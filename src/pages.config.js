@@ -7,6 +7,8 @@ import AIAssistant from './pages/AIAssistant';
 import ProjectSettings from './pages/ProjectSettings';
 import Web3Dashboard from './pages/Web3Dashboard';
 import TokenCreator from './pages/TokenCreator';
+import NFTStudio from './pages/NFTStudio';
+import ContractBuilder from './pages/ContractBuilder';
 import __Layout from './Layout.jsx';
 
 
@@ -20,6 +22,8 @@ export const PAGES = {
     "ProjectSettings": ProjectSettings,
     "Web3Dashboard": Web3Dashboard,
     "TokenCreator": TokenCreator,
+    "NFTStudio": NFTStudio,
+    "ContractBuilder": ContractBuilder,
 }
 
 export const pagesConfig = {
