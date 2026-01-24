@@ -3,8 +3,9 @@ import { base44 } from '@/api/base44Client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { 
   Coins, Plus, Search, Rocket, Settings2, Code,
-  ChevronRight, Sparkles
+  ChevronRight, Sparkles, CheckCircle
 } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -30,6 +31,8 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import TokenCard from '@/components/web3/TokenCard';
 import NetworkBadge from '@/components/web3/NetworkBadge';
 import EmptyState from '@/components/common/EmptyState';
+import DeploymentModal from '@/components/web3/DeploymentModal';
+import WalletConnect from '@/components/web3/WalletConnect';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
@@ -63,8 +66,10 @@ const features = [
 export default function TokenCreator() {
   const [selectedToken, setSelectedToken] = useState(null);
   const [showNewDialog, setShowNewDialog] = useState(false);
+  const [showDeployModal, setShowDeployModal] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [activeTab, setActiveTab] = useState('config');
+  const [wallet, setWallet] = useState(null);
   const [newToken, setNewToken] = useState({
     name: '',
     symbol: '',
@@ -128,7 +133,17 @@ export default function TokenCreator() {
   );
 
   const handleDeploy = () => {
-    toast.info('Deployment requires wallet connection and backend functions enabled.');
+    setShowDeployModal(true);
+  };
+
+  const handleDeploymentComplete = async (deploymentData) => {
+    const updatedToken = {
+      ...selectedToken,
+      ...deploymentData,
+    };
+    await updateMutation.mutateAsync({ id: selectedToken.id, data: updatedToken });
+    setSelectedToken(updatedToken);
+    toast.success('Token deployed successfully!');
   };
 
   const generateContractCode = () => {
@@ -262,6 +277,9 @@ contract ${name.replace(/\s+/g, '')} is ERC20${features?.burnable ? ', ERC20Burn
                     <div className="flex items-center gap-2">
                       <h1 className="text-xl font-semibold">{selectedToken.name}</h1>
                       <span className="font-mono text-gray-500">{selectedToken.symbol}</span>
+                      {selectedToken.status === 'deployed' && (
+                        <Badge className="bg-green-100 text-green-600">Deployed</Badge>
+                      )}
                     </div>
                     <div className="flex items-center gap-2 mt-1">
                       <NetworkBadge network={selectedToken.network} size="sm" />
@@ -270,6 +288,11 @@ contract ${name.replace(/\s+/g, '')} is ERC20${features?.burnable ? ', ERC20Burn
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
+                  <WalletConnect 
+                    wallet={wallet} 
+                    onConnect={setWallet} 
+                    onDisconnect={() => setWallet(null)} 
+                  />
                   <Button
                     onClick={() => updateMutation.mutate({ id: selectedToken.id, data: selectedToken })}
                     variant="outline"
@@ -432,6 +455,16 @@ contract ${name.replace(/\s+/g, '')} is ERC20${features?.burnable ? ', ERC20Burn
           </div>
         )}
       </div>
+
+      {/* Deployment Modal */}
+      <DeploymentModal
+        open={showDeployModal}
+        onOpenChange={setShowDeployModal}
+        contract={{ ...selectedToken, template: selectedToken?.type }}
+        wallet={wallet}
+        onDeploymentComplete={handleDeploymentComplete}
+        onConnectWallet={() => {}}
+      />
 
       {/* New Token Dialog */}
       <Dialog open={showNewDialog} onOpenChange={setShowNewDialog}>
