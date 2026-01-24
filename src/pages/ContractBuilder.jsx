@@ -31,6 +31,8 @@ import { Badge } from '@/components/ui/badge';
 import ContractCard from '@/components/web3/ContractCard';
 import NetworkBadge from '@/components/web3/NetworkBadge';
 import EmptyState from '@/components/common/EmptyState';
+import DeploymentModal from '@/components/web3/DeploymentModal';
+import WalletConnect from '@/components/web3/WalletConnect';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
@@ -216,8 +218,10 @@ contract TokenVesting {
 export default function ContractBuilder() {
   const [selectedContract, setSelectedContract] = useState(null);
   const [showNewDialog, setShowNewDialog] = useState(false);
+  const [showDeployModal, setShowDeployModal] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [activeTab, setActiveTab] = useState('code');
+  const [wallet, setWallet] = useState(null);
   const [newContract, setNewContract] = useState({
     name: '',
     description: '',
@@ -272,7 +276,17 @@ export default function ContractBuilder() {
   };
 
   const handleDeploy = () => {
-    toast.info('Deployment requires wallet connection and backend functions enabled.');
+    setShowDeployModal(true);
+  };
+
+  const handleDeploymentComplete = async (deploymentData) => {
+    const updatedContract = {
+      ...selectedContract,
+      ...deploymentData,
+    };
+    await updateMutation.mutateAsync({ id: selectedContract.id, data: updatedContract });
+    setSelectedContract(updatedContract);
+    toast.success('Contract deployed successfully!');
   };
 
   const currentTemplate = templates.find(t => t.value === selectedContract?.template) || templates[0];
@@ -384,6 +398,12 @@ export default function ContractBuilder() {
                           Verified
                         </Badge>
                       )}
+                      {selectedContract.status === 'deployed' && (
+                        <Badge className="bg-green-100 text-green-600">
+                          <CheckCircle className="w-3 h-3 mr-1" />
+                          Deployed
+                        </Badge>
+                      )}
                     </div>
                     <div className="flex items-center gap-2 mt-1">
                       <NetworkBadge network={selectedContract.network} size="sm" />
@@ -392,6 +412,11 @@ export default function ContractBuilder() {
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
+                  <WalletConnect 
+                    wallet={wallet} 
+                    onConnect={setWallet} 
+                    onDisconnect={() => setWallet(null)} 
+                  />
                   <Button
                     onClick={handleCompile}
                     variant="outline"
@@ -527,6 +552,16 @@ export default function ContractBuilder() {
           </div>
         )}
       </div>
+
+      {/* Deployment Modal */}
+      <DeploymentModal
+        open={showDeployModal}
+        onOpenChange={setShowDeployModal}
+        contract={selectedContract}
+        wallet={wallet}
+        onDeploymentComplete={handleDeploymentComplete}
+        onConnectWallet={() => {}}
+      />
 
       {/* New Contract Dialog */}
       <Dialog open={showNewDialog} onOpenChange={setShowNewDialog}>
