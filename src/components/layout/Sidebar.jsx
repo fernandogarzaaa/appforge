@@ -10,7 +10,11 @@ import {
   Settings,
   Sparkles,
   ChevronLeft,
-  Plus
+  Plus,
+  Wallet,
+  Coins,
+  Image,
+  Code
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
@@ -26,6 +30,13 @@ const projectNavItems = [
   { name: 'Components', icon: Component, page: 'Components' },
   { name: 'AI Assistant', icon: Sparkles, page: 'AIAssistant' },
   { name: 'Settings', icon: Settings, page: 'ProjectSettings' },
+];
+
+const web3NavItems = [
+  { name: 'Web3 Studio', icon: Wallet, page: 'Web3Dashboard' },
+  { name: 'Tokens', icon: Coins, page: 'TokenCreator' },
+  { name: 'NFT Collections', icon: Image, page: 'NFTStudio' },
+  { name: 'Contracts', icon: Code, page: 'ContractBuilder' },
 ];
 
 export default function Sidebar({ currentProject, collapsed, onToggle }) {
@@ -112,6 +123,31 @@ export default function Sidebar({ currentProject, collapsed, onToggle }) {
                   "flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200",
                   isActive(item.page)
                     ? "bg-indigo-50 text-indigo-600"
+                    : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+                )}
+              >
+                <item.icon className="w-5 h-5 flex-shrink-0" />
+                {!collapsed && <span>{item.name}</span>}
+              </Link>
+            ))}
+
+            {/* Web3 Section */}
+            <div className={cn("pt-4 pb-2", collapsed ? "px-2" : "px-3")}>
+              {!collapsed && (
+                <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">
+                  Web3
+                </p>
+              )}
+            </div>
+
+            {web3NavItems.map((item) => (
+              <Link
+                key={item.page}
+                to={createPageUrl(item.page) + `?projectId=${currentProject.id}`}
+                className={cn(
+                  "flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200",
+                  isActive(item.page)
+                    ? "bg-purple-50 text-purple-600"
                     : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
                 )}
               >
