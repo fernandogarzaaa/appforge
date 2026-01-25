@@ -12,6 +12,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import CryptoTradingBotBuilder from '@/components/bots/CryptoTradingBotBuilder';
+import VisualWorkflowEditor from '@/components/workflow/VisualWorkflowEditor';
 import { toast } from 'sonner';
 
 const triggerTypes = [
@@ -224,7 +225,9 @@ export default function BotBuilder() {
   const [showDialog, setShowDialog] = useState(false);
   const [selectedBot, setSelectedBot] = useState(null);
   const [isGenerating, setIsGenerating] = useState(false);
-  const [activeTab, setActiveTab] = useState('basic');
+  const [activeTab, setActiveTab] = useState('all');
+  const [showVisualEditor, setShowVisualEditor] = useState(false);
+  const [workflowNodes, setWorkflowNodes] = useState([]);
   const [newBot, setNewBot] = useState({
     name: '',
     description: '',
@@ -646,6 +649,20 @@ export default function BotBuilder() {
                   </SelectContent>
                 </Select>
               </div>
+
+              <div>
+                <Label className="mb-2 block">Visual Workflow Editor</Label>
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    setWorkflowNodes(newBot.nodes.length > 0 ? newBot.nodes : []);
+                    setShowVisualEditor(true);
+                  }}
+                  className="w-full"
+                >
+                  Open Visual Editor
+                </Button>
+              </div>
               </TabsContent>
               </Tabs>
 
@@ -657,6 +674,34 @@ export default function BotBuilder() {
             </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      {showVisualEditor && (
+        <Dialog open={showVisualEditor} onOpenChange={setShowVisualEditor}>
+          <DialogContent className="max-w-6xl max-h-[90vh]">
+            <DialogHeader>
+              <DialogTitle>Visual Workflow Editor</DialogTitle>
+            </DialogHeader>
+            <div className="h-[70vh]">
+              <VisualWorkflowEditor
+                initialNodes={workflowNodes}
+                onSave={(nodes) => {
+                  setNewBot({
+                    ...newBot,
+                    nodes: nodes.map((node, idx) => ({
+                      id: `node-${idx}`,
+                      name: node.label || node.type,
+                      type: node.type,
+                      config: node.config
+                    }))
+                  });
+                  setShowVisualEditor(false);
+                  toast.success('Workflow saved');
+                }}
+              />
+            </div>
+          </DialogContent>
+        </Dialog>
+      )}
     </div>
   );
 }
