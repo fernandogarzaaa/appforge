@@ -47,6 +47,7 @@ import EnterpriseIntelligence from './pages/EnterpriseIntelligence';
 import IntegrationHub from './pages/IntegrationHub';
 import AdvancedAnomalyDetection from './pages/AdvancedAnomalyDetection';
 import RoleManagement from './pages/RoleManagement';
+import ReferralProgram from './pages/ReferralProgram';
 import __Layout from './Layout.jsx';
 
 
@@ -100,6 +101,7 @@ export const PAGES = {
     "IntegrationHub": IntegrationHub,
     "AdvancedAnomalyDetection": AdvancedAnomalyDetection,
     "RoleManagement": RoleManagement,
+    "ReferralProgram": ReferralProgram,
 }
 
 export const pagesConfig = {
