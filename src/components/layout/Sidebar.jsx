@@ -28,7 +28,8 @@ import {
   BarChart3,
   Package,
   Gamepad2,
-  Dices
+  Dices,
+  HelpCircle
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
@@ -39,7 +40,7 @@ const navItems = [
   { name: 'Projects', icon: FolderKanban, page: 'Projects' },
   { name: 'Templates', icon: Package, page: 'TemplateMarketplace' },
   { name: 'Guide', icon: BookOpen, page: 'Guide' },
-  { name: 'Code Playground', icon: Code, page: 'CodePlayground' },
+  { name: 'Support', icon: HelpCircle, page: 'Support' },
   { name: 'Pricing', icon: CreditCard, page: 'Pricing' },
 ];
 
