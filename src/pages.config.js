@@ -18,6 +18,7 @@ import BotBuilder from './pages/BotBuilder';
 import APIExplorer from './pages/APIExplorer';
 import GitHubConnect from './pages/GitHubConnect';
 import SocialMediaHub from './pages/SocialMediaHub';
+import VSCodeIntegration from './pages/VSCodeIntegration';
 import __Layout from './Layout.jsx';
 
 
@@ -42,6 +43,7 @@ export const PAGES = {
     "APIExplorer": APIExplorer,
     "GitHubConnect": GitHubConnect,
     "SocialMediaHub": SocialMediaHub,
+    "VSCodeIntegration": VSCodeIntegration,
 }
 
 export const pagesConfig = {

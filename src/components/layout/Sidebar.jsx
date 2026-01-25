@@ -42,6 +42,7 @@ const projectNavItems = [
   { name: 'Bot Builder', icon: Bot, page: 'BotBuilder' },
   { name: 'API Explorer', icon: Search, page: 'APIExplorer' },
   { name: 'Social Media', icon: Share2, page: 'SocialMediaHub' },
+  { name: 'VS Code', icon: Code, page: 'VSCodeIntegration' },
   { name: 'GitHub', icon: Github, page: 'GitHubConnect' },
   { name: 'Settings', icon: Settings, page: 'ProjectSettings' },
 ];
