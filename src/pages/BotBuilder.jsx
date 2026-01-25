@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { base44 } from '@/api/base44Client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { Bot, Plus, Play, Pause, Trash2, Settings, Zap, Clock, Mail, Webhook } from 'lucide-react';
+import { Bot, Plus, Play, Pause, Trash2, Settings, Zap, Clock, Mail, Webhook, Sparkles, RefreshCw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -22,6 +22,7 @@ const triggerTypes = [
 export default function BotBuilder() {
   const [showDialog, setShowDialog] = useState(false);
   const [selectedBot, setSelectedBot] = useState(null);
+  const [isGenerating, setIsGenerating] = useState(false);
   const [newBot, setNewBot] = useState({
     name: '',
     description: '',
@@ -70,6 +71,44 @@ export default function BotBuilder() {
   const toggleStatus = (bot) => {
     const newStatus = bot.status === 'active' ? 'paused' : 'active';
     updateMutation.mutate({ id: bot.id, data: { status: newStatus } });
+  };
+
+  const generateBotWorkflow = async (description) => {
+    setIsGenerating(true);
+    try {
+      const result = await base44.integrations.Core.InvokeLLM({
+        prompt: `Create an automation bot workflow for: ${description}
+        
+        Provide:
+        - name: short descriptive name
+        - description: what the bot does
+        - trigger_type: best trigger (schedule, webhook, email, entity_change)
+        - workflow_steps: array of 3-5 steps the bot should perform
+        
+        Make it practical and actionable.`,
+        response_json_schema: {
+          type: 'object',
+          properties: {
+            name: { type: 'string' },
+            description: { type: 'string' },
+            trigger_type: { type: 'string' },
+            workflow_steps: { type: 'array', items: { type: 'string' } }
+          }
+        }
+      });
+      
+      setNewBot({
+        ...newBot,
+        name: result.name,
+        description: result.description,
+        trigger: { type: result.trigger_type, config: {} }
+      });
+      toast.success('AI workflow generated!');
+    } catch (error) {
+      toast.error('Failed to generate workflow');
+    } finally {
+      setIsGenerating(false);
+    }
   };
 
   if (!projectId) {
@@ -181,6 +220,33 @@ export default function BotBuilder() {
             <DialogTitle>Create New Bot</DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
+            <div>
+              <Label className="mb-2 block">AI Bot Generator</Label>
+              <div className="flex gap-2 mb-3">
+                <Input
+                  placeholder="Describe what you want to automate..."
+                  onKeyPress={(e) => {
+                    if (e.key === 'Enter' && e.currentTarget.value.trim()) {
+                      generateBotWorkflow(e.currentTarget.value);
+                    }
+                  }}
+                />
+                <Button
+                  variant="outline"
+                  onClick={(e) => {
+                    const input = e.currentTarget.previousElementSibling;
+                    if (input.value.trim()) generateBotWorkflow(input.value);
+                  }}
+                  disabled={isGenerating}
+                >
+                  {isGenerating ? (
+                    <RefreshCw className="w-4 h-4 animate-spin" />
+                  ) : (
+                    <Sparkles className="w-4 h-4" />
+                  )}
+                </Button>
+              </div>
+            </div>
             <div>
               <Label>Bot Name</Label>
               <Input
