@@ -4,11 +4,13 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { 
   Sparkles, Send, Plus, Trash2, MessageSquare,
   Loader2, Copy, Check, Code, FileCode, Database,
-  Globe, Brain, Zap, Bot
+  Globe, Brain, Zap, Bot, Github, Wand2
 } from 'lucide-react';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import APIDiscoveryPanel from '@/components/ai/APIDiscoveryPanel';
 import PredictiveModels from '@/components/ai/PredictiveModels';
+import GitHubIntegration from '@/components/ai/GitHubIntegration';
+import AdvancedAIFunctions from '@/components/ai/AdvancedAIFunctions';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -247,6 +249,30 @@ Provide helpful, concise responses with code examples when relevant.`,
               <Brain className="w-4 h-4" />
               <span className="font-medium">Predictive Models</span>
             </button>
+            <button
+              onClick={() => setActivePanel('functions')}
+              className={cn(
+                "flex items-center gap-2 py-3 border-b-2 transition-colors",
+                activePanel === 'functions' 
+                  ? "border-pink-500 text-pink-600" 
+                  : "border-transparent text-gray-500 hover:text-gray-700"
+              )}
+            >
+              <Wand2 className="w-4 h-4" />
+              <span className="font-medium">AI Functions</span>
+            </button>
+            <button
+              onClick={() => setActivePanel('github')}
+              className={cn(
+                "flex items-center gap-2 py-3 border-b-2 transition-colors",
+                activePanel === 'github' 
+                  ? "border-gray-800 text-gray-900" 
+                  : "border-transparent text-gray-500 hover:text-gray-700"
+              )}
+            >
+              <Github className="w-4 h-4" />
+              <span className="font-medium">GitHub</span>
+            </button>
             {integratedAPIs.length > 0 && (
               <div className="ml-auto flex items-center gap-2">
                 <Zap className="w-4 h-4 text-green-500" />
@@ -280,6 +306,32 @@ Provide helpful, concise responses with code examples when relevant.`,
                 <p className="text-gray-500">Run AI-powered predictions and analysis on your data</p>
               </div>
               <PredictiveModels projectId={projectId} />
+            </div>
+          </div>
+        )}
+
+        {/* AI Functions Panel */}
+        {activePanel === 'functions' && (
+          <div className="flex-1 p-6 overflow-auto">
+            <div className="max-w-4xl mx-auto">
+              <div className="mb-6">
+                <h2 className="text-xl font-bold text-gray-900 mb-1">AI Functions</h2>
+                <p className="text-gray-500">Image generation, code, translation, SEO, and more</p>
+              </div>
+              <AdvancedAIFunctions />
+            </div>
+          </div>
+        )}
+
+        {/* GitHub Panel */}
+        {activePanel === 'github' && (
+          <div className="flex-1 p-6 overflow-auto">
+            <div className="max-w-4xl mx-auto">
+              <div className="mb-6">
+                <h2 className="text-xl font-bold text-gray-900 mb-1">GitHub Integration</h2>
+                <p className="text-gray-500">Connect your repository to edit and sync code</p>
+              </div>
+              <GitHubIntegration projectId={projectId} />
             </div>
           </div>
         )}
