@@ -476,7 +476,7 @@ export default function BotBuilder() {
             </TabsContent>
 
             <TabsContent value="email" className="space-y-4 mt-4">
-              <Label className="mb-2 block">Quick Start Templates</Label>
+              <Label className="mb-2 block">Email & Communication Bots</Label>
               <div className="grid grid-cols-1 gap-2 mb-4">
                 {botTemplates.filter(t => t.category === 'email').map((template, idx) => {
                   const TemplateIcon = template.icon;
@@ -519,6 +519,47 @@ export default function BotBuilder() {
                                 </Badge>
                               )}
                             </div>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  );
+                })}
+              </div>
+            </TabsContent>
+
+            <TabsContent value="automation" className="space-y-4 mt-4">
+              <Label className="mb-2 block">Automation Bots</Label>
+              <div className="grid grid-cols-1 gap-2 mb-4">
+                {botTemplates.filter(t => ['data_processing', 'reporting', 'content', 'sales', 'devops', 'scheduling', 'integration', 'social'].includes(t.category)).map((template, idx) => {
+                  const TemplateIcon = template.icon;
+                  return (
+                    <Card 
+                      key={idx} 
+                      className="cursor-pointer hover:bg-gray-50 transition-colors"
+                      onClick={() => {
+                        setNewBot({
+                          name: template.name,
+                          description: template.description,
+                          trigger: template.trigger,
+                          nodes: template.workflow.map((step, i) => ({
+                            id: `node-${i}`,
+                            name: step,
+                            type: 'action'
+                          })),
+                          status: 'draft'
+                        });
+                        setActiveTab('custom');
+                      }}
+                    >
+                      <CardContent className="p-4">
+                        <div className="flex items-start gap-3">
+                          <div className="w-10 h-10 rounded-lg bg-blue-100 flex items-center justify-center">
+                            <TemplateIcon className="w-5 h-5 text-blue-600" />
+                          </div>
+                          <div className="flex-1">
+                            <h4 className="font-semibold text-sm mb-1">{template.name}</h4>
+                            <p className="text-xs text-gray-600">{template.description}</p>
                           </div>
                         </div>
                       </CardContent>
