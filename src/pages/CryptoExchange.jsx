@@ -8,8 +8,11 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Badge } from '@/components/ui/badge';
 import { 
   TrendingUp, TrendingDown, ArrowUpDown, Wallet, 
-  DollarSign, Clock, BarChart3, Activity
+  DollarSign, Clock, BarChart3, Activity, Zap, Coins
 } from 'lucide-react';
+import TradingChart from '@/components/web3/TradingChart';
+import StakingPanel from '@/components/web3/StakingPanel';
+import MarginTradingPanel from '@/components/web3/MarginTradingPanel';
 import { toast } from 'sonner';
 
 const tradingPairs = [
@@ -136,151 +139,165 @@ export default function CryptoExchange() {
                     </Badge>
                   </div>
                 </div>
-                <div className="text-right text-sm">
-                  <div className="text-gray-600">24h High: <span className="font-semibold">${selectedPair.high}</span></div>
-                  <div className="text-gray-600">24h Low: <span className="font-semibold">${selectedPair.low}</span></div>
-                  <div className="text-gray-600">24h Volume: <span className="font-semibold">{selectedPair.volume}</span></div>
-                </div>
               </div>
             </CardHeader>
             <CardContent>
-              <div className="h-64 bg-gradient-to-br from-gray-50 to-gray-100 rounded-lg flex items-center justify-center">
-                <div className="text-center">
-                  <BarChart3 className="w-16 h-16 text-gray-300 mx-auto mb-2" />
-                  <p className="text-gray-500">Trading chart placeholder</p>
-                </div>
-              </div>
+              <TradingChart selectedPair={selectedPair} />
             </CardContent>
           </Card>
 
           {/* Trading Interface */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {/* Buy/Sell */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-base">Place Order</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <Tabs value={side} onValueChange={setSide} className="mb-4">
-                  <TabsList className="grid w-full grid-cols-2">
-                    <TabsTrigger value="buy" className="data-[state=active]:bg-green-600 data-[state=active]:text-white">
-                      Buy
-                    </TabsTrigger>
-                    <TabsTrigger value="sell" className="data-[state=active]:bg-red-600 data-[state=active]:text-white">
-                      Sell
-                    </TabsTrigger>
-                  </TabsList>
-                </Tabs>
+          <Tabs defaultValue="spot" className="mb-6">
+            <TabsList>
+              <TabsTrigger value="spot">Spot Trading</TabsTrigger>
+              <TabsTrigger value="margin">
+                <Zap className="w-4 h-4 mr-2" />
+                Margin / Futures
+              </TabsTrigger>
+              <TabsTrigger value="staking">
+                <Coins className="w-4 h-4 mr-2" />
+                Staking & Earn
+              </TabsTrigger>
+            </TabsList>
 
-                <div className="space-y-4">
-                  <Select value={orderType} onValueChange={setOrderType}>
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="limit">Limit Order</SelectItem>
-                      <SelectItem value="market">Market Order</SelectItem>
-                    </SelectContent>
-                  </Select>
+            <TabsContent value="spot" className="mt-6">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {/* Buy/Sell */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-base">Place Order</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <Tabs value={side} onValueChange={setSide} className="mb-4">
+                      <TabsList className="grid w-full grid-cols-2">
+                        <TabsTrigger value="buy" className="data-[state=active]:bg-green-600 data-[state=active]:text-white">
+                          Buy
+                        </TabsTrigger>
+                        <TabsTrigger value="sell" className="data-[state=active]:bg-red-600 data-[state=active]:text-white">
+                          Sell
+                        </TabsTrigger>
+                      </TabsList>
+                    </Tabs>
 
-                  {orderType === 'limit' && (
-                    <div>
-                      <label className="text-sm text-gray-600">Price (USDT)</label>
-                      <Input
-                        type="number"
-                        value={price}
-                        onChange={(e) => setPrice(e.target.value)}
-                        placeholder="0.00"
-                        className="mt-1"
-                      />
-                    </div>
-                  )}
+                    <div className="space-y-4">
+                      <Select value={orderType} onValueChange={setOrderType}>
+                        <SelectTrigger>
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="limit">Limit Order</SelectItem>
+                          <SelectItem value="market">Market Order</SelectItem>
+                        </SelectContent>
+                      </Select>
 
-                  <div>
-                    <label className="text-sm text-gray-600">Amount ({selectedPair.symbol.split('/')[0]})</label>
-                    <Input
-                      type="number"
-                      value={amount}
-                      onChange={(e) => setAmount(e.target.value)}
-                      placeholder="0.00"
-                      className="mt-1"
-                    />
-                  </div>
+                      {orderType === 'limit' && (
+                        <div>
+                          <label className="text-sm text-gray-600">Price (USDT)</label>
+                          <Input
+                            type="number"
+                            value={price}
+                            onChange={(e) => setPrice(e.target.value)}
+                            placeholder="0.00"
+                            className="mt-1"
+                          />
+                        </div>
+                      )}
 
-                  <div className="flex gap-2 text-xs">
-                    {[25, 50, 75, 100].map(percent => (
+                      <div>
+                        <label className="text-sm text-gray-600">Amount ({selectedPair.symbol.split('/')[0]})</label>
+                        <Input
+                          type="number"
+                          value={amount}
+                          onChange={(e) => setAmount(e.target.value)}
+                          placeholder="0.00"
+                          className="mt-1"
+                        />
+                      </div>
+
+                      <div className="flex gap-2 text-xs">
+                        {[25, 50, 75, 100].map(percent => (
+                          <Button
+                            key={percent}
+                            variant="outline"
+                            size="sm"
+                            onClick={() => setAmount((10 / selectedPair.price * (percent / 100)).toFixed(6))}
+                            className="flex-1"
+                          >
+                            {percent}%
+                          </Button>
+                        ))}
+                      </div>
+
+                      <div className="pt-2 border-t">
+                        <div className="flex justify-between text-sm mb-2">
+                          <span className="text-gray-600">Total</span>
+                          <span className="font-semibold">
+                            {amount && price ? (parseFloat(amount) * parseFloat(price)).toFixed(2) : '0.00'} USDT
+                          </span>
+                        </div>
+                      </div>
+
                       <Button
-                        key={percent}
-                        variant="outline"
-                        size="sm"
-                        onClick={() => setAmount((10 / selectedPair.price * (percent / 100)).toFixed(6))}
-                        className="flex-1"
+                        onClick={placeOrder}
+                        className={`w-full ${side === 'buy' ? 'bg-green-600 hover:bg-green-700' : 'bg-red-600 hover:bg-red-700'}`}
                       >
-                        {percent}%
+                        {side === 'buy' ? 'Buy' : 'Sell'} {selectedPair.symbol.split('/')[0]}
                       </Button>
-                    ))}
-                  </div>
-
-                  <div className="pt-2 border-t">
-                    <div className="flex justify-between text-sm mb-2">
-                      <span className="text-gray-600">Total</span>
-                      <span className="font-semibold">
-                        {amount && price ? (parseFloat(amount) * parseFloat(price)).toFixed(2) : '0.00'} USDT
-                      </span>
                     </div>
-                  </div>
+                  </CardContent>
+                </Card>
 
-                  <Button
-                    onClick={placeOrder}
-                    className={`w-full ${side === 'buy' ? 'bg-green-600 hover:bg-green-700' : 'bg-red-600 hover:bg-red-700'}`}
-                  >
-                    {side === 'buy' ? 'Buy' : 'Sell'} {selectedPair.symbol.split('/')[0]}
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
+                {/* Order Book */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-base">Order Book</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-1">
+                      <div className="grid grid-cols-3 text-xs text-gray-600 mb-2">
+                        <div>Price (USDT)</div>
+                        <div className="text-right">Amount</div>
+                        <div className="text-right">Total</div>
+                      </div>
+                      {/* Sell orders */}
+                      {[...Array(5)].map((_, i) => {
+                        const sellPrice = selectedPair.price + (i + 1) * 50;
+                        const amount = (Math.random() * 2).toFixed(4);
+                        return (
+                          <div key={i} className="grid grid-cols-3 text-xs text-red-600">
+                            <div className="font-mono">{sellPrice.toFixed(2)}</div>
+                            <div className="text-right font-mono">{amount}</div>
+                            <div className="text-right font-mono">{(sellPrice * parseFloat(amount)).toFixed(2)}</div>
+                          </div>
+                        );
+                      })}
+                      <div className="py-2 text-center text-lg font-bold">{selectedPair.price.toFixed(2)}</div>
+                      {/* Buy orders */}
+                      {[...Array(5)].map((_, i) => {
+                        const buyPrice = selectedPair.price - (i + 1) * 50;
+                        const amount = (Math.random() * 2).toFixed(4);
+                        return (
+                          <div key={i} className="grid grid-cols-3 text-xs text-green-600">
+                            <div className="font-mono">{buyPrice.toFixed(2)}</div>
+                            <div className="text-right font-mono">{amount}</div>
+                            <div className="text-right font-mono">{(buyPrice * parseFloat(amount)).toFixed(2)}</div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            </TabsContent>
 
-            {/* Order Book */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-base">Order Book</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-1">
-                  <div className="grid grid-cols-3 text-xs text-gray-600 mb-2">
-                    <div>Price (USDT)</div>
-                    <div className="text-right">Amount</div>
-                    <div className="text-right">Total</div>
-                  </div>
-                  {/* Sell orders */}
-                  {[...Array(5)].map((_, i) => {
-                    const sellPrice = selectedPair.price + (i + 1) * 50;
-                    const amount = (Math.random() * 2).toFixed(4);
-                    return (
-                      <div key={i} className="grid grid-cols-3 text-xs text-red-600">
-                        <div className="font-mono">{sellPrice.toFixed(2)}</div>
-                        <div className="text-right font-mono">{amount}</div>
-                        <div className="text-right font-mono">{(sellPrice * parseFloat(amount)).toFixed(2)}</div>
-                      </div>
-                    );
-                  })}
-                  <div className="py-2 text-center text-lg font-bold">{selectedPair.price.toFixed(2)}</div>
-                  {/* Buy orders */}
-                  {[...Array(5)].map((_, i) => {
-                    const buyPrice = selectedPair.price - (i + 1) * 50;
-                    const amount = (Math.random() * 2).toFixed(4);
-                    return (
-                      <div key={i} className="grid grid-cols-3 text-xs text-green-600">
-                        <div className="font-mono">{buyPrice.toFixed(2)}</div>
-                        <div className="text-right font-mono">{amount}</div>
-                        <div className="text-right font-mono">{(buyPrice * parseFloat(amount)).toFixed(2)}</div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </CardContent>
-            </Card>
-          </div>
+            <TabsContent value="margin" className="mt-6">
+              <MarginTradingPanel selectedPair={selectedPair} />
+            </TabsContent>
+
+            <TabsContent value="staking" className="mt-6">
+              <StakingPanel />
+            </TabsContent>
+          </Tabs>
 
           {/* Open Orders */}
           <Card>
