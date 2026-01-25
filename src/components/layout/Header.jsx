@@ -10,6 +10,8 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { createPageUrl } from '@/utils';
+import { Link } from 'react-router-dom';
 
 export default function Header({ user, onLogout }) {
   const initials = user?.full_name
@@ -53,14 +55,18 @@ export default function Header({ user, onLogout }) {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-48 rounded-lg p-1">
-            <DropdownMenuItem className="rounded-md cursor-pointer text-[13px]">
-              <User className="w-3.5 h-3.5 mr-2" />
-              Profile
-            </DropdownMenuItem>
-            <DropdownMenuItem className="rounded-md cursor-pointer text-[13px]">
-              <Settings className="w-3.5 h-3.5 mr-2" />
-              Settings
-            </DropdownMenuItem>
+            <Link to={createPageUrl('Profile')}>
+              <DropdownMenuItem className="rounded-md cursor-pointer text-[13px]">
+                <User className="w-3.5 h-3.5 mr-2" />
+                Profile
+              </DropdownMenuItem>
+            </Link>
+            <Link to={createPageUrl('Profile')}>
+              <DropdownMenuItem className="rounded-md cursor-pointer text-[13px]">
+                <Settings className="w-3.5 h-3.5 mr-2" />
+                Settings
+              </DropdownMenuItem>
+            </Link>
             <DropdownMenuSeparator />
             <DropdownMenuItem 
               onClick={onLogout}
