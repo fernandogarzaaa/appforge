@@ -249,7 +249,13 @@ export default function BotBuilder() {
 
   const { data: bots = [], isLoading } = useQuery({
     queryKey: ['automations', projectId],
-    queryFn: () => base44.entities.Automation.filter({ project_id: projectId }),
+    queryFn: async () => {
+      try {
+        return await base44.entities.Automation?.filter?.({ project_id: projectId }) || [];
+      } catch {
+        return [];
+      }
+    },
     enabled: !!projectId
   });
 

@@ -109,8 +109,8 @@ Deno.serve(async (req) => {
         .filter(p => p.nodeId)
         .map(p => executor(p.nodeId));
 
-      const results = await Promise.all(promises);
-      return results[results.length - 1] || ctx;
+      await Promise.all(promises);
+      return ctx;
     }
 
     async function executeApiCall(node, ctx) {
@@ -216,7 +216,7 @@ Deno.serve(async (req) => {
       if (unit === 'hours') ms = duration * 60 * 60 * 1000;
 
       await new Promise(resolve => setTimeout(resolve, ms));
-      return context;
+      return ctx;
     }
 
     function applyTransformation(value, type, params = {}) {
