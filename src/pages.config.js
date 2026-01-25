@@ -1,51 +1,51 @@
 import AIAssistant from './pages/AIAssistant';
+import APIExplorer from './pages/APIExplorer';
+import BotBuilder from './pages/BotBuilder';
+import CodePlayground from './pages/CodePlayground';
 import Components from './pages/Components';
 import ContractBuilder from './pages/ContractBuilder';
+import DAOGovernance from './pages/DAOGovernance';
 import Dashboard from './pages/Dashboard';
+import DeFiHub from './pages/DeFiHub';
 import EntityDesigner from './pages/EntityDesigner';
+import GitHubConnect from './pages/GitHubConnect';
+import Guide from './pages/Guide';
 import NFTStudio from './pages/NFTStudio';
 import PageEditor from './pages/PageEditor';
 import Pricing from './pages/Pricing';
 import ProjectSettings from './pages/ProjectSettings';
-import Projects from './pages/Projects';
-import TokenCreator from './pages/TokenCreator';
-import Web3Dashboard from './pages/Web3Dashboard';
-import CodePlayground from './pages/CodePlayground';
 import ProjectTasks from './pages/ProjectTasks';
-import DeFiHub from './pages/DeFiHub';
-import DAOGovernance from './pages/DAOGovernance';
-import BotBuilder from './pages/BotBuilder';
-import APIExplorer from './pages/APIExplorer';
-import GitHubConnect from './pages/GitHubConnect';
+import Projects from './pages/Projects';
 import SocialMediaHub from './pages/SocialMediaHub';
+import TokenCreator from './pages/TokenCreator';
 import VSCodeIntegration from './pages/VSCodeIntegration';
-import Guide from './pages/Guide';
+import Web3Dashboard from './pages/Web3Dashboard';
 import __Layout from './Layout.jsx';
 
 
 export const PAGES = {
     "AIAssistant": AIAssistant,
+    "APIExplorer": APIExplorer,
+    "BotBuilder": BotBuilder,
+    "CodePlayground": CodePlayground,
     "Components": Components,
     "ContractBuilder": ContractBuilder,
+    "DAOGovernance": DAOGovernance,
     "Dashboard": Dashboard,
+    "DeFiHub": DeFiHub,
     "EntityDesigner": EntityDesigner,
+    "GitHubConnect": GitHubConnect,
+    "Guide": Guide,
     "NFTStudio": NFTStudio,
     "PageEditor": PageEditor,
     "Pricing": Pricing,
     "ProjectSettings": ProjectSettings,
-    "Projects": Projects,
-    "TokenCreator": TokenCreator,
-    "Web3Dashboard": Web3Dashboard,
-    "CodePlayground": CodePlayground,
     "ProjectTasks": ProjectTasks,
-    "DeFiHub": DeFiHub,
-    "DAOGovernance": DAOGovernance,
-    "BotBuilder": BotBuilder,
-    "APIExplorer": APIExplorer,
-    "GitHubConnect": GitHubConnect,
+    "Projects": Projects,
     "SocialMediaHub": SocialMediaHub,
+    "TokenCreator": TokenCreator,
     "VSCodeIntegration": VSCodeIntegration,
-    "Guide": Guide,
+    "Web3Dashboard": Web3Dashboard,
 }
 
 export const pagesConfig = {

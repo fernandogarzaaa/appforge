@@ -54,6 +54,14 @@ export default function SocialMediaHub() {
   const [isGenerating, setIsGenerating] = useState(false);
   const [contentIdeas, setContentIdeas] = useState([]);
   const [showIdeasDialog, setShowIdeasDialog] = useState(false);
+  const [showRefineDialog, setShowRefineDialog] = useState(false);
+  const [refineInput, setRefineInput] = useState('');
+  const [refinedVariations, setRefinedVariations] = useState([]);
+  const [refineSettings, setRefineSettings] = useState({
+    targetPlatforms: ['twitter', 'linkedin', 'instagram'],
+    audience: 'general',
+    goal: 'engagement'
+  });
 
   const urlParams = new URLSearchParams(window.location.search);
   const projectId = urlParams.get('projectId');
@@ -223,6 +231,81 @@ export default function SocialMediaHub() {
     }
   };
 
+  const refineMarketingCopy = async () => {
+    if (!refineInput.trim()) {
+      toast.error('Enter text to refine');
+      return;
+    }
+
+    setIsGenerating(true);
+    try {
+      const audienceDescriptions = {
+        general: 'general audience',
+        professionals: 'business professionals and decision-makers',
+        youth: 'young adults and Gen Z',
+        enterprise: 'enterprise clients and B2B buyers',
+        consumers: 'everyday consumers and shoppers'
+      };
+
+      const goalDescriptions = {
+        engagement: 'maximize likes, comments, and shares',
+        conversions: 'drive clicks and conversions',
+        brand_awareness: 'increase brand visibility and recognition',
+        education: 'educate and inform the audience',
+        community: 'build community and foster discussions'
+      };
+
+      const prompt = `Refine this marketing copy for social media: "${refineInput}"
+
+Target Platforms: ${refineSettings.targetPlatforms.join(', ')}
+Target Audience: ${audienceDescriptions[refineSettings.audience]}
+Marketing Goal: ${goalDescriptions[refineSettings.goal]}
+
+Create ${refineSettings.targetPlatforms.length} optimized variations, one for each platform:
+- For Twitter/X: concise, punchy, hashtag-friendly (under 280 chars)
+- For LinkedIn: professional, value-driven, thought-leadership tone
+- For Instagram: visual-focused, emoji-rich, engaging captions
+- For Facebook: conversational, community-oriented, longer form
+- For TikTok: trendy, authentic, call-to-action focused
+
+For each variation provide:
+- platform: platform name
+- copy: optimized text
+- key_changes: list of 2-3 main improvements made
+- character_count: length of the copy
+- suggested_hashtags: array of 3-5 relevant hashtags`;
+
+      const result = await base44.integrations.Core.InvokeLLM({
+        prompt,
+        response_json_schema: {
+          type: 'object',
+          properties: {
+            variations: {
+              type: 'array',
+              items: {
+                type: 'object',
+                properties: {
+                  platform: { type: 'string' },
+                  copy: { type: 'string' },
+                  key_changes: { type: 'array', items: { type: 'string' } },
+                  character_count: { type: 'number' },
+                  suggested_hashtags: { type: 'array', items: { type: 'string' } }
+                }
+              }
+            }
+          }
+        }
+      });
+      
+      setRefinedVariations(result.variations || []);
+      toast.success(`Generated ${result.variations?.length || 0} platform-optimized variations!`);
+    } catch (error) {
+      toast.error('Failed to refine copy');
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
   if (!projectId) {
     return (
       <div className="flex items-center justify-center h-full">
@@ -354,18 +437,18 @@ export default function SocialMediaHub() {
                 <p className="text-sm text-gray-600">Post immediately to all platforms</p>
               </CardContent>
             </Card>
+            <Card className="hover:shadow-lg transition-shadow cursor-pointer" onClick={() => setShowRefineDialog(true)}>
+              <CardContent className="p-6 text-center">
+                <Sparkles className="w-8 h-8 mx-auto mb-2 text-indigo-600" />
+                <h3 className="font-semibold mb-1">AI Copy Refiner</h3>
+                <p className="text-sm text-gray-600">Optimize text for each platform</p>
+              </CardContent>
+            </Card>
             <Card className="hover:shadow-lg transition-shadow cursor-pointer" onClick={generateContentIdeas}>
               <CardContent className="p-6 text-center">
                 <Lightbulb className="w-8 h-8 mx-auto mb-2 text-purple-600" />
                 <h3 className="font-semibold mb-1">AI Content Ideas</h3>
                 <p className="text-sm text-gray-600">Generate creative post ideas</p>
-              </CardContent>
-            </Card>
-            <Card className="hover:shadow-lg transition-shadow cursor-pointer">
-              <CardContent className="p-6 text-center">
-                <Calendar className="w-8 h-8 mx-auto mb-2 text-blue-600" />
-                <h3 className="font-semibold mb-1">Schedule Campaign</h3>
-                <p className="text-sm text-gray-600">Plan content in advance</p>
               </CardContent>
             </Card>
             <Card className="hover:shadow-lg transition-shadow cursor-pointer">
@@ -667,6 +750,212 @@ export default function SocialMediaHub() {
             <Button onClick={generateContentIdeas} disabled={isGenerating}>
               <RefreshCw className={`w-4 h-4 mr-2 ${isGenerating ? 'animate-spin' : ''}`} />
               Generate New Ideas
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* AI Copy Refiner Dialog */}
+      <Dialog open={showRefineDialog} onOpenChange={setShowRefineDialog}>
+        <DialogContent className="sm:max-w-4xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Sparkles className="w-5 h-5 text-indigo-600" />
+              AI Marketing Copy Refiner
+            </DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            {refinedVariations.length === 0 ? (
+              <>
+                <div>
+                  <Label>Your Marketing Copy</Label>
+                  <Textarea
+                    value={refineInput}
+                    onChange={(e) => setRefineInput(e.target.value)}
+                    placeholder="Paste your existing marketing text here..."
+                    rows={4}
+                    className="mt-2"
+                  />
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div>
+                    <Label>Target Platforms</Label>
+                    <div className="space-y-2 mt-2">
+                      {platforms.slice(0, 4).map((platform) => (
+                        <label key={platform.id} className="flex items-center gap-2 cursor-pointer">
+                          <input
+                            type="checkbox"
+                            checked={refineSettings.targetPlatforms.includes(platform.id)}
+                            onChange={(e) => {
+                              if (e.target.checked) {
+                                setRefineSettings({
+                                  ...refineSettings,
+                                  targetPlatforms: [...refineSettings.targetPlatforms, platform.id]
+                                });
+                              } else {
+                                setRefineSettings({
+                                  ...refineSettings,
+                                  targetPlatforms: refineSettings.targetPlatforms.filter(p => p !== platform.id)
+                                });
+                              }
+                            }}
+                            className="rounded"
+                          />
+                          <platform.icon className="w-4 h-4" style={{ color: platform.color }} />
+                          <span className="text-sm">{platform.name}</span>
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+                  <div>
+                    <Label>Target Audience</Label>
+                    <Select
+                      value={refineSettings.audience}
+                      onValueChange={(value) => setRefineSettings({ ...refineSettings, audience: value })}
+                    >
+                      <SelectTrigger className="mt-2">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="general">General Audience</SelectItem>
+                        <SelectItem value="professionals">Professionals</SelectItem>
+                        <SelectItem value="youth">Youth / Gen Z</SelectItem>
+                        <SelectItem value="enterprise">Enterprise</SelectItem>
+                        <SelectItem value="consumers">Consumers</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div>
+                    <Label>Marketing Goal</Label>
+                    <Select
+                      value={refineSettings.goal}
+                      onValueChange={(value) => setRefineSettings({ ...refineSettings, goal: value })}
+                    >
+                      <SelectTrigger className="mt-2">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="engagement">Increase Engagement</SelectItem>
+                        <SelectItem value="conversions">Drive Conversions</SelectItem>
+                        <SelectItem value="brand_awareness">Brand Awareness</SelectItem>
+                        <SelectItem value="education">Educate Audience</SelectItem>
+                        <SelectItem value="community">Build Community</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+                <Button
+                  onClick={refineMarketingCopy}
+                  disabled={isGenerating || !refineInput.trim() || refineSettings.targetPlatforms.length === 0}
+                  className="w-full"
+                >
+                  {isGenerating ? (
+                    <>
+                      <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
+                      Generating Variations...
+                    </>
+                  ) : (
+                    <>
+                      <Sparkles className="w-4 h-4 mr-2" />
+                      Generate Platform-Optimized Variations
+                    </>
+                  )}
+                </Button>
+              </>
+            ) : (
+              <>
+                <div className="space-y-4">
+                  {refinedVariations.map((variation, index) => {
+                    const platform = platforms.find(p => p.name.toLowerCase().includes(variation.platform.toLowerCase()));
+                    const PlatformIcon = platform?.icon || Share2;
+                    const platformColor = platform?.color || '#666';
+                    
+                    return (
+                      <Card key={index} className="border-2" style={{ borderColor: `${platformColor}20` }}>
+                        <CardHeader>
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-2">
+                              <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ backgroundColor: `${platformColor}20` }}>
+                                <PlatformIcon className="w-4 h-4" style={{ color: platformColor }} />
+                              </div>
+                              <CardTitle className="text-base">{variation.platform}</CardTitle>
+                            </div>
+                            <Badge variant="outline">{variation.character_count} chars</Badge>
+                          </div>
+                        </CardHeader>
+                        <CardContent className="space-y-3">
+                          <div className="bg-gray-50 p-3 rounded-lg">
+                            <p className="text-sm whitespace-pre-wrap">{variation.copy}</p>
+                          </div>
+                          {variation.suggested_hashtags && variation.suggested_hashtags.length > 0 && (
+                            <div className="flex flex-wrap gap-1">
+                              {variation.suggested_hashtags.map((tag, i) => (
+                                <Badge key={i} variant="secondary" className="text-xs">
+                                  #{tag}
+                                </Badge>
+                              ))}
+                            </div>
+                          )}
+                          {variation.key_changes && variation.key_changes.length > 0 && (
+                            <div className="text-xs space-y-1">
+                              <p className="font-semibold text-gray-700">Key Improvements:</p>
+                              <ul className="list-disc list-inside text-gray-600 space-y-0.5">
+                                {variation.key_changes.map((change, i) => (
+                                  <li key={i}>{change}</li>
+                                ))}
+                              </ul>
+                            </div>
+                          )}
+                          <div className="flex gap-2">
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => {
+                                navigator.clipboard.writeText(variation.copy);
+                                toast.success('Copied to clipboard');
+                              }}
+                              className="flex-1"
+                            >
+                              Copy
+                            </Button>
+                            <Button
+                              size="sm"
+                              onClick={() => {
+                                setNewPost({ ...newPost, content: variation.copy });
+                                setShowRefineDialog(false);
+                                setShowPostDialog(true);
+                                toast.success('Applied to post');
+                              }}
+                              className="flex-1"
+                            >
+                              Use This
+                            </Button>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    );
+                  })}
+                </div>
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    setRefinedVariations([]);
+                    setRefineInput('');
+                  }}
+                  className="w-full"
+                >
+                  Refine New Copy
+                </Button>
+              </>
+            )}
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => {
+              setShowRefineDialog(false);
+              setRefinedVariations([]);
+              setRefineInput('');
+            }}>
+              Close
             </Button>
           </DialogFooter>
         </DialogContent>
