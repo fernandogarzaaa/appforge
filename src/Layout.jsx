@@ -34,7 +34,7 @@ export default function Layout({ children, currentPageName }) {
   };
 
   return (
-    <div className="flex h-screen bg-gray-50/50">
+    <div className="flex h-screen bg-[#fafbfc]">
       <Sidebar 
         currentProject={currentProject} 
         collapsed={sidebarCollapsed}
@@ -42,7 +42,7 @@ export default function Layout({ children, currentPageName }) {
       />
       <div className="flex-1 flex flex-col overflow-hidden">
         <Header user={user} onLogout={handleLogout} />
-        <main className="flex-1 overflow-auto">
+        <main className="flex-1 overflow-auto bg-[#fafbfc]">
           {children}
         </main>
       </div>

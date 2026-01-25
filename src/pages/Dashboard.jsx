@@ -26,27 +26,27 @@ export default function Dashboard() {
   );
 
   return (
-    <div className="p-6 lg:p-8 max-w-7xl mx-auto">
+    <div className="p-6 max-w-7xl mx-auto">
       {/* Welcome Section */}
       <motion.div 
-        initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        className="mb-8"
+        className="mb-6"
       >
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">
-          Welcome back 👋
+        <h1 className="text-2xl font-semibold text-gray-900 mb-1">
+          Welcome back
         </h1>
-        <p className="text-gray-500">
-          Here's an overview of your projects and recent activity.
+        <p className="text-[13px] text-gray-500">
+          Overview of your projects and activity
         </p>
       </motion.div>
 
       {/* Stats Grid */}
       <motion.div 
-        initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.1 }}
-        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8"
+        transition={{ delay: 0.05 }}
+        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 mb-6"
       >
         <StatCard
           title="Total Projects"
@@ -84,57 +84,57 @@ export default function Dashboard() {
 
       {/* Quick Actions */}
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.2 }}
-        className="bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 rounded-2xl p-6 mb-8 text-white"
+        transition={{ delay: 0.1 }}
+        className="bg-gray-900 rounded-xl p-5 mb-6 text-white"
       >
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-xl bg-white/20 backdrop-blur flex items-center justify-center">
-              <Sparkles className="w-6 h-6" />
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-lg bg-white/10 flex items-center justify-center">
+              <Sparkles className="w-4 h-4" />
             </div>
             <div>
-              <h2 className="text-xl font-semibold">AI-Powered Development</h2>
-              <p className="text-white/80 text-sm">
-                Use our AI assistant to build features faster
+              <h2 className="text-base font-semibold">AI-Powered Development</h2>
+              <p className="text-white/60 text-[13px]">
+                Build features faster with AI assistance
               </p>
             </div>
           </div>
           <Link to={createPageUrl('Projects') + '?new=true'}>
-            <Button className="bg-white text-indigo-600 hover:bg-white/90 rounded-xl h-11 px-6">
-              <Plus className="w-4 h-4 mr-2" />
-              Create New Project
+            <Button className="bg-white text-gray-900 hover:bg-gray-100 rounded-lg h-9 px-4 text-[13px] font-medium">
+              <Plus className="w-3.5 h-3.5 mr-1.5" />
+              New Project
             </Button>
           </Link>
         </div>
       </motion.div>
 
       {/* Recent Projects */}
-      <div className="mb-8">
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-semibold text-gray-900">Recent Projects</h2>
+      <div className="mb-6">
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-base font-semibold text-gray-900">Recent Projects</h2>
           <Link to={createPageUrl('Projects')}>
-            <Button variant="ghost" className="text-indigo-600 hover:text-indigo-700 hover:bg-indigo-50 rounded-xl">
+            <Button variant="ghost" className="text-gray-600 hover:text-gray-900 hover:bg-gray-100/70 rounded-lg h-8 text-[13px]">
               View all
-              <ArrowRight className="w-4 h-4 ml-2" />
+              <ArrowRight className="w-3.5 h-3.5 ml-1.5" />
             </Button>
           </Link>
         </div>
 
         {isLoading ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
             {[1, 2, 3].map((i) => (
-              <div key={i} className="bg-white rounded-2xl border border-gray-100 p-6 animate-pulse">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-12 h-12 bg-gray-200 rounded-xl" />
+              <div key={i} className="bg-white rounded-xl border border-gray-200 p-4 animate-pulse">
+                <div className="flex items-center gap-2.5 mb-3">
+                  <div className="w-9 h-9 bg-gray-200 rounded-lg" />
                   <div>
-                    <div className="h-4 w-24 bg-gray-200 rounded mb-2" />
-                    <div className="h-3 w-16 bg-gray-100 rounded" />
+                    <div className="h-3 w-20 bg-gray-200 rounded mb-1.5" />
+                    <div className="h-2.5 w-14 bg-gray-100 rounded" />
                   </div>
                 </div>
-                <div className="h-10 bg-gray-100 rounded mb-4" />
-                <div className="h-8 bg-gray-50 rounded" />
+                <div className="h-8 bg-gray-100 rounded mb-3" />
+                <div className="h-7 bg-gray-50 rounded" />
               </div>
             ))}
           </div>
@@ -147,7 +147,7 @@ export default function Dashboard() {
             onAction={() => window.location.href = createPageUrl('Projects') + '?new=true'}
           />
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
             {projects.map((project, index) => (
               <ProjectCard key={project.id} project={project} index={index} />
             ))}
