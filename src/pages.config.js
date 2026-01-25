@@ -42,6 +42,7 @@ import EmailAssistant from './pages/EmailAssistant';
 import AIMonitoring from './pages/AIMonitoring';
 import PredictiveAnalytics from './pages/PredictiveAnalytics';
 import FeedbackAnalytics from './pages/FeedbackAnalytics';
+import AdminDashboard from './pages/AdminDashboard';
 import __Layout from './Layout.jsx';
 
 
@@ -90,6 +91,7 @@ export const PAGES = {
     "AIMonitoring": AIMonitoring,
     "PredictiveAnalytics": PredictiveAnalytics,
     "FeedbackAnalytics": FeedbackAnalytics,
+    "AdminDashboard": AdminDashboard,
 }
 
 export const pagesConfig = {
