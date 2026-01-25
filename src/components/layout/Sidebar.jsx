@@ -14,7 +14,8 @@ import {
   Wallet,
   Coins,
   Image,
-  Code
+  Code,
+  CreditCard
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
@@ -22,6 +23,7 @@ import { Button } from '@/components/ui/button';
 const navItems = [
   { name: 'Dashboard', icon: LayoutDashboard, page: 'Dashboard' },
   { name: 'Projects', icon: FolderKanban, page: 'Projects' },
+  { name: 'Pricing', icon: CreditCard, page: 'Pricing' },
 ];
 
 const projectNavItems = [
