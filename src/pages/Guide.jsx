@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { 
   BookOpen, CheckCircle, Circle, ChevronRight, Rocket,
-  FolderPlus, Database, FileCode, Sparkles, Upload, Globe
+  FolderPlus, FileCode, Sparkles, Upload, FileText
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
