@@ -431,7 +431,51 @@ export default function BotBuilder() {
               <TabsTrigger value="custom">Custom</TabsTrigger>
             </TabsList>
 
-            <TabsContent value="basic" className="space-y-4 mt-4">
+            <TabsContent value="all" className="space-y-4 mt-4">
+              <Label className="mb-2 block">All Available Templates</Label>
+              <div className="grid grid-cols-1 gap-2 mb-4">
+                {botTemplates.map((template, idx) => {
+                  const TemplateIcon = template.icon;
+                  return (
+                    <Card 
+                      key={idx} 
+                      className="cursor-pointer hover:bg-gray-50 transition-colors"
+                      onClick={() => {
+                        setNewBot({
+                          name: template.name,
+                          description: template.description,
+                          trigger: template.trigger,
+                          nodes: template.workflow.map((step, i) => ({
+                            id: `node-${i}`,
+                            name: step,
+                            type: 'action'
+                          })),
+                          status: 'draft'
+                        });
+                        setActiveTab('custom');
+                      }}
+                    >
+                      <CardContent className="p-4">
+                        <div className="flex items-start gap-3">
+                          <div className="w-10 h-10 rounded-lg bg-indigo-100 flex items-center justify-center">
+                            <TemplateIcon className="w-5 h-5 text-indigo-600" />
+                          </div>
+                          <div className="flex-1">
+                            <div className="flex items-center gap-2">
+                              <h4 className="font-semibold text-sm">{template.name}</h4>
+                              <Badge variant="outline" className="text-xs">{template.category}</Badge>
+                            </div>
+                            <p className="text-xs text-gray-600 mt-1">{template.description}</p>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  );
+                })}
+              </div>
+            </TabsContent>
+
+            <TabsContent value="email" className="space-y-4 mt-4">
               <Label className="mb-2 block">Quick Start Templates</Label>
               <div className="grid grid-cols-1 gap-2 mb-4">
                 {botTemplates.filter(t => t.category === 'email').map((template, idx) => {
