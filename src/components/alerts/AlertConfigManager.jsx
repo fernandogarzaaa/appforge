@@ -13,6 +13,7 @@ import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
 import { AlertCircle, Plus, Trash2, Edit, TestTube } from 'lucide-react';
 import { toast } from 'sonner';
+import HelpTooltip from '@/components/help/HelpTooltip';
 
 export default function AlertConfigManager({ monitoringRuleId }) {
   const queryClient = useQueryClient();
