@@ -4,7 +4,8 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { 
   Sparkles, Send, Plus, Trash2, MessageSquare,
   Loader2, Copy, Check, Code, FileCode, Database,
-  Globe, Brain, Zap, Bot, Github, Wand2, Workflow
+  Globe, Brain, Zap, Bot, Github, Wand2, Workflow,
+  Upload, FileText, Shield
 } from 'lucide-react';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import APIDiscoveryPanel from '@/components/ai/APIDiscoveryPanel';
@@ -12,6 +13,9 @@ import PredictiveModels from '@/components/ai/PredictiveModels';
 import GitHubIntegration from '@/components/ai/GitHubIntegration';
 import AdvancedAIFunctions from '@/components/ai/AdvancedAIFunctions';
 import AutomationBuilder from '@/components/ai/AutomationBuilder';
+import DocumentUpload from '@/components/ai/DocumentUpload';
+import CodeReview from '@/components/ai/CodeReview';
+import ProactiveSuggestions from '@/components/ai/ProactiveSuggestions';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -38,6 +42,12 @@ export default function AIAssistant() {
   const [activePanel, setActivePanel] = useState('chat');
   const [integratedAPIs, setIntegratedAPIs] = useState([]);
   const messagesEndRef = useRef(null);
+
+  const { data: documents = [] } = useQuery({
+    queryKey: ['documents', projectId],
+    queryFn: () => base44.entities.ProjectDocument.filter({ project_id: projectId }),
+    enabled: !!projectId
+  });
 
   const urlParams = new URLSearchParams(window.location.search);
   const projectId = urlParams.get('projectId');
@@ -94,10 +104,14 @@ export default function AIAssistant() {
     setInput('');
     setIsLoading(true);
 
+    const documentContext = documents.length > 0 
+      ? `\n\nProject Documents Available: ${documents.map(d => d.name).join(', ')}`
+      : '';
+
     const response = await base44.integrations.Core.InvokeLLM({
       prompt: `You are an advanced AI assistant (powered by Gemini) helping to build web applications with AI capabilities.
 You have access to API discovery, predictive models, and code generation.
-${integratedAPIs.length > 0 ? `\nIntegrated APIs: ${integratedAPIs.map(a => a.name).join(', ')}` : ''}
+${integratedAPIs.length > 0 ? `\nIntegrated APIs: ${integratedAPIs.map(a => a.name).join(', ')}` : ''}${documentContext}
 
 User request: ${input}
 
@@ -107,11 +121,15 @@ Capabilities:
 - Build predictive models (forecasting, sentiment analysis, classification, anomaly detection)
 - Generate API integration code
 - Provide AI-powered insights and recommendations
+- Review and refactor code
+- Reference project documentation
 
 If the user asks about APIs, suggest using the API Discovery panel.
 If they need predictions/analysis, suggest the Predictive Models panel.
+If they want code review, suggest the Code Review panel.
 Provide helpful, concise responses with code examples when relevant.`,
       add_context_from_internet: input.toLowerCase().includes('api') || input.toLowerCase().includes('latest') || input.toLowerCase().includes('current'),
+      file_urls: documents.map(d => d.file_url)
     });
 
     const assistantMessage = { role: 'assistant', content: response, timestamp: new Date().toISOString() };
@@ -286,6 +304,32 @@ Provide helpful, concise responses with code examples when relevant.`,
               <Workflow className="w-4 h-4" />
               <span className="font-medium">Automations</span>
             </button>
+            <button
+              onClick={() => setActivePanel('review')}
+              className={cn(
+                "flex items-center gap-2 py-3 border-b-2 transition-colors",
+                activePanel === 'review' 
+                  ? "border-emerald-500 text-emerald-600" 
+                  : "border-transparent text-gray-500 hover:text-gray-700"
+              )}
+            >
+              <Shield className="w-4 h-4" />
+              <span className="font-medium">Code Review</span>
+            </button>
+            <button
+              onClick={() => setActivePanel('docs')}
+              className={cn(
+                "flex items-center gap-2 py-3 border-b-2 transition-colors",
+                activePanel === 'docs' 
+                  ? "border-orange-500 text-orange-600" 
+                  : "border-transparent text-gray-500 hover:text-gray-700"
+              )}
+            >
+              <FileText className="w-4 h-4" />
+              <span className="font-medium">
+                Documents {documents.length > 0 && `(${documents.length})`}
+              </span>
+            </button>
             {integratedAPIs.length > 0 && (
               <div className="ml-auto flex items-center gap-2">
                 <Zap className="w-4 h-4 text-green-500" />
@@ -362,28 +406,58 @@ Provide helpful, concise responses with code examples when relevant.`,
           </div>
         )}
 
+        {/* Code Review Panel */}
+        {activePanel === 'review' && (
+          <div className="flex-1 p-6 overflow-auto">
+            <div className="max-w-4xl mx-auto">
+              <CodeReview projectId={projectId} />
+            </div>
+          </div>
+        )}
+
+        {/* Documents Panel */}
+        {activePanel === 'docs' && (
+          <div className="flex-1 p-6 overflow-auto">
+            <div className="max-w-4xl mx-auto">
+              <div className="mb-6">
+                <h2 className="text-xl font-bold text-gray-900 mb-1">Project Documents</h2>
+                <p className="text-gray-500">Upload specifications and documentation for AI context</p>
+              </div>
+              <DocumentUpload projectId={projectId} />
+            </div>
+          </div>
+        )}
+
         {/* Chat Panel */}
         {activePanel === 'chat' && messages.length === 0 ? (
-          <div className="flex-1 flex flex-col items-center justify-center p-8">
-            <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center mb-6">
-              <Sparkles className="w-10 h-10 text-white" />
+          <div className="flex-1 overflow-auto">
+            <div className="flex flex-col items-center justify-center p-8 pb-4">
+              <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center mb-6">
+                <Sparkles className="w-10 h-10 text-white" />
+              </div>
+              <h2 className="text-2xl font-bold text-gray-900 mb-2">AI Assistant</h2>
+              <p className="text-gray-500 text-center max-w-md mb-8">
+                Build apps, discover APIs, and run predictive models with AI assistance
+              </p>
+              <div className="flex flex-wrap gap-3 justify-center mb-8">
+                {quickActions.map((action) => (
+                  <Button
+                    key={action.label}
+                    variant="outline"
+                    onClick={() => setInput(action.prompt)}
+                    className="rounded-xl h-11 px-4"
+                  >
+                    <action.icon className="w-4 h-4 mr-2" />
+                    {action.label}
+                  </Button>
+                ))}
+              </div>
             </div>
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">AI Assistant</h2>
-            <p className="text-gray-500 text-center max-w-md mb-8">
-              Build apps, discover APIs, and run predictive models with AI assistance
-            </p>
-            <div className="flex flex-wrap gap-3 justify-center">
-              {quickActions.map((action) => (
-                <Button
-                  key={action.label}
-                  variant="outline"
-                  onClick={() => setInput(action.prompt)}
-                  className="rounded-xl h-11 px-4"
-                >
-                  <action.icon className="w-4 h-4 mr-2" />
-                  {action.label}
-                </Button>
-              ))}
+            <div className="max-w-4xl mx-auto px-8 pb-8">
+              <ProactiveSuggestions 
+                projectId={projectId} 
+                onApplySuggestion={(suggestion) => setInput(suggestion.action)}
+              />
             </div>
           </div>
         ) : activePanel === 'chat' && (
