@@ -423,9 +423,11 @@ export default function BotBuilder() {
           </DialogHeader>
           
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-            <TabsList className="grid w-full grid-cols-3">
-              <TabsTrigger value="basic">Basic Bots</TabsTrigger>
+            <TabsList className="grid w-full grid-cols-5">
+              <TabsTrigger value="all">All Templates</TabsTrigger>
+              <TabsTrigger value="email">Email</TabsTrigger>
               <TabsTrigger value="trading">Trading</TabsTrigger>
+              <TabsTrigger value="automation">Automation</TabsTrigger>
               <TabsTrigger value="custom">Custom</TabsTrigger>
             </TabsList>
 
