@@ -118,12 +118,14 @@ async function sendEmailAlert(config, source, alert) {
   try {
     const emailBody = formatAlertEmail(config, source, alert);
     
-    for (const email of config.recipient_emails) {
-      await base44.integrations.Core.SendEmail({
-        to: email,
-        subject: `🚨 Anomaly Detected: ${source.data.title}`,
-        body: emailBody
-      });
+    if (config.recipient_emails && config.recipient_emails.length > 0) {
+      for (const email of config.recipient_emails) {
+        await base44.integrations.Core.SendEmail({
+          to: email,
+          subject: `🚨 Anomaly Detected: ${source.data.title || 'Alert'}`,
+          body: emailBody
+        });
+      }
     }
     return true;
   } catch (error) {
