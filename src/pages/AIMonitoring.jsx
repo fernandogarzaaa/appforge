@@ -13,8 +13,11 @@ import { toast } from 'sonner';
 import {
   Eye, Plus, TrendingUp, AlertTriangle, Lightbulb, 
   Activity, Database, Mail, Code, CheckCircle, XCircle,
-  Clock, Zap, Target, Brain, Play, Pause
+  Clock, Zap, Target, Brain, Play, Pause, BarChart2
 } from 'lucide-react';
+import { InsightsTrendChart, SeverityDistribution, InsightTypeChart } from '@/components/monitoring/InsightsChart';
+import { TaskPriorityChart, UrgencyFactorsRadar, PriorityScatterPlot } from '@/components/monitoring/TaskAnalyticsChart';
+import { RuleTriggersChart, DataSourceDistribution } from '@/components/monitoring/RuleActivityChart';
 
 export default function AIMonitoring() {
   const queryClient = useQueryClient();
@@ -215,12 +218,76 @@ Calculate:
         </Button>
       </div>
 
-      <Tabs defaultValue="insights" className="flex-1 flex flex-col">
+      <Tabs defaultValue="dashboard" className="flex-1 flex flex-col">
         <TabsList className="mb-4">
+          <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
           <TabsTrigger value="insights">Insights ({insights.length})</TabsTrigger>
           <TabsTrigger value="tasks">AI Tasks ({aiTasks.length})</TabsTrigger>
           <TabsTrigger value="rules">Monitoring Rules ({rules.length})</TabsTrigger>
         </TabsList>
+
+        <TabsContent value="dashboard" className="flex-1 overflow-y-auto">
+          <div className="space-y-6">
+            {/* Overview Stats */}
+            <div className="grid grid-cols-4 gap-4">
+              <Card>
+                <CardContent className="pt-6">
+                  <div className="text-center">
+                    <Eye className="w-8 h-8 mx-auto text-indigo-600 mb-2" />
+                    <div className="text-2xl font-bold">{insights.length}</div>
+                    <div className="text-sm text-gray-500">Total Insights</div>
+                  </div>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardContent className="pt-6">
+                  <div className="text-center">
+                    <Target className="w-8 h-8 mx-auto text-purple-600 mb-2" />
+                    <div className="text-2xl font-bold">{aiTasks.length}</div>
+                    <div className="text-sm text-gray-500">AI Tasks</div>
+                  </div>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardContent className="pt-6">
+                  <div className="text-center">
+                    <Activity className="w-8 h-8 mx-auto text-green-600 mb-2" />
+                    <div className="text-2xl font-bold">{rules.filter(r => r.is_active).length}</div>
+                    <div className="text-sm text-gray-500">Active Rules</div>
+                  </div>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardContent className="pt-6">
+                  <div className="text-center">
+                    <AlertTriangle className="w-8 h-8 mx-auto text-red-600 mb-2" />
+                    <div className="text-2xl font-bold">{insights.filter(i => i.severity === 'critical' || i.severity === 'high').length}</div>
+                    <div className="text-sm text-gray-500">High Priority</div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Insights Analytics */}
+            <div className="grid grid-cols-3 gap-4">
+              <InsightsTrendChart insights={insights} />
+              <SeverityDistribution insights={insights} />
+              <InsightTypeChart insights={insights} />
+            </div>
+
+            {/* Task Analytics */}
+            <div className="grid grid-cols-2 gap-4">
+              <TaskPriorityChart tasks={aiTasks} />
+              <PriorityScatterPlot tasks={aiTasks} />
+            </div>
+
+            {/* Rule Analytics */}
+            <div className="grid grid-cols-2 gap-4">
+              <RuleTriggersChart rules={rules} />
+              <DataSourceDistribution rules={rules} />
+            </div>
+          </div>
+        </TabsContent>
 
         <TabsContent value="insights" className="flex-1 overflow-y-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -303,52 +370,57 @@ Calculate:
         </TabsContent>
 
         <TabsContent value="tasks" className="flex-1 overflow-y-auto">
-          <div className="space-y-3">
-            {aiTasks.map((task) => (
-              <Card key={task.id}>
-                <CardContent className="p-4">
-                  <div className="flex items-start justify-between">
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2 mb-2">
-                        <h4 className="font-semibold">{task.title}</h4>
-                        <Badge className={
-                          task.priority === 'urgent' ? 'bg-red-600' :
-                          task.priority === 'high' ? 'bg-orange-600' :
-                          task.priority === 'medium' ? 'bg-yellow-600' : 'bg-green-600'
-                        }>
-                          {task.priority}
-                        </Badge>
-                        <Badge variant="outline">Score: {task.ai_priority_score || 0}</Badge>
-                      </div>
-                      <p className="text-sm text-gray-600 mb-2">{task.description}</p>
-                      
-                      {task.urgency_factors && (
-                        <div className="flex gap-3 text-xs text-gray-500">
-                          <span>Impact: {((task.urgency_factors.business_impact || 0) * 100).toFixed(0)}%</span>
-                          <span>Urgency: {((task.urgency_factors.deadline_proximity || 0) * 100).toFixed(0)}%</span>
+          <div className="grid grid-cols-3 gap-4 mb-6">
+            <div className="col-span-2 space-y-3">
+              {aiTasks.map((task) => (
+                <Card key={task.id}>
+                  <CardContent className="p-4">
+                    <div className="flex items-start justify-between">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2 mb-2">
+                          <h4 className="font-semibold">{task.title}</h4>
+                          <Badge className={
+                            task.priority === 'urgent' ? 'bg-red-600' :
+                            task.priority === 'high' ? 'bg-orange-600' :
+                            task.priority === 'medium' ? 'bg-yellow-600' : 'bg-green-600'
+                          }>
+                            {task.priority}
+                          </Badge>
+                          <Badge variant="outline">Score: {task.ai_priority_score || 0}</Badge>
                         </div>
-                      )}
+                        <p className="text-sm text-gray-600 mb-2">{task.description}</p>
+                        
+                        {task.urgency_factors && (
+                          <div className="flex gap-3 text-xs text-gray-500">
+                            <span>Impact: {((task.urgency_factors.business_impact || 0) * 100).toFixed(0)}%</span>
+                            <span>Urgency: {((task.urgency_factors.deadline_proximity || 0) * 100).toFixed(0)}%</span>
+                          </div>
+                        )}
 
-                      {task.ai_suggestions && task.ai_suggestions.length > 0 && (
-                        <div className="mt-2 text-xs">
-                          <p className="font-semibold mb-1">AI Suggestions:</p>
-                          <ul className="list-disc list-inside space-y-0.5 text-gray-600">
-                            {task.ai_suggestions.slice(0, 2).map((suggestion, idx) => (
-                              <li key={idx}>{suggestion}</li>
-                            ))}
-                          </ul>
-                        </div>
-                      )}
+                        {task.ai_suggestions && task.ai_suggestions.length > 0 && (
+                          <div className="mt-2 text-xs">
+                            <p className="font-semibold mb-1">AI Suggestions:</p>
+                            <ul className="list-disc list-inside space-y-0.5 text-gray-600">
+                              {task.ai_suggestions.slice(0, 2).map((suggestion, idx) => (
+                                <li key={idx}>{suggestion}</li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
+                      </div>
+                      <div className="flex gap-2">
+                        <Button size="sm" variant="outline">
+                          <CheckCircle className="w-4 h-4" />
+                        </Button>
+                      </div>
                     </div>
-                    <div className="flex gap-2">
-                      <Button size="sm" variant="outline">
-                        <CheckCircle className="w-4 h-4" />
-                      </Button>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+            <div>
+              {aiTasks[0] && <UrgencyFactorsRadar task={aiTasks[0]} />}
+            </div>
           </div>
           {aiTasks.length === 0 && (
             <div className="text-center py-12">
