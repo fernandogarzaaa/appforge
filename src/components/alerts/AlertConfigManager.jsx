@@ -140,7 +140,7 @@ export default function AlertConfigManager({ monitoringRuleId }) {
   };
 
   const handleEmailChange = (e) => {
-    const emails = e.target.value.split(',').map(e => e.trim()).filter(Boolean);
+    const emails = e.target.value.split(',').map(email => email.trim()).filter(Boolean);
     setFormData(prev => ({ ...prev, recipient_emails: emails }));
   };
 
@@ -282,9 +282,16 @@ export default function AlertConfigManager({ monitoringRuleId }) {
                 />
               </div>
 
-              <Button onClick={() => createMutation.mutate(formData)} className="w-full" disabled={createMutation.isPending || !formData.name}>
-                {editingId ? 'Update Alert' : 'Create Alert'}
-              </Button>
+              <div className="flex gap-2">
+                <Button onClick={() => createMutation.mutate(formData)} className="flex-1" disabled={createMutation.isPending || !formData.name}>
+                  {editingId ? 'Update Alert' : 'Create Alert'}
+                </Button>
+                {formData.alert_channels.length > 0 && (
+                  <Button variant="outline" onClick={() => testMutation.mutate(formData)} disabled={testMutation.isPending}>
+                    Test
+                  </Button>
+                )}
+              </div>
             </div>
           </DialogContent>
         </Dialog>

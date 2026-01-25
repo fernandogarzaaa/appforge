@@ -26,9 +26,9 @@ export default function FeedbackWidget({ type, targetId, onFeedbackSubmitted }) 
         feedback_type: type,
         target_id: targetId,
         accuracy_rating: rating,
-        usefulness_rating: usefulness,
+        usefulness_rating: usefulness || 0,
         is_helpful: rating >= 4,
-        corrective_feedback: corrective
+        corrective_feedback: corrective || ''
       });
 
       toast.success('Feedback submitted! This helps improve our AI.');

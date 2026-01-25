@@ -21,7 +21,6 @@ export default function FeedbackAnalytics() {
 
   const retainModelMutation = useMutation({
     mutationFn: async () => {
-      setIsRetraining(true);
       const lowRatedFeedback = feedback.filter(f => f.accuracy_rating <= 2);
       
       if (lowRatedFeedback.length === 0) {
@@ -64,9 +63,6 @@ Provide:
     },
     onError: (error) => {
       toast.error('Retraining failed: ' + error.message);
-    },
-    onSettled: () => {
-      setIsRetraining(false);
     }
   });
 
