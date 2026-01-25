@@ -105,6 +105,118 @@ const botTemplates = [
       'Notify stakeholders',
       'Log incident'
     ]
+  },
+  {
+    name: 'Social Media Post Bot',
+    description: 'Auto-post content to social media channels on schedule',
+    trigger: { type: 'schedule', config: {} },
+    icon: Mail,
+    category: 'social',
+    workflow: [
+      'Fetch content from CMS',
+      'Format for each platform',
+      'Schedule posts',
+      'Publish to social media',
+      'Track engagement metrics'
+    ]
+  },
+  {
+    name: 'Database Sync Bot',
+    description: 'Sync data between multiple databases in real-time',
+    trigger: { type: 'entity_change', config: {} },
+    icon: Zap,
+    category: 'integration',
+    workflow: [
+      'Monitor source database',
+      'Detect data changes',
+      'Transform data format',
+      'Sync to destination database',
+      'Log sync status'
+    ]
+  },
+  {
+    name: 'Report Generation Bot',
+    description: 'Generate and email reports on schedule automatically',
+    trigger: { type: 'schedule', config: {} },
+    icon: Mail,
+    category: 'reporting',
+    workflow: [
+      'Query data sources',
+      'Compile metrics',
+      'Generate PDF report',
+      'Email stakeholders',
+      'Archive report'
+    ]
+  },
+  {
+    name: 'Image Processing Bot',
+    description: 'Automatically resize, optimize, and organize images',
+    trigger: { type: 'entity_change', config: {} },
+    icon: Zap,
+    category: 'content',
+    workflow: [
+      'Detect new images',
+      'Apply filters/transformations',
+      'Generate thumbnails',
+      'Optimize for web',
+      'Update image metadata'
+    ]
+  },
+  {
+    name: 'Lead Scoring Bot',
+    description: 'Score and prioritize sales leads based on engagement',
+    trigger: { type: 'entity_change', config: {} },
+    icon: Zap,
+    category: 'sales',
+    workflow: [
+      'Monitor lead activities',
+      'Calculate engagement score',
+      'Analyze company size/budget',
+      'Assign priority level',
+      'Notify sales team'
+    ]
+  },
+  {
+    name: 'Backup Automation Bot',
+    description: 'Schedule automatic backups of critical data',
+    trigger: { type: 'schedule', config: {} },
+    icon: Zap,
+    category: 'devops',
+    workflow: [
+      'Trigger backup process',
+      'Compress data',
+      'Upload to cloud storage',
+      'Verify backup integrity',
+      'Cleanup old backups'
+    ]
+  },
+  {
+    name: 'Content Moderation Bot',
+    description: 'Moderate user-generated content and flag violations',
+    trigger: { type: 'entity_change', config: {} },
+    icon: Zap,
+    category: 'content',
+    workflow: [
+      'Scan new content',
+      'Check for violations',
+      'Flag inappropriate content',
+      'Notify moderators',
+      'Log moderation actions'
+    ]
+  },
+  {
+    name: 'Appointment Reminder Bot',
+    description: 'Send reminders before scheduled appointments',
+    trigger: { type: 'schedule', config: {} },
+    icon: Clock,
+    category: 'scheduling',
+    workflow: [
+      'Query upcoming appointments',
+      'Calculate reminder time',
+      'Send SMS/email reminders',
+      'Track confirmation',
+      'Update appointment status'
+    ]
   }
 ];
 
