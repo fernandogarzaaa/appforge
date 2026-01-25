@@ -18,6 +18,7 @@ import {
 import { InsightsTrendChart, SeverityDistribution, InsightTypeChart } from '@/components/monitoring/InsightsChart';
 import { TaskPriorityChart, UrgencyFactorsRadar, PriorityScatterPlot } from '@/components/monitoring/TaskAnalyticsChart';
 import { RuleTriggersChart, DataSourceDistribution } from '@/components/monitoring/RuleActivityChart';
+import TriggerBuilder, { ActionBuilder } from '@/components/monitoring/TriggerBuilder';
 
 export default function AIMonitoring() {
   const queryClient = useQueryClient();
@@ -29,7 +30,13 @@ export default function AIMonitoring() {
     data_source: 'database',
     monitoring_frequency: 'hourly',
     conditions: { anomaly_detection: true },
+    trigger_conditions: [],
     actions: []
+  });
+
+  const { data: workflows = [] } = useQuery({
+    queryKey: ['workflows'],
+    queryFn: () => base44.entities.Workflow.list('-created_date', 50)
   });
 
   const { data: rules = [] } = useQuery({
@@ -72,11 +79,68 @@ export default function AIMonitoring() {
     }
   });
 
+  const evaluateTriggers = (insight, rule) => {
+    if (!rule.trigger_conditions || rule.trigger_conditions.length === 0) return true;
+    
+    return rule.trigger_conditions.every(condition => {
+      if (condition.condition_type === 'severity') {
+        return condition.severity_match?.includes(insight.severity);
+      }
+      if (condition.condition_type === 'insight_type') {
+        return condition.insight_type_match?.includes(insight.insight_type);
+      }
+      return true;
+    });
+  };
+
+  const executeActions = async (insight, actions) => {
+    for (const action of actions) {
+      if (action.create_task && action.type === 'create_task') {
+        const priority = await base44.integrations.Core.InvokeLLM({
+          prompt: `Calculate priority for: ${insight.title}. Severity: ${insight.severity}`,
+          response_json_schema: {
+            type: "object",
+            properties: {
+              ai_priority_score: { type: "number" },
+              urgency_factors: { type: "object" }
+            }
+          }
+        });
+
+        await base44.entities.AITask.create({
+          title: insight.title,
+          description: insight.description,
+          ai_priority_score: priority.ai_priority_score,
+          priority: action.task_priority || 'medium',
+          category: action.task_category || 'analysis',
+          urgency_factors: priority.urgency_factors,
+          insight_id: insight.id
+        });
+      }
+
+      if (action.trigger_workflow && action.workflow_id) {
+        await base44.entities.WorkflowExecution.create({
+          workflow_id: action.workflow_id,
+          workflow_name: action.workflow_name,
+          trigger_type: 'webhook',
+          status: 'running'
+        });
+      }
+
+      if (action.send_alert && action.notification_email) {
+        await base44.integrations.Core.SendEmail({
+          to: action.notification_email,
+          subject: `AI Alert: ${insight.title}`,
+          body: `${insight.description}\n\nSeverity: ${insight.severity}\nType: ${insight.insight_type}`
+        });
+      }
+    }
+  };
+
   const triggerMonitoring = async (rule) => {
     toast.loading('Running monitoring check...');
     
     try {
-      // Simulate AI analysis
       const analysis = await base44.integrations.Core.InvokeLLM({
         prompt: `Analyze data source: ${rule.data_source} (${rule.entity_name || rule.api_endpoint})
         
@@ -101,8 +165,7 @@ Provide:
         }
       });
 
-      // Create insight
-      await base44.entities.AIInsight.create({
+      const insight = await base44.entities.AIInsight.create({
         monitoring_rule_id: rule.id,
         title: `${rule.name} - New ${analysis.insight_type}`,
         description: analysis.description,
@@ -112,7 +175,12 @@ Provide:
         recommended_actions: analysis.recommended_actions
       });
 
-      // Update rule stats
+      // Evaluate triggers and execute actions
+      if (evaluateTriggers(insight, rule) && rule.actions?.length > 0) {
+        await executeActions(insight, rule.actions);
+        toast.success('Triggers matched - actions executed!');
+      }
+
       await base44.entities.MonitoringRule.update(rule.id, {
         last_checked: new Date().toISOString(),
         triggers_count: (rule.triggers_count || 0) + 1
@@ -120,6 +188,7 @@ Provide:
 
       queryClient.invalidateQueries({ queryKey: ['ai-insights'] });
       queryClient.invalidateQueries({ queryKey: ['monitoring-rules'] });
+      queryClient.invalidateQueries({ queryKey: ['ai-tasks'] });
       
       toast.dismiss();
       toast.success('Monitoring completed - new insight found!');
@@ -605,6 +674,21 @@ Calculate:
                   <span className="text-sm">Analyze trends</span>
                 </div>
               </div>
+            </div>
+
+            <div className="border-t pt-4 mt-4">
+              <TriggerBuilder
+                triggers={newRule.trigger_conditions}
+                onChange={(triggers) => setNewRule({ ...newRule, trigger_conditions: triggers })}
+              />
+            </div>
+
+            <div className="border-t pt-4 mt-4">
+              <ActionBuilder
+                actions={newRule.actions}
+                workflows={workflows}
+                onChange={(actions) => setNewRule({ ...newRule, actions })}
+              />
             </div>
 
             <Button
