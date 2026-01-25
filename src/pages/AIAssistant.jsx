@@ -18,6 +18,7 @@ import CodeReview from '@/components/ai/CodeReview';
 import ProactiveSuggestions from '@/components/ai/ProactiveSuggestions';
 import MobileAppBuilder from '@/components/ai/MobileAppBuilder';
 import PersonalizationEngine from '@/components/ai/PersonalizationEngine';
+import AgentDeploymentPanel from '@/components/ai/AgentDeploymentPanel';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -367,6 +368,18 @@ Provide helpful, concise responses with code examples when relevant.`,
               <User className="w-4 h-4" />
               <span className="font-medium">Personalization</span>
             </button>
+            <button
+              onClick={() => setActivePanel('agents')}
+              className={cn(
+                "flex items-center gap-2 py-3 border-b-2 transition-colors",
+                activePanel === 'agents' 
+                  ? "border-green-500 text-green-600" 
+                  : "border-transparent text-gray-500 hover:text-gray-700"
+              )}
+            >
+              <Bot className="w-4 h-4" />
+              <span className="font-medium">Deploy Agents</span>
+            </button>
             </div>
             <a
               href={base44.agents.getWhatsAppConnectURL('ai_assistant')}
@@ -487,6 +500,19 @@ Provide helpful, concise responses with code examples when relevant.`,
           <div className="flex-1 p-6 overflow-auto">
             <div className="max-w-5xl mx-auto">
               <PersonalizationEngine user={user} />
+            </div>
+          </div>
+        )}
+
+        {/* Agent Deployment Panel */}
+        {activePanel === 'agents' && (
+          <div className="flex-1 p-6 overflow-auto">
+            <div className="max-w-5xl mx-auto">
+              <div className="mb-6">
+                <h2 className="text-xl font-bold text-gray-900 mb-1">Deploy Autonomous Agents</h2>
+                <p className="text-gray-500">Suggest and configure AI agents with customizable autonomy levels</p>
+              </div>
+              <AgentDeploymentPanel />
             </div>
           </div>
         )}
