@@ -34,21 +34,21 @@ export default function ProjectCard({ project, onDelete, onDuplicate, index }) {
         to={createPageUrl('EntityDesigner') + `?projectId=${project.id}`}
         className="block group"
       >
-        <div className="bg-white rounded-2xl border border-gray-100 p-6 hover:shadow-xl hover:shadow-gray-100/50 hover:border-indigo-100 transition-all duration-300">
+        <div className="bg-white rounded-xl border border-gray-200 p-4 hover:border-gray-900 hover:shadow-sm transition-all duration-200">
           {/* Header */}
-          <div className="flex items-start justify-between mb-4">
-            <div className="flex items-center gap-3">
+          <div className="flex items-start justify-between mb-3">
+            <div className="flex items-center gap-2.5">
               <div 
-                className="w-12 h-12 rounded-xl flex items-center justify-center text-2xl"
+                className="w-9 h-9 rounded-lg flex items-center justify-center text-lg"
                 style={{ backgroundColor: project.color ? `${project.color}15` : '#f3f4f6' }}
               >
                 {project.icon || '📁'}
               </div>
               <div>
-                <h3 className="font-semibold text-gray-900 group-hover:text-indigo-600 transition-colors">
+                <h3 className="font-medium text-[13px] text-gray-900 group-hover:text-gray-700 transition-colors">
                   {project.name}
                 </h3>
-                <Badge className={cn("mt-1 text-xs font-medium", statusStyles[project.status])}>
+                <Badge className={cn("mt-0.5 text-[10px] font-medium", statusStyles[project.status])}>
                   {project.status}
                 </Badge>
               </div>
@@ -56,22 +56,22 @@ export default function ProjectCard({ project, onDelete, onDuplicate, index }) {
             
             <DropdownMenu>
               <DropdownMenuTrigger asChild onClick={(e) => e.preventDefault()}>
-                <Button variant="ghost" size="icon" className="h-8 w-8 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity">
-                  <MoreHorizontal className="w-4 h-4 text-gray-500" />
+                <Button variant="ghost" size="icon" className="h-7 w-7 rounded-md opacity-0 group-hover:opacity-100 transition-opacity">
+                  <MoreHorizontal className="w-3.5 h-3.5 text-gray-500" />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="rounded-xl p-2">
-                <DropdownMenuItem className="rounded-lg cursor-pointer">
-                  <ExternalLink className="w-4 h-4 mr-2" />
+              <DropdownMenuContent align="end" className="rounded-lg p-1">
+                <DropdownMenuItem className="rounded-md cursor-pointer text-[13px]">
+                  <ExternalLink className="w-3.5 h-3.5 mr-2" />
                   Open Preview
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={(e) => { e.preventDefault(); onDuplicate?.(project); }} className="rounded-lg cursor-pointer">
+                <DropdownMenuItem onClick={(e) => { e.preventDefault(); onDuplicate?.(project); }} className="rounded-md cursor-pointer text-[13px]">
                   Duplicate
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem 
                   onClick={(e) => { e.preventDefault(); onDelete?.(project); }}
-                  className="rounded-lg cursor-pointer text-red-600 focus:text-red-600 focus:bg-red-50"
+                  className="rounded-md cursor-pointer text-red-600 focus:text-red-600 focus:bg-red-50 text-[13px]"
                 >
                   Delete
                 </DropdownMenuItem>
@@ -80,23 +80,23 @@ export default function ProjectCard({ project, onDelete, onDuplicate, index }) {
           </div>
 
           {/* Description */}
-          <p className="text-sm text-gray-500 line-clamp-2 mb-4 min-h-[40px]">
+          <p className="text-[13px] text-gray-500 line-clamp-2 mb-3 min-h-[34px]">
             {project.description || 'No description'}
           </p>
 
           {/* Stats */}
-          <div className="flex items-center gap-4 pt-4 border-t border-gray-50">
-            <div className="flex items-center gap-1.5 text-gray-500">
-              <Database className="w-4 h-4" />
-              <span className="text-sm">{stats.entities_count}</span>
+          <div className="flex items-center gap-3 pt-3 border-t border-gray-100">
+            <div className="flex items-center gap-1 text-gray-500">
+              <Database className="w-3.5 h-3.5" />
+              <span className="text-[11px]">{stats.entities_count}</span>
             </div>
-            <div className="flex items-center gap-1.5 text-gray-500">
-              <FileCode className="w-4 h-4" />
-              <span className="text-sm">{stats.pages_count}</span>
+            <div className="flex items-center gap-1 text-gray-500">
+              <FileCode className="w-3.5 h-3.5" />
+              <span className="text-[11px]">{stats.pages_count}</span>
             </div>
-            <div className="flex items-center gap-1.5 text-gray-500">
-              <Component className="w-4 h-4" />
-              <span className="text-sm">{stats.components_count}</span>
+            <div className="flex items-center gap-1 text-gray-500">
+              <Component className="w-3.5 h-3.5" />
+              <span className="text-[11px]">{stats.components_count}</span>
             </div>
           </div>
         </div>
