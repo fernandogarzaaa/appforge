@@ -21,7 +21,8 @@ import {
   Bot,
   Search,
   Github,
-  Share2
+  Share2,
+  BookOpen
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
