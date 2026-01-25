@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { base44 } from '@/api/base44Client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { Bot, Plus, Play, Pause, Trash2, Settings, Zap, Clock, Mail, Webhook, Sparkles, RefreshCw, TrendingUp } from 'lucide-react';
+import { Bot, Plus, Play, Pause, Trash2, Settings, Zap, Clock, Mail, Webhook, Sparkles, RefreshCw, TrendingUp, Database, Upload } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -13,13 +13,17 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import CryptoTradingBotBuilder from '@/components/bots/CryptoTradingBotBuilder';
 import VisualWorkflowEditor from '@/components/workflow/VisualWorkflowEditor';
+import TriggerConfiguration from '@/components/bots/TriggerConfiguration';
 import { toast } from 'sonner';
 
 const triggerTypes = [
   { id: 'schedule', name: 'Schedule', icon: Clock, description: 'Run on a schedule' },
   { id: 'webhook', name: 'Webhook', icon: Webhook, description: 'Trigger via HTTP request' },
   { id: 'email', name: 'Email', icon: Mail, description: 'Trigger on email received' },
-  { id: 'entity_change', name: 'Entity Change', icon: Zap, description: 'When entity data changes' }
+  { id: 'entity_change', name: 'Entity Change', icon: Zap, description: 'When entity data changes' },
+  { id: 'api_endpoint', name: 'API Endpoint', icon: Webhook, description: 'Trigger via external webhook' },
+  { id: 'database_change', name: 'Database Change', icon: Database, description: 'When database records change' },
+  { id: 'file_upload', name: 'File Upload', icon: Upload, description: 'When files are uploaded' }
 ];
 
 const botTemplates = [
@@ -649,6 +653,12 @@ export default function BotBuilder() {
                   </SelectContent>
                 </Select>
               </div>
+
+              <TriggerConfiguration
+                triggerType={newBot.trigger.type}
+                config={newBot.trigger.config}
+                onChange={(config) => setNewBot({ ...newBot, trigger: { type: newBot.trigger.type, config } })}
+              />
 
               <div>
                 <Label className="mb-2 block">Visual Workflow Editor</Label>
