@@ -4,11 +4,16 @@ import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { 
   TrendingUp, Users, Eye, MousePointer, Clock, 
-  Globe, Smartphone, Monitor, BarChart3
+  Globe, Smartphone, Monitor, BarChart3, Brain, AlertTriangle
 } from 'lucide-react';
 import UsageInsights from '@/components/analytics/UsageInsights';
+import PredictiveAnalytics from '@/components/analytics/PredictiveAnalytics';
+import AnomalyDetection from '@/components/analytics/AnomalyDetection';
 
 export default function Analytics() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const projectId = urlParams.get('projectId');
+
   return (
     <div className="p-6 lg:p-8 max-w-7xl mx-auto">
       <div className="mb-8">
@@ -63,10 +68,26 @@ export default function Analytics() {
       <Tabs defaultValue="overview" className="space-y-6">
         <TabsList>
           <TabsTrigger value="overview">Overview</TabsTrigger>
+          <TabsTrigger value="predictions">
+            <Brain className="w-4 h-4 mr-2" />
+            AI Predictions
+          </TabsTrigger>
+          <TabsTrigger value="anomalies">
+            <AlertTriangle className="w-4 h-4 mr-2" />
+            Anomaly Detection
+          </TabsTrigger>
           <TabsTrigger value="users">Users</TabsTrigger>
           <TabsTrigger value="devices">Devices</TabsTrigger>
           <TabsTrigger value="geographic">Geographic</TabsTrigger>
         </TabsList>
+
+        <TabsContent value="predictions" className="space-y-6">
+          <PredictiveAnalytics projectId={projectId} />
+        </TabsContent>
+
+        <TabsContent value="anomalies" className="space-y-6">
+          <AnomalyDetection projectId={projectId} />
+        </TabsContent>
 
         <TabsContent value="overview" className="space-y-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
