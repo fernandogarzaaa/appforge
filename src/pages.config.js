@@ -49,6 +49,7 @@ import VSCodeIntegration from './pages/VSCodeIntegration';
 import Web3Dashboard from './pages/Web3Dashboard';
 import WorkflowBuilder from './pages/WorkflowBuilder';
 import FunctionValidator from './pages/FunctionValidator';
+import ChatbotManager from './pages/ChatbotManager';
 import __Layout from './Layout.jsx';
 
 
@@ -104,6 +105,7 @@ export const PAGES = {
     "Web3Dashboard": Web3Dashboard,
     "WorkflowBuilder": WorkflowBuilder,
     "FunctionValidator": FunctionValidator,
+    "ChatbotManager": ChatbotManager,
 }
 
 export const pagesConfig = {
