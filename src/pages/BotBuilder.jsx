@@ -318,7 +318,6 @@ export default function BotBuilder() {
             </TabsList>
 
             <TabsContent value="basic" className="space-y-4 mt-4">
-            <div>
               <Label className="mb-2 block">Quick Start Templates</Label>
               <div className="grid grid-cols-1 gap-2 mb-4">
                 {botTemplates.filter(t => t.category === 'email').map((template, idx) => {
@@ -369,7 +368,7 @@ export default function BotBuilder() {
                   );
                 })}
               </div>
-            </div>
+            </TabsContent>
 
             <TabsContent value="trading" className="space-y-4 mt-4">
               <Label className="mb-2 block">Crypto & Trading Bots</Label>
@@ -380,84 +379,82 @@ export default function BotBuilder() {
             </TabsContent>
 
             <TabsContent value="custom" className="space-y-4 mt-4">
-            <div className="border-t pt-4">
-              <Label className="mb-2 block">AI Bot Generator</Label>
-              <div className="flex gap-2 mb-3">
-                <Input
-                  placeholder="Describe what you want to automate..."
-                  onKeyPress={(e) => {
-                    if (e.key === 'Enter' && e.currentTarget.value.trim()) {
-                      generateBotWorkflow(e.currentTarget.value);
-                    }
-                  }}
-                />
-                <Button
-                  variant="outline"
-                  onClick={(e) => {
-                    const input = e.currentTarget.previousElementSibling;
-                    if (input.value.trim()) generateBotWorkflow(input.value);
-                  }}
-                  disabled={isGenerating}
-                >
-                  {isGenerating ? (
-                    <RefreshCw className="w-4 h-4 animate-spin" />
-                  ) : (
-                    <Sparkles className="w-4 h-4" />
-                  )}
-                </Button>
+              <div className="border-t pt-4">
+                <Label className="mb-2 block">AI Bot Generator</Label>
+                <div className="flex gap-2 mb-3">
+                  <Input
+                    placeholder="Describe what you want to automate..."
+                    onKeyPress={(e) => {
+                      if (e.key === 'Enter' && e.currentTarget.value.trim()) {
+                        generateBotWorkflow(e.currentTarget.value);
+                      }
+                    }}
+                  />
+                  <Button
+                    variant="outline"
+                    onClick={(e) => {
+                      const input = e.currentTarget.previousElementSibling;
+                      if (input.value.trim()) generateBotWorkflow(input.value);
+                    }}
+                    disabled={isGenerating}
+                  >
+                    {isGenerating ? (
+                      <RefreshCw className="w-4 h-4 animate-spin" />
+                    ) : (
+                      <Sparkles className="w-4 h-4" />
+                    )}
+                  </Button>
+                </div>
               </div>
-            </div>
-            <div>
-              <Label>Bot Name</Label>
-              <Input
-                value={newBot.name}
-                onChange={(e) => setNewBot({ ...newBot, name: e.target.value })}
-                placeholder="My Automation Bot"
-              />
-            </div>
-            <div>
-              <Label>Description</Label>
-              <Textarea
-                value={newBot.description}
-                onChange={(e) => setNewBot({ ...newBot, description: e.target.value })}
-                placeholder="What does this bot do?"
-                rows={3}
-              />
-            </div>
-            <div>
-              <Label>Trigger Type</Label>
-              <Select
-                value={newBot.trigger.type}
-                onValueChange={(value) => setNewBot({ ...newBot, trigger: { type: value, config: {} } })}
-              >
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {triggerTypes.map((type) => (
-                    <SelectItem key={type.id} value={type.id}>
-                      <div className="flex items-center gap-2">
-                        <type.icon className="w-4 h-4" />
-                        <div>
-                          <div className="font-medium">{type.name}</div>
-                          <div className="text-xs text-gray-500">{type.description}</div>
+              <div>
+                <Label>Bot Name</Label>
+                <Input
+                  value={newBot.name}
+                  onChange={(e) => setNewBot({ ...newBot, name: e.target.value })}
+                  placeholder="My Automation Bot"
+                />
+              </div>
+              <div>
+                <Label>Description</Label>
+                <Textarea
+                  value={newBot.description}
+                  onChange={(e) => setNewBot({ ...newBot, description: e.target.value })}
+                  placeholder="What does this bot do?"
+                  rows={3}
+                />
+              </div>
+              <div>
+                <Label>Trigger Type</Label>
+                <Select
+                  value={newBot.trigger.type}
+                  onValueChange={(value) => setNewBot({ ...newBot, trigger: { type: value, config: {} } })}
+                >
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {triggerTypes.map((type) => (
+                      <SelectItem key={type.id} value={type.id}>
+                        <div className="flex items-center gap-2">
+                          <type.icon className="w-4 h-4" />
+                          <div>
+                            <div className="font-medium">{type.name}</div>
+                            <div className="text-xs text-gray-500">{type.description}</div>
+                          </div>
                         </div>
-                      </div>
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-            </div>
-            </TabsContent>
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
             </Tabs>
 
             <DialogFooter>
-            <Button variant="outline" onClick={() => setShowDialog(false)}>Cancel</Button>
-            <Button onClick={() => createMutation.mutate(newBot)} disabled={!newBot.name}>
-              Create Bot
-            </Button>
-          </DialogFooter>
+              <Button variant="outline" onClick={() => setShowDialog(false)}>Cancel</Button>
+              <Button onClick={() => createMutation.mutate(newBot)} disabled={!newBot.name}>
+                Create Bot
+              </Button>
+            </DialogFooter>
         </DialogContent>
       </Dialog>
     </div>
