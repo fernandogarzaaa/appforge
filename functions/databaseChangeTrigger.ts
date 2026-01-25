@@ -81,16 +81,20 @@ Deno.serve(async (req) => {
           executedNodes: result.nodesExecuted
         });
 
-        // Create trigger log
-        await base44.entities.TriggerLog.create({
+        // Create trigger log (check if entity exists)
+        try {
+          await base44.entities.TriggerLog?.create?.({
           bot_id: bot.id,
           trigger_type: 'database_change',
           entity_name: entityName,
           event_type: eventType,
           entity_id: entityId,
           status: result.success ? 'success' : 'failed',
-          logs: result.logs
-        });
+              logs: result.logs
+            });
+          } catch (logError) {
+          console.error(`Failed to create trigger log: ${logError.message}`);
+          }
 
       } catch (error) {
         console.error(`Failed to trigger bot ${bot.id}: ${error.message}`);

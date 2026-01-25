@@ -55,8 +55,8 @@ Deno.serve(async (req) => {
 
     const pipeline = pipelines[0];
 
-    // Verify webhook signature
-    if (signature && pipeline.webhook_secret) {
+    // Verify webhook signature - only for GitHub format
+    if (signature && pipeline.webhook_secret && signature.startsWith('sha256=')) {
       const secret = pipeline.webhook_secret;
       const hmac = createHmac('sha256', secret);
       hmac.update(body);
@@ -68,6 +68,11 @@ Deno.serve(async (req) => {
         }
       } catch (e) {
         return Response.json({ error: 'Signature verification failed' }, { status: 401 });
+      }
+    } else if (signature && pipeline.webhook_secret) {
+      // GitLab format - direct token comparison
+      if (signature !== pipeline.webhook_secret) {
+        return Response.json({ error: 'Invalid token' }, { status: 401 });
       }
     }
 

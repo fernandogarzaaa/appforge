@@ -154,7 +154,8 @@ export default function VisualWorkflowEditor({ initialNodes = [], onSave }) {
                 onDelete={handleNodeDelete}
                 isSelected={selectedNodeId === node.id}
                 onSelect={setSelectedNodeId}
-                isDragging={setIsDraggingNode}
+                onDragStart={() => setIsDraggingNode(true)}
+                onDragEnd={() => setIsDraggingNode(false)}
               />
             ))}
           </div>
