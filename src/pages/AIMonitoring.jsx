@@ -508,6 +508,13 @@ Calculate:
         </TabsContent>
 
         <TabsContent value="rules" className="flex-1 overflow-y-auto">
+          <div className="mb-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
+            <DataSourceConnectorManager 
+              connectors={dataConnectors}
+              onConnectorsChange={() => queryClient.invalidateQueries({ queryKey: ['data-connectors'] })}
+            />
+          </div>
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {rules.map((rule) => {
               const SourceIcon = getDataSourceIcon(rule.data_source);
@@ -608,6 +615,12 @@ Calculate:
                     <SelectItem value="email">Email Account</SelectItem>
                     <SelectItem value="api">API Endpoint</SelectItem>
                     <SelectItem value="workflow">Workflow Results</SelectItem>
+                    <SelectItem value="snowflake">Snowflake</SelectItem>
+                    <SelectItem value="bigquery">BigQuery</SelectItem>
+                    <SelectItem value="salesforce">Salesforce</SelectItem>
+                    <SelectItem value="hubspot">HubSpot</SelectItem>
+                    <SelectItem value="asana">Asana</SelectItem>
+                    <SelectItem value="jira">Jira</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -631,6 +644,31 @@ Calculate:
                   onChange={(e) => setNewRule({ ...newRule, entity_name: e.target.value })}
                   placeholder="e.g., Order, User, Transaction"
                 />
+              </div>
+            )}
+
+            {['snowflake', 'bigquery', 'salesforce', 'hubspot', 'asana', 'jira'].includes(newRule.data_source) && (
+              <div>
+                <label className="text-sm font-medium mb-1 block">Select Connector</label>
+                <Select
+                  value={newRule.connector_id}
+                  onValueChange={(v) => setNewRule({ ...newRule, connector_id: v })}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Choose a connector..." />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {dataConnectors
+                      .filter(c => c.connector_type === newRule.data_source && c.status === 'active')
+                      .map(c => (
+                        <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>
+                      ))
+                    }
+                  </SelectContent>
+                </Select>
+                {dataConnectors.filter(c => c.connector_type === newRule.data_source).length === 0 && (
+                  <p className="text-xs text-amber-600 mt-1">Create a connector first to use this data source</p>
+                )}
               </div>
             )}
 
