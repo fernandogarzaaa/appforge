@@ -5,7 +5,7 @@ import {
   Sparkles, Send, Plus, Trash2, MessageSquare,
   Loader2, Copy, Check, Code, FileCode, Database,
   Globe, Brain, Zap, Bot, Github, Wand2, Workflow,
-  Upload, FileText, Shield
+  Upload, FileText, Shield, Smartphone
 } from 'lucide-react';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import APIDiscoveryPanel from '@/components/ai/APIDiscoveryPanel';
@@ -16,6 +16,7 @@ import AutomationBuilder from '@/components/ai/AutomationBuilder';
 import DocumentUpload from '@/components/ai/DocumentUpload';
 import CodeReview from '@/components/ai/CodeReview';
 import ProactiveSuggestions from '@/components/ai/ProactiveSuggestions';
+import MobileAppBuilder from '@/components/ai/MobileAppBuilder';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -330,6 +331,18 @@ Provide helpful, concise responses with code examples when relevant.`,
                 Documents {documents.length > 0 && `(${documents.length})`}
               </span>
             </button>
+            <button
+              onClick={() => setActivePanel('mobile')}
+              className={cn(
+                "flex items-center gap-2 py-3 border-b-2 transition-colors",
+                activePanel === 'mobile' 
+                  ? "border-blue-500 text-blue-600" 
+                  : "border-transparent text-gray-500 hover:text-gray-700"
+              )}
+            >
+              <Smartphone className="w-4 h-4" />
+              <span className="font-medium">Mobile Apps</span>
+            </button>
             {integratedAPIs.length > 0 && (
               <div className="ml-auto flex items-center gap-2">
                 <Zap className="w-4 h-4 text-green-500" />
@@ -424,6 +437,19 @@ Provide helpful, concise responses with code examples when relevant.`,
                 <p className="text-gray-500">Upload specifications and documentation for AI context</p>
               </div>
               <DocumentUpload projectId={projectId} />
+            </div>
+          </div>
+        )}
+
+        {/* Mobile App Builder Panel */}
+        {activePanel === 'mobile' && (
+          <div className="flex-1 p-6 overflow-auto">
+            <div className="max-w-4xl mx-auto">
+              <div className="mb-6">
+                <h2 className="text-xl font-bold text-gray-900 mb-1">Mobile App Builder</h2>
+                <p className="text-gray-500">Generate React Native mobile apps with AI - iOS & Android</p>
+              </div>
+              <MobileAppBuilder projectId={projectId} />
             </div>
           </div>
         )}
