@@ -32,12 +32,10 @@ Deno.serve(async (req) => {
     const base44 = createClientFromRequest(req);
 
     // Fetch bot configuration
-    const bots = await base44.asServiceRole.entities.Automation.filter({ id: botId });
-    if (bots.length === 0) {
+    const bot = await base44.asServiceRole.entities.Automation.get(botId);
+    if (!bot) {
       return Response.json({ error: 'Bot not found' }, { status: 404 });
     }
-
-    const bot = bots[0];
 
     // Validate trigger type
     if (bot.trigger?.type !== 'api_endpoint' && bot.trigger?.type !== 'webhook') {
