@@ -27,6 +27,10 @@ import MediaStudio from './pages/MediaStudio';
 import EmailCampaigns from './pages/EmailCampaigns';
 import Analytics from './pages/Analytics';
 import TemplateMarketplace from './pages/TemplateMarketplace';
+import CryptoExchange from './pages/CryptoExchange';
+import GamingPlatform from './pages/GamingPlatform';
+import CryptoGambling from './pages/CryptoGambling';
+import NFTMarketplace from './pages/NFTMarketplace';
 import __Layout from './Layout.jsx';
 
 
@@ -60,6 +64,10 @@ export const PAGES = {
     "EmailCampaigns": EmailCampaigns,
     "Analytics": Analytics,
     "TemplateMarketplace": TemplateMarketplace,
+    "CryptoExchange": CryptoExchange,
+    "GamingPlatform": GamingPlatform,
+    "CryptoGambling": CryptoGambling,
+    "NFTMarketplace": NFTMarketplace,
 }
 
 export const pagesConfig = {
