@@ -482,36 +482,50 @@ Provide helpful, concise responses with code examples when relevant.`,
           </ScrollArea>
         )}
 
-        {/* Input Area - Only show in chat mode */}
-        {activePanel === 'chat' && <div className="p-4 bg-white border-t border-gray-100">
-          <div className="max-w-3xl mx-auto">
-            <div className="flex gap-3">
-              <Textarea
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' && !e.shiftKey) {
-                    e.preventDefault();
-                    handleSend();
-                  }
-                }}
-                placeholder="Ask me to create entities, pages, components..."
-                className="min-h-[52px] max-h-32 rounded-xl resize-none border-gray-200"
-              />
+        {/* Universal Chat Bar - Always visible */}
+        <div className="p-3 bg-white/80 backdrop-blur-xl border-t border-gray-200/50">
+          <div className="max-w-4xl mx-auto">
+            <div className="flex gap-2 items-end">
+              <div className="flex-1 relative">
+                <Input
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                      e.preventDefault();
+                      handleSend();
+                    }
+                  }}
+                  placeholder="Ask me anything... (create entity, find API, build automation...)"
+                  className="h-10 rounded-lg text-[13px] pr-20 bg-white border-gray-200 focus:ring-1 focus:ring-gray-900"
+                />
+                <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1">
+                  <span className="text-[10px] text-gray-400 font-medium">⏎ Send</span>
+                </div>
+              </div>
               <Button
                 onClick={handleSend}
                 disabled={!input.trim() || isLoading}
-                className="h-[52px] px-6 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white rounded-xl"
+                className="h-10 w-10 bg-gray-900 hover:bg-gray-800 text-white rounded-lg p-0"
               >
                 {isLoading ? (
-                  <Loader2 className="w-5 h-5 animate-spin" />
+                  <Loader2 className="w-4 h-4 animate-spin" />
                 ) : (
-                  <Send className="w-5 h-5" />
+                  <Send className="w-4 h-4" />
                 )}
               </Button>
             </div>
+            {activePanel !== 'chat' && messages.length > 0 && (
+              <button
+                onClick={() => setActivePanel('chat')}
+                className="text-[11px] text-gray-500 hover:text-gray-700 mt-2 flex items-center gap-1"
+              >
+                <MessageSquare className="w-3 h-3" />
+                View conversation ({messages.length} messages)
+              </button>
+            )}
           </div>
-        </div>}
+        </div>
       </div>
     </div>
   );
