@@ -5,7 +5,7 @@ import {
   Sparkles, Send, Plus, Trash2, MessageSquare,
   Loader2, Copy, Check, Code, FileCode, Database,
   Globe, Brain, Zap, Bot, Github, Wand2, Workflow,
-  Upload, FileText, Shield, Smartphone
+  Upload, FileText, Shield, Smartphone, User
 } from 'lucide-react';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import APIDiscoveryPanel from '@/components/ai/APIDiscoveryPanel';
@@ -17,6 +17,7 @@ import DocumentUpload from '@/components/ai/DocumentUpload';
 import CodeReview from '@/components/ai/CodeReview';
 import ProactiveSuggestions from '@/components/ai/ProactiveSuggestions';
 import MobileAppBuilder from '@/components/ai/MobileAppBuilder';
+import PersonalizationEngine from '@/components/ai/PersonalizationEngine';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -42,7 +43,17 @@ export default function AIAssistant() {
   const [copiedIndex, setCopiedIndex] = useState(null);
   const [activePanel, setActivePanel] = useState('chat');
   const [integratedAPIs, setIntegratedAPIs] = useState([]);
+  const [user, setUser] = useState(null);
   const messagesEndRef = useRef(null);
+
+  useEffect(() => {
+    loadUser();
+  }, []);
+
+  const loadUser = async () => {
+    const userData = await base44.auth.me();
+    setUser(userData);
+  };
 
   const { data: documents = [] } = useQuery({
     queryKey: ['documents', projectId],
@@ -343,6 +354,18 @@ Provide helpful, concise responses with code examples when relevant.`,
               <Smartphone className="w-4 h-4" />
               <span className="font-medium">Mobile Apps</span>
             </button>
+            <button
+              onClick={() => setActivePanel('personalization')}
+              className={cn(
+                "flex items-center gap-2 py-3 border-b-2 transition-colors",
+                activePanel === 'personalization' 
+                  ? "border-indigo-500 text-indigo-600" 
+                  : "border-transparent text-gray-500 hover:text-gray-700"
+              )}
+            >
+              <User className="w-4 h-4" />
+              <span className="font-medium">Personalization</span>
+            </button>
             {integratedAPIs.length > 0 && (
               <div className="ml-auto flex items-center gap-2">
                 <Zap className="w-4 h-4 text-green-500" />
@@ -450,6 +473,15 @@ Provide helpful, concise responses with code examples when relevant.`,
                 <p className="text-gray-500">Generate React Native mobile apps with AI - iOS & Android</p>
               </div>
               <MobileAppBuilder projectId={projectId} />
+            </div>
+          </div>
+        )}
+
+        {/* Personalization Panel */}
+        {activePanel === 'personalization' && (
+          <div className="flex-1 p-6 overflow-auto">
+            <div className="max-w-5xl mx-auto">
+              <PersonalizationEngine user={user} />
             </div>
           </div>
         )}
