@@ -14,6 +14,8 @@ import { Badge } from '@/components/ui/badge';
 import CryptoTradingBotBuilder from '@/components/bots/CryptoTradingBotBuilder';
 import VisualWorkflowEditor from '@/components/workflow/VisualWorkflowEditor';
 import TriggerConfiguration from '@/components/bots/TriggerConfiguration';
+import CollaboratorManager from '@/components/collaboration/CollaboratorManager';
+import ActivityLog from '@/components/collaboration/ActivityLog';
 import { toast } from 'sonner';
 
 const triggerTypes = [
@@ -253,8 +255,9 @@ export default function BotBuilder() {
 
   const createMutation = useMutation({
     mutationFn: (data) => base44.entities.Automation.create({ ...data, project_id: projectId }),
-    onSuccess: () => {
+    onSuccess: async (result) => {
       queryClient.invalidateQueries({ queryKey: ['automations', projectId] });
+      await logActivity(result.id, 'created', `Created bot: ${newBot.name}`);
       setShowDialog(false);
       setNewBot({ name: '', description: '', trigger: { type: 'schedule', config: {} }, nodes: [], status: 'draft' });
       toast.success('Bot created successfully');
@@ -277,9 +280,28 @@ export default function BotBuilder() {
     }
   });
 
+  const { data: currentUser } = useQuery({
+    queryKey: ['currentUser'],
+    queryFn: () => base44.auth.me(),
+  });
+
   const toggleStatus = (bot) => {
     const newStatus = bot.status === 'active' ? 'paused' : 'active';
     updateMutation.mutate({ id: bot.id, data: { status: newStatus } });
+    logActivity(bot.id, newStatus === 'active' ? 'deployed' : 'paused', `Bot ${newStatus}`);
+  };
+
+  const logActivity = async (botId, action, description) => {
+    try {
+      await base44.entities.BotActivityLog.create({
+        bot_id: botId,
+        action,
+        performed_by: currentUser?.email,
+        description
+      });
+    } catch (error) {
+      console.error('Failed to log activity:', error);
+    }
   };
 
   const generateBotWorkflow = async (description) => {
@@ -337,7 +359,7 @@ export default function BotBuilder() {
       <div className="flex items-center justify-between mb-8">
         <div>
           <h1 className="text-3xl font-bold text-gray-900 mb-1">Bot Builder</h1>
-          <p className="text-gray-500">Create automated workflows and intelligent bots</p>
+          <p className="text-gray-500">Create automated workflows and intelligent bots with team collaboration</p>
         </div>
         <Button onClick={() => setShowDialog(true)} className="bg-gray-900 hover:bg-gray-800">
           <Plus className="w-4 h-4 mr-2" />
@@ -363,62 +385,70 @@ export default function BotBuilder() {
           <Button onClick={() => setShowDialog(true)}>Create Bot</Button>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="space-y-6">
           {bots.map((bot) => (
-            <Card key={bot.id} className="hover:shadow-lg transition-shadow">
-              <CardHeader>
-                <div className="flex items-start justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center">
-                      <Bot className="w-5 h-5 text-gray-600" />
+            <div key={bot.id} className="grid grid-cols-1 lg:grid-cols-4 gap-4">
+              <div className="lg:col-span-1">
+                <Card className="hover:shadow-lg transition-shadow h-full">
+                  <CardHeader>
+                    <div className="flex items-start justify-between">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center">
+                          <Bot className="w-5 h-5 text-gray-600" />
+                        </div>
+                        <div>
+                          <CardTitle className="text-base">{bot.name}</CardTitle>
+                          <Badge variant={bot.status === 'active' ? 'default' : 'secondary'} className="mt-1">
+                            {bot.status}
+                          </Badge>
+                        </div>
+                      </div>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => deleteMutation.mutate(bot.id)}
+                      >
+                        <Trash2 className="w-4 h-4 text-gray-400" />
+                      </Button>
                     </div>
-                    <div>
-                      <CardTitle className="text-base">{bot.name}</CardTitle>
-                      <Badge variant={bot.status === 'active' ? 'default' : 'secondary'} className="mt-1">
-                        {bot.status}
-                      </Badge>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-sm text-gray-600 mb-4">{bot.description}</p>
+                    <div className="flex items-center justify-between text-xs text-gray-500 mb-4">
+                      <span>Trigger: {bot.trigger?.type || 'None'}</span>
+                      <span>Runs: {bot.execution_count || 0}</span>
                     </div>
-                  </div>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => deleteMutation.mutate(bot.id)}
-                  >
-                    <Trash2 className="w-4 h-4 text-gray-400" />
-                  </Button>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-gray-600 mb-4">{bot.description}</p>
-                <div className="flex items-center justify-between text-xs text-gray-500 mb-4">
-                  <span>Trigger: {bot.trigger?.type || 'None'}</span>
-                  <span>Runs: {bot.execution_count || 0}</span>
-                </div>
-                <div className="flex gap-2">
-                  <Button
-                    onClick={() => toggleStatus(bot)}
-                    variant={bot.status === 'active' ? 'outline' : 'default'}
-                    className="flex-1"
-                    size="sm"
-                  >
-                    {bot.status === 'active' ? (
-                      <>
-                        <Pause className="w-3 h-3 mr-1" />
-                        Pause
-                      </>
-                    ) : (
-                      <>
-                        <Play className="w-3 h-3 mr-1" />
-                        Activate
-                      </>
-                    )}
-                  </Button>
-                  <Button variant="outline" size="sm">
-                    <Settings className="w-3 h-3" />
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
+                    <div className="flex gap-2">
+                      <Button
+                        onClick={() => toggleStatus(bot)}
+                        variant={bot.status === 'active' ? 'outline' : 'default'}
+                        className="flex-1"
+                        size="sm"
+                      >
+                        {bot.status === 'active' ? (
+                          <>
+                            <Pause className="w-3 h-3 mr-1" />
+                            Pause
+                          </>
+                        ) : (
+                          <>
+                            <Play className="w-3 h-3 mr-1" />
+                            Activate
+                          </>
+                        )}
+                      </Button>
+                      <Button variant="outline" size="sm">
+                        <Settings className="w-3 h-3" />
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+              <div className="lg:col-span-3 space-y-4">
+                <CollaboratorManager botId={bot.id} />
+                <ActivityLog botId={bot.id} />
+              </div>
+            </div>
           ))}
         </div>
       )}
