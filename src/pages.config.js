@@ -31,6 +31,7 @@ import CryptoExchange from './pages/CryptoExchange';
 import GamingPlatform from './pages/GamingPlatform';
 import CryptoGambling from './pages/CryptoGambling';
 import NFTMarketplace from './pages/NFTMarketplace';
+import Support from './pages/Support';
 import __Layout from './Layout.jsx';
 
 
@@ -68,6 +69,7 @@ export const PAGES = {
     "GamingPlatform": GamingPlatform,
     "CryptoGambling": CryptoGambling,
     "NFTMarketplace": NFTMarketplace,
+    "Support": Support,
 }
 
 export const pagesConfig = {
