@@ -97,7 +97,7 @@ Provide realistic predictions with confidence scores and bounds.`,
         const prediction_type = forecast.anomaly_risk > 60 ? 'anomaly' : 
                                forecast.threshold_breach_risk > 60 ? 'threshold_breach' : 'trend';
 
-        await base44.entities.Prediction.create({
+        const pred = await base44.entities.Prediction.create({
           monitoring_rule_id: rule.id,
           prediction_type,
           title: `${rule.name} - ${selectedForecast} Forecast`,
@@ -112,6 +112,15 @@ Provide realistic predictions with confidence scores and bounds.`,
           recommended_actions: forecast.recommended_actions || [],
           risk_level: forecast.risk_level || 'medium',
           last_prediction: new Date().toISOString()
+        });
+
+        // Trigger alerts for high-risk predictions
+        await checkAndTriggerAlerts({
+          type: 'prediction',
+          data: {
+            ...pred,
+            severity: pred.risk_level
+          }
         });
       }
 
