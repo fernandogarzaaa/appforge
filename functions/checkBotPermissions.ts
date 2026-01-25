@@ -16,7 +16,13 @@ Deno.serve(async (req) => {
     }
 
     // Get bot (use Automation entity, not Bot)
-    const bot = await base44.entities.Automation.get(bot_id);
+    let bot;
+    try {
+      bot = await base44.entities.Automation.get(bot_id);
+    } catch {
+      return Response.json({ error: 'Bot not found' }, { status: 404 });
+    }
+
     if (!bot) {
       return Response.json({ error: 'Bot not found' }, { status: 404 });
     }
