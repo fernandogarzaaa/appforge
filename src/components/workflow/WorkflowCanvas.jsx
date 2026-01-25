@@ -15,7 +15,11 @@ const nodeTypes = {
   data_analysis: { icon: BarChart3, color: 'indigo', label: 'Data Analysis' },
   medical_ai: { icon: FileText, color: 'red', label: 'Medical AI' },
   government_ai: { icon: FileText, color: 'cyan', label: 'Government AI' },
+  conditional: { icon: ArrowRight, color: 'yellow', label: 'Conditional' },
   email: { icon: Mail, color: 'orange', label: 'Send Email' },
+  slack: { icon: Mail, color: 'purple', label: 'Slack' },
+  google_drive: { icon: Database, color: 'blue', label: 'Google Drive' },
+  zapier: { icon: Mail, color: 'orange', label: 'Zapier' },
   output: { icon: FileText, color: 'gray', label: 'Output' }
 };
 
