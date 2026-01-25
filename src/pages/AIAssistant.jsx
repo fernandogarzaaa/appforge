@@ -5,7 +5,7 @@ import {
   Sparkles, Send, Plus, Trash2, MessageSquare,
   Loader2, Copy, Check, Code, FileCode, Database,
   Globe, Brain, Zap, Bot, Github, Wand2, Workflow,
-  Upload, FileText, Shield, Smartphone, User
+  Upload, FileText, Shield, Smartphone, User, MessageCircle
 } from 'lucide-react';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import APIDiscoveryPanel from '@/components/ai/APIDiscoveryPanel';
@@ -242,8 +242,9 @@ Provide helpful, concise responses with code examples when relevant.`,
       {/* Main Area */}
       <div className="flex-1 flex flex-col bg-gray-50/50">
         {/* Panel Tabs */}
-        <div className="bg-white border-b border-gray-100 px-4">
-          <div className="flex items-center gap-4">
+         <div className="bg-white border-b border-gray-100 px-4">
+           <div className="flex items-center gap-4 justify-between">
+           <div className="flex items-center gap-4">
             <button
               onClick={() => setActivePanel('chat')}
               className={cn(
@@ -366,14 +367,18 @@ Provide helpful, concise responses with code examples when relevant.`,
               <User className="w-4 h-4" />
               <span className="font-medium">Personalization</span>
             </button>
-            {integratedAPIs.length > 0 && (
-              <div className="ml-auto flex items-center gap-2">
-                <Zap className="w-4 h-4 text-green-500" />
-                <span className="text-sm text-gray-600">{integratedAPIs.length} APIs integrated</span>
-              </div>
-            )}
-          </div>
-        </div>
+            </div>
+            <a
+              href={base44.agents.getWhatsAppConnectURL('ai_assistant')}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 px-3 py-2 rounded-lg bg-green-50 text-green-700 hover:bg-green-100 transition-colors"
+            >
+              <MessageCircle className="w-4 h-4" />
+              <span className="text-sm font-medium">WhatsApp</span>
+            </a>
+            </div>
+            </div>
 
         {/* API Discovery Panel */}
         {activePanel === 'api' && (
