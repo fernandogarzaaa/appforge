@@ -45,6 +45,7 @@ import FeedbackAnalytics from './pages/FeedbackAnalytics';
 import AdminDashboard from './pages/AdminDashboard';
 import EnterpriseIntelligence from './pages/EnterpriseIntelligence';
 import IntegrationHub from './pages/IntegrationHub';
+import AdvancedAnomalyDetection from './pages/AdvancedAnomalyDetection';
 import __Layout from './Layout.jsx';
 
 
@@ -96,6 +97,7 @@ export const PAGES = {
     "AdminDashboard": AdminDashboard,
     "EnterpriseIntelligence": EnterpriseIntelligence,
     "IntegrationHub": IntegrationHub,
+    "AdvancedAnomalyDetection": AdvancedAnomalyDetection,
 }
 
 export const pagesConfig = {
