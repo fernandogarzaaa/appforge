@@ -21,6 +21,8 @@ import { RuleTriggersChart, DataSourceDistribution } from '@/components/monitori
 import TriggerBuilder, { ActionBuilder } from '@/components/monitoring/TriggerBuilder';
 import DataSourceConnectorManager from '@/components/monitoring/DataSourceConnectorManager';
 import FeedbackWidget from '@/components/feedback/FeedbackWidget';
+import AlertConfigManager from '@/components/alerts/AlertConfigManager';
+import { checkAndTriggerAlerts } from '@/components/alerts/AlertService';
 
 export default function AIMonitoring() {
   const queryClient = useQueryClient();

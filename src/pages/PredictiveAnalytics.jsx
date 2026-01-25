@@ -12,6 +12,8 @@ import AnomalyForecast from '@/components/analytics/AnomalyForecast';
 import PerformanceForecast from '@/components/analytics/PerformanceForecast';
 import FeedbackWidget from '@/components/feedback/FeedbackWidget';
 import FeedbackSummary from '@/components/feedback/FeedbackSummary';
+import AlertConfigManager from '@/components/alerts/AlertConfigManager';
+import { checkAndTriggerAlerts } from '@/components/alerts/AlertService';
 
 export default function PredictiveAnalytics() {
   const queryClient = useQueryClient();
