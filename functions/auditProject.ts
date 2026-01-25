@@ -59,7 +59,7 @@ Deno.serve(async (req) => {
       console.error('Error auditing automations:', e);
     }
 
-    // Audit for orphaned records
+    // Audit workflows
     try {
       const workflows = await base44.entities.Workflow.list();
       for (const workflow of workflows) {
@@ -74,6 +74,130 @@ Deno.serve(async (req) => {
       }
     } catch (e) {
       console.error('Error auditing workflows:', e);
+    }
+
+    // Audit chatbots
+    try {
+      const chatbots = await base44.entities.Chatbot.list();
+      for (const chatbot of chatbots) {
+        if (!chatbot.name || !chatbot.type) {
+          issues.medium.push({
+            type: 'Chatbot Config Error',
+            chatbot: chatbot.name,
+            description: 'Missing required chatbot configuration',
+            severity: 'medium'
+          });
+        }
+        if (!chatbot.is_active === undefined) {
+          issues.low.push({
+            type: 'Chatbot Status Issue',
+            chatbot: chatbot.name,
+            description: 'Chatbot status not explicitly set',
+            severity: 'low'
+          });
+        }
+      }
+    } catch (e) {
+      console.error('Error auditing chatbots:', e);
+    }
+
+    // Audit pipelines
+    try {
+      const pipelines = await base44.entities.BotPipeline.list();
+      for (const pipeline of pipelines) {
+        if (!pipeline.bot_id || !pipeline.repository_url) {
+          issues.high.push({
+            type: 'Pipeline Config Error',
+            pipeline: pipeline.name,
+            description: 'Missing pipeline configuration',
+            severity: 'high'
+          });
+        }
+        if (!pipeline.stages || pipeline.stages.length === 0) {
+          issues.medium.push({
+            type: 'Pipeline Missing Stages',
+            pipeline: pipeline.name,
+            description: 'No pipeline stages configured',
+            severity: 'medium'
+          });
+        }
+      }
+    } catch (e) {
+      console.error('Error auditing pipelines:', e);
+    }
+
+    // Audit integrations
+    try {
+      const integrations = await base44.entities.IntegrationConnection.list();
+      for (const integration of integrations) {
+        if (!integration.provider || !integration.status) {
+          issues.medium.push({
+            type: 'Integration Config Error',
+            integration: integration.name,
+            description: 'Missing integration configuration',
+            severity: 'medium'
+          });
+        }
+        if (integration.status === 'failed' || integration.status === 'error') {
+          issues.high.push({
+            type: 'Integration Connection Failed',
+            integration: integration.name,
+            description: `Integration status: ${integration.status}`,
+            severity: 'high'
+          });
+        }
+      }
+    } catch (e) {
+      console.error('Error auditing integrations:', e);
+    }
+
+    // Audit alert configurations
+    try {
+      const alerts = await base44.entities.AlertConfiguration.list();
+      for (const alert of alerts) {
+        if (!alert.name || !alert.conditions) {
+          issues.medium.push({
+            type: 'Alert Config Error',
+            alert: alert.name,
+            description: 'Incomplete alert configuration',
+            severity: 'medium'
+          });
+        }
+      }
+    } catch (e) {
+      console.error('Error auditing alerts:', e);
+    }
+
+    // Audit monitoring rules
+    try {
+      const rules = await base44.entities.MonitoringRule.list();
+      for (const rule of rules) {
+        if (!rule.name || !rule.data_source) {
+          issues.medium.push({
+            type: 'Monitoring Rule Error',
+            rule: rule.name,
+            description: 'Missing monitoring rule configuration',
+            severity: 'medium'
+          });
+        }
+      }
+    } catch (e) {
+      console.error('Error auditing monitoring rules:', e);
+    }
+
+    // Audit tasks for incomplete items
+    try {
+      const tasks = await base44.entities.Task.list();
+      const incompleteTasks = tasks.filter(t => t.status !== 'done' && t.status !== 'cancelled');
+      if (incompleteTasks.length > 50) {
+        issues.low.push({
+          type: 'Task Backlog Warning',
+          description: `${incompleteTasks.length} incomplete tasks in the system`,
+          severity: 'low'
+        });
+      }
+    } catch (e) {
+      console.error('Error auditing tasks:', e);
     }
 
     // Check for missing critical functions
