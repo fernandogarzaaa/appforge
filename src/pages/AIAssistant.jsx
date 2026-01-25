@@ -19,6 +19,7 @@ import ProactiveSuggestions from '@/components/ai/ProactiveSuggestions';
 import MobileAppBuilder from '@/components/ai/MobileAppBuilder';
 import PersonalizationEngine from '@/components/ai/PersonalizationEngine';
 import AgentDeploymentPanel from '@/components/ai/AgentDeploymentPanel';
+import AdvancedAITools from '@/components/ai/AdvancedAITools';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -380,6 +381,18 @@ Provide helpful, concise responses with code examples when relevant.`,
               <Bot className="w-4 h-4" />
               <span className="font-medium">Deploy Agents</span>
             </button>
+            <button
+              onClick={() => setActivePanel('advanced')}
+              className={cn(
+                "flex items-center gap-2 py-3 border-b-2 transition-colors",
+                activePanel === 'advanced' 
+                  ? "border-amber-500 text-amber-600" 
+                  : "border-transparent text-gray-500 hover:text-gray-700"
+              )}
+            >
+              <Wand2 className="w-4 h-4" />
+              <span className="font-medium">Advanced Tools</span>
+            </button>
             </div>
             <a
               href={base44.agents.getWhatsAppConnectURL('ai_assistant')}
@@ -513,6 +526,19 @@ Provide helpful, concise responses with code examples when relevant.`,
                 <p className="text-gray-500">Suggest and configure AI agents with customizable autonomy levels</p>
               </div>
               <AgentDeploymentPanel />
+            </div>
+          </div>
+        )}
+
+        {/* Advanced AI Tools Panel */}
+        {activePanel === 'advanced' && (
+          <div className="flex-1 p-6 overflow-auto">
+            <div className="max-w-5xl mx-auto">
+              <div className="mb-6">
+                <h2 className="text-xl font-bold text-gray-900 mb-1">Advanced AI Tools</h2>
+                <p className="text-gray-500">Code refactoring, test generation, performance analysis, and sentiment analysis</p>
+              </div>
+              <AdvancedAITools />
             </div>
           </div>
         )}
