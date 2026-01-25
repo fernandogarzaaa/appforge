@@ -43,6 +43,7 @@ import AIMonitoring from './pages/AIMonitoring';
 import PredictiveAnalytics from './pages/PredictiveAnalytics';
 import FeedbackAnalytics from './pages/FeedbackAnalytics';
 import AdminDashboard from './pages/AdminDashboard';
+import EnterpriseIntelligence from './pages/EnterpriseIntelligence';
 import __Layout from './Layout.jsx';
 
 
@@ -92,6 +93,7 @@ export const PAGES = {
     "PredictiveAnalytics": PredictiveAnalytics,
     "FeedbackAnalytics": FeedbackAnalytics,
     "AdminDashboard": AdminDashboard,
+    "EnterpriseIntelligence": EnterpriseIntelligence,
 }
 
 export const pagesConfig = {
