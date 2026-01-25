@@ -23,6 +23,7 @@ import { Button } from '@/components/ui/button';
 const navItems = [
   { name: 'Dashboard', icon: LayoutDashboard, page: 'Dashboard' },
   { name: 'Projects', icon: FolderKanban, page: 'Projects' },
+  { name: 'Code Playground', icon: Code, page: 'CodePlayground' },
   { name: 'Pricing', icon: CreditCard, page: 'Pricing' },
 ];
 
