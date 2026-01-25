@@ -98,14 +98,17 @@ Deno.serve(async (req) => {
         });
 
         // Create trigger log (check if entity exists)
-        try {
-          await base44.entities.TriggerLog?.create?.({
-          bot_id: bot.id,
-          trigger_type: 'file_upload',
-          trigger_details: fileMetadata,
-          status: result.success ? 'success' : 'failed',
-          logs: result.logs
-        });
+         try {
+           await base44.entities.TriggerLog?.create?.({
+           bot_id: bot.id,
+           trigger_type: 'file_upload',
+           trigger_details: fileMetadata,
+           status: result.success ? 'success' : 'failed',
+           logs: result.logs
+           });
+         } catch (logError) {
+           console.error(`Failed to create trigger log: ${logError.message}`);
+         }
 
       } catch (error) {
         console.error(`Failed to trigger bot ${bot.id}: ${error.message}`);
