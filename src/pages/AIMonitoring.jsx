@@ -186,6 +186,12 @@ Provide:
         recommended_actions: analysis.recommended_actions
       });
 
+      // Trigger alerts based on configurations
+      await checkAndTriggerAlerts({
+        type: 'insight',
+        data: insight
+      });
+
       // Evaluate triggers and execute actions
       if (evaluateTriggers(insight, rule) && rule.actions?.length > 0) {
         await executeActions(insight, rule.actions);
@@ -308,6 +314,16 @@ Calculate:
 
         <TabsContent value="dashboard" className="flex-1 overflow-y-auto">
           <div className="space-y-6">
+            {/* Alert Configuration */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Alert Configuration</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <AlertConfigManager />
+              </CardContent>
+            </Card>
+
             {/* Overview Stats */}
             <div className="grid grid-cols-4 gap-4">
               <Card>
