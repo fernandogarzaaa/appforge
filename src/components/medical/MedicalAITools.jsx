@@ -58,6 +58,27 @@ export default function MedicalAITools() {
       icon: Activity,
       action: 'decision',
       color: 'indigo'
+    },
+    {
+      name: 'Emergency Geo-Tracker',
+      description: 'Track medical emergencies by location and severity',
+      icon: Activity,
+      action: 'emergency_geo',
+      color: 'red'
+    },
+    {
+      name: 'Patient Triage Assistant',
+      description: 'Prioritize patients based on urgency and severity',
+      icon: User,
+      action: 'triage',
+      color: 'yellow'
+    },
+    {
+      name: 'Mental Health Screener',
+      description: 'Screen for depression, anxiety, and mental health issues',
+      icon: Brain,
+      action: 'mental_health',
+      color: 'purple'
     }
   ];
 
@@ -91,6 +112,15 @@ export default function MedicalAITools() {
           break;
         case 'decision':
           prompt = `Clinical scenario:\n${input}\n\nProvide: differential diagnosis, recommended tests, treatment options with evidence, contraindications.`;
+          break;
+        case 'emergency_geo':
+          prompt = `Analyze this emergency medical data with location info:\n${input}\n\nProvide: severity assessment, nearest hospitals/facilities, estimated response time, resource allocation, priority routing.`;
+          break;
+        case 'triage':
+          prompt = `Triage these patients:\n${input}\n\nProvide: priority levels (Red/Yellow/Green/Black), urgency score, recommended immediate actions, resource needs.`;
+          break;
+        case 'mental_health':
+          prompt = `Mental health screening data:\n${input}\n\nProvide: risk indicators for depression/anxiety/PTSD, severity level, red flags, recommended interventions, referral suggestions. DISCLAIMER: Not a substitute for professional evaluation.`;
           break;
       }
 

@@ -8,7 +8,7 @@ import { base44 } from '@/api/base44Client';
 import { toast } from 'sonner';
 import { 
   Building2, FileText, Scale, Users, 
-  Shield, Database, TrendingUp, Globe
+  Shield, Database, TrendingUp, Globe, MapPin, Map, Siren
 } from 'lucide-react';
 
 export default function GovernmentAITools() {
@@ -72,6 +72,34 @@ export default function GovernmentAITools() {
       icon: FileText,
       action: 'forms',
       color: 'yellow'
+    },
+    {
+      name: 'City Planning AI',
+      description: 'Urban planning, zoning, infrastructure optimization',
+      icon: Map,
+      action: 'city_planning',
+      color: 'teal'
+    },
+    {
+      name: 'Emergency Response Tracker',
+      description: 'Real-time emergency dispatch and resource allocation',
+      icon: Siren,
+      action: 'emergency_tracker',
+      color: 'red'
+    },
+    {
+      name: 'Traffic & Transit Optimizer',
+      description: 'Optimize traffic flow and public transit routes',
+      icon: MapPin,
+      action: 'traffic',
+      color: 'blue'
+    },
+    {
+      name: 'Resource Distribution',
+      description: 'Optimize allocation of public resources and services',
+      icon: Database,
+      action: 'resource_dist',
+      color: 'green'
     }
   ];
 
@@ -111,6 +139,18 @@ export default function GovernmentAITools() {
           break;
         case 'forms':
           prompt = `Extract structured data from this form:\n${input}\n\nProvide: extracted fields, data validation, missing information, structured JSON output.`;
+          break;
+        case 'city_planning':
+          prompt = `City planning analysis:\n${input}\n\nProvide: zoning recommendations, infrastructure needs, population density analysis, environmental impact, traffic flow optimization, public space allocation, sustainability measures.`;
+          break;
+        case 'emergency_tracker':
+          prompt = `Emergency response data:\n${input}\n\nProvide: severity classification, nearest response units, optimal dispatch routes, estimated response times, resource requirements, coordination strategy, escalation protocol.`;
+          break;
+        case 'traffic':
+          prompt = `Traffic and transit data:\n${input}\n\nProvide: congestion hotspots, optimal traffic light timing, suggested route diversions, public transit schedule adjustments, capacity analysis, bottleneck solutions.`;
+          break;
+        case 'resource_dist':
+          prompt = `Resource distribution scenario:\n${input}\n\nProvide: optimal allocation strategy, priority areas, equity analysis, efficiency metrics, cost-benefit analysis, implementation timeline.`;
           break;
       }
 
