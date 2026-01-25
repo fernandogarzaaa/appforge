@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { base44 } from '@/api/base44Client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { Bot, Plus, Play, Pause, Trash2, Settings, Zap, Clock, Mail, Webhook, Sparkles, RefreshCw } from 'lucide-react';
+import { Bot, Plus, Play, Pause, Trash2, Settings, Zap, Clock, Mail, Webhook, Sparkles, RefreshCw, TrendingUp } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -9,7 +9,9 @@ import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
+import CryptoTradingBotBuilder from '@/components/bots/CryptoTradingBotBuilder';
 import { toast } from 'sonner';
 
 const triggerTypes = [
@@ -25,6 +27,7 @@ const botTemplates = [
     description: 'Auto-read emails, suggest replies, auto-respond to queries, and schedule appointments',
     trigger: { type: 'email', config: {} },
     icon: Mail,
+    category: 'email',
     workflow: [
       'Monitor incoming emails',
       'Analyze email content with AI',
@@ -38,6 +41,7 @@ const botTemplates = [
     description: 'Automatically respond to customer queries and escalate when needed',
     trigger: { type: 'email', config: {} },
     icon: Zap,
+    category: 'email',
     workflow: [
       'Receive customer inquiry',
       'Analyze sentiment and urgency',
@@ -51,12 +55,55 @@ const botTemplates = [
     description: 'Parse meeting requests from emails and automatically schedule appointments',
     trigger: { type: 'email', config: {} },
     icon: Clock,
+    category: 'email',
     workflow: [
       'Detect meeting request in email',
       'Extract preferred times',
       'Check calendar availability',
       'Propose meeting times',
       'Send calendar invite'
+    ]
+  },
+  {
+    name: 'Crypto Trading Bot',
+    description: 'Grid trading, DCA, arbitrage, momentum trading with risk management',
+    trigger: { type: 'schedule', config: {} },
+    icon: TrendingUp,
+    category: 'trading',
+    workflow: [
+      'Monitor cryptocurrency prices',
+      'Calculate trading signals',
+      'Execute buy/sell orders',
+      'Manage positions',
+      'Log performance metrics'
+    ]
+  },
+  {
+    name: 'Data Aggregator Bot',
+    description: 'Collect data from multiple sources and consolidate into your system',
+    trigger: { type: 'schedule', config: {} },
+    icon: Zap,
+    category: 'data_processing',
+    workflow: [
+      'Fetch data from APIs',
+      'Transform and validate',
+      'Aggregate results',
+      'Store in database',
+      'Send notifications'
+    ]
+  },
+  {
+    name: 'Alert Monitor Bot',
+    description: 'Monitor metrics and send alerts when thresholds are exceeded',
+    trigger: { type: 'entity_change', config: {} },
+    icon: Zap,
+    category: 'monitoring',
+    workflow: [
+      'Track metric values',
+      'Compare against thresholds',
+      'Generate alerts',
+      'Notify stakeholders',
+      'Log incident'
     ]
   }
 ];
@@ -65,6 +112,7 @@ export default function BotBuilder() {
   const [showDialog, setShowDialog] = useState(false);
   const [selectedBot, setSelectedBot] = useState(null);
   const [isGenerating, setIsGenerating] = useState(false);
+  const [activeTab, setActiveTab] = useState('basic');
   const [newBot, setNewBot] = useState({
     name: '',
     description: '',
@@ -257,31 +305,42 @@ export default function BotBuilder() {
       )}
 
       <Dialog open={showDialog} onOpenChange={setShowDialog}>
-        <DialogContent className="sm:max-w-2xl max-h-[90vh] overflow-y-auto">
+        <DialogContent className="sm:max-w-4xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>Create New Bot</DialogTitle>
           </DialogHeader>
-          <div className="space-y-4">
+          
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+            <TabsList className="grid w-full grid-cols-3">
+              <TabsTrigger value="basic">Basic Bots</TabsTrigger>
+              <TabsTrigger value="trading">Trading</TabsTrigger>
+              <TabsTrigger value="custom">Custom</TabsTrigger>
+            </TabsList>
+
+            <TabsContent value="basic" className="space-y-4 mt-4">
             <div>
               <Label className="mb-2 block">Quick Start Templates</Label>
               <div className="grid grid-cols-1 gap-2 mb-4">
-                {botTemplates.map((template, idx) => {
+                {botTemplates.filter(t => t.category === 'email').map((template, idx) => {
                   const TemplateIcon = template.icon;
                   return (
                     <Card 
                       key={idx} 
                       className="cursor-pointer hover:bg-gray-50 transition-colors"
-                      onClick={() => setNewBot({
-                        name: template.name,
-                        description: template.description,
-                        trigger: template.trigger,
-                        nodes: template.workflow.map((step, i) => ({
-                          id: `node-${i}`,
-                          name: step,
-                          type: 'action'
-                        })),
-                        status: 'draft'
-                      })}
+                      onClick={() => {
+                        setNewBot({
+                          name: template.name,
+                          description: template.description,
+                          trigger: template.trigger,
+                          nodes: template.workflow.map((step, i) => ({
+                            id: `node-${i}`,
+                            name: step,
+                            type: 'action'
+                          })),
+                          status: 'draft'
+                        });
+                        setActiveTab('custom');
+                      }}
                     >
                       <CardContent className="p-4">
                         <div className="flex items-start gap-3">
@@ -311,6 +370,16 @@ export default function BotBuilder() {
                 })}
               </div>
             </div>
+
+            <TabsContent value="trading" className="space-y-4 mt-4">
+              <Label className="mb-2 block">Crypto & Trading Bots</Label>
+              <CryptoTradingBotBuilder onSave={(botConfig) => {
+                setNewBot(botConfig);
+                setActiveTab('custom');
+              }} />
+            </TabsContent>
+
+            <TabsContent value="custom" className="space-y-4 mt-4">
             <div className="border-t pt-4">
               <Label className="mb-2 block">AI Bot Generator</Label>
               <div className="flex gap-2 mb-3">
@@ -379,8 +448,11 @@ export default function BotBuilder() {
                 </SelectContent>
               </Select>
             </div>
-          </div>
-          <DialogFooter>
+            </div>
+            </TabsContent>
+            </Tabs>
+
+            <DialogFooter>
             <Button variant="outline" onClick={() => setShowDialog(false)}>Cancel</Button>
             <Button onClick={() => createMutation.mutate(newBot)} disabled={!newBot.name}>
               Create Bot
