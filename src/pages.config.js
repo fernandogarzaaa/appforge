@@ -33,6 +33,7 @@ import CryptoGambling from './pages/CryptoGambling';
 import NFTMarketplace from './pages/NFTMarketplace';
 import Support from './pages/Support';
 import Roadmap from './pages/Roadmap';
+import Integrations from './pages/Integrations';
 import __Layout from './Layout.jsx';
 
 
@@ -72,6 +73,7 @@ export const PAGES = {
     "NFTMarketplace": NFTMarketplace,
     "Support": Support,
     "Roadmap": Roadmap,
+    "Integrations": Integrations,
 }
 
 export const pagesConfig = {
