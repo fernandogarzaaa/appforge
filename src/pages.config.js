@@ -17,6 +17,7 @@ import DAOGovernance from './pages/DAOGovernance';
 import BotBuilder from './pages/BotBuilder';
 import APIExplorer from './pages/APIExplorer';
 import GitHubConnect from './pages/GitHubConnect';
+import SocialMediaHub from './pages/SocialMediaHub';
 import __Layout from './Layout.jsx';
 
 
@@ -40,6 +41,7 @@ export const PAGES = {
     "BotBuilder": BotBuilder,
     "APIExplorer": APIExplorer,
     "GitHubConnect": GitHubConnect,
+    "SocialMediaHub": SocialMediaHub,
 }
 
 export const pagesConfig = {

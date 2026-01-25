@@ -20,7 +20,8 @@ import {
   Users,
   Bot,
   Search,
-  Github
+  Github,
+  Share2
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
@@ -40,6 +41,7 @@ const projectNavItems = [
   { name: 'AI Assistant', icon: Sparkles, page: 'AIAssistant' },
   { name: 'Bot Builder', icon: Bot, page: 'BotBuilder' },
   { name: 'API Explorer', icon: Search, page: 'APIExplorer' },
+  { name: 'Social Media', icon: Share2, page: 'SocialMediaHub' },
   { name: 'GitHub', icon: Github, page: 'GitHubConnect' },
   { name: 'Settings', icon: Settings, page: 'ProjectSettings' },
 ];
