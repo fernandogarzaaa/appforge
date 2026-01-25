@@ -28,52 +28,53 @@ const steps = [
   },
   {
     id: 2,
-    title: 'Define Your Data Structure',
-    description: 'Create entities to define what data your app will store',
-    icon: Database,
+    title: 'Use AI to Build Your App',
+    description: 'Simply describe what you want - AI will create everything for you',
+    icon: Sparkles,
     color: 'purple',
     instructions: [
       'Open your project from the dashboard',
-      'Navigate to "Entities" in the project sidebar',
-      'Click "Create Entity" button',
-      'Name your entity (e.g., User, Product, Task)',
-      'Add fields with appropriate data types',
-      'Define required fields and default values',
-      'Save your entity'
+      'Click on "AI Assistant" in the sidebar',
+      'Type what you want in plain English (e.g., "Create a blog with posts and comments")',
+      'AI will automatically create the data structure (entities) for you',
+      'AI will also build the pages and features you need',
+      'Review what AI created and ask for changes if needed',
+      'That\'s it! No coding required'
     ],
-    page: 'EntityDesigner'
+    page: 'AIAssistant'
   },
   {
     id: 3,
-    title: 'Build Your Pages',
-    description: 'Design the user interface pages for your application',
+    title: 'Customize with Templates',
+    description: 'Use ready-made templates and customize them to your needs',
     icon: FileCode,
     color: 'green',
     instructions: [
-      'Click on "Pages" in the project menu',
-      'Use the page editor to create new pages',
-      'Add components from the library',
-      'Connect your pages to entities',
-      'Customize styling with Tailwind CSS',
-      'Preview your pages in real-time'
+      'Go to "Templates" in the main menu',
+      'Browse professional templates (e-commerce, blog, portfolio, etc.)',
+      'Click "Install" on any template you like',
+      'The template is automatically added to your project',
+      'Use AI Assistant to customize: "Change the colors to blue" or "Add a contact form"',
+      'Preview your changes instantly in the right panel',
+      'No coding knowledge needed!'
     ],
-    page: 'PageEditor'
+    page: 'TemplateMarketplace'
   },
   {
     id: 4,
-    title: 'Leverage AI Features',
-    description: 'Use AI to speed up development and generate content',
-    icon: Sparkles,
+    title: 'Generate Content with AI',
+    description: 'Create professional content for your app automatically',
+    icon: FileText,
     color: 'pink',
     instructions: [
-      'Go to "AI Assistant" in your project',
-      'Describe what you want to build',
-      'Let AI generate code, components, or content',
-      'Use "Bot Builder" for automation',
-      'Generate social media posts automatically',
-      'Get code suggestions and optimizations'
+      'Go to "Content Studio" to generate blog posts, articles, or product descriptions',
+      'Visit "Media Studio" to create images and graphics with AI',
+      'Use "Email Campaigns" to write marketing emails automatically',
+      'Go to "Social Media Hub" to create posts for all platforms at once',
+      'Just describe what you need and AI creates it instantly',
+      'Edit and refine the content with simple requests'
     ],
-    page: 'AIAssistant'
+    page: 'ContentStudio'
   },
   {
     id: 5,
