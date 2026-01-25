@@ -280,6 +280,7 @@ const templates = [
 ];
 
 export default function ProjectTemplates({ onSelect, selected }) {
+  console.log('Rendering templates:', templates.length);
   return (
     <div className="max-h-[400px] overflow-y-auto pr-2">
       <div className="grid grid-cols-2 gap-2.5">
