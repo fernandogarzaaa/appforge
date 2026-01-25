@@ -26,7 +26,9 @@ import {
   FileText,
   Mail,
   BarChart3,
-  Package
+  Package,
+  Gamepad2,
+  Dices
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
@@ -63,6 +65,10 @@ const web3NavItems = [
   { name: 'Web3 Studio', icon: Wallet, page: 'Web3Dashboard' },
   { name: 'Tokens', icon: Coins, page: 'TokenCreator' },
   { name: 'NFT Collections', icon: Image, page: 'NFTStudio' },
+  { name: 'NFT Marketplace', icon: TrendingUp, page: 'NFTMarketplace' },
+  { name: 'Crypto Exchange', icon: BarChart3, page: 'CryptoExchange' },
+  { name: 'Gaming Platform', icon: Gamepad2, page: 'GamingPlatform' },
+  { name: 'Crypto Casino', icon: Dices, page: 'CryptoGambling' },
   { name: 'Contracts', icon: Code, page: 'ContractBuilder' },
   { name: 'DeFi Hub', icon: TrendingUp, page: 'DeFiHub' },
   { name: 'DAO Governance', icon: Users, page: 'DAOGovernance' },
