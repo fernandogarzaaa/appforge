@@ -16,11 +16,8 @@ Deno.serve(async (req) => {
     }
 
     // Fetch pipeline and run
-    const pipeline = await base44.entities.BotPipeline.list();
-    const pipelineData = pipeline.find(p => p.id === pipelineId);
-    
-    const runs = await base44.entities.PipelineRun.list();
-    let pipelineRun = runs.find(r => r.id === pipelineRunId);
+    const pipelineData = await base44.entities.BotPipeline.get(pipelineId);
+    let pipelineRun = await base44.entities.PipelineRun.get(pipelineRunId);
 
     if (!pipelineData || !pipelineRun) {
       return Response.json({ error: 'Pipeline or run not found' }, { status: 404 });
@@ -106,7 +103,7 @@ Deno.serve(async (req) => {
     logs.push(`\nPipeline ${overallStatus} after ${totalDuration.toFixed(2)}s`);
 
     // Update pipeline run
-    pipelineRun = await base44.entities.BotPipelineRun.update(pipelineRunId, {
+    pipelineRun = await base44.entities.PipelineRun.update(pipelineRunId, {
       status: overallStatus,
       stage_results: stageResults,
       completed_at: new Date().toISOString(),
@@ -149,7 +146,7 @@ async function runTestStage(base44, botId, logs) {
     });
 
     const passedTests = results.data.results.filter(r => r.status === 'completed').length;
-    const totalTests = results.data.totalRun;
+    const totalTests = results.data.totalRun || results.data.results?.length || 0;
 
     logs.push(`Tests: ${passedTests}/${totalTests} passed`);
 

@@ -251,8 +251,9 @@ export default function BotBuilder() {
     queryKey: ['automations', projectId],
     queryFn: async () => {
       try {
-        return await base44.entities.Automation?.filter?.({ project_id: projectId }) || [];
-      } catch {
+        return await base44.entities.Automation.filter({ project_id: projectId });
+      } catch (error) {
+        console.error('Failed to fetch automations:', error);
         return [];
       }
     },

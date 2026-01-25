@@ -16,7 +16,9 @@ Deno.serve(async (req) => {
     }
 
     // Fetch test cases
-    const testCases = await base44.entities.BotTestCase.filter({ id: { $in: testIds } });
+    const testCases = await Promise.all(
+      testIds.map(id => base44.entities.BotTestCase.get(id))
+    );
 
     const results = [];
 

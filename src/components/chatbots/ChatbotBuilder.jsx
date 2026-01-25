@@ -58,7 +58,7 @@ export default function ChatbotBuilder() {
           instructions: formData.personality.system_prompt || `You are ${newBot.name}, a helpful assistant. ${formData.personality.style}`,
           tool_configs: formData.knowledge_sources.length > 0 
             ? formData.knowledge_sources.map(source => ({
-                entity_name: source.name,
+                entity_name: source.entity_name || source.source_id || source.name,
                 allowed_operations: ['read']
               }))
             : [],

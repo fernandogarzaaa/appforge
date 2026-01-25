@@ -5,6 +5,7 @@ import AdminDashboard from './pages/AdminDashboard';
 import AdvancedAnomalyDetection from './pages/AdvancedAnomalyDetection';
 import Analytics from './pages/Analytics';
 import BotBuilder from './pages/BotBuilder';
+import ChatbotManager from './pages/ChatbotManager';
 import CodePlayground from './pages/CodePlayground';
 import Components from './pages/Components';
 import ContentStudio from './pages/ContentStudio';
@@ -20,6 +21,7 @@ import EmailCampaigns from './pages/EmailCampaigns';
 import EnterpriseIntelligence from './pages/EnterpriseIntelligence';
 import EntityDesigner from './pages/EntityDesigner';
 import FeedbackAnalytics from './pages/FeedbackAnalytics';
+import FunctionValidator from './pages/FunctionValidator';
 import GamingPlatform from './pages/GamingPlatform';
 import GitHubConnect from './pages/GitHubConnect';
 import GovernmentTools from './pages/GovernmentTools';
@@ -48,8 +50,6 @@ import TokenCreator from './pages/TokenCreator';
 import VSCodeIntegration from './pages/VSCodeIntegration';
 import Web3Dashboard from './pages/Web3Dashboard';
 import WorkflowBuilder from './pages/WorkflowBuilder';
-import FunctionValidator from './pages/FunctionValidator';
-import ChatbotManager from './pages/ChatbotManager';
 import __Layout from './Layout.jsx';
 
 
@@ -61,6 +61,7 @@ export const PAGES = {
     "AdvancedAnomalyDetection": AdvancedAnomalyDetection,
     "Analytics": Analytics,
     "BotBuilder": BotBuilder,
+    "ChatbotManager": ChatbotManager,
     "CodePlayground": CodePlayground,
     "Components": Components,
     "ContentStudio": ContentStudio,
@@ -76,6 +77,7 @@ export const PAGES = {
     "EnterpriseIntelligence": EnterpriseIntelligence,
     "EntityDesigner": EntityDesigner,
     "FeedbackAnalytics": FeedbackAnalytics,
+    "FunctionValidator": FunctionValidator,
     "GamingPlatform": GamingPlatform,
     "GitHubConnect": GitHubConnect,
     "GovernmentTools": GovernmentTools,
@@ -104,8 +106,6 @@ export const PAGES = {
     "VSCodeIntegration": VSCodeIntegration,
     "Web3Dashboard": Web3Dashboard,
     "WorkflowBuilder": WorkflowBuilder,
-    "FunctionValidator": FunctionValidator,
-    "ChatbotManager": ChatbotManager,
 }
 
 export const pagesConfig = {
