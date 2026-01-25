@@ -15,13 +15,11 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Missing bot_id' }, { status: 400 });
     }
 
-    // Get bot
-    const bots = await base44.entities.Bot.filter({ id: bot_id });
-    if (bots.length === 0) {
+    // Get bot (use Automation entity, not Bot)
+    const bot = await base44.entities.Automation.get(bot_id);
+    if (!bot) {
       return Response.json({ error: 'Bot not found' }, { status: 404 });
     }
-
-    const bot = bots[0];
 
     // Check if user is creator (owner)
     if (bot.created_by === user.email) {
