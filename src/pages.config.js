@@ -14,6 +14,8 @@ import CodePlayground from './pages/CodePlayground';
 import ProjectTasks from './pages/ProjectTasks';
 import DeFiHub from './pages/DeFiHub';
 import DAOGovernance from './pages/DAOGovernance';
+import BotBuilder from './pages/BotBuilder';
+import APIExplorer from './pages/APIExplorer';
 import __Layout from './Layout.jsx';
 
 
@@ -34,6 +36,8 @@ export const PAGES = {
     "ProjectTasks": ProjectTasks,
     "DeFiHub": DeFiHub,
     "DAOGovernance": DAOGovernance,
+    "BotBuilder": BotBuilder,
+    "APIExplorer": APIExplorer,
 }
 
 export const pagesConfig = {
