@@ -19,6 +19,7 @@ import { InsightsTrendChart, SeverityDistribution, InsightTypeChart } from '@/co
 import { TaskPriorityChart, UrgencyFactorsRadar, PriorityScatterPlot } from '@/components/monitoring/TaskAnalyticsChart';
 import { RuleTriggersChart, DataSourceDistribution } from '@/components/monitoring/RuleActivityChart';
 import TriggerBuilder, { ActionBuilder } from '@/components/monitoring/TriggerBuilder';
+import DataSourceConnectorManager from '@/components/monitoring/DataSourceConnectorManager';
 
 export default function AIMonitoring() {
   const queryClient = useQueryClient();
@@ -31,12 +32,19 @@ export default function AIMonitoring() {
     monitoring_frequency: 'hourly',
     conditions: { anomaly_detection: true },
     trigger_conditions: [],
-    actions: []
+    actions: [],
+    connector_id: ''
   });
+  const [connectors, setConnectors] = useState([]);
 
   const { data: workflows = [] } = useQuery({
     queryKey: ['workflows'],
     queryFn: () => base44.entities.Workflow.list('-created_date', 50)
+  });
+
+  const { data: dataConnectors = [] } = useQuery({
+    queryKey: ['data-connectors'],
+    queryFn: () => base44.entities.DataSourceConnector.list('-created_date', 50)
   });
 
   const { data: rules = [] } = useQuery({
