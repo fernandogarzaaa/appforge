@@ -24,6 +24,7 @@ import {
 } from '@/components/ui/select';
 import ProjectCard from '@/components/dashboard/ProjectCard';
 import EmptyState from '@/components/common/EmptyState';
+import ProjectTemplates from '@/components/projects/ProjectTemplates';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const projectIcons = ['📁', '🚀', '💼', '🎨', '📱', '🌐', '🛒', '📊', '🎮', '📝', '🔧', '💡'];
@@ -41,6 +42,7 @@ export default function Projects() {
     color: '#6366f1',
     status: 'draft',
   });
+  const [selectedTemplate, setSelectedTemplate] = useState(null);
 
   const queryClient = useQueryClient();
 
@@ -188,22 +190,34 @@ export default function Projects() {
       {/* New Project Dialog */}
       <Dialog open={showNewDialog} onOpenChange={setShowNewDialog}>
         <DialogContent className="sm:max-w-lg rounded-2xl p-0 overflow-hidden">
-          <DialogHeader className="p-6 pb-0">
-            <DialogTitle className="text-xl font-semibold">Create New Project</DialogTitle>
+          <DialogHeader className="p-6 pb-4 border-b border-gray-100">
+            <DialogTitle className="text-base font-semibold">Create New Project</DialogTitle>
           </DialogHeader>
-          <div className="p-6 space-y-5">
+          <div className="p-6 space-y-4">
+            {/* Template Selection */}
+            <div>
+              <Label className="text-[13px] text-gray-600 mb-2 block">Choose Template</Label>
+              <ProjectTemplates 
+                onSelect={(template) => {
+                  setSelectedTemplate(template);
+                  setNewProject({ ...newProject, icon: template.icon ? '📁' : newProject.icon });
+                }} 
+                selected={selectedTemplate}
+              />
+            </div>
+
             {/* Icon & Color Selection */}
-            <div className="flex gap-6">
+            <div className="flex gap-4">
               <div className="flex-1">
-                <Label className="text-sm text-gray-600 mb-2 block">Icon</Label>
-                <div className="grid grid-cols-6 gap-2">
+                <Label className="text-[13px] text-gray-600 mb-2 block">Icon</Label>
+                <div className="grid grid-cols-6 gap-1.5">
                   {projectIcons.map((icon) => (
                     <button
                       key={icon}
                       onClick={() => setNewProject({ ...newProject, icon })}
-                      className={`w-10 h-10 rounded-lg flex items-center justify-center text-xl transition-all ${
+                      className={`w-9 h-9 rounded-lg flex items-center justify-center text-lg transition-all ${
                         newProject.icon === icon
-                          ? 'bg-indigo-100 ring-2 ring-indigo-500'
+                          ? 'bg-gray-900 text-white'
                           : 'bg-gray-50 hover:bg-gray-100'
                       }`}
                     >
@@ -213,14 +227,14 @@ export default function Projects() {
                 </div>
               </div>
               <div>
-                <Label className="text-sm text-gray-600 mb-2 block">Color</Label>
-                <div className="grid grid-cols-5 gap-2">
-                  {projectColors.map((color) => (
+                <Label className="text-[13px] text-gray-600 mb-2 block">Color</Label>
+                <div className="grid grid-cols-2 gap-1.5">
+                  {projectColors.slice(0, 8).map((color) => (
                     <button
                       key={color}
                       onClick={() => setNewProject({ ...newProject, color })}
-                      className={`w-8 h-8 rounded-full transition-all ${
-                        newProject.color === color ? 'ring-2 ring-offset-2 ring-gray-400' : ''
+                      className={`w-7 h-7 rounded-lg transition-all ${
+                        newProject.color === color ? 'ring-2 ring-offset-1 ring-gray-900' : ''
                       }`}
                       style={{ backgroundColor: color }}
                     />
@@ -231,38 +245,38 @@ export default function Projects() {
 
             {/* Name */}
             <div>
-              <Label className="text-sm text-gray-600 mb-1.5 block">Project Name</Label>
+              <Label className="text-[13px] text-gray-600 mb-1.5 block">Project Name</Label>
               <Input
                 value={newProject.name}
                 onChange={(e) => setNewProject({ ...newProject, name: e.target.value })}
                 placeholder="My Awesome App"
-                className="h-11 rounded-xl border-gray-200"
+                className="h-9 rounded-lg border-gray-200 text-[13px]"
               />
             </div>
 
             {/* Description */}
             <div>
-              <Label className="text-sm text-gray-600 mb-1.5 block">Description</Label>
+              <Label className="text-[13px] text-gray-600 mb-1.5 block">Description</Label>
               <Textarea
                 value={newProject.description}
                 onChange={(e) => setNewProject({ ...newProject, description: e.target.value })}
                 placeholder="What's this project about?"
-                className="rounded-xl border-gray-200 resize-none h-24"
+                className="rounded-lg border-gray-200 resize-none h-20 text-[13px]"
               />
             </div>
           </div>
-          <DialogFooter className="p-6 pt-0">
+          <DialogFooter className="p-6 pt-4 border-t border-gray-100">
             <Button
               variant="outline"
               onClick={() => setShowNewDialog(false)}
-              className="rounded-xl"
+              className="rounded-lg h-9 text-[13px]"
             >
               Cancel
             </Button>
             <Button
               onClick={handleCreate}
               disabled={!newProject.name || createMutation.isPending}
-              className="bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white rounded-xl"
+              className="bg-gray-900 hover:bg-gray-800 text-white rounded-lg h-9 text-[13px]"
             >
               {createMutation.isPending ? 'Creating...' : 'Create Project'}
             </Button>

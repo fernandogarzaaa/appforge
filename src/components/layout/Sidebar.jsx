@@ -31,6 +31,7 @@ const projectNavItems = [
   { name: 'Entities', icon: Database, page: 'EntityDesigner' },
   { name: 'Pages', icon: FileCode, page: 'PageEditor' },
   { name: 'Components', icon: Component, page: 'Components' },
+  { name: 'Tasks', icon: LayoutDashboard, page: 'ProjectTasks' },
   { name: 'AI Assistant', icon: Sparkles, page: 'AIAssistant' },
   { name: 'Settings', icon: Settings, page: 'ProjectSettings' },
 ];
