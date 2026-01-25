@@ -16,6 +16,7 @@ import DeFiHub from './pages/DeFiHub';
 import DAOGovernance from './pages/DAOGovernance';
 import BotBuilder from './pages/BotBuilder';
 import APIExplorer from './pages/APIExplorer';
+import GitHubConnect from './pages/GitHubConnect';
 import __Layout from './Layout.jsx';
 
 
@@ -38,6 +39,7 @@ export const PAGES = {
     "DAOGovernance": DAOGovernance,
     "BotBuilder": BotBuilder,
     "APIExplorer": APIExplorer,
+    "GitHubConnect": GitHubConnect,
 }
 
 export const pagesConfig = {

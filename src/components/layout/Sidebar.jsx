@@ -17,7 +17,10 @@ import {
   Code,
   CreditCard,
   TrendingUp,
-  Users
+  Users,
+  Bot,
+  Search,
+  Github
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
@@ -35,6 +38,9 @@ const projectNavItems = [
   { name: 'Components', icon: Component, page: 'Components' },
   { name: 'Tasks', icon: LayoutDashboard, page: 'ProjectTasks' },
   { name: 'AI Assistant', icon: Sparkles, page: 'AIAssistant' },
+  { name: 'Bot Builder', icon: Bot, page: 'BotBuilder' },
+  { name: 'API Explorer', icon: Search, page: 'APIExplorer' },
+  { name: 'GitHub', icon: Github, page: 'GitHubConnect' },
   { name: 'Settings', icon: Settings, page: 'ProjectSettings' },
 ];
 
