@@ -32,13 +32,13 @@ Deno.serve(async (req) => {
 
       switch (node.type) {
         case 'condition':
-          return executeCondition(node, context);
+          return await executeCondition(node, context);
 
         case 'loop':
-          return executeLoop(node, context, executeNode);
+          return await executeLoop(node, context, executeNode);
 
         case 'parallel':
-          return executeParallel(node, context, executeNode);
+          return await executeParallel(node, context, executeNode);
 
         case 'api_call':
           return await executeApiCall(node, context);
@@ -266,11 +266,11 @@ Deno.serve(async (req) => {
 
     // Execute from first node
     const firstNode = nodes[0];
-    await executeNode(firstNode.id);
+    const finalContext = await executeNode(firstNode.id);
 
     return Response.json({
       success: true,
-      context,
+      context: finalContext,
       executionLog
     });
   } catch (error) {
