@@ -28,7 +28,7 @@ export default function AlertAcknowledgement({ alert, isOpen, onClose, onAcknowl
 
       if (assignTo) {
         updateData.assigned_to = assignTo;
-        updateData.assigned_at = new Date().toISOString());
+        updateData.assigned_at = new Date().toISOString();
       }
 
       await base44.entities.AnomalyAlert.update(alert.id, updateData);
