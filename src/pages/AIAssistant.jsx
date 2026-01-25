@@ -4,13 +4,14 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { 
   Sparkles, Send, Plus, Trash2, MessageSquare,
   Loader2, Copy, Check, Code, FileCode, Database,
-  Globe, Brain, Zap, Bot, Github, Wand2
+  Globe, Brain, Zap, Bot, Github, Wand2, Workflow
 } from 'lucide-react';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import APIDiscoveryPanel from '@/components/ai/APIDiscoveryPanel';
 import PredictiveModels from '@/components/ai/PredictiveModels';
 import GitHubIntegration from '@/components/ai/GitHubIntegration';
 import AdvancedAIFunctions from '@/components/ai/AdvancedAIFunctions';
+import AutomationBuilder from '@/components/ai/AutomationBuilder';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -273,6 +274,18 @@ Provide helpful, concise responses with code examples when relevant.`,
               <Github className="w-4 h-4" />
               <span className="font-medium">GitHub</span>
             </button>
+            <button
+              onClick={() => setActivePanel('automations')}
+              className={cn(
+                "flex items-center gap-2 py-3 border-b-2 transition-colors",
+                activePanel === 'automations' 
+                  ? "border-indigo-500 text-indigo-600" 
+                  : "border-transparent text-gray-500 hover:text-gray-700"
+              )}
+            >
+              <Workflow className="w-4 h-4" />
+              <span className="font-medium">Automations</span>
+            </button>
             {integratedAPIs.length > 0 && (
               <div className="ml-auto flex items-center gap-2">
                 <Zap className="w-4 h-4 text-green-500" />
@@ -332,6 +345,19 @@ Provide helpful, concise responses with code examples when relevant.`,
                 <p className="text-gray-500">Connect your repository to edit and sync code</p>
               </div>
               <GitHubIntegration projectId={projectId} />
+            </div>
+          </div>
+        )}
+
+        {/* Automations Panel */}
+        {activePanel === 'automations' && (
+          <div className="flex-1 p-6 overflow-auto">
+            <div className="max-w-6xl mx-auto">
+              <div className="mb-6">
+                <h2 className="text-xl font-bold text-gray-900 mb-1">Workflow Automations</h2>
+                <p className="text-gray-500">Create n8n-style workflows with triggers, actions, and API integrations</p>
+              </div>
+              <AutomationBuilder projectId={projectId} />
             </div>
           </div>
         )}
