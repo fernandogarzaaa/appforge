@@ -20,6 +20,8 @@ import SocialMediaHub from './pages/SocialMediaHub';
 import TokenCreator from './pages/TokenCreator';
 import VSCodeIntegration from './pages/VSCodeIntegration';
 import Web3Dashboard from './pages/Web3Dashboard';
+import Landing from './pages/Landing';
+import Profile from './pages/Profile';
 import __Layout from './Layout.jsx';
 
 
@@ -46,6 +48,8 @@ export const PAGES = {
     "TokenCreator": TokenCreator,
     "VSCodeIntegration": VSCodeIntegration,
     "Web3Dashboard": Web3Dashboard,
+    "Landing": Landing,
+    "Profile": Profile,
 }
 
 export const pagesConfig = {

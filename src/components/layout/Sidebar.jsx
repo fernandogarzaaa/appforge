@@ -28,6 +28,7 @@ import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 
 const navItems = [
+  { name: 'Home', icon: LayoutDashboard, page: 'Landing' },
   { name: 'Dashboard', icon: LayoutDashboard, page: 'Dashboard' },
   { name: 'Projects', icon: FolderKanban, page: 'Projects' },
   { name: 'Guide', icon: BookOpen, page: 'Guide' },
