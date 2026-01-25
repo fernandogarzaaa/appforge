@@ -10,6 +10,7 @@ import ProjectSettings from './pages/ProjectSettings';
 import Projects from './pages/Projects';
 import TokenCreator from './pages/TokenCreator';
 import Web3Dashboard from './pages/Web3Dashboard';
+import CodePlayground from './pages/CodePlayground';
 import __Layout from './Layout.jsx';
 
 
@@ -26,6 +27,7 @@ export const PAGES = {
     "Projects": Projects,
     "TokenCreator": TokenCreator,
     "Web3Dashboard": Web3Dashboard,
+    "CodePlayground": CodePlayground,
 }
 
 export const pagesConfig = {
