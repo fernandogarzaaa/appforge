@@ -32,6 +32,7 @@ import GamingPlatform from './pages/GamingPlatform';
 import CryptoGambling from './pages/CryptoGambling';
 import NFTMarketplace from './pages/NFTMarketplace';
 import Support from './pages/Support';
+import Roadmap from './pages/Roadmap';
 import __Layout from './Layout.jsx';
 
 
@@ -70,6 +71,7 @@ export const PAGES = {
     "CryptoGambling": CryptoGambling,
     "NFTMarketplace": NFTMarketplace,
     "Support": Support,
+    "Roadmap": Roadmap,
 }
 
 export const pagesConfig = {
