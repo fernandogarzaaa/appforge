@@ -15,7 +15,9 @@ import {
   Coins,
   Image,
   Code,
-  CreditCard
+  CreditCard,
+  TrendingUp,
+  Users
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
@@ -41,6 +43,8 @@ const web3NavItems = [
   { name: 'Tokens', icon: Coins, page: 'TokenCreator' },
   { name: 'NFT Collections', icon: Image, page: 'NFTStudio' },
   { name: 'Contracts', icon: Code, page: 'ContractBuilder' },
+  { name: 'DeFi Hub', icon: TrendingUp, page: 'DeFiHub' },
+  { name: 'DAO Governance', icon: Users, page: 'DAOGovernance' },
 ];
 
 export default function Sidebar({ currentProject, collapsed, onToggle }) {
