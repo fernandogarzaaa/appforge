@@ -70,6 +70,81 @@ Deno.serve(async (req) => {
       }
     }
 
+    // Fix chatbot configuration issues
+    const chatbots = await base44.entities.Chatbot.list();
+    for (const issue of issues.filter(i => i.type === 'Chatbot Config Error')) {
+      try {
+        const chatbot = chatbots.find(c => c.name === issue.chatbot);
+        if (chatbot && (!chatbot.is_active === undefined)) {
+          await base44.entities.Chatbot.update(chatbot.id, {
+            is_active: true
+          });
+          fixes.applied.push({
+            type: 'Fixed chatbot config',
+            entity: issue.chatbot,
+            action: 'Enabled chatbot'
+          });
+        }
+      } catch (e) {
+        fixes.failed.push({
+          type: 'Chatbot Config Fix Failed',
+          entity: issue.chatbot,
+          error: e.message
+        });
+      }
+    }
+
+    // Fix pipeline configuration
+    const pipelines = await base44.entities.BotPipeline.list();
+    for (const issue of issues.filter(i => i.type === 'Pipeline Config Error' || i.type === 'Pipeline Missing Stages')) {
+      try {
+        const pipeline = pipelines.find(p => p.name === issue.pipeline);
+        if (pipeline && (!pipeline.stages || pipeline.stages.length === 0)) {
+          await base44.entities.BotPipeline.update(pipeline.id, {
+            stages: [
+              { id: '1', name: 'test', type: 'test', required: true },
+              { id: '2', name: 'build', type: 'build', required: true },
+              { id: '3', name: 'deploy', type: 'deploy', required: false }
+            ]
+          });
+          fixes.applied.push({
+            type: 'Fixed pipeline stages',
+            entity: issue.pipeline,
+            action: 'Added default pipeline stages'
+          });
+        }
+      } catch (e) {
+        fixes.failed.push({
+          type: 'Pipeline Fix Failed',
+          entity: issue.pipeline,
+          error: e.message
+        });
+      }
+    }
+
+    // Fix integration failures
+    const integrations = await base44.entities.IntegrationConnection.list();
+    for (const issue of issues.filter(i => i.type === 'Integration Connection Failed')) {
+      try {
+        const integration = integrations.find(i => i.name === issue.integration);
+        if (integration && integration.status === 'failed') {
+          // Log the failed integration for review
+          fixes.applied.push({
+            type: 'Flagged integration for review',
+            entity: issue.integration,
+            action: 'Integration requires manual reconnection',
+            severity: 'requires_manual_review'
+          });
+        }
+      } catch (e) {
+        fixes.failed.push({
+          type: 'Integration Fix Failed',
+          entity: issue.integration,
+          error: e.message
+        });
+      }
+    }
+
     // Log audit activity
     try {
       await base44.entities.BotActivityLog.create({
