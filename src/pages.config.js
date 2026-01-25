@@ -39,6 +39,7 @@ import VSCodeIntegration from './pages/VSCodeIntegration';
 import Web3Dashboard from './pages/Web3Dashboard';
 import WorkflowBuilder from './pages/WorkflowBuilder';
 import EmailAssistant from './pages/EmailAssistant';
+import AIMonitoring from './pages/AIMonitoring';
 import __Layout from './Layout.jsx';
 
 
@@ -84,6 +85,7 @@ export const PAGES = {
     "Web3Dashboard": Web3Dashboard,
     "WorkflowBuilder": WorkflowBuilder,
     "EmailAssistant": EmailAssistant,
+    "AIMonitoring": AIMonitoring,
 }
 
 export const pagesConfig = {
