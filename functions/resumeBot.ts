@@ -19,12 +19,10 @@ Deno.serve(async (req) => {
     }
 
     // Fetch bot
-    const bots = await base44.entities.Automation.filter({ id: botId });
-    if (bots.length === 0) {
+    const bot = await base44.entities.Automation.get(botId);
+    if (!bot) {
       return Response.json({ error: 'Bot not found' }, { status: 404 });
     }
-
-    const bot = bots[0];
 
     // Update status to active
     await base44.entities.Automation.update(botId, {

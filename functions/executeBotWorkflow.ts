@@ -62,14 +62,19 @@ Deno.serve(async (req) => {
     }
 
     // Store execution log
-    await base44.entities.WorkflowExecution.create({
-      bot_id: botId,
-      status: executionResult.success ? 'completed' : 'failed',
-      execution_time_ms: new Date(executionContext.startTime) - new Date(),
-      trigger_data: triggerData,
-      results: executionContext.results,
-      logs: executionContext.logs
-    });
+    const executionTime = new Date() - new Date(executionContext.startTime);
+    try {
+      await base44.entities.WorkflowExecution.create({
+        bot_id: botId,
+        status: executionResult.success ? 'completed' : 'failed',
+        execution_time_ms: executionTime,
+        trigger_data: triggerData,
+        results: executionContext.results,
+        logs: executionContext.logs
+      });
+    } catch (logError) {
+      console.error(`Failed to log execution: ${logError.message}`);
+    }
 
     return Response.json({
       success: executionResult.success,
@@ -125,7 +130,7 @@ async function executeActionNode(node, context, base44) {
         result = await makeApiCall(details, context.variables);
         break;
       case 'send_email':
-        result = await sendEmail(details, context.variables);
+        result = await sendEmail(details, context.variables, base44);
         break;
       case 'database_query':
         result = await executeDatabaseQuery(details, context.variables, base44);
@@ -248,18 +253,22 @@ async function makeApiCall(details, variables) {
 /**
  * Send email
  */
-async function sendEmail(details, variables) {
-  // Parse email details (to, subject, body)
-  const emailConfig = parseEmailConfig(details, variables);
-  
-  // Send via integration
-  const result = await fetch('https://api.base44.io/email', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(emailConfig)
-  });
+async function sendEmail(details, variables, base44) {
+   // Parse email details (to, subject, body)
+   const emailConfig = parseEmailConfig(details, variables);
 
-  return await result.json();
+   if (!emailConfig.to) {
+     throw new Error('Email recipient required');
+   }
+
+   // Send via base44 integration
+   const result = await base44.integrations.Core.SendEmail({
+     to: emailConfig.to,
+     subject: emailConfig.subject || 'Notification',
+     body: emailConfig.body
+   });
+
+   return result;
 }
 
 /**
