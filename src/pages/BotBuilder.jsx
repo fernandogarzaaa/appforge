@@ -19,6 +19,48 @@ const triggerTypes = [
   { id: 'entity_change', name: 'Entity Change', icon: Zap, description: 'When entity data changes' }
 ];
 
+const botTemplates = [
+  { 
+    name: 'Email Assistant Bot',
+    description: 'Auto-read emails, suggest replies, auto-respond to queries, and schedule appointments',
+    trigger: { type: 'email', config: {} },
+    icon: Mail,
+    workflow: [
+      'Monitor incoming emails',
+      'Analyze email content with AI',
+      'Generate appropriate responses',
+      'Auto-reply or suggest manual reply',
+      'Extract meeting requests and schedule'
+    ]
+  },
+  {
+    name: 'Customer Support Bot',
+    description: 'Automatically respond to customer queries and escalate when needed',
+    trigger: { type: 'email', config: {} },
+    icon: Zap,
+    workflow: [
+      'Receive customer inquiry',
+      'Analyze sentiment and urgency',
+      'Search knowledge base',
+      'Generate helpful response',
+      'Escalate to human if needed'
+    ]
+  },
+  {
+    name: 'Meeting Scheduler Bot',
+    description: 'Parse meeting requests from emails and automatically schedule appointments',
+    trigger: { type: 'email', config: {} },
+    icon: Clock,
+    workflow: [
+      'Detect meeting request in email',
+      'Extract preferred times',
+      'Check calendar availability',
+      'Propose meeting times',
+      'Send calendar invite'
+    ]
+  }
+];
+
 export default function BotBuilder() {
   const [showDialog, setShowDialog] = useState(false);
   const [selectedBot, setSelectedBot] = useState(null);
@@ -215,12 +257,61 @@ export default function BotBuilder() {
       )}
 
       <Dialog open={showDialog} onOpenChange={setShowDialog}>
-        <DialogContent className="sm:max-w-lg">
+        <DialogContent className="sm:max-w-2xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>Create New Bot</DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
             <div>
+              <Label className="mb-2 block">Quick Start Templates</Label>
+              <div className="grid grid-cols-1 gap-2 mb-4">
+                {botTemplates.map((template, idx) => {
+                  const TemplateIcon = template.icon;
+                  return (
+                    <Card 
+                      key={idx} 
+                      className="cursor-pointer hover:bg-gray-50 transition-colors"
+                      onClick={() => setNewBot({
+                        name: template.name,
+                        description: template.description,
+                        trigger: template.trigger,
+                        nodes: template.workflow.map((step, i) => ({
+                          id: `node-${i}`,
+                          name: step,
+                          type: 'action'
+                        })),
+                        status: 'draft'
+                      })}
+                    >
+                      <CardContent className="p-4">
+                        <div className="flex items-start gap-3">
+                          <div className="w-10 h-10 rounded-lg bg-indigo-100 flex items-center justify-center">
+                            <TemplateIcon className="w-5 h-5 text-indigo-600" />
+                          </div>
+                          <div className="flex-1">
+                            <h4 className="font-semibold text-sm mb-1">{template.name}</h4>
+                            <p className="text-xs text-gray-600 mb-2">{template.description}</p>
+                            <div className="flex flex-wrap gap-1">
+                              {template.workflow.slice(0, 3).map((step, i) => (
+                                <Badge key={i} variant="outline" className="text-xs">
+                                  {step}
+                                </Badge>
+                              ))}
+                              {template.workflow.length > 3 && (
+                                <Badge variant="outline" className="text-xs">
+                                  +{template.workflow.length - 3} more
+                                </Badge>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  );
+                })}
+              </div>
+            </div>
+            <div className="border-t pt-4">
               <Label className="mb-2 block">AI Bot Generator</Label>
               <div className="flex gap-2 mb-3">
                 <Input

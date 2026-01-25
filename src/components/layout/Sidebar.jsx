@@ -39,6 +39,7 @@ const navItems = [
   { name: 'Dashboard', icon: LayoutDashboard, page: 'Dashboard' },
   { name: 'Projects', icon: FolderKanban, page: 'Projects' },
   { name: 'Workflow Builder', icon: Share2, page: 'WorkflowBuilder' },
+  { name: 'Email Assistant', icon: Share2, page: 'EmailAssistant' },
   { name: 'Integrations', icon: Share2, page: 'Integrations' },
   { name: 'Templates', icon: Package, page: 'TemplateMarketplace' },
   { name: 'Guide', icon: BookOpen, page: 'Guide' },
