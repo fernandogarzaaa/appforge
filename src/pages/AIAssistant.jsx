@@ -5,7 +5,7 @@ import {
   Sparkles, Send, Plus, Trash2, MessageSquare,
   Loader2, Copy, Check, Code, FileCode, Database,
   Globe, Brain, Zap, Bot, Github, Wand2, Workflow,
-  Upload, FileText, Shield, Smartphone, User, MessageCircle, AlertCircle
+  Upload, FileText, Shield, Smartphone, User, MessageCircle, AlertCircle, Bug
 } from 'lucide-react';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import APIDiscoveryPanel from '@/components/ai/APIDiscoveryPanel';
@@ -21,6 +21,7 @@ import PersonalizationEngine from '@/components/ai/PersonalizationEngine';
 import AgentDeploymentPanel from '@/components/ai/AgentDeploymentPanel';
 import AdvancedAITools from '@/components/ai/AdvancedAITools';
 import ProjectAuditorPanel from '@/components/ai/ProjectAuditorPanel';
+import ProactiveBugDetection from '@/components/ai/ProactiveBugDetection';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -406,6 +407,18 @@ Provide helpful, concise responses with code examples when relevant.`,
               <Zap className="w-4 h-4" />
               <span className="font-medium">Project Auditor</span>
             </button>
+            <button
+              onClick={() => setActivePanel('bugs')}
+              className={cn(
+                "flex items-center gap-2 py-3 border-b-2 transition-colors",
+                activePanel === 'bugs' 
+                  ? "border-orange-500 text-orange-600" 
+                  : "border-transparent text-gray-500 hover:text-gray-700"
+              )}
+            >
+              <AlertCircle className="w-4 h-4" />
+              <span className="font-medium">Bug Detection</span>
+            </button>
             </div>
             <a
               href={base44.agents.getWhatsAppConnectURL('ai_assistant')}
@@ -565,6 +578,19 @@ Provide helpful, concise responses with code examples when relevant.`,
                 <p className="text-gray-500">Full autonomy agent that checks for errors, reports via WhatsApp, and fixes issues automatically</p>
               </div>
               <ProjectAuditorPanel />
+            </div>
+          </div>
+        )}
+
+        {/* Proactive Bug Detection Panel */}
+        {activePanel === 'bugs' && (
+          <div className="flex-1 p-6 overflow-auto">
+            <div className="max-w-5xl mx-auto">
+              <div className="mb-6">
+                <h2 className="text-xl font-bold text-gray-900 mb-1">Proactive Bug Detection</h2>
+                <p className="text-gray-500">AI analyzes logs, feedback, and crashes to predict bugs and auto-create prioritized tickets</p>
+              </div>
+              <ProactiveBugDetection />
             </div>
           </div>
         )}
