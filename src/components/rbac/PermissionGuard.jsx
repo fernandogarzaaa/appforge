@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { checkPermission } from '@/functions/permissionCheck';
+import { checkPermission } from '../../../functions/permissionCheck';
 
 export default function PermissionGuard({ 
   permission, 
