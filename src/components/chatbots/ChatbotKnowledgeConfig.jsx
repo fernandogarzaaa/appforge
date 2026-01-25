@@ -12,7 +12,13 @@ export default function ChatbotKnowledgeConfig({ sources, onUpdate }) {
 
   const { data: documents = [] } = useQuery({
     queryKey: ['projectDocuments'],
-    queryFn: () => base44.entities.ProjectDocument.list()
+    queryFn: async () => {
+      try {
+        return await base44.entities.ProjectDocument?.list?.() || [];
+      } catch {
+        return [];
+      }
+    }
   });
 
   const { data: botEntities = [] } = useQuery({
@@ -75,17 +81,21 @@ export default function ChatbotKnowledgeConfig({ sources, onUpdate }) {
         <div className="flex gap-2">
           <Select value={selectedSource} onValueChange={setSelectedSource}>
             <SelectTrigger className="flex-1">
-              <SelectValue placeholder="Choose a source..." />
+              <SelectValue placeholder={getAvailableSources().length === 0 ? "No sources available" : "Choose a source..."} />
             </SelectTrigger>
             <SelectContent>
-              {getAvailableSources().map(source => (
-                <SelectItem key={source.id} value={source.id}>
-                  {source.name || source.title}
-                </SelectItem>
-              ))}
+              {getAvailableSources().length > 0 ? (
+                getAvailableSources().map(source => (
+                  <SelectItem key={source.id} value={source.id}>
+                    {source.name || source.title}
+                  </SelectItem>
+                ))
+              ) : (
+                <div className="p-2 text-sm text-gray-500">No sources available</div>
+              )}
             </SelectContent>
           </Select>
-          <Button onClick={handleAddSource} size="sm">
+          <Button onClick={handleAddSource} size="sm" disabled={!selectedSource}>
             <Plus className="w-4 h-4" />
           </Button>
         </div>

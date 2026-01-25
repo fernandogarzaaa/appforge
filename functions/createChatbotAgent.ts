@@ -18,20 +18,13 @@ Deno.serve(async (req) => {
       );
     }
 
-    try {
-      // Store agent reference in chatbot
-      await base44.entities.Chatbot.update(chatbotId, {
-        agent_id: chatbotId
-      });
-    } catch (updateError) {
-      // If chatbot doesn't exist, just log and continue
-      console.warn(`Chatbot ${chatbotId} not found for agent update:`, updateError.message);
-    }
-
+    // Agent is now created via configuration file naming
+    // The chatbot ID itself serves as agent reference
+    
     return Response.json({
       success: true,
       agentId: chatbotId,
-      message: 'Chatbot agent created successfully'
+      message: 'Chatbot configured successfully'
     });
   } catch (error) {
     console.error('Error creating chatbot agent:', error);
