@@ -3,23 +3,29 @@ import { createClientFromRequest } from 'npm:@base44/sdk@0.8.6';
 Deno.serve(async (req) => {
   try {
     const base44 = createClientFromRequest(req);
+    
     const user = await base44.auth.me();
-
     if (!user) {
       return Response.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { priceId } = await req.json();
+    const body = await req.json();
+    const { priceId } = body;
 
     if (!priceId) {
       return Response.json({ error: 'Missing priceId' }, { status: 400 });
     }
 
     const stripeSecretKey = Deno.env.get('STRIPE_SECRET_KEY');
+    const appId = Deno.env.get('BASE44_APP_ID');
+    
     if (!stripeSecretKey) {
       console.error('STRIPE_SECRET_KEY not configured');
       return Response.json({ error: 'Payment service not configured' }, { status: 500 });
     }
+
+    // Get origin for redirect URLs
+    const origin = new URL(req.url).origin;
 
     // Create Stripe checkout session
     const checkoutResponse = await fetch('https://api.stripe.com/v1/checkout/sessions', {
@@ -33,10 +39,10 @@ Deno.serve(async (req) => {
         'line_items[0][price]': priceId,
         'line_items[0][quantity]': '1',
         'mode': 'subscription',
-        'success_url': `${new URL(req.url).origin}?session_id={CHECKOUT_SESSION_ID}`,
-        'cancel_url': `${new URL(req.url).origin}`,
+        'success_url': `${origin}?session_id={CHECKOUT_SESSION_ID}`,
+        'cancel_url': origin,
         'customer_email': user.email,
-        'metadata[base44_app_id]': Deno.env.get('BASE44_APP_ID'),
+        'metadata[base44_app_id]': appId || 'unknown',
         'metadata[user_email]': user.email,
       }).toString(),
     });
