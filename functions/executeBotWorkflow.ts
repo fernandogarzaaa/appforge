@@ -20,12 +20,12 @@ Deno.serve(async (req) => {
     }
 
     // Fetch bot configuration
-    const bots = await base44.entities.Automation.filter({ id: botId });
-    if (bots.length === 0) {
-      return Response.json({ error: 'Bot not found' }, { status: 404 });
+    let bot;
+    try {
+     bot = await base44.entities.Automation.get(botId);
+    } catch {
+     return Response.json({ error: 'Bot not found' }, { status: 404 });
     }
-
-    const bot = bots[0];
 
     // Create execution context
     const executionContext = {

@@ -281,8 +281,14 @@ export default function Integrations() {
               <Card key={idx} className="hover:shadow-lg transition-all">
                 <CardHeader>
                   <div className="flex items-start justify-between mb-2">
-                    <div className={`w-12 h-12 rounded-lg bg-${integration.color}-100 flex items-center justify-center`}>
-                      <IntegrationIcon className={`w-6 h-6 text-${integration.color}-600`} />
+                    <div 
+                      className="w-12 h-12 rounded-lg flex items-center justify-center"
+                      style={{ backgroundColor: `var(--color-${integration.color}-100)` }}
+                    >
+                      <IntegrationIcon 
+                        className="w-6 h-6"
+                        style={{ color: `var(--color-${integration.color}-600)` }}
+                      />
                     </div>
                     <div className="flex flex-col items-end gap-1">
                       {integration.status === 'connected' && (

@@ -186,21 +186,24 @@ export default function VisualWorkflowEditor({ initialNodes = [], onSave }) {
                 </div>
 
                 {selectedNode.type === 'action' && (
-                  <>
-                    <div>
-                      <Label className="text-sm">Action Type</Label>
-                      <Select defaultValue={selectedNode.config.actionType || 'api_call'}>
-                        <SelectTrigger className="mt-1">
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="api_call">API Call</SelectItem>
-                          <SelectItem value="send_email">Send Email</SelectItem>
-                          <SelectItem value="database_query">Database Query</SelectItem>
-                          <SelectItem value="create_task">Create Task</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
+                   <>
+                     <div>
+                       <Label className="text-sm">Action Type</Label>
+                       <Select 
+                         value={selectedNode.config.actionType || 'api_call'}
+                         onValueChange={(value) => handleNodeConfigChange('actionType', value)}
+                       >
+                         <SelectTrigger className="mt-1">
+                           <SelectValue />
+                         </SelectTrigger>
+                         <SelectContent>
+                           <SelectItem value="api_call">API Call</SelectItem>
+                           <SelectItem value="send_email">Send Email</SelectItem>
+                           <SelectItem value="database_query">Database Query</SelectItem>
+                           <SelectItem value="create_task">Create Task</SelectItem>
+                         </SelectContent>
+                       </Select>
+                     </div>
                     <div>
                       <Label className="text-sm">Action Details</Label>
                       <Textarea
