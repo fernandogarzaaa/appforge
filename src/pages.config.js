@@ -41,6 +41,7 @@ import WorkflowBuilder from './pages/WorkflowBuilder';
 import EmailAssistant from './pages/EmailAssistant';
 import AIMonitoring from './pages/AIMonitoring';
 import PredictiveAnalytics from './pages/PredictiveAnalytics';
+import FeedbackAnalytics from './pages/FeedbackAnalytics';
 import __Layout from './Layout.jsx';
 
 
@@ -88,6 +89,7 @@ export const PAGES = {
     "EmailAssistant": EmailAssistant,
     "AIMonitoring": AIMonitoring,
     "PredictiveAnalytics": PredictiveAnalytics,
+    "FeedbackAnalytics": FeedbackAnalytics,
 }
 
 export const pagesConfig = {

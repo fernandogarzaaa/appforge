@@ -20,6 +20,7 @@ import { TaskPriorityChart, UrgencyFactorsRadar, PriorityScatterPlot } from '@/c
 import { RuleTriggersChart, DataSourceDistribution } from '@/components/monitoring/RuleActivityChart';
 import TriggerBuilder, { ActionBuilder } from '@/components/monitoring/TriggerBuilder';
 import DataSourceConnectorManager from '@/components/monitoring/DataSourceConnectorManager';
+import FeedbackWidget from '@/components/feedback/FeedbackWidget';
 
 export default function AIMonitoring() {
   const queryClient = useQueryClient();
@@ -421,6 +422,11 @@ Calculate:
                           <Zap className="w-3 h-3 mr-1" />
                           {insight.status === 'action_taken' ? 'Task Created' : 'Create Task'}
                         </Button>
+                        <FeedbackWidget 
+                          type="insight" 
+                          targetId={insight.id}
+                          onFeedbackSubmitted={() => queryClient.invalidateQueries({ queryKey: ['ai-insights'] })}
+                        />
                         <Button
                           size="sm"
                           variant="outline"
@@ -489,6 +495,11 @@ Calculate:
                         <Button size="sm" variant="outline">
                           <CheckCircle className="w-4 h-4" />
                         </Button>
+                        <FeedbackWidget 
+                          type="task" 
+                          targetId={task.id}
+                          onFeedbackSubmitted={() => queryClient.invalidateQueries({ queryKey: ['ai-tasks'] })}
+                        />
                       </div>
                     </div>
                   </CardContent>

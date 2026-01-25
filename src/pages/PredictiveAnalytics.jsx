@@ -10,6 +10,8 @@ import { Brain, Zap, TrendingUp, AlertTriangle, RefreshCw } from 'lucide-react';
 import { ForecastChart, TrendComparison } from '@/components/analytics/PredictionChart';
 import AnomalyForecast from '@/components/analytics/AnomalyForecast';
 import PerformanceForecast from '@/components/analytics/PerformanceForecast';
+import FeedbackWidget from '@/components/feedback/FeedbackWidget';
+import FeedbackSummary from '@/components/feedback/FeedbackSummary';
 
 export default function PredictiveAnalytics() {
   const queryClient = useQueryClient();
@@ -29,6 +31,11 @@ export default function PredictiveAnalytics() {
   const { data: insights = [] } = useQuery({
     queryKey: ['ai-insights'],
     queryFn: () => base44.entities.AIInsight.list('-created_date', 100)
+  });
+
+  const { data: feedback = [] } = useQuery({
+    queryKey: ['feedback'],
+    queryFn: () => base44.entities.AIFeedback.list('-created_date', 100)
   });
 
   const generatePredictions = async () => {
@@ -199,7 +206,17 @@ Provide realistic predictions with confidence scores and bounds.`,
         </div>
         <div className="space-y-4">
           {predictions.slice(0, 2).map((pred) => (
-            <ForecastChart key={pred.id} prediction={pred} />
+            <div key={pred.id} className="space-y-2">
+              <div className="flex items-center justify-between">
+                <span></span>
+                <FeedbackWidget 
+                  type="prediction" 
+                  targetId={pred.id}
+                  onFeedbackSubmitted={() => queryClient.invalidateQueries({ queryKey: ['feedback'] })}
+                />
+              </div>
+              <ForecastChart prediction={pred} />
+            </div>
           ))}
         </div>
       </div>
@@ -210,6 +227,12 @@ Provide realistic predictions with confidence scores and bounds.`,
           <TrendComparison predictions={predictions} />
         </div>
       )}
+
+      {/* Feedback Analytics */}
+      <div className="mb-6">
+        <h2 className="text-xl font-bold mb-4">AI Feedback Analytics</h2>
+        <FeedbackSummary feedback={feedback} />
+      </div>
 
       {/* Detailed Predictions */}
       {predictions.length === 0 && (
