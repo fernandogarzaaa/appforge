@@ -1,5 +1,5 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.6';
-import { timingSafeEqual, createHmac } from 'node:crypto';
+import { createHmac } from 'node:crypto';
 
 Deno.serve(async (req) => {
   try {
@@ -45,9 +45,14 @@ Deno.serve(async (req) => {
     }
 
     // Find pipeline by repository URL
-    const pipelines = await base44.entities.BotPipeline.filter({
-      repository_url: repositoryUrl
-    });
+    let pipelines;
+    try {
+      pipelines = await base44.entities.BotPipeline.filter({
+        repository_url: repositoryUrl
+      });
+    } catch {
+      return Response.json({ error: 'No pipeline configured for this repository' }, { status: 404 });
+    }
 
     if (!pipelines || pipelines.length === 0) {
       return Response.json({ error: 'No pipeline configured for this repository' }, { status: 404 });
@@ -62,13 +67,9 @@ Deno.serve(async (req) => {
       hmac.update(body);
       const expectedSignature = `sha256=${hmac.digest('hex')}`;
 
-      try {
-        if (!timingSafeEqual(Buffer.from(signature), Buffer.from(expectedSignature))) {
-          return Response.json({ error: 'Invalid signature' }, { status: 401 });
-        }
-      } catch (e) {
-        return Response.json({ error: 'Signature verification failed' }, { status: 401 });
-      }
+      if (signature !== expectedSignature) {
+         return Response.json({ error: 'Invalid signature' }, { status: 401 });
+       }
     } else if (signature && pipeline.webhook_secret) {
       // GitLab format - direct token comparison
       if (signature !== pipeline.webhook_secret) {
