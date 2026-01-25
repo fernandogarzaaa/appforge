@@ -2,7 +2,7 @@ import React from 'react';
 import { 
   Database, ShoppingCart, Users, FileText, Sparkles, Globe, Briefcase,
   Heart, Calendar, GraduationCap, Utensils, Dumbbell, Building2,
-  Ticket, MessageSquare, TrendingUp, Zap, Gamepad2, Music
+  Ticket, MessageSquare, TrendingUp, Zap, Gamepad2, Music, Camera
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -168,6 +168,114 @@ const templates = [
     color: '#14b8a6',
     entities: ['Song', 'Playlist', 'Artist', 'Album'],
     pages: ['Library', 'Playlists', 'Artists']
+  },
+  {
+    id: 'real-estate',
+    name: 'Real Estate',
+    description: 'Properties, listings, and client management',
+    icon: Building2,
+    color: '#7c3aed',
+    entities: ['Property', 'Listing', 'Client', 'Viewing'],
+    pages: ['Properties', 'Clients', 'Calendar']
+  },
+  {
+    id: 'hr-management',
+    name: 'HR Management',
+    description: 'Employees, payroll, and performance tracking',
+    icon: Users,
+    color: '#0891b2',
+    entities: ['Employee', 'Department', 'Payroll', 'Leave'],
+    pages: ['Employees', 'Departments', 'Reports']
+  },
+  {
+    id: 'inventory',
+    name: 'Inventory System',
+    description: 'Stock management and warehouse operations',
+    icon: Database,
+    color: '#059669',
+    entities: ['Product', 'Stock', 'Warehouse', 'Supplier'],
+    pages: ['Inventory', 'Warehouses', 'Reports']
+  },
+  {
+    id: 'helpdesk',
+    name: 'Help Desk',
+    description: 'Support tickets and customer service',
+    icon: MessageSquare,
+    color: '#ea580c',
+    entities: ['Ticket', 'Customer', 'Agent', 'KnowledgeBase'],
+    pages: ['Tickets', 'Customers', 'Knowledge']
+  },
+  {
+    id: 'recruitment',
+    name: 'Recruitment ATS',
+    description: 'Job postings, candidates, and hiring pipeline',
+    icon: Briefcase,
+    color: '#4f46e5',
+    entities: ['Job', 'Candidate', 'Interview', 'Application'],
+    pages: ['Jobs', 'Candidates', 'Pipeline']
+  },
+  {
+    id: 'legal',
+    name: 'Legal Case Manager',
+    description: 'Cases, clients, and legal document tracking',
+    icon: FileText,
+    color: '#dc2626',
+    entities: ['Case', 'Client', 'Document', 'Hearing'],
+    pages: ['Cases', 'Clients', 'Documents']
+  },
+  {
+    id: 'hotel',
+    name: 'Hotel Management',
+    description: 'Rooms, bookings, and guest services',
+    icon: Building2,
+    color: '#d946ef',
+    entities: ['Room', 'Booking', 'Guest', 'Service'],
+    pages: ['Rooms', 'Bookings', 'Guests']
+  },
+  {
+    id: 'library',
+    name: 'Library System',
+    description: 'Books, members, and lending management',
+    icon: FileText,
+    color: '#0d9488',
+    entities: ['Book', 'Member', 'Loan', 'Category'],
+    pages: ['Catalog', 'Members', 'Loans']
+  },
+  {
+    id: 'medical',
+    name: 'Medical Clinic',
+    description: 'Patients, appointments, and medical records',
+    icon: Heart,
+    color: '#be123c',
+    entities: ['Patient', 'Appointment', 'Doctor', 'Record'],
+    pages: ['Patients', 'Appointments', 'Records']
+  },
+  {
+    id: 'delivery',
+    name: 'Delivery Tracker',
+    description: 'Orders, drivers, and route optimization',
+    icon: ShoppingCart,
+    color: '#7c3aed',
+    entities: ['Delivery', 'Driver', 'Route', 'Customer'],
+    pages: ['Deliveries', 'Drivers', 'Routes']
+  },
+  {
+    id: 'wedding',
+    name: 'Wedding Planner',
+    description: 'Events, vendors, and guest management',
+    icon: Heart,
+    color: '#ec4899',
+    entities: ['Event', 'Vendor', 'Guest', 'Budget'],
+    pages: ['Events', 'Vendors', 'Guests']
+  },
+  {
+    id: 'photography',
+    name: 'Photography Studio',
+    description: 'Sessions, galleries, and client bookings',
+    icon: Globe,
+    color: '#ea580c',
+    entities: ['Session', 'Gallery', 'Client', 'Package'],
+    pages: ['Sessions', 'Galleries', 'Clients']
   }
 ];
 
