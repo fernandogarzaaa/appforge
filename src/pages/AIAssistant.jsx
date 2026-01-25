@@ -5,7 +5,7 @@ import {
   Sparkles, Send, Plus, Trash2, MessageSquare,
   Loader2, Copy, Check, Code, FileCode, Database,
   Globe, Brain, Zap, Bot, Github, Wand2, Workflow,
-  Upload, FileText, Shield, Smartphone, User, MessageCircle, AlertCircle, Bug, CodeIcon
+  Upload, FileText, Shield, Smartphone, User, MessageCircle, AlertCircle, Bug, CodeIcon, HardDrive
 } from 'lucide-react';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import APIDiscoveryPanel from '@/components/ai/APIDiscoveryPanel';
@@ -24,6 +24,7 @@ import ProjectAuditorPanel from '@/components/ai/ProjectAuditorPanel';
 import ProjectAuditorEnhanced from '@/components/ai/ProjectAuditorEnhanced';
 import ProactiveBugDetection from '@/components/ai/ProactiveBugDetection';
 import CodeReviewPanel from '@/components/ai/CodeReviewPanel';
+import ResourceMonitoringPanel from '@/components/ai/ResourceMonitoringPanel';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -433,6 +434,18 @@ Provide helpful, concise responses with code examples when relevant.`,
               <Code className="w-4 h-4" />
               <span className="font-medium">Code Review</span>
             </button>
+            <button
+              onClick={() => setActivePanel('resources')}
+              className={cn(
+                "flex items-center gap-2 py-3 border-b-2 transition-colors",
+                activePanel === 'resources' 
+                  ? "border-purple-500 text-purple-600" 
+                  : "border-transparent text-gray-500 hover:text-gray-700"
+              )}
+            >
+              <HardDrive className="w-4 h-4" />
+              <span className="font-medium">Resource Monitor</span>
+            </button>
             </div>
             <a
               href={base44.agents.getWhatsAppConnectURL('ai_assistant')}
@@ -618,6 +631,19 @@ Provide helpful, concise responses with code examples when relevant.`,
                 <p className="text-gray-500">Get AI-powered feedback on best practices, bugs, performance, and security</p>
               </div>
               <CodeReviewPanel />
+            </div>
+          </div>
+        )}
+
+        {/* Resource Monitoring Panel */}
+        {activePanel === 'resources' && (
+          <div className="flex-1 p-6 overflow-auto">
+            <div className="max-w-5xl mx-auto">
+              <div className="mb-6">
+                <h2 className="text-xl font-bold text-gray-900 mb-1">Resource Monitoring & Optimization</h2>
+                <p className="text-gray-500">Monitor CPU, memory, and network usage. Get AI predictions for spikes and scaling strategies</p>
+              </div>
+              <ResourceMonitoringPanel />
             </div>
           </div>
         )}
