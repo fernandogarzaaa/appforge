@@ -12,6 +12,8 @@ import TokenCreator from './pages/TokenCreator';
 import Web3Dashboard from './pages/Web3Dashboard';
 import CodePlayground from './pages/CodePlayground';
 import ProjectTasks from './pages/ProjectTasks';
+import DeFiHub from './pages/DeFiHub';
+import DAOGovernance from './pages/DAOGovernance';
 import __Layout from './Layout.jsx';
 
 
@@ -30,6 +32,8 @@ export const PAGES = {
     "Web3Dashboard": Web3Dashboard,
     "CodePlayground": CodePlayground,
     "ProjectTasks": ProjectTasks,
+    "DeFiHub": DeFiHub,
+    "DAOGovernance": DAOGovernance,
 }
 
 export const pagesConfig = {
