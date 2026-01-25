@@ -447,9 +447,10 @@ export default function BotBuilder() {
                   </SelectContent>
                 </Select>
               </div>
-            </Tabs>
+              </TabsContent>
+              </Tabs>
 
-            <DialogFooter>
+              <DialogFooter>
               <Button variant="outline" onClick={() => setShowDialog(false)}>Cancel</Button>
               <Button onClick={() => createMutation.mutate(newBot)} disabled={!newBot.name}>
                 Create Bot
