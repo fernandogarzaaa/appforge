@@ -1,7 +1,7 @@
 import React from 'react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
-import { AVAILABLE_ROLES } from '@/utils/permissionCheck';
+import { AVAILABLE_ROLES } from '@/functions/permissionCheck';
 
 export default function RoleSelector({ value, onChange, disabled = false }) {
   const role = AVAILABLE_ROLES.find(r => r.value === value);

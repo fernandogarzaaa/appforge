@@ -8,7 +8,7 @@ import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import RoleSelector from '@/components/rbac/RoleSelector';
-import { AVAILABLE_ROLES, getRolePermissions } from '@/utils/permissionCheck';
+import { AVAILABLE_ROLES, getRolePermissions } from '@/functions/permissionCheck';
 import { Users, Shield, CheckCircle2 } from 'lucide-react';
 import { toast } from 'sonner';
 
