@@ -34,6 +34,9 @@ import NFTMarketplace from './pages/NFTMarketplace';
 import Support from './pages/Support';
 import Roadmap from './pages/Roadmap';
 import Integrations from './pages/Integrations';
+import DataAnalytics from './pages/DataAnalytics';
+import MedicalAI from './pages/MedicalAI';
+import GovernmentTools from './pages/GovernmentTools';
 import __Layout from './Layout.jsx';
 
 
@@ -74,6 +77,9 @@ export const PAGES = {
     "Support": Support,
     "Roadmap": Roadmap,
     "Integrations": Integrations,
+    "DataAnalytics": DataAnalytics,
+    "MedicalAI": MedicalAI,
+    "GovernmentTools": GovernmentTools,
 }
 
 export const pagesConfig = {

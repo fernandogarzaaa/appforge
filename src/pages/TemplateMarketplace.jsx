@@ -7,7 +7,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { 
   Search, Star, Download, Eye, TrendingUp, 
   Zap, ShoppingCart, Briefcase, Users, Heart,
-  Coins, Gamepad2, Newspaper, Mail, BarChart3, Image as ImageIcon
+  Coins, Gamepad2, Newspaper, Mail, BarChart3, Image as ImageIcon,
+  Database, Stethoscope, Building2
 } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -21,6 +22,36 @@ const templates = [
     rating: 4.8,
     preview: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400&h=300&fit=crop',
     description: 'Complete SaaS dashboard with authentication, billing, and analytics'
+  },
+  { 
+    id: 19, 
+    name: 'Data Analytics Platform', 
+    category: 'analytics', 
+    price: 0, 
+    downloads: 2450, 
+    rating: 4.9,
+    preview: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&h=300&fit=crop',
+    description: 'AI-powered data analysis with statistical tools, trend analysis, and visualizations'
+  },
+  { 
+    id: 20, 
+    name: 'Medical AI Suite', 
+    category: 'medical', 
+    price: 49, 
+    downloads: 890, 
+    rating: 4.8,
+    preview: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=400&h=300&fit=crop',
+    description: 'Medical AI tools for symptom analysis, report parsing, drug interactions, and clinical support'
+  },
+  { 
+    id: 21, 
+    name: 'GovTech Platform', 
+    category: 'government', 
+    price: 59, 
+    downloads: 540, 
+    rating: 4.7,
+    preview: 'https://images.unsplash.com/photo-1449247666642-264389f5f5b1?w=400&h=300&fit=crop',
+    description: 'Government AI tools for policy analysis, compliance, citizen services, and document processing'
   },
   { 
     id: 2, 
@@ -196,6 +227,9 @@ const templates = [
 
 const categories = [
   { id: 'all', name: 'All Templates', icon: Zap },
+  { id: 'analytics', name: 'Data Analytics', icon: Database },
+  { id: 'medical', name: 'Medical AI', icon: Stethoscope },
+  { id: 'government', name: 'Government', icon: Building2 },
   { id: 'saas', name: 'SaaS', icon: TrendingUp },
   { id: 'ecommerce', name: 'E-commerce', icon: ShoppingCart },
   { id: 'business', name: 'Business', icon: Briefcase },
