@@ -15,14 +15,21 @@ export default function ChatbotKnowledgeConfig({ sources, onUpdate }) {
     queryFn: () => base44.entities.ProjectDocument.list()
   });
 
-  const { data: entities = [] } = useQuery({
-    queryKey: ['entities'],
-    queryFn: () => base44.entities.Entity.list()
+  const { data: botEntities = [] } = useQuery({
+    queryKey: ['chatbotAvailableEntities'],
+    queryFn: async () => {
+      try {
+        // Get available entities from KnowledgeBase instead
+        return await base44.entities.KnowledgeBase.list();
+      } catch {
+        return [];
+      }
+    }
   });
 
   const getAvailableSources = () => {
     if (sourceType === 'document') return documents;
-    if (sourceType === 'entity') return entities;
+    if (sourceType === 'entity') return botEntities;
     return [];
   };
 

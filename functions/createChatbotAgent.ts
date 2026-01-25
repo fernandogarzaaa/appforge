@@ -18,23 +18,14 @@ Deno.serve(async (req) => {
       );
     }
 
-    // Create agent file in agents directory
-    const agentFileName = `chatbot_${chatbotId.substring(0, 8)}`;
-    
-    // Create the agent configuration JSON
-    const fullAgentConfig = {
-      ...agentConfig,
-      whatsapp_greeting: agentConfig.whatsapp_greeting || 'Hello! How can I help you?'
-    };
-
     // Store agent reference in chatbot
     await base44.entities.Chatbot.update(chatbotId, {
-      agent_id: agentFileName
+      agent_id: chatbotId
     });
 
     return Response.json({
       success: true,
-      agentId: agentFileName,
+      agentId: chatbotId,
       message: 'Chatbot agent created successfully'
     });
   } catch (error) {
