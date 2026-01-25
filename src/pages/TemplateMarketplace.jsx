@@ -6,7 +6,8 @@ import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { 
   Search, Star, Download, Eye, TrendingUp, 
-  Zap, ShoppingCart, Briefcase, Users, Heart
+  Zap, ShoppingCart, Briefcase, Users, Heart,
+  Coins, Gamepad2, Newspaper, Mail, BarChart3, Image as ImageIcon
 } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -70,6 +71,126 @@ const templates = [
     rating: 4.8,
     preview: 'https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?w=400&h=300&fit=crop',
     description: 'High-converting landing page with lead capture forms'
+  },
+  { 
+    id: 7, 
+    name: 'NFT Marketplace', 
+    category: 'web3', 
+    price: 59, 
+    downloads: 1120, 
+    rating: 4.9,
+    preview: 'https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=400&h=300&fit=crop',
+    description: 'Full NFT marketplace with minting, trading, and wallet integration'
+  },
+  { 
+    id: 8, 
+    name: 'Crypto Exchange', 
+    category: 'web3', 
+    price: 79, 
+    downloads: 840, 
+    rating: 4.8,
+    preview: 'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=400&h=300&fit=crop',
+    description: 'Professional trading platform with order books and real-time charts'
+  },
+  { 
+    id: 9, 
+    name: 'Gaming Platform', 
+    category: 'gaming', 
+    price: 49, 
+    downloads: 1560, 
+    rating: 4.7,
+    preview: 'https://images.unsplash.com/photo-1511512578047-dfb367046420?w=400&h=300&fit=crop',
+    description: 'Play-to-earn gaming platform with leaderboards and token rewards'
+  },
+  { 
+    id: 10, 
+    name: 'Blog & Magazine', 
+    category: 'content', 
+    price: 0, 
+    downloads: 3200, 
+    rating: 4.6,
+    preview: 'https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=400&h=300&fit=crop',
+    description: 'Modern blog with categories, comments, and newsletter subscription'
+  },
+  { 
+    id: 11, 
+    name: 'Email Marketing Hub', 
+    category: 'marketing', 
+    price: 39, 
+    downloads: 920, 
+    rating: 4.8,
+    preview: 'https://images.unsplash.com/photo-1557200134-90327ee9fafa?w=400&h=300&fit=crop',
+    description: 'Complete email campaign manager with templates and analytics'
+  },
+  { 
+    id: 12, 
+    name: 'Analytics Dashboard', 
+    category: 'business', 
+    price: 29, 
+    downloads: 1340, 
+    rating: 4.7,
+    preview: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&h=300&fit=crop',
+    description: 'Business intelligence dashboard with charts and real-time metrics'
+  },
+  { 
+    id: 13, 
+    name: 'Crypto Casino', 
+    category: 'gaming', 
+    price: 69, 
+    downloads: 680, 
+    rating: 4.5,
+    preview: 'https://images.unsplash.com/photo-1596838132731-3301c3fd4317?w=400&h=300&fit=crop',
+    description: 'Provably fair casino with dice, slots, and crypto payments'
+  },
+  { 
+    id: 14, 
+    name: 'AI Content Studio', 
+    category: 'content', 
+    price: 0, 
+    downloads: 2100, 
+    rating: 4.9,
+    preview: 'https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?w=400&h=300&fit=crop',
+    description: 'AI-powered content generator for blogs, social media, and marketing'
+  },
+  { 
+    id: 15, 
+    name: 'Token Launchpad', 
+    category: 'web3', 
+    price: 49, 
+    downloads: 760, 
+    rating: 4.6,
+    preview: 'https://images.unsplash.com/photo-1621761191319-c6fb62004040?w=400&h=300&fit=crop',
+    description: 'Create and launch crypto tokens with built-in tokenomics tools'
+  },
+  { 
+    id: 16, 
+    name: 'Social Media Manager', 
+    category: 'marketing', 
+    price: 39, 
+    downloads: 1420, 
+    rating: 4.8,
+    preview: 'https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=400&h=300&fit=crop',
+    description: 'Schedule posts, manage campaigns, and track analytics across platforms'
+  },
+  { 
+    id: 17, 
+    name: 'Job Board Platform', 
+    category: 'business', 
+    price: 0, 
+    downloads: 1890, 
+    rating: 4.5,
+    preview: 'https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=400&h=300&fit=crop',
+    description: 'Complete job listing platform with applications and employer dashboard'
+  },
+  { 
+    id: 18, 
+    name: 'DAO Governance', 
+    category: 'web3', 
+    price: 59, 
+    downloads: 540, 
+    rating: 4.7,
+    preview: 'https://images.unsplash.com/photo-1559526324-4b87b5e36e44?w=400&h=300&fit=crop',
+    description: 'Decentralized organization platform with voting and treasury management'
   }
 ];
 
@@ -78,6 +199,10 @@ const categories = [
   { id: 'saas', name: 'SaaS', icon: TrendingUp },
   { id: 'ecommerce', name: 'E-commerce', icon: ShoppingCart },
   { id: 'business', name: 'Business', icon: Briefcase },
+  { id: 'web3', name: 'Web3', icon: Coins },
+  { id: 'gaming', name: 'Gaming', icon: Gamepad2 },
+  { id: 'content', name: 'Content', icon: Newspaper },
+  { id: 'marketing', name: 'Marketing', icon: Mail },
   { id: 'social', name: 'Social', icon: Users },
   { id: 'portfolio', name: 'Portfolio', icon: Heart }
 ];
