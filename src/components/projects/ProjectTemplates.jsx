@@ -2,7 +2,8 @@ import React from 'react';
 import { 
   Database, ShoppingCart, Users, FileText, Sparkles, Globe, Briefcase,
   Heart, Calendar, GraduationCap, Utensils, Dumbbell, Building2,
-  Ticket, MessageSquare, TrendingUp, Zap, Gamepad2, Music, Camera
+  Ticket, MessageSquare, TrendingUp, Zap, Gamepad2, Music, Camera,
+  Coins, Wallet, Lock, GitBranch, BarChart3, Layers
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -276,6 +277,96 @@ const templates = [
     color: '#ea580c',
     entities: ['Session', 'Gallery', 'Client', 'Package'],
     pages: ['Sessions', 'Galleries', 'Clients']
+  },
+  {
+    id: 'defi-protocol',
+    name: 'DeFi Protocol',
+    description: 'Lending, staking, and liquidity pools',
+    icon: TrendingUp,
+    color: '#10b981',
+    entities: ['DeFiProtocol', 'Token', 'Transaction'],
+    pages: ['DeFiHub', 'Dashboard']
+  },
+  {
+    id: 'dao-platform',
+    name: 'DAO Platform',
+    description: 'Governance, proposals, and voting',
+    icon: Users,
+    color: '#6366f1',
+    entities: ['DAO', 'Proposal', 'Vote', 'Token'],
+    pages: ['DAOGovernance', 'Dashboard']
+  },
+  {
+    id: 'nft-marketplace',
+    name: 'NFT Marketplace',
+    description: 'Collections, minting, and trading platform',
+    icon: Camera,
+    color: '#8b5cf6',
+    entities: ['NFTCollection', 'Token', 'Transaction'],
+    pages: ['NFTStudio', 'Web3Dashboard']
+  },
+  {
+    id: 'token-launchpad',
+    name: 'Token Launchpad',
+    description: 'ICO/IDO platform with token creation',
+    icon: Coins,
+    color: '#f59e0b',
+    entities: ['Token', 'SmartContract', 'Transaction'],
+    pages: ['TokenCreator', 'Web3Dashboard']
+  },
+  {
+    id: 'blockchain-explorer',
+    name: 'Blockchain Explorer',
+    description: 'Transactions, blocks, and address tracking',
+    icon: BarChart3,
+    color: '#06b6d4',
+    entities: ['Transaction', 'Wallet', 'SmartContract'],
+    pages: ['Web3Dashboard', 'Dashboard']
+  },
+  {
+    id: 'web3-gaming',
+    name: 'Web3 Gaming',
+    description: 'NFT items, play-to-earn mechanics',
+    icon: Gamepad2,
+    color: '#ec4899',
+    entities: ['NFTCollection', 'Token', 'Transaction'],
+    pages: ['NFTStudio', 'Dashboard']
+  },
+  {
+    id: 'crypto-wallet',
+    name: 'Crypto Wallet',
+    description: 'Multi-chain wallet and portfolio tracker',
+    icon: Wallet,
+    color: '#14b8a6',
+    entities: ['Wallet', 'Token', 'Transaction'],
+    pages: ['Web3Dashboard', 'Dashboard']
+  },
+  {
+    id: 'staking-platform',
+    name: 'Staking Platform',
+    description: 'Token staking and rewards distribution',
+    icon: Lock,
+    color: '#a855f7',
+    entities: ['Token', 'SmartContract', 'Transaction'],
+    pages: ['TokenCreator', 'DeFiHub']
+  },
+  {
+    id: 'dex-platform',
+    name: 'DEX Platform',
+    description: 'Decentralized token swaps and liquidity',
+    icon: GitBranch,
+    color: '#f43f5e',
+    entities: ['Token', 'DeFiProtocol', 'Transaction'],
+    pages: ['DeFiHub', 'Web3Dashboard']
+  },
+  {
+    id: 'bridge-protocol',
+    name: 'Bridge Protocol',
+    description: 'Cross-chain asset transfers',
+    icon: Layers,
+    color: '#0891b2',
+    entities: ['Token', 'Transaction', 'SmartContract'],
+    pages: ['Web3Dashboard', 'TokenCreator']
   }
 ];
 
