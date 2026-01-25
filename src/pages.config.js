@@ -52,6 +52,7 @@ import Web3Dashboard from './pages/Web3Dashboard';
 import WorkflowBuilder from './pages/WorkflowBuilder';
 import SubscriptionSuccess from './pages/SubscriptionSuccess';
 import Account from './pages/Account';
+import AdminSubscriptions from './pages/AdminSubscriptions';
 import __Layout from './Layout.jsx';
 
 
@@ -110,6 +111,7 @@ export const PAGES = {
     "WorkflowBuilder": WorkflowBuilder,
     "SubscriptionSuccess": SubscriptionSuccess,
     "Account": Account,
+    "AdminSubscriptions": AdminSubscriptions,
 }
 
 export const pagesConfig = {
