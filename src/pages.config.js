@@ -40,6 +40,7 @@ import Web3Dashboard from './pages/Web3Dashboard';
 import WorkflowBuilder from './pages/WorkflowBuilder';
 import EmailAssistant from './pages/EmailAssistant';
 import AIMonitoring from './pages/AIMonitoring';
+import PredictiveAnalytics from './pages/PredictiveAnalytics';
 import __Layout from './Layout.jsx';
 
 
@@ -86,6 +87,7 @@ export const PAGES = {
     "WorkflowBuilder": WorkflowBuilder,
     "EmailAssistant": EmailAssistant,
     "AIMonitoring": AIMonitoring,
+    "PredictiveAnalytics": PredictiveAnalytics,
 }
 
 export const pagesConfig = {
