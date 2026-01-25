@@ -22,6 +22,11 @@ import VSCodeIntegration from './pages/VSCodeIntegration';
 import Web3Dashboard from './pages/Web3Dashboard';
 import Landing from './pages/Landing';
 import Profile from './pages/Profile';
+import ContentStudio from './pages/ContentStudio';
+import MediaStudio from './pages/MediaStudio';
+import EmailCampaigns from './pages/EmailCampaigns';
+import Analytics from './pages/Analytics';
+import TemplateMarketplace from './pages/TemplateMarketplace';
 import __Layout from './Layout.jsx';
 
 
@@ -50,6 +55,11 @@ export const PAGES = {
     "Web3Dashboard": Web3Dashboard,
     "Landing": Landing,
     "Profile": Profile,
+    "ContentStudio": ContentStudio,
+    "MediaStudio": MediaStudio,
+    "EmailCampaigns": EmailCampaigns,
+    "Analytics": Analytics,
+    "TemplateMarketplace": TemplateMarketplace,
 }
 
 export const pagesConfig = {

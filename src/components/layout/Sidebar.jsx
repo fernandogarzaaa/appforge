@@ -22,7 +22,11 @@ import {
   Search,
   Github,
   Share2,
-  BookOpen
+  BookOpen,
+  FileText,
+  Mail,
+  BarChart3,
+  Package
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
@@ -31,6 +35,7 @@ const navItems = [
   { name: 'Home', icon: LayoutDashboard, page: 'Landing' },
   { name: 'Dashboard', icon: LayoutDashboard, page: 'Dashboard' },
   { name: 'Projects', icon: FolderKanban, page: 'Projects' },
+  { name: 'Templates', icon: Package, page: 'TemplateMarketplace' },
   { name: 'Guide', icon: BookOpen, page: 'Guide' },
   { name: 'Code Playground', icon: Code, page: 'CodePlayground' },
   { name: 'Pricing', icon: CreditCard, page: 'Pricing' },
@@ -42,9 +47,13 @@ const projectNavItems = [
   { name: 'Components', icon: Component, page: 'Components' },
   { name: 'Tasks', icon: LayoutDashboard, page: 'ProjectTasks' },
   { name: 'AI Assistant', icon: Sparkles, page: 'AIAssistant' },
+  { name: 'Content Studio', icon: FileText, page: 'ContentStudio' },
+  { name: 'Media Studio', icon: Image, page: 'MediaStudio' },
   { name: 'Bot Builder', icon: Bot, page: 'BotBuilder' },
   { name: 'API Explorer', icon: Search, page: 'APIExplorer' },
   { name: 'Social Media', icon: Share2, page: 'SocialMediaHub' },
+  { name: 'Email Campaigns', icon: Mail, page: 'EmailCampaigns' },
+  { name: 'Analytics', icon: BarChart3, page: 'Analytics' },
   { name: 'VS Code', icon: Code, page: 'VSCodeIntegration' },
   { name: 'GitHub', icon: Github, page: 'GitHubConnect' },
   { name: 'Settings', icon: Settings, page: 'ProjectSettings' },
