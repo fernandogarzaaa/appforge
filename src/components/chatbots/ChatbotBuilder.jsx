@@ -51,25 +51,26 @@ export default function ChatbotBuilder() {
       resetForm();
       toast.success('Chatbot created successfully');
       
-      // Create associated agent
+      // Create associated agent via function
       try {
         const agentConfig = {
           description: `Chatbot agent for ${newBot.name}`,
           instructions: formData.personality.system_prompt || `You are ${newBot.name}, a helpful assistant. ${formData.personality.style}`,
-          tool_configs: formData.knowledge_sources.map(source => ({
-            entity_name: source.name,
-            allowed_operations: ['read']
-          })),
+          tool_configs: formData.knowledge_sources.length > 0 
+            ? formData.knowledge_sources.map(source => ({
+                entity_name: source.name,
+                allowed_operations: ['read']
+              }))
+            : [],
           whatsapp_greeting: `Hi! I'm ${newBot.name}. How can I help you today?`
         };
         
-        // Create agent via function
         await base44.functions.invoke('createChatbotAgent', {
           chatbotId: newBot.id,
           agentConfig
-        });
+        }).catch(err => console.warn('Agent creation skipped:', err));
       } catch (error) {
-        console.error('Failed to create agent:', error);
+        console.warn('Agent setup optional:', error);
       }
     },
     onError: () => toast.error('Failed to create chatbot')

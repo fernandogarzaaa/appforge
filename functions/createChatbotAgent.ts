@@ -18,10 +18,15 @@ Deno.serve(async (req) => {
       );
     }
 
-    // Store agent reference in chatbot
-    await base44.entities.Chatbot.update(chatbotId, {
-      agent_id: chatbotId
-    });
+    try {
+      // Store agent reference in chatbot
+      await base44.entities.Chatbot.update(chatbotId, {
+        agent_id: chatbotId
+      });
+    } catch (updateError) {
+      // If chatbot doesn't exist, just log and continue
+      console.warn(`Chatbot ${chatbotId} not found for agent update:`, updateError.message);
+    }
 
     return Response.json({
       success: true,
