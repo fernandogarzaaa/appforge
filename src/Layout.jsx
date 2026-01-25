@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
 import Sidebar from '@/components/layout/Sidebar';
 import Header from '@/components/layout/Header';
+import HelpSidebar from '@/components/help/HelpSidebar';
 
 export default function Layout({ children, currentPageName }) {
   const [user, setUser] = useState(null);
@@ -41,11 +42,12 @@ export default function Layout({ children, currentPageName }) {
         onToggle={() => setSidebarCollapsed(!sidebarCollapsed)}
       />
       <div className="flex-1 flex flex-col overflow-hidden">
-        <Header user={user} onLogout={handleLogout} />
-        <main className="flex-1 overflow-auto bg-[#fafbfc]">
-          {children}
-        </main>
-      </div>
-    </div>
-  );
-}
+              <Header user={user} onLogout={handleLogout} />
+              <main className="flex-1 overflow-auto bg-[#fafbfc]">
+                {children}
+              </main>
+            </div>
+            <HelpSidebar />
+          </div>
+        );
+      }
