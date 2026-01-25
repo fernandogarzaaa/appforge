@@ -1,29 +1,29 @@
-import Dashboard from './pages/Dashboard';
-import Projects from './pages/Projects';
-import EntityDesigner from './pages/EntityDesigner';
-import PageEditor from './pages/PageEditor';
-import Components from './pages/Components';
 import AIAssistant from './pages/AIAssistant';
-import ProjectSettings from './pages/ProjectSettings';
-import Web3Dashboard from './pages/Web3Dashboard';
-import TokenCreator from './pages/TokenCreator';
-import NFTStudio from './pages/NFTStudio';
+import Components from './pages/Components';
 import ContractBuilder from './pages/ContractBuilder';
+import Dashboard from './pages/Dashboard';
+import EntityDesigner from './pages/EntityDesigner';
+import NFTStudio from './pages/NFTStudio';
+import PageEditor from './pages/PageEditor';
+import ProjectSettings from './pages/ProjectSettings';
+import Projects from './pages/Projects';
+import TokenCreator from './pages/TokenCreator';
+import Web3Dashboard from './pages/Web3Dashboard';
 import __Layout from './Layout.jsx';
 
 
 export const PAGES = {
-    "Dashboard": Dashboard,
-    "Projects": Projects,
-    "EntityDesigner": EntityDesigner,
-    "PageEditor": PageEditor,
-    "Components": Components,
     "AIAssistant": AIAssistant,
-    "ProjectSettings": ProjectSettings,
-    "Web3Dashboard": Web3Dashboard,
-    "TokenCreator": TokenCreator,
-    "NFTStudio": NFTStudio,
+    "Components": Components,
     "ContractBuilder": ContractBuilder,
+    "Dashboard": Dashboard,
+    "EntityDesigner": EntityDesigner,
+    "NFTStudio": NFTStudio,
+    "PageEditor": PageEditor,
+    "ProjectSettings": ProjectSettings,
+    "Projects": Projects,
+    "TokenCreator": TokenCreator,
+    "Web3Dashboard": Web3Dashboard,
 }
 
 export const pagesConfig = {

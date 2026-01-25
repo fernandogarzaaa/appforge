@@ -3,8 +3,12 @@ import { base44 } from '@/api/base44Client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { 
   Sparkles, Send, Plus, Trash2, MessageSquare,
-  Loader2, Copy, Check, Code, FileCode, Database
+  Loader2, Copy, Check, Code, FileCode, Database,
+  Globe, Brain, Zap, Bot
 } from 'lucide-react';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
+import APIDiscoveryPanel from '@/components/ai/APIDiscoveryPanel';
+import PredictiveModels from '@/components/ai/PredictiveModels';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -19,6 +23,8 @@ const quickActions = [
   { label: 'Create Entity', icon: Database, prompt: 'Create a new entity called ' },
   { label: 'Build Page', icon: FileCode, prompt: 'Build a page that displays ' },
   { label: 'Generate Component', icon: Code, prompt: 'Generate a React component for ' },
+  { label: 'Find API', icon: Globe, prompt: 'Find a free API for ' },
+  { label: 'Predict Data', icon: Brain, prompt: 'Analyze and predict trends for ' },
 ];
 
 export default function AIAssistant() {
@@ -26,6 +32,8 @@ export default function AIAssistant() {
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [copiedIndex, setCopiedIndex] = useState(null);
+  const [activePanel, setActivePanel] = useState('chat');
+  const [integratedAPIs, setIntegratedAPIs] = useState([]);
   const messagesEndRef = useRef(null);
 
   const urlParams = new URLSearchParams(window.location.search);
@@ -84,11 +92,23 @@ export default function AIAssistant() {
     setIsLoading(true);
 
     const response = await base44.integrations.Core.InvokeLLM({
-      prompt: `You are an AI assistant helping to build web applications. You're working on a project.
-      
+      prompt: `You are an advanced AI assistant (powered by Gemini) helping to build web applications with AI capabilities.
+You have access to API discovery, predictive models, and code generation.
+${integratedAPIs.length > 0 ? `\nIntegrated APIs: ${integratedAPIs.map(a => a.name).join(', ')}` : ''}
+
 User request: ${input}
 
-Provide helpful, concise responses. If the user asks to create entities, pages, or components, describe what you would create and provide code examples when relevant. Format code blocks with proper syntax highlighting.`,
+Capabilities:
+- Create entities, pages, and React components
+- Discover and integrate free public APIs
+- Build predictive models (forecasting, sentiment analysis, classification, anomaly detection)
+- Generate API integration code
+- Provide AI-powered insights and recommendations
+
+If the user asks about APIs, suggest using the API Discovery panel.
+If they need predictions/analysis, suggest the Predictive Models panel.
+Provide helpful, concise responses with code examples when relevant.`,
+      add_context_from_internet: input.toLowerCase().includes('api') || input.toLowerCase().includes('latest') || input.toLowerCase().includes('current'),
     });
 
     const assistantMessage = { role: 'assistant', content: response, timestamp: new Date().toISOString() };
@@ -186,16 +206,93 @@ Provide helpful, concise responses. If the user asks to create entities, pages, 
         </ScrollArea>
       </div>
 
-      {/* Chat Area */}
+      {/* Main Area */}
       <div className="flex-1 flex flex-col bg-gray-50/50">
-        {messages.length === 0 ? (
+        {/* Panel Tabs */}
+        <div className="bg-white border-b border-gray-100 px-4">
+          <div className="flex items-center gap-4">
+            <button
+              onClick={() => setActivePanel('chat')}
+              className={cn(
+                "flex items-center gap-2 py-3 border-b-2 transition-colors",
+                activePanel === 'chat' 
+                  ? "border-indigo-500 text-indigo-600" 
+                  : "border-transparent text-gray-500 hover:text-gray-700"
+              )}
+            >
+              <Bot className="w-4 h-4" />
+              <span className="font-medium">AI Chat</span>
+            </button>
+            <button
+              onClick={() => setActivePanel('api')}
+              className={cn(
+                "flex items-center gap-2 py-3 border-b-2 transition-colors",
+                activePanel === 'api' 
+                  ? "border-cyan-500 text-cyan-600" 
+                  : "border-transparent text-gray-500 hover:text-gray-700"
+              )}
+            >
+              <Globe className="w-4 h-4" />
+              <span className="font-medium">API Discovery</span>
+            </button>
+            <button
+              onClick={() => setActivePanel('models')}
+              className={cn(
+                "flex items-center gap-2 py-3 border-b-2 transition-colors",
+                activePanel === 'models' 
+                  ? "border-purple-500 text-purple-600" 
+                  : "border-transparent text-gray-500 hover:text-gray-700"
+              )}
+            >
+              <Brain className="w-4 h-4" />
+              <span className="font-medium">Predictive Models</span>
+            </button>
+            {integratedAPIs.length > 0 && (
+              <div className="ml-auto flex items-center gap-2">
+                <Zap className="w-4 h-4 text-green-500" />
+                <span className="text-sm text-gray-600">{integratedAPIs.length} APIs integrated</span>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* API Discovery Panel */}
+        {activePanel === 'api' && (
+          <div className="flex-1 p-6 overflow-auto">
+            <div className="max-w-4xl mx-auto">
+              <div className="mb-6">
+                <h2 className="text-xl font-bold text-gray-900 mb-1">API Discovery</h2>
+                <p className="text-gray-500">Find and integrate free public APIs into your project</p>
+              </div>
+              <APIDiscoveryPanel 
+                onIntegrate={(api) => setIntegratedAPIs([...integratedAPIs, api])}
+              />
+            </div>
+          </div>
+        )}
+
+        {/* Predictive Models Panel */}
+        {activePanel === 'models' && (
+          <div className="flex-1 p-6 overflow-auto">
+            <div className="max-w-4xl mx-auto">
+              <div className="mb-6">
+                <h2 className="text-xl font-bold text-gray-900 mb-1">Predictive Models</h2>
+                <p className="text-gray-500">Run AI-powered predictions and analysis on your data</p>
+              </div>
+              <PredictiveModels projectId={projectId} />
+            </div>
+          </div>
+        )}
+
+        {/* Chat Panel */}
+        {activePanel === 'chat' && messages.length === 0 ? (
           <div className="flex-1 flex flex-col items-center justify-center p-8">
             <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center mb-6">
               <Sparkles className="w-10 h-10 text-white" />
             </div>
             <h2 className="text-2xl font-bold text-gray-900 mb-2">AI Assistant</h2>
             <p className="text-gray-500 text-center max-w-md mb-8">
-              I can help you build entities, pages, and components. What would you like to create?
+              Build apps, discover APIs, and run predictive models with AI assistance
             </p>
             <div className="flex flex-wrap gap-3 justify-center">
               {quickActions.map((action) => (
@@ -211,7 +308,7 @@ Provide helpful, concise responses. If the user asks to create entities, pages, 
               ))}
             </div>
           </div>
-        ) : (
+        ) : activePanel === 'chat' && (
           <ScrollArea className="flex-1 p-6">
             <div className="max-w-3xl mx-auto space-y-6">
               <AnimatePresence>
@@ -307,8 +404,8 @@ Provide helpful, concise responses. If the user asks to create entities, pages, 
           </ScrollArea>
         )}
 
-        {/* Input Area */}
-        <div className="p-4 bg-white border-t border-gray-100">
+        {/* Input Area - Only show in chat mode */}
+        {activePanel === 'chat' && <div className="p-4 bg-white border-t border-gray-100">
           <div className="max-w-3xl mx-auto">
             <div className="flex gap-3">
               <Textarea
@@ -336,7 +433,7 @@ Provide helpful, concise responses. If the user asks to create entities, pages, 
               </Button>
             </div>
           </div>
-        </div>
+        </div>}
       </div>
     </div>
   );
