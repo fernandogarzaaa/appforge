@@ -17,17 +17,13 @@ import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 
 const navItems = [
-  { name: 'Dashboard', icon: LayoutDashboard, page: 'Dashboard' },
   { name: 'Projects', icon: FolderKanban, page: 'Projects' },
-  { name: 'Templates', icon: Package, page: 'TemplateMarketplace' },
 ];
 
 const projectNavItems = [
   { name: 'AI Assistant', icon: Sparkles, page: 'AIAssistant' },
   { name: 'Entities', icon: Database, page: 'EntityDesigner' },
   { name: 'Pages', icon: FileCode, page: 'PageEditor' },
-  { name: 'Components', icon: Component, page: 'Components' },
-  { name: 'Settings', icon: Settings, page: 'ProjectSettings' },
 ];
 
 
