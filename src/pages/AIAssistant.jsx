@@ -357,6 +357,15 @@ Provide helpful, actionable responses with code examples when relevant. Be conci
                   <Zap className="w-4 h-4 text-green-600" />
                   Deployment Check
                 </button>
+                <a 
+                  href={base44.agents.getWhatsAppConnectURL('project_integrity_monitor')}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 text-gray-600 hover:text-green-600"
+                >
+                  <MessageCircle className="w-4 h-4 text-green-600" />
+                  Integrity Monitor (WhatsApp)
+                </a>
               </div>
             </div>
           </div>
