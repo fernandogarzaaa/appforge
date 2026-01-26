@@ -1,6 +1,7 @@
 import AIAssistant from './pages/AIAssistant';
 import AIMonitoring from './pages/AIMonitoring';
 import APIExplorer from './pages/APIExplorer';
+import APIKeyManager from './pages/APIKeyManager';
 import Account from './pages/Account';
 import AdminDashboard from './pages/AdminDashboard';
 import AdminSubscriptions from './pages/AdminSubscriptions';
@@ -56,7 +57,9 @@ import TokenCreator from './pages/TokenCreator';
 import VSCodeIntegration from './pages/VSCodeIntegration';
 import Web3Dashboard from './pages/Web3Dashboard';
 import WorkflowBuilder from './pages/WorkflowBuilder';
-import APIKeyManager from './pages/APIKeyManager';
+import WebhookMonitor from './pages/WebhookMonitor';
+import IntegrationTemplates from './pages/IntegrationTemplates';
+import IntegrationAnalytics from './pages/IntegrationAnalytics';
 import __Layout from './Layout.jsx';
 
 
@@ -64,6 +67,7 @@ export const PAGES = {
     "AIAssistant": AIAssistant,
     "AIMonitoring": AIMonitoring,
     "APIExplorer": APIExplorer,
+    "APIKeyManager": APIKeyManager,
     "Account": Account,
     "AdminDashboard": AdminDashboard,
     "AdminSubscriptions": AdminSubscriptions,
@@ -119,7 +123,9 @@ export const PAGES = {
     "VSCodeIntegration": VSCodeIntegration,
     "Web3Dashboard": Web3Dashboard,
     "WorkflowBuilder": WorkflowBuilder,
-    "APIKeyManager": APIKeyManager,
+    "WebhookMonitor": WebhookMonitor,
+    "IntegrationTemplates": IntegrationTemplates,
+    "IntegrationAnalytics": IntegrationAnalytics,
 }
 
 export const pagesConfig = {
