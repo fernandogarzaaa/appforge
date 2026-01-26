@@ -29,7 +29,9 @@ import {
   Package,
   Gamepad2,
   Dices,
-  HelpCircle
+  HelpCircle,
+  Activity,
+  Webhook
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
@@ -39,12 +41,14 @@ const navItems = [
   { name: 'Dashboard', icon: LayoutDashboard, page: 'Dashboard' },
   { name: 'Projects', icon: FolderKanban, page: 'Projects' },
   { name: 'Workflow Builder', icon: Share2, page: 'WorkflowBuilder' },
+  { name: 'Bot Integrations', icon: Webhook, page: 'ExternalBotIntegrations' },
   { name: 'AI Monitoring', icon: Share2, page: 'AIMonitoring' },
   { name: 'Predictive Analytics', icon: TrendingUp, page: 'PredictiveAnalytics' },
   { name: 'Feedback Analytics', icon: Share2, page: 'FeedbackAnalytics' },
   { name: 'Email Assistant', icon: Share2, page: 'EmailAssistant' },
   { name: 'Integrations', icon: Share2, page: 'Integrations' },
   { name: 'Templates', icon: Package, page: 'TemplateMarketplace' },
+  { name: 'Diagnostics', icon: Activity, page: 'ProjectDiagnostics' },
   { name: 'Guide', icon: BookOpen, page: 'Guide' },
   { name: 'Support', icon: HelpCircle, page: 'Support' },
   { name: 'Pricing', icon: CreditCard, page: 'Pricing' },
