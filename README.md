@@ -1,39 +1,63 @@
-**Welcome to your Base44 project** 
+🚀 Base44 Superior Clone: AI-Driven Causal Inference & RBAC
+A high-performance observability and incident response platform that goes beyond correlation to identify causality. This system leverages automated causal discovery to pinpoint root causes in complex distributed systems.
 
-**About**
+✨ Key Features
+🧠 Causal Inference Engine
+Directed Acyclic Graphs (DAG): Visualizes the flow of causality between system metrics.
 
-View and Edit  your app on [Base44.com](http://Base44.com) 
+Automated Root Cause Analysis: Filters relationships with a strength threshold (e.g., >70%) to eliminate noise.
 
-This project contains everything you need to run your app locally.
+Inference Methods: Supports multiple discovery algorithms including PC-Algorithm and LiNGAM.
 
-**Edit the code in your local development environment**
+🛡️ Enterprise-Grade RBAC
+Granular Permissions: Full Role-Based Access Control (RBAC) implementation.
 
-Any change pushed to the repo will also be reflected in the Base44 Builder.
+Dynamic Role Management: Interface for assigning Admin, Editor, and Viewer roles with real-time permission updates.
 
-**Prerequisites:** 
+Security First: Integrated with @base44/sdk for secure entity management.
 
-1. Clone the repository using the project's Git URL 
-2. Navigate to the project directory
-3. Install dependencies: `npm install`
-4. Create an `.env.local` file and set the right environment variables
+📊 Advanced Observability
+Real-time Monitoring: Tracking anomalies and metric shifts.
 
-```
-VITE_BASE44_APP_ID=your_app_id
-VITE_BASE44_APP_BASE_URL=your_backend_url
+Business Impact Analysis: Translates technical failures into business cost metrics.
 
-e.g.
-VITE_BASE44_APP_ID=cbef744a8545c389ef439ea6
-VITE_BASE44_APP_BASE_URL=https://my-to-do-list-81bfaad7.base44.app
-```
+🛠️ Tech Stack
+Frontend: React 18, Vite, Tailwind CSS
 
-Run the app: `npm run dev`
+State Management: TanStack Query (React Query) v5
 
-**Publish your changes**
+UI Components: Shadcn/UI, Radix UI, Lucide React
 
-Open [Base44.com](http://Base44.com) and click on Publish.
+Backend Integration: Base44 SDK
 
-**Docs & Support**
+🚀 Getting Started
+Prerequisites
+Node.js (v18 or higher)
 
-Documentation: [https://docs.base44.com/Integrations/Using-GitHub](https://docs.base44.com/Integrations/Using-GitHub)
+npm or pnpm
 
-Support: [https://app.base44.com/support](https://app.base44.com/support)
+Installation
+Clone the repository:
+
+Bash
+git clone https://github.com/your-username/base44-superior-clone.git
+Install dependencies:
+
+Bash
+npm install
+Start the development server:
+
+Bash
+npm run dev
+📁 Project Structure
+Plaintext
+src/
+├── api/             # Base44 client configuration
+├── components/      
+│   ├── anomalies/   # CausalInferenceViewer and monitoring tools
+│   ├── rbac/        # Role selectors and permission dialogs
+│   └── ui/          # Reusable Shadcn components
+├── functions/       # Business logic & permission mapping
+└── pages/           # Main views (Role Management, Dashboards)
+📜 License
+Distributed under the MIT License. See LICENSE for more information.
