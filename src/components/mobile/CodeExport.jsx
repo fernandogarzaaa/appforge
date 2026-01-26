@@ -10,32 +10,98 @@ export default function CodeExport({ app }) {
 
   const generateReactNativeCode = () => {
     return `import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, SafeAreaView } from 'react-native';
 
 export default function ${app.screens?.[0]?.name.replace(/\s/g, '')}Screen() {
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>${app.screens?.[0]?.name}</Text>
-      ${app.screens?.[0]?.components?.map(c => 
-        `<Text>${c.props?.text || 'Component'}</Text>`
-      ).join('\n      ') || ''}
-    </View>
+    <SafeAreaView style={styles.container}>
+      <ScrollView contentContainerStyle={styles.scrollContent}>
+        <Text style={styles.title}>${app.screens?.[0]?.name}</Text>
+        ${app.screens?.[0]?.components?.map(c => 
+          `<View style={styles.component}>
+          <Text style={styles.componentText}>${c.props?.text || 'Component'}</Text>
+        </View>`
+        ).join('\n        ') || ''}
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '${app.theme?.background_color}',
+    backgroundColor: '${app.theme?.background_color || '#ffffff'}',
+  },
+  scrollContent: {
     padding: 16,
   },
   title: {
-    fontSize: 24,
+    fontSize: 28,
     fontWeight: 'bold',
-    color: '${app.theme?.primary_color}',
-    marginBottom: 16,
+    color: '${app.theme?.primary_color || '#000000'}',
+    marginBottom: 20,
+  },
+  component: {
+    backgroundColor: '#f5f5f5',
+    padding: 16,
+    borderRadius: 8,
+    marginBottom: 12,
+  },
+  componentText: {
+    fontSize: 16,
+    color: '#333',
   },
 });`;
+  };
+
+  const generateFlutterCode = () => {
+    return `import 'package:flutter/material.dart';
+
+class ${app.screens?.[0]?.name.replace(/\s/g, '')}Screen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Color(0xFF${app.theme?.background_color?.replace('#', '') || 'FFFFFF'}),
+      appBar: AppBar(
+        title: Text('${app.screens?.[0]?.name}'),
+        backgroundColor: Color(0xFF${app.theme?.primary_color?.replace('#', '') || '000000'}),
+      ),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                '${app.screens?.[0]?.name}',
+                style: TextStyle(
+                  fontSize: 28,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF${app.theme?.primary_color?.replace('#', '') || '000000'}),
+                ),
+              ),
+              SizedBox(height: 20),
+              ${app.screens?.[0]?.components?.map(c => 
+                `Container(
+                padding: EdgeInsets.all(16.0),
+                margin: EdgeInsets.only(bottom: 12),
+                decoration: BoxDecoration(
+                  color: Colors.grey[100],
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Text(
+                  '${c.props?.text || 'Component'}',
+                  style: TextStyle(fontSize: 16),
+                ),
+              ),`
+              ).join('\n              ') || ''}
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}`;
   };
 
   const copyCode = (code) => {
@@ -96,8 +162,27 @@ const styles = StyleSheet.create({
           </TabsContent>
 
           <TabsContent value="flutter">
-            <div className="p-4 bg-gray-50 rounded-lg text-center text-gray-500">
-              Flutter export coming soon!
+            <div className="space-y-4">
+              <div className="flex gap-2">
+                <Button 
+                  size="sm" 
+                  variant="outline"
+                  onClick={() => copyCode(generateFlutterCode())}
+                >
+                  <Copy className="w-4 h-4 mr-2" />
+                  Copy
+                </Button>
+                <Button 
+                  size="sm"
+                  onClick={() => downloadCode(generateFlutterCode(), `${app.screens?.[0]?.name.replace(/\s/g, '')}_screen.dart`)}
+                >
+                  <Download className="w-4 h-4 mr-2" />
+                  Download
+                </Button>
+              </div>
+              <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto text-sm">
+                {generateFlutterCode()}
+              </pre>
             </div>
           </TabsContent>
 

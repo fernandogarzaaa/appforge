@@ -4,12 +4,14 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { ArrowLeft, Save, Eye, Smartphone, Code, Palette, Zap, Download } from 'lucide-react';
+import { ArrowLeft, Save, Eye, Smartphone, Code, Palette, Zap, Download, Sparkles, Shield } from 'lucide-react';
 import { toast } from 'sonner';
 import MobilePreview from './MobilePreview';
 import ScreenEditor from './ScreenEditor';
 import ThemeEditor from './ThemeEditor';
 import CodeExport from './CodeExport';
+import AIDesignSuggestions from './AIDesignSuggestions';
+import AccessibilityChecker from './AccessibilityChecker';
 
 export default function MobileAppEditor({ app, onBack }) {
   const [currentApp, setCurrentApp] = useState(app);
@@ -80,6 +82,14 @@ export default function MobileAppEditor({ app, onBack }) {
                 <Palette className="w-4 h-4 mr-2" />
                 Theme
               </TabsTrigger>
+              <TabsTrigger value="ai-design">
+                <Sparkles className="w-4 h-4 mr-2" />
+                AI Design
+              </TabsTrigger>
+              <TabsTrigger value="accessibility">
+                <Shield className="w-4 h-4 mr-2" />
+                Accessibility
+              </TabsTrigger>
               <TabsTrigger value="code">
                 <Code className="w-4 h-4 mr-2" />
                 Export Code
@@ -92,6 +102,14 @@ export default function MobileAppEditor({ app, onBack }) {
 
             <TabsContent value="theme">
               <ThemeEditor app={currentApp} onChange={setCurrentApp} />
+            </TabsContent>
+
+            <TabsContent value="ai-design">
+              <AIDesignSuggestions app={currentApp} onChange={setCurrentApp} />
+            </TabsContent>
+
+            <TabsContent value="accessibility">
+              <AccessibilityChecker app={currentApp} />
             </TabsContent>
 
             <TabsContent value="code">
