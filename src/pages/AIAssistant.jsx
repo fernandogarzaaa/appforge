@@ -22,6 +22,7 @@ import VoiceInput from '@/components/ai/VoiceInput';
 import CommandPalette from '@/components/ai/CommandPalette';
 import SystemDiagnostics from '@/components/diagnostics/SystemDiagnostics';
 import CodeSnippetLibrary from '@/components/ai/CodeSnippetLibrary';
+import DeploymentChecklist from '@/components/deployment/DeploymentChecklist';
 import AgentDeploymentPanel from '@/components/ai/AgentDeploymentPanel';
 import AdvancedAITools from '@/components/ai/AdvancedAITools';
 import ProjectAuditorEnhanced from '@/components/ai/ProjectAuditorEnhanced';
@@ -343,6 +344,10 @@ Provide helpful, actionable responses with code examples when relevant. Be conci
                   <Code className="w-4 h-4 text-orange-600" />
                   Code Snippets
                 </button>
+                <button onClick={() => setActivePanel('deployment')} className="flex items-center gap-2 text-gray-600 hover:text-green-600">
+                  <Zap className="w-4 h-4 text-green-600" />
+                  Deployment Check
+                </button>
               </div>
             </div>
           </div>
@@ -369,6 +374,7 @@ Provide helpful, actionable responses with code examples when relevant. Be conci
               {activePanel === 'resources' && 'Resource Monitor'}
               {activePanel === 'diagnostics' && 'System Diagnostics'}
               {activePanel === 'snippets' && 'Code Snippet Library'}
+              {activePanel === 'deployment' && 'Deployment Readiness'}
             </h2>
             <Button variant="ghost" size="sm" onClick={() => setActivePanel(null)}>
               <ArrowLeft className="w-4 h-4 mr-2" />
@@ -503,6 +509,14 @@ Provide helpful, actionable responses with code examples when relevant. Be conci
                 projectId={projectId}
                 contextCode={messages[messages.length - 1]?.role === 'assistant' ? messages[messages.length - 1]?.content : null}
               />
+            </div>
+          </div>
+        )}
+
+        {activePanel === 'deployment' && (
+          <div className="flex-1 p-6 overflow-auto">
+            <div className="max-w-4xl mx-auto">
+              <DeploymentChecklist />
             </div>
           </div>
         )}
