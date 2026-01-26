@@ -1,454 +1,396 @@
 import React, { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import { base44 } from '@/api/base44Client';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { Input } from '@/components/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { 
-  Search, Star, Download, Eye, TrendingUp, 
-  Zap, ShoppingCart, Briefcase, Users, Heart,
-  Coins, Gamepad2, Newspaper, Mail, BarChart3, Image as ImageIcon,
-  Database, Stethoscope, Building2
-} from 'lucide-react';
+import { Search, Download, Star, TrendingUp, Zap, Plus, DollarSign, Eye, Code } from 'lucide-react';
 import { toast } from 'sonner';
-
-const templates = [
-  { 
-    id: 1, 
-    name: 'SaaS Dashboard', 
-    category: 'saas', 
-    price: 0, 
-    downloads: 1240, 
-    rating: 4.8,
-    preview: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400&h=300&fit=crop',
-    description: 'Complete SaaS dashboard with authentication, billing, and analytics'
-  },
-  { 
-    id: 22, 
-    name: 'AI Chatbot Platform', 
-    category: 'ai', 
-    price: 0, 
-    downloads: 4230, 
-    rating: 4.9,
-    preview: 'https://images.unsplash.com/photo-1531746790731-6c087fecd65a?w=400&h=300&fit=crop',
-    description: 'Build and deploy intelligent chatbots with natural language processing'
-  },
-  { 
-    id: 23, 
-    name: 'Workflow Automation Hub', 
-    category: 'automation', 
-    price: 39, 
-    downloads: 2890, 
-    rating: 4.8,
-    preview: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&h=300&fit=crop',
-    description: 'Visual workflow builder with 100+ integrations and triggers'
-  },
-  { 
-    id: 24, 
-    name: 'Multi-tenant SaaS Starter', 
-    category: 'saas', 
-    price: 79, 
-    downloads: 1560, 
-    rating: 4.9,
-    preview: 'https://images.unsplash.com/photo-1551434678-e076c223a692?w=400&h=300&fit=crop',
-    description: 'Enterprise SaaS boilerplate with team management, subscriptions, and white-labeling'
-  },
-  { 
-    id: 25, 
-    name: 'Real-time Analytics Engine', 
-    category: 'analytics', 
-    price: 49, 
-    downloads: 1920, 
-    rating: 4.7,
-    preview: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400&h=300&fit=crop',
-    description: 'Live dashboards with event tracking, funnels, and cohort analysis'
-  },
-  { 
-    id: 26, 
-    name: 'Video Streaming Platform', 
-    category: 'media', 
-    price: 69, 
-    downloads: 1120, 
-    rating: 4.6,
-    preview: 'https://images.unsplash.com/photo-1492619392552-fd8be5c7e1c0?w=400&h=300&fit=crop',
-    description: 'Complete video platform with upload, transcoding, and CDN delivery'
-  },
-  { 
-    id: 27, 
-    name: 'Learning Management System', 
-    category: 'education', 
-    price: 59, 
-    downloads: 1450, 
-    rating: 4.8,
-    preview: 'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=400&h=300&fit=crop',
-    description: 'Full LMS with courses, quizzes, certificates, and progress tracking'
-  },
-  { 
-    id: 28, 
-    name: 'Healthcare Patient Portal', 
-    category: 'healthcare', 
-    price: 89, 
-    downloads: 670, 
-    rating: 4.7,
-    preview: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=400&h=300&fit=crop',
-    description: 'HIPAA-compliant patient management with appointments, records, and telehealth'
-  },
-  { 
-    id: 29, 
-    name: 'Restaurant Management System', 
-    category: 'business', 
-    price: 49, 
-    downloads: 980, 
-    rating: 4.5,
-    preview: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=400&h=300&fit=crop',
-    description: 'POS, inventory, reservations, and online ordering in one platform'
-  },
-  { 
-    id: 30, 
-    name: 'AI Content Writer', 
-    category: 'ai', 
-    price: 0, 
-    downloads: 5120, 
-    rating: 4.9,
-    preview: 'https://images.unsplash.com/photo-1455390582262-044cdead277a?w=400&h=300&fit=crop',
-    description: 'Generate blog posts, articles, and marketing copy with AI assistance'
-  },
-  { 
-    id: 19, 
-    name: 'Data Analytics Platform', 
-    category: 'analytics', 
-    price: 0, 
-    downloads: 2450, 
-    rating: 4.9,
-    preview: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&h=300&fit=crop',
-    description: 'AI-powered data analysis with statistical tools, trend analysis, and visualizations'
-  },
-  { 
-    id: 20, 
-    name: 'Medical AI Suite', 
-    category: 'medical', 
-    price: 49, 
-    downloads: 890, 
-    rating: 4.8,
-    preview: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=400&h=300&fit=crop',
-    description: 'Medical AI tools for symptom analysis, report parsing, drug interactions, and clinical support'
-  },
-  { 
-    id: 21, 
-    name: 'GovTech Platform', 
-    category: 'government', 
-    price: 59, 
-    downloads: 540, 
-    rating: 4.7,
-    preview: 'https://images.unsplash.com/photo-1449247666642-264389f5f5b1?w=400&h=300&fit=crop',
-    description: 'Government AI tools for policy analysis, compliance, citizen services, and document processing'
-  },
-  { 
-    id: 2, 
-    name: 'E-commerce Store', 
-    category: 'ecommerce', 
-    price: 29, 
-    downloads: 890, 
-    rating: 4.9,
-    preview: 'https://images.unsplash.com/photo-1472851294608-062f824d29cc?w=400&h=300&fit=crop',
-    description: 'Full-featured online store with cart, checkout, and inventory management'
-  },
-  { 
-    id: 3, 
-    name: 'Portfolio Website', 
-    category: 'portfolio', 
-    price: 0, 
-    downloads: 2340, 
-    rating: 4.7,
-    preview: 'https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?w=400&h=300&fit=crop',
-    description: 'Stunning portfolio template for creatives and developers'
-  },
-  { 
-    id: 4, 
-    name: 'CRM Platform', 
-    category: 'business', 
-    price: 49, 
-    downloads: 560, 
-    rating: 4.9,
-    preview: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&h=300&fit=crop',
-    description: 'Enterprise CRM with lead management, pipelines, and reporting'
-  },
-  { 
-    id: 5, 
-    name: 'Social Network', 
-    category: 'social', 
-    price: 39, 
-    downloads: 720, 
-    rating: 4.6,
-    preview: 'https://images.unsplash.com/photo-1432888622747-4eb9a8f2c293?w=400&h=300&fit=crop',
-    description: 'Social media platform with posts, profiles, and messaging'
-  },
-  { 
-    id: 6, 
-    name: 'Landing Page Pro', 
-    category: 'marketing', 
-    price: 19, 
-    downloads: 1560, 
-    rating: 4.8,
-    preview: 'https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?w=400&h=300&fit=crop',
-    description: 'High-converting landing page with lead capture forms'
-  },
-  { 
-    id: 7, 
-    name: 'NFT Marketplace', 
-    category: 'web3', 
-    price: 59, 
-    downloads: 1120, 
-    rating: 4.9,
-    preview: 'https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=400&h=300&fit=crop',
-    description: 'Full NFT marketplace with minting, trading, and wallet integration'
-  },
-  { 
-    id: 8, 
-    name: 'Crypto Exchange', 
-    category: 'web3', 
-    price: 79, 
-    downloads: 840, 
-    rating: 4.8,
-    preview: 'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=400&h=300&fit=crop',
-    description: 'Professional trading platform with order books and real-time charts'
-  },
-  { 
-    id: 9, 
-    name: 'Gaming Platform', 
-    category: 'gaming', 
-    price: 49, 
-    downloads: 1560, 
-    rating: 4.7,
-    preview: 'https://images.unsplash.com/photo-1511512578047-dfb367046420?w=400&h=300&fit=crop',
-    description: 'Play-to-earn gaming platform with leaderboards and token rewards'
-  },
-  { 
-    id: 10, 
-    name: 'Blog & Magazine', 
-    category: 'content', 
-    price: 0, 
-    downloads: 3200, 
-    rating: 4.6,
-    preview: 'https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=400&h=300&fit=crop',
-    description: 'Modern blog with categories, comments, and newsletter subscription'
-  },
-  { 
-    id: 11, 
-    name: 'Email Marketing Hub', 
-    category: 'marketing', 
-    price: 39, 
-    downloads: 920, 
-    rating: 4.8,
-    preview: 'https://images.unsplash.com/photo-1557200134-90327ee9fafa?w=400&h=300&fit=crop',
-    description: 'Complete email campaign manager with templates and analytics'
-  },
-  { 
-    id: 12, 
-    name: 'Analytics Dashboard', 
-    category: 'business', 
-    price: 29, 
-    downloads: 1340, 
-    rating: 4.7,
-    preview: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&h=300&fit=crop',
-    description: 'Business intelligence dashboard with charts and real-time metrics'
-  },
-  { 
-    id: 13, 
-    name: 'Crypto Casino', 
-    category: 'gaming', 
-    price: 69, 
-    downloads: 680, 
-    rating: 4.5,
-    preview: 'https://images.unsplash.com/photo-1596838132731-3301c3fd4317?w=400&h=300&fit=crop',
-    description: 'Provably fair casino with dice, slots, and crypto payments'
-  },
-  { 
-    id: 14, 
-    name: 'AI Content Studio', 
-    category: 'content', 
-    price: 0, 
-    downloads: 2100, 
-    rating: 4.9,
-    preview: 'https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?w=400&h=300&fit=crop',
-    description: 'AI-powered content generator for blogs, social media, and marketing'
-  },
-  { 
-    id: 15, 
-    name: 'Token Launchpad', 
-    category: 'web3', 
-    price: 49, 
-    downloads: 760, 
-    rating: 4.6,
-    preview: 'https://images.unsplash.com/photo-1621761191319-c6fb62004040?w=400&h=300&fit=crop',
-    description: 'Create and launch crypto tokens with built-in tokenomics tools'
-  },
-  { 
-    id: 16, 
-    name: 'Social Media Manager', 
-    category: 'marketing', 
-    price: 39, 
-    downloads: 1420, 
-    rating: 4.8,
-    preview: 'https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=400&h=300&fit=crop',
-    description: 'Schedule posts, manage campaigns, and track analytics across platforms'
-  },
-  { 
-    id: 17, 
-    name: 'Job Board Platform', 
-    category: 'business', 
-    price: 0, 
-    downloads: 1890, 
-    rating: 4.5,
-    preview: 'https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=400&h=300&fit=crop',
-    description: 'Complete job listing platform with applications and employer dashboard'
-  },
-  { 
-    id: 18, 
-    name: 'DAO Governance', 
-    category: 'web3', 
-    price: 59, 
-    downloads: 540, 
-    rating: 4.7,
-    preview: 'https://images.unsplash.com/photo-1559526324-4b87b5e36e44?w=400&h=300&fit=crop',
-    description: 'Decentralized organization platform with voting and treasury management'
-  }
-];
-
-const categories = [
-  { id: 'all', name: 'All Templates', icon: Zap },
-  { id: 'ai', name: 'AI & Automation', icon: Zap },
-  { id: 'analytics', name: 'Data Analytics', icon: Database },
-  { id: 'medical', name: 'Medical AI', icon: Stethoscope },
-  { id: 'healthcare', name: 'Healthcare', icon: Stethoscope },
-  { id: 'education', name: 'Education', icon: BarChart3 },
-  { id: 'government', name: 'Government', icon: Building2 },
-  { id: 'saas', name: 'SaaS', icon: TrendingUp },
-  { id: 'ecommerce', name: 'E-commerce', icon: ShoppingCart },
-  { id: 'business', name: 'Business', icon: Briefcase },
-  { id: 'web3', name: 'Web3', icon: Coins },
-  { id: 'gaming', name: 'Gaming', icon: Gamepad2 },
-  { id: 'content', name: 'Content', icon: Newspaper },
-  { id: 'marketing', name: 'Marketing', icon: Mail },
-  { id: 'social', name: 'Social', icon: Users },
-  { id: 'portfolio', name: 'Portfolio', icon: Heart },
-  { id: 'automation', name: 'Automation', icon: Zap },
-  { id: 'media', name: 'Media', icon: ImageIcon }
-];
+import CreateTemplateModal from '@/components/templates/CreateTemplateModal';
+import TemplateReviews from '@/components/templates/TemplateReviews';
 
 export default function TemplateMarketplace() {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('all');
+  const [search, setSearch] = useState('');
+  const [category, setCategory] = useState('all');
+  const [selectedTemplate, setSelectedTemplate] = useState(null);
+  const [showCreateModal, setShowCreateModal] = useState(false);
+  const [viewMode, setViewMode] = useState('marketplace'); // 'marketplace' or 'myTemplates'
+  const queryClient = useQueryClient();
+
+  const { data: templates = [], isLoading } = useQuery({
+    queryKey: ['botTemplates', viewMode],
+    queryFn: async () => {
+      if (viewMode === 'myTemplates') {
+        const user = await base44.auth.me();
+        return await base44.entities.BotTemplate.filter({ author_email: user.email }, '-created_date');
+      }
+      return await base44.entities.BotTemplate.filter({ is_published: true }, '-downloads_count');
+    }
+  });
+
+  const { data: user } = useQuery({
+    queryKey: ['user'],
+    queryFn: () => base44.auth.me()
+  });
+
+  const downloadMutation = useMutation({
+    mutationFn: async (templateId) => {
+      const template = await base44.entities.BotTemplate.get(templateId);
+      
+      // Check if premium and handle payment
+      if (template.is_premium && template.price > 0) {
+        const purchases = await base44.entities.TemplatePurchase.filter({
+          template_id: templateId,
+          buyer_email: user?.email
+        });
+        
+        if (purchases.length === 0) {
+          toast.error('Please purchase this template first');
+          return null;
+        }
+      }
+
+      // Record download
+      await base44.entities.BotTemplate.update(templateId, {
+        downloads_count: (template.downloads_count || 0) + 1
+      });
+
+      // Create purchase record for free templates
+      if (!template.is_premium || template.price === 0) {
+        await base44.entities.TemplatePurchase.create({
+          template_id: templateId,
+          buyer_email: user?.email,
+          price_paid: 0,
+          payment_method: 'free',
+          status: 'completed',
+          author_revenue: 0,
+          platform_fee: 0
+        });
+      }
+
+      return template;
+    },
+    onSuccess: (template) => {
+      if (template) {
+        queryClient.invalidateQueries(['botTemplates']);
+        toast.success('Template downloaded successfully!');
+      }
+    }
+  });
+
+  const purchaseMutation = useMutation({
+    mutationFn: async ({ templateId, price }) => {
+      const response = await base44.functions.invoke('purchaseTemplate', {
+        template_id: templateId,
+        price
+      });
+      return response.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(['botTemplates']);
+      toast.success('Purchase successful! You can now download the template.');
+    }
+  });
 
   const filteredTemplates = templates.filter(t => {
-    const matchesSearch = t.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         t.description.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesCategory = selectedCategory === 'all' || t.category === selectedCategory;
+    const matchesSearch = t.name?.toLowerCase().includes(search.toLowerCase()) ||
+                         t.description?.toLowerCase().includes(search.toLowerCase());
+    const matchesCategory = category === 'all' || t.category === category;
     return matchesSearch && matchesCategory;
   });
 
-  const handleInstall = (template) => {
-    toast.success(`${template.name} installed successfully!`);
-  };
-
   return (
     <div className="p-6 lg:p-8 max-w-7xl mx-auto">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-1">Template Marketplace</h1>
-        <p className="text-gray-500">Browse and install ready-made templates for your projects</p>
+      <div className="flex justify-between items-center mb-6">
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900 mb-1">Template Marketplace</h1>
+          <p className="text-gray-500">Discover, create, and monetize automation templates</p>
+        </div>
+        <div className="flex gap-2">
+          <Button variant="outline" onClick={() => setViewMode(viewMode === 'marketplace' ? 'myTemplates' : 'marketplace')}>
+            {viewMode === 'marketplace' ? 'My Templates' : 'Marketplace'}
+          </Button>
+          <Button onClick={() => setShowCreateModal(true)}>
+            <Plus className="w-4 h-4 mr-2" />
+            Create Template
+          </Button>
+        </div>
+      </div>
+
+      {/* Stats */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+        <Card>
+          <CardContent className="pt-6">
+            <div className="text-2xl font-bold">{templates.length}</div>
+            <div className="text-sm text-gray-500">{viewMode === 'marketplace' ? 'Available Templates' : 'My Templates'}</div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="pt-6">
+            <div className="text-2xl font-bold">
+              {templates.filter(t => t.is_premium).length}
+            </div>
+            <div className="text-sm text-gray-500">Premium Templates</div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="pt-6">
+            <div className="text-2xl font-bold">
+              {templates.reduce((sum, t) => sum + (t.downloads_count || 0), 0)}
+            </div>
+            <div className="text-sm text-gray-500">Total Downloads</div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="pt-6">
+            <div className="text-2xl font-bold">
+              {viewMode === 'myTemplates' 
+                ? `$${templates.reduce((sum, t) => sum + (t.total_revenue || 0), 0).toFixed(2)}`
+                : templates.filter(t => t.is_featured).length
+              }
+            </div>
+            <div className="text-sm text-gray-500">
+              {viewMode === 'myTemplates' ? 'Total Revenue' : 'Featured'}
+            </div>
+          </CardContent>
+        </Card>
       </div>
 
       {/* Search & Filter */}
-      <div className="mb-6 space-y-4">
-        <div className="relative">
+      <div className="flex gap-3 mb-6">
+        <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
           <Input
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
             placeholder="Search templates..."
             className="pl-10"
           />
         </div>
-
-        <div className="flex gap-2 overflow-x-auto pb-2">
-          {categories.map(cat => (
-            <Button
-              key={cat.id}
-              variant={selectedCategory === cat.id ? 'default' : 'outline'}
-              size="sm"
-              onClick={() => setSelectedCategory(cat.id)}
-              className="whitespace-nowrap"
-            >
-              <cat.icon className="w-4 h-4 mr-2" />
-              {cat.name}
-            </Button>
-          ))}
-        </div>
+        <Select value={category} onValueChange={setCategory}>
+          <SelectTrigger className="w-48">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All Categories</SelectItem>
+            <SelectItem value="ai_automation">AI Automation</SelectItem>
+            <SelectItem value="data_visualization">Data Visualization</SelectItem>
+            <SelectItem value="finance_automation">Finance Automation</SelectItem>
+            <SelectItem value="customer_service">Customer Service</SelectItem>
+            <SelectItem value="marketing">Marketing</SelectItem>
+            <SelectItem value="analytics">Analytics</SelectItem>
+            <SelectItem value="sales_automation">Sales Automation</SelectItem>
+            <SelectItem value="hr_automation">HR Automation</SelectItem>
+            <SelectItem value="ecommerce">E-commerce</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
 
       {/* Templates Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {filteredTemplates.map(template => (
-          <Card key={template.id} className="overflow-hidden hover:shadow-lg transition-shadow">
-            <div className="aspect-video bg-gray-100 overflow-hidden">
-              <img 
-                src={template.preview} 
-                alt={template.name}
-                className="w-full h-full object-cover hover:scale-105 transition-transform cursor-pointer"
-              />
-            </div>
+          <Card key={template.id} className="hover:shadow-lg transition-shadow cursor-pointer" onClick={() => setSelectedTemplate(template)}>
             <CardHeader>
-              <div className="flex items-start justify-between">
+              <div className="flex items-start justify-between mb-2">
                 <div>
                   <CardTitle className="text-lg">{template.name}</CardTitle>
-                  <div className="flex items-center gap-2 mt-1">
-                    <Badge variant="outline" className="text-xs capitalize">{template.category}</Badge>
-                    {template.price === 0 && (
-                      <Badge className="bg-green-100 text-green-700 text-xs">Free</Badge>
+                  <div className="flex items-center gap-2 mt-2 flex-wrap">
+                    <Badge variant="outline" className="capitalize text-xs">{template.category.replace('_', ' ')}</Badge>
+                    {template.is_premium && (
+                      <Badge className="bg-yellow-500 text-xs">
+                        <DollarSign className="w-3 h-3 mr-1" />
+                        ${template.price}
+                      </Badge>
                     )}
+                    {template.is_featured && <Badge className="bg-purple-500 text-xs">Featured</Badge>}
                   </div>
+                  {viewMode === 'myTemplates' && (
+                    <Badge variant={template.is_published ? 'default' : 'secondary'} className="mt-2 text-xs">
+                      {template.is_published ? 'Published' : 'Draft'}
+                    </Badge>
+                  )}
                 </div>
-                {template.price > 0 && (
-                  <div className="text-right">
-                    <div className="text-xl font-bold">${template.price}</div>
-                  </div>
-                )}
               </div>
-              <CardDescription className="mt-2">{template.description}</CardDescription>
+              <CardDescription className="line-clamp-2">{template.description}</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="flex items-center justify-between text-sm text-gray-600 mb-4">
-                <div className="flex items-center gap-1">
+              <div className="flex items-center justify-between mb-4 text-sm text-gray-500">
+                <span className="flex items-center gap-1">
                   <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                  <span>{template.rating}</span>
-                </div>
-                <div className="flex items-center gap-1">
+                  {template.rating?.toFixed(1) || '0.0'} ({template.review_count || 0})
+                </span>
+                <span className="flex items-center gap-1">
                   <Download className="w-4 h-4" />
-                  <span>{template.downloads.toLocaleString()}</span>
+                  {template.downloads_count || 0}
+                </span>
+              </div>
+              {viewMode === 'myTemplates' && template.is_premium && (
+                <div className="text-sm text-gray-600 mb-2">
+                  Revenue: ${(template.total_revenue || 0).toFixed(2)}
                 </div>
-              </div>
-              <div className="flex gap-2">
-                <Button variant="outline" size="sm" className="flex-1">
-                  <Eye className="w-3 h-3 mr-1" />
-                  Preview
-                </Button>
-                <Button size="sm" onClick={() => handleInstall(template)} className="flex-1">
-                  <Download className="w-3 h-3 mr-1" />
-                  Install
-                </Button>
-              </div>
+              )}
+              <Button 
+                className="w-full" 
+                onClick={(e) => {
+                  e.stopPropagation();
+                  if (viewMode === 'marketplace') {
+                    downloadMutation.mutate(template.id);
+                  } else {
+                    setSelectedTemplate(template);
+                  }
+                }}
+                disabled={downloadMutation.isPending}
+              >
+                {viewMode === 'marketplace' ? (
+                  <>
+                    <Zap className="w-4 h-4 mr-2" />
+                    {template.is_premium && template.price > 0 ? `Buy $${template.price}` : 'Use Template'}
+                  </>
+                ) : (
+                  <>
+                    <Eye className="w-4 h-4 mr-2" />
+                    View Details
+                  </>
+                )}
+              </Button>
             </CardContent>
           </Card>
         ))}
       </div>
 
       {filteredTemplates.length === 0 && (
-        <div className="text-center py-12">
-          <Search className="w-16 h-16 mx-auto text-gray-300 mb-4" />
-          <h3 className="text-lg font-semibold text-gray-900 mb-2">No templates found</h3>
-          <p className="text-gray-500">Try adjusting your search or filters</p>
-        </div>
+        <Card className="text-center py-12">
+          <Search className="w-16 h-16 mx-auto mb-4 text-gray-300" />
+          <h3 className="text-lg font-semibold mb-2">No Templates Found</h3>
+          <p className="text-gray-500">Try adjusting your search or create your own!</p>
+        </Card>
       )}
+
+      {/* Template Details Modal */}
+      {selectedTemplate && (
+        <Dialog open={true} onOpenChange={() => setSelectedTemplate(null)}>
+          <DialogContent className="max-w-5xl max-h-[90vh] overflow-y-auto">
+            <DialogHeader>
+              <DialogTitle className="text-2xl">{selectedTemplate.name}</DialogTitle>
+            </DialogHeader>
+            
+            <Tabs defaultValue="overview">
+              <TabsList>
+                <TabsTrigger value="overview">Overview</TabsTrigger>
+                <TabsTrigger value="workflow">Workflow</TabsTrigger>
+                <TabsTrigger value="reviews">Reviews ({selectedTemplate.review_count || 0})</TabsTrigger>
+              </TabsList>
+
+              <TabsContent value="overview" className="space-y-4">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <Badge variant="outline">{selectedTemplate.category.replace('_', ' ')}</Badge>
+                  <Badge variant="secondary">{selectedTemplate.difficulty_level}</Badge>
+                  {selectedTemplate.is_premium && (
+                    <Badge className="bg-yellow-500">Premium - ${selectedTemplate.price}</Badge>
+                  )}
+                  <span className="text-sm text-gray-500">
+                    ~{selectedTemplate.estimated_setup_time} min setup
+                  </span>
+                </div>
+
+                <p className="text-gray-700">{selectedTemplate.description}</p>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <h4 className="font-semibold mb-2">Rating</h4>
+                    <div className="flex items-center gap-2">
+                      <Star className="w-5 h-5 fill-yellow-400 text-yellow-400" />
+                      <span className="text-lg font-semibold">{selectedTemplate.rating?.toFixed(1) || '0.0'}</span>
+                      <span className="text-sm text-gray-500">({selectedTemplate.review_count || 0} reviews)</span>
+                    </div>
+                  </div>
+                  <div>
+                    <h4 className="font-semibold mb-2">Downloads</h4>
+                    <div className="flex items-center gap-2">
+                      <Download className="w-5 h-5" />
+                      <span className="text-lg font-semibold">{selectedTemplate.downloads_count || 0}</span>
+                    </div>
+                  </div>
+                </div>
+
+                {selectedTemplate.tags && selectedTemplate.tags.length > 0 && (
+                  <div>
+                    <h4 className="font-semibold mb-2">Tags</h4>
+                    <div className="flex flex-wrap gap-2">
+                      {selectedTemplate.tags.map((tag, i) => (
+                        <Badge key={i} variant="outline">{tag}</Badge>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                <div>
+                  <h4 className="font-semibold mb-2">Author</h4>
+                  <p className="text-gray-700">{selectedTemplate.author_name || 'Anonymous'}</p>
+                </div>
+
+                <Button 
+                  className="w-full"
+                  onClick={() => {
+                    if (selectedTemplate.is_premium && selectedTemplate.price > 0) {
+                      purchaseMutation.mutate({ 
+                        templateId: selectedTemplate.id, 
+                        price: selectedTemplate.price 
+                      });
+                    } else {
+                      downloadMutation.mutate(selectedTemplate.id);
+                    }
+                  }}
+                >
+                  {selectedTemplate.is_premium && selectedTemplate.price > 0 ? (
+                    <>
+                      <DollarSign className="w-4 h-4 mr-2" />
+                      Purchase for ${selectedTemplate.price}
+                    </>
+                  ) : (
+                    <>
+                      <Download className="w-4 h-4 mr-2" />
+                      Download Free
+                    </>
+                  )}
+                </Button>
+              </TabsContent>
+
+              <TabsContent value="workflow">
+                <div className="space-y-3">
+                  <h4 className="font-semibold">Workflow Steps</h4>
+                  {selectedTemplate.workflow_steps?.map((step, i) => (
+                    <Card key={i}>
+                      <CardContent className="pt-4">
+                        <div className="flex items-start gap-3">
+                          <div className="bg-blue-100 text-blue-800 rounded-full w-8 h-8 flex items-center justify-center font-semibold flex-shrink-0">
+                            {i + 1}
+                          </div>
+                          <div className="flex-1">
+                            <h5 className="font-semibold">{step.name}</h5>
+                            <p className="text-sm text-gray-600 mt-1">{step.description}</p>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              </TabsContent>
+
+              <TabsContent value="reviews">
+                <TemplateReviews templateId={selectedTemplate.id} />
+              </TabsContent>
+            </Tabs>
+          </DialogContent>
+        </Dialog>
+      )}
+
+      {/* Create Template Modal */}
+      <CreateTemplateModal open={showCreateModal} onClose={() => setShowCreateModal(false)} />
     </div>
   );
 }
