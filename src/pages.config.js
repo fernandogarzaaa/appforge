@@ -22,6 +22,7 @@ import EmailAssistant from './pages/EmailAssistant';
 import EmailCampaigns from './pages/EmailCampaigns';
 import EnterpriseIntelligence from './pages/EnterpriseIntelligence';
 import EntityDesigner from './pages/EntityDesigner';
+import ExternalBotIntegrations from './pages/ExternalBotIntegrations';
 import FeatureFlags from './pages/FeatureFlags';
 import FeedbackAnalytics from './pages/FeedbackAnalytics';
 import FunctionValidator from './pages/FunctionValidator';
@@ -40,6 +41,7 @@ import PageEditor from './pages/PageEditor';
 import PredictiveAnalytics from './pages/PredictiveAnalytics';
 import Pricing from './pages/Pricing';
 import Profile from './pages/Profile';
+import ProjectDiagnostics from './pages/ProjectDiagnostics';
 import ProjectSettings from './pages/ProjectSettings';
 import ProjectTasks from './pages/ProjectTasks';
 import Projects from './pages/Projects';
@@ -54,8 +56,7 @@ import TokenCreator from './pages/TokenCreator';
 import VSCodeIntegration from './pages/VSCodeIntegration';
 import Web3Dashboard from './pages/Web3Dashboard';
 import WorkflowBuilder from './pages/WorkflowBuilder';
-import ExternalBotIntegrations from './pages/ExternalBotIntegrations';
-import ProjectDiagnostics from './pages/ProjectDiagnostics';
+import APIKeyManager from './pages/APIKeyManager';
 import __Layout from './Layout.jsx';
 
 
@@ -84,6 +85,7 @@ export const PAGES = {
     "EmailCampaigns": EmailCampaigns,
     "EnterpriseIntelligence": EnterpriseIntelligence,
     "EntityDesigner": EntityDesigner,
+    "ExternalBotIntegrations": ExternalBotIntegrations,
     "FeatureFlags": FeatureFlags,
     "FeedbackAnalytics": FeedbackAnalytics,
     "FunctionValidator": FunctionValidator,
@@ -102,6 +104,7 @@ export const PAGES = {
     "PredictiveAnalytics": PredictiveAnalytics,
     "Pricing": Pricing,
     "Profile": Profile,
+    "ProjectDiagnostics": ProjectDiagnostics,
     "ProjectSettings": ProjectSettings,
     "ProjectTasks": ProjectTasks,
     "Projects": Projects,
@@ -116,8 +119,7 @@ export const PAGES = {
     "VSCodeIntegration": VSCodeIntegration,
     "Web3Dashboard": Web3Dashboard,
     "WorkflowBuilder": WorkflowBuilder,
-    "ExternalBotIntegrations": ExternalBotIntegrations,
-    "ProjectDiagnostics": ProjectDiagnostics,
+    "APIKeyManager": APIKeyManager,
 }
 
 export const pagesConfig = {

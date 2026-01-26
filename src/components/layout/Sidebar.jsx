@@ -42,6 +42,7 @@ const navItems = [
   { name: 'Projects', icon: FolderKanban, page: 'Projects' },
   { name: 'Workflow Builder', icon: Share2, page: 'WorkflowBuilder' },
   { name: 'Bot Integrations', icon: Webhook, page: 'ExternalBotIntegrations' },
+  { name: 'API Keys', icon: Key, page: 'APIKeyManager' },
   { name: 'AI Monitoring', icon: Share2, page: 'AIMonitoring' },
   { name: 'Predictive Analytics', icon: TrendingUp, page: 'PredictiveAnalytics' },
   { name: 'Feedback Analytics', icon: Share2, page: 'FeedbackAnalytics' },

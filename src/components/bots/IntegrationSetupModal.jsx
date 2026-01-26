@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { base44 } from '@/api/base44Client';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient, useQuery } from '@tanstack/react-query';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -8,7 +8,7 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { toast } from 'sonner';
-import { Loader2 } from 'lucide-react';
+import { Loader2, ExternalLink } from 'lucide-react';
 
 export default function IntegrationSetupModal({ open, onClose }) {
   const queryClient = useQueryClient();
@@ -23,6 +23,16 @@ export default function IntegrationSetupModal({ open, onClose }) {
     authentication: {
       type: 'none'
     }
+  });
+
+  // Fetch available API keys
+  const { data: apiKeys = [] } = useQuery({
+    queryKey: ['apiKeys'],
+    queryFn: async () => {
+      const keys = await base44.entities.APIKey.filter({ is_active: true, is_revoked: false });
+      return keys;
+    },
+    enabled: open
   });
 
   const createMutation = useMutation({
@@ -170,18 +180,57 @@ export default function IntegrationSetupModal({ open, onClose }) {
               </Select>
             </div>
 
-            {formData.authentication.type === 'api_key' && (
-              <div>
-                <Label>API Key Header Name</Label>
-                <Input
-                  value={formData.authentication.api_key_header || ''}
-                  onChange={(e) => setFormData({ 
-                    ...formData, 
-                    authentication: { ...formData.authentication, api_key_header: e.target.value } 
-                  })}
-                  placeholder="X-API-Key"
-                />
-              </div>
+            {(formData.authentication.type === 'api_key' || formData.authentication.type === 'bearer') && (
+              <>
+                {formData.authentication.type === 'api_key' && (
+                  <div>
+                    <Label>API Key Header Name</Label>
+                    <Input
+                      value={formData.authentication.api_key_header || ''}
+                      onChange={(e) => setFormData({ 
+                        ...formData, 
+                        authentication: { ...formData.authentication, api_key_header: e.target.value } 
+                      })}
+                      placeholder="X-API-Key"
+                    />
+                  </div>
+                )}
+
+                <div>
+                  <Label>Select Stored API Key</Label>
+                  <Select 
+                    value={formData.authentication.key_id || ''} 
+                    onValueChange={(v) => setFormData({ 
+                      ...formData, 
+                      authentication: { ...formData.authentication, key_id: v } 
+                    })}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Choose an API key" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {apiKeys.map(key => (
+                        <SelectItem key={key.id} value={key.id}>
+                          {key.name} ({key.service_name || 'Generic'}) - {key.environment}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <div className="flex items-center gap-2 mt-2">
+                    <p className="text-xs text-gray-500">
+                      Don't see your key?
+                    </p>
+                    <a 
+                      href="/apiKeyManager" 
+                      target="_blank"
+                      className="text-xs text-blue-600 hover:underline flex items-center gap-1"
+                    >
+                      Manage API Keys
+                      <ExternalLink className="w-3 h-3" />
+                    </a>
+                  </div>
+                </div>
+              </>
             )}
 
             <div className="flex gap-2">
