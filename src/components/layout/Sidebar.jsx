@@ -31,7 +31,9 @@ import {
   Dices,
   HelpCircle,
   Activity,
-  Webhook
+  Webhook,
+  Key,
+  Smartphone
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
@@ -40,6 +42,7 @@ const navItems = [
   { name: 'Home', icon: LayoutDashboard, page: 'Landing' },
   { name: 'Dashboard', icon: LayoutDashboard, page: 'Dashboard' },
   { name: 'Projects', icon: FolderKanban, page: 'Projects' },
+  { name: 'Mobile Studio', icon: Smartphone, page: 'MobileStudio' },
   { name: 'Workflow Builder', icon: Share2, page: 'WorkflowBuilder' },
   { name: 'Bot Integrations', icon: Webhook, page: 'ExternalBotIntegrations' },
   { name: 'Integration Templates', icon: Package, page: 'IntegrationTemplates' },

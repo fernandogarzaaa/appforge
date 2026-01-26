@@ -62,6 +62,7 @@ import IntegrationTemplates from './pages/IntegrationTemplates';
 import IntegrationAnalytics from './pages/IntegrationAnalytics';
 import CentralAnalytics from './pages/CentralAnalytics';
 import MobileStudio from './pages/MobileStudio';
+import SystemHealth from './pages/SystemHealth';
 import __Layout from './Layout.jsx';
 
 
@@ -130,6 +131,7 @@ export const PAGES = {
     "IntegrationAnalytics": IntegrationAnalytics,
     "CentralAnalytics": CentralAnalytics,
     "MobileStudio": MobileStudio,
+    "SystemHealth": SystemHealth,
 }
 
 export const pagesConfig = {
