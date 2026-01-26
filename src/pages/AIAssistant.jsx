@@ -18,6 +18,9 @@ import CodeReview from '@/components/ai/CodeReview';
 import ProactiveSuggestions from '@/components/ai/ProactiveSuggestions';
 import MobileAppBuilder from '@/components/ai/MobileAppBuilder';
 import PersonalizationEngine from '@/components/ai/PersonalizationEngine';
+import VoiceInput from '@/components/ai/VoiceInput';
+import CommandPalette from '@/components/ai/CommandPalette';
+import SystemDiagnostics from '@/components/diagnostics/SystemDiagnostics';
 import AgentDeploymentPanel from '@/components/ai/AgentDeploymentPanel';
 import AdvancedAITools from '@/components/ai/AdvancedAITools';
 import ProjectAuditorEnhanced from '@/components/ai/ProjectAuditorEnhanced';
@@ -49,6 +52,7 @@ export default function AIAssistant() {
   const [integratedAPIs, setIntegratedAPIs] = useState([]);
   const [user, setUser] = useState(null);
   const [suggestedTools, setSuggestedTools] = useState([]);
+  const [showCommandPalette, setShowCommandPalette] = useState(false);
   const messagesEndRef = useRef(null);
 
   const urlParams = new URLSearchParams(window.location.search);
@@ -57,6 +61,17 @@ export default function AIAssistant() {
 
   useEffect(() => {
     loadUser();
+
+    // Command Palette keyboard shortcut
+    const handleKeyDown = (e) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        setShowCommandPalette(true);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
   const loadUser = async () => {
@@ -319,6 +334,10 @@ Provide helpful, actionable responses with code examples when relevant. Be conci
                   <Shield className="w-4 h-4 text-green-600" />
                   Code Review
                 </button>
+                <button onClick={() => setActivePanel('diagnostics')} className="flex items-center gap-2 text-gray-600 hover:text-purple-600">
+                  <Zap className="w-4 h-4 text-purple-600" />
+                  System Diagnostics
+                </button>
               </div>
             </div>
           </div>
@@ -343,6 +362,7 @@ Provide helpful, actionable responses with code examples when relevant. Be conci
               {activePanel === 'bugs' && 'Bug Detection'}
               {activePanel === 'codereview' && 'Code Review'}
               {activePanel === 'resources' && 'Resource Monitor'}
+              {activePanel === 'diagnostics' && 'System Diagnostics'}
             </h2>
             <Button variant="ghost" size="sm" onClick={() => setActivePanel(null)}>
               <ArrowLeft className="w-4 h-4 mr-2" />
@@ -462,6 +482,14 @@ Provide helpful, actionable responses with code examples when relevant. Be conci
           </div>
         )}
 
+        {activePanel === 'diagnostics' && (
+          <div className="flex-1 p-6 overflow-auto">
+            <div className="max-w-6xl mx-auto">
+              <SystemDiagnostics />
+            </div>
+          </div>
+        )}
+
         {/* Chat Panel */}
         {!activePanel && messages.length > 0 && (
           <ScrollArea className="flex-1 p-6">
@@ -578,6 +606,10 @@ Provide helpful, actionable responses with code examples when relevant. Be conci
                   rows={2}
                 />
                 <div className="absolute right-3 bottom-3 flex items-center gap-2">
+                  <VoiceInput 
+                    onTranscript={(text) => setInput(input + (input ? ' ' : '') + text)}
+                    disabled={isLoading}
+                  />
                   <a
                     href={base44.agents.getWhatsAppConnectURL('ai_assistant')}
                     target="_blank"
@@ -615,6 +647,13 @@ Provide helpful, actionable responses with code examples when relevant. Be conci
           </div>
         </div>
       </div>
+
+      {/* Command Palette */}
+      <CommandPalette
+        isOpen={showCommandPalette}
+        onClose={() => setShowCommandPalette(false)}
+        onSelectPanel={(panel) => setActivePanel(panel)}
+      />
     </div>
   );
 }
