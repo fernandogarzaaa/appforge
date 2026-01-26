@@ -310,32 +310,8 @@ Provide helpful, actionable responses with code examples when relevant. Be conci
 
             {/* Features Overview */}
             <div className="bg-white rounded-xl border border-gray-200 p-6 max-w-4xl w-full">
-              <h3 className="font-semibold mb-4 text-gray-900">Available Tools & Features</h3>
+              <h3 className="font-semibold mb-4 text-gray-900">Quick Tools</h3>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-3 text-sm">
-                <button onClick={() => setActivePanel('api')} className="flex items-center gap-2 text-gray-600 hover:text-cyan-600">
-                  <Globe className="w-4 h-4 text-cyan-600" />
-                  API Discovery
-                </button>
-                <button onClick={() => setActivePanel('models')} className="flex items-center gap-2 text-gray-600 hover:text-purple-600">
-                  <Brain className="w-4 h-4 text-purple-600" />
-                  Predictive Models
-                </button>
-                <button onClick={() => setActivePanel('functions')} className="flex items-center gap-2 text-gray-600 hover:text-pink-600">
-                  <Wand2 className="w-4 h-4 text-pink-600" />
-                  AI Functions
-                </button>
-                <button onClick={() => setActivePanel('automations')} className="flex items-center gap-2 text-gray-600 hover:text-indigo-600">
-                  <Workflow className="w-4 h-4 text-indigo-600" />
-                  Automation Builder
-                </button>
-                <button onClick={() => setActivePanel('mobile')} className="flex items-center gap-2 text-gray-600 hover:text-blue-600">
-                  <Smartphone className="w-4 h-4 text-blue-600" />
-                  Mobile Apps
-                </button>
-                <button onClick={() => setActivePanel('codereview')} className="flex items-center gap-2 text-gray-600 hover:text-green-600">
-                  <Shield className="w-4 h-4 text-green-600" />
-                  Code Review
-                </button>
                 <button onClick={() => setActivePanel('diagnostics')} className="flex items-center gap-2 text-gray-600 hover:text-purple-600">
                   <Zap className="w-4 h-4 text-purple-600" />
                   System Diagnostics
