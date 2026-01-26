@@ -5,8 +5,9 @@ import {
   Sparkles, Send, Plus, Trash2, MessageSquare,
   Loader2, Copy, Check, Code, FileCode, Database,
   Globe, Brain, Zap, Bot, Github, Wand2, Workflow,
-  Upload, FileText, Shield, Smartphone, User, MessageCircle, AlertCircle, Bug, CodeIcon, HardDrive
+  Upload, FileText, Shield, Smartphone, User, MessageCircle, AlertCircle, Bug, CodeIcon, HardDrive, ArrowLeft
 } from 'lucide-react';
+import { Textarea } from '@/components/ui/textarea';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import APIDiscoveryPanel from '@/components/ai/APIDiscoveryPanel';
 import PredictiveModels from '@/components/ai/PredictiveModels';
@@ -48,9 +49,10 @@ export default function AIAssistant() {
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [copiedIndex, setCopiedIndex] = useState(null);
-  const [activePanel, setActivePanel] = useState('chat');
+  const [activePanel, setActivePanel] = useState(null);
   const [integratedAPIs, setIntegratedAPIs] = useState([]);
   const [user, setUser] = useState(null);
+  const [suggestedTools, setSuggestedTools] = useState([]);
   const messagesEndRef = useRef(null);
 
   useEffect(() => {
@@ -120,34 +122,54 @@ export default function AIAssistant() {
     const userMessage = { role: 'user', content: input, timestamp: new Date().toISOString() };
     const newMessages = [...messages, userMessage];
     setMessages(newMessages);
+    const currentInput = input;
     setInput('');
     setIsLoading(true);
+
+    // Suggest relevant tools based on input
+    const toolSuggestions = await base44.integrations.Core.InvokeLLM({
+      prompt: `Analyze this request and suggest which tools would be most helpful: "${currentInput}"
+
+Available tools:
+- api: API Discovery - Find and integrate public APIs
+- models: Predictive Analytics - Forecasting, sentiment analysis, classification
+- functions: AI Functions - Image generation, translation, SEO
+- github: GitHub Integration - Sync code with repository
+- automations: Workflow Builder - Create automated workflows
+- review: Code Review - Get AI feedback on code quality
+- docs: Documents - Upload project specifications
+- mobile: Mobile Apps - Generate React Native/Flutter apps
+- agents: Deploy AI Agents - Create autonomous assistants
+- advanced: Advanced Tools - Refactoring, testing, performance
+- auditor: Project Auditor - Error detection and fixes
+- accessibility: Accessibility - WCAG compliance checks
+
+Return JSON: {"suggested_tools": ["tool1", "tool2"], "reasoning": "why these tools"}`,
+      response_json_schema: {
+        type: "object",
+        properties: {
+          suggested_tools: { type: "array", items: { type: "string" } },
+          reasoning: { type: "string" }
+        }
+      }
+    });
+
+    if (toolSuggestions.suggested_tools?.length > 0) {
+      setSuggestedTools(toolSuggestions.suggested_tools);
+    }
 
     const documentContext = documents.length > 0 
       ? `\n\nProject Documents Available: ${documents.map(d => d.name).join(', ')}`
       : '';
 
     const response = await base44.integrations.Core.InvokeLLM({
-      prompt: `You are an advanced AI assistant (powered by Gemini) helping to build web applications with AI capabilities.
-You have access to API discovery, predictive models, and code generation.
+      prompt: `You are an advanced AI assistant helping to build web applications with AI capabilities.
 ${integratedAPIs.length > 0 ? `\nIntegrated APIs: ${integratedAPIs.map(a => a.name).join(', ')}` : ''}${documentContext}
 
-User request: ${input}
+User request: ${currentInput}
 
-Capabilities:
-- Create entities, pages, and React components
-- Discover and integrate free public APIs
-- Build predictive models (forecasting, sentiment analysis, classification, anomaly detection)
-- Generate API integration code
-- Provide AI-powered insights and recommendations
-- Review and refactor code
-- Reference project documentation
-
-If the user asks about APIs, suggest using the API Discovery panel.
-If they need predictions/analysis, suggest the Predictive Models panel.
-If they want code review, suggest the Code Review panel.
-Provide helpful, concise responses with code examples when relevant.`,
-      add_context_from_internet: input.toLowerCase().includes('api') || input.toLowerCase().includes('latest') || input.toLowerCase().includes('current'),
+Provide helpful, actionable responses with code examples when relevant. Be concise and practical.`,
+      add_context_from_internet: currentInput.toLowerCase().includes('api') || currentInput.toLowerCase().includes('latest') || currentInput.toLowerCase().includes('current'),
       file_urls: documents.map(d => d.file_url)
     });
 
@@ -164,7 +186,7 @@ Provide helpful, concise responses with code examples when relevant.`,
     } else {
       createConversationMutation.mutate({
         project_id: projectId,
-        title: input.slice(0, 50) + (input.length > 50 ? '...' : ''),
+        title: currentInput.slice(0, 50) + (currentInput.length > 50 ? '...' : ''),
         messages: updatedMessages,
       });
     }
@@ -247,8 +269,67 @@ Provide helpful, concise responses with code examples when relevant.`,
       </div>
 
       {/* Main Area */}
-      <div className="flex-1 flex flex-col bg-gray-50/50">
-        {/* Panel Tabs */}
+      <div className="flex-1 flex flex-col bg-gradient-to-br from-gray-50 to-blue-50/30">
+        {/* Hero Section */}
+        {!activePanel && messages.length === 0 && (
+          <div className="flex-1 flex flex-col items-center justify-center p-8">
+            <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center mb-6 shadow-lg">
+              <Sparkles className="w-10 h-10 text-white" />
+            </div>
+            <h1 className="text-4xl font-bold text-gray-900 mb-3">What do you want to build?</h1>
+            <p className="text-lg text-gray-600 max-w-2xl text-center mb-12">
+              Describe your idea and I'll help you create it with AI-powered tools
+            </p>
+            
+            {/* Quick Actions Grid */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl w-full mb-12">
+              {quickActions.map((action) => (
+                <button
+                  key={action.label}
+                  onClick={() => setInput(action.prompt)}
+                  className="p-6 bg-white rounded-xl border-2 border-gray-100 hover:border-indigo-500 hover:shadow-lg transition-all group"
+                >
+                  <action.icon className="w-8 h-8 mb-3 text-gray-400 group-hover:text-indigo-600 transition-colors mx-auto" />
+                  <div className="font-medium text-sm text-gray-700 group-hover:text-gray-900">{action.label}</div>
+                </button>
+              ))}
+            </div>
+
+            {/* Features Overview */}
+            <div className="bg-white rounded-xl border border-gray-200 p-6 max-w-4xl w-full">
+              <h3 className="font-semibold mb-4 text-gray-900">Available Tools & Features</h3>
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-3 text-sm">
+                <div className="flex items-center gap-2 text-gray-600">
+                  <Globe className="w-4 h-4 text-cyan-600" />
+                  API Discovery
+                </div>
+                <div className="flex items-center gap-2 text-gray-600">
+                  <Brain className="w-4 h-4 text-purple-600" />
+                  Predictive Models
+                </div>
+                <div className="flex items-center gap-2 text-gray-600">
+                  <Wand2 className="w-4 h-4 text-pink-600" />
+                  AI Functions
+                </div>
+                <div className="flex items-center gap-2 text-gray-600">
+                  <Workflow className="w-4 h-4 text-indigo-600" />
+                  Automation Builder
+                </div>
+                <div className="flex items-center gap-2 text-gray-600">
+                  <Smartphone className="w-4 h-4 text-blue-600" />
+                  Mobile Apps
+                </div>
+                <div className="flex items-center gap-2 text-gray-600">
+                  <Shield className="w-4 h-4 text-green-600" />
+                  Code Review
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Active Tool Panel */}
+        {activePanel && (
          <div className="bg-white border-b border-gray-100 px-4">
            <div className="flex items-center gap-4 justify-between">
            <div className="flex items-center gap-4">
@@ -649,38 +730,7 @@ Provide helpful, concise responses with code examples when relevant.`,
         )}
 
         {/* Chat Panel */}
-        {activePanel === 'chat' && messages.length === 0 ? (
-          <div className="flex-1 overflow-auto">
-            <div className="flex flex-col items-center justify-center p-8 pb-4">
-              <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center mb-6">
-                <Sparkles className="w-10 h-10 text-white" />
-              </div>
-              <h2 className="text-2xl font-bold text-gray-900 mb-2">AI Assistant</h2>
-              <p className="text-gray-500 text-center max-w-md mb-8">
-                Build apps, discover APIs, and run predictive models with AI assistance
-              </p>
-              <div className="flex flex-wrap gap-3 justify-center mb-8">
-                {quickActions.map((action) => (
-                  <Button
-                    key={action.label}
-                    variant="outline"
-                    onClick={() => setInput(action.prompt)}
-                    className="rounded-xl h-11 px-4"
-                  >
-                    <action.icon className="w-4 h-4 mr-2" />
-                    {action.label}
-                  </Button>
-                ))}
-              </div>
-            </div>
-            <div className="max-w-4xl mx-auto px-8 pb-8">
-              <ProactiveSuggestions 
-                projectId={projectId} 
-                onApplySuggestion={(suggestion) => setInput(suggestion.action)}
-              />
-            </div>
-          </div>
-        ) : activePanel === 'chat' && (
+        {!activePanel && messages.length > 0 && (
           <ScrollArea className="flex-1 p-6">
             <div className="max-w-3xl mx-auto space-y-6">
               <AnimatePresence>
@@ -777,11 +827,11 @@ Provide helpful, concise responses with code examples when relevant.`,
         )}
 
         {/* Universal Chat Bar - Always visible */}
-        <div className="p-3 bg-white/80 backdrop-blur-xl border-t border-gray-200/50">
+        <div className="p-4 bg-white border-t border-gray-200 shadow-lg">
           <div className="max-w-4xl mx-auto">
-            <div className="flex gap-2 items-end">
+            <div className="flex gap-3 items-end">
               <div className="flex-1 relative">
-                <Input
+                <Textarea
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   onKeyDown={(e) => {
@@ -790,33 +840,44 @@ Provide helpful, concise responses with code examples when relevant.`,
                       handleSend();
                     }
                   }}
-                  placeholder="Ask me anything... (create entity, find API, build automation...)"
-                  className="h-10 rounded-lg text-[13px] pr-20 bg-white border-gray-200 focus:ring-1 focus:ring-gray-900"
+                  placeholder="Describe what you want to build... (e.g., 'Create a mobile app for tracking fitness goals' or 'Build an API integration for weather data')"
+                  className="min-h-[60px] max-h-[120px] rounded-xl text-sm pr-24 bg-white border-gray-300 focus:ring-2 focus:ring-indigo-500 resize-none"
+                  rows={2}
                 />
-                <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1">
+                <div className="absolute right-3 bottom-3 flex items-center gap-2">
+                  <a
+                    href={base44.agents.getWhatsAppConnectURL('ai_assistant')}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-green-600 hover:text-green-700"
+                  >
+                    <MessageCircle className="w-4 h-4" />
+                  </a>
                   <span className="text-[10px] text-gray-400 font-medium">⏎ Send</span>
                 </div>
               </div>
               <Button
                 onClick={handleSend}
                 disabled={!input.trim() || isLoading}
-                className="h-10 w-10 bg-gray-900 hover:bg-gray-800 text-white rounded-lg p-0"
+                className="h-[60px] px-6 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white rounded-xl shadow-lg"
               >
                 {isLoading ? (
-                  <Loader2 className="w-4 h-4 animate-spin" />
+                  <Loader2 className="w-5 h-5 animate-spin" />
                 ) : (
-                  <Send className="w-4 h-4" />
+                  <div className="flex items-center gap-2">
+                    <Send className="w-5 h-5" />
+                    <span className="font-medium">Send</span>
+                  </div>
                 )}
               </Button>
             </div>
-            {activePanel !== 'chat' && messages.length > 0 && (
-              <button
-                onClick={() => setActivePanel('chat')}
-                className="text-[11px] text-gray-500 hover:text-gray-700 mt-2 flex items-center gap-1"
-              >
-                <MessageSquare className="w-3 h-3" />
-                View conversation ({messages.length} messages)
-              </button>
+            {messages.length > 0 && !activePanel && (
+              <div className="mt-3 flex items-center gap-2">
+                <ProactiveSuggestions 
+                  projectId={projectId} 
+                  onApplySuggestion={(suggestion) => setInput(suggestion.action)}
+                />
+              </div>
             )}
           </div>
         </div>
