@@ -24,6 +24,96 @@ const templates = [
     description: 'Complete SaaS dashboard with authentication, billing, and analytics'
   },
   { 
+    id: 22, 
+    name: 'AI Chatbot Platform', 
+    category: 'ai', 
+    price: 0, 
+    downloads: 4230, 
+    rating: 4.9,
+    preview: 'https://images.unsplash.com/photo-1531746790731-6c087fecd65a?w=400&h=300&fit=crop',
+    description: 'Build and deploy intelligent chatbots with natural language processing'
+  },
+  { 
+    id: 23, 
+    name: 'Workflow Automation Hub', 
+    category: 'automation', 
+    price: 39, 
+    downloads: 2890, 
+    rating: 4.8,
+    preview: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&h=300&fit=crop',
+    description: 'Visual workflow builder with 100+ integrations and triggers'
+  },
+  { 
+    id: 24, 
+    name: 'Multi-tenant SaaS Starter', 
+    category: 'saas', 
+    price: 79, 
+    downloads: 1560, 
+    rating: 4.9,
+    preview: 'https://images.unsplash.com/photo-1551434678-e076c223a692?w=400&h=300&fit=crop',
+    description: 'Enterprise SaaS boilerplate with team management, subscriptions, and white-labeling'
+  },
+  { 
+    id: 25, 
+    name: 'Real-time Analytics Engine', 
+    category: 'analytics', 
+    price: 49, 
+    downloads: 1920, 
+    rating: 4.7,
+    preview: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400&h=300&fit=crop',
+    description: 'Live dashboards with event tracking, funnels, and cohort analysis'
+  },
+  { 
+    id: 26, 
+    name: 'Video Streaming Platform', 
+    category: 'media', 
+    price: 69, 
+    downloads: 1120, 
+    rating: 4.6,
+    preview: 'https://images.unsplash.com/photo-1492619392552-fd8be5c7e1c0?w=400&h=300&fit=crop',
+    description: 'Complete video platform with upload, transcoding, and CDN delivery'
+  },
+  { 
+    id: 27, 
+    name: 'Learning Management System', 
+    category: 'education', 
+    price: 59, 
+    downloads: 1450, 
+    rating: 4.8,
+    preview: 'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=400&h=300&fit=crop',
+    description: 'Full LMS with courses, quizzes, certificates, and progress tracking'
+  },
+  { 
+    id: 28, 
+    name: 'Healthcare Patient Portal', 
+    category: 'healthcare', 
+    price: 89, 
+    downloads: 670, 
+    rating: 4.7,
+    preview: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=400&h=300&fit=crop',
+    description: 'HIPAA-compliant patient management with appointments, records, and telehealth'
+  },
+  { 
+    id: 29, 
+    name: 'Restaurant Management System', 
+    category: 'business', 
+    price: 49, 
+    downloads: 980, 
+    rating: 4.5,
+    preview: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=400&h=300&fit=crop',
+    description: 'POS, inventory, reservations, and online ordering in one platform'
+  },
+  { 
+    id: 30, 
+    name: 'AI Content Writer', 
+    category: 'ai', 
+    price: 0, 
+    downloads: 5120, 
+    rating: 4.9,
+    preview: 'https://images.unsplash.com/photo-1455390582262-044cdead277a?w=400&h=300&fit=crop',
+    description: 'Generate blog posts, articles, and marketing copy with AI assistance'
+  },
+  { 
     id: 19, 
     name: 'Data Analytics Platform', 
     category: 'analytics', 
@@ -227,8 +317,11 @@ const templates = [
 
 const categories = [
   { id: 'all', name: 'All Templates', icon: Zap },
+  { id: 'ai', name: 'AI & Automation', icon: Zap },
   { id: 'analytics', name: 'Data Analytics', icon: Database },
   { id: 'medical', name: 'Medical AI', icon: Stethoscope },
+  { id: 'healthcare', name: 'Healthcare', icon: Stethoscope },
+  { id: 'education', name: 'Education', icon: BarChart3 },
   { id: 'government', name: 'Government', icon: Building2 },
   { id: 'saas', name: 'SaaS', icon: TrendingUp },
   { id: 'ecommerce', name: 'E-commerce', icon: ShoppingCart },
@@ -238,7 +331,9 @@ const categories = [
   { id: 'content', name: 'Content', icon: Newspaper },
   { id: 'marketing', name: 'Marketing', icon: Mail },
   { id: 'social', name: 'Social', icon: Users },
-  { id: 'portfolio', name: 'Portfolio', icon: Heart }
+  { id: 'portfolio', name: 'Portfolio', icon: Heart },
+  { id: 'automation', name: 'Automation', icon: Zap },
+  { id: 'media', name: 'Media', icon: ImageIcon }
 ];
 
 export default function TemplateMarketplace() {

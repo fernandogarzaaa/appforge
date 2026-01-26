@@ -22,6 +22,7 @@ import EmailAssistant from './pages/EmailAssistant';
 import EmailCampaigns from './pages/EmailCampaigns';
 import EnterpriseIntelligence from './pages/EnterpriseIntelligence';
 import EntityDesigner from './pages/EntityDesigner';
+import FeatureFlags from './pages/FeatureFlags';
 import FeedbackAnalytics from './pages/FeedbackAnalytics';
 import FunctionValidator from './pages/FunctionValidator';
 import GamingPlatform from './pages/GamingPlatform';
@@ -53,7 +54,6 @@ import TokenCreator from './pages/TokenCreator';
 import VSCodeIntegration from './pages/VSCodeIntegration';
 import Web3Dashboard from './pages/Web3Dashboard';
 import WorkflowBuilder from './pages/WorkflowBuilder';
-import FeatureFlags from './pages/FeatureFlags';
 import __Layout from './Layout.jsx';
 
 
@@ -82,6 +82,7 @@ export const PAGES = {
     "EmailCampaigns": EmailCampaigns,
     "EnterpriseIntelligence": EnterpriseIntelligence,
     "EntityDesigner": EntityDesigner,
+    "FeatureFlags": FeatureFlags,
     "FeedbackAnalytics": FeedbackAnalytics,
     "FunctionValidator": FunctionValidator,
     "GamingPlatform": GamingPlatform,
@@ -113,7 +114,6 @@ export const PAGES = {
     "VSCodeIntegration": VSCodeIntegration,
     "Web3Dashboard": Web3Dashboard,
     "WorkflowBuilder": WorkflowBuilder,
-    "FeatureFlags": FeatureFlags,
 }
 
 export const pagesConfig = {
