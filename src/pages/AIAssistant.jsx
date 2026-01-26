@@ -21,6 +21,7 @@ import PersonalizationEngine from '@/components/ai/PersonalizationEngine';
 import VoiceInput from '@/components/ai/VoiceInput';
 import CommandPalette from '@/components/ai/CommandPalette';
 import SystemDiagnostics from '@/components/diagnostics/SystemDiagnostics';
+import CodeSnippetLibrary from '@/components/ai/CodeSnippetLibrary';
 import AgentDeploymentPanel from '@/components/ai/AgentDeploymentPanel';
 import AdvancedAITools from '@/components/ai/AdvancedAITools';
 import ProjectAuditorEnhanced from '@/components/ai/ProjectAuditorEnhanced';
@@ -338,6 +339,10 @@ Provide helpful, actionable responses with code examples when relevant. Be conci
                   <Zap className="w-4 h-4 text-purple-600" />
                   System Diagnostics
                 </button>
+                <button onClick={() => setActivePanel('snippets')} className="flex items-center gap-2 text-gray-600 hover:text-orange-600">
+                  <Code className="w-4 h-4 text-orange-600" />
+                  Code Snippets
+                </button>
               </div>
             </div>
           </div>
@@ -363,6 +368,7 @@ Provide helpful, actionable responses with code examples when relevant. Be conci
               {activePanel === 'codereview' && 'Code Review'}
               {activePanel === 'resources' && 'Resource Monitor'}
               {activePanel === 'diagnostics' && 'System Diagnostics'}
+              {activePanel === 'snippets' && 'Code Snippet Library'}
             </h2>
             <Button variant="ghost" size="sm" onClick={() => setActivePanel(null)}>
               <ArrowLeft className="w-4 h-4 mr-2" />
@@ -486,6 +492,17 @@ Provide helpful, actionable responses with code examples when relevant. Be conci
           <div className="flex-1 p-6 overflow-auto">
             <div className="max-w-6xl mx-auto">
               <SystemDiagnostics />
+            </div>
+          </div>
+        )}
+
+        {activePanel === 'snippets' && (
+          <div className="flex-1 p-6 overflow-auto">
+            <div className="max-w-6xl mx-auto">
+              <CodeSnippetLibrary 
+                projectId={projectId}
+                contextCode={messages[messages.length - 1]?.role === 'assistant' ? messages[messages.length - 1]?.content : null}
+              />
             </div>
           </div>
         )}

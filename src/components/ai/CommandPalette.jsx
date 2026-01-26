@@ -18,6 +18,7 @@ const commands = [
   { id: 'codereview', label: 'Code Review', icon: Shield, panel: 'codereview', description: 'AI code feedback' },
   { id: 'docs', label: 'Documents', icon: FileText, panel: 'docs', description: 'Upload project docs' },
   { id: 'mobile', label: 'Mobile Apps', icon: Smartphone, panel: 'mobile', description: 'Build mobile apps' },
+  { id: 'snippets', label: 'Code Snippets', icon: Code, panel: 'snippets', description: 'Save & search snippets' },
   { id: 'auditor', label: 'Project Auditor', icon: Zap, panel: 'auditor', description: 'Error detection' },
   { id: 'advanced', label: 'Advanced Tools', icon: Code, panel: 'advanced', description: 'Refactor & optimize' },
 ];

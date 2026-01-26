@@ -8,6 +8,7 @@ import AdminSubscriptions from './pages/AdminSubscriptions';
 import AdvancedAnomalyDetection from './pages/AdvancedAnomalyDetection';
 import Analytics from './pages/Analytics';
 import BotBuilder from './pages/BotBuilder';
+import CentralAnalytics from './pages/CentralAnalytics';
 import ChatbotManager from './pages/ChatbotManager';
 import CodePlayground from './pages/CodePlayground';
 import Components from './pages/Components';
@@ -31,11 +32,14 @@ import GamingPlatform from './pages/GamingPlatform';
 import GitHubConnect from './pages/GitHubConnect';
 import GovernmentTools from './pages/GovernmentTools';
 import Guide from './pages/Guide';
+import IntegrationAnalytics from './pages/IntegrationAnalytics';
 import IntegrationHub from './pages/IntegrationHub';
+import IntegrationTemplates from './pages/IntegrationTemplates';
 import Integrations from './pages/Integrations';
 import Landing from './pages/Landing';
 import MediaStudio from './pages/MediaStudio';
 import MedicalAI from './pages/MedicalAI';
+import MobileStudio from './pages/MobileStudio';
 import NFTMarketplace from './pages/NFTMarketplace';
 import NFTStudio from './pages/NFTStudio';
 import PageEditor from './pages/PageEditor';
@@ -52,17 +56,13 @@ import RoleManagement from './pages/RoleManagement';
 import SocialMediaHub from './pages/SocialMediaHub';
 import SubscriptionSuccess from './pages/SubscriptionSuccess';
 import Support from './pages/Support';
+import SystemHealth from './pages/SystemHealth';
 import TemplateMarketplace from './pages/TemplateMarketplace';
 import TokenCreator from './pages/TokenCreator';
 import VSCodeIntegration from './pages/VSCodeIntegration';
 import Web3Dashboard from './pages/Web3Dashboard';
-import WorkflowBuilder from './pages/WorkflowBuilder';
 import WebhookMonitor from './pages/WebhookMonitor';
-import IntegrationTemplates from './pages/IntegrationTemplates';
-import IntegrationAnalytics from './pages/IntegrationAnalytics';
-import CentralAnalytics from './pages/CentralAnalytics';
-import MobileStudio from './pages/MobileStudio';
-import SystemHealth from './pages/SystemHealth';
+import WorkflowBuilder from './pages/WorkflowBuilder';
 import __Layout from './Layout.jsx';
 
 
@@ -77,6 +77,7 @@ export const PAGES = {
     "AdvancedAnomalyDetection": AdvancedAnomalyDetection,
     "Analytics": Analytics,
     "BotBuilder": BotBuilder,
+    "CentralAnalytics": CentralAnalytics,
     "ChatbotManager": ChatbotManager,
     "CodePlayground": CodePlayground,
     "Components": Components,
@@ -100,11 +101,14 @@ export const PAGES = {
     "GitHubConnect": GitHubConnect,
     "GovernmentTools": GovernmentTools,
     "Guide": Guide,
+    "IntegrationAnalytics": IntegrationAnalytics,
     "IntegrationHub": IntegrationHub,
+    "IntegrationTemplates": IntegrationTemplates,
     "Integrations": Integrations,
     "Landing": Landing,
     "MediaStudio": MediaStudio,
     "MedicalAI": MedicalAI,
+    "MobileStudio": MobileStudio,
     "NFTMarketplace": NFTMarketplace,
     "NFTStudio": NFTStudio,
     "PageEditor": PageEditor,
@@ -121,17 +125,13 @@ export const PAGES = {
     "SocialMediaHub": SocialMediaHub,
     "SubscriptionSuccess": SubscriptionSuccess,
     "Support": Support,
+    "SystemHealth": SystemHealth,
     "TemplateMarketplace": TemplateMarketplace,
     "TokenCreator": TokenCreator,
     "VSCodeIntegration": VSCodeIntegration,
     "Web3Dashboard": Web3Dashboard,
-    "WorkflowBuilder": WorkflowBuilder,
     "WebhookMonitor": WebhookMonitor,
-    "IntegrationTemplates": IntegrationTemplates,
-    "IntegrationAnalytics": IntegrationAnalytics,
-    "CentralAnalytics": CentralAnalytics,
-    "MobileStudio": MobileStudio,
-    "SystemHealth": SystemHealth,
+    "WorkflowBuilder": WorkflowBuilder,
 }
 
 export const pagesConfig = {
