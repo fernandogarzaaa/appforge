@@ -1,7 +1,9 @@
 import AIAssistant from './pages/AIAssistant';
 import AIMonitoring from './pages/AIMonitoring';
 import APIExplorer from './pages/APIExplorer';
+import Account from './pages/Account';
 import AdminDashboard from './pages/AdminDashboard';
+import AdminSubscriptions from './pages/AdminSubscriptions';
 import AdvancedAnomalyDetection from './pages/AdvancedAnomalyDetection';
 import Analytics from './pages/Analytics';
 import BotBuilder from './pages/BotBuilder';
@@ -44,15 +46,14 @@ import ReferralProgram from './pages/ReferralProgram';
 import Roadmap from './pages/Roadmap';
 import RoleManagement from './pages/RoleManagement';
 import SocialMediaHub from './pages/SocialMediaHub';
+import SubscriptionSuccess from './pages/SubscriptionSuccess';
 import Support from './pages/Support';
 import TemplateMarketplace from './pages/TemplateMarketplace';
 import TokenCreator from './pages/TokenCreator';
 import VSCodeIntegration from './pages/VSCodeIntegration';
 import Web3Dashboard from './pages/Web3Dashboard';
 import WorkflowBuilder from './pages/WorkflowBuilder';
-import SubscriptionSuccess from './pages/SubscriptionSuccess';
-import Account from './pages/Account';
-import AdminSubscriptions from './pages/AdminSubscriptions';
+import FeatureFlags from './pages/FeatureFlags';
 import __Layout from './Layout.jsx';
 
 
@@ -60,7 +61,9 @@ export const PAGES = {
     "AIAssistant": AIAssistant,
     "AIMonitoring": AIMonitoring,
     "APIExplorer": APIExplorer,
+    "Account": Account,
     "AdminDashboard": AdminDashboard,
+    "AdminSubscriptions": AdminSubscriptions,
     "AdvancedAnomalyDetection": AdvancedAnomalyDetection,
     "Analytics": Analytics,
     "BotBuilder": BotBuilder,
@@ -103,15 +106,14 @@ export const PAGES = {
     "Roadmap": Roadmap,
     "RoleManagement": RoleManagement,
     "SocialMediaHub": SocialMediaHub,
+    "SubscriptionSuccess": SubscriptionSuccess,
     "Support": Support,
     "TemplateMarketplace": TemplateMarketplace,
     "TokenCreator": TokenCreator,
     "VSCodeIntegration": VSCodeIntegration,
     "Web3Dashboard": Web3Dashboard,
     "WorkflowBuilder": WorkflowBuilder,
-    "SubscriptionSuccess": SubscriptionSuccess,
-    "Account": Account,
-    "AdminSubscriptions": AdminSubscriptions,
+    "FeatureFlags": FeatureFlags,
 }
 
 export const pagesConfig = {
