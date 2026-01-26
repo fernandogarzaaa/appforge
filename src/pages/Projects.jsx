@@ -35,6 +35,8 @@ export default function Projects() {
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const [viewMode, setViewMode] = useState('grid');
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 12;
   const [newProject, setNewProject] = useState({
     name: '',
     description: '',
@@ -82,6 +84,16 @@ export default function Projects() {
     return matchesSearch && matchesStatus;
   });
 
+  const totalPages = Math.ceil(filteredProjects.length / itemsPerPage);
+  const paginatedProjects = filteredProjects.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
+  const handleFilterChange = () => {
+    setCurrentPage(1);
+  };
+
   const handleCreate = () => {
     createMutation.mutate({
       ...newProject,
@@ -118,7 +130,7 @@ export default function Projects() {
           />
         </div>
         <div className="flex gap-2">
-          <Select value={statusFilter} onValueChange={setStatusFilter}>
+          <Select value={statusFilter} onValueChange={(val) => { setStatusFilter(val); handleFilterChange(); }}>
             <SelectTrigger className="w-40 h-11 rounded-xl border-gray-200">
               <Filter className="w-4 h-4 mr-2 text-gray-400" />
               <SelectValue placeholder="Status" />
@@ -174,20 +186,43 @@ export default function Projects() {
           onAction={!searchQuery ? () => setShowNewDialog(true) : undefined}
         />
       ) : (
-        <div className={viewMode === 'grid' 
-          ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'
-          : 'flex flex-col gap-3'
-        }>
-          <AnimatePresence mode="popLayout">
-            {filteredProjects.map((project, index) => (
-              <ProjectCard
-                key={project.id}
-                project={project}
-                index={index}
-                onDelete={(p) => deleteMutation.mutate(p.id)}
-              />
-            ))}
-          </AnimatePresence>
+        <div>
+          <div className={viewMode === 'grid' 
+            ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'
+            : 'flex flex-col gap-3'
+          }>
+            <AnimatePresence mode="popLayout">
+              {paginatedProjects.map((project, index) => (
+                <ProjectCard
+                  key={project.id}
+                  project={project}
+                  index={index}
+                  onDelete={(p) => deleteMutation.mutate(p.id)}
+                />
+              ))}
+            </AnimatePresence>
+          </div>
+          {totalPages > 1 && (
+            <div className="flex items-center justify-center gap-2 mt-8">
+              <Button
+                variant="outline"
+                onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                disabled={currentPage === 1}
+              >
+                Previous
+              </Button>
+              <span className="text-sm text-gray-600">
+                Page {currentPage} of {totalPages}
+              </span>
+              <Button
+                variant="outline"
+                onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+                disabled={currentPage === totalPages}
+              >
+                Next
+              </Button>
+            </div>
+          )}
         </div>
       )}
 
