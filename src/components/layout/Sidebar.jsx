@@ -57,6 +57,7 @@ const navItems = [
   { name: 'Integrations', icon: Share2, page: 'Integrations' },
   { name: 'Templates', icon: Package, page: 'TemplateMarketplace' },
   { name: 'Diagnostics', icon: Activity, page: 'ProjectDiagnostics' },
+  { name: 'System Health', icon: Activity, page: 'SystemHealth' },
   { name: 'Guide', icon: BookOpen, page: 'Guide' },
   { name: 'Support', icon: HelpCircle, page: 'Support' },
   { name: 'Pricing', icon: CreditCard, page: 'Pricing' },
