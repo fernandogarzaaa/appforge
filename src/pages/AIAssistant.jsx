@@ -5,10 +5,9 @@ import {
   Sparkles, Send, Plus, Trash2, MessageSquare,
   Loader2, Copy, Check, Code, FileCode, Database,
   Globe, Brain, Zap, Bot, Github, Wand2, Workflow,
-  Upload, FileText, Shield, Smartphone, User, MessageCircle, AlertCircle, Bug, CodeIcon, HardDrive, ArrowLeft
+  Upload, FileText, Shield, Smartphone, User, MessageCircle, AlertCircle, Bug, HardDrive, ArrowLeft
 } from 'lucide-react';
 import { Textarea } from '@/components/ui/textarea';
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import APIDiscoveryPanel from '@/components/ai/APIDiscoveryPanel';
 import PredictiveModels from '@/components/ai/PredictiveModels';
 import GitHubIntegration from '@/components/ai/GitHubIntegration';
@@ -21,13 +20,11 @@ import MobileAppBuilder from '@/components/ai/MobileAppBuilder';
 import PersonalizationEngine from '@/components/ai/PersonalizationEngine';
 import AgentDeploymentPanel from '@/components/ai/AgentDeploymentPanel';
 import AdvancedAITools from '@/components/ai/AdvancedAITools';
-import ProjectAuditorPanel from '@/components/ai/ProjectAuditorPanel';
 import ProjectAuditorEnhanced from '@/components/ai/ProjectAuditorEnhanced';
 import ProactiveBugDetection from '@/components/ai/ProactiveBugDetection';
 import CodeReviewPanel from '@/components/ai/CodeReviewPanel';
 import ResourceMonitoringPanel from '@/components/ai/ResourceMonitoringPanel';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import ReactMarkdown from 'react-markdown';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -54,6 +51,10 @@ export default function AIAssistant() {
   const [suggestedTools, setSuggestedTools] = useState([]);
   const messagesEndRef = useRef(null);
 
+  const urlParams = new URLSearchParams(window.location.search);
+  const projectId = urlParams.get('projectId');
+  const queryClient = useQueryClient();
+
   useEffect(() => {
     loadUser();
   }, []);
@@ -68,11 +69,6 @@ export default function AIAssistant() {
     queryFn: () => base44.entities.ProjectDocument.filter({ project_id: projectId }),
     enabled: !!projectId
   });
-
-  const urlParams = new URLSearchParams(window.location.search);
-  const projectId = urlParams.get('projectId');
-
-  const queryClient = useQueryClient();
 
   const { data: conversations = [] } = useQuery({
     queryKey: ['conversations', projectId],
@@ -141,7 +137,6 @@ Available tools:
 - agents: Deploy AI Agents - Create autonomous assistants
 - advanced: Advanced Tools - Refactoring, testing, performance
 - auditor: Project Auditor - Error detection and fixes
-- accessibility: Accessibility - WCAG compliance checks
 
 Return JSON: {"suggested_tools": ["tool1", "tool2"], "reasoning": "why these tools"}`,
       response_json_schema: {
@@ -201,6 +196,8 @@ Provide helpful, actionable responses with code examples when relevant. Be conci
   const handleNewChat = () => {
     setActiveConversation(null);
     setMessages([]);
+    setActivePanel(null);
+    setSuggestedTools([]);
   };
 
   if (!projectId) {
@@ -298,433 +295,170 @@ Provide helpful, actionable responses with code examples when relevant. Be conci
             <div className="bg-white rounded-xl border border-gray-200 p-6 max-w-4xl w-full">
               <h3 className="font-semibold mb-4 text-gray-900">Available Tools & Features</h3>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-3 text-sm">
-                <div className="flex items-center gap-2 text-gray-600">
+                <button onClick={() => setActivePanel('api')} className="flex items-center gap-2 text-gray-600 hover:text-cyan-600">
                   <Globe className="w-4 h-4 text-cyan-600" />
                   API Discovery
-                </div>
-                <div className="flex items-center gap-2 text-gray-600">
+                </button>
+                <button onClick={() => setActivePanel('models')} className="flex items-center gap-2 text-gray-600 hover:text-purple-600">
                   <Brain className="w-4 h-4 text-purple-600" />
                   Predictive Models
-                </div>
-                <div className="flex items-center gap-2 text-gray-600">
+                </button>
+                <button onClick={() => setActivePanel('functions')} className="flex items-center gap-2 text-gray-600 hover:text-pink-600">
                   <Wand2 className="w-4 h-4 text-pink-600" />
                   AI Functions
-                </div>
-                <div className="flex items-center gap-2 text-gray-600">
+                </button>
+                <button onClick={() => setActivePanel('automations')} className="flex items-center gap-2 text-gray-600 hover:text-indigo-600">
                   <Workflow className="w-4 h-4 text-indigo-600" />
                   Automation Builder
-                </div>
-                <div className="flex items-center gap-2 text-gray-600">
+                </button>
+                <button onClick={() => setActivePanel('mobile')} className="flex items-center gap-2 text-gray-600 hover:text-blue-600">
                   <Smartphone className="w-4 h-4 text-blue-600" />
                   Mobile Apps
-                </div>
-                <div className="flex items-center gap-2 text-gray-600">
+                </button>
+                <button onClick={() => setActivePanel('codereview')} className="flex items-center gap-2 text-gray-600 hover:text-green-600">
                   <Shield className="w-4 h-4 text-green-600" />
                   Code Review
-                </div>
+                </button>
               </div>
             </div>
           </div>
         )}
 
-        {/* Active Tool Panel */}
+        {/* Active Tool Panel Header */}
         {activePanel && (
-         <div className="bg-white border-b border-gray-100 px-4">
-           <div className="flex items-center gap-4 justify-between">
-           <div className="flex items-center gap-4">
-            <button
-              onClick={() => setActivePanel('chat')}
-              className={cn(
-                "flex items-center gap-2 py-3 border-b-2 transition-colors",
-                activePanel === 'chat' 
-                  ? "border-indigo-500 text-indigo-600" 
-                  : "border-transparent text-gray-500 hover:text-gray-700"
-              )}
-            >
-              <Bot className="w-4 h-4" />
-              <span className="font-medium">AI Chat</span>
-            </button>
-            <button
-              onClick={() => setActivePanel('api')}
-              className={cn(
-                "flex items-center gap-2 py-3 border-b-2 transition-colors",
-                activePanel === 'api' 
-                  ? "border-cyan-500 text-cyan-600" 
-                  : "border-transparent text-gray-500 hover:text-gray-700"
-              )}
-            >
-              <Globe className="w-4 h-4" />
-              <span className="font-medium">API Discovery</span>
-            </button>
-            <button
-              onClick={() => setActivePanel('models')}
-              className={cn(
-                "flex items-center gap-2 py-3 border-b-2 transition-colors",
-                activePanel === 'models' 
-                  ? "border-purple-500 text-purple-600" 
-                  : "border-transparent text-gray-500 hover:text-gray-700"
-              )}
-            >
-              <Brain className="w-4 h-4" />
-              <span className="font-medium">Predictive Models</span>
-            </button>
-            <button
-              onClick={() => setActivePanel('functions')}
-              className={cn(
-                "flex items-center gap-2 py-3 border-b-2 transition-colors",
-                activePanel === 'functions' 
-                  ? "border-pink-500 text-pink-600" 
-                  : "border-transparent text-gray-500 hover:text-gray-700"
-              )}
-            >
-              <Wand2 className="w-4 h-4" />
-              <span className="font-medium">AI Functions</span>
-            </button>
-            <button
-              onClick={() => setActivePanel('github')}
-              className={cn(
-                "flex items-center gap-2 py-3 border-b-2 transition-colors",
-                activePanel === 'github' 
-                  ? "border-gray-800 text-gray-900" 
-                  : "border-transparent text-gray-500 hover:text-gray-700"
-              )}
-            >
-              <Github className="w-4 h-4" />
-              <span className="font-medium">GitHub</span>
-            </button>
-            <button
-              onClick={() => setActivePanel('automations')}
-              className={cn(
-                "flex items-center gap-2 py-3 border-b-2 transition-colors",
-                activePanel === 'automations' 
-                  ? "border-indigo-500 text-indigo-600" 
-                  : "border-transparent text-gray-500 hover:text-gray-700"
-              )}
-            >
-              <Workflow className="w-4 h-4" />
-              <span className="font-medium">Automations</span>
-            </button>
-            <button
-              onClick={() => setActivePanel('review')}
-              className={cn(
-                "flex items-center gap-2 py-3 border-b-2 transition-colors",
-                activePanel === 'review' 
-                  ? "border-emerald-500 text-emerald-600" 
-                  : "border-transparent text-gray-500 hover:text-gray-700"
-              )}
-            >
-              <Shield className="w-4 h-4" />
-              <span className="font-medium">Code Review</span>
-            </button>
-            <button
-              onClick={() => setActivePanel('docs')}
-              className={cn(
-                "flex items-center gap-2 py-3 border-b-2 transition-colors",
-                activePanel === 'docs' 
-                  ? "border-orange-500 text-orange-600" 
-                  : "border-transparent text-gray-500 hover:text-gray-700"
-              )}
-            >
-              <FileText className="w-4 h-4" />
-              <span className="font-medium">
-                Documents {documents.length > 0 && `(${documents.length})`}
-              </span>
-            </button>
-            <button
-              onClick={() => setActivePanel('mobile')}
-              className={cn(
-                "flex items-center gap-2 py-3 border-b-2 transition-colors",
-                activePanel === 'mobile' 
-                  ? "border-blue-500 text-blue-600" 
-                  : "border-transparent text-gray-500 hover:text-gray-700"
-              )}
-            >
-              <Smartphone className="w-4 h-4" />
-              <span className="font-medium">Mobile Apps</span>
-            </button>
-            <button
-              onClick={() => setActivePanel('personalization')}
-              className={cn(
-                "flex items-center gap-2 py-3 border-b-2 transition-colors",
-                activePanel === 'personalization' 
-                  ? "border-indigo-500 text-indigo-600" 
-                  : "border-transparent text-gray-500 hover:text-gray-700"
-              )}
-            >
-              <User className="w-4 h-4" />
-              <span className="font-medium">Personalization</span>
-            </button>
-            <button
-              onClick={() => setActivePanel('agents')}
-              className={cn(
-                "flex items-center gap-2 py-3 border-b-2 transition-colors",
-                activePanel === 'agents' 
-                  ? "border-green-500 text-green-600" 
-                  : "border-transparent text-gray-500 hover:text-gray-700"
-              )}
-            >
-              <Bot className="w-4 h-4" />
-              <span className="font-medium">Deploy Agents</span>
-            </button>
-            <button
-              onClick={() => setActivePanel('advanced')}
-              className={cn(
-                "flex items-center gap-2 py-3 border-b-2 transition-colors",
-                activePanel === 'advanced' 
-                  ? "border-amber-500 text-amber-600" 
-                  : "border-transparent text-gray-500 hover:text-gray-700"
-              )}
-            >
-              <Wand2 className="w-4 h-4" />
-              <span className="font-medium">Advanced Tools</span>
-            </button>
-            <button
-              onClick={() => setActivePanel('auditor')}
-              className={cn(
-                "flex items-center gap-2 py-3 border-b-2 transition-colors",
-                activePanel === 'auditor' 
-                  ? "border-red-500 text-red-600" 
-                  : "border-transparent text-gray-500 hover:text-gray-700"
-              )}
-            >
-              <Zap className="w-4 h-4" />
-              <span className="font-medium">Project Auditor</span>
-            </button>
-            <button
-              onClick={() => setActivePanel('bugs')}
-              className={cn(
-                "flex items-center gap-2 py-3 border-b-2 transition-colors",
-                activePanel === 'bugs' 
-                  ? "border-orange-500 text-orange-600" 
-                  : "border-transparent text-gray-500 hover:text-gray-700"
-              )}
-            >
-              <AlertCircle className="w-4 h-4" />
-              <span className="font-medium">Bug Detection</span>
-            </button>
-            <button
-              onClick={() => setActivePanel('codereview')}
-              className={cn(
-                "flex items-center gap-2 py-3 border-b-2 transition-colors",
-                activePanel === 'codereview' 
-                  ? "border-green-500 text-green-600" 
-                  : "border-transparent text-gray-500 hover:text-gray-700"
-              )}
-            >
-              <Code className="w-4 h-4" />
-              <span className="font-medium">Code Review</span>
-            </button>
-            <button
-              onClick={() => setActivePanel('resources')}
-              className={cn(
-                "flex items-center gap-2 py-3 border-b-2 transition-colors",
-                activePanel === 'resources' 
-                  ? "border-purple-500 text-purple-600" 
-                  : "border-transparent text-gray-500 hover:text-gray-700"
-              )}
-            >
-              <HardDrive className="w-4 h-4" />
-              <span className="font-medium">Resource Monitor</span>
-            </button>
-            </div>
-            <a
-              href={base44.agents.getWhatsAppConnectURL('ai_assistant')}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-2 px-3 py-2 rounded-lg bg-green-50 text-green-700 hover:bg-green-100 transition-colors"
-            >
-              <MessageCircle className="w-4 h-4" />
-              <span className="text-sm font-medium">WhatsApp</span>
-            </a>
-            </div>
-            </div>
+          <div className="bg-white border-b border-gray-100 px-6 py-4 flex items-center justify-between">
+            <h2 className="text-lg font-semibold text-gray-900">
+              {activePanel === 'api' && 'API Discovery'}
+              {activePanel === 'models' && 'Predictive Models'}
+              {activePanel === 'functions' && 'AI Functions'}
+              {activePanel === 'github' && 'GitHub Integration'}
+              {activePanel === 'automations' && 'Workflow Automations'}
+              {activePanel === 'review' && 'Code Review'}
+              {activePanel === 'docs' && 'Project Documents'}
+              {activePanel === 'mobile' && 'Mobile App Builder'}
+              {activePanel === 'personalization' && 'Personalization Engine'}
+              {activePanel === 'agents' && 'Deploy Agents'}
+              {activePanel === 'advanced' && 'Advanced Tools'}
+              {activePanel === 'auditor' && 'Project Auditor'}
+              {activePanel === 'bugs' && 'Bug Detection'}
+              {activePanel === 'codereview' && 'Code Review'}
+              {activePanel === 'resources' && 'Resource Monitor'}
+            </h2>
+            <Button variant="ghost" size="sm" onClick={() => setActivePanel(null)}>
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              Back
+            </Button>
+          </div>
+        )}
 
-        {/* API Discovery Panel */}
+        {/* Suggested Tools */}
+        {suggestedTools.length > 0 && !activePanel && messages.length > 0 && (
+          <div className="bg-blue-50 border-b border-blue-200 px-6 py-3">
+            <div className="flex items-center gap-3 flex-wrap">
+              <span className="text-sm font-medium text-blue-900">Recommended tools:</span>
+              {suggestedTools.map(tool => (
+                <Button
+                  key={tool}
+                  size="sm"
+                  variant="outline"
+                  onClick={() => setActivePanel(tool)}
+                  className="bg-white hover:bg-blue-100 border-blue-300"
+                >
+                  {tool.charAt(0).toUpperCase() + tool.slice(1)}
+                </Button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Tool Panels */}
         {activePanel === 'api' && (
           <div className="flex-1 p-6 overflow-auto">
-            <div className="max-w-4xl mx-auto">
-              <div className="mb-6">
-                <h2 className="text-xl font-bold text-gray-900 mb-1">API Discovery</h2>
-                <p className="text-gray-500">Find and integrate free public APIs into your project</p>
-              </div>
-              <APIDiscoveryPanel 
-                onIntegrate={(api) => setIntegratedAPIs([...integratedAPIs, api])}
-              />
-            </div>
+            <APIDiscoveryPanel onIntegrate={(api) => setIntegratedAPIs([...integratedAPIs, api])} />
           </div>
         )}
 
-        {/* Predictive Models Panel */}
         {activePanel === 'models' && (
           <div className="flex-1 p-6 overflow-auto">
-            <div className="max-w-4xl mx-auto">
-              <div className="mb-6">
-                <h2 className="text-xl font-bold text-gray-900 mb-1">Predictive Models</h2>
-                <p className="text-gray-500">Run AI-powered predictions and analysis on your data</p>
-              </div>
-              <PredictiveModels projectId={projectId} />
-            </div>
+            <PredictiveModels projectId={projectId} />
           </div>
         )}
 
-        {/* AI Functions Panel */}
         {activePanel === 'functions' && (
           <div className="flex-1 p-6 overflow-auto">
-            <div className="max-w-4xl mx-auto">
-              <div className="mb-6">
-                <h2 className="text-xl font-bold text-gray-900 mb-1">AI Functions</h2>
-                <p className="text-gray-500">Image generation, code, translation, SEO, and more</p>
-              </div>
-              <AdvancedAIFunctions />
-            </div>
+            <AdvancedAIFunctions />
           </div>
         )}
 
-        {/* GitHub Panel */}
         {activePanel === 'github' && (
           <div className="flex-1 p-6 overflow-auto">
-            <div className="max-w-4xl mx-auto">
-              <div className="mb-6">
-                <h2 className="text-xl font-bold text-gray-900 mb-1">GitHub Integration</h2>
-                <p className="text-gray-500">Connect your repository to edit and sync code</p>
-              </div>
-              <GitHubIntegration projectId={projectId} />
-            </div>
+            <GitHubIntegration projectId={projectId} />
           </div>
         )}
 
-        {/* Automations Panel */}
         {activePanel === 'automations' && (
           <div className="flex-1 p-6 overflow-auto">
-            <div className="max-w-6xl mx-auto">
-              <div className="mb-6">
-                <h2 className="text-xl font-bold text-gray-900 mb-1">Workflow Automations</h2>
-                <p className="text-gray-500">Create n8n-style workflows with triggers, actions, and API integrations</p>
-              </div>
-              <AutomationBuilder projectId={projectId} />
-            </div>
+            <AutomationBuilder projectId={projectId} />
           </div>
         )}
 
-        {/* Code Review Panel */}
         {activePanel === 'review' && (
           <div className="flex-1 p-6 overflow-auto">
-            <div className="max-w-4xl mx-auto">
-              <CodeReview projectId={projectId} />
-            </div>
+            <CodeReview projectId={projectId} />
           </div>
         )}
 
-        {/* Documents Panel */}
         {activePanel === 'docs' && (
           <div className="flex-1 p-6 overflow-auto">
-            <div className="max-w-4xl mx-auto">
-              <div className="mb-6">
-                <h2 className="text-xl font-bold text-gray-900 mb-1">Project Documents</h2>
-                <p className="text-gray-500">Upload specifications and documentation for AI context</p>
-              </div>
-              <DocumentUpload projectId={projectId} />
-            </div>
+            <DocumentUpload projectId={projectId} />
           </div>
         )}
 
-        {/* Mobile App Builder Panel */}
         {activePanel === 'mobile' && (
           <div className="flex-1 p-6 overflow-auto">
-            <div className="max-w-4xl mx-auto">
-              <div className="mb-6">
-                <h2 className="text-xl font-bold text-gray-900 mb-1">Mobile App Builder</h2>
-                <p className="text-gray-500">Generate React Native mobile apps with AI - iOS & Android</p>
-              </div>
-              <MobileAppBuilder projectId={projectId} />
-            </div>
+            <MobileAppBuilder projectId={projectId} />
           </div>
         )}
 
-        {/* Personalization Panel */}
         {activePanel === 'personalization' && (
           <div className="flex-1 p-6 overflow-auto">
-            <div className="max-w-5xl mx-auto">
-              <PersonalizationEngine user={user} />
-            </div>
+            <PersonalizationEngine user={user} />
           </div>
         )}
 
-        {/* Agent Deployment Panel */}
         {activePanel === 'agents' && (
           <div className="flex-1 p-6 overflow-auto">
-            <div className="max-w-5xl mx-auto">
-              <div className="mb-6">
-                <h2 className="text-xl font-bold text-gray-900 mb-1">Deploy Autonomous Agents</h2>
-                <p className="text-gray-500">Suggest and configure AI agents with customizable autonomy levels</p>
-              </div>
-              <AgentDeploymentPanel />
-            </div>
+            <AgentDeploymentPanel />
           </div>
         )}
 
-        {/* Advanced AI Tools Panel */}
         {activePanel === 'advanced' && (
           <div className="flex-1 p-6 overflow-auto">
-            <div className="max-w-5xl mx-auto">
-              <div className="mb-6">
-                <h2 className="text-xl font-bold text-gray-900 mb-1">Advanced AI Tools</h2>
-                <p className="text-gray-500">Code refactoring, test generation, performance analysis, and sentiment analysis</p>
-              </div>
-              <AdvancedAITools />
-            </div>
+            <AdvancedAITools />
           </div>
         )}
 
-        {/* Project Auditor Panel */}
         {activePanel === 'auditor' && (
           <div className="flex-1 p-6 overflow-auto">
-            <div className="max-w-5xl mx-auto">
-              <div className="mb-6">
-                <h2 className="text-xl font-bold text-gray-900 mb-1">Advanced Project Auditor</h2>
-                <p className="text-gray-500">Real-time error detection, AI suggestions, automatic code fixes, and intelligent recommendations</p>
-              </div>
-              <ProjectAuditorEnhanced />
-            </div>
+            <ProjectAuditorEnhanced />
           </div>
         )}
 
-        {/* Proactive Bug Detection Panel */}
         {activePanel === 'bugs' && (
           <div className="flex-1 p-6 overflow-auto">
-            <div className="max-w-5xl mx-auto">
-              <div className="mb-6">
-                <h2 className="text-xl font-bold text-gray-900 mb-1">Proactive Bug Detection</h2>
-                <p className="text-gray-500">AI analyzes logs, feedback, and crashes to predict bugs and auto-create prioritized tickets</p>
-              </div>
-              <ProactiveBugDetection />
-            </div>
+            <ProactiveBugDetection />
           </div>
         )}
 
-        {/* Code Review Panel */}
         {activePanel === 'codereview' && (
           <div className="flex-1 p-6 overflow-auto">
-            <div className="max-w-5xl mx-auto">
-              <div className="mb-6">
-                <h2 className="text-xl font-bold text-gray-900 mb-1">AI Code Review</h2>
-                <p className="text-gray-500">Get AI-powered feedback on best practices, bugs, performance, and security</p>
-              </div>
-              <CodeReviewPanel />
-            </div>
+            <CodeReviewPanel />
           </div>
         )}
 
-        {/* Resource Monitoring Panel */}
         {activePanel === 'resources' && (
           <div className="flex-1 p-6 overflow-auto">
-            <div className="max-w-5xl mx-auto">
-              <div className="mb-6">
-                <h2 className="text-xl font-bold text-gray-900 mb-1">Resource Monitoring & Optimization</h2>
-                <p className="text-gray-500">Monitor CPU, memory, and network usage. Get AI predictions for spikes and scaling strategies</p>
-              </div>
-              <ResourceMonitoringPanel />
-            </div>
+            <ResourceMonitoringPanel />
           </div>
         )}
 
@@ -871,7 +605,7 @@ Provide helpful, actionable responses with code examples when relevant. Be conci
               </Button>
             </div>
             {messages.length > 0 && !activePanel && (
-              <div className="mt-3 flex items-center gap-2">
+              <div className="mt-3">
                 <ProactiveSuggestions 
                   projectId={projectId} 
                   onApplySuggestion={(suggestion) => setInput(suggestion.action)}
