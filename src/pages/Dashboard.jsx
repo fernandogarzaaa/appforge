@@ -3,14 +3,17 @@ import { base44 } from '@/api/base44Client';
 import { useQuery } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
-import { FolderKanban, Database, FileCode, Component, ArrowRight, Sparkles, Plus } from 'lucide-react';
+import { FolderKanban, Database, FileCode, Component, ArrowRight, Sparkles, Plus, Send } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Textarea } from '@/components/ui/textarea';
 import StatCard from '@/components/dashboard/StatCard';
 import ProjectCard from '@/components/dashboard/ProjectCard';
 import EmptyState from '@/components/common/EmptyState';
 import { motion } from 'framer-motion';
 
 export default function Dashboard() {
+  const [ideaInput, setIdeaInput] = useState('');
+
   const { data: projects = [], isLoading } = useQuery({
     queryKey: ['projects'],
     queryFn: () => base44.entities.Project.list('-updated_date', 6),
@@ -33,12 +36,37 @@ export default function Dashboard() {
         animate={{ opacity: 1, y: 0 }}
         className="mb-6"
       >
-        <h1 className="text-2xl font-semibold text-gray-900 mb-1">
-          Welcome back
+        <h1 className="text-3xl font-bold text-gray-900 mb-2">
+          What do you want to create today?
         </h1>
-        <p className="text-[13px] text-gray-500">
-          Overview of your projects and activity
+        <p className="text-base text-gray-600 mb-6">
+          Describe your idea and we'll help you build it
         </p>
+
+        {/* Input Box */}
+        <div className="max-w-3xl">
+          <div className="relative">
+            <Textarea
+              value={ideaInput}
+              onChange={(e) => setIdeaInput(e.target.value)}
+              placeholder="Type your idea here... (e.g., 'Create a task management app' or 'Build a weather dashboard')"
+              className="min-h-[100px] rounded-xl text-base px-5 py-4 pr-28 bg-white border-2 border-gray-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 resize-none shadow-sm"
+              rows={3}
+            />
+            <Button
+              onClick={() => {
+                if (ideaInput.trim()) {
+                  window.location.href = createPageUrl('Projects') + '?new=true&idea=' + encodeURIComponent(ideaInput);
+                }
+              }}
+              disabled={!ideaInput.trim()}
+              className="absolute right-3 bottom-3 h-11 px-5 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white rounded-lg shadow-lg"
+            >
+              <Send className="w-4 h-4 mr-2" />
+              Create
+            </Button>
+          </div>
+        </div>
       </motion.div>
 
       {/* Stats Grid */}
