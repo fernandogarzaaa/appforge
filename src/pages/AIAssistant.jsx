@@ -290,9 +290,42 @@ Provide helpful, actionable responses with code examples when relevant. Be conci
               <Sparkles className="w-10 h-10 text-white" />
             </div>
             <h1 className="text-4xl font-bold text-gray-900 mb-3">What do you want to build?</h1>
-            <p className="text-lg text-gray-600 max-w-2xl text-center mb-12">
+            <p className="text-lg text-gray-600 max-w-2xl text-center mb-8">
               Describe your idea and I'll help you create it with AI-powered tools
             </p>
+            
+            {/* Input Box */}
+            <div className="max-w-3xl w-full mb-12">
+              <div className="relative">
+                <Textarea
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                      e.preventDefault();
+                      handleSend();
+                    }
+                  }}
+                  placeholder="Type your idea here... (e.g., 'Create a task management app' or 'Build a weather dashboard')"
+                  className="min-h-[120px] rounded-2xl text-base px-6 py-4 pr-20 bg-white border-2 border-gray-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 resize-none shadow-sm"
+                  rows={4}
+                />
+                <Button
+                  onClick={handleSend}
+                  disabled={!input.trim() || isLoading}
+                  className="absolute right-4 bottom-4 h-12 px-6 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white rounded-xl shadow-lg"
+                >
+                  {isLoading ? (
+                    <Loader2 className="w-5 h-5 animate-spin" />
+                  ) : (
+                    <>
+                      <Send className="w-5 h-5 mr-2" />
+                      Create
+                    </>
+                  )}
+                </Button>
+              </div>
+            </div>
             
             {/* Quick Actions Grid */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl w-full mb-12">
