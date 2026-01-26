@@ -61,6 +61,7 @@ import WebhookMonitor from './pages/WebhookMonitor';
 import IntegrationTemplates from './pages/IntegrationTemplates';
 import IntegrationAnalytics from './pages/IntegrationAnalytics';
 import CentralAnalytics from './pages/CentralAnalytics';
+import MobileStudio from './pages/MobileStudio';
 import __Layout from './Layout.jsx';
 
 
@@ -128,6 +129,7 @@ export const PAGES = {
     "IntegrationTemplates": IntegrationTemplates,
     "IntegrationAnalytics": IntegrationAnalytics,
     "CentralAnalytics": CentralAnalytics,
+    "MobileStudio": MobileStudio,
 }
 
 export const pagesConfig = {
