@@ -32,8 +32,9 @@ export default function Dashboard() {
     <div className="p-6 max-w-7xl mx-auto">
       {/* Welcome Section */}
       <motion.div 
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.15 }}
         className="mb-6"
       >
         <h1 className="text-3xl font-bold text-gray-900 mb-2">
@@ -71,9 +72,9 @@ export default function Dashboard() {
 
       {/* Stats Grid */}
       <motion.div 
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.05 }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.15 }}
         className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 mb-6"
       >
         <StatCard
@@ -112,9 +113,9 @@ export default function Dashboard() {
 
       {/* Quick Actions */}
       <motion.div
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.1 }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.15 }}
         className="bg-gray-900 rounded-xl p-5 mb-6 text-white"
       >
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">

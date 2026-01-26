@@ -26,9 +26,9 @@ export default function ProjectCard({ project, onDelete, onDuplicate, index }) {
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: index * 0.05, duration: 0.3 }}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.15 }}
     >
       <Link
         to={createPageUrl('EntityDesigner') + `?projectId=${project.id}`}
