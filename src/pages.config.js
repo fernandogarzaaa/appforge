@@ -54,6 +54,7 @@ import TokenCreator from './pages/TokenCreator';
 import VSCodeIntegration from './pages/VSCodeIntegration';
 import Web3Dashboard from './pages/Web3Dashboard';
 import WorkflowBuilder from './pages/WorkflowBuilder';
+import ExternalBotIntegrations from './pages/ExternalBotIntegrations';
 import __Layout from './Layout.jsx';
 
 
@@ -114,6 +115,7 @@ export const PAGES = {
     "VSCodeIntegration": VSCodeIntegration,
     "Web3Dashboard": Web3Dashboard,
     "WorkflowBuilder": WorkflowBuilder,
+    "ExternalBotIntegrations": ExternalBotIntegrations,
 }
 
 export const pagesConfig = {
