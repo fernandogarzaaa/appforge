@@ -55,6 +55,7 @@ import VSCodeIntegration from './pages/VSCodeIntegration';
 import Web3Dashboard from './pages/Web3Dashboard';
 import WorkflowBuilder from './pages/WorkflowBuilder';
 import ExternalBotIntegrations from './pages/ExternalBotIntegrations';
+import ProjectDiagnostics from './pages/ProjectDiagnostics';
 import __Layout from './Layout.jsx';
 
 
@@ -116,6 +117,7 @@ export const PAGES = {
     "Web3Dashboard": Web3Dashboard,
     "WorkflowBuilder": WorkflowBuilder,
     "ExternalBotIntegrations": ExternalBotIntegrations,
+    "ProjectDiagnostics": ProjectDiagnostics,
 }
 
 export const pagesConfig = {
