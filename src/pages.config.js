@@ -60,6 +60,7 @@ import WorkflowBuilder from './pages/WorkflowBuilder';
 import WebhookMonitor from './pages/WebhookMonitor';
 import IntegrationTemplates from './pages/IntegrationTemplates';
 import IntegrationAnalytics from './pages/IntegrationAnalytics';
+import CentralAnalytics from './pages/CentralAnalytics';
 import __Layout from './Layout.jsx';
 
 
@@ -126,6 +127,7 @@ export const PAGES = {
     "WebhookMonitor": WebhookMonitor,
     "IntegrationTemplates": IntegrationTemplates,
     "IntegrationAnalytics": IntegrationAnalytics,
+    "CentralAnalytics": CentralAnalytics,
 }
 
 export const pagesConfig = {

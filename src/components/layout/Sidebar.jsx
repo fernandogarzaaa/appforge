@@ -45,6 +45,7 @@ const navItems = [
   { name: 'Integration Templates', icon: Package, page: 'IntegrationTemplates' },
   { name: 'Webhook Monitor', icon: Activity, page: 'WebhookMonitor' },
   { name: 'Integration Analytics', icon: BarChart3, page: 'IntegrationAnalytics' },
+  { name: 'Central Analytics', icon: TrendingUp, page: 'CentralAnalytics' },
   { name: 'API Keys', icon: Key, page: 'APIKeyManager' },
   { name: 'AI Monitoring', icon: Share2, page: 'AIMonitoring' },
   { name: 'Predictive Analytics', icon: TrendingUp, page: 'PredictiveAnalytics' },
