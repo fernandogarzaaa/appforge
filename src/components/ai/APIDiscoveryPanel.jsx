@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -11,13 +11,17 @@ export default function APIDiscoveryPanel({ onIntegrate }) {
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
   const [copiedId, setCopiedId] = useState(null);
+  const debounceTimerRef = useRef(null);
 
-  const handleSearch = async () => {
-    if (!search.trim()) return;
+  const performSearch = async (query) => {
+    if (!query.trim()) {
+      setResults([]);
+      return;
+    }
     setLoading(true);
     try {
       const result = await base44.integrations.Core.InvokeLLM({
-        prompt: `Find 5 popular free APIs for: ${search}. Return JSON with array of {name, description, endpoint, auth_type}`,
+        prompt: `Find 5 popular free APIs for: ${query}. Return JSON with array of {name, description, endpoint, auth_type}`,
         add_context_from_internet: true,
         response_json_schema: {
           type: 'object',
@@ -47,16 +51,27 @@ export default function APIDiscoveryPanel({ onIntegrate }) {
     }
   };
 
+  const handleSearch = (value) => {
+    setSearch(value);
+    clearTimeout(debounceTimerRef.current);
+    debounceTimerRef.current = setTimeout(() => {
+      performSearch(value);
+    }, 500);
+  };
+
+  useEffect(() => {
+    return () => clearTimeout(debounceTimerRef.current);
+  }, []);
+
   return (
     <div className="space-y-4">
       <div className="flex gap-2">
         <Input
           value={search}
-          onChange={(e) => setSearch(e.target.value)}
+          onChange={(e) => handleSearch(e.target.value)}
           placeholder="Search for APIs... (e.g., weather, crypto, news)"
-          onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
         />
-        <Button onClick={handleSearch} disabled={loading}>
+        <Button onClick={() => performSearch(search)} disabled={loading}>
           {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Globe className="w-4 h-4" />}
         </Button>
       </div>
