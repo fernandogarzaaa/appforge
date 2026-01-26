@@ -58,6 +58,10 @@ export default function Projects() {
       setShowNewDialog(false);
       setNewProject({ name: '', description: '', icon: '📁', color: '#6366f1', status: 'draft' });
     },
+    onError: (error) => {
+      const errorMessage = error?.message || 'Failed to create project';
+      console.error('Project creation error:', error);
+    },
   });
 
   const deleteMutation = useMutation({

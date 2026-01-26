@@ -38,6 +38,10 @@ export default function APIDiscoveryPanel({ onIntegrate }) {
         }
       });
       setResults(result.apis || []);
+    } catch (error) {
+      console.error('API search error:', error);
+      toast.error('Failed to search APIs. Please try again.');
+      setResults([]);
     } finally {
       setLoading(false);
     }
