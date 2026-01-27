@@ -107,7 +107,7 @@ export default function Components() {
 
   const defaultCode = `import React from 'react';
 
-export default function ${newComponent.name.replace(/\s+/g, '') || 'NewComponent'}({ children }) {
+export default function ${(newComponent.name || '').replace(/\s+/g, '') || 'NewComponent'}({ children }) {
   return (
     <div className="p-4">
       {children}
@@ -373,7 +373,7 @@ export default function ${newComponent.name.replace(/\s+/g, '') || 'NewComponent
               onClick={() => createMutation.mutate({ 
                 ...newComponent, 
                 project_id: projectId,
-                code: defaultCode.replace(/NewComponent/g, newComponent.name.replace(/\s+/g, '') || 'NewComponent')
+                code: defaultCode.replace(/NewComponent/g, (newComponent.name || '').replace(/\s+/g, '') || 'NewComponent')
               })}
               disabled={!newComponent.name || createMutation.isPending}
               className="bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-xl"
