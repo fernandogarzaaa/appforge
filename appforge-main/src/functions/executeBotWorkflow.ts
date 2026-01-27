@@ -307,10 +307,13 @@ async function createTask(details, variables, base44) {
  * Evaluate a condition expression
  */
 function evaluateCondition(condition, variables) {
+  // Ensure condition is a string
+  const conditionStr = String(condition || '');
+
   // Simple condition evaluator
   // Replace variables in condition
-  let expr = condition;
-  
+  let expr = conditionStr;
+
   for (const [key, value] of Object.entries(variables)) {
     const regex = new RegExp(`\\b${key}\\b`, 'g');
     expr = expr.replace(regex, JSON.stringify(value));
@@ -319,7 +322,7 @@ function evaluateCondition(condition, variables) {
   try {
     return new Function(`return ${expr}`)();
   } catch (error) {
-    throw new Error(`Invalid condition: ${condition}`);
+    throw new Error(`Invalid condition: ${conditionStr}`);
   }
 }
 
