@@ -1,0 +1,754 @@
+import React, { useState } from 'react';
+import { base44 } from '@/api/base44Client';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { Bot, Plus, Play, Pause, Trash2, Settings, Zap, Clock, Mail, Webhook, Sparkles, RefreshCw, TrendingUp, Database, Upload } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Badge } from '@/components/ui/badge';
+import CryptoTradingBotBuilder from '@/components/bots/CryptoTradingBotBuilder';
+import VisualWorkflowEditor from '@/components/workflow/VisualWorkflowEditor';
+import TriggerConfiguration from '@/components/bots/TriggerConfiguration';
+import CollaboratorManager from '@/components/collaboration/CollaboratorManager';
+import ActivityLog from '@/components/collaboration/ActivityLog';
+import { toast } from 'sonner';
+
+const triggerTypes = [
+  { id: 'schedule', name: 'Schedule', icon: Clock, description: 'Run on a schedule' },
+  { id: 'webhook', name: 'Webhook', icon: Webhook, description: 'Trigger via HTTP request' },
+  { id: 'email', name: 'Email', icon: Mail, description: 'Trigger on email received' },
+  { id: 'entity_change', name: 'Entity Change', icon: Zap, description: 'When entity data changes' },
+  { id: 'api_endpoint', name: 'API Endpoint', icon: Webhook, description: 'Trigger via external webhook' },
+  { id: 'database_change', name: 'Database Change', icon: Database, description: 'When database records change' },
+  { id: 'file_upload', name: 'File Upload', icon: Upload, description: 'When files are uploaded' }
+];
+
+const botTemplates = [
+  { 
+    name: 'Email Assistant Bot',
+    description: 'Auto-read emails, suggest replies, auto-respond to queries, and schedule appointments',
+    trigger: { type: 'email', config: {} },
+    icon: Mail,
+    category: 'email',
+    workflow: [
+      'Monitor incoming emails',
+      'Analyze email content with AI',
+      'Generate appropriate responses',
+      'Auto-reply or suggest manual reply',
+      'Extract meeting requests and schedule'
+    ]
+  },
+  {
+    name: 'Customer Support Bot',
+    description: 'Automatically respond to customer queries and escalate when needed',
+    trigger: { type: 'email', config: {} },
+    icon: Zap,
+    category: 'email',
+    workflow: [
+      'Receive customer inquiry',
+      'Analyze sentiment and urgency',
+      'Search knowledge base',
+      'Generate helpful response',
+      'Escalate to human if needed'
+    ]
+  },
+  {
+    name: 'Meeting Scheduler Bot',
+    description: 'Parse meeting requests from emails and automatically schedule appointments',
+    trigger: { type: 'email', config: {} },
+    icon: Clock,
+    category: 'email',
+    workflow: [
+      'Detect meeting request in email',
+      'Extract preferred times',
+      'Check calendar availability',
+      'Propose meeting times',
+      'Send calendar invite'
+    ]
+  },
+  {
+    name: 'Crypto Trading Bot',
+    description: 'Grid trading, DCA, arbitrage, momentum trading with risk management',
+    trigger: { type: 'schedule', config: {} },
+    icon: TrendingUp,
+    category: 'trading',
+    workflow: [
+      'Monitor cryptocurrency prices',
+      'Calculate trading signals',
+      'Execute buy/sell orders',
+      'Manage positions',
+      'Log performance metrics'
+    ]
+  },
+  {
+    name: 'Data Aggregator Bot',
+    description: 'Collect data from multiple sources and consolidate into your system',
+    trigger: { type: 'schedule', config: {} },
+    icon: Zap,
+    category: 'data_processing',
+    workflow: [
+      'Fetch data from APIs',
+      'Transform and validate',
+      'Aggregate results',
+      'Store in database',
+      'Send notifications'
+    ]
+  },
+  {
+    name: 'Alert Monitor Bot',
+    description: 'Monitor metrics and send alerts when thresholds are exceeded',
+    trigger: { type: 'entity_change', config: {} },
+    icon: Zap,
+    category: 'monitoring',
+    workflow: [
+      'Track metric values',
+      'Compare against thresholds',
+      'Generate alerts',
+      'Notify stakeholders',
+      'Log incident'
+    ]
+  },
+  {
+    name: 'Social Media Post Bot',
+    description: 'Auto-post content to social media channels on schedule',
+    trigger: { type: 'schedule', config: {} },
+    icon: Mail,
+    category: 'social',
+    workflow: [
+      'Fetch content from CMS',
+      'Format for each platform',
+      'Schedule posts',
+      'Publish to social media',
+      'Track engagement metrics'
+    ]
+  },
+  {
+    name: 'Database Sync Bot',
+    description: 'Sync data between multiple databases in real-time',
+    trigger: { type: 'entity_change', config: {} },
+    icon: Zap,
+    category: 'integration',
+    workflow: [
+      'Monitor source database',
+      'Detect data changes',
+      'Transform data format',
+      'Sync to destination database',
+      'Log sync status'
+    ]
+  },
+  {
+    name: 'Report Generation Bot',
+    description: 'Generate and email reports on schedule automatically',
+    trigger: { type: 'schedule', config: {} },
+    icon: Mail,
+    category: 'reporting',
+    workflow: [
+      'Query data sources',
+      'Compile metrics',
+      'Generate PDF report',
+      'Email stakeholders',
+      'Archive report'
+    ]
+  },
+  {
+    name: 'Image Processing Bot',
+    description: 'Automatically resize, optimize, and organize images',
+    trigger: { type: 'entity_change', config: {} },
+    icon: Zap,
+    category: 'content',
+    workflow: [
+      'Detect new images',
+      'Apply filters/transformations',
+      'Generate thumbnails',
+      'Optimize for web',
+      'Update image metadata'
+    ]
+  },
+  {
+    name: 'Lead Scoring Bot',
+    description: 'Score and prioritize sales leads based on engagement',
+    trigger: { type: 'entity_change', config: {} },
+    icon: Zap,
+    category: 'sales',
+    workflow: [
+      'Monitor lead activities',
+      'Calculate engagement score',
+      'Analyze company size/budget',
+      'Assign priority level',
+      'Notify sales team'
+    ]
+  },
+  {
+    name: 'Backup Automation Bot',
+    description: 'Schedule automatic backups of critical data',
+    trigger: { type: 'schedule', config: {} },
+    icon: Zap,
+    category: 'devops',
+    workflow: [
+      'Trigger backup process',
+      'Compress data',
+      'Upload to cloud storage',
+      'Verify backup integrity',
+      'Cleanup old backups'
+    ]
+  },
+  {
+    name: 'Content Moderation Bot',
+    description: 'Moderate user-generated content and flag violations',
+    trigger: { type: 'entity_change', config: {} },
+    icon: Zap,
+    category: 'content',
+    workflow: [
+      'Scan new content',
+      'Check for violations',
+      'Flag inappropriate content',
+      'Notify moderators',
+      'Log moderation actions'
+    ]
+  },
+  {
+    name: 'Appointment Reminder Bot',
+    description: 'Send reminders before scheduled appointments',
+    trigger: { type: 'schedule', config: {} },
+    icon: Clock,
+    category: 'scheduling',
+    workflow: [
+      'Query upcoming appointments',
+      'Calculate reminder time',
+      'Send SMS/email reminders',
+      'Track confirmation',
+      'Update appointment status'
+    ]
+  }
+];
+
+export default function BotBuilder() {
+  const [showDialog, setShowDialog] = useState(false);
+  const [selectedBot, setSelectedBot] = useState(null);
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [activeTab, setActiveTab] = useState('all');
+  const [showVisualEditor, setShowVisualEditor] = useState(false);
+  const [workflowNodes, setWorkflowNodes] = useState([]);
+  const [newBot, setNewBot] = useState({
+    name: '',
+    description: '',
+    trigger: { type: 'schedule', config: {} },
+    nodes: [],
+    status: 'draft'
+  });
+
+  const urlParams = new URLSearchParams(window.location.search);
+  const projectId = urlParams.get('projectId');
+
+  const queryClient = useQueryClient();
+
+  const { data: bots = [], isLoading } = useQuery({
+    queryKey: ['automations', projectId],
+    queryFn: async () => {
+      try {
+        return await base44.entities.Automation.filter({ project_id: projectId });
+      } catch (error) {
+        console.error('Failed to fetch automations:', error);
+        return [];
+      }
+    },
+    enabled: !!projectId
+  });
+
+  const createMutation = useMutation({
+    mutationFn: (data) => base44.entities.Automation.create({ ...data, project_id: projectId }),
+    onSuccess: async (result) => {
+      queryClient.invalidateQueries({ queryKey: ['automations', projectId] });
+      await logActivity(result.id, 'created', `Created bot: ${newBot.name}`);
+      setShowDialog(false);
+      setNewBot({ name: '', description: '', trigger: { type: 'schedule', config: {} }, nodes: [], status: 'draft' });
+      toast.success('Bot created successfully');
+    }
+  });
+
+  const updateMutation = useMutation({
+    mutationFn: ({ id, data }) => base44.entities.Automation.update(id, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['automations', projectId] });
+      toast.success('Bot updated');
+    }
+  });
+
+  const deleteMutation = useMutation({
+    mutationFn: (id) => base44.entities.Automation.delete(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['automations', projectId] });
+      toast.success('Bot deleted');
+    }
+  });
+
+  const { data: currentUser } = useQuery({
+    queryKey: ['currentUser'],
+    queryFn: () => base44.auth.me(),
+  });
+
+  const toggleStatus = (bot) => {
+    const newStatus = bot.status === 'active' ? 'paused' : 'active';
+    updateMutation.mutate({ id: bot.id, data: { status: newStatus } });
+    logActivity(bot.id, newStatus === 'active' ? 'deployed' : 'paused', `Bot ${newStatus}`);
+  };
+
+  const logActivity = async (botId, action, description) => {
+    try {
+      await base44.entities.BotActivityLog.create({
+        bot_id: botId,
+        action,
+        performed_by: currentUser?.email,
+        description
+      });
+    } catch (error) {
+      console.error('Failed to log activity:', error);
+    }
+  };
+
+  const generateBotWorkflow = async (description) => {
+    setIsGenerating(true);
+    try {
+      const result = await base44.integrations.Core.InvokeLLM({
+        prompt: `Create an automation bot workflow for: ${description}
+        
+        Provide:
+        - name: short descriptive name
+        - description: what the bot does
+        - trigger_type: best trigger (schedule, webhook, email, entity_change)
+        - workflow_steps: array of 3-5 steps the bot should perform
+        
+        Make it practical and actionable.`,
+        response_json_schema: {
+          type: 'object',
+          properties: {
+            name: { type: 'string' },
+            description: { type: 'string' },
+            trigger_type: { type: 'string' },
+            workflow_steps: { type: 'array', items: { type: 'string' } }
+          }
+        }
+      });
+      
+      setNewBot({
+        ...newBot,
+        name: result.name,
+        description: result.description,
+        trigger: { type: result.trigger_type, config: {} }
+      });
+      toast.success('AI workflow generated!');
+    } catch (error) {
+      toast.error('Failed to generate workflow');
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
+  if (!projectId) {
+    return (
+      <div className="flex items-center justify-center h-full">
+        <div className="text-center">
+          <Bot className="w-16 h-16 mx-auto text-gray-300 mb-4" />
+          <h2 className="text-xl font-semibold text-gray-900 mb-2">Select a Project</h2>
+          <p className="text-gray-500">Choose a project to create and manage bots</p>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="p-6 lg:p-8 max-w-7xl mx-auto">
+      <div className="flex items-center justify-between mb-8">
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900 mb-1">Bot Builder</h1>
+          <p className="text-gray-500">Create automated workflows and intelligent bots with team collaboration</p>
+        </div>
+        <Button onClick={() => setShowDialog(true)} className="bg-gray-900 hover:bg-gray-800">
+          <Plus className="w-4 h-4 mr-2" />
+          Create Bot
+        </Button>
+      </div>
+
+      {isLoading ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {[1, 2, 3].map((i) => (
+            <div key={i} className="bg-white rounded-xl border p-6 animate-pulse">
+              <div className="h-6 bg-gray-200 rounded w-3/4 mb-4" />
+              <div className="h-4 bg-gray-100 rounded w-full mb-2" />
+              <div className="h-4 bg-gray-100 rounded w-2/3" />
+            </div>
+          ))}
+        </div>
+      ) : bots.length === 0 ? (
+        <div className="text-center py-12">
+          <Bot className="w-16 h-16 mx-auto text-gray-300 mb-4" />
+          <h3 className="text-lg font-semibold text-gray-900 mb-2">No bots yet</h3>
+          <p className="text-gray-500 mb-4">Create your first automation bot</p>
+          <Button onClick={() => setShowDialog(true)}>Create Bot</Button>
+        </div>
+      ) : (
+        <div className="space-y-6">
+          {bots.map((bot) => (
+            <div key={bot.id} className="grid grid-cols-1 lg:grid-cols-4 gap-4">
+              <div className="lg:col-span-1">
+                <Card className="hover:shadow-lg transition-shadow h-full">
+                  <CardHeader>
+                    <div className="flex items-start justify-between">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center">
+                          <Bot className="w-5 h-5 text-gray-600" />
+                        </div>
+                        <div>
+                          <CardTitle className="text-base">{bot.name}</CardTitle>
+                          <Badge variant={bot.status === 'active' ? 'default' : 'secondary'} className="mt-1">
+                            {bot.status}
+                          </Badge>
+                        </div>
+                      </div>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => deleteMutation.mutate(bot.id)}
+                      >
+                        <Trash2 className="w-4 h-4 text-gray-400" />
+                      </Button>
+                    </div>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-sm text-gray-600 mb-4">{bot.description}</p>
+                    <div className="flex items-center justify-between text-xs text-gray-500 mb-4">
+                      <span>Trigger: {bot.trigger?.type || 'None'}</span>
+                      <span>Runs: {bot.execution_count || 0}</span>
+                    </div>
+                    <div className="flex gap-2">
+                      <Button
+                        onClick={() => toggleStatus(bot)}
+                        variant={bot.status === 'active' ? 'outline' : 'default'}
+                        className="flex-1"
+                        size="sm"
+                      >
+                        {bot.status === 'active' ? (
+                          <>
+                            <Pause className="w-3 h-3 mr-1" />
+                            Pause
+                          </>
+                        ) : (
+                          <>
+                            <Play className="w-3 h-3 mr-1" />
+                            Activate
+                          </>
+                        )}
+                      </Button>
+                      <Button variant="outline" size="sm">
+                        <Settings className="w-3 h-3" />
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+              <div className="lg:col-span-3 space-y-4">
+                <CollaboratorManager botId={bot.id} />
+                <ActivityLog botId={bot.id} />
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      <Dialog open={showDialog} onOpenChange={setShowDialog}>
+        <DialogContent className="sm:max-w-4xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Create New Bot</DialogTitle>
+          </DialogHeader>
+          
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+            <TabsList className="grid w-full grid-cols-5">
+              <TabsTrigger value="all">All Templates</TabsTrigger>
+              <TabsTrigger value="email">Email</TabsTrigger>
+              <TabsTrigger value="trading">Trading</TabsTrigger>
+              <TabsTrigger value="automation">Automation</TabsTrigger>
+              <TabsTrigger value="custom">Custom</TabsTrigger>
+            </TabsList>
+
+            <TabsContent value="all" className="space-y-4 mt-4">
+              <Label className="mb-2 block">All Available Templates</Label>
+              <div className="grid grid-cols-1 gap-2 mb-4">
+                {botTemplates.map((template, idx) => {
+                  const TemplateIcon = template.icon;
+                  return (
+                    <Card 
+                      key={idx} 
+                      className="cursor-pointer hover:bg-gray-50 transition-colors"
+                      onClick={() => {
+                        setNewBot({
+                          name: template.name,
+                          description: template.description,
+                          trigger: template.trigger,
+                          nodes: template.workflow.map((step, i) => ({
+                            id: `node-${i}`,
+                            name: step,
+                            type: 'action'
+                          })),
+                          status: 'draft'
+                        });
+                        setActiveTab('custom');
+                      }}
+                    >
+                      <CardContent className="p-4">
+                        <div className="flex items-start gap-3">
+                          <div className="w-10 h-10 rounded-lg bg-indigo-100 flex items-center justify-center">
+                            <TemplateIcon className="w-5 h-5 text-indigo-600" />
+                          </div>
+                          <div className="flex-1">
+                            <div className="flex items-center gap-2">
+                              <h4 className="font-semibold text-sm">{template.name}</h4>
+                              <Badge variant="outline" className="text-xs">{template.category}</Badge>
+                            </div>
+                            <p className="text-xs text-gray-600 mt-1">{template.description}</p>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  );
+                })}
+              </div>
+            </TabsContent>
+
+            <TabsContent value="email" className="space-y-4 mt-4">
+              <Label className="mb-2 block">Email & Communication Bots</Label>
+              <div className="grid grid-cols-1 gap-2 mb-4">
+                {botTemplates.filter(t => t.category === 'email').map((template, idx) => {
+                  const TemplateIcon = template.icon;
+                  return (
+                    <Card 
+                      key={idx} 
+                      className="cursor-pointer hover:bg-gray-50 transition-colors"
+                      onClick={() => {
+                        setNewBot({
+                          name: template.name,
+                          description: template.description,
+                          trigger: template.trigger,
+                          nodes: template.workflow.map((step, i) => ({
+                            id: `node-${i}`,
+                            name: step,
+                            type: 'action'
+                          })),
+                          status: 'draft'
+                        });
+                        setActiveTab('custom');
+                      }}
+                    >
+                      <CardContent className="p-4">
+                        <div className="flex items-start gap-3">
+                          <div className="w-10 h-10 rounded-lg bg-indigo-100 flex items-center justify-center">
+                            <TemplateIcon className="w-5 h-5 text-indigo-600" />
+                          </div>
+                          <div className="flex-1">
+                            <h4 className="font-semibold text-sm mb-1">{template.name}</h4>
+                            <p className="text-xs text-gray-600 mb-2">{template.description}</p>
+                            <div className="flex flex-wrap gap-1">
+                              {template.workflow.slice(0, 3).map((step, i) => (
+                                <Badge key={i} variant="outline" className="text-xs">
+                                  {step}
+                                </Badge>
+                              ))}
+                              {template.workflow.length > 3 && (
+                                <Badge variant="outline" className="text-xs">
+                                  +{template.workflow.length - 3} more
+                                </Badge>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  );
+                })}
+              </div>
+            </TabsContent>
+
+            <TabsContent value="automation" className="space-y-4 mt-4">
+              <Label className="mb-2 block">Automation Bots</Label>
+              <div className="grid grid-cols-1 gap-2 mb-4">
+                {botTemplates.filter(t => ['data_processing', 'reporting', 'content', 'sales', 'devops', 'scheduling', 'integration', 'social'].includes(t.category)).map((template, idx) => {
+                  const TemplateIcon = template.icon;
+                  return (
+                    <Card 
+                      key={idx} 
+                      className="cursor-pointer hover:bg-gray-50 transition-colors"
+                      onClick={() => {
+                        setNewBot({
+                          name: template.name,
+                          description: template.description,
+                          trigger: template.trigger,
+                          nodes: template.workflow.map((step, i) => ({
+                            id: `node-${i}`,
+                            name: step,
+                            type: 'action'
+                          })),
+                          status: 'draft'
+                        });
+                        setActiveTab('custom');
+                      }}
+                    >
+                      <CardContent className="p-4">
+                        <div className="flex items-start gap-3">
+                          <div className="w-10 h-10 rounded-lg bg-blue-100 flex items-center justify-center">
+                            <TemplateIcon className="w-5 h-5 text-blue-600" />
+                          </div>
+                          <div className="flex-1">
+                            <h4 className="font-semibold text-sm mb-1">{template.name}</h4>
+                            <p className="text-xs text-gray-600">{template.description}</p>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  );
+                })}
+              </div>
+            </TabsContent>
+
+            <TabsContent value="trading" className="space-y-4 mt-4">
+              <Label className="mb-2 block">Crypto & Trading Bots</Label>
+              <CryptoTradingBotBuilder onSave={(botConfig) => {
+                setNewBot(botConfig);
+                setActiveTab('custom');
+              }} />
+            </TabsContent>
+
+            <TabsContent value="custom" className="space-y-4 mt-4">
+              <div className="border-t pt-4">
+                <Label className="mb-2 block">AI Bot Generator</Label>
+                <div className="flex gap-2 mb-3">
+                  <Input
+                    placeholder="Describe what you want to automate..."
+                    onKeyPress={(e) => {
+                      if (e.key === 'Enter' && e.currentTarget.value.trim()) {
+                        generateBotWorkflow(e.currentTarget.value);
+                      }
+                    }}
+                  />
+                  <Button
+                    variant="outline"
+                    onClick={(e) => {
+                      const input = e.currentTarget.previousElementSibling;
+                      if (input.value.trim()) generateBotWorkflow(input.value);
+                    }}
+                    disabled={isGenerating}
+                  >
+                    {isGenerating ? (
+                      <RefreshCw className="w-4 h-4 animate-spin" />
+                    ) : (
+                      <Sparkles className="w-4 h-4" />
+                    )}
+                  </Button>
+                </div>
+              </div>
+              <div>
+                <Label>Bot Name</Label>
+                <Input
+                  value={newBot.name}
+                  onChange={(e) => setNewBot({ ...newBot, name: e.target.value })}
+                  placeholder="My Automation Bot"
+                />
+              </div>
+              <div>
+                <Label>Description</Label>
+                <Textarea
+                  value={newBot.description}
+                  onChange={(e) => setNewBot({ ...newBot, description: e.target.value })}
+                  placeholder="What does this bot do?"
+                  rows={3}
+                />
+              </div>
+              <div>
+                <Label>Trigger Type</Label>
+                <Select
+                  value={newBot.trigger.type}
+                  onValueChange={(value) => setNewBot({ ...newBot, trigger: { type: value, config: {} } })}
+                >
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {triggerTypes.map((type) => (
+                      <SelectItem key={type.id} value={type.id}>
+                        <div className="flex items-center gap-2">
+                          <type.icon className="w-4 h-4" />
+                          <div>
+                            <div className="font-medium">{type.name}</div>
+                            <div className="text-xs text-gray-500">{type.description}</div>
+                          </div>
+                        </div>
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <TriggerConfiguration
+                triggerType={newBot.trigger.type}
+                config={newBot.trigger.config}
+                onChange={(config) => setNewBot({ ...newBot, trigger: { type: newBot.trigger.type, config } })}
+              />
+
+              <div>
+                <Label className="mb-2 block">Visual Workflow Editor</Label>
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    setWorkflowNodes(newBot.nodes.length > 0 ? newBot.nodes : []);
+                    setShowVisualEditor(true);
+                  }}
+                  className="w-full"
+                >
+                  Open Visual Editor
+                </Button>
+              </div>
+              </TabsContent>
+              </Tabs>
+
+              <DialogFooter>
+              <Button variant="outline" onClick={() => setShowDialog(false)}>Cancel</Button>
+              <Button onClick={() => createMutation.mutate(newBot)} disabled={!newBot.name}>
+                Create Bot
+              </Button>
+            </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {showVisualEditor && (
+        <Dialog open={showVisualEditor} onOpenChange={setShowVisualEditor}>
+          <DialogContent className="max-w-6xl max-h-[90vh]">
+            <DialogHeader>
+              <DialogTitle>Visual Workflow Editor</DialogTitle>
+            </DialogHeader>
+            <div className="h-[70vh]">
+              <VisualWorkflowEditor
+                initialNodes={workflowNodes}
+                onSave={(nodes) => {
+                  setNewBot({
+                    ...newBot,
+                    nodes: nodes.map((node, idx) => ({
+                      id: `node-${idx}`,
+                      name: node.label || node.type,
+                      type: node.type,
+                      config: node.config
+                    }))
+                  });
+                  setShowVisualEditor(false);
+                  toast.success('Workflow saved');
+                }}
+              />
+            </div>
+          </DialogContent>
+        </Dialog>
+      )}
+    </div>
+  );
+}
