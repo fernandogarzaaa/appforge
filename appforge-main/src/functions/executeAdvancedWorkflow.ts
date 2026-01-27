@@ -1,5 +1,28 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.6';
 
+// Safe math expression evaluator - only allows basic arithmetic operations
+function safeMathEval(expression: string): number {
+  if (!expression || typeof expression !== 'string') {
+    throw new Error('Invalid expression');
+  }
+
+  // Only allow numbers, basic operators, parentheses, and spaces
+  if (!/^[\d\s+\-*/().]+$/.test(expression)) {
+    throw new Error('Expression contains invalid characters');
+  }
+
+  try {
+    // Use Function constructor with strict limitations
+    const result = new Function('"use strict"; return (' + expression + ')')();
+    if (typeof result !== 'number' || !isFinite(result)) {
+      throw new Error('Expression must evaluate to a finite number');
+    }
+    return result;
+  } catch (error) {
+    throw new Error(`Math evaluation failed: ${error.message}`);
+  }
+}
+
 Deno.serve(async (req) => {
   try {
     const base44 = createClientFromRequest(req);
@@ -224,7 +247,11 @@ Deno.serve(async (req) => {
         case 'format_date':
           return new Date(value).toISOString();
         case 'calculate':
-          return eval(params.expression?.replace(/\{(\w+)\}/g, (m, k) => getNestedValue(context, k)));
+          // Safe expression evaluation - only allow basic math operations
+          const expression = typeof params.expression === 'string' 
+            ? params.expression.replace(/\{(\w+)\}/g, (m, k) => getNestedValue(context, k))
+            : '';
+          return safeMathEval(expression);
         case 'concatenate':
           const parts = params.parts || [];
           return parts.join(params.separator || '');

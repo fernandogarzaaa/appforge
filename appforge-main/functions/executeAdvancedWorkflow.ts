@@ -248,7 +248,10 @@ Deno.serve(async (req) => {
           return new Date(value).toISOString();
         case 'calculate':
           // Safe expression evaluation - only allow basic math operations
-          return safeMathEval(params.expression?.replace(/\{(\w+)\}/g, (m, k) => getNestedValue(context, k)));
+          const expression = typeof params.expression === 'string' 
+            ? params.expression.replace(/\{(\w+)\}/g, (m, k) => getNestedValue(context, k))
+            : '';
+          return safeMathEval(expression);
         case 'concatenate':
           const parts = params.parts || [];
           return parts.join(params.separator || '');
