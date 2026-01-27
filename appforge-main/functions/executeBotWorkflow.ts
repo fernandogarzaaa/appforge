@@ -340,12 +340,13 @@ function evaluateCondition(condition, variables) {
  * Interpolate variables in a string
  */
 function interpolateVariables(text, variables) {
+  // Ensure text is a string
   if (typeof text !== 'string') {
-    return text; // Return as-is if not a string
+    return String(text || '');
   }
-  
+
   let result = text;
-  
+
   for (const [key, value] of Object.entries(variables)) {
     const regex = new RegExp(`\\$\\{${key}\\}`, 'g');
     result = result.replace(regex, String(value));

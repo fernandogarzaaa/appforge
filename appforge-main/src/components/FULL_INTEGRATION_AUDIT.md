@@ -34,7 +34,7 @@
 - Implemented missing acknowledge functionality in ChatOps interface
 
 **✅ RUNTIME ERROR FIXES:**
-- Fixed "e.replace is not a function" by adding string type validation
+- **Fixed "e.replace is not a function"** by adding proper type validation to `interpolateVariables()` function in both `executeBotWorkflow.ts` files - now safely converts non-string inputs to strings before calling `.replace()`
 - Added safety checks for API response processing
 - Enhanced interpolateVariables function with type checking
 
