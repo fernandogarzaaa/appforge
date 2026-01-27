@@ -145,7 +145,7 @@ export default function TokenCreator() {
   };
 
   const generateContractCode = () => {
-    if (!selectedToken) return '';
+    if (!selectedToken || !selectedToken.name || typeof selectedToken.name !== 'string') return '';
     const { name, symbol, type, features } = selectedToken;
     
     if (type === 'ERC20') {
