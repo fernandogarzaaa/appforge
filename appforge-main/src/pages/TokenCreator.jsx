@@ -3,13 +3,12 @@ import { base44 } from '@/api/base44Client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { 
   Coins, Plus, Search, Rocket, Settings2, Code,
-  ChevronRight, Sparkles, CheckCircle
+  ChevronRight, Sparkles
 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
 import { Switch } from '@/components/ui/switch';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
@@ -28,7 +27,6 @@ import {
   DialogFooter,
 } from '@/components/ui/dialog';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import TokenCard from '@/components/web3/TokenCard';
 import NetworkBadge from '@/components/web3/NetworkBadge';
 import EmptyState from '@/components/common/EmptyState';
 import DeploymentModal from '@/components/web3/DeploymentModal';

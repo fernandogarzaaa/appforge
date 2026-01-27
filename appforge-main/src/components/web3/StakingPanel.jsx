@@ -4,7 +4,7 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
-import { Coins, TrendingUp, Lock, Calendar, Percent } from 'lucide-react';
+import { Coins, Lock } from 'lucide-react';
 import { toast } from 'sonner';
 
 const stakingOptions = [

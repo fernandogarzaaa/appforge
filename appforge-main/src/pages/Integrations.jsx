@@ -5,16 +5,15 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import { 
   Bot, Database, Mail, MessageSquare, Zap, Code, 
-  Cloud, Share2, CreditCard, BarChart3, FileText,
-  Globe, Search, CheckCircle, Plus, Settings, Star,
+  Cloud, Share2, CreditCard, BarChart3, FileText, Search, CheckCircle, Plus, Settings, Star,
   Users, Briefcase, ShoppingCart, TrendingUp, Package,
-  Calendar, Video, Phone, DollarSign, Lock, Download
+  Calendar, Video, Phone, Download
 } from 'lucide-react';
 import { toast } from 'sonner';
 

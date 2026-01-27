@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import RootCauseAnalysis from '@/components/intelligence/RootCauseAnalysis';
 import BusinessImpactCard from '@/components/intelligence/BusinessImpactCard';
 import AutomatedActionManager from '@/components/intelligence/AutomatedActionManager';
 import SLAMonitoringDashboard from '@/components/intelligence/SLAMonitoringDashboard';

@@ -3,8 +3,7 @@ import { LineChart, Line, AreaChart, Area, BarChart, Bar, XAxis, YAxis, Cartesia
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { 
-  TrendingUp, TrendingDown, Maximize2, Activity, 
-  BarChart3, CandlestickChart, LineChartIcon 
+  TrendingUp, TrendingDown, Maximize2, Activity, CandlestickChart, LineChartIcon 
 } from 'lucide-react';
 
 const generateChartData = (basePrice, days = 30) => {

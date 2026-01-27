@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import { base44 } from '@/api/base44Client';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
 import { Brain, Zap, TrendingUp, AlertTriangle, RefreshCw } from 'lucide-react';
 import { ForecastChart, TrendComparison } from '@/components/analytics/PredictionChart';
@@ -12,7 +11,6 @@ import AnomalyForecast from '@/components/analytics/AnomalyForecast';
 import PerformanceForecast from '@/components/analytics/PerformanceForecast';
 import FeedbackWidget from '@/components/feedback/FeedbackWidget';
 import FeedbackSummary from '@/components/feedback/FeedbackSummary';
-import AlertConfigManager from '@/components/alerts/AlertConfigManager';
 import { checkAndTriggerAlerts } from '@/components/alerts/AlertService';
 import ProactiveMonitoringPanel from '@/components/proactive/ProactiveMonitoringPanel';
 

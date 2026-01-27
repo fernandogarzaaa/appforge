@@ -1,11 +1,10 @@
 import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { 
-  Sparkles, Database, Workflow, Shield, Globe, 
-  Zap, Users, Bell, FileCode, Code2, Blocks,
-  TrendingUp, Link2, TestTube, GitBranch
+  Sparkles, Database, Shield, 
+  Zap, Users, Link2, TestTube, GitBranch
 } from 'lucide-react';
 
 const suggestedFeatures = [

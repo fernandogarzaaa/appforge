@@ -8,8 +8,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import { 
-  Image as ImageIcon, Video, Wand2, Download, 
-  Copy, Trash2, RefreshCw, Sparkles
+  Image as ImageIcon, Wand2, Download, 
+  Copy, RefreshCw
 } from 'lucide-react';
 import { toast } from 'sonner';
 

@@ -7,7 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { 
   Activity, AlertCircle, CheckCircle2, AlertTriangle, Info,
-  Zap, Database, Shield, TrendingUp, FileCode, Play
+  Zap, Database, Shield, FileCode, Play
 } from 'lucide-react';
 import { toast } from 'sonner';
 

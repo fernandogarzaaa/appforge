@@ -3,7 +3,7 @@ import { base44 } from '@/api/base44Client';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { AlertCircle, Zap, Bug, Lightbulb, Code, CheckCircle2, AlertTriangle, Loader2, RefreshCw } from 'lucide-react';
+import { AlertCircle, Lightbulb, CheckCircle2, Loader2, RefreshCw } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 export default function ProjectAuditorEnhanced() {

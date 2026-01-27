@@ -5,8 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { 
-  CheckCircle2, XCircle, AlertTriangle, Info, 
-  Code, Database, Zap, Shield, RefreshCw
+  CheckCircle2, XCircle, AlertTriangle, Info, RefreshCw
 } from 'lucide-react';
 
 export default function ProjectHealthReport() {

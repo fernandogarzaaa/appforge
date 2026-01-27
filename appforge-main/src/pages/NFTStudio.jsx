@@ -3,7 +3,7 @@ import { base44 } from '@/api/base44Client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { 
   Image, Plus, Search, Upload, Rocket, Settings2,
-  ChevronRight, Grid3X3, Percent, Users, Sparkles
+  ChevronRight, Percent, Sparkles
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -28,7 +28,6 @@ import {
   DialogFooter,
 } from '@/components/ui/dialog';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import NFTCollectionCard from '@/components/web3/NFTCollectionCard';
 import NetworkBadge from '@/components/web3/NetworkBadge';
 import EmptyState from '@/components/common/EmptyState';
 import { motion, AnimatePresence } from 'framer-motion';

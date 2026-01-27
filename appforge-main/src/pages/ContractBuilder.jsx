@@ -26,9 +26,8 @@ import {
   DialogTitle,
   DialogFooter,
 } from '@/components/ui/dialog';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import ContractCard from '@/components/web3/ContractCard';
 import NetworkBadge from '@/components/web3/NetworkBadge';
 import EmptyState from '@/components/common/EmptyState';
 import DeploymentModal from '@/components/web3/DeploymentModal';

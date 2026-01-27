@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Search, Zap, Star, Download } from 'lucide-react';
+import { Search, Zap, Star } from 'lucide-react';
 import { toast } from 'sonner';
 
 const sampleTemplates = [

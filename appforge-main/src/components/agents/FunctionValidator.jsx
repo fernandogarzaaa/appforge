@@ -6,8 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Badge } from '@/components/ui/badge';
-import { AlertCircle, CheckCircle2, XCircle, Loader2, Send, MessageSquare } from 'lucide-react';
+import { AlertCircle, CheckCircle2, Loader2, Send, MessageSquare } from 'lucide-react';
 
 export default function FunctionValidator() {
   const [activeTab, setActiveTab] = useState('validator');

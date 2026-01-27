@@ -4,8 +4,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { 
   Sparkles, Send, Plus, Trash2, MessageSquare,
   Loader2, Copy, Check, Code, FileCode, Database,
-  Globe, Brain, Zap, Bot, Github, Wand2, Workflow,
-  Upload, FileText, Shield, Smartphone, User, MessageCircle, AlertCircle, Bug, HardDrive, ArrowLeft
+  Globe, Brain, Zap, MessageCircle, ArrowLeft
 } from 'lucide-react';
 import { Textarea } from '@/components/ui/textarea';
 import APIDiscoveryPanel from '@/components/ai/APIDiscoveryPanel';

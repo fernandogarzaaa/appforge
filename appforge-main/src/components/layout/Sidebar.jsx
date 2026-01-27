@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
-import { ChevronDown, Menu, X, FolderKanban, Sparkles, Zap, Code } from 'lucide-react';
+import { Menu, X, FolderKanban, Sparkles, Zap, Code } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 

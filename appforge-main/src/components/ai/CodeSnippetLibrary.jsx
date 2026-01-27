@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
-import { Copy, Check, Trash2, Star } from 'lucide-react';
+import { Copy, Check, Star } from 'lucide-react';
 import { toast } from 'sonner';
 
 const languages = ['javascript', 'typescript', 'python', 'jsx', 'css', 'html'];
