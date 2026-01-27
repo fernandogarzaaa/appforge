@@ -340,6 +340,10 @@ function evaluateCondition(condition, variables) {
  * Interpolate variables in a string
  */
 function interpolateVariables(text, variables) {
+  if (typeof text !== 'string') {
+    return text; // Return as-is if not a string
+  }
+  
   let result = text;
   
   for (const [key, value] of Object.entries(variables)) {

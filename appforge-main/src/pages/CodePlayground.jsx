@@ -176,7 +176,7 @@ Improvement: ${suggestion.message}
 Return ONLY the improved code, no explanations.`
       });
 
-      setCode(response.trim().replace(/^```javascript\n?/, '').replace(/\n?```$/, ''));
+      setCode(typeof response === 'string' ? response.trim().replace(/^```javascript\n?/, '').replace(/\n?```$/, '') : code);
       toast.success('Suggestion applied');
     } catch (error) {
       toast.error('Failed to apply suggestion');
