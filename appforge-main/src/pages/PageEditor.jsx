@@ -83,7 +83,7 @@ export default function PageEditor() {
 
   const defaultCode = `import React from 'react';
 
-export default function ${newPage.name.replace(/\s+/g, '') || 'NewPage'}() {
+export default function ${(newPage.name || '').replace(/\s+/g, '') || 'NewPage'}() {
   return (
     <div className="p-6">
       <h1 className="text-2xl font-bold">Welcome to ${newPage.name || 'New Page'}</h1>
@@ -166,7 +166,7 @@ export default function ${newPage.name.replace(/\s+/g, '') || 'NewPage'}() {
                         )}
                       </div>
                       <p className="text-xs text-gray-500 truncate">
-                        /{page.path || page.name.toLowerCase().replace(/\s+/g, '-')}
+                        /{page.path || (page.name || '').toLowerCase().replace(/\s+/g, '-')}
                       </p>
                     </div>
                     <ChevronRight className={cn(
@@ -380,7 +380,7 @@ export default function ${newPage.name.replace(/\s+/g, '') || 'NewPage'}() {
                 <Input
                   value={newPage.path}
                   onChange={(e) => setNewPage({ ...newPage, path: e.target.value })}
-                  placeholder={newPage.name.toLowerCase().replace(/\s+/g, '-') || 'page-path'}
+                  placeholder={(newPage.name || '').toLowerCase().replace(/\s+/g, '-') || 'page-path'}
                   className="h-11 rounded-xl"
                 />
               </div>
@@ -401,7 +401,7 @@ export default function ${newPage.name.replace(/\s+/g, '') || 'NewPage'}() {
               onClick={() => createMutation.mutate({ 
                 ...newPage, 
                 project_id: projectId, 
-                code: defaultCode.replace(/NewPage/g, newPage.name.replace(/\s+/g, '') || 'NewPage').replace(/New Page/g, newPage.name || 'New Page')
+                code: defaultCode.replace(/NewPage/g, (newPage.name || '').replace(/\s+/g, '') || 'NewPage').replace(/New Page/g, newPage.name || 'New Page')
               })}
               disabled={!newPage.name || createMutation.isPending}
               className="bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-xl"
