@@ -325,18 +325,38 @@ export default function WorkflowBuilder() {
 
   const evaluateCondition = async (condition, data) => {
     try {
-      const prompt = `Evaluate this condition: "${condition}"\nWith this data: ${JSON.stringify(data)}\n\nReturn true or false.`;
+      const conditionStr = String(condition || '');
+      const prompt = `Evaluate this condition: "${conditionStr}"\nWith this data: ${JSON.stringify(data || {})}\n\nReturn only a JSON object with a "result" boolean property.`;
       const response = await base44.integrations.Core.InvokeLLM({
         prompt,
         response_json_schema: {
           type: "object",
           properties: {
             result: { type: "boolean" }
-          }
+          },
+          required: ["result"]
         }
       });
-      return response.result;
-    } catch {
+      
+      // Handle different response types
+      if (typeof response === 'object' && response !== null && 'result' in response) {
+        return Boolean(response.result);
+      } else if (typeof response === 'string') {
+        // Try to parse as JSON
+        try {
+          const parsed = JSON.parse(response);
+          return Boolean(parsed.result);
+        } catch {
+          // Check if the string contains 'true' or 'false'
+          const lower = response.toLowerCase().trim();
+          if (lower.includes('true')) return true;
+          if (lower.includes('false')) return false;
+          return false;
+        }
+      }
+      return false;
+    } catch (error) {
+      console.error('Error evaluating condition:', error);
       return false;
     }
   };
