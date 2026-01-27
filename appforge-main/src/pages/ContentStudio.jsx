@@ -137,7 +137,7 @@ Improvements to make:
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `${topic.replace(/\s+/g, '-').toLowerCase()}.md`;
+    a.download = `${(topic || 'content').replace(/\s+/g, '-').toLowerCase()}.md`;
     a.click();
     toast.success('Downloaded');
   };
