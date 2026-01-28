@@ -229,5 +229,3 @@ export default function EnvironmentVariables({ projectId = 'proj_default' }) {
     </div>
   );
 }
-
-export default EnvironmentVariables;

@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/dialog';
+import { Card, CardContent } from '@/components/ui/card';
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
 import { getStatusColor, getStatusIcon, canRollback, formatDuration, DEPLOYMENT_STATUS } from '@/lib/deploymentHistory';
-import { ChevronDown, RotateCcw, X, Eye, ChevronUp } from 'lucide-react';
+import { ChevronDown, RotateCcw, X, ChevronUp } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 export const DeploymentsTable = ({

@@ -156,5 +156,3 @@ export default function DeploymentsPage({ projectId = 'proj_default' }) {
     </div>
   );
 }
-
-export default DeploymentsPage;

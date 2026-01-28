@@ -46,6 +46,7 @@ export default [
           varsIgnorePattern: "^_",
           args: "after-used",
           argsIgnorePattern: "^_",
+          caughtErrors: "none",
         },
       ],
       "react/prop-types": "off",

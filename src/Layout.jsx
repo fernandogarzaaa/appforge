@@ -4,7 +4,7 @@ import Sidebar from '@/components/layout/Sidebar';
 import Header from '@/components/layout/Header';
 import HelpSidebar from '@/components/help/HelpSidebar';
 
-export default function Layout({ children, currentPageName, onSearchOpen }) {
+export default function Layout({ children, currentPageName: _currentPageName, onSearchOpen }) {
   const [user, setUser] = useState(null);
   const [currentProject, setCurrentProject] = useState(null);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);

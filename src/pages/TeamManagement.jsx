@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
 import { useTeamInvites } from '@/hooks/useTeamInvites';
 import { InviteTeamMemberForm } from '@/components/InviteTeamMemberForm';
 import { TeamMembersList } from '@/components/TeamMembersList';
@@ -185,5 +184,3 @@ export default function TeamManagement({ projectId = 'proj_default' }) {
     </div>
   );
 }
-
-export default TeamManagement;

@@ -4,10 +4,13 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { 
   Sparkles, Send, Plus, Trash2, MessageSquare,
   Loader2, Copy, Check, Code, FileCode, Database,
-  Globe, Brain, Zap, MessageCircle, ArrowLeft
+  Globe, Brain, Zap, MessageCircle, ArrowLeft, BarChart3
 } from 'lucide-react';
 import { Textarea } from '@/components/ui/textarea';
 import { generateEnhancedEntities } from '@/utils/enhancedEntityGeneration';
+import { useLLM } from '@/contexts/LLMContext';
+import ModelSelector from '@/components/ai/ModelSelector';
+import AIUsagePanel from '@/components/ai/AIUsagePanel';
 import APIDiscoveryPanel from '@/components/ai/APIDiscoveryPanel';
 import PredictiveModels from '@/components/ai/PredictiveModels';
 import GitHubIntegration from '@/components/ai/GitHubIntegration';
@@ -56,6 +59,9 @@ export default function AIAssistant() {
   const [suggestedTools, setSuggestedTools] = useState([]);
   const [showCommandPalette, setShowCommandPalette] = useState(false);
   const messagesEndRef = useRef(null);
+  
+  // LLM Context for model selection and usage tracking
+  const { query: llmQuery, selectedModel, getModelInfo } = useLLM();
 
   const urlParams = new URLSearchParams(window.location.search);
   const projectId = urlParams.get('projectId');
@@ -270,9 +276,9 @@ export default function AIAssistant() {
     setInput('');
     setIsLoading(true);
 
-    // Suggest relevant tools based on input
-    const toolSuggestions = await base44.integrations.Core.InvokeLLM({
-      prompt: `Analyze this request and suggest which tools would be most helpful: "${currentInput}"
+    try {
+      // Suggest relevant tools based on input (using LLM context)
+      const toolResult = await llmQuery(`Analyze this request and suggest which tools would be most helpful: "${currentInput}"
 
 Available tools:
 - api: API Discovery - Find and integrate public APIs
@@ -287,51 +293,67 @@ Available tools:
 - advanced: Advanced Tools - Refactoring, testing, performance
 - auditor: Project Auditor - Error detection and fixes
 
-Return JSON: {"suggested_tools": ["tool1", "tool2"], "reasoning": "why these tools"}`,
-      response_json_schema: {
-        type: "object",
-        properties: {
-          suggested_tools: { type: "array", items: { type: "string" } },
-          reasoning: { type: "string" }
+Return JSON: {"suggested_tools": ["tool1", "tool2"], "reasoning": "why these tools"}`, {
+        jsonSchema: {
+          type: "object",
+          properties: {
+            suggested_tools: { type: "array", items: { type: "string" } },
+            reasoning: { type: "string" }
+          }
         }
+      });
+
+      if (toolResult.parsedResponse?.suggested_tools?.length > 0) {
+        setSuggestedTools(toolResult.parsedResponse.suggested_tools);
       }
-    });
 
-    if (toolSuggestions.suggested_tools?.length > 0) {
-      setSuggestedTools(toolSuggestions.suggested_tools);
-    }
+      const documentContext = documents.length > 0 
+        ? `\n\nProject Documents Available: ${documents.map(d => d.name).join(', ')}`
+        : '';
 
-    const documentContext = documents.length > 0 
-      ? `\n\nProject Documents Available: ${documents.map(d => d.name).join(', ')}`
-      : '';
-
-    const response = await base44.integrations.Core.InvokeLLM({
-      prompt: `You are an advanced AI assistant helping to build web applications with AI capabilities.
+      // Get model info for response attribution
+      const modelInfo = getModelInfo(selectedModel);
+      
+      // Main response using LLM context
+      const result = await llmQuery(`You are an advanced AI assistant helping to build web applications with AI capabilities.
 ${integratedAPIs.length > 0 ? `\nIntegrated APIs: ${integratedAPIs.map(a => a.name).join(', ')}` : ''}${documentContext}
 
 User request: ${currentInput}
 
-Provide helpful, actionable responses with code examples when relevant. Be concise and practical.`,
-      add_context_from_internet: currentInput.toLowerCase().includes('api') || currentInput.toLowerCase().includes('latest') || currentInput.toLowerCase().includes('current'),
-      file_urls: documents.map(d => d.file_url)
-    });
+Provide helpful, actionable responses with code examples when relevant. Be concise and practical.`);
 
-    const assistantMessage = { role: 'assistant', content: response, timestamp: new Date().toISOString() };
-    const updatedMessages = [...newMessages, assistantMessage];
-    setMessages(updatedMessages);
-    setIsLoading(false);
+      const responseText = result.response || 'I apologize, but I was unable to generate a response. Please try again.';
+      const usedModel = result.model || 'base44';
+      const usedModelInfo = getModelInfo(usedModel);
+      
+      const assistantMessage = { 
+        role: 'assistant', 
+        content: responseText,
+        model: usedModel,
+        modelName: usedModelInfo?.name || 'AI',
+        timestamp: new Date().toISOString() 
+      };
+      
+      const updatedMessages = [...newMessages, assistantMessage];
+      setMessages(updatedMessages);
 
-    if (activeConversation) {
-      updateConversationMutation.mutate({
-        id: activeConversation.id,
-        data: { messages: updatedMessages },
-      });
-    } else {
-      createConversationMutation.mutate({
-        project_id: projectId,
-        title: currentInput.slice(0, 50) + (currentInput.length > 50 ? '...' : ''),
-        messages: updatedMessages,
-      });
+      if (activeConversation) {
+        updateConversationMutation.mutate({
+          id: activeConversation.id,
+          data: { messages: updatedMessages },
+        });
+      } else {
+        createConversationMutation.mutate({
+          project_id: projectId,
+          title: currentInput.slice(0, 50) + (currentInput.length > 50 ? '...' : ''),
+          messages: updatedMessages,
+        });
+      }
+    } catch (error) {
+      console.error('AI response error:', error);
+      toast.error('Failed to get AI response. Please try again.');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -697,13 +719,19 @@ Provide helpful, actionable responses with code examples when relevant. Be conci
                         "max-w-[80%] rounded-2xl p-4",
                         message.role === 'user'
                           ? "bg-indigo-600 text-white"
-                          : "bg-white border border-gray-100 shadow-sm"
+                          : "bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 shadow-sm"
                       )}
                     >
                       {message.role === 'user' ? (
                         <p className="text-sm">{message.content}</p>
                       ) : (
-                        <div className="prose prose-sm max-w-none">
+                        <div className="prose prose-sm max-w-none dark:prose-invert">
+                          {/* Show model used */}
+                          {message.modelName && (
+                            <div className="flex items-center gap-2 text-xs text-gray-400 dark:text-gray-500 mb-2 pb-2 border-b border-gray-100 dark:border-gray-700">
+                              <span className="font-medium">{message.modelName}</span>
+                            </div>
+                          )}
                           <ReactMarkdown
                             components={{
                               code: ({ inline, className, children, ...props }) => {
@@ -727,7 +755,7 @@ Provide helpful, actionable responses with code examples when relevant. Be conci
                                     </Button>
                                   </div>
                                 ) : (
-                                  <code className="bg-gray-100 px-1.5 py-0.5 rounded text-sm">{children}</code>
+                                  <code className="bg-gray-100 dark:bg-gray-700 px-1.5 py-0.5 rounded text-sm">{children}</code>
                                 );
                               },
                             }}
@@ -738,8 +766,8 @@ Provide helpful, actionable responses with code examples when relevant. Be conci
                       )}
                     </div>
                     {message.role === 'user' && (
-                      <div className="w-8 h-8 rounded-lg bg-indigo-100 flex items-center justify-center flex-shrink-0">
-                        <span className="text-sm font-medium text-indigo-600">U</span>
+                      <div className="w-8 h-8 rounded-lg bg-indigo-100 dark:bg-indigo-900/30 flex items-center justify-center flex-shrink-0">
+                        <span className="text-sm font-medium text-indigo-600 dark:text-indigo-400">U</span>
                       </div>
                     )}
                   </motion.div>
@@ -748,17 +776,42 @@ Provide helpful, actionable responses with code examples when relevant. Be conci
 
               {isLoading && (
                 <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.2 }}
                   className="flex gap-4"
                 >
-                  <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
+                  <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center flex-shrink-0">
                     <Sparkles className="w-4 h-4 text-white" />
                   </div>
-                  <div className="bg-white border border-gray-100 rounded-2xl p-4 shadow-sm">
-                    <div className="flex items-center gap-2 text-gray-500">
-                      <Loader2 className="w-4 h-4 animate-spin" />
-                      <span className="text-sm">Thinking...</span>
+                  <div className="bg-white border border-gray-100 rounded-2xl px-5 py-4 shadow-sm max-w-2xl">
+                    <div className="flex items-center gap-3">
+                      <div className="relative">
+                        <Loader2 className="w-5 h-5 animate-spin text-indigo-600" />
+                        <div className="absolute inset-0 w-5 h-5 border-2 border-indigo-200 rounded-full animate-pulse" />
+                      </div>
+                      <div className="space-y-1">
+                        <span className="text-sm font-medium text-gray-700">
+                          {selectedModel ? getModelInfo(selectedModel)?.name : 'AI'} is thinking...
+                        </span>
+                        <div className="flex gap-1">
+                          <motion.div
+                            animate={{ opacity: [0.4, 1, 0.4] }}
+                            transition={{ duration: 1.5, repeat: Infinity, delay: 0 }}
+                            className="w-1.5 h-1.5 rounded-full bg-indigo-400"
+                          />
+                          <motion.div
+                            animate={{ opacity: [0.4, 1, 0.4] }}
+                            transition={{ duration: 1.5, repeat: Infinity, delay: 0.2 }}
+                            className="w-1.5 h-1.5 rounded-full bg-indigo-400"
+                          />
+                          <motion.div
+                            animate={{ opacity: [0.4, 1, 0.4] }}
+                            transition={{ duration: 1.5, repeat: Infinity, delay: 0.4 }}
+                            className="w-1.5 h-1.5 rounded-full bg-indigo-400"
+                          />
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </motion.div>
@@ -770,8 +823,22 @@ Provide helpful, actionable responses with code examples when relevant. Be conci
         )}
 
         {/* Universal Chat Bar - Always visible */}
-        <div className="p-4 bg-white border-t border-gray-200 shadow-lg">
+        <div className="p-4 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700 shadow-lg">
           <div className="max-w-4xl mx-auto">
+            {/* Model Selector Row */}
+            <div className="flex items-center justify-between mb-3">
+              <ModelSelector compact className="flex-shrink-0" />
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setActivePanel('usage')}
+                className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200"
+              >
+                <BarChart3 className="w-4 h-4 mr-2" />
+                Usage
+              </Button>
+            </div>
+            
             <div className="flex gap-3 items-end">
               <div className="flex-1 relative">
                 <Textarea
@@ -784,7 +851,7 @@ Provide helpful, actionable responses with code examples when relevant. Be conci
                     }
                   }}
                   placeholder="Describe what you want to build... (e.g., 'Create a mobile app for tracking fitness goals' or 'Build an API integration for weather data')"
-                  className="min-h-[60px] max-h-[120px] rounded-xl text-sm pr-24 bg-white border-gray-300 focus:ring-2 focus:ring-indigo-500 resize-none"
+                  className="min-h-[60px] max-h-[120px] rounded-xl text-sm pr-24 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-indigo-500 resize-none dark:text-white dark:placeholder-gray-400"
                   rows={2}
                 />
                 <div className="absolute right-3 bottom-3 flex items-center gap-2">
@@ -829,6 +896,24 @@ Provide helpful, actionable responses with code examples when relevant. Be conci
           </div>
         </div>
       </div>
+
+      {/* AI Usage Panel Modal */}
+      {activePanel === 'usage' && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-2xl max-w-2xl w-full mx-4 max-h-[80vh] overflow-auto">
+            <div className="flex items-center justify-between p-4 border-b dark:border-gray-700">
+              <h2 className="text-lg font-semibold dark:text-white">AI Usage Analytics</h2>
+              <Button variant="ghost" size="sm" onClick={() => setActivePanel(null)}>
+                <ArrowLeft className="w-4 h-4 mr-2" />
+                Close
+              </Button>
+            </div>
+            <div className="p-4">
+              <AIUsagePanel showHistory />
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Command Palette */}
       <CommandPalette

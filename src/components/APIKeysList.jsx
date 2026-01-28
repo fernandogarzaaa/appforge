@@ -13,7 +13,7 @@ import {
 } from '@/components/ui/alert-dialog';
 import { formatDate, maskAPIKey, isKeyExpiringSoon } from '@/lib/apiKeyUtils';
 
-export function APIKeysList({ keys, onRevoke, onDelete }) {
+export function APIKeysList({ keys, onRevoke, onDelete: _onDelete }) {
   const [revealedKeys, setRevealedKeys] = useState({});
   const [copiedKey, setCopiedKey] = useState(null);
 

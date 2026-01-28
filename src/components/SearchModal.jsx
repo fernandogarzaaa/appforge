@@ -3,7 +3,6 @@ import { Search, X, ArrowRight } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useSearch } from '@/hooks/useSearch';
-import { cn } from '@/lib/utils';
 
 export function SearchModal({ isOpen, onClose, context = {} }) {
   const { query, search, clear, results, isLoading, hasResults } = useSearch(context);

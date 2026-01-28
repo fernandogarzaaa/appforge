@@ -15,5 +15,24 @@ export default defineConfig({
       visualEditAgent: true
     }),
     react(),
-  ]
+  ],
+  build: {
+    // Increase chunk size warning limit (we have proper code splitting now)
+    chunkSizeWarningLimit: 800,
+    rollupOptions: {
+      output: {
+        // Manual chunk splitting for better caching
+        manualChunks: {
+          // Vendor chunks - separate large libraries
+          'vendor-react': ['react', 'react-dom', 'react-router-dom'],
+          'vendor-query': ['@tanstack/react-query'],
+          'vendor-ui': ['@radix-ui/react-dialog', '@radix-ui/react-dropdown-menu', '@radix-ui/react-tabs', '@radix-ui/react-select', '@radix-ui/react-popover'],
+          'vendor-charts': ['recharts'],
+          'vendor-motion': ['framer-motion'],
+          'vendor-editor': ['react-quill', 'quill'],
+          'vendor-utils': ['lodash', 'date-fns', 'zod'],
+        },
+      },
+    },
+  },
 });

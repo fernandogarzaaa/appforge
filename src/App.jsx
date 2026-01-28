@@ -2,15 +2,19 @@ import { Toaster } from "@/components/ui/toaster"
 import { QueryClientProvider } from '@tanstack/react-query'
 import { queryClientInstance } from '@/lib/query-client'
 import NavigationTracker from '@/lib/NavigationTracker'
-import { pagesConfig } from './pages.config'
+import { pagesConfig } from './pages.config.jsx'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import PageNotFound from './lib/PageNotFound';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 import { ThemeProvider } from '@/context/ThemeContext';
+import { LLMProvider } from '@/contexts/LLMContext';
 import { SearchModal } from '@/components/SearchModal';
 import ErrorBoundary from '@/components/ErrorBoundary';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { validateEnv } from '@/utils/env';
+import errorTracker, { setUser, clearUser } from '@/utils/errorTracking';
+import { startHealthMonitoring } from '@/utils/healthCheck';
 
 const { Pages, Layout, mainPage } = pagesConfig;
 const mainPageKey = mainPage ?? Object.keys(Pages)[0];
@@ -78,19 +82,37 @@ const AuthenticatedApp = ({ onSearchOpen }) => {
 function App() {
   const [searchOpen, setSearchOpen] = useState(false);
 
+  useEffect(() => {
+    // Validate environment configuration
+    const envValidation = validateEnv();
+    if (!envValidation.valid) {
+      console.warn('⚠️ Environment configuration issues detected');
+      if (envValidation.missing.length > 0) {
+        console.warn('Missing variables:', envValidation.missing);
+      }
+    }
+
+    // Start health monitoring in production
+    if (import.meta.env.PROD) {
+      startHealthMonitoring(60000); // Check every minute
+    }
+  }, []);
+
   return (
     <ErrorBoundary>
       <ThemeProvider>
-        <AuthProvider>
-          <QueryClientProvider client={queryClientInstance}>
-            <Router>
-              <NavigationTracker />
-              <AuthenticatedApp onSearchOpen={() => setSearchOpen(true)} />
-              <SearchModal isOpen={searchOpen} onClose={() => setSearchOpen(false)} />
-            </Router>
-            <Toaster />
-          </QueryClientProvider>
-        </AuthProvider>
+        <LLMProvider>
+          <AuthProvider>
+            <QueryClientProvider client={queryClientInstance}>
+              <Router>
+                <NavigationTracker />
+                <AuthenticatedApp onSearchOpen={() => setSearchOpen(true)} />
+                <SearchModal isOpen={searchOpen} onClose={() => setSearchOpen(false)} />
+              </Router>
+              <Toaster />
+            </QueryClientProvider>
+          </AuthProvider>
+        </LLMProvider>
       </ThemeProvider>
     </ErrorBoundary>
   )

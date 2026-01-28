@@ -8,9 +8,7 @@ import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {
   Dialog,
   DialogContent,
-  DialogHeader,
   DialogTitle,
-  DialogFooter,
 } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
@@ -23,7 +21,6 @@ import {
 } from '@/components/ui/select';
 import ProjectCard from '@/components/dashboard/ProjectCard';
 import EmptyState from '@/components/common/EmptyState';
-import ProjectTemplates from '@/components/projects/ProjectTemplates';
 import { AnimatePresence } from 'framer-motion';
 
 const projectIcons = ['📁', '🚀', '💼', '🎨', '📱', '🌐', '🛒', '📊', '🎮', '📝', '🔧', '💡'];

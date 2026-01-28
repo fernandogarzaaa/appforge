@@ -93,28 +93,6 @@ export const CloneProjectModal = ({ open, onClose, project, onCloneSuccess }) =>
       setStep('configure');
     }
   };
-        team_members: copyTeamMembers ? [...(project.team_members || [])] : [],
-        deployments: copyDeployments ? [...(project.deployments || [])] : []
-      };
-
-      setStep('success');
-      setProgress(100);
-
-      // Notify parent of success
-      if (onCloneSuccess) {
-        onCloneSuccess(clonedProject);
-      }
-
-      // Auto-close after 3 seconds
-      setTimeout(() => {
-        handleClose();
-      }, 3000);
-    } catch (err) {
-      setError(err.message || 'Failed to clone project');
-      setIsCloning(false);
-      setStep('config');
-    }
-  };
 
   const handleClose = () => {
     setCloneName('');

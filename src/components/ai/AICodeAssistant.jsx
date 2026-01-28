@@ -37,7 +37,7 @@ export default function AICodeAssistant({ code, language = 'javascript', onCodeU
       
       setSuggestion({ type: 'explanation', ...result });
       toast.success('Code explained!');
-    } catch (error) {
+    } catch (_error) {
       toast.error('Failed to explain code');
     } finally {
       setIsProcessing(false);
@@ -70,7 +70,7 @@ export default function AICodeAssistant({ code, language = 'javascript', onCodeU
       
       setSuggestion({ type: 'improvement', ...result });
       toast.success('Code improved!');
-    } catch (error) {
+    } catch (_error) {
       toast.error('Failed to improve code');
     } finally {
       setIsProcessing(false);
@@ -107,7 +107,7 @@ export default function AICodeAssistant({ code, language = 'javascript', onCodeU
       } else {
         toast.warning(`Found ${result.bugs_found.length} potential issues`);
       }
-    } catch (error) {
+    } catch (_error) {
       toast.error('Failed to analyze code');
     } finally {
       setIsProcessing(false);
@@ -140,7 +140,7 @@ export default function AICodeAssistant({ code, language = 'javascript', onCodeU
       
       setSuggestion({ type: 'tests', ...result });
       toast.success('Tests generated!');
-    } catch (error) {
+    } catch (_error) {
       toast.error('Failed to generate tests');
     } finally {
       setIsProcessing(false);

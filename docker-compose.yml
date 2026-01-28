@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  appforge:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - VITE_BASE44_USERNAME=${BASE44_USERNAME}
+        - VITE_BASE44_PASSWORD=${BASE44_PASSWORD}
+        - VITE_BASE44_API_URL=${BASE44_API_URL:-https://appforge.fun}
+    ports:
+      - "${PORT:-80}:80"
+    environment:
+      - NODE_ENV=production
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"

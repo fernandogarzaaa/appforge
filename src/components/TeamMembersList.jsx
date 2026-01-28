@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/dialog';
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
 import {
   Select,
   SelectContent,
@@ -11,7 +10,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { getRoleColor, TEAM_ROLES } from '@/lib/teamInvites';
-import { Shield, Trash2, MoreHorizontal } from 'lucide-react';
+import { Trash2 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import toast from 'react-hot-toast';
 

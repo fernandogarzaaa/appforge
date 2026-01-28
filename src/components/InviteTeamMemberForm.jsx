@@ -13,13 +13,13 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { AlertCircle, CheckCircle2 } from 'lucide-react';
-import { validateEmail, TEAM_ROLES, ROLE_PERMISSIONS, getRoleColor } from '@/lib/teamInvites';
+import { validateEmail, TEAM_ROLES, ROLE_PERMISSIONS } from '@/lib/teamInvites';
 
 export const InviteTeamMemberForm = ({
   open,
   onClose,
   onSubmit,
-  isLoading
+  isLoading: _isLoading
 }) => {
   const [email, setEmail] = useState('');
   const [role, setRole] = useState(TEAM_ROLES.DEVELOPER);

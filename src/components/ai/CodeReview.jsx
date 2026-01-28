@@ -15,7 +15,7 @@ export default function CodeReview({ projectId }) {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [review, setReview] = useState(null);
 
-  const { data: project } = useQuery({
+  const { data: _project } = useQuery({
     queryKey: ['project', projectId],
     queryFn: async () => {
       const projects = await base44.entities.Project.filter({ id: projectId });

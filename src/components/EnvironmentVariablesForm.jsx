@@ -11,7 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { AlertCircle, CheckCircle2 } from 'lucide-react';
+import { AlertCircle } from 'lucide-react';
 import { validateVariableName, validateVariableValue, ENV_VAR_TYPES, ENVIRONMENT_NAMES } from '@/lib/environmentVariables';
 
 export const EnvironmentVariablesForm = ({
@@ -19,7 +19,7 @@ export const EnvironmentVariablesForm = ({
   onClose,
   onSubmit,
   variable,
-  isLoading
+  isLoading: _isLoading
 }) => {
   const [name, setName] = useState('');
   const [value, setValue] = useState('');

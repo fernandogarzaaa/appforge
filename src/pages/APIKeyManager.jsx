@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { base44 } from '@/api/base44Client';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -8,12 +7,10 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { CreateAPIKeyModal } from '@/components/CreateAPIKeyModal';
-import { APIKeysList } from '@/components/APIKeysList';
 import { useAPIKeys } from '@/hooks/useAPIKeys';
 import { 
   Plus, Key, Eye, EyeOff, Copy, Trash2, Shield, 
-  AlertTriangle, CheckCircle2, Clock, AlertCircle
+  AlertTriangle, CheckCircle2, Clock
 } from 'lucide-react';
 import { toast } from 'sonner';
 

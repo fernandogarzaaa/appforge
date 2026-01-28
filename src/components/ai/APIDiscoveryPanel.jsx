@@ -10,7 +10,7 @@ export default function APIDiscoveryPanel({ onIntegrate }) {
   const [search, setSearch] = useState('');
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [copiedId, setCopiedId] = useState(null);
+  const [_copiedId, setCopiedId] = useState(null);
   const debounceTimerRef = useRef(null);
 
   const performSearch = async (query) => {

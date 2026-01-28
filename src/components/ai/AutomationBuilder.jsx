@@ -51,10 +51,10 @@ export default function AutomationBuilder({ projectId }) {
   const [selectedAutomation, setSelectedAutomation] = useState(null);
   const [newAutomation, setNewAutomation] = useState({ name: '', description: '', trigger: null });
   const [nodes, setNodes] = useState([]);
-  const [selectedNode, setSelectedNode] = useState(null);
+  const [_selectedNode, setSelectedNode] = useState(null);
   const queryClient = useQueryClient();
 
-  const { data: automations = [], isLoading } = useQuery({
+  const { data: automations = [], isLoading: _isLoading } = useQuery({
     queryKey: ['automations', projectId],
     queryFn: () => base44.entities.Automation.filter({ project_id: projectId }),
     enabled: !!projectId,
@@ -378,7 +378,7 @@ export default function AutomationBuilder({ projectId }) {
 
             {/* Action Nodes */}
             <div className="flex-1 space-y-4">
-              {nodes.map((node, index) => {
+              {nodes.map((node, _index) => {
                 const nodeType = ACTION_NODES.find(n => n.id === node.type);
                 const NodeIcon = nodeType?.icon || Code;
                 

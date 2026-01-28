@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
-import { ExternalLink, Code, Eye, Database, FileCode, Sparkles, Globe } from 'lucide-react';
+import { ExternalLink, Code, Eye, Database, FileCode, Globe } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
@@ -451,7 +451,7 @@ export default function ProjectViewer() {
                     <div className="px-6 py-4 bg-green-50 border-t border-green-100">
                       <p className="text-sm font-semibold text-green-900 mb-3">API Endpoints</p>
                       <div className="space-y-2">
-                        {Object.entries(entity.metadata.api_endpoints).map(([name, config], i) => (
+                        {Object.entries(entity.metadata.api_endpoints).map(([_name, config], i) => (
                           <div key={i} className="flex items-center gap-3 p-2 bg-white rounded border border-green-100">
                             <span className={`px-2 py-1 text-xs font-mono rounded font-semibold ${
                               config.method === 'GET' ? 'bg-green-100 text-green-700' :

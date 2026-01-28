@@ -3,13 +3,14 @@ import { base44 } from '@/api/base44Client';
 import { useQuery } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
-import { FolderKanban, Database, FileCode, Component, ArrowRight, Sparkles, Plus, Send } from 'lucide-react';
+import { FolderKanban, Database, FileCode, Component, ArrowRight, Sparkles, Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import StatCard from '@/components/dashboard/StatCard';
 import ProjectCard from '@/components/dashboard/ProjectCard';
 import EmptyState from '@/components/common/EmptyState';
 import { motion } from 'framer-motion';
+import Skeletons from '@/components/common/Skeletons';
 
 export default function Dashboard() {
   const [ideaInput, setIdeaInput] = useState('');
@@ -156,17 +157,7 @@ export default function Dashboard() {
         {isLoading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
             {[1, 2, 3].map((i) => (
-              <div key={i} className="bg-white rounded-xl border border-gray-200 p-4 animate-pulse">
-                <div className="flex items-center gap-2.5 mb-3">
-                  <div className="w-9 h-9 bg-gray-200 rounded-lg" />
-                  <div>
-                    <div className="h-3 w-20 bg-gray-200 rounded mb-1.5" />
-                    <div className="h-2.5 w-14 bg-gray-100 rounded" />
-                  </div>
-                </div>
-                <div className="h-8 bg-gray-100 rounded mb-3" />
-                <div className="h-7 bg-gray-50 rounded" />
-              </div>
+              <Skeletons.ProjectCard key={i} />
             ))}
           </div>
         ) : projects.length === 0 ? (
