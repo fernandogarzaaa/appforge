@@ -9,48 +9,46 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Unauthorized' }, { status: 403 });
     }
 
-    const { subscription_id } = await req.json();
+    const { recurring_charge_id } = await req.json();
 
-    if (!subscription_id) {
-      return Response.json({ error: 'Missing subscription_id' }, { status: 400 });
+    if (!recurring_charge_id) {
+      return Response.json({ error: 'Missing recurring_charge_id' }, { status: 400 });
     }
 
-    const stripeSecretKey = Deno.env.get('STRIPE_SECRET_KEY');
-    if (!stripeSecretKey) {
+    const xenditSecretKey = Deno.env.get('XENDIT_SECRET_KEY');
+    if (!xenditSecretKey) {
       return Response.json({ error: 'Payment service not configured' }, { status: 500 });
     }
 
-    // Get the subscription to find customer email
-    const subResponse = await fetch(
-      `https://api.stripe.com/v1/subscriptions/${subscription_id}`,
+    // Get the recurring charge to find customer email
+    const chargeResponse = await fetch(
+      `https://api.xendit.co/v4/recurring_charges/${recurring_charge_id}`,
       {
-        headers: { 'Authorization': `Bearer ${stripeSecretKey}` },
+        headers: { 'Authorization': `Basic ${btoa(`${xenditSecretKey}:`)}`},
       }
     );
 
-    if (!subResponse.ok) {
-      return Response.json({ error: 'Subscription not found' }, { status: 404 });
+    if (!chargeResponse.ok) {
+      return Response.json({ error: 'Recurring charge not found' }, { status: 404 });
     }
 
-    const subscription = await subResponse.json();
-    const customerEmail = subscription.customer_email;
+    const charge = await chargeResponse.json();
+    const customerEmail = charge.customer_email || charge.customer_id;
 
-    // Cancel the subscription
+    // Cancel the recurring charge
     const cancelResponse = await fetch(
-      `https://api.stripe.com/v1/subscriptions/${subscription_id}`,
+      `https://api.xendit.co/v4/recurring_charges/${recurring_charge_id}`,
       {
         method: 'DELETE',
-        headers: { 'Authorization': `Bearer ${stripeSecretKey}` },
+        headers: { 'Authorization': `Basic ${btoa(`${xenditSecretKey}:`)}` },
       }
     );
 
     if (!cancelResponse.ok) {
       const error = await cancelResponse.json();
-      console.error('Stripe error:', error);
-      return Response.json({ error: 'Failed to cancel subscription' }, { status: 500 });
+      console.error('Xendit error:', error);
+      return Response.json({ error: 'Failed to cancel recurring charge' }, { status: 500 });
     }
-
-    const canceledSub = await cancelResponse.json();
 
     // Send cancellation email
     try {
@@ -64,11 +62,11 @@ Deno.serve(async (req) => {
       console.error('Failed to send cancellation email:', emailError);
     }
 
-    console.log(`Admin canceled subscription ${subscription_id}`);
+    console.log(`Admin canceled recurring charge ${recurring_charge_id}`);
 
     return Response.json({
       success: true,
-      subscription_id: canceledSub.id
+      recurring_charge_id: recurring_charge_id
     }, { status: 200 });
   } catch (error) {
     console.error('Admin cancel subscription error:', error);

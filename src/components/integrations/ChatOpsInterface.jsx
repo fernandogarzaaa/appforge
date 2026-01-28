@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
-import { useQuery, useMutation } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
 import { MessageCircle, Send, HelpCircle } from 'lucide-react';
-import { toast } from 'sonner';
 
 export default function ChatOpsInterface() {
   const [input, setInput] = useState('');

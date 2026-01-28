@@ -8,7 +8,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Plus, Edit2, Trash2, MessageSquare, Settings, Zap } from 'lucide-react';
+import { Plus, Edit2, Trash2, MessageSquare } from 'lucide-react';
 import { toast } from 'sonner';
 import ChatbotPersonalityConfig from './ChatbotPersonalityConfig';
 import ChatbotKnowledgeConfig from './ChatbotKnowledgeConfig';

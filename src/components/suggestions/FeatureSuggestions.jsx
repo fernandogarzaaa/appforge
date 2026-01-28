@@ -1,11 +1,10 @@
 import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { 
-  Sparkles, Database, Workflow, Shield, Globe, 
-  Zap, Users, Bell, FileCode, Code2, Blocks,
-  TrendingUp, Link2, TestTube, GitBranch
+  Sparkles, Database, Shield, 
+  Zap, Users, Link2, TestTube, GitBranch
 } from 'lucide-react';
 
 const suggestedFeatures = [
@@ -69,7 +68,7 @@ const suggestedFeatures = [
     icon: Link2,
     color: 'orange',
     features: [
-      { name: 'Stripe Advanced', description: 'Subscriptions, invoices, payment links', priority: 'high' },
+      { name: 'Xendit Advanced', description: 'Subscriptions, invoices, payment links', priority: 'high' },
       { name: 'Email Providers', description: 'SendGrid, Mailchimp integration', priority: 'medium' },
       { name: 'SMS/WhatsApp', description: 'Twilio integration for messaging', priority: 'medium' },
       { name: 'Cloud Storage', description: 'AWS S3, Google Cloud Storage', priority: 'high' }

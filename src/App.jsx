@@ -7,16 +7,19 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import PageNotFound from './lib/PageNotFound';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
+import { ThemeProvider } from '@/context/ThemeContext';
+import { SearchModal } from '@/components/SearchModal';
+import { useState } from 'react';
 
 const { Pages, Layout, mainPage } = pagesConfig;
 const mainPageKey = mainPage ?? Object.keys(Pages)[0];
 const MainPage = mainPageKey ? Pages[mainPageKey] : <></>;
 
-const LayoutWrapper = ({ children, currentPageName }) => Layout ?
-  <Layout currentPageName={currentPageName}>{children}</Layout>
+const LayoutWrapper = ({ children, currentPageName, onSearchOpen }) => Layout ?
+  <Layout currentPageName={currentPageName} onSearchOpen={onSearchOpen}>{children}</Layout>
   : <>{children}</>;
 
-const AuthenticatedApp = () => {
+const AuthenticatedApp = ({ onSearchOpen }) => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
 
   // Show loading spinner while checking app public settings or auth
@@ -43,7 +46,7 @@ const AuthenticatedApp = () => {
   return (
     <Routes>
       <Route path="/" element={
-        <LayoutWrapper currentPageName={mainPageKey}>
+        <LayoutWrapper currentPageName={mainPageKey} onSearchOpen={onSearchOpen}>
           <MainPage />
         </LayoutWrapper>
       } />
@@ -52,7 +55,7 @@ const AuthenticatedApp = () => {
           key={path}
           path={`/${path}`}
           element={
-            <LayoutWrapper currentPageName={path}>
+            <LayoutWrapper currentPageName={path} onSearchOpen={onSearchOpen}>
               <Page />
             </LayoutWrapper>
           }
@@ -65,17 +68,21 @@ const AuthenticatedApp = () => {
 
 
 function App() {
+  const [searchOpen, setSearchOpen] = useState(false);
 
   return (
-    <AuthProvider>
-      <QueryClientProvider client={queryClientInstance}>
-        <Router>
-          <NavigationTracker />
-          <AuthenticatedApp />
-        </Router>
-        <Toaster />
-      </QueryClientProvider>
-    </AuthProvider>
+    <ThemeProvider>
+      <AuthProvider>
+        <QueryClientProvider client={queryClientInstance}>
+          <Router>
+            <NavigationTracker />
+            <AuthenticatedApp onSearchOpen={() => setSearchOpen(true)} />
+            <SearchModal isOpen={searchOpen} onClose={() => setSearchOpen(false)} />
+          </Router>
+          <Toaster />
+        </QueryClientProvider>
+      </AuthProvider>
+    </ThemeProvider>
   )
 }
 

@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { 
   Sparkles, Zap, Shield, Code, Rocket, Users, 
-  CheckCircle, ArrowRight, Star, Globe
+  CheckCircle, ArrowRight, Globe
 } from 'lucide-react';
 import { createPageUrl } from '@/utils';
 import { Link } from 'react-router-dom';

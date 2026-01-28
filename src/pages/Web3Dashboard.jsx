@@ -4,11 +4,10 @@ import { useQuery } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { 
-  Coins, Image, FileCode, ArrowRight, Wallet, 
-  TrendingUp, Activity, Zap, Plus
+  Coins, Image, FileCode, ArrowRight, Wallet, Activity, Zap
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import StatCard from '@/components/dashboard/StatCard';
 import TokenCard from '@/components/web3/TokenCard';
 import NFTCollectionCard from '@/components/web3/NFTCollectionCard';

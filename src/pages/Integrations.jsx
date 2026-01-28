@@ -5,16 +5,15 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import { 
   Bot, Database, Mail, MessageSquare, Zap, Code, 
-  Cloud, Share2, CreditCard, BarChart3, FileText,
-  Globe, Search, CheckCircle, Plus, Settings, Star,
+  Cloud, Share2, CreditCard, BarChart3, FileText, Search, CheckCircle, Plus, Settings, Star,
   Users, Briefcase, ShoppingCart, TrendingUp, Package,
-  Calendar, Video, Phone, DollarSign, Lock, Download
+  Calendar, Video, Phone, Download
 } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -93,7 +92,7 @@ const integrations = {
     { name: 'Pinterest', description: 'Visual discovery', icon: Share2, status: 'available', color: 'red', rating: 4.4 }
   ],
   payment: [
-    { name: 'Stripe', description: 'Payment processing', icon: CreditCard, status: 'connected', color: 'purple', rating: 4.9 },
+    { name: 'Xendit', description: 'Payment processing & invoices', icon: CreditCard, status: 'connected', color: 'blue', rating: 4.9 },
     { name: 'PayPal', description: 'Digital payments', icon: CreditCard, status: 'available', color: 'blue', rating: 4.6 },
     { name: 'Square', description: 'Payment platform', icon: CreditCard, status: 'available', color: 'slate', rating: 4.7 },
     { name: 'Braintree', description: 'Payment gateway', icon: CreditCard, status: 'available', color: 'blue', rating: 4.5 },

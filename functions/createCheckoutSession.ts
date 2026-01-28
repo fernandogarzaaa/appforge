@@ -1,4 +1,12 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.6';
+import { createRecurringInvoice } from '../src/functions/utils/xenditClient.ts';
+
+// Xendit price mapping
+const planPrices = {
+  'price_1StWdZ8rNvlz2v0BtngMRUyS': { name: 'Basic', amount: 20 },
+  'price_1StWdZ8rNvlz2v0BV7sIV4A9': { name: 'Pro', amount: 30 },
+  'price_1StWdZ8rNvlz2v0BSl7yx4v7': { name: 'Premium', amount: 99 }
+};
 
 Deno.serve(async (req) => {
   try {
@@ -16,46 +24,55 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Missing priceId' }, { status: 400 });
     }
 
-    const stripeSecretKey = Deno.env.get('STRIPE_SECRET_KEY');
+    const xenditSecretKey = Deno.env.get('XENDIT_SECRET_KEY');
     const appId = Deno.env.get('BASE44_APP_ID');
     
-    if (!stripeSecretKey) {
-      console.error('STRIPE_SECRET_KEY not configured');
+    if (!xenditSecretKey) {
+      console.error('XENDIT_SECRET_KEY not configured');
       return Response.json({ error: 'Payment service not configured' }, { status: 500 });
+    }
+
+    // Get plan info
+    const planInfo = planPrices[priceId];
+    if (!planInfo) {
+      return Response.json({ error: 'Invalid price ID' }, { status: 400 });
     }
 
     // Get origin for redirect URLs
     const origin = new URL(req.url).origin;
 
-    // Create Stripe checkout session
-    const checkoutResponse = await fetch('https://api.stripe.com/v1/checkout/sessions', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${stripeSecretKey}`,
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body: new URLSearchParams({
-        'payment_method_types[]': 'card',
-        'line_items[0][price]': priceId,
-        'line_items[0][quantity]': '1',
-        'mode': 'subscription',
-        'success_url': `${origin}?session_id={CHECKOUT_SESSION_ID}`,
-        'cancel_url': origin,
-        'customer_email': user.email,
-        'metadata[base44_app_id]': appId || 'unknown',
-        'metadata[user_email]': user.email,
-      }).toString(),
-    });
+    try {
+      // Create Xendit recurring invoice
+      const invoice = await createRecurringInvoice({
+        externalId: `${user.id || user.email}_${Date.now()}`,
+        amount: planInfo.amount,
+        description: `${planInfo.name} Plan Subscription`,
+        customerEmail: user.email,
+        customerName: user.name || user.email.split('@')[0],
+        currency: 'USD',
+        interval: 'MONTH',
+        intervalCount: 1,
+        successRedirectUrl: `${origin}?payment=success`,
+        failureRedirectUrl: `${origin}?payment=failed`,
+        metadata: {
+          base44_app_id: appId || 'unknown',
+          user_email: user.email,
+          plan_name: planInfo.name,
+          price_id: priceId
+        }
+      });
 
-    if (!checkoutResponse.ok) {
-      const error = await checkoutResponse.json();
-      console.error('Stripe error:', error);
-      return Response.json({ error: 'Failed to create checkout session' }, { status: 500 });
+      // Return the invoice URL for checkout
+      return Response.json({ 
+        url: invoice.invoice_url,
+        invoiceId: invoice.id
+      }, { status: 200 });
+    } catch (error) {
+      console.error('Xendit invoice creation error:', error);
+      return Response.json({ 
+        error: error.message || 'Failed to create payment session' 
+      }, { status: 500 });
     }
-
-    const session = await checkoutResponse.json();
-
-    return Response.json({ url: session.url }, { status: 200 });
   } catch (error) {
     console.error('Checkout session error:', error);
     return Response.json({ error: error.message }, { status: 500 });

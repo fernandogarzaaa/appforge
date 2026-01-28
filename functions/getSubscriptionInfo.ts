@@ -1,4 +1,5 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.6';
+import { getCustomerInvoices } from '../src/functions/utils/xenditClient.ts';
 
 const planPrices = {
   'price_1StWdZ8rNvlz2v0BtngMRUyS': { name: 'Basic', price: 20 },
@@ -15,59 +16,68 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const stripeSecretKey = Deno.env.get('STRIPE_SECRET_KEY');
-    if (!stripeSecretKey) {
+    const xenditSecretKey = Deno.env.get('XENDIT_SECRET_KEY');
+    if (!xenditSecretKey) {
       return Response.json({ error: 'Payment service not configured' }, { status: 500 });
     }
 
-    // Get customer by email
-    const customerResponse = await fetch(
-      `https://api.stripe.com/v1/customers?email=${encodeURIComponent(user.email)}`,
-      {
-        headers: { 'Authorization': `Bearer ${stripeSecretKey}` },
+    try {
+      // Get customer invoices from Xendit
+      const invoices = await getCustomerInvoices(user.email);
+
+      if (!invoices || invoices.length === 0) {
+        // No subscription found
+        return Response.json(null, { status: 200 });
       }
-    );
 
-    if (!customerResponse.ok) {
-      console.error('Failed to fetch customer');
-      return Response.json({ error: 'Failed to fetch customer' }, { status: 500 });
-    }
+      // Find the most recent active/recurring invoice
+      const activeInvoice = invoices.find((inv: any) => 
+        inv.status === 'PENDING' || inv.status === 'PAID' || inv.recurring_charge_id
+      );
 
-    const customerData = await customerResponse.json();
-    const customer = customerData.data[0];
-
-    if (!customer) {
-      // No subscription found
-      return Response.json(null, { status: 200 });
-    }
-
-    // Get active subscription for this customer
-    const subResponse = await fetch(
-      `https://api.stripe.com/v1/subscriptions?customer=${customer.id}&status=active&limit=1`,
-      {
-        headers: { 'Authorization': `Bearer ${stripeSecretKey}` },
+      if (!activeInvoice) {
+        // No active subscription
+        return Response.json(null, { status: 200 });
       }
-    );
 
-    if (!subResponse.ok) {
-      console.error('Failed to fetch subscription');
+      // Extract plan info from metadata or description
+      const priceId = activeInvoice.metadata?.price_id;
+      const planInfo = priceId ? planPrices[priceId] : null;
+      
+      // Determine plan from amount if not in metadata
+      let planName = planInfo?.name || 'Unknown';
+      let planPrice = planInfo?.price || activeInvoice.amount;
+
+      if (!planInfo) {
+        // Fallback: guess plan from amount
+        const amount = activeInvoice.amount;
+        if (amount === 20) planName = 'Basic';
+        else if (amount === 30) planName = 'Pro';
+        else if (amount === 99) planName = 'Premium';
+        planPrice = amount;
+      }
+
+      return Response.json({
+        id: activeInvoice.id,
+        status: activeInvoice.status === 'PAID' ? 'active' : activeInvoice.status.toLowerCase(),
+        plan: planName,
+        amount: planPrice,
+        currency: activeInvoice.currency || 'USD',
+        current_period_start: activeInvoice.created,
+        current_period_end: activeInvoice.expiry_date,
+        cancel_at_period_end: activeInvoice.status === 'EXPIRED' || !activeInvoice.recurring_charge_id,
+        customer_email: user.email,
+        invoice_url: activeInvoice.invoice_url
+      }, { status: 200 });
+    } catch (error) {
+      console.error('Xendit error:', error);
       return Response.json({ error: 'Failed to fetch subscription' }, { status: 500 });
     }
-
-    const subData = await subResponse.json();
-    const subscription = subData.data[0];
-
-    if (!subscription) {
-      // No active subscription
-      return Response.json(null, { status: 200 });
-    }
-
-    const priceId = subscription.items.data[0].price.id;
-    const planInfo = planPrices[priceId] || { name: 'Unknown', price: 0 };
-
-    return Response.json({
-      id: subscription.id,
-      status: subscription.status,
+  } catch (error) {
+    console.error('Subscription info error:', error);
+    return Response.json({ error: error.message }, { status: 500 });
+  }
+});
       plan_name: planInfo.name,
       price: planInfo.price,
       current_period_start: new Date(subscription.current_period_start * 1000).toISOString(),

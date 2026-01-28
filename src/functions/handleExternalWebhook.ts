@@ -1,4 +1,5 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.6';
+import { logger } from './utils/logger.ts';
 
 Deno.serve(async (req) => {
   const base44 = createClientFromRequest(req);
@@ -30,7 +31,7 @@ Deno.serve(async (req) => {
 
     // Parse incoming data
     const payload = await req.json();
-    console.log('Received webhook data:', payload);
+    logger.debug('Received webhook data:', payload);
 
     // Store to target entity if configured
     if (integration.target_entity) {

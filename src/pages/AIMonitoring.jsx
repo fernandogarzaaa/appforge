@@ -12,8 +12,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { toast } from 'sonner';
 import {
   Eye, Plus, TrendingUp, AlertTriangle, Lightbulb, 
-  Activity, Database, Mail, Code, CheckCircle, XCircle,
-  Clock, Zap, Target, Brain, Play, Pause, BarChart2
+  Activity, Database, Mail, Code, CheckCircle, Zap, Target, Brain, Play, Pause
 } from 'lucide-react';
 import { InsightsTrendChart, SeverityDistribution, InsightTypeChart } from '@/components/monitoring/InsightsChart';
 import { TaskPriorityChart, UrgencyFactorsRadar, PriorityScatterPlot } from '@/components/monitoring/TaskAnalyticsChart';

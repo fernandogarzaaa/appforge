@@ -4,8 +4,8 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { 
-  Settings, Save, Trash2, Globe, Palette, Shield,
-  AlertTriangle, Check, Copy
+  Settings, Save, Trash2, Globe, Palette,
+  AlertTriangle, Copy
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';

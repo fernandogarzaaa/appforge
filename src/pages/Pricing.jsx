@@ -173,7 +173,7 @@ export default function PricingPage() {
             💳 <strong>Test Mode:</strong> Use card <code className="bg-amber-100 px-2 py-1 rounded">4242 4242 4242 4242</code> with any future expiry and CVC to test payments.
           </p>
           <p className="text-xs text-amber-700 mt-2">
-            To accept real payments, claim your Stripe account in Dashboard &gt; Integrations.
+            To accept real payments, claim your Xendit account in Dashboard &gt; Integrations.
           </p>
         </div>
       </div>

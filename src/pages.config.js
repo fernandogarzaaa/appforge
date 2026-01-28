@@ -1,8 +1,10 @@
+import AdvancedSearch from './pages/AdvancedSearch';
 import AIAssistant from './pages/AIAssistant';
 import AIMonitoring from './pages/AIMonitoring';
 import APIExplorer from './pages/APIExplorer';
 import APIKeyManager from './pages/APIKeyManager';
 import Account from './pages/Account';
+import AuditLog from './pages/AuditLog';
 import AdminDashboard from './pages/AdminDashboard';
 import AdminSubscriptions from './pages/AdminSubscriptions';
 import AdvancedAnomalyDetection from './pages/AdvancedAnomalyDetection';
@@ -11,6 +13,7 @@ import BotBuilder from './pages/BotBuilder';
 import CentralAnalytics from './pages/CentralAnalytics';
 import ChatbotManager from './pages/ChatbotManager';
 import CodePlayground from './pages/CodePlayground';
+import Collaboration from './pages/Collaboration';
 import Components from './pages/Components';
 import ContentStudio from './pages/ContentStudio';
 import ContractBuilder from './pages/ContractBuilder';
@@ -42,12 +45,15 @@ import MedicalAI from './pages/MedicalAI';
 import MobileStudio from './pages/MobileStudio';
 import NFTMarketplace from './pages/NFTMarketplace';
 import NFTStudio from './pages/NFTStudio';
+import Notifications from './pages/Notifications';
 import PageEditor from './pages/PageEditor';
 import PredictiveAnalytics from './pages/PredictiveAnalytics';
+import ProjectExport from './pages/ProjectExport';
 import Pricing from './pages/Pricing';
 import Profile from './pages/Profile';
 import ProjectDiagnostics from './pages/ProjectDiagnostics';
 import ProjectSettings from './pages/ProjectSettings';
+import RateLimits from './pages/RateLimits';
 import ProjectTasks from './pages/ProjectTasks';
 import Projects from './pages/Projects';
 import ReferralProgram from './pages/ReferralProgram';
@@ -59,14 +65,15 @@ import Support from './pages/Support';
 import SystemHealth from './pages/SystemHealth';
 import TemplateMarketplace from './pages/TemplateMarketplace';
 import TokenCreator from './pages/TokenCreator';
+import TwoFactorAuth from './pages/TwoFactorAuth';
 import VSCodeIntegration from './pages/VSCodeIntegration';
 import Web3Dashboard from './pages/Web3Dashboard';
 import WebhookMonitor from './pages/WebhookMonitor';
 import WorkflowBuilder from './pages/WorkflowBuilder';
 import __Layout from './Layout.jsx';
 
-
-export const PAGES = {
+const PAGES = {
+    "AdvancedSearch": AdvancedSearch,
     "AIAssistant": AIAssistant,
     "AIMonitoring": AIMonitoring,
     "APIExplorer": APIExplorer,
@@ -75,9 +82,11 @@ export const PAGES = {
     "AdminDashboard": AdminDashboard,
     "AdminSubscriptions": AdminSubscriptions,
     "AdvancedAnomalyDetection": AdvancedAnomalyDetection,
+    "AuditLog": AuditLog,
     "Analytics": Analytics,
     "BotBuilder": BotBuilder,
     "CentralAnalytics": CentralAnalytics,
+    "Collaboration": Collaboration,
     "ChatbotManager": ChatbotManager,
     "CodePlayground": CodePlayground,
     "Components": Components,
@@ -110,12 +119,13 @@ export const PAGES = {
     "MedicalAI": MedicalAI,
     "MobileStudio": MobileStudio,
     "NFTMarketplace": NFTMarketplace,
-    "NFTStudio": NFTStudio,
+    "Notifications": Notifications,
     "PageEditor": PageEditor,
     "PredictiveAnalytics": PredictiveAnalytics,
     "Pricing": Pricing,
     "Profile": Profile,
     "ProjectDiagnostics": ProjectDiagnostics,
+    "ProjectExport": ProjectExport,
     "ProjectSettings": ProjectSettings,
     "ProjectTasks": ProjectTasks,
     "Projects": Projects,
@@ -128,6 +138,7 @@ export const PAGES = {
     "SystemHealth": SystemHealth,
     "TemplateMarketplace": TemplateMarketplace,
     "TokenCreator": TokenCreator,
+    "TwoFactorAuth": TwoFactorAuth,
     "VSCodeIntegration": VSCodeIntegration,
     "Web3Dashboard": Web3Dashboard,
     "WebhookMonitor": WebhookMonitor,

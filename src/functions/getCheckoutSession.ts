@@ -9,44 +9,44 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { sessionId } = await req.json();
+    const { invoiceId } = await req.json();
 
-    if (!sessionId) {
-      return Response.json({ error: 'Missing sessionId' }, { status: 400 });
+    if (!invoiceId) {
+      return Response.json({ error: 'Missing invoiceId' }, { status: 400 });
     }
 
-    const stripeSecretKey = Deno.env.get('STRIPE_SECRET_KEY');
+    const xenditSecretKey = Deno.env.get('XENDIT_SECRET_KEY');
 
-    if (!stripeSecretKey) {
-      console.error('STRIPE_SECRET_KEY not configured');
+    if (!xenditSecretKey) {
+      console.error('XENDIT_SECRET_KEY not configured');
       return Response.json({ error: 'Payment service not configured' }, { status: 500 });
     }
 
-    // Fetch session from Stripe with line items and subscription details
+    // Fetch invoice from Xendit
     const sessionResponse = await fetch(
-      `https://api.stripe.com/v1/checkout/sessions/${sessionId}?expand[]=line_items&expand[]=subscription`,
+      `https://api.xendit.co/v4/invoices/${invoiceId}`,
       {
         headers: {
-          'Authorization': `Bearer ${stripeSecretKey}`,
+          'Authorization': `Basic ${btoa(`${xenditSecretKey}:`)}`,
         },
       }
     );
 
     if (!sessionResponse.ok) {
       const error = await sessionResponse.json();
-      console.error('Stripe error:', error);
-      return Response.json({ error: 'Failed to fetch session details' }, { status: 500 });
+      console.error('Xendit error:', error);
+      return Response.json({ error: 'Failed to fetch invoice details' }, { status: 500 });
     }
 
-    const session = await sessionResponse.json();
+    const invoice = await sessionResponse.json();
 
-    // Verify the session belongs to the current user
-    if (session.customer_email !== user.email) {
-      console.error('Session email mismatch:', session.customer_email, 'vs', user.email);
+    // Verify the invoice belongs to the current user
+    if (invoice.customer_email !== user.email && invoice.customer_id !== user.id) {
+      console.error('Invoice email mismatch:', invoice.customer_email, 'vs', user.email);
       return Response.json({ error: 'Unauthorized' }, { status: 403 });
     }
 
-    return Response.json(session, { status: 200 });
+    return Response.json(invoice, { status: 200 });
   } catch (error) {
     console.error('Get checkout session error:', error);
     return Response.json({ error: error.message }, { status: 500 });

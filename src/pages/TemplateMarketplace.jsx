@@ -8,7 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Search, Download, Star, TrendingUp, Zap, Plus, DollarSign, Eye, Code } from 'lucide-react';
+import { Search, Download, Star, Zap, Plus, DollarSign, Eye } from 'lucide-react';
 import { toast } from 'sonner';
 import CreateTemplateModal from '@/components/templates/CreateTemplateModal';
 import TemplateReviews from '@/components/templates/TemplateReviews';

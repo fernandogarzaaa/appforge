@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { base44 } from '@/api/base44Client';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { 
   Twitter, Facebook, Instagram, Linkedin, MessageCircle, 
-  Calendar, Send, Image, Video, TrendingUp, Users, Heart,
-  Eye, Share2, Plus, Edit, Trash2, BarChart3, Clock, Zap,
+  Calendar, Send, TrendingUp, Heart,
+  Eye, Share2, Plus, BarChart3, Clock, Zap,
   Sparkles, Lightbulb, RefreshCw
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';

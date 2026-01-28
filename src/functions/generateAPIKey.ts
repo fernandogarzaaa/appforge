@@ -22,8 +22,11 @@ Deno.serve(async (req) => {
     const encoder = new TextEncoder();
     const data = encoder.encode(plain_value);
     
-    // In production, use a proper encryption key from environment
-    const encryptionKey = Deno.env.get('API_KEY_ENCRYPTION_SECRET') || 'default-encryption-key-change-me';
+    // Require encryption key from environment
+    const encryptionKey = Deno.env.get('API_KEY_ENCRYPTION_SECRET');
+    if (!encryptionKey) {
+      return Response.json({ error: 'API_KEY_ENCRYPTION_SECRET environment variable not configured' }, { status: 500 });
+    }
     const keyMaterial = await crypto.subtle.importKey(
       'raw',
       encoder.encode(encryptionKey.padEnd(32, '0').substring(0, 32)),

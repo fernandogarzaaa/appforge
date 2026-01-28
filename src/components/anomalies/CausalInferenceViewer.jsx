@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { ArrowRight, Zap, TrendingDown } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 
 export default function CausalInferenceViewer() {
   const [selectedRelationship, setSelectedRelationship] = useState(null);
@@ -33,7 +33,7 @@ export default function CausalInferenceViewer() {
         </Card>
         <Card className="border-green-200 bg-green-50">
           <CardContent className="pt-4">
-            <p className="text-xs text-green-600">Strong (>70%)</p>
+            <p className="text-xs text-green-600">Strong (&gt;70%)</p>
             <p className="text-2xl font-bold text-green-700">{strongRelationships.length}</p>
           </CardContent>
         </Card>

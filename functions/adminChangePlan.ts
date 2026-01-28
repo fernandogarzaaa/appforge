@@ -1,5 +1,8 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.6';
 
+// Import xenditClient for payment operations
+// Note: Xendit handles plan changes via creating new invoices and canceling old recurring charges
+
 Deno.serve(async (req) => {
   try {
     const base44 = createClientFromRequest(req);
@@ -9,62 +12,67 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Unauthorized' }, { status: 403 });
     }
 
-    const { subscription_id, new_price_id } = await req.json();
+    const { recurring_charge_id, new_plan_amount } = await req.json();
 
-    if (!subscription_id || !new_price_id) {
+    if (!recurring_charge_id || !new_plan_amount) {
       return Response.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
-    const stripeSecretKey = Deno.env.get('STRIPE_SECRET_KEY');
-    if (!stripeSecretKey) {
+    const xenditSecretKey = Deno.env.get('XENDIT_SECRET_KEY');
+    if (!xenditSecretKey) {
       return Response.json({ error: 'Payment service not configured' }, { status: 500 });
     }
 
-    // Get the subscription
-    const subResponse = await fetch(
-      `https://api.stripe.com/v1/subscriptions/${subscription_id}`,
+    // In Xendit, plan changes are handled by:
+    // 1. Canceling the existing recurring charge
+    // 2. Creating a new recurring charge with the new amount
+    
+    // Cancel existing recurring charge
+    const cancelResponse = await fetch(
+      `https://api.xendit.co/v4/recurring_charges/${recurring_charge_id}`,
       {
-        headers: { 'Authorization': `Bearer ${stripeSecretKey}` },
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Basic ${btoa(`${xenditSecretKey}:`)}`
+        }
       }
     );
 
-    if (!subResponse.ok) {
-      return Response.json({ error: 'Subscription not found' }, { status: 404 });
+    if (!cancelResponse.ok) {
+      console.error('Failed to cancel recurring charge');
+      return Response.json({ error: 'Failed to cancel existing plan' }, { status: 500 });
     }
 
-    const subscription = await subResponse.json();
-    const currentItemId = subscription.items.data[0].id;
-
-    // Update the subscription with new price
-    const updateResponse = await fetch(
-      `https://api.stripe.com/v1/subscriptions/${subscription_id}`,
+    // Create new recurring charge with new amount
+    const createResponse = await fetch(
+      'https://api.xendit.co/v4/recurring_charges',
       {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${stripeSecretKey}`,
-          'Content-Type': 'application/x-www-form-urlencoded',
+          'Authorization': `Basic ${btoa(`${xenditSecretKey}:`)}`
         },
-        body: new URLSearchParams({
-          'items[0][id]': currentItemId,
-          'items[0][price]': new_price_id,
-          'proration_behavior': 'create_prorations'
-        }).toString(),
+        body: JSON.stringify({
+          amount: new_plan_amount,
+          interval: 'month',
+          interval_count: 1
+        })
       }
     );
 
-    if (!updateResponse.ok) {
-      const error = await updateResponse.json();
-      console.error('Stripe error:', error);
-      return Response.json({ error: 'Failed to update subscription' }, { status: 500 });
+    if (!createResponse.ok) {
+      const error = await createResponse.json();
+      console.error('Xendit error:', error);
+      return Response.json({ error: 'Failed to create new recurring charge' }, { status: 500 });
     }
 
-    const updatedSub = await updateResponse.json();
+    const newCharge = await createResponse.json();
 
-    console.log(`Admin changed plan for subscription ${subscription_id}`);
+    console.log(`Admin changed plan from ${recurring_charge_id} to ${newCharge.id}`);
 
     return Response.json({
       success: true,
-      subscription_id: updatedSub.id
+      recurring_charge_id: newCharge.id,
+      amount: newCharge.amount
     }, { status: 200 });
   } catch (error) {
     console.error('Admin change plan error:', error);

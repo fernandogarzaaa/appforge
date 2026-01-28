@@ -1,4 +1,3 @@
-import React from 'react';
 import { useFeatureFlag } from './FeatureFlagProvider';
 
 export default function FeatureGate({ flag, fallback = null, children }) {

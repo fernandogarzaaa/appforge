@@ -28,7 +28,7 @@ const features = [
   { id: 'push', name: 'Push Notifications', icon: Bell, description: 'Real-time alerts and messages' },
   { id: 'camera', name: 'Camera & Photos', icon: Camera, description: 'Take photos, upload images' },
   { id: 'location', name: 'GPS & Maps', icon: MapPin, description: 'Location tracking, maps integration' },
-  { id: 'payments', name: 'In-App Payments', icon: CreditCard, description: 'Stripe, PayPal integration' },
+  { id: 'payments', name: 'In-App Payments', icon: CreditCard, description: 'Xendit, PayPal integration' },
   { id: 'sharing', name: 'Social Sharing', icon: Share2, description: 'Share to social platforms' },
   { id: 'offline', name: 'Offline Mode', icon: Layers, description: 'Work without internet' },
   { id: 'chat', name: 'Real-time Chat', icon: MessageCircle, description: 'Live messaging feature' }

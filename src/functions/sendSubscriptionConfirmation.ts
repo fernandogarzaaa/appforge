@@ -1,4 +1,5 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.6';
+import { logger } from './utils/logger.ts';
 
 const planDetails = {
   'price_1StWdZ8rNvlz2v0BtngMRUyS': {
@@ -71,7 +72,7 @@ The Team
       from_name: 'Subscription Team'
     });
 
-    console.log(`Confirmation email sent to ${email} for ${plan.name} plan`);
+    logger.info(`Confirmation email sent to ${email} for ${plan.name} plan`);
 
     return Response.json({ success: true }, { status: 200 });
   } catch (error) {

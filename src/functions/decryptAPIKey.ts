@@ -23,7 +23,10 @@ Deno.serve(async (req) => {
     }
 
     // Decrypt the value
-    const encryptionKey = Deno.env.get('API_KEY_ENCRYPTION_SECRET') || 'default-encryption-key-change-me';
+    const encryptionKey = Deno.env.get('API_KEY_ENCRYPTION_SECRET');
+    if (!encryptionKey) {
+      return Response.json({ error: 'API_KEY_ENCRYPTION_SECRET environment variable not configured' }, { status: 500 });
+    }
     const encoder = new TextEncoder();
     const decoder = new TextDecoder();
 

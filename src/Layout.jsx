@@ -4,7 +4,7 @@ import Sidebar from '@/components/layout/Sidebar';
 import Header from '@/components/layout/Header';
 import HelpSidebar from '@/components/help/HelpSidebar';
 
-export default function Layout({ children, currentPageName }) {
+export default function Layout({ children, currentPageName, onSearchOpen }) {
   const [user, setUser] = useState(null);
   const [currentProject, setCurrentProject] = useState(null);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
@@ -35,19 +35,23 @@ export default function Layout({ children, currentPageName }) {
   };
 
   return (
-    <div className="flex h-screen bg-[#fafbfc]">
+    <div className="flex h-screen bg-[#fafbfc] dark:bg-gray-950">
       <Sidebar 
         currentProject={currentProject} 
         collapsed={sidebarCollapsed}
         onToggle={() => setSidebarCollapsed(!sidebarCollapsed)}
       />
       <div className="flex-1 flex flex-col overflow-hidden">
-              <Header user={user} onLogout={handleLogout} />
-              <main className="flex-1 overflow-auto bg-[#fafbfc]">
-                {children}
-              </main>
-            </div>
-            <HelpSidebar />
-          </div>
-        );
-      }
+        <Header 
+          user={user} 
+          onLogout={handleLogout}
+          onSearchOpen={onSearchOpen}
+        />
+        <main className="flex-1 overflow-auto bg-[#fafbfc] dark:bg-gray-950">
+          {children}
+        </main>
+      </div>
+      <HelpSidebar />
+    </div>
+  );
+}

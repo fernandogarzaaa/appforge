@@ -36,13 +36,13 @@ Deno.serve(async (req) => {
     const platformFee = price * (platformFeePercentage / 100);
     const authorRevenue = price * ((100 - platformFeePercentage) / 100);
 
-    // In production, integrate with Stripe or payment processor here
+    // In production, integrate with Xendit or payment processor here
     // For now, create a completed purchase record
     const purchase = await base44.entities.TemplatePurchase.create({
       template_id,
       buyer_email: user.email,
       price_paid: price,
-      payment_method: 'credits', // Change to 'stripe' in production
+      payment_method: 'credits', // Change to 'xendit' in production
       transaction_id: crypto.randomUUID(),
       status: 'completed',
       author_revenue: authorRevenue,

@@ -1,6 +1,5 @@
 import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
+import { Card, CardContent } from '@/components/ui/card';
 import { ADVANCED_NODE_TYPES } from './nodeTypes';
 
 export default function AdvancedNodePalette({ onNodeSelect }) {

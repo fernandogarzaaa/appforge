@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
-import { base44 } from '@/api/base44Client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { AlertTriangle, TrendingUp, CheckCircle2, Clock } from 'lucide-react';
+import { AlertTriangle, TrendingUp, CheckCircle2 } from 'lucide-react';
 import HelpTooltip from '@/components/help/HelpTooltip';
 
 export default function ProactiveAnomalyCard({ forecast }) {

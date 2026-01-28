@@ -7,7 +7,6 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { ScrollArea } from '@/components/ui/scroll-area';
 import {
   Dialog,
   DialogContent,
@@ -15,18 +14,12 @@ import {
   DialogTitle,
   DialogFooter,
 } from '@/components/ui/dialog';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
+
+
 import { 
-  Zap, Plus, Play, Pause, Trash2, Settings, Globe,
-  Clock, Mail, Webhook, Database, Code, Send,
-  CheckCircle, AlertCircle, Loader2, GitBranch,
-  ArrowRight, Calendar, MessageSquare, FileText
+  Zap, Plus, Play, Pause, Trash2, Globe,
+  Clock, Mail, Webhook, Database, Code, GitBranch,
+  ArrowRight, MessageSquare, FileText
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';

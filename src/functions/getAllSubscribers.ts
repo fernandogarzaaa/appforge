@@ -1,9 +1,10 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.6';
 
-const planPrices = {
-  'price_1StWdZ8rNvlz2v0BtngMRUyS': { name: 'Basic', price: 20 },
-  'price_1StWdZ8rNvlz2v0BV7sIV4A9': { name: 'Pro', price: 30 },
-  'price_1StWdZ8rNvlz2v0BSl7yx4v7': { name: 'Premium', price: 99 }
+// Plan mapping for Xendit invoices
+const planMapping = {
+  'basic': { name: 'Basic', price: 20 },
+  'pro': { name: 'Pro', price: 30 },
+  'premium': { name: 'Premium', price: 99 }
 };
 
 Deno.serve(async (req) => {
@@ -15,55 +16,44 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Unauthorized' }, { status: 403 });
     }
 
-    const stripeSecretKey = Deno.env.get('STRIPE_SECRET_KEY');
-    if (!stripeSecretKey) {
+    const xenditSecretKey = Deno.env.get('XENDIT_SECRET_KEY');
+    if (!xenditSecretKey) {
       return Response.json({ error: 'Payment service not configured' }, { status: 500 });
     }
 
-    // Get all subscriptions
+    // Get all invoices
     const subResponse = await fetch(
-      'https://api.stripe.com/v1/subscriptions?limit=100',
+      'https://api.xendit.co/v4/invoices?limit=100',
       {
-        headers: { 'Authorization': `Bearer ${stripeSecretKey}` },
+        headers: { 'Authorization': `Basic ${btoa(`${xenditSecretKey}:`)}`},
       }
     );
 
     if (!subResponse.ok) {
-      console.error('Failed to fetch subscriptions');
+      console.error('Failed to fetch invoices');
       return Response.json([], { status: 200 });
     }
 
     const subData = await subResponse.json();
     const subscribers = [];
 
-    for (const subscription of subData.data) {
-      const priceId = subscription.items.data[0]?.price?.id;
-      const planInfo = planPrices[priceId] || { name: 'Unknown', price: 0 };
+    for (const invoice of subData.data) {
+      // Extract plan info from description or metadata
+      const description = invoice.description || '';
+      const planKey = (invoice.reference_id || description).toLowerCase();
+      const planInfo = planMapping[planKey] || { name: 'Custom', price: 0 };
 
-      const customer = subscription.customer_email || 'Unknown';
+      const customer = invoice.customer_email || invoice.customer_id || 'Unknown';
       
-      // Get invoice count
-      const invoiceResponse = await fetch(
-        `https://api.stripe.com/v1/invoices?subscription=${subscription.id}&limit=100`,
-        {
-          headers: { 'Authorization': `Bearer ${stripeSecretKey}` },
-        }
-      );
-
-      const invoiceCount = invoiceResponse.ok 
-        ? (await invoiceResponse.json()).data.length
-        : 0;
-
       subscribers.push({
-        id: subscription.id,
+        id: invoice.id,
         customer_email: customer,
         plan_name: planInfo.name,
         price: planInfo.price,
-        status: subscription.status,
-        current_period_start: new Date(subscription.current_period_start * 1000).toISOString(),
-        current_period_end: new Date(subscription.current_period_end * 1000).toISOString(),
-        created_at: new Date(subscription.created * 1000).toISOString(),
-        invoice_count: invoiceCount
+        status: invoice.status,
+        created_at: new Date(invoice.created || Date.now()).toISOString(),
+        expires_at: invoice.expires_at ? new Date(invoice.expires_at).toISOString() : null,
+        amount: invoice.amount / 100
       });
     }
 

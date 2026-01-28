@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { HelpCircle, X } from 'lucide-react';
+import { HelpCircle } from 'lucide-react';
 
 export default function HelpTooltip({ content, title, children, position = 'top' }) {
   const [isVisible, setIsVisible] = useState(false);

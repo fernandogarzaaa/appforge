@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { 
   Database, Brain, Mail, FileText, BarChart3, 
-  Trash2, Settings, Play, ArrowRight, Plus
+  Trash2, Play, ArrowRight, Plus
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 

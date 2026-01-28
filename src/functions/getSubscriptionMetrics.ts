@@ -9,51 +9,50 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Unauthorized' }, { status: 403 });
     }
 
-    const stripeSecretKey = Deno.env.get('STRIPE_SECRET_KEY');
-    if (!stripeSecretKey) {
+    const xenditSecretKey = Deno.env.get('XENDIT_SECRET_KEY');
+    if (!xenditSecretKey) {
       return Response.json({ error: 'Payment service not configured' }, { status: 500 });
     }
 
-    // Get all subscriptions
+    // Get all invoices (representing customer subscriptions in Xendit)
     const subResponse = await fetch(
-      'https://api.stripe.com/v1/subscriptions?limit=100',
+      'https://api.xendit.co/v4/invoices?limit=100',
       {
-        headers: { 'Authorization': `Bearer ${stripeSecretKey}` },
+        headers: { 'Authorization': `Basic ${btoa(`${xenditSecretKey}:`)}`},
       }
     );
 
     if (!subResponse.ok) {
-      console.error('Failed to fetch subscriptions');
-      return Response.json({ error: 'Failed to fetch subscriptions' }, { status: 500 });
+      console.error('Failed to fetch invoices');
+      return Response.json({ error: 'Failed to fetch invoices' }, { status: 500 });
     }
 
     const subData = await subResponse.json();
-    const allSubscriptions = subData.data;
+    const allInvoices = subData.data || [];
 
-    const activeSubscriptions = allSubscriptions.filter(s => s.status === 'active');
-    const canceledSubscriptions = allSubscriptions.filter(s => s.status === 'canceled');
+    const activeInvoices = allInvoices.filter((i: any) => i.status === 'PAID' || i.status === 'PENDING');
+    const expiredInvoices = allInvoices.filter((i: any) => i.status === 'EXPIRED');
 
-    // Calculate MRR
-    const mrr = activeSubscriptions.reduce((total, sub) => {
-      const price = sub.items.data[0]?.price?.unit_amount || 0;
-      return total + price / 100;
+    // Calculate MRR from active invoices
+    const mrr = activeInvoices.reduce((total: number, inv: any) => {
+      return total + (inv.amount / 100);
     }, 0);
 
     // Calculate churn rate (30 days)
     const thirtyDaysAgo = Math.floor(Date.now() / 1000) - (30 * 24 * 60 * 60);
-    const recentCancellations = canceledSubscriptions.filter(s => {
-      const canceledAt = s.canceled_at || 0;
-      return canceledAt > thirtyDaysAgo;
+    const recentExpirations = expiredInvoices.filter((inv: any) => {
+      const expiredAt = inv.updated || 0;
+      return expiredAt > thirtyDaysAgo;
     }).length;
 
-    const churnRate = allSubscriptions.length > 0
-      ? (recentCancellations / allSubscriptions.length) * 100
+    const churnRate = allInvoices.length > 0
+      ? (recentExpirations / allInvoices.length) * 100
       : 0;
 
     return Response.json({
-      total_subscribers: allSubscriptions.length,
-      active_subscriptions: activeSubscriptions.length,
-      canceled_subscriptions: canceledSubscriptions.length,
+      total_subscribers: allInvoices.length,
+      active_subscriptions: activeInvoices.length,
+      expired_subscriptions: expiredInvoices.length,
       mrr: mrr,
       churn_rate: churnRate,
       growth_rate: 0

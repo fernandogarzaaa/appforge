@@ -3,7 +3,7 @@ import { base44 } from '@/api/base44Client';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Loader2, Globe, Copy, Check } from 'lucide-react';
+import { Loader2, Globe } from 'lucide-react';
 import { toast } from 'sonner';
 
 export default function APIDiscoveryPanel({ onIntegrate }) {

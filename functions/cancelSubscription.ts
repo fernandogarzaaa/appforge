@@ -9,67 +9,63 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const stripeSecretKey = Deno.env.get('STRIPE_SECRET_KEY');
-    if (!stripeSecretKey) {
+    const xenditSecretKey = Deno.env.get('XENDIT_SECRET_KEY');
+    if (!xenditSecretKey) {
       return Response.json({ error: 'Payment service not configured' }, { status: 500 });
     }
 
-    // Get customer by email
-    const customerResponse = await fetch(
-      `https://api.stripe.com/v1/customers?email=${encodeURIComponent(user.email)}`,
+    // Get customer's invoices by email/id
+    const customerId = user.id || user.email;
+    
+    const invoicesResponse = await fetch(
+      `https://api.xendit.co/v4/customers/${customerId}/invoices`,
       {
-        headers: { 'Authorization': `Bearer ${stripeSecretKey}` },
+        headers: {
+          'Authorization': `Basic ${btoa(`${xenditSecretKey}:`)}`
+        }
       }
     );
 
-    if (!customerResponse.ok) {
-      console.error('Failed to fetch customer');
+    if (!invoicesResponse.ok) {
+      console.error('Failed to fetch customer invoices');
       return Response.json({ error: 'Customer not found' }, { status: 404 });
     }
 
-    const customerData = await customerResponse.json();
-    const customer = customerData.data[0];
+    const invoicesData = await invoicesResponse.json();
+    const activeInvoices = invoicesData.data?.filter((inv: any) => inv.status === 'ACTIVE') || [];
 
-    if (!customer) {
-      return Response.json({ error: 'Customer not found' }, { status: 404 });
+    if (activeInvoices.length === 0) {
+      return Response.json({ error: 'No active invoices found' }, { status: 404 });
     }
 
-    // Get active subscription
-    const subResponse = await fetch(
-      `https://api.stripe.com/v1/subscriptions?customer=${customer.id}&status=active&limit=1`,
-      {
-        headers: { 'Authorization': `Bearer ${stripeSecretKey}` },
+    // Cancel all recurring charges associated with the customer
+    const cancelledInvoiceIds = [];
+    
+    for (const invoice of activeInvoices) {
+      if (invoice.recurring_charge_id) {
+        try {
+          const cancelResponse = await fetch(
+            `https://api.xendit.co/v4/recurring_charges/${invoice.recurring_charge_id}`,
+            {
+              method: 'DELETE',
+              headers: {
+                'Authorization': `Basic ${btoa(`${xenditSecretKey}:`)}`
+              }
+            }
+          );
+
+          if (cancelResponse.ok) {
+            cancelledInvoiceIds.push(invoice.id);
+          }
+        } catch (error) {
+          console.error(`Failed to cancel recurring charge ${invoice.recurring_charge_id}:`, error);
+        }
       }
-    );
-
-    if (!subResponse.ok) {
-      console.error('Failed to fetch subscription');
-      return Response.json({ error: 'Failed to fetch subscription' }, { status: 500 });
     }
 
-    const subData = await subResponse.json();
-    const subscription = subData.data[0];
-
-    if (!subscription) {
-      return Response.json({ error: 'No active subscription found' }, { status: 404 });
+    if (cancelledInvoiceIds.length === 0) {
+      return Response.json({ error: 'Failed to cancel subscriptions' }, { status: 500 });
     }
-
-    // Cancel the subscription
-    const cancelResponse = await fetch(
-      `https://api.stripe.com/v1/subscriptions/${subscription.id}`,
-      {
-        method: 'DELETE',
-        headers: { 'Authorization': `Bearer ${stripeSecretKey}` },
-      }
-    );
-
-    if (!cancelResponse.ok) {
-      const error = await cancelResponse.json();
-      console.error('Stripe error:', error);
-      return Response.json({ error: 'Failed to cancel subscription' }, { status: 500 });
-    }
-
-    const canceledSub = await cancelResponse.json();
 
     // Send cancellation confirmation email
     try {
@@ -85,8 +81,8 @@ Deno.serve(async (req) => {
 
     return Response.json({
       success: true,
-      subscription_id: canceledSub.id,
-      status: canceledSub.status
+      cancelled_invoices: cancelledInvoiceIds.length,
+      invoice_ids: cancelledInvoiceIds
     }, { status: 200 });
   } catch (error) {
     console.error('Cancel subscription error:', error);

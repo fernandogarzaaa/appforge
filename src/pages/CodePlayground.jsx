@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
 import { 
-  Play, Bug, Sparkles, Code2, AlertCircle, CheckCircle2, 
-  Loader2, Terminal, Wand2, Save, FileCode, Lightbulb, Zap
+  Play, Bug, Code2, AlertCircle, CheckCircle2, 
+  Loader2, Terminal, Wand2, Lightbulb, Zap
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
 

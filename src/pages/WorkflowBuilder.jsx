@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { base44 } from '@/api/base44Client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Button } from '@/components/ui/button';
@@ -11,7 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { toast } from 'sonner';
 import WorkflowCanvas from '@/components/workflow/WorkflowCanvas';
 import { 
-  Save, Play, Plus, FolderOpen, Download, Upload, Loader2,
+  Save, Play, Plus, FolderOpen, Loader2,
   Database, Brain, Mail, FileText, BarChart3, Stethoscope, Building2,
   Clock, History, AlertCircle, CheckCircle
 } from 'lucide-react';

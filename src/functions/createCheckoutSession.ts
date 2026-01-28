@@ -1,4 +1,6 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.6';
+import { logger } from './utils/logger.ts';
+import { createPaymentLink } from './utils/xenditClient.ts';
 
 Deno.serve(async (req) => {
   try {
@@ -10,52 +12,40 @@ Deno.serve(async (req) => {
     }
 
     const body = await req.json();
-    const { priceId } = body;
+    const { planName, amount, description } = body;
 
-    if (!priceId) {
-      return Response.json({ error: 'Missing priceId' }, { status: 400 });
+    if (!planName || !amount) {
+      return Response.json({ error: 'Missing required fields: planName, amount' }, { status: 400 });
     }
 
-    const stripeSecretKey = Deno.env.get('STRIPE_SECRET_KEY');
+    const xenditSecretKey = Deno.env.get('XENDIT_SECRET_KEY');
     const appId = Deno.env.get('BASE44_APP_ID');
     
-    if (!stripeSecretKey) {
-      console.error('STRIPE_SECRET_KEY not configured');
+    if (!xenditSecretKey) {
+      logger.error('XENDIT_SECRET_KEY not configured');
       return Response.json({ error: 'Payment service not configured' }, { status: 500 });
     }
 
     // Get origin for redirect URLs
     const origin = new URL(req.url).origin;
 
-    // Create Stripe checkout session
-    const checkoutResponse = await fetch('https://api.stripe.com/v1/checkout/sessions', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${stripeSecretKey}`,
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body: new URLSearchParams({
-        'payment_method_types[]': 'card',
-        'line_items[0][price]': priceId,
-        'line_items[0][quantity]': '1',
-        'mode': 'subscription',
-        'success_url': `${origin}?session_id={CHECKOUT_SESSION_ID}`,
-        'cancel_url': origin,
-        'customer_email': user.email,
-        'metadata[base44_app_id]': appId || 'unknown',
-        'metadata[user_email]': user.email,
-      }).toString(),
-    });
+    // Create Xendit invoice (payment link)
+    const invoice = await createPaymentLink(
+      user.id || user.email,
+      Math.round(amount * 100) / 100, // Ensure proper decimal
+      description || `Subscription: ${planName}`,
+      user.email,
+      `${origin}/billing/success?invoice_id={invoice_id}`,
+      xenditSecretKey
+    );
 
-    if (!checkoutResponse.ok) {
-      const error = await checkoutResponse.json();
-      console.error('Stripe error:', error);
-      return Response.json({ error: 'Failed to create checkout session' }, { status: 500 });
-    }
+    logger.info(`Xendit invoice created: ${invoice.id}`);
 
-    const session = await checkoutResponse.json();
-
-    return Response.json({ url: session.url }, { status: 200 });
+    return Response.json({ 
+      url: invoice.invoice_url,
+      invoiceId: invoice.id,
+      externalId: invoice.external_id
+    }, { status: 200 });
   } catch (error) {
     console.error('Checkout session error:', error);
     return Response.json({ error: error.message }, { status: 500 });

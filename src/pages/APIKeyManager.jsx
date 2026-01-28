@@ -8,46 +8,40 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { CreateAPIKeyModal } from '@/components/CreateAPIKeyModal';
+import { APIKeysList } from '@/components/APIKeysList';
+import { useAPIKeys } from '@/hooks/useAPIKeys';
 import { 
   Plus, Key, Eye, EyeOff, Copy, Trash2, Shield, 
-  AlertTriangle, CheckCircle2, Clock
+  AlertTriangle, CheckCircle2, Clock, AlertCircle
 } from 'lucide-react';
 import { toast } from 'sonner';
 
 export default function APIKeyManager() {
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [newKey, setNewKey] = useState(null);
-  const [showValue, setShowValue] = useState({});
+  const { keys, createKey, revokeKey } = useAPIKeys();
   const queryClient = useQueryClient();
 
-  const { data: apiKeys = [], isLoading } = useQuery({
-    queryKey: ['apiKeys'],
-    queryFn: () => base44.entities.APIKey.list('-created_date')
-  });
-
-  const createKeyMutation = useMutation({
-    mutationFn: async (data) => {
-      const response = await base44.functions.invoke('generateAPIKey', data);
-      return response.data;
-    },
-    onSuccess: (data) => {
-      queryClient.invalidateQueries(['apiKeys']);
-      setNewKey(data);
-      setShowCreateModal(false);
+  const handleCreateKey = async (name, scopes) => {
+    try {
+      const newKey = await createKey(name, scopes);
       toast.success('API key created successfully');
+      return newKey;
+    } catch (error) {
+      toast.error('Failed to create API key');
+      throw error;
     }
-  });
+  };
 
-  const revokeKeyMutation = useMutation({
-    mutationFn: async (keyId) => {
-      const response = await base44.functions.invoke('revokeAPIKey', { key_id: keyId });
-      return response.data;
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries(['apiKeys']);
-      toast.success('API key revoked');
+  const handleRevokeKey = async (keyId) => {
+    try {
+      await revokeKey(keyId);
+      toast.success('API key revoked successfully');
+    } catch (error) {
+      toast.error('Failed to revoke API key');
     }
-  });
+  };
 
   const copyToClipboard = (text) => {
     navigator.clipboard.writeText(text);
@@ -284,7 +278,7 @@ function CreateKeyModal({ open, onClose, onSubmit, isPending }) {
             <Input
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-              placeholder="e.g., Stripe Production Key"
+              placeholder="e.g., Xendit Production Key"
             />
           </div>
 
@@ -293,7 +287,7 @@ function CreateKeyModal({ open, onClose, onSubmit, isPending }) {
             <Input
               value={formData.service_name}
               onChange={(e) => setFormData({ ...formData, service_name: e.target.value })}
-              placeholder="e.g., Stripe, OpenAI, Zapier"
+              placeholder="e.g., Xendit, OpenAI, Zapier"
             />
           </div>
 

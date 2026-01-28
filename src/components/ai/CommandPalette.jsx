@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
-  Dialog, DialogContent, DialogHeader, DialogTitle 
+  Dialog, DialogContent 
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { 

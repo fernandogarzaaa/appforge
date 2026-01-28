@@ -1,14 +1,12 @@
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
 import { base44 } from '@/api/base44Client';
 import { toast } from 'sonner';
 import { 
-  Database, TrendingUp, PieChart, BarChart3, 
-  FileSpreadsheet, Brain, Download, Upload 
+  Database, TrendingUp, PieChart, BarChart3, Brain, Download 
 } from 'lucide-react';
 
 export default function DataAnalysisFunctions() {

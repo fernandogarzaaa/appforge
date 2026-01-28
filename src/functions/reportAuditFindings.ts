@@ -1,4 +1,5 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.6';
+import { logger } from './utils/logger.ts';
 
 Deno.serve(async (req) => {
   try {
@@ -22,7 +23,7 @@ Deno.serve(async (req) => {
     try {
       // Note: This would integrate with WhatsApp if configured
       // For now, log the message that would be sent
-      console.log('Audit report prepared for WhatsApp:', message);
+      logger.debug('Audit report prepared for WhatsApp:', message);
 
       // Create audit log entry
       await base44.entities.AuditLog.create({

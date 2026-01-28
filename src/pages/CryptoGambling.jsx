@@ -1,13 +1,11 @@
 import React, { useState } from 'react';
-import { base44 } from '@/api/base44Client';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Slider } from '@/components/ui/slider';
-import { 
-  Dice1, Dice3, Dice5, Sparkles, TrendingUp, 
-  Coins, Award, Clock, DollarSign
+import { Dice5, Sparkles, 
+  Coins, DollarSign
 } from 'lucide-react';
 import { toast } from 'sonner';
 
