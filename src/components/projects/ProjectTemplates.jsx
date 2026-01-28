@@ -373,29 +373,29 @@ const templates = [
 export default function ProjectTemplates({ onSelect, selected }) {
   console.log('Rendering templates:', templates.length);
   return (
-    <div className="max-h-[400px] overflow-y-auto pr-2">
-      <div className="grid grid-cols-2 gap-2.5">
+    <div className="max-h-[200px] overflow-y-auto pr-2">
+      <div className="grid grid-cols-2 gap-1.5">
         {templates.map((template) => (
           <button
             key={template.id}
             onClick={() => onSelect(template)}
             className={cn(
-              "text-left p-2.5 rounded-lg border-2 transition-all",
+              "text-left p-1.5 rounded-lg border-2 transition-all",
               selected?.id === template.id
                 ? "border-gray-900 bg-gray-50"
                 : "border-gray-200 hover:border-gray-300 bg-white"
             )}
           >
-            <div className="flex items-start gap-2 mb-1.5">
+            <div className="flex items-start gap-1.5 mb-1">
               <div 
-                className="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0"
+                className="w-6 h-6 rounded-lg flex items-center justify-center flex-shrink-0"
                 style={{ backgroundColor: `${template.color}20` }}
               >
-                <template.icon className="w-3.5 h-3.5" style={{ color: template.color }} />
+                <template.icon className="w-3 h-3" style={{ color: template.color }} />
               </div>
               <div className="flex-1 min-w-0">
-                <h3 className="font-medium text-[12px] text-gray-900 leading-tight">{template.name}</h3>
-                <p className="text-[10px] text-gray-500 line-clamp-2 mt-0.5 leading-tight">
+                <h3 className="font-medium text-[11px] text-gray-900 leading-tight">{template.name}</h3>
+                <p className="text-[9px] text-gray-500 line-clamp-1 mt-0.5 leading-tight">
                   {template.description}
                 </p>
               </div>

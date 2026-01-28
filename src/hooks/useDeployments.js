@@ -1,5 +1,6 @@
 import { useState, useCallback, useEffect } from 'react';
-import { generateMockDeploymentHistory, filterDeployments, sortDeployments } from '@/lib/deploymentHistory';
+import { filterDeployments, sortDeployments } from '@/lib/deploymentHistory';
+import { deploymentsService } from '@/api/services';
 
 /**
  * Hook for managing deployment history state and operations
@@ -18,16 +19,25 @@ export const useDeployments = (projectId) => {
   const [sortBy, setSortBy] = useState('date');
   const [sortOrder, setSortOrder] = useState('desc');
 
-  // Load mock deployments on mount
+  // Load deployments from backend
   useEffect(() => {
-    setIsLoading(true);
-    // Simulate API call
-    setTimeout(() => {
-      const mockData = generateMockDeploymentHistory(20);
-      setDeployments(mockData);
-      setIsLoading(false);
-    }, 500);
-  }, [projectId]);
+    const fetchDeployments = async () => {
+      setIsLoading(true);
+      setError(null);
+      try {
+        const data = await deploymentsService.getAll(projectId, filters);
+        setDeployments(data);
+      } catch (err) {
+        setError(err.message);
+        console.error('Failed to fetch deployments:', err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    if (projectId) {
+      fetchDeployments();
+    }
+  }, [projectId, filters]);
 
   const getFilteredAndSorted = useCallback(() => {
     const filtered = filterDeployments(deployments, filters);
@@ -51,14 +61,7 @@ export const useDeployments = (projectId) => {
   const rollback = useCallback(async (deploymentId, previousVersion) => {
     try {
       setError(null);
-      // Simulate rollback operation
-      const newDeployment = {
-        id: `deploy_${Date.now()}`,
-        status: 'deploying',
-        version: previousVersion,
-        created_at: new Date().toISOString(),
-        // ... other fields
-      };
+      const newDeployment = await deploymentsService.rollback(deploymentId, previousVersion);
       setDeployments(prev => [newDeployment, ...prev]);
       return newDeployment;
     } catch (err) {
@@ -70,6 +73,7 @@ export const useDeployments = (projectId) => {
   const cancel = useCallback(async (deploymentId) => {
     try {
       setError(null);
+      await deploymentsService.cancel(deploymentId);
       setDeployments(prev =>
         prev.map(d =>
           d.id === deploymentId
@@ -84,19 +88,13 @@ export const useDeployments = (projectId) => {
   }, []);
 
   const getDeploymentLogs = useCallback(async (deploymentId) => {
-    // Return mock logs
-    return [
-      '[INFO] Starting deployment...',
-      '[INFO] Building project...',
-      '[DEBUG] Compiling components...',
-      '[INFO] Build successful (1.23s)',
-      '[INFO] Running tests...',
-      '[INFO] All tests passed',
-      '[INFO] Uploading artifacts...',
-      '[INFO] Artifacts uploaded successfully',
-      '[INFO] Deployment complete',
-      '[SUCCESS] Deployment finished at ' + new Date().toLocaleTimeString()
-    ];
+    try {
+      const logs = await deploymentsService.getLogs(deploymentId);
+      return logs;
+    } catch (err) {
+      console.error('Failed to fetch deployment logs:', err);
+      return [];
+    }
   }, []);
 
   return {

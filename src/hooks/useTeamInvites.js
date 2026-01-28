@@ -1,5 +1,6 @@
 import { useState, useCallback, useEffect } from 'react';
-import { generateMockTeamMembers, generateMockInvites, INVITE_STATUS } from '@/lib/teamInvites';
+import { INVITE_STATUS } from '@/lib/teamInvites';
+import { teamService } from '@/api/services';
 
 /**
  * Hook for managing team invites and members
@@ -10,44 +11,63 @@ export const useTeamInvites = (projectId) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  // Load mock data on mount
+  // Load team data from backend
   useEffect(() => {
-    setIsLoading(true);
-    // Simulate API call
-    setTimeout(() => {
-      const mockMembers = generateMockTeamMembers(5);
-      const mockInvites = generateMockInvites(3);
-      setMembers(mockMembers);
-      setInvites(mockInvites);
-      setIsLoading(false);
-    }, 500);
+    const fetchTeamData = async () => {
+      setIsLoading(true);
+      setError(null);
+      try {
+        const [membersData, invitesData] = await Promise.all([
+          teamService.getMembers(projectId),
+          teamService.getInvites(projectId)
+        ]);
+        setMembers(membersData);
+        setInvites(invitesData);
+      } catch (err) {
+        setError(err.message);
+        console.error('Failed to fetch team data:', err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    if (projectId) {
+      fetchTeamData();
+    }
   }, [projectId]);
 
-  const inviteMember = useCallback((email, role, message) => {
-    const newInvite = {
-      id: `invite_${Date.now()}`,
-      email,
-      role,
-      status: INVITE_STATUS.PENDING,
-      created_at: new Date().toISOString(),
-      expires_at: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
-      invited_by: 'current@example.com',
-      message
-    };
-    setInvites(prev => [newInvite, ...prev]);
-    return newInvite;
+  const inviteMember = useCallback(async (email, role, message) => {
+    try {
+      const newInvite = await teamService.inviteMember(projectId, { email, role, message });
+      setInvites(prev => [newInvite, ...prev]);
+      return newInvite;
+    } catch (err) {
+      setError(err.message);
+      throw err;
+    }
+  }, [projectId]);
+
+  const resendInvite = useCallback(async (inviteId) => {
+    try {
+      await teamService.resendInvite(inviteId);
+      setInvites(prev =>
+        prev.map(i => (i.id === inviteId ? { ...i, resent_at: new Date().toISOString() } : i))
+      );
+    } catch (err) {
+      setError(err.message);
+      throw err;
+    }
   }, []);
 
-  const resendInvite = useCallback((inviteId) => {
-    setInvites(prev =>
-      prev.map(i => (i.id === inviteId ? { ...i, resent_at: new Date().toISOString() } : i))
-    );
-  }, []);
-
-  const cancelInvite = useCallback((inviteId) => {
-    setInvites(prev =>
-      prev.map(i => (i.id === inviteId ? { ...i, status: INVITE_STATUS.CANCELLED } : i))
-    );
+  const cancelInvite = useCallback(async (inviteId) => {
+    try {
+      await teamService.cancelInvite(inviteId);
+      setInvites(prev =>
+        prev.map(i => (i.id === inviteId ? { ...i, status: INVITE_STATUS.CANCELLED } : i))
+      );
+    } catch (err) {
+      setError(err.message);
+      throw err;
+    }
   }, []);
 
   const acceptInvite = useCallback((inviteId) => {
@@ -77,15 +97,27 @@ export const useTeamInvites = (projectId) => {
     );
   }, []);
 
-  const removeMember = useCallback((memberId) => {
-    setMembers(prev => prev.filter(m => m.id !== memberId));
-  }, []);
+  const removeMember = useCallback(async (memberId) => {
+    try {
+      await teamService.removeMember(projectId, memberId);
+      setMembers(prev => prev.filter(m => m.id !== memberId));
+    } catch (err) {
+      setError(err.message);
+      throw err;
+    }
+  }, [projectId]);
 
-  const updateMemberRole = useCallback((memberId, newRole) => {
-    setMembers(prev =>
-      prev.map(m => (m.id === memberId ? { ...m, role: newRole } : m))
-    );
-  }, []);
+  const updateMemberRole = useCallback(async (memberId, newRole) => {
+    try {
+      await teamService.updateMemberRole(projectId, memberId, newRole);
+      setMembers(prev =>
+        prev.map(m => (m.id === memberId ? { ...m, role: newRole } : m))
+      );
+    } catch (err) {
+      setError(err.message);
+      throw err;
+    }
+  }, [projectId]);
 
   const getPendingInvites = useCallback(() => {
     return invites.filter(i => i.status === INVITE_STATUS.PENDING);

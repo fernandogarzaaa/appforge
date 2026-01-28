@@ -48,6 +48,7 @@ import NFTStudio from './pages/NFTStudio';
 import Notifications from './pages/Notifications';
 import PageEditor from './pages/PageEditor';
 import PredictiveAnalytics from './pages/PredictiveAnalytics';
+import ProjectViewer from './pages/ProjectViewer';
 import ProjectExport from './pages/ProjectExport';
 import Pricing from './pages/Pricing';
 import Profile from './pages/Profile';
@@ -129,6 +130,7 @@ const PAGES = {
     "ProjectSettings": ProjectSettings,
     "ProjectTasks": ProjectTasks,
     "Projects": Projects,
+    "projects/:id": ProjectViewer,
     "ReferralProgram": ReferralProgram,
     "Roadmap": Roadmap,
     "RoleManagement": RoleManagement,

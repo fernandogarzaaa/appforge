@@ -19,11 +19,11 @@ export default function Sidebar({ currentProject, collapsed, onToggle }) {
     <motion.div
       initial={{ width: collapsed ? 64 : 256 }}
       animate={{ width: collapsed ? 64 : 256 }}
-      className="bg-white border-r border-gray-200 flex flex-col h-screen"
+      className="bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800 flex flex-col h-screen"
     >
-      <div className="p-4 border-b border-gray-100 flex items-center justify-between">
-        {!collapsed && <h2 className="font-bold text-gray-900">Base44</h2>}
-        <button onClick={onToggle} className="text-gray-600 hover:text-gray-900">
+      <div className="p-4 border-b border-gray-100 dark:border-gray-800 flex items-center justify-between">
+        {!collapsed && <h2 className="font-bold text-gray-900 dark:text-white">Base44</h2>}
+        <button onClick={onToggle} className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white">
           {collapsed ? <Menu className="w-5 h-5" /> : <X className="w-5 h-5" />}
         </button>
       </div>
@@ -34,7 +34,7 @@ export default function Sidebar({ currentProject, collapsed, onToggle }) {
             key={item.label}
             to={item.href}
             className={cn(
-              'flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-gray-600 hover:text-gray-900 hover:bg-gray-50',
+              'flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-800',
               collapsed && 'justify-center'
             )}
             title={collapsed ? item.label : undefined}
@@ -46,9 +46,9 @@ export default function Sidebar({ currentProject, collapsed, onToggle }) {
       </nav>
 
       {currentProject && !collapsed && (
-        <div className="p-4 border-t border-gray-100">
-          <p className="text-xs text-gray-500 uppercase mb-2">Project</p>
-          <p className="font-medium text-gray-900 text-sm">{currentProject.name}</p>
+        <div className="p-4 border-t border-gray-100 dark:border-gray-800">
+          <p className="text-xs text-gray-500 dark:text-gray-400 uppercase mb-2">Project</p>
+          <p className="font-medium text-gray-900 dark:text-white text-sm">{currentProject.name}</p>
         </div>
       )}
     </motion.div>

@@ -13,6 +13,7 @@ import { motion } from 'framer-motion';
 
 export default function Dashboard() {
   const [ideaInput, setIdeaInput] = useState('');
+  const [isCreating, setIsCreating] = useState(false);
 
   const { data: projects = [], isLoading } = useQuery({
     queryKey: ['projects'],
@@ -55,16 +56,17 @@ export default function Dashboard() {
               rows={3}
             />
             <Button
-              onClick={() => {
+              onClick={async () => {
                 if (ideaInput.trim()) {
-                  window.location.href = createPageUrl('Projects') + '?new=true&idea=' + encodeURIComponent(ideaInput);
+                  // Navigate to AI Assistant with the idea to start AI agent conversation
+                  window.location.href = createPageUrl('AIAssistant') + '?auto_start=true&idea=' + encodeURIComponent(ideaInput);
                 }
               }}
               disabled={!ideaInput.trim()}
-              className="absolute right-3 bottom-3 h-11 px-5 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white rounded-lg shadow-lg"
+              className="absolute right-3 bottom-3 h-11 px-5 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white rounded-lg shadow-lg disabled:opacity-50"
             >
-              <Send className="w-4 h-4 mr-2" />
-              Create
+              <Sparkles className="w-4 h-4 mr-2" />
+              Create with AI
             </Button>
           </div>
         </div>

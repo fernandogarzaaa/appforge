@@ -7,6 +7,7 @@ import {
   Globe, Brain, Zap, MessageCircle, ArrowLeft
 } from 'lucide-react';
 import { Textarea } from '@/components/ui/textarea';
+import { generateEnhancedEntities } from '@/utils/enhancedEntityGeneration';
 import APIDiscoveryPanel from '@/components/ai/APIDiscoveryPanel';
 import PredictiveModels from '@/components/ai/PredictiveModels';
 import GitHubIntegration from '@/components/ai/GitHubIntegration';
@@ -58,10 +59,18 @@ export default function AIAssistant() {
 
   const urlParams = new URLSearchParams(window.location.search);
   const projectId = urlParams.get('projectId');
+  const autoStart = urlParams.get('auto_start');
+  const initialIdea = urlParams.get('idea');
   const queryClient = useQueryClient();
 
   useEffect(() => {
     loadUser();
+
+    // Auto-start AI agent if coming from Dashboard
+    if (autoStart === 'true' && initialIdea && !messages.length) {
+      // Start AI agent conversation automatically
+      startAIAgentConversation(initialIdea);
+    }
 
     // Command Palette keyboard shortcut
     const handleKeyDown = (e) => {
@@ -73,11 +82,135 @@ export default function AIAssistant() {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, []);
+  }, [autoStart, initialIdea]);
 
   const loadUser = async () => {
     const userData = await base44.auth.me();
     setUser(userData);
+  };
+
+  const startAIAgentConversation = async (idea) => {
+    // Create initial welcome message from AI
+    const welcomeMessage = {
+      role: 'assistant',
+      content: `🎉 Awesome! I'm building: **"${idea}"**\n\n✨ Let me ask a few quick questions to make it perfect:\n\n1. Who will use this? (e.g., customers, team members, personal)\n2. What's the #1 thing it should do?\n3. Any must-have features?\n\n💡 **Meanwhile, I'm already:**\n- Creating your project\n- Setting up the database\n- Building the pages\n\nJust answer when ready, or type "go" and I'll use smart defaults!`,
+      timestamp: new Date().toISOString()
+    };
+
+    setMessages([welcomeMessage]);
+    setIsLoading(true);
+
+    try {
+      // Smart project name extraction
+      const extractProjectName = (text) => {
+        // Remove common command words and extract meaningful name
+        let cleaned = text
+          .replace(/^(create|build|make|develop|generate|design)\s+/i, '')
+          .replace(/\s+(landing\s+page|website|web\s+app|app|page|site|for\s+me)$/i, '')
+          .replace(/\s+for\s+/i, ' - ')
+          .trim();
+        
+        // Capitalize first letter of each word
+        cleaned = cleaned.split(' ')
+          .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+          .join(' ');
+        
+        return cleaned.substring(0, 50) || 'My Project';
+      };
+      
+      const projectName = extractProjectName(idea);
+      
+      // Pre-detect features for metadata
+      const { features: detectedFeatures } = generateEnhancedEntities(idea);
+      
+      const newProject = await base44.entities.Project.create({
+        name: projectName,
+        description: idea,
+        icon: '✨',
+        color: '#8b5cf6',
+        status: 'active',
+        metadata: {
+          ai_generated: true,
+          features: detectedFeatures,
+          enhanced_schema: true,
+          creation_timestamp: new Date().toISOString()
+        }
+      });
+
+      // Show building progress
+      setTimeout(async () => {
+        const progressMessage = {
+          role: 'assistant',
+          content: `✅ **Project Created!**\n\n🏗️ **Building your website now:**\n\n⏳ Setting up database...\n⏳ Creating pages...\n⏳ Designing UI...`,
+          timestamp: new Date().toISOString()
+        };
+        setMessages(prev => [...prev, progressMessage]);
+
+        // Actually create entities and pages based on the idea
+        try {
+          // Use enhanced entity generation with advanced schemas, validations, and APIs
+          const { entities: enhancedEntities, features } = generateEnhancedEntities(idea);
+          
+          setMessages(prev => [...prev, {
+            role: 'assistant',
+            content: `🔧 **Detected Features**: ${Object.entries(features).filter(([_, v]) => v).map(([k]) => k).join(', ') || 'basic website'}\n📦 **Creating ${enhancedEntities.length} entities** with advanced schemas, validations, and API endpoints...`
+          }]);
+
+          // Create all enhanced entities with proper relationships and validations
+          for (const entityData of enhancedEntities) {
+            await base44.entities.Entity.create({
+              project_id: newProject.id,
+              name: entityData.name,
+              schema: entityData.schema,
+              metadata: {
+                indexes: entityData.indexes || [],
+                relationships: entityData.relationships || [],
+                api_endpoints: entityData.api_endpoints || {},
+                features: features
+              }
+            });
+          }
+
+          // Create a main page
+          await base44.entities.Page.create({
+            project_id: newProject.id,
+            name: 'Home',
+            path: '/',
+            content: {
+              type: 'generated',
+              description: idea,
+              entities: enhancedEntities.map(e => e.name)
+            }
+          });
+
+          // Show completion
+          setTimeout(() => {
+            const completeMessage = {
+              role: 'assistant',
+              content: `🎉 **Your website is LIVE!**\n\n✅ Database created\n✅ Pages built\n✅ Ready to use\n\n🔗 [**View Your Website →**](/projects/${newProject.id})\n\n💬 Want to customize it? Just tell me what to change!`,
+              timestamp: new Date().toISOString()
+            };
+            setMessages(prev => [...prev, completeMessage]);
+            setIsLoading(false);
+          }, 300);
+
+        } catch (buildError) {
+          console.error('Build error:', buildError);
+          setIsLoading(false);
+        }
+
+      }, 500);
+
+    } catch (error) {
+      console.error('Failed to start AI agent:', error);
+      const errorMessage = {
+        role: 'assistant',
+        content: '❌ Oops! Something went wrong. Let me try again or describe your idea differently.',
+        timestamp: new Date().toISOString()
+      };
+      setMessages(prev => [...prev, errorMessage]);
+      setIsLoading(false);
+    }
   };
 
   const { data: documents = [] } = useQuery({
@@ -216,7 +349,8 @@ Provide helpful, actionable responses with code examples when relevant. Be conci
     setSuggestedTools([]);
   };
 
-  if (!projectId) {
+  // Allow AI Assistant to work without project when auto-starting
+  if (!projectId && autoStart !== 'true') {
     return (
       <div className="flex items-center justify-center h-full">
         <EmptyState

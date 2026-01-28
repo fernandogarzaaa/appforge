@@ -70,3 +70,17 @@ export function getKeyAge(createdDate) {
 export function isKeyExpiringSoon(createdDate) {
   return getKeyAge(createdDate) > 90;
 }
+
+// Encrypt a value (for environment variables)
+export function encryptValue(value) {
+  // TODO: Use actual encryption library
+  return `encrypted:${btoa(value)}`;
+}
+
+// Decrypt a value (for environment variables)
+export function decryptValue(encryptedValue) {
+  if (!encryptedValue || !encryptedValue.startsWith('encrypted:')) {
+    return encryptedValue;
+  }
+  return atob(encryptedValue.replace('encrypted:', ''));
+}

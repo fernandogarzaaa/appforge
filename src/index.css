@@ -85,4 +85,46 @@
   body {
     @apply bg-background text-foreground;
   }
+
+  /* Scrollbar styling */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.05);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.3);
+  }
+
+  /* Radix UI Dialog scrolling fix */
+  [role="dialog"] {
+    max-height: 90vh !important;
+    overflow-y: scroll !important;
+  }
+
+  [role="dialog"]::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  [role="dialog"]::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.05);
+  }
+
+  [role="dialog"]::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+  }
+
+  [role="dialog"]::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.3);
+  }
 }

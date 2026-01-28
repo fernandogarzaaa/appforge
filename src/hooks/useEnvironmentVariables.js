@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect } from 'react';
-import { generateMockEnvVariables } from '@/lib/environmentVariables';
+import { environmentVariablesService } from '@/api/services';
 
 /**
  * Hook for managing environment variables
@@ -11,29 +11,57 @@ export const useEnvironmentVariables = (projectId) => {
   const [selectedEnvironment, setSelectedEnvironment] = useState('development');
   const [revealedIds, setRevealedIds] = useState(new Set());
 
-  // Load mock variables on mount
+  // Load variables from backend
   useEffect(() => {
-    setIsLoading(true);
-    // Simulate API call
-    setTimeout(() => {
-      const mockData = generateMockEnvVariables(10);
-      setVariables(mockData);
-      setIsLoading(false);
-    }, 500);
+    const fetchVariables = async () => {
+      setIsLoading(true);
+      setError(null);
+      try {
+        const data = await environmentVariablesService.getAll(projectId, selectedEnvironment);
+        setVariables(data);
+      } catch (err) {
+        setError(err.message);
+        console.error('Failed to fetch environment variables:', err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    if (projectId) {
+      fetchVariables();
+    }
+  }, [projectId, selectedEnvironment]);
+
+  const addVariable = useCallback(async (variable) => {
+    try {
+      const newVar = await environmentVariablesService.create(projectId, variable);
+      setVariables(prev => [newVar, ...prev]);
+      return newVar;
+    } catch (err) {
+      setError(err.message);
+      throw err;
+    }
   }, [projectId]);
 
-  const addVariable = useCallback((variable) => {
-    setVariables(prev => [variable, ...prev]);
+  const updateVariable = useCallback(async (id, updates) => {
+    try {
+      await environmentVariablesService.update(id, updates);
+      setVariables(prev =>
+        prev.map(v => (v.id === id ? { ...v, ...updates, updated_at: new Date().toISOString() } : v))
+      );
+    } catch (err) {
+      setError(err.message);
+      throw err;
+    }
   }, []);
 
-  const updateVariable = useCallback((id, updates) => {
-    setVariables(prev =>
-      prev.map(v => (v.id === id ? { ...v, ...updates, updated_at: new Date().toISOString() } : v))
-    );
-  }, []);
-
-  const deleteVariable = useCallback((id) => {
-    setVariables(prev => prev.filter(v => v.id !== id));
+  const deleteVariable = useCallback(async (id) => {
+    try {
+      await environmentVariablesService.delete(id);
+      setVariables(prev => prev.filter(v => v.id !== id));
+    } catch (err) {
+      setError(err.message);
+      throw err;
+    }
   }, []);
 
   const toggleReveal = useCallback((id) => {

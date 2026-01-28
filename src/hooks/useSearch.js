@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect } from 'react';
-import { performSearch } from '@/lib/search';
+import { projectsService } from '@/api/services';
 
 export function useSearch(context = {}) {
   const [query, setQuery] = useState('');
@@ -11,7 +11,7 @@ export function useSearch(context = {}) {
   });
   const [isLoading, setIsLoading] = useState(false);
 
-  // Debounced search
+  // Debounced search with backend
   useEffect(() => {
     if (!query.trim()) {
       setResults({ projects: [], functions: [], pages: [], total: 0 });
@@ -20,15 +20,21 @@ export function useSearch(context = {}) {
 
     setIsLoading(true);
     
-    // Simulate async search delay
-    const timeout = setTimeout(() => {
-      const searchResults = performSearch(query, context);
-      setResults(searchResults);
-      setIsLoading(false);
-    }, 150);
+    // Debounce search requests
+    const timeout = setTimeout(async () => {
+      try {
+        const searchResults = await projectsService.search(query);
+        setResults(searchResults);
+      } catch (err) {
+        console.error('Search failed:', err);
+        setResults({ projects: [], functions: [], pages: [], total: 0 });
+      } finally {
+        setIsLoading(false);
+      }
+    }, 300);
 
     return () => clearTimeout(timeout);
-  }, [query, context]);
+  }, [query]);
 
   const search = useCallback((q) => {
     setQuery(q);

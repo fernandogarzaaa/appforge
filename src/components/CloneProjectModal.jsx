@@ -6,6 +6,7 @@ import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import { AlertCircle, CheckCircle2, Copy, Loader } from 'lucide-react';
 import { generateCloneName, validateProjectName, getCloneSummary } from '@/lib/projectCloning';
+import { projectsService } from '@/api/services';
 
 export const CloneProjectModal = ({ open, onClose, project, onCloneSuccess }) => {
   const [step, setStep] = useState('config'); // config, progress, success
@@ -48,36 +49,50 @@ export const CloneProjectModal = ({ open, onClose, project, onCloneSuccess }) =>
     setProgress(0);
 
     try {
-      // Simulate cloning process with progress
-      const steps = [
-        { duration: 400, target: 15 },
-        { duration: 600, target: 35 },
-        { duration: 800, target: 60 },
-        { duration: 600, target: 85 },
-        { duration: 400, target: 100 }
-      ];
+      // Progress simulation
+      const progressInterval = setInterval(() => {
+        setProgress(prev => {
+          if (prev >= 90) {
+            clearInterval(progressInterval);
+            return prev;
+          }
+          return prev + 10;
+        });
+      }, 300);
 
-      for (const step of steps) {
-        await new Promise(resolve => setTimeout(resolve, step.duration));
-        setProgress(step.target);
+      // Call backend API to clone project
+      const clonedProject = await projectsService.clone(project.id, {
+        name: cloneName,
+        copySettings,
+        copyEnvironmentVars,
+        copyTeamMembers,
+        copyDeployments
+      });
+
+      clearInterval(progressInterval);
+      setProgress(100);
+
+      // Update step to success
+      await new Promise(resolve => setTimeout(resolve, 500));
+      setStep('success');
+
+      // Notify parent component
+      if (onCloneSuccess) {
+        onCloneSuccess(clonedProject);
       }
 
-      // Simulate API call to clone project
-      await new Promise(resolve => setTimeout(resolve, 500));
+      // Auto-close after 3 seconds
+      setTimeout(() => {
+        handleClose();
+      }, 3000);
 
-      // Create cloned project object
-      const clonedProject = {
-        id: `project_${Date.now()}`,
-        name: cloneName,
-        description: project.description ? `${project.description} (Cloned)` : 'Cloned project',
-        framework: project.framework || 'react',
-        template: project.template,
-        visibility: project.visibility || 'private',
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
-        cloned_from: project.id,
-        settings: copySettings ? { ...project.settings } : {},
-        environment_variables: copyEnvironmentVars ? [...(project.environment_variables || [])] : [],
+    } catch (err) {
+      console.error('Clone failed:', err);
+      setError(err.message || 'Failed to clone project. Please try again.');
+      setIsCloning(false);
+      setStep('configure');
+    }
+  };
         team_members: copyTeamMembers ? [...(project.team_members || [])] : [],
         deployments: copyDeployments ? [...(project.deployments || [])] : []
       };

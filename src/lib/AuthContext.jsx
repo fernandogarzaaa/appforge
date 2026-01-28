@@ -18,6 +18,7 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const checkAppState = async () => {
+    console.log('[AuthContext] Starting app state check...');
     try {
       setIsLoadingPublicSettings(true);
       setAuthError(null);
@@ -34,19 +35,24 @@ export const AuthProvider = ({ children }) => {
       });
       
       try {
+        console.log('[AuthContext] Fetching public settings...');
         const publicSettings = await appClient.get(`/prod/public-settings/by-id/${appParams.appId}`);
+        console.log('[AuthContext] Public settings loaded:', publicSettings);
         setAppPublicSettings(publicSettings);
         
         // If we got the app public settings successfully, check if user is authenticated
         if (appParams.token) {
+          console.log('[AuthContext] Token found, checking user auth...');
           await checkUserAuth();
         } else {
+          console.log('[AuthContext] No token, user not authenticated');
           setIsLoadingAuth(false);
           setIsAuthenticated(false);
         }
         setIsLoadingPublicSettings(false);
+        console.log('[AuthContext] App state check complete');
       } catch (appError) {
-        console.error('App state check failed:', appError);
+        console.error('[AuthContext] App state check failed:', appError);
         
         // Handle app-level errors
         if (appError.status === 403 && appError.data?.extra_data?.reason) {
@@ -90,8 +96,10 @@ export const AuthProvider = ({ children }) => {
   const checkUserAuth = async () => {
     try {
       // Now check if the user is authenticated
+      console.log('[AuthContext] Checking user authentication...');
       setIsLoadingAuth(true);
       const currentUser = await base44.auth.me();
+      console.log('[AuthContext] User authenticated:', currentUser);
       setUser(currentUser);
       setIsAuthenticated(true);
       setIsLoadingAuth(false);

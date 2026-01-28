@@ -47,14 +47,31 @@ export default function Projects() {
 
   const queryClient = useQueryClient();
 
-  const { data: projects = [], isLoading } = useQuery({
+  const { data: projects = [], isLoading, error } = useQuery({
     queryKey: ['projects'],
-    queryFn: () => base44.entities.Project.list('-updated_date'),
+    queryFn: async () => {
+      try {
+        const result = await base44.entities.Project.list('-updated_date');
+        console.log('Projects loaded:', result);
+        return result;
+      } catch (err) {
+        console.error('Failed to load projects:', err);
+        // Return empty array instead of throwing to prevent white screen
+        return [];
+      }
+    },
+    retry: 1,
   });
 
   const createMutation = useMutation({
-    mutationFn: (data) => base44.entities.Project.create(data),
+    mutationFn: async (data) => {
+      console.log('Mutation called with:', data);
+      // Use base44.entities.Project.create without ID, let base44 auto-generate
+      const result = await base44.entities.Project.create(data);
+      return result;
+    },
     onSuccess: () => {
+      console.log('Project created successfully!');
       queryClient.invalidateQueries({ queryKey: ['projects'] });
       setShowNewDialog(false);
       setNewProject({ name: '', description: '', icon: '📁', color: '#6366f1', status: 'draft' });
@@ -62,6 +79,7 @@ export default function Projects() {
     onError: (error) => {
       const errorMessage = error?.message || 'Failed to create project';
       console.error('Project creation error:', error);
+      alert(`Error: ${errorMessage}`);
     },
   });
 
@@ -94,10 +112,17 @@ export default function Projects() {
   };
 
   const handleCreate = () => {
-    createMutation.mutate({
-      ...newProject,
-      stats: { pages_count: 0, entities_count: 0, components_count: 0 },
-    });
+    console.log('Creating project with data:', newProject);
+    // Filter out any undefined/null values and only send what we have
+    const projectData = {
+      name: newProject.name.trim(),
+      ...(newProject.description && { description: newProject.description.trim() }),
+      ...(newProject.icon && { icon: newProject.icon }),
+      ...(newProject.color && { color: newProject.color }),
+      status: 'draft'
+    };
+    console.log('Sending to API (filtered):', projectData);
+    createMutation.mutate(projectData);
   };
 
   return (
@@ -227,23 +252,20 @@ export default function Projects() {
 
       {/* New Project Dialog */}
       <Dialog open={showNewDialog} onOpenChange={setShowNewDialog}>
-        <DialogContent className="sm:max-w-lg rounded-2xl p-0 overflow-hidden">
-          <DialogHeader className="p-6 pb-4 border-b border-gray-100">
+        <DialogContent 
+          className="sm:max-w-lg rounded-2xl p-6"
+          style={{
+            maxHeight: '90vh',
+            overflowY: 'scroll',
+            overflowX: 'hidden',
+            display: 'flex',
+            flexDirection: 'column'
+          }}
+        >
+          <div className="mb-4">
             <DialogTitle className="text-base font-semibold">Create New Project</DialogTitle>
-          </DialogHeader>
-          <div className="p-6 space-y-4">
-            {/* Template Selection */}
-            <div>
-              <Label className="text-[13px] text-gray-600 mb-2 block">Choose Template</Label>
-              <ProjectTemplates 
-                onSelect={(template) => {
-                  setSelectedTemplate(template);
-                  setNewProject({ ...newProject, icon: template.icon ? '📁' : newProject.icon });
-                }} 
-                selected={selectedTemplate}
-              />
-            </div>
-
+          </div>
+          <div className="space-y-4">
             {/* Icon & Color Selection */}
             <div className="flex gap-4">
               <div className="flex-1">
@@ -286,7 +308,10 @@ export default function Projects() {
               <Label className="text-[13px] text-gray-600 mb-1.5 block">Project Name</Label>
               <Input
                 value={newProject.name}
-                onChange={(e) => setNewProject({ ...newProject, name: e.target.value })}
+                onChange={(e) => {
+                  console.log('Name changed to:', e.target.value);
+                  setNewProject({ ...newProject, name: e.target.value });
+                }}
                 placeholder="My Awesome App"
                 className="h-9 rounded-lg border-gray-200 text-[13px]"
               />
@@ -303,7 +328,7 @@ export default function Projects() {
               />
             </div>
           </div>
-          <DialogFooter className="p-6 pt-4 border-t border-gray-100">
+          <div className="flex gap-2 mt-8 pt-4 border-t border-gray-100">
             <Button
               variant="outline"
               onClick={() => setShowNewDialog(false)}
@@ -314,11 +339,11 @@ export default function Projects() {
             <Button
               onClick={handleCreate}
               disabled={!newProject.name || createMutation.isPending}
-              className="bg-gray-900 hover:bg-gray-800 text-white rounded-lg h-9 text-[13px]"
+              className="bg-gray-900 hover:bg-gray-800 text-white rounded-lg h-9 text-[13px] flex-1"
             >
               {createMutation.isPending ? 'Creating...' : 'Create Project'}
             </Button>
-          </DialogFooter>
+          </div>
         </DialogContent>
       </Dialog>
     </div>

@@ -9,6 +9,7 @@ import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 import { ThemeProvider } from '@/context/ThemeContext';
 import { SearchModal } from '@/components/SearchModal';
+import ErrorBoundary from '@/components/ErrorBoundary';
 import { useState } from 'react';
 
 const { Pages, Layout, mainPage } = pagesConfig;
@@ -38,7 +39,14 @@ const AuthenticatedApp = ({ onSearchOpen }) => {
     } else if (authError.type === 'auth_required') {
       // Redirect to login automatically
       navigateToLogin();
-      return null;
+      return (
+        <div className="fixed inset-0 flex items-center justify-center">
+          <div className="text-center">
+            <div className="w-8 h-8 border-4 border-slate-200 border-t-slate-800 rounded-full animate-spin mx-auto mb-4"></div>
+            <p className="text-slate-600">Redirecting to login...</p>
+          </div>
+        </div>
+      );
     }
   }
 
@@ -71,18 +79,20 @@ function App() {
   const [searchOpen, setSearchOpen] = useState(false);
 
   return (
-    <ThemeProvider>
-      <AuthProvider>
-        <QueryClientProvider client={queryClientInstance}>
-          <Router>
-            <NavigationTracker />
-            <AuthenticatedApp onSearchOpen={() => setSearchOpen(true)} />
-            <SearchModal isOpen={searchOpen} onClose={() => setSearchOpen(false)} />
-          </Router>
-          <Toaster />
-        </QueryClientProvider>
-      </AuthProvider>
-    </ThemeProvider>
+    <ErrorBoundary>
+      <ThemeProvider>
+        <AuthProvider>
+          <QueryClientProvider client={queryClientInstance}>
+            <Router>
+              <NavigationTracker />
+              <AuthenticatedApp onSearchOpen={() => setSearchOpen(true)} />
+              <SearchModal isOpen={searchOpen} onClose={() => setSearchOpen(false)} />
+            </Router>
+            <Toaster />
+          </QueryClientProvider>
+        </AuthProvider>
+      </ThemeProvider>
+    </ErrorBoundary>
   )
 }
 
