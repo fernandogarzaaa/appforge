@@ -43,14 +43,14 @@ export default function Projects() {
     color: '#6366f1',
     status: 'draft',
   });
-  const [selectedTemplate, setSelectedTemplate] = useState(null);
+  const [_selectedTemplate, _setSelectedTemplate] = useState(null);
 
   const queryClient = useQueryClient();
   const { isAuthenticated } = useBackendAuth();
-  const { toast } = useToast();
+  const { toast: _toast } = useToast();
 
   // Fetch base44 projects
-  const { data: projects = [], isLoading, error } = useQuery({
+  const { data: projects = [], isLoading, error: _error } = useQuery({
     queryKey: ['projects'],
     queryFn: async () => {
       try {
@@ -66,14 +66,12 @@ export default function Projects() {
   });
 
   // Fetch backend projects (optional - shows integration)
-  const { data: backendProjects = [] } = useQuery({
+  const { data: _backendProjects = [] } = useQuery({
     queryKey: ['backendProjects'],
     queryFn: () => userService.listProjects(),
     enabled: isAuthenticated,
     retry: 1,
-    onError: () => {
-      // Silent fail - backend projects are optional
-    }
+    // Silent fail - backend projects are optional
   });
 
   const createMutation = useMutation({

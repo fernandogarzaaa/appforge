@@ -117,15 +117,30 @@ interface AxiosError extends Error {
 }
 
 // Base44 SDK type extensions
+interface EntityCRUD {
+  get(id: string): Promise<any>
+  list(): Promise<any[]>
+  create(data: any): Promise<any>
+  update(id: string, data: any): Promise<any>
+  delete(id: string): Promise<void>
+  filter(filters: any): Promise<any[]>
+}
+
 interface Base44Client {
   auth: {
     me(): Promise<User | null>
     login(credentials: any): Promise<any>
     logout(): Promise<void>
   }
-  entities: any
+  entities: {
+    Project: EntityCRUD
+    Entity: EntityCRUD
+    [key: string]: EntityCRUD
+  }
   asServiceRole: {
-    entities: any
+    entities: {
+      [key: string]: EntityCRUD
+    }
   }
   integrations: {
     get(id: string): Promise<any>
