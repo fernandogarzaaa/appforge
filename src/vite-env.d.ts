@@ -68,3 +68,50 @@ interface PerformanceEntry {
   domInteractive?: number
   fetchStart?: number
 }
+
+// User type definitions
+interface User {
+  id?: string
+  email?: string
+  name?: string
+  username?: string
+  role?: string
+  avatar?: string
+  createdAt?: string
+  updatedAt?: string
+}
+
+// Analytics event types
+interface AnalyticsEvent {
+  userId: any
+  sessionId: string
+  userAgent: string
+  url: string
+  event?: string
+  message?: string
+  page?: string
+  metricName?: string
+  value?: number
+  unit?: string
+  properties?: Record<string, any>
+}
+
+// Base44 SDK type extensions
+interface Base44Client {
+  auth: {
+    me(): Promise<User | null>
+    login(credentials: any): Promise<any>
+    logout(): Promise<void>
+  }
+  entities: any
+  asServiceRole: {
+    entities: any
+  }
+  integrations: {
+    get(id: string): Promise<any>
+    list(): Promise<any[]>
+    create(data: any): Promise<any>
+    update(id: string, data: any): Promise<any>
+    delete(id: string): Promise<void>
+  }
+}

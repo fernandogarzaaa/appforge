@@ -28,7 +28,19 @@
     "types/**/*",
     "src/vite-env.d.ts"
   ],
-  "exclude": ["node_modules", "dist", "build", ".venv"],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "build",
+    ".venv",
+    "**/*.test.js",
+    "**/*.test.jsx",
+    "**/*.spec.js",
+    "**/__tests__/**",
+    "src/test/**",
+    "src/tests/**",
+    "tests/**"
+  ],
   "deno": {
     "enable": true,
     "unstable": true
