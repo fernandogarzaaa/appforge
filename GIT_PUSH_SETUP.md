@@ -25,14 +25,22 @@ The repository's git configuration uses a credential helper that requires the `G
 
 2. Set the environment variable:
    ```bash
-   export GITHUB_TOKEN="your_token_here"
+   export GITHUB_TOKEN="your_personal_access_token_here"
    ```
 
-3. For permanent setup, add to your shell profile (`~/.bashrc`, `~/.zshrc`, etc.):
+3. **SECURITY WARNING**: Storing tokens in shell profile files exposes them in plaintext.
+   For permanent setup, consider these options:
+
+   **Option A (Less Secure)**: Add to shell profile with restricted permissions
    ```bash
    echo 'export GITHUB_TOKEN="your_token_here"' >> ~/.bashrc
+   chmod 600 ~/.bashrc  # Restrict file permissions
    source ~/.bashrc
    ```
+
+   **Option B (More Secure)**: Use a credential manager or password manager to store tokens
+   - Consider using Git Credential Manager (Option 3 below)
+   - Or use a password manager and manually set the variable when needed
 
 ### Option 2: Use SSH Instead of HTTPS
 
@@ -41,7 +49,11 @@ The repository's git configuration uses a credential helper that requires the `G
 
 2. Change the remote URL to use SSH:
    ```bash
-   git remote set-url origin git@github.com:fernandogarzaaa/appforge.git
+   # Replace with your actual repository path
+   git remote set-url origin git@github.com:USERNAME/REPOSITORY.git
+   
+   # For this repository specifically:
+   # git remote set-url origin git@github.com:fernandogarzaaa/appforge.git
    ```
 
 3. Verify the change:

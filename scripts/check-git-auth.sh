@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Git Authentication Checker
 # This script helps diagnose git push authentication issues
@@ -82,7 +82,9 @@ if [[ $REMOTE_URL == https://github.com* ]] && [ -z "$GITHUB_TOKEN" ]; then
     echo "   export GITHUB_TOKEN='your_token_here'"
     echo ""
     echo "B. Switch to SSH authentication:"
-    echo "   git remote set-url origin git@github.com:fernandogarzaaa/appforge.git"
+    # Extract repo info from REMOTE_URL
+    REPO_PATH=$(echo "$REMOTE_URL" | sed 's|https://github.com/||' | sed 's|\.git$||')
+    echo "   git remote set-url origin git@github.com:${REPO_PATH}.git"
     echo ""
     echo "C. Use GitHub CLI:"
     echo "   gh auth login"
