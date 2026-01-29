@@ -40,13 +40,13 @@ describe('useSearch Hook', () => {
     
     act(() => {
       result.current.search('Auth');
-      result1Count = result.current.results.length;
     });
+    result1Count = result.current.results.length;
     
     act(() => {
       result.current.search('AUTH');
-      result2Count = result.current.results.length;
     });
+    result2Count = result.current.results.length;
     
     expect(result1Count).toBe(result2Count);
   });

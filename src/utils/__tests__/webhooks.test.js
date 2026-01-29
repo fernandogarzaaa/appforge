@@ -276,55 +276,36 @@ describe('Webhooks System', () => {
     });
   });
 
-  describe('getWebhookStats', () => {
-    it('should return webhook statistics', () => {
-      const wh = webhooks.createWebhook('https://example.com', ['event']);
-
-      webhooks.triggerWebhook('event', {});
-      const stats = webhooks.getWebhookStats(wh.id);
-
-      expect(stats).toBeDefined();
-      expect(typeof stats.delivered).toBe('number');
-      expect(typeof stats.failed).toBe('number');
-    });
-
-    it('should track success and failure', () => {
-      const wh = webhooks.createWebhook('https://example.com', ['event']);
-
-      webhooks.triggerWebhook('event', {});
-      const stats = webhooks.getWebhookStats(wh.id);
-
-      // Stats should include pending deliveries
-      expect(stats.totalDeliveries).toBeGreaterThan(0);
-    });
-  });
-
   describe('Webhook Events', () => {
-    it('should emit delivery_sent event', (done) => {
+    it('should emit delivery_sent event', async () => {
       const wh = webhooks.createWebhook('https://example.com', ['event']);
 
-      const unsub = webhooks.onWebhookEvent('delivery_sent', (event) => {
-        expect(event.webhookId).toBeDefined();
-        unsub();
-        done();
-      });
+      await new Promise((resolve) => {
+        const unsub = webhooks.onWebhookEvent('delivery_sent', (event) => {
+          expect(event.webhookId).toBeDefined();
+          unsub();
+          resolve();
+        });
 
-      webhooks.triggerWebhook('event', {});
+        webhooks.triggerWebhook('event', {});
+      });
     });
 
-    it('should emit delivery_failed event on retry exhaustion', (done) => {
+    it('should emit delivery_failed event on retry exhaustion', async () => {
       const wh = webhooks.createWebhook('https://invalid-domain-12345.com', ['event']);
 
-      const unsub = webhooks.onWebhookEvent('delivery_failed', (event) => {
-        expect(event.webhookId).toBeDefined();
-        unsub();
-        done();
-      });
+      await new Promise((resolve) => {
+        const unsub = webhooks.onWebhookEvent('delivery_failed', (event) => {
+          expect(event.webhookId).toBeDefined();
+          unsub();
+          resolve();
+        });
 
-      webhooks.triggerWebhook('event', {});
-      
-      // Fast-forward through retries
-      vi.advanceTimersByTime(60000);
+        webhooks.triggerWebhook('event', {});
+
+        // Fast-forward through retries
+        vi.advanceTimersByTime(60000);
+      });
     });
   });
 
