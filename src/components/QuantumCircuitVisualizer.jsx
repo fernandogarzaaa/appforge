@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { Plus, Trash2, Play, RotateCcw } from 'lucide-react'
+import { Plus, Trash2, RotateCcw } from 'lucide-react'
 
 /**
  * QuantumCircuitVisualizer - Interactive quantum circuit visualization

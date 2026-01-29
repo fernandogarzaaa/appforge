@@ -1,11 +1,11 @@
 import React, { useState, useCallback } from 'react'
-import { Plus, Trash2, Play, Download, Upload, Copy, RotateCw, Zap } from 'lucide-react'
+import { Plus, Trash2, Play, Download, RotateCw, Zap } from 'lucide-react'
 import {
   createCircuit, addGate, removeGate, getCircuitDepth, getGateCount,
-  getGateCountsByType, clearCircuit, validateCircuit, exportToOpenQASM,
+  getGateCountsByType, validateCircuit, exportToOpenQASM,
   QuantumGates, QuantumAlgorithms
 } from '@/utils/quantumComputing'
-import { simulateCircuit, getTopProbabilityStates, createStateReport } from '@/utils/quantumSimulator'
+import { simulateCircuit } from '@/utils/quantumSimulator'
 
 /**
  * Quantum Circuit Builder Component

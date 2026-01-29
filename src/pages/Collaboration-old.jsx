@@ -5,17 +5,13 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Textarea } from '@/components/ui/textarea';
-import { Users, MessageSquare, Lock, Activity, FileText, Plus, Trash2, Eye, Zap } from 'lucide-react';
+import { Users, MessageSquare, Lock, Activity, FileText, Plus, Trash2, Eye } from 'lucide-react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
 import { collaborationService } from '@/api/appforge';
 import { useToast } from '@/components/ui/use-toast';
 import { useBackendAuth } from '@/contexts/BackendAuthContext';
 import { useCollaboration } from '@/contexts/CollaborationContext';
-import CollaborativeEditor from '@/components/collaboration/CollaborativeEditor';
-import PresenceIndicator from '@/components/collaboration/PresenceIndicator';
-import CollaborationChat from '@/components/collaboration/CollaborationChat';
-import { motion } from 'framer-motion';
 
 export default function Collaboration() {
   const [sessionId, setSessionId] = useState('');

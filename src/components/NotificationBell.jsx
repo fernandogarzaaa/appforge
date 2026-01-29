@@ -1,7 +1,6 @@
 import React from 'react'
 import { useActivity } from '@/contexts/ActivityContext'
 import { Bell, AlertCircle } from 'lucide-react'
-import { Card } from '@/components/ui/card'
 import ActivityCard from '@/components/ActivityCard'
 
 /**

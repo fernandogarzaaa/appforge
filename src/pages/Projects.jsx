@@ -3,11 +3,10 @@ import { base44 } from '@/api/base44Client';
 import { userService } from '@/api/appforge';
 import { useBackendAuth } from '@/contexts/BackendAuthContext';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { Search, Plus, Grid3X3, List, Filter, FolderKanban, Database } from 'lucide-react';
+import { Search, Plus, Grid3X3, List, Filter, FolderKanban } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Badge } from '@/components/ui/badge';
 import {
   Dialog,
   DialogContent,

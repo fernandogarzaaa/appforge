@@ -3,7 +3,7 @@
  * Real-time editor with presence awareness, live cursors, and conflict resolution
  */
 
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+import React, { useState, useRef, useCallback } from 'react';
 import { useCollaboration } from '@/contexts/CollaborationContext';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';

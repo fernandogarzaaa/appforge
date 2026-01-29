@@ -47,4 +47,3 @@ Deno.serve(async (req) => {
     return Response.json([], { status: 200 });
   }
 });
-});

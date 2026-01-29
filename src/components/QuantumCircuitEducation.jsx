@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { Zap, BookOpen, Code2 } from 'lucide-react'
+import { BookOpen, Code2 } from 'lucide-react'
 
 /**
  * QuantumCircuitEducation - Interactive quantum computing education

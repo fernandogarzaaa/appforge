@@ -78,15 +78,3 @@ Deno.serve(async (req) => {
     return Response.json({ error: error.message }, { status: 500 });
   }
 });
-      plan_name: planInfo.name,
-      price: planInfo.price,
-      current_period_start: new Date(subscription.current_period_start * 1000).toISOString(),
-      current_period_end: new Date(subscription.current_period_end * 1000).toISOString(),
-      next_billing_date: new Date(subscription.current_period_end * 1000).toISOString(),
-      customer_email: customer.email
-    }, { status: 200 });
-  } catch (error) {
-    console.error('Get subscription info error:', error);
-    return Response.json({ error: error.message }, { status: 500 });
-  }
-});

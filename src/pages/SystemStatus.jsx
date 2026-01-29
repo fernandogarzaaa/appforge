@@ -3,7 +3,7 @@ import { Activity, CheckCircle2, AlertTriangle, XCircle, RefreshCw, TrendingUp, 
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import healthMonitor, { runHealthChecks, getSystemStatus } from '@/utils/healthCheck';
+import { runHealthChecks, getSystemStatus } from '@/utils/healthCheck';
 import { getWebVitals } from '@/utils/performance';
 import errorTracker from '@/utils/errorTracking';
 import env from '@/utils/env';

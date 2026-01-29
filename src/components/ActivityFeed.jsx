@@ -3,7 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { ActivityCard } from '@/components/ActivityCard'
-import { Bell, Trash2, CheckCheck, Filter } from 'lucide-react'
+import { Bell, Trash2, CheckCheck } from 'lucide-react'
 import { useActivity } from '@/contexts/ActivityContext'
 import EmptyState from '@/components/common/EmptyState'
 
