@@ -12,6 +12,7 @@
  * @property {number[]} [controlQubits] - Control qubit indices (for controlled gates)
  * @property {number} [angle] - Rotation angle (for parametric gates)
  * @property {number} timestamp - Gate creation timestamp
+ * @property {number} [classicalBit] - Classical bit index for measurement gates
  */
 
 /**
@@ -35,7 +36,9 @@
  * @property {number} depth - Circuit depth
  * @property {number} gateCount - Total gates
  * @property {Object} parameters - Algorithm parameters
- * @property {MeasurementResult[]} results - Simulation results
+ * @property {MeasurementResult[]} [results] - Simulation results (optional)
+ * @property {string} [description] - Algorithm description
+ * @property {number} [entanglementDepth] - Entanglement depth for Bell states
  */
 
 // =======================
@@ -285,6 +288,7 @@ export function getGateCount(circuit) {
  * @returns {Object.<string, number>} Gate counts by type
  */
 export function getGateCountsByType(circuit) {
+  /** @type {Object.<string, number>} */
   const counts = {};
   circuit.gates.forEach(gate => {
     counts[gate.name] = (counts[gate.name] || 0) + 1;
@@ -535,7 +539,8 @@ export function quantumFourierTransform(numQubits, options = {}) {
         type: 'controlled',
         controlQubits: [k],
         targetQubits: [j],
-        angle
+        angle,
+        timestamp: Date.now()
       };
       addGate(circuit, controlledRZ);
     }

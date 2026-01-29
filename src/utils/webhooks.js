@@ -229,7 +229,7 @@ async function sendWebhookWithRetry(webhook, event, payload, delivery) {
           timestamp: new Date().toISOString(),
           deliveryId: delivery.id,
         }),
-        timeout: 30000,
+        signal: AbortSignal.timeout(30000),
       });
 
       delivery.responseTime = performance.now() - startTime;

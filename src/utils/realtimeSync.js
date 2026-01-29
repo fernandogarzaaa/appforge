@@ -23,6 +23,7 @@
  * @property {any} data - Change data
  * @property {number} timestamp - Change timestamp
  * @property {number} version - Document version
+ * @property {string} documentId - Document ID
  */
 
 /**
@@ -51,6 +52,7 @@ class RealtimeSyncManager {
     this.syncInterval = null
     this.heartbeatInterval = null
     this.lastSyncTime = Date.now()
+    this.startTime = Date.now()
     this.conflictResolver = new ConflictResolver()
     this.changeTimestamps = new Map() // Track change timestamps
   }

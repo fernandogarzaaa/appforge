@@ -25,7 +25,8 @@
   "include": [
     "src/**/*",
     "functions/**/*",
-    "types/**/*"
+    "types/**/*",
+    "src/vite-env.d.ts"
   ],
   "exclude": ["node_modules", "dist", "build", ".venv"],
   "deno": {

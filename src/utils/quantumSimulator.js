@@ -5,8 +5,14 @@
  */
 
 /**
+ * @typedef {Object} ComplexNumber
+ * @property {number} real - Real part
+ * @property {number} imag - Imaginary part
+ */
+
+/**
  * @typedef {Object} QuantumState
- * @property {Array<number>} amplitudes - Complex amplitudes
+ * @property {Array<ComplexNumber>} amplitudes - Complex amplitudes
  * @property {number} numQubits - Number of qubits
  */
 
@@ -21,7 +27,7 @@
  * Complex number representation
  * @param {number} real - Real part
  * @param {number} imag - Imaginary part
- * @returns {Object} Complex number
+ * @returns {ComplexNumber} Complex number
  */
 function complex(real, imag = 0) {
   return { real, imag };
@@ -301,6 +307,7 @@ export function applySWAP(state, qubit1, qubit2) {
  * @returns {Object.<string, number>} Probability distribution
  */
 export function getProbabilities(state) {
+  /** @type {Object.<string, number>} */
   const probabilities = {};
   
   state.amplitudes.forEach((amplitude, index) => {
@@ -323,6 +330,7 @@ export function getProbabilities(state) {
  */
 export function simulate(state, shots = 1000) {
   const probabilities = getProbabilities(state);
+  /** @type {Object.<string, number>} */
   const results = {};
   
   for (let i = 0; i < shots; i++) {
@@ -461,7 +469,7 @@ export function getBlochSphereCoordinates(state) {
 export function createStateReport(state) {
   const probabilities = getProbabilities(state);
   const topStates = getTopProbabilityStates(state, 5);
-  const entropy = calculateEntanglementEntropy(state);
+  const entropy = calculateEntanglementEntropy(state, Math.floor(state.numQubits / 2));
   
   return {
     numQubits: state.numQubits,
