@@ -24,6 +24,7 @@ const Analytics = lazy(() => import('./pages/Analytics'));
 const BotBuilder = lazy(() => import('./pages/BotBuilder'));
 const CentralAnalytics = lazy(() => import('./pages/CentralAnalytics'));
 const ChatbotManager = lazy(() => import('./pages/ChatbotManager'));
+const CodeRefactoring = lazy(() => import('./pages/CodeRefactoring'));
 const CodePlayground = lazy(() => import('./pages/CodePlayground'));
 const Collaboration = lazy(() => import('./pages/Collaboration'));
 const Components = lazy(() => import('./pages/Components'));
@@ -33,6 +34,7 @@ const CryptoExchange = lazy(() => import('./pages/CryptoExchange'));
 const CryptoGambling = lazy(() => import('./pages/CryptoGambling'));
 const DAOGovernance = lazy(() => import('./pages/DAOGovernance'));
 const DataAnalytics = lazy(() => import('./pages/DataAnalytics'));
+const DataPrivacy = lazy(() => import('./pages/DataPrivacy'));
 const DeFiHub = lazy(() => import('./pages/DeFiHub'));
 const Deployments = lazy(() => import('./pages/Deployments'));
 const EmailAssistant = lazy(() => import('./pages/EmailAssistant'));
@@ -55,9 +57,11 @@ const Integrations = lazy(() => import('./pages/Integrations'));
 const MediaStudio = lazy(() => import('./pages/MediaStudio'));
 const MedicalAI = lazy(() => import('./pages/MedicalAI'));
 const MobileStudio = lazy(() => import('./pages/MobileStudio'));
+const MLIntegration = lazy(() => import('./pages/MLIntegration'));
 const NFTMarketplace = lazy(() => import('./pages/NFTMarketplace'));
 const NFTStudio = lazy(() => import('./pages/NFTStudio'));
 const Notifications = lazy(() => import('./pages/Notifications'));
+const Observability = lazy(() => import('./pages/Observability'));
 const PageEditor = lazy(() => import('./pages/PageEditor'));
 const PredictiveAnalytics = lazy(() => import('./pages/PredictiveAnalytics'));
 const ProjectViewer = lazy(() => import('./pages/ProjectViewer'));
@@ -72,10 +76,13 @@ const ReferralProgram = lazy(() => import('./pages/ReferralProgram'));
 const Roadmap = lazy(() => import('./pages/Roadmap'));
 const RoleManagement = lazy(() => import('./pages/RoleManagement'));
 const SecurityFeatures = lazy(() => import('./pages/SecurityFeatures'));
+const Security = lazy(() => import('./pages/Security'));
+const SearchAnalytics = lazy(() => import('./pages/SearchAnalytics'));
 const SocialMediaHub = lazy(() => import('./pages/SocialMediaHub'));
 const SubscriptionSuccess = lazy(() => import('./pages/SubscriptionSuccess'));
 const Support = lazy(() => import('./pages/Support'));
 const SystemHealth = lazy(() => import('./pages/SystemHealth'));
+const TeamCollaboration = lazy(() => import('./pages/TeamCollaboration'));
 const TeamManagement = lazy(() => import('./pages/TeamManagement'));
 const TemplateMarketplace = lazy(() => import('./pages/TemplateMarketplace'));
 const TokenCreator = lazy(() => import('./pages/TokenCreator'));
@@ -112,6 +119,7 @@ const PAGES = {
     "CentralAnalytics": withSuspense(CentralAnalytics),
     "Collaboration": withSuspense(Collaboration),
     "ChatbotManager": withSuspense(ChatbotManager),
+    "CodeRefactoring": withSuspense(CodeRefactoring),
     "CodePlayground": withSuspense(CodePlayground),
     "Components": withSuspense(Components),
     "ContentStudio": withSuspense(ContentStudio),
@@ -121,6 +129,7 @@ const PAGES = {
     "DAOGovernance": withSuspense(DAOGovernance),
     "Dashboard": Dashboard, // Core - eager load
     "DataAnalytics": withSuspense(DataAnalytics),
+    "DataPrivacy": withSuspense(DataPrivacy),
     "DeFiHub": withSuspense(DeFiHub),
     "Deployments": withSuspense(Deployments),
     "EmailAssistant": withSuspense(EmailAssistant),
@@ -146,9 +155,11 @@ const PAGES = {
     "MediaStudio": withSuspense(MediaStudio),
     "MedicalAI": withSuspense(MedicalAI),
     "MobileStudio": withSuspense(MobileStudio),
+    "MLIntegration": withSuspense(MLIntegration),
     "NFTMarketplace": withSuspense(NFTMarketplace),
     "NFTStudio": withSuspense(NFTStudio),
     "Notifications": withSuspense(Notifications),
+    "Observability": withSuspense(Observability),
     "PageEditor": withSuspense(PageEditor),
     "PredictiveAnalytics": withSuspense(PredictiveAnalytics),
     "Pricing": withSuspense(Pricing),
@@ -163,10 +174,13 @@ const PAGES = {
     "Roadmap": withSuspense(Roadmap),
     "RoleManagement": withSuspense(RoleManagement),
     "SecurityFeatures": withSuspense(SecurityFeatures),
+    "Security": withSuspense(Security),
+    "SearchAnalytics": withSuspense(SearchAnalytics),
     "SocialMediaHub": withSuspense(SocialMediaHub),
     "SubscriptionSuccess": withSuspense(SubscriptionSuccess),
     "Support": withSuspense(Support),
     "SystemHealth": withSuspense(SystemHealth),
+    "TeamCollaboration": withSuspense(TeamCollaboration),
     "TeamManagement": withSuspense(TeamManagement),
     "TemplateMarketplace": withSuspense(TemplateMarketplace),
     "TokenCreator": withSuspense(TokenCreator),

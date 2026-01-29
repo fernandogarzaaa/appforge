@@ -21,6 +21,10 @@ import { validateEnv } from '@/utils/env';
 import errorTracker, { setUser, clearUser } from '@/utils/errorTracking';
 import { startHealthMonitoring } from '@/utils/healthCheck';
 import { useToast } from '@/components/ui/use-toast';
+// Phase 1 Feature Imports
+import { CommandPalette } from '@/features/commandPalette/CommandPalette';
+import { ContextMenu } from '@/features/quickActions/ContextMenu';
+import { ThemeManager } from '@/features/themes/ThemeManager';
 
 const { Pages, Layout, mainPage, publicPages = [] } = pagesConfig;
 const mainPageKey = mainPage ?? Object.keys(Pages)[0];
@@ -136,6 +140,9 @@ function App() {
                   <QueryClientProvider client={queryClientInstance}>
                   <Router>
                     <NavigationTracker />
+                    {/* Phase 1 Features */}
+                    <CommandPalette />
+                    <ContextMenu />
                     <AuthenticatedApp onSearchOpen={() => setSearchOpen(true)} />
                     <SearchModal isOpen={searchOpen} onClose={() => setSearchOpen(false)} />
                     <OfflineIndicator />

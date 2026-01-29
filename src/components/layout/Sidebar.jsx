@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
-import { Menu, X, FolderKanban, Sparkles, Zap, Code } from 'lucide-react';
+import { Menu, X, FolderKanban, Sparkles, Zap, Code, ShieldCheck, Activity, Brain, Wrench, BarChart3, Users } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 
@@ -13,6 +13,13 @@ export default function Sidebar({ currentProject, collapsed, onToggle }) {
     { label: 'Projects', icon: FolderKanban, href: createPageUrl('Projects') },
     { label: 'AI Assistant', icon: Zap, href: createPageUrl('AIAssistant') },
     { label: 'Bot Builder', icon: Code, href: createPageUrl('BotBuilder') },
+    { label: 'Data Privacy', icon: ShieldCheck, href: createPageUrl('DataPrivacy') },
+    { label: 'Observability', icon: Activity, href: createPageUrl('Observability') },
+    { label: 'ML Integration', icon: Brain, href: createPageUrl('MLIntegration') },
+    { label: 'Code Refactoring', icon: Wrench, href: createPageUrl('CodeRefactoring') },
+    { label: 'Search Analytics', icon: BarChart3, href: createPageUrl('SearchAnalytics') },
+    { label: 'Team Collaboration', icon: Users, href: createPageUrl('TeamCollaboration') },
+    { label: 'Security', icon: ShieldCheck, href: createPageUrl('Security') },
   ];
 
   return (

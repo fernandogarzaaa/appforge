@@ -4,7 +4,7 @@ import { quantumService } from '@/api/appforge';
 import { useQuery } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
-import { FolderKanban, Database, FileCode, Component, ArrowRight, Sparkles, Plus, Zap } from 'lucide-react';
+import { FolderKanban, Database, FileCode, Component, ArrowRight, Sparkles, Plus, Zap, ShieldCheck } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import StatCard from '@/components/dashboard/StatCard';
@@ -166,6 +166,34 @@ export default function Dashboard() {
             <Button className="bg-white text-gray-900 hover:bg-gray-100 rounded-lg h-9 px-4 text-[13px] font-medium">
               <Plus className="w-3.5 h-3.5 mr-1.5" />
               New Project
+            </Button>
+          </Link>
+        </div>
+      </motion.div>
+
+      {/* Privacy & Security */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.15 }}
+        className="bg-white border border-gray-200 rounded-xl p-5 mb-6"
+      >
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-lg bg-emerald-50 flex items-center justify-center">
+              <ShieldCheck className="w-4 h-4 text-emerald-600" />
+            </div>
+            <div>
+              <h2 className="text-base font-semibold text-gray-900">Data Privacy & Security</h2>
+              <p className="text-gray-600 text-[13px]">
+                Manage encryption, anonymization, and GDPR compliance
+              </p>
+            </div>
+          </div>
+          <Link to={createPageUrl('DataPrivacy')}>
+            <Button className="bg-emerald-600 text-white hover:bg-emerald-700 rounded-lg h-9 px-4 text-[13px] font-medium">
+              Open Privacy Center
+              <ArrowRight className="w-3.5 h-3.5 ml-1.5" />
             </Button>
           </Link>
         </div>
