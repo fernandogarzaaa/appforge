@@ -74,11 +74,17 @@ git commit -m "Test: verify push works"
 # Try pushing
 git push
 
-# If successful, clean up
+# IMPORTANT: Only run the cleanup below if the push SUCCEEDED
+# Check git log first to verify you're resetting the correct commit
+git log --oneline -3
+
+# If test push was successful, clean up:
 git reset --soft HEAD~1
 git restore --staged test.txt
 rm test.txt
 ```
+
+**WARNING**: Do not run the cleanup commands if the push failed, as you might lose actual work.
 
 ## Need More Help?
 If you're still having issues:

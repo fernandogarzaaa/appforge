@@ -8,6 +8,22 @@ echo "Git Authentication Diagnostic Tool"
 echo "======================================="
 echo ""
 
+# Check if we're in a git repository
+if ! git rev-parse --git-dir > /dev/null 2>&1; then
+    echo "❌ ERROR: Not a git repository"
+    echo "   Please run this script from within a git repository"
+    echo ""
+    exit 1
+fi
+
+# Function to check for SSH keys
+check_ssh_keys() {
+    if [ -f ~/.ssh/id_rsa ] || [ -f ~/.ssh/id_ed25519 ] || [ -f ~/.ssh/id_ecdsa ] || [ -f ~/.ssh/id_dsa ]; then
+        return 0  # Keys found
+    fi
+    return 1  # No keys found
+}
+
 # Check if GITHUB_TOKEN is set
 echo "1. Checking GITHUB_TOKEN environment variable..."
 if [ -z "$GITHUB_TOKEN" ]; then
@@ -46,7 +62,7 @@ echo ""
 
 # Check if SSH keys are available
 echo "4. Checking SSH keys..."
-if [ -f ~/.ssh/id_rsa ] || [ -f ~/.ssh/id_ed25519 ]; then
+if check_ssh_keys; then
     echo "   ✅ SSH keys found"
 else
     echo "   ❌ No SSH keys found"
@@ -82,16 +98,20 @@ if [[ $REMOTE_URL == https://github.com* ]] && [ -z "$GITHUB_TOKEN" ]; then
     echo "   export GITHUB_TOKEN='your_token_here'"
     echo ""
     echo "B. Switch to SSH authentication:"
-    # Extract repo info from REMOTE_URL
-    REPO_PATH=$(echo "$REMOTE_URL" | sed 's|https://github.com/||' | sed 's|\.git$||')
-    echo "   git remote set-url origin git@github.com:${REPO_PATH}.git"
+    # Extract repo info from REMOTE_URL more robustly
+    REPO_PATH=$(echo "$REMOTE_URL" | sed -E 's|https?://[^/]+/||' | sed 's|\.git$||')
+    if [ -n "$REPO_PATH" ]; then
+        echo "   git remote set-url origin git@github.com:${REPO_PATH}.git"
+    else
+        echo "   git remote set-url origin git@github.com:USERNAME/REPOSITORY.git"
+    fi
     echo ""
     echo "C. Use GitHub CLI:"
     echo "   gh auth login"
     echo "   gh auth setup-git"
     echo ""
     echo "See GIT_PUSH_SETUP.md for detailed instructions"
-elif [[ $REMOTE_URL == git@github.com* ]] && [ ! -f ~/.ssh/id_rsa ] && [ ! -f ~/.ssh/id_ed25519 ]; then
+elif [[ $REMOTE_URL == git@github.com* ]] && ! check_ssh_keys; then
     echo "⚠️  ISSUE DETECTED: Using SSH but no SSH keys found"
     echo ""
     echo "Recommended solution:"

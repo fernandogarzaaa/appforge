@@ -37,10 +37,14 @@ The repository's git configuration uses a credential helper that requires the `G
    chmod 600 ~/.bashrc  # Restrict file permissions
    source ~/.bashrc
    ```
+   
+   **Note**: This provides basic protection but is NOT foolproof on multi-user systems.
+   Other users may still access the token through backups or if directory permissions allow it.
 
    **Option B (More Secure)**: Use a credential manager or password manager to store tokens
    - Consider using Git Credential Manager (Option 3 below)
    - Or use a password manager and manually set the variable when needed
+   - **Strongly recommended** for shared or multi-user environments
 
 ### Option 2: Use SSH Instead of HTTPS
 
@@ -99,11 +103,17 @@ git add test.txt
 git commit -m "Test commit"
 git push
 
-# Clean up if successful
+# IMPORTANT: Only run cleanup if push SUCCEEDED
+# Check git log first to verify you're resetting the correct commit
+git log --oneline -3
+
+# If test push was successful, clean up:
 git reset --soft HEAD~1
 git restore --staged test.txt
 rm test.txt
 ```
+
+**WARNING**: Do not run the cleanup commands if the push failed, as you might lose actual work.
 
 ## For GitHub Actions / CI/CD
 
