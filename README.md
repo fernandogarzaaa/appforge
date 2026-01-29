@@ -443,6 +443,7 @@ For detailed information, see [XENDIT_MIGRATION_GUIDE.md](./XENDIT_MIGRATION_GUI
 - **[XENDIT_MIGRATION_GUIDE.md](./XENDIT_MIGRATION_GUIDE.md)** - Complete payment migration details
 - **[PROJECT_INTEGRITY_REPORT.md](./PROJECT_INTEGRITY_REPORT.md)** - Project audit and analysis
 - **[FIXES_COMPLETED.md](./FIXES_COMPLETED.md)** - List of all resolved issues
+- **[GIT_PUSH_SETUP.md](./GIT_PUSH_SETUP.md)** - Git authentication and push troubleshooting guide
 
 ### API Documentation
 
@@ -502,6 +503,18 @@ npm run lint:fix
 ```bash
 npm run test:watch
 # Review error messages and update tests
+```
+
+#### Git push fails with authentication error
+```bash
+# Error: "Invalid username or token. Password authentication is not supported"
+# This means GITHUB_TOKEN environment variable is not set.
+
+# Quick diagnosis:
+./scripts/check-git-auth.sh
+
+# See detailed solutions:
+# GIT_PUSH_SETUP.md
 ```
 
 ---
