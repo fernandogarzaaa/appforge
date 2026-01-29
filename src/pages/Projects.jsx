@@ -234,6 +234,8 @@ export default function Projects() {
                   project={project}
                   index={index}
                   onDelete={(p) => deleteMutation.mutate(p.id)}
+                  onDuplicate={() => {}}
+                  onClone={() => {}}
                 />
               ))}
             </AnimatePresence>

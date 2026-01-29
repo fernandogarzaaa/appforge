@@ -17,7 +17,7 @@ export default function QuantumCircuitBuilder() {
   const [selectedAlgorithm, setSelectedAlgorithm] = useState('bell')
   const [algorithmParams, setAlgorithmParams] = useState({ numPairs: 2 })
   const [simulationResults, setSimulationResults] = useState(null)
-  const [activeTab, setActiveTab] = useState('builder')
+  const [_activeTab, _setActiveTab] = useState('builder')
   const [showGateHelp, setShowGateHelp] = useState(false)
 
   // Gate insertion functions

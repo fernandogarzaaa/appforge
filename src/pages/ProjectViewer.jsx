@@ -10,10 +10,13 @@ export default function ProjectViewer() {
   const { id } = useParams();
   const [activeTab, setActiveTab] = useState('preview');
 
-  const { data: project, isLoading } = useQuery({
+  const { data: projectResponse, isLoading } = useQuery({
     queryKey: ['project', id],
     queryFn: () => base44.entities.Project.get(id),
   });
+
+  // Handle both {data: project} and project response formats
+  const project = projectResponse?.data || projectResponse;
 
   const { data: entities = [] } = useQuery({
     queryKey: ['entities', id],

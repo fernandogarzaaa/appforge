@@ -13,7 +13,7 @@ export default function AnalyticsPanel() {
     eventBatches: 0
   });
   const [activeTab, setActiveTab] = useState('events');
-  const [filters, setFilters] = useState({
+  const [_filters, _setFilters] = useState({
     eventType: 'all',
     timeRange: '24h',
     source: 'all'

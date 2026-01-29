@@ -88,6 +88,21 @@ interface User {
   updatedAt?: string
 }
 
+// Project type definition
+interface Project {
+  id?: string
+  name?: string
+  description?: string
+  icon?: string
+  status?: string
+  color?: string
+  stats?: {
+    pages_count?: number
+    entities_count?: number
+    components_count?: number
+  }
+}
+
 // Analytics event types
 interface AnalyticsEvent {
   userId: any
@@ -120,9 +135,9 @@ interface AxiosError extends Error {
 interface EntityCRUD {
   get(id: string): Promise<any>
   list(): Promise<any[]>
-  create(data: any): Promise<any>
+  create(data?: any): Promise<any>
   update(id: string, data: any): Promise<any>
-  delete(id: string): Promise<void>
+  delete(id?: string): Promise<void>
   filter(filters: any): Promise<any[]>
 }
 

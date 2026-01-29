@@ -24,7 +24,7 @@ export default function TeamManager() {
 
   useEffect(() => {
     // Subscribe to team events
-    const unsubscribe = teams.onTeamEvent('*', (event) => {
+    const unsubscribe = teams.onTeamEvent('*', (_event) => {
       loadTeams();
     });
 
@@ -73,7 +73,7 @@ export default function TeamManager() {
       return;
     }
 
-    const invitation = teams.inviteTeamMember(
+    const _invitation = teams.inviteTeamMember(
       selectedTeam.id,
       formData.inviteEmail,
       formData.inviteRole
@@ -88,7 +88,7 @@ export default function TeamManager() {
     setTimeout(() => setMessage(''), 3000);
   };
 
-  const handleAcceptInvitation = (teamId, inviteId) => {
+  const _handleAcceptInvitation = (teamId, inviteId) => {
     teams.acceptTeamInvitation(teamId, inviteId);
     setMessage('✅ Invitation accepted!');
     loadTeamMembers(teamId);

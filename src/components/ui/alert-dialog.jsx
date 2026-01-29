@@ -21,6 +21,13 @@ const AlertDialogOverlay = React.forwardRef(({ className, ...props }, ref) => (
 ))
 AlertDialogOverlay.displayName = AlertDialogPrimitive.Overlay.displayName
 
+/**
+ * @typedef {Object} AlertDialogContentProps
+ * @property {React.ReactNode} [children]
+ * @property {string} [className]
+ */
+
+/** @type {React.ForwardRefExoticComponent<AlertDialogContentProps & React.RefAttributes<HTMLDivElement>>} */
 const AlertDialogContent = React.forwardRef(({ className, ...props }, ref) => (
   <AlertDialogPortal>
     <AlertDialogOverlay />
@@ -35,6 +42,9 @@ const AlertDialogContent = React.forwardRef(({ className, ...props }, ref) => (
 ))
 AlertDialogContent.displayName = AlertDialogPrimitive.Content.displayName
 
+/**
+ * @param {{className?: string, children?: React.ReactNode}} props
+ */
 const AlertDialogHeader = ({
   className = "",
   ...props
@@ -45,6 +55,9 @@ const AlertDialogHeader = ({
 )
 AlertDialogHeader.displayName = "AlertDialogHeader"
 
+/**
+ * @param {{className?: string, children?: React.ReactNode}} props
+ */
 const AlertDialogFooter = ({
   className = "",
   ...props
@@ -55,11 +68,25 @@ const AlertDialogFooter = ({
 )
 AlertDialogFooter.displayName = "AlertDialogFooter"
 
+/**
+ * @typedef {Object} AlertDialogTitleProps
+ * @property {React.ReactNode} [children]
+ * @property {string} [className]
+ */
+
+/** @type {React.ForwardRefExoticComponent<AlertDialogTitleProps & React.RefAttributes<HTMLHeadingElement>>} */
 const AlertDialogTitle = React.forwardRef(({ className, ...props }, ref) => (
   <AlertDialogPrimitive.Title ref={ref} className={cn("text-lg font-semibold", className)} {...props} />
 ))
 AlertDialogTitle.displayName = AlertDialogPrimitive.Title.displayName
 
+/**
+ * @typedef {Object} AlertDialogDescriptionProps
+ * @property {React.ReactNode} [children]
+ * @property {string} [className]
+ */
+
+/** @type {React.ForwardRefExoticComponent<AlertDialogDescriptionProps & React.RefAttributes<HTMLParagraphElement>>} */
 const AlertDialogDescription = React.forwardRef(({ className, ...props }, ref) => (
   <AlertDialogPrimitive.Description
     ref={ref}
@@ -69,11 +96,26 @@ const AlertDialogDescription = React.forwardRef(({ className, ...props }, ref) =
 AlertDialogDescription.displayName =
   AlertDialogPrimitive.Description.displayName
 
+/**
+ * @typedef {Object} AlertDialogActionProps
+ * @property {React.ReactNode} [children]
+ * @property {string} [className]
+ * @property {() => void} [onClick]
+ */
+
+/** @type {React.ForwardRefExoticComponent<AlertDialogActionProps & React.RefAttributes<HTMLButtonElement>>} */
 const AlertDialogAction = React.forwardRef(({ className, ...props }, ref) => (
   <AlertDialogPrimitive.Action ref={ref} className={cn(buttonVariants(), className)} {...props} />
 ))
 AlertDialogAction.displayName = AlertDialogPrimitive.Action.displayName
 
+/**
+ * @typedef {Object} AlertDialogCancelProps
+ * @property {React.ReactNode} [children]
+ * @property {string} [className]
+ */
+
+/** @type {React.ForwardRefExoticComponent<AlertDialogCancelProps & React.RefAttributes<HTMLButtonElement>>} */
 const AlertDialogCancel = React.forwardRef(({ className, ...props }, ref) => (
   <AlertDialogPrimitive.Cancel
     ref={ref}

@@ -25,6 +25,14 @@ const DialogOverlay = React.forwardRef(({ className, ...props }, ref) => (
 ))
 DialogOverlay.displayName = DialogPrimitive.Overlay.displayName
 
+/**
+ * @typedef {Object} DialogContentProps
+ * @property {React.ReactNode} [children]
+ * @property {string} [className]
+ * @property {React.CSSProperties} [style]
+ */
+
+/** @type {React.ForwardRefExoticComponent<DialogContentProps & React.RefAttributes<HTMLDivElement>>} */
 const DialogContent = React.forwardRef(({ className, children, ...props }, ref) => (
   <DialogPortal>
     <DialogOverlay />
@@ -46,6 +54,9 @@ const DialogContent = React.forwardRef(({ className, children, ...props }, ref) 
 ))
 DialogContent.displayName = DialogPrimitive.Content.displayName
 
+/**
+ * @param {{className?: string, children?: React.ReactNode}} props
+ */
 const DialogHeader = ({
   className = "",
   ...props
@@ -56,6 +67,9 @@ const DialogHeader = ({
 )
 DialogHeader.displayName = "DialogHeader"
 
+/**
+ * @param {{className?: string, children?: React.ReactNode}} props
+ */
 const DialogFooter = ({
   className = "",
   ...props
@@ -66,6 +80,13 @@ const DialogFooter = ({
 )
 DialogFooter.displayName = "DialogFooter"
 
+/**
+ * @typedef {Object} DialogTitleProps
+ * @property {React.ReactNode} [children]
+ * @property {string} [className]
+ */
+
+/** @type {React.ForwardRefExoticComponent<DialogTitleProps & React.RefAttributes<HTMLHeadingElement>>} */
 const DialogTitle = React.forwardRef(({ className, ...props }, ref) => (
   <DialogPrimitive.Title
     ref={ref}
@@ -74,6 +95,13 @@ const DialogTitle = React.forwardRef(({ className, ...props }, ref) => (
 ))
 DialogTitle.displayName = DialogPrimitive.Title.displayName
 
+/**
+ * @typedef {Object} DialogDescriptionProps
+ * @property {React.ReactNode} [children]
+ * @property {string} [className]
+ */
+
+/** @type {React.ForwardRefExoticComponent<DialogDescriptionProps & React.RefAttributes<HTMLParagraphElement>>} */
 const DialogDescription = React.forwardRef(({ className, ...props }, ref) => (
   <DialogPrimitive.Description
     ref={ref}

@@ -56,10 +56,10 @@ export default function ModelSelector({
     updateSettings 
   } = useLLM();
   
-  const [showDetails, setShowDetails] = useState(false);
+  const [_showDetails, _setShowDetails] = useState(false);
 
   const currentModel = Object.values(AI_MODELS).find(m => m.id === selectedModel) || AI_MODELS.BASE44;
-  const Icon = modelIcons[selectedModel] || Sparkles;
+  const _Icon = modelIcons[selectedModel] || Sparkles;
 
   if (compact) {
     return (
@@ -87,7 +87,7 @@ export default function ModelSelector({
           
           {Object.values(AI_MODELS).map((model) => {
             const isAvailable = availableModels.includes(model.id);
-            const ModelIcon = modelIcons[model.id];
+            const _ModelIcon = modelIcons[model.id];
             
             return (
               <DropdownMenuItem

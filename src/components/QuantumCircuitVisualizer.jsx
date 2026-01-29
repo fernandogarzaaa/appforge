@@ -7,7 +7,7 @@ import { Plus, Trash2, RotateCcw } from 'lucide-react'
  * QuantumCircuitVisualizer - Interactive quantum circuit visualization
  * Allows users to build and visualize quantum circuits with drag-and-drop gates
  */
-export function QuantumCircuitVisualizer({ initialQubits = 3, onCircuitChange }) {
+export function QuantumCircuitVisualizer({ initialQubits = 3, onCircuitChange: _onCircuitChange }) {
   const [qubits, setQubits] = useState(initialQubits)
   const [gates, setGates] = useState([])
   const [selectedGate, setSelectedGate] = useState(null)

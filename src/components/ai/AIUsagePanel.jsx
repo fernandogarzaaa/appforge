@@ -164,7 +164,7 @@ export default function AIUsagePanel({
           {modelStats.length > 0 && (
             <div className="space-y-3">
               <h4 className="text-sm font-medium dark:text-gray-200">Model Usage</h4>
-              {modelStats.map(({ model, info, queries, tokens, cost, percentage }) => (
+              {modelStats.map(({ model, info, queries, tokens, cost: _cost, percentage }) => (
                 <div key={model} className="space-y-1.5">
                   <div className="flex items-center justify-between text-sm">
                     <div className="flex items-center gap-2">
