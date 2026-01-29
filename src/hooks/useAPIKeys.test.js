@@ -47,10 +47,11 @@ describe('useAPIKeys Hook', () => {
   it('should toggle key visibility', async () => {
     const { result } = renderHook(() => useAPIKeys());
     
-    await act(async () => {
+    act(() => {
       result.current.toggleKeyVisibility('key-id-1');
-      expect(result.current.visibleKeys).toContain('key-id-1');
     });
+    
+    expect(result.current.visibleKeys).toContain('key-id-1');
   });
 
   it('should revoke key', async () => {

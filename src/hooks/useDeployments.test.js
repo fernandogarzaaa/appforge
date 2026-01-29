@@ -175,7 +175,8 @@ describe('useDeployments Hook', () => {
     
     act(() => {
       result.current.setPage(2);
-      expect(result.current.currentPage).toBe(2);
     });
+    
+    expect(result.current.currentPage).toBe(2);
   });
 });

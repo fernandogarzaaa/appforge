@@ -42,18 +42,19 @@ export function useSearch(data = []) {
   }, [data, syncFilteredResults, syncResults]);
 
   const search = useCallback((q) => {
-    setQuery(q);
+    const normalized = normalizeQuery(q);
+    setQuery(normalized);
     setIsSearching(true);
 
     if (debounceRef.current) {
       clearTimeout(debounceRef.current);
     }
 
-    updateResults(q);
+    updateResults(normalized);
 
-    if (q && q.trim()) {
+    if (normalized && normalized.trim()) {
       setHistory(prev => {
-        const next = [q, ...prev.filter(item => item !== q)];
+        const next = [normalized, ...prev.filter(item => item !== normalized)];
         return next.slice(0, 10);
       });
     }

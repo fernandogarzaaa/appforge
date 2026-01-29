@@ -38,6 +38,15 @@ const webhookListeners = new Map();
 const deliveryLogs = new Map();
 
 /**
+ * Reset all webhook data (for testing)
+ */
+export const resetWebhooks = () => {
+  webhookStore.clear();
+  webhookListeners.clear();
+  deliveryLogs.clear();
+};
+
+/**
  * Create webhook
  */
 export const createWebhook = (url, events = [], options = {}) => {
@@ -155,6 +164,9 @@ export const triggerWebhook = async (event, payload = {}) => {
   const deliveries = [];
 
   for (const webhook of webhooks) {
+    // Skip if webhook doesn't match the event
+    if (!webhook.events.includes(event)) continue;
+    
     const delivery = {
       id: `delivery_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
       webhookId: webhook.id,
@@ -169,6 +181,9 @@ export const triggerWebhook = async (event, payload = {}) => {
 
     deliveries.push(delivery);
     deliveryLogs.get(webhook.id).push(delivery);
+
+    // Notify that delivery was sent
+    notifyWebhookListeners('delivery_sent', delivery);
 
     // Send webhook asynchronously
     sendWebhookWithRetry(webhook, event, payload, delivery);
@@ -304,10 +319,13 @@ export const verifyWebhookSignature = (payload, secret) => {
 export const getWebhookStats = (webhookId) => {
   const logs = deliveryLogs.get(webhookId) || [];
   
+  const successCount = logs.filter(l => l.status === 'success').length;
+  const failedCount = logs.filter(l => l.status === 'failed').length;
+  
   return {
     totalDeliveries: logs.length,
-    delivered: logs.filter(l => l.status === 'success').length,
-    failed: logs.filter(l => l.status === 'failed').length,
+    delivered: successCount,
+    failed: failedCount,
     averageResponseTime: logs.length > 0 
       ? logs.reduce((sum, l) => sum + (l.responseTime || 0), 0) / logs.length 
       : 0,
@@ -378,4 +396,5 @@ export default {
   verifyWebhookSignature,
   getWebhookStats,
   onWebhookEvent,
+  resetWebhooks,
 };

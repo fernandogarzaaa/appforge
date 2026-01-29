@@ -39,6 +39,7 @@ export const useDeployments = () => {
   const [error, setError] = useState(null);
   const [filters, setFilters] = useState({});
   const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize] = useState(10);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -136,6 +137,10 @@ export const useDeployments = () => {
     setFilters({});
   }, []);
 
+  const setPage = useCallback((page) => {
+    setCurrentPage(page);
+  }, []);
+
   const stats = useMemo(() => {
     const total = deployments.length;
     const successful = deployments.filter(d => d.status === 'success').length;
@@ -175,7 +180,7 @@ export const useDeployments = () => {
     clearError,
     setFilters,
     resetFilters,
-    setPage: setCurrentPage
+    setPage: (page) => setCurrentPage(page)
   };
 };
 

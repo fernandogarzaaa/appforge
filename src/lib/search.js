@@ -37,10 +37,7 @@ export function fuzzyScore(searchStr, targetStr) {
 
 export function normalizeQuery(query = '') {
   if (!query) return '';
-  return query
-    .trim()
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '.');
+  return query.trim().toLowerCase();
 }
 
 export function fuzzySearch(query, items = [], field = 'name') {
@@ -55,7 +52,7 @@ export function fuzzySearch(query, items = [], field = 'name') {
         score: fuzzyScore(normalized, String(value))
       };
     })
-    .filter(item => item.score > 0)
+      .filter(item => item.score > 0)
     .sort((a, b) => b.score - a.score);
 }
 

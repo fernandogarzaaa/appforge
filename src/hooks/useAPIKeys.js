@@ -84,10 +84,9 @@ export function useAPIKeys() {
   }, [keys]);
 
   const toggleKeyVisibility = useCallback((keyId) => {
-    setVisibleKeys(prev => {
-      const next = prev.includes(keyId) ? prev.filter(id => id !== keyId) : [...prev, keyId];
-      return next;
-    });
+    setVisibleKeys(prev => 
+      prev.includes(keyId) ? prev.filter(id => id !== keyId) : [...prev, keyId]
+    );
   }, []);
 
   const revokeKey = useCallback(async (keyId) => {
