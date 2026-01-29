@@ -6,9 +6,10 @@ import { useBackendAuth } from '@/contexts/BackendAuthContext';
  * Redirects to login if user is not authenticated with backend
  */
 export const PrivateRoute = ({ children }) => {
-  const { isAuthenticated, isLoading } = useBackendAuth();
+  const { isAuthenticated, isLoading, loading } = useBackendAuth();
+  const resolvedLoading = isLoading ?? loading;
 
-  if (isLoading) {
+  if (resolvedLoading) {
     return (
       <div className="fixed inset-0 flex items-center justify-center">
         <div className="w-8 h-8 border-4 border-slate-200 border-t-slate-800 rounded-full animate-spin"></div>
@@ -22,3 +23,5 @@ export const PrivateRoute = ({ children }) => {
 
   return children;
 };
+
+export default PrivateRoute;

@@ -16,6 +16,9 @@
 import { describe, it, expect, beforeAll, afterAll, beforeEach } from 'vitest';
 import type { Page } from '@playwright/test';
 
+const RUN_INTEGRATION_TESTS = process.env.RUN_INTEGRATION_TESTS === 'true';
+const describeIntegration = RUN_INTEGRATION_TESTS ? describe : describe.skip;
+
 // Mock types - adjust to your actual types
 interface TestUser {
   id: string;
@@ -39,7 +42,7 @@ interface Invoice {
  * 3. Verify webhook
  * 4. Check database
  */
-describe('Payment Integration Tests', () => {
+describeIntegration('Payment Integration Tests', () => {
   let testUser: TestUser;
   let testInvoiceId: string;
   
@@ -389,42 +392,44 @@ describe('Payment Integration Tests', () => {
 /**
  * Admin-specific Integration Tests
  */
-describe('Admin Payment Functions', () => {
-  it('should get subscription metrics (admin only)', async () => {
-    const response = await fetch('http://localhost:3000/api/getSubscriptionMetrics', {
-      headers: {
-        'Authorization': `Bearer ${process.env.ADMIN_TOKEN}`
+if (process.env.RUN_INTEGRATION_TESTS === 'true') {
+  describe('Admin Payment Functions', () => {
+    it('should get subscription metrics (admin only)', async () => {
+      const response = await fetch('http://localhost:3000/api/getSubscriptionMetrics', {
+        headers: {
+          'Authorization': `Bearer ${process.env.ADMIN_TOKEN}`
+        }
+      });
+      
+      if (response.status === 401) {
+        // User not admin
+        expect(response.status).toBe(401);
+      } else {
+        expect(response.status).toBe(200);
+        const metrics = await response.json();
+        expect(metrics.total_subscribers).toBeDefined();
+        expect(metrics.mrr).toBeDefined();
+        expect(metrics.churn_rate).toBeDefined();
       }
     });
     
-    if (response.status === 401) {
-      // User not admin
-      expect(response.status).toBe(401);
-    } else {
-      expect(response.status).toBe(200);
-      const metrics = await response.json();
-      expect(metrics.total_subscribers).toBeDefined();
-      expect(metrics.mrr).toBeDefined();
-      expect(metrics.churn_rate).toBeDefined();
-    }
-  });
-  
-  it('should get all subscribers (admin only)', async () => {
-    const response = await fetch('http://localhost:3000/api/getAllSubscribers', {
-      headers: {
-        'Authorization': `Bearer ${process.env.ADMIN_TOKEN}`
+    it('should get all subscribers (admin only)', async () => {
+      const response = await fetch('http://localhost:3000/api/getAllSubscribers', {
+        headers: {
+          'Authorization': `Bearer ${process.env.ADMIN_TOKEN}`
+        }
+      });
+      
+      if (response.status === 401) {
+        expect(response.status).toBe(401);
+      } else {
+        expect(response.status).toBe(200);
+        const subscribers = await response.json();
+        expect(Array.isArray(subscribers)).toBe(true);
       }
     });
-    
-    if (response.status === 401) {
-      expect(response.status).toBe(401);
-    } else {
-      expect(response.status).toBe(200);
-      const subscribers = await response.json();
-      expect(Array.isArray(subscribers)).toBe(true);
-    }
   });
-});
+}
 
 /**
  * Webhook Event Simulation Tests

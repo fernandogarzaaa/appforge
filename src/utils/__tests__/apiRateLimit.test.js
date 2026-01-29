@@ -373,7 +373,7 @@ describe('API Rate Limiting System', () => {
   });
 
   describe('Rate Limit Events', () => {
-    it('should emit rate_limited event', (done) => {
+    it('should emit rate_limited event', async () => {
       for (let i = 0; i < 10; i++) {
         rateLimit.checkRateLimit('user-1', {
           maxRequests: 10,
@@ -381,16 +381,18 @@ describe('API Rate Limiting System', () => {
         });
       }
 
-      const unsub = rateLimit.onRateLimitEvent('rate_limited', (event) => {
-        expect(event.userId).toBeDefined();
-        expect(event.limit).toBe(10);
-        unsub();
-        done();
-      });
+      await new Promise((resolve) => {
+        const unsub = rateLimit.onRateLimitEvent('rate_limited', (event) => {
+          expect(event.userId).toBeDefined();
+          expect(event.limit).toBe(10);
+          unsub();
+          resolve();
+        });
 
-      rateLimit.checkRateLimit('user-1', {
-        maxRequests: 10,
-        windowMs: 60000
+        rateLimit.checkRateLimit('user-1', {
+          maxRequests: 10,
+          windowMs: 60000
+        });
       });
     });
 

@@ -35,7 +35,7 @@ export function generateAPIKey(prefix = 'appforge') {
 
 // Validate API key format
 export function isValidAPIKey(key) {
-  return key && key.length > 20 && /^[a-zA-Z0-9_]+$/.test(key);
+  return Boolean(key && key.length > 20 && /^[a-zA-Z0-9_]+$/.test(key));
 }
 
 // Default scopes for API keys
@@ -63,12 +63,12 @@ export function getKeyAge(createdDate) {
   const created = new Date(createdDate);
   const diffTime = Math.abs(now - created);
   const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-  return diffDays;
+  return Math.max(1, diffDays);
 }
 
 // Check if key is about to expire (older than 90 days)
 export function isKeyExpiringSoon(createdDate) {
-  return getKeyAge(createdDate) > 90;
+  return getKeyAge(createdDate) >= 90;
 }
 
 // Encrypt a value (for environment variables)

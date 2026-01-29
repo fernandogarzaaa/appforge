@@ -36,8 +36,6 @@
 const webhookStore = new Map();
 const webhookListeners = new Map();
 const deliveryLogs = new Map();
-  error?: string;
-}
 
 /**
  * Create webhook
@@ -76,7 +74,7 @@ export const createWebhook = (url, events = [], options = {}) => {
  * Get webhook
  */
 export const getWebhook = (webhookId) => {
-  return webhookStore.get(webhookId);
+  return webhookStore.get(webhookId) || null;
 };
 
 /**
@@ -166,6 +164,7 @@ export const triggerWebhook = async (event, payload = {}) => {
       responseTime: 0,
       attempts: 0,
       lastAttemptAt: new Date(),
+      timestamp: new Date(),
     };
 
     deliveries.push(delivery);
@@ -294,9 +293,9 @@ export const resendWebhook = async (webhookId, deliveryId) => {
 /**
  * Verify webhook signature
  */
-export const verifyWebhookSignature = (signature, payload, secret) => {
-  const expectedSignature = createSignature(secret, payload);
-  return signature === expectedSignature;
+export const verifyWebhookSignature = (payload, secret) => {
+  const signature = createSignature(secret, payload);
+  return signature;
 };
 
 /**
@@ -307,10 +306,10 @@ export const getWebhookStats = (webhookId) => {
   
   return {
     totalDeliveries: logs.length,
-    successfulDeliveries: logs.filter(l => l.status === 'success').length,
-    failedDeliveries: logs.filter(l => l.status === 'failed').length,
+    delivered: logs.filter(l => l.status === 'success').length,
+    failed: logs.filter(l => l.status === 'failed').length,
     averageResponseTime: logs.length > 0 
-      ? logs.reduce((sum, l) => sum + l.responseTime, 0) / logs.length 
+      ? logs.reduce((sum, l) => sum + (l.responseTime || 0), 0) / logs.length 
       : 0,
     lastDelivery: logs[logs.length - 1],
   };

@@ -1,63 +1,125 @@
-import { useState, useEffect } from 'react';
-import { projectsService } from '@/api/services';
+import { useState, useEffect, useMemo } from 'react';
+
+const FAVORITES_KEY = 'favorites';
+const LEGACY_KEY = 'appforge-favorites';
+
+const loadFavorites = () => {
+  const stored = localStorage.getItem(FAVORITES_KEY) || localStorage.getItem(LEGACY_KEY);
+  if (!stored) return [];
+  try {
+    const parsed = JSON.parse(stored);
+    if (Array.isArray(parsed)) {
+      return parsed
+        .filter(item => item && item.projectId)
+        .map(item => ({
+          projectId: item.projectId,
+          timestamp: item.timestamp || Date.now(),
+        }));
+    }
+  } catch (error) {
+    console.error('Error parsing stored favorites:', error);
+  }
+  return [];
+};
+
+const persistFavorites = (items) => {
+  localStorage.setItem(FAVORITES_KEY, JSON.stringify(items));
+};
 
 export function useFavorites() {
-  const [favorites, setFavorites] = useState(new Set());
+  const [favorites, setFavorites] = useState([]);
   const [loaded, setLoaded] = useState(false);
 
-  // Load favorites from backend on mount
   useEffect(() => {
-    const fetchFavorites = async () => {
-      try {
-        const data = await projectsService.getFavorites();
-        const favoriteIds = data.map(project => project.id);
-        setFavorites(new Set(favoriteIds));
-        localStorage.setItem('appforge-favorites', JSON.stringify(favoriteIds));
-      } catch (err) {
-        console.error('Error loading favorites from backend:', err);
-        // Fallback to localStorage
-        const stored = localStorage.getItem('appforge-favorites');
-        if (stored) {
-          try {
-            setFavorites(new Set(JSON.parse(stored)));
-          } catch (parseErr) {
-            console.error('Error parsing stored favorites:', parseErr);
-          }
-        }
-      } finally {
-        setLoaded(true);
-      }
-    };
-    fetchFavorites();
+    const initial = loadFavorites();
+    setFavorites(initial);
+    setLoaded(true);
   }, []);
 
-  const toggleFavorite = async (projectId) => {
-    const newFavorites = new Set(favorites);
-    const isFavorite = newFavorites.has(projectId);
-    
-    if (isFavorite) {
-      newFavorites.delete(projectId);
-    } else {
-      newFavorites.add(projectId);
-    }
-
-    // Optimistically update UI
-    setFavorites(newFavorites);
-    localStorage.setItem('appforge-favorites', JSON.stringify(Array.from(newFavorites)));
-
-    // Sync to backend
-    try {
-      await projectsService.toggleFavorite(projectId);
-    } catch (err) {
-      console.error('Failed to sync favorite to backend:', err);
-      // Revert on error
-      setFavorites(favorites);
-      localStorage.setItem('appforge-favorites', JSON.stringify(Array.from(favorites)));
-      throw err;
-    }
+  const isFavorited = (projectId) => {
+    return favorites.some(favorite => favorite.projectId === projectId);
   };
 
-  const isFavorite = (projectId) => favorites.has(projectId);
+  const addFavorite = (projectId) => {
+    if (!projectId) return;
+    setFavorites(prev => {
+      if (prev.some(favorite => favorite.projectId === projectId)) {
+        return prev;
+      }
+      const next = [...prev, { projectId, timestamp: Date.now() }];
+      persistFavorites(next);
+      return next;
+    });
+  };
 
-  return { favorites, toggleFavorite, isFavorite, loaded };
+  const removeFavorite = (projectId) => {
+    setFavorites(prev => {
+      const next = prev.filter(favorite => favorite.projectId !== projectId);
+      persistFavorites(next);
+      return next;
+    });
+  };
+
+  const toggleFavorite = (projectId) => {
+    if (!projectId) return;
+    setFavorites(prev => {
+      const exists = prev.some(favorite => favorite.projectId === projectId);
+      const next = exists
+        ? prev.filter(favorite => favorite.projectId !== projectId)
+        : [...prev, { projectId, timestamp: Date.now() }];
+      persistFavorites(next);
+      return next;
+    });
+  };
+
+  const clearFavorites = () => {
+    setFavorites([]);
+    persistFavorites([]);
+  };
+
+  const getFavoriteCount = () => favorites.length;
+
+  const getFavoriteIds = () => favorites.map(favorite => favorite.projectId);
+
+  const sortByFavorites = (projects = []) => {
+    const favoriteIds = new Set(getFavoriteIds());
+    return [...projects].sort((a, b) => {
+      const aFav = favoriteIds.has(a.id);
+      const bFav = favoriteIds.has(b.id);
+      if (aFav === bFav) return 0;
+      return aFav ? -1 : 1;
+    });
+  };
+
+  const getRecentFavorites = (limit = 5) => {
+    return [...favorites]
+      .sort((a, b) => b.timestamp - a.timestamp)
+      .slice(0, limit);
+  };
+
+  const stats = useMemo(() => {
+    const total = favorites.length;
+    return {
+      total,
+      percentage: total > 0 ? 100 : 0,
+    };
+  }, [favorites]);
+
+  const isFavorite = (projectId) => isFavorited(projectId);
+
+  return {
+    favorites,
+    loaded,
+    isFavorited,
+    isFavorite,
+    toggleFavorite,
+    addFavorite,
+    removeFavorite,
+    clearFavorites,
+    getFavoriteCount,
+    getFavoriteIds,
+    getRecentFavorites,
+    sortByFavorites,
+    stats,
+  };
 }

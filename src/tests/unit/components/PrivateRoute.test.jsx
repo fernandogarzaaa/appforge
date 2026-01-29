@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen } from '@testing-library/react'
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { MemoryRouter, Routes, Route } from 'react-router-dom'
 import PrivateRoute from '@/components/PrivateRoute'
 import { BackendAuthContext } from '@/contexts/BackendAuthContext'
 
@@ -18,12 +18,12 @@ const renderWithRouter = (component, isAuthenticated = false) => {
 
   return render(
     <BackendAuthContext.Provider value={mockAuthContext}>
-      <BrowserRouter>
+      <MemoryRouter initialEntries={['/protected']}>
         <Routes>
           <Route path="/login" element={<LoginComponent />} />
           <Route path="/protected" element={component} />
         </Routes>
-      </BrowserRouter>
+      </MemoryRouter>
     </BackendAuthContext.Provider>
   )
 }
@@ -75,12 +75,12 @@ describe('PrivateRoute', () => {
 
     render(
       <BackendAuthContext.Provider value={mockAuthContext}>
-        <BrowserRouter>
+        <MemoryRouter initialEntries={['/protected']}>
           <Routes>
             <Route path="/login" element={<LoginComponent />} />
             <Route path="/protected" element={privateRoute} />
           </Routes>
-        </BrowserRouter>
+        </MemoryRouter>
       </BackendAuthContext.Provider>
     )
 

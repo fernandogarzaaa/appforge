@@ -63,7 +63,9 @@ export const getStatusIcon = (status) => {
  * @returns {boolean} True if rollback is possible
  */
 export const canRollback = (deployment) => {
-  return deployment.status === DEPLOYMENT_STATUS.SUCCESS && deployment.previous_version;
+  return Boolean(
+    deployment?.status === DEPLOYMENT_STATUS.SUCCESS && deployment?.previous_version
+  );
 };
 
 /**

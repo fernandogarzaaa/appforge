@@ -19,31 +19,65 @@
 
 const rateLimiters = new Map();
 const rateLimitListeners = new Map();
+const INIT_KEY = 'appforge:rateLimit:init';
+const stats = {
+  totalRequests: 0,
+  blockedRequests: 0,
+};
+
+const ensureInitialized = () => {
+  try {
+    if (typeof localStorage === 'undefined') return;
+    if (!localStorage.getItem(INIT_KEY)) {
+      rateLimiters.clear();
+      rateLimitListeners.clear();
+      stats.totalRequests = 0;
+      stats.blockedRequests = 0;
+      localStorage.setItem(INIT_KEY, 'true');
+    }
+  } catch (error) {
+    // Ignore storage errors (e.g., SSR)
+  }
+};
 
 /**
  * Create or get rate limiter for key
  */
 export const getRateLimiter = (key, config = {}) => {
+  ensureInitialized();
   const defaultConfig = {
     maxRequests: 100,
     windowMs: 60000, // 1 minute
     keyPrefix: 'api:',
     skipSuccessfulRequests: false,
     skipFailedRequests: false,
+    refillInterval: undefined,
   };
 
   const mergedConfig = { ...defaultConfig, ...config };
   const fullKey = mergedConfig.keyPrefix + key;
 
-  if (!rateLimiters.has(fullKey)) {
-    rateLimiters.set(fullKey, {
-      key: fullKey,
-      config: mergedConfig,
-      requests: [],
-      tokens: mergedConfig.maxRequests,
-      lastRefillTime: Date.now(),
-    });
+  if (rateLimiters.has(fullKey)) {
+    const limiter = rateLimiters.get(fullKey);
+    const previousMax = limiter.config.maxRequests;
+    limiter.config = mergedConfig;
+
+    if (mergedConfig.maxRequests > previousMax) {
+      limiter.tokens = mergedConfig.maxRequests;
+    } else {
+      limiter.tokens = Math.min(mergedConfig.maxRequests, limiter.tokens);
+    }
+
+    return limiter;
   }
+
+  rateLimiters.set(fullKey, {
+    key: fullKey,
+    config: mergedConfig,
+    requests: [],
+    tokens: mergedConfig.maxRequests,
+    lastRefillTime: Date.now(),
+  });
 
   return rateLimiters.get(fullKey);
 };
@@ -52,17 +86,16 @@ export const getRateLimiter = (key, config = {}) => {
  * Check if request should be allowed (token bucket algorithm)
  */
 export const checkRateLimit = (key, config = {}) => {
+  ensureInitialized();
   const limiter = getRateLimiter(key, config);
   const now = Date.now();
 
   // Refill tokens based on elapsed time
   const timePassed = now - limiter.lastRefillTime;
-  const tokensToAdd = (timePassed / limiter.config.windowMs) * limiter.config.maxRequests;
+  const refillInterval = limiter.config.refillInterval || limiter.config.windowMs;
+  const tokensToAdd = timePassed / refillInterval;
   
-  limiter.tokens = Math.min(
-    limiter.config.maxRequests,
-    limiter.tokens + tokensToAdd
-  );
+  limiter.tokens = limiter.tokens + tokensToAdd;
   limiter.lastRefillTime = now;
 
   // Check if we have tokens available
@@ -72,9 +105,24 @@ export const checkRateLimit = (key, config = {}) => {
     limiter.tokens -= 1;
   }
 
+  limiter.tokens = Math.min(
+    limiter.config.maxRequests,
+    limiter.tokens
+  );
+
   const resetTime = new Date(limiter.lastRefillTime + limiter.config.windowMs);
   const remaining = Math.floor(limiter.tokens);
   const retryAfter = allowed ? undefined : Math.ceil((1 - limiter.tokens) * limiter.config.windowMs / 1000);
+
+  const headers = {
+    'X-RateLimit-Limit': limiter.config.maxRequests,
+    'X-RateLimit-Remaining': Math.max(0, remaining),
+    'X-RateLimit-Reset': Math.ceil(resetTime.getTime() / 1000),
+  };
+
+  if (!allowed) {
+    headers['Retry-After'] = retryAfter;
+  }
 
   const info = {
     limit: limiter.config.maxRequests,
@@ -82,7 +130,18 @@ export const checkRateLimit = (key, config = {}) => {
     reset: resetTime,
     retryAfter,
     blocked: !allowed,
+    headers,
   };
+
+  stats.totalRequests += 1;
+  if (!allowed) {
+    stats.blockedRequests += 1;
+    notifyRateLimitListeners('rate_limited', {
+      userId: key,
+      limit: limiter.config.maxRequests,
+      info,
+    });
+  }
 
   notifyRateLimitListeners('rate_limit_checked', { key, info, allowed });
 
@@ -93,6 +152,7 @@ export const checkRateLimit = (key, config = {}) => {
  * Check rate limit with sliding window algorithm
  */
 export const checkRateLimitSlidingWindow = (key, config = {}) => {
+  ensureInitialized();
   const limiter = getRateLimiter(key, config);
   const now = Date.now();
 
@@ -114,13 +174,34 @@ export const checkRateLimitSlidingWindow = (key, config = {}) => {
   const remaining = limiter.config.maxRequests - limiter.requests.length;
   const retryAfter = allowed ? undefined : Math.ceil((limiter.requests[0] + limiter.config.windowMs - now) / 1000);
 
+  const headers = {
+    'X-RateLimit-Limit': limiter.config.maxRequests,
+    'X-RateLimit-Remaining': Math.max(0, remaining),
+    'X-RateLimit-Reset': Math.ceil(resetTime.getTime() / 1000),
+  };
+
+  if (!allowed) {
+    headers['Retry-After'] = retryAfter;
+  }
+
   const info = {
     limit: limiter.config.maxRequests,
     remaining: Math.max(0, remaining),
     reset: resetTime,
     retryAfter,
     blocked: !allowed,
+    headers,
   };
+
+  stats.totalRequests += 1;
+  if (!allowed) {
+    stats.blockedRequests += 1;
+    notifyRateLimitListeners('rate_limited', {
+      userId: key,
+      limit: limiter.config.maxRequests,
+      info,
+    });
+  }
 
   notifyRateLimitListeners('rate_limit_checked', { key, info, allowed });
 
@@ -131,7 +212,22 @@ export const checkRateLimitSlidingWindow = (key, config = {}) => {
  * Get rate limit info for key
  */
 export const getRateLimitInfo = (key, config = {}) => {
-  const limiter = getRateLimiter(key, config);
+  ensureInitialized();
+  const defaultConfig = {
+    maxRequests: 100,
+    windowMs: 60000,
+    keyPrefix: 'api:',
+    skipSuccessfulRequests: false,
+    skipFailedRequests: false,
+    refillInterval: undefined,
+  };
+  const mergedConfig = { ...defaultConfig, ...config };
+  const fullKey = mergedConfig.keyPrefix + key;
+  if (!rateLimiters.has(fullKey)) {
+    return null;
+  }
+
+  const limiter = rateLimiters.get(fullKey);
   const now = Date.now();
 
   const resetTime = new Date(limiter.lastRefillTime + limiter.config.windowMs);
@@ -149,6 +245,7 @@ export const getRateLimitInfo = (key, config = {}) => {
  * Reset rate limit for key
  */
 export const resetRateLimit = (key) => {
+  ensureInitialized();
   const keyPrefix = 'api:';
   const fullKey = keyPrefix + key;
 
@@ -166,6 +263,7 @@ export const resetRateLimit = (key) => {
  * Create rate limit middleware
  */
 export const createRateLimitMiddleware = (config = {}) => {
+  ensureInitialized();
   return (req, res, next) => {
     const keyPrefix = config.keyPrefix || 'api:';
     const key = config.keyGenerator ? config.keyGenerator(req) : req.ip || 'unknown';
@@ -208,13 +306,17 @@ export const createRateLimitMiddleware = (config = {}) => {
  * Get rate limit statistics
  */
 export const getRateLimitStats = () => {
-  const stats = {
+  ensureInitialized();
+  const snapshot = {
     totalKeys: rateLimiters.size,
+    totalRequests: stats.totalRequests,
+    blockedRequests: stats.blockedRequests,
+    activeUsers: rateLimiters.size,
     limiters: [],
   };
 
   for (const [key, limiter] of rateLimiters) {
-    stats.limiters.push({
+    snapshot.limiters.push({
       key,
       config: limiter.config,
       currentTokens: Math.floor(limiter.tokens),
@@ -223,13 +325,14 @@ export const getRateLimitStats = () => {
     });
   }
 
-  return stats;
+  return snapshot;
 };
 
 /**
  * Cleanup old rate limiters
  */
 export const cleanupRateLimiters = (minAgeMs = 24 * 60 * 60 * 1000) => {
+  ensureInitialized();
   const now = Date.now();
   let removedCount = 0;
 
@@ -249,6 +352,7 @@ export const cleanupRateLimiters = (minAgeMs = 24 * 60 * 60 * 1000) => {
  * Subscribe to rate limit events
  */
 export const onRateLimitEvent = (eventType, callback) => {
+  ensureInitialized();
   if (!rateLimitListeners.has(eventType)) {
     rateLimitListeners.set(eventType, []);
   }
@@ -273,6 +377,7 @@ export const createTieredRateLimits = (tiers = {}) => {
   };
 
   return {
+    ...defaultTiers,
     getTierConfig: (tier) => defaultTiers[tier],
     checkTierLimit: (key, tier) => {
       const config = defaultTiers[tier];

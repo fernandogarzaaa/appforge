@@ -43,11 +43,27 @@
 const teamStore = new Map();
 const teamListeners = new Map();
 const memberListeners = new Map();
+const INIT_KEY = 'appforge:teamCollaboration:init';
+
+const ensureInitialized = () => {
+  try {
+    if (typeof localStorage === 'undefined') return;
+    if (!localStorage.getItem(INIT_KEY)) {
+      teamStore.clear();
+      teamListeners.clear();
+      memberListeners.clear();
+      localStorage.setItem(INIT_KEY, 'true');
+    }
+  } catch (error) {
+    // Ignore storage errors (e.g., SSR)
+  }
+};
 
 /**
  * Create a new team
  */
 export const createTeam = (name, description = '', settings = {}) => {
+  ensureInitialized();
   const teamId = `team_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
   
   const team = {
@@ -79,7 +95,11 @@ export const createTeam = (name, description = '', settings = {}) => {
   };
 
   teamStore.set(teamId, team);
-  notifyTeamListeners('team_created', team);
+  notifyTeamListeners('team_created', {
+    teamId: team.id,
+    teamName: team.name,
+    team,
+  });
   
   return team;
 };
@@ -88,6 +108,7 @@ export const createTeam = (name, description = '', settings = {}) => {
  * Get team by ID
  */
 export const getTeam = (teamId) => {
+  ensureInitialized();
   return teamStore.get(teamId);
 };
 
@@ -95,6 +116,7 @@ export const getTeam = (teamId) => {
  * Update team settings
  */
 export const updateTeamSettings = (teamId, updates) => {
+  ensureInitialized();
   const team = teamStore.get(teamId);
   if (!team) throw new Error('Team not found');
   
@@ -108,6 +130,7 @@ export const updateTeamSettings = (teamId, updates) => {
  * Invite member to team
  */
 export const inviteTeamMember = (teamId, email, role = 'editor') => {
+  ensureInitialized();
   const team = teamStore.get(teamId);
   if (!team) throw new Error('Team not found');
   
@@ -118,11 +141,14 @@ export const inviteTeamMember = (teamId, email, role = 'editor') => {
   const existingInvitation = team.invitations.find(i => i.email === email);
   if (existingInvitation) throw new Error('Invitation already sent');
 
+  const now = new Date();
   const invitation = {
     id: `invite_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
     email,
     role,
-    sentAt: new Date(),
+    status: 'pending',
+    createdAt: now,
+    sentAt: now,
     expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days
     accepted: false,
   };
@@ -137,6 +163,7 @@ export const inviteTeamMember = (teamId, email, role = 'editor') => {
  * Accept team invitation
  */
 export const acceptTeamInvitation = (teamId, invitationId) => {
+  ensureInitialized();
   const team = teamStore.get(teamId);
   if (!team) throw new Error('Team not found');
   
@@ -148,11 +175,12 @@ export const acceptTeamInvitation = (teamId, invitationId) => {
   }
 
   invitation.accepted = true;
+  invitation.status = 'accepted';
   invitation.acceptedAt = new Date();
 
   // Add member to team
   const member = {
-    id: `member_${Date.now()}`,
+    id: invitation.id,
     userId: getCurrentUserId(),
     email: invitation.email,
     name: getCurrentUserName(),
@@ -164,15 +192,20 @@ export const acceptTeamInvitation = (teamId, invitationId) => {
   };
 
   team.members.push(member);
-  notifyMemberListeners(teamId, 'member_added', member);
+  notifyMemberListeners(teamId, 'member_added', {
+    teamId,
+    memberId: member.id,
+    member,
+  });
   
-  return member;
+  return true;
 };
 
 /**
  * Update member role
  */
 export const updateMemberRole = (teamId, memberId, newRole) => {
+  ensureInitialized();
   const team = teamStore.get(teamId);
   if (!team) throw new Error('Team not found');
   
@@ -192,6 +225,7 @@ export const updateMemberRole = (teamId, memberId, newRole) => {
  * Remove member from team
  */
 export const removeTeamMember = (teamId, memberId) => {
+  ensureInitialized();
   const team = teamStore.get(teamId);
   if (!team) throw new Error('Team not found');
   
@@ -201,7 +235,11 @@ export const removeTeamMember = (teamId, memberId) => {
   const member = team.members[memberIndex];
   team.members.splice(memberIndex, 1);
   
-  notifyMemberListeners(teamId, 'member_removed', member);
+  notifyMemberListeners(teamId, 'member_removed', {
+    teamId,
+    memberId: member.id,
+    member,
+  });
   
   return member;
 };
@@ -210,6 +248,7 @@ export const removeTeamMember = (teamId, memberId) => {
  * Update member last active timestamp
  */
 export const updateMemberActivity = (teamId, memberId) => {
+  ensureInitialized();
   const team = teamStore.get(teamId);
   if (!team) return;
   
@@ -223,6 +262,7 @@ export const updateMemberActivity = (teamId, memberId) => {
  * Get team members
  */
 export const getTeamMembers = (teamId) => {
+  ensureInitialized();
   const team = teamStore.get(teamId);
   if (!team) return [];
   return team.members;
@@ -232,16 +272,21 @@ export const getTeamMembers = (teamId) => {
  * Get member by ID
  */
 export const getTeamMember = (teamId, memberId) => {
+  ensureInitialized();
   const team = teamStore.get(teamId);
   if (!team) return null;
-  return team.members.find(m => m.id === memberId);
+  return team.members.find(m => m.id === memberId) || null;
 };
 
 /**
  * Subscribe to team events
  */
-export const onTeamEvent = (teamId, eventType, callback) => {
-  const key = `${teamId}:${eventType}`;
+export const onTeamEvent = (teamIdOrEventType, eventTypeOrCallback, maybeCallback) => {
+  ensureInitialized();
+  const isGlobal = typeof eventTypeOrCallback === 'function';
+  const eventType = isGlobal ? teamIdOrEventType : eventTypeOrCallback;
+  const callback = isGlobal ? eventTypeOrCallback : maybeCallback;
+  const key = isGlobal ? `global:${eventType}` : `${teamIdOrEventType}:${eventType}`;
   if (!teamListeners.has(key)) {
     teamListeners.set(key, []);
   }
@@ -257,8 +302,12 @@ export const onTeamEvent = (teamId, eventType, callback) => {
 /**
  * Subscribe to member events
  */
-export const onMemberEvent = (teamId, eventType, callback) => {
-  const key = `${teamId}:member:${eventType}`;
+export const onMemberEvent = (teamIdOrEventType, eventTypeOrCallback, maybeCallback) => {
+  ensureInitialized();
+  const isGlobal = typeof eventTypeOrCallback === 'function';
+  const eventType = isGlobal ? teamIdOrEventType : eventTypeOrCallback;
+  const callback = isGlobal ? eventTypeOrCallback : maybeCallback;
+  const key = isGlobal ? `global:member:${eventType}` : `${teamIdOrEventType}:member:${eventType}`;
   if (!memberListeners.has(key)) {
     memberListeners.set(key, []);
   }
@@ -278,6 +327,7 @@ function getPermissionsForRole(role) {
   const rolePermissions = {
     owner: [
       'manage_team',
+      'view_team',
       'manage_members',
       'manage_projects',
       'manage_settings',
@@ -290,6 +340,7 @@ function getPermissionsForRole(role) {
       'manage_integrations',
     ],
     admin: [
+      'view_team',
       'manage_projects',
       'manage_members',
       'invite_members',
@@ -302,10 +353,12 @@ function getPermissionsForRole(role) {
       'create_projects',
       'edit_projects',
       'manage_projects',
+      'view_team',
       'invite_members',
       'access_analytics',
     ],
     viewer: [
+      'view_team',
       'view_projects',
       'view_analytics',
     ],
@@ -318,6 +371,7 @@ function getPermissionsForRole(role) {
  * Check if member has permission
  */
 export const hasMemberPermission = (teamId, memberId, permission) => {
+  ensureInitialized();
   const member = getTeamMember(teamId, memberId);
   if (!member) return false;
   return member.permissions.includes(permission);
@@ -327,17 +381,20 @@ export const hasMemberPermission = (teamId, memberId, permission) => {
  * Notify team listeners
  */
 function notifyTeamListeners(eventType, data) {
-  const listeners = teamListeners.get(eventType) || [];
-  listeners.forEach(callback => callback(data));
+  const globalListeners = teamListeners.get(`global:${eventType}`) || [];
+  const wildcardListeners = teamListeners.get('global:*') || [];
+  const scopedListeners = teamListeners.get(`${data?.teamId}:${eventType}`) || [];
+  [...globalListeners, ...wildcardListeners, ...scopedListeners].forEach(callback => callback(data));
 }
 
 /**
  * Notify member listeners
  */
 function notifyMemberListeners(teamId, eventType, data) {
-  const key = `${teamId}:member:${eventType}`;
-  const listeners = memberListeners.get(key) || [];
-  listeners.forEach(callback => callback(data));
+  const scoped = memberListeners.get(`${teamId}:member:${eventType}`) || [];
+  const global = memberListeners.get(`global:member:${eventType}`) || [];
+  const wildcard = memberListeners.get('global:member:*') || [];
+  [...scoped, ...global, ...wildcard].forEach(callback => callback(data));
 }
 
 /**
@@ -348,7 +405,7 @@ function getCurrentUserId() {
 }
 
 function getCurrentUserEmail() {
-  return localStorage.getItem('userEmail') || 'user@example.com';
+  return localStorage.getItem('userEmail') || 'owner@example.com';
 }
 
 function getCurrentUserName() {

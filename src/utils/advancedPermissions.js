@@ -33,13 +33,15 @@ const permissionStore = new Map();
 const roleStore = new Map();
 const resourcePermissions = new Map();
 const permissionListeners = new Map();
+const roleAssignments = new Map();
+const INIT_KEY = 'appforge:advancedPermissions:init';
 
 // Initialize default roles
 const initializeDefaultRoles = () => {
   const defaultRoles = [
     {
       id: 'role_owner',
-      name: 'Owner',
+      name: 'owner',
       description: 'Full access to all resources',
       permissions: getAllPermissions(),
       isCustom: false,
@@ -47,7 +49,7 @@ const initializeDefaultRoles = () => {
     },
     {
       id: 'role_admin',
-      name: 'Administrator',
+      name: 'admin',
       description: 'Administrative access with limited control',
       permissions: getAdminPermissions(),
       isCustom: false,
@@ -55,7 +57,7 @@ const initializeDefaultRoles = () => {
     },
     {
       id: 'role_editor',
-      name: 'Editor',
+      name: 'editor',
       description: 'Can create and edit resources',
       permissions: getEditorPermissions(),
       isCustom: false,
@@ -63,7 +65,7 @@ const initializeDefaultRoles = () => {
     },
     {
       id: 'role_viewer',
-      name: 'Viewer',
+      name: 'viewer',
       description: 'Read-only access',
       permissions: getViewerPermissions(),
       isCustom: false,
@@ -76,10 +78,32 @@ const initializeDefaultRoles = () => {
   });
 };
 
+const ensureInitialized = () => {
+  try {
+    if (typeof localStorage === 'undefined') return;
+    if (!localStorage.getItem(INIT_KEY)) {
+      permissionStore.clear();
+      roleStore.clear();
+      resourcePermissions.clear();
+      permissionListeners.clear();
+      roleAssignments.clear();
+      initializeDefaultRoles();
+      localStorage.setItem(INIT_KEY, 'true');
+    }
+  } catch (error) {
+    // Ignore storage errors (e.g., SSR)
+  }
+};
+
+const getPrincipalKey = (principalId, principalType = 'user') => {
+  return `${principalType}:${principalId}`;
+};
+
 /**
  * Create custom role
  */
 export const createCustomRole = (name, description, permissions) => {
+  ensureInitialized();
   const roleId = `role_custom_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
   
   const role = {
@@ -101,6 +125,7 @@ export const createCustomRole = (name, description, permissions) => {
  * Update role permissions
  */
 export const updateRolePermissions = (roleId, permissions) => {
+  ensureInitialized();
   const role = roleStore.get(roleId);
   if (!role) throw new Error('Role not found');
   
@@ -125,6 +150,7 @@ export const grantResourceAccess = (
   accessLevel,
   customPermissions = []
 ) => {
+  ensureInitialized();
   const key = `${resourceId}:${principal}`;
   
   const access = {
@@ -152,6 +178,7 @@ export const grantResourceAccess = (
  * Revoke resource access
  */
 export const revokeResourceAccess = (resourceId, principal) => {
+  ensureInitialized();
   const resourceMap = resourcePermissions.get(resourceId);
   if (!resourceMap) return null;
 
@@ -171,6 +198,7 @@ export const checkResourceAccess = (
   principal,
   requiredAccessLevel
 ) => {
+  ensureInitialized();
   const resourceMap = resourcePermissions.get(resourceId);
   if (!resourceMap) return false;
 
@@ -188,15 +216,17 @@ export const checkResourceAccess = (
  * Get resource access
  */
 export const getResourceAccess = (resourceId, principal) => {
+  ensureInitialized();
   const resourceMap = resourcePermissions.get(resourceId);
   if (!resourceMap) return null;
-  return resourceMap.get(principal);
+  return resourceMap.get(principal) || null;
 };
 
 /**
  * Get all resource access
  */
 export const getResourceAccessList = (resourceId) => {
+  ensureInitialized();
   const resourceMap = resourcePermissions.get(resourceId);
   if (!resourceMap) return [];
   return Array.from(resourceMap.values());
@@ -206,6 +236,7 @@ export const getResourceAccessList = (resourceId) => {
  * Check permission
  */
 export const hasPermission = (principal, permission) => {
+  ensureInitialized();
   // Check if principal has the permission directly
   const userPermissions = permissionStore.get(principal);
   if (userPermissions && userPermissions.includes(permission)) {
@@ -228,6 +259,7 @@ export const hasPermission = (principal, permission) => {
  * Grant permission to principal
  */
 export const grantPermission = (principal, permission) => {
+  ensureInitialized();
   if (!permissionStore.has(principal)) {
     permissionStore.set(principal, []);
   }
@@ -235,7 +267,7 @@ export const grantPermission = (principal, permission) => {
   const permissions = permissionStore.get(principal);
   if (!permissions.includes(permission)) {
     permissions.push(permission);
-    notifyPermissionListeners('permission_granted', { principal, permission });
+    notifyPermissionListeners('permission_granted', { principalId: principal, permission });
   }
 };
 
@@ -243,58 +275,79 @@ export const grantPermission = (principal, permission) => {
  * Revoke permission from principal
  */
 export const revokePermission = (principal, permission) => {
+  ensureInitialized();
   const permissions = permissionStore.get(principal);
   if (!permissions) return;
 
   const index = permissions.indexOf(permission);
   if (index > -1) {
     permissions.splice(index, 1);
-    notifyPermissionListeners('permission_revoked', { principal, permission });
+    notifyPermissionListeners('permission_revoked', { principalId: principal, permission });
   }
 };
 
 /**
  * Assign role to principal
  */
-export const assignRole = (principal, roleId) => {
-  const role = roleStore.get(roleId);
+export const assignRole = (principalId, principalTypeOrRoleId, roleId) => {
+  ensureInitialized();
+  let principalType = 'user';
+  let resolvedRoleId = principalTypeOrRoleId;
+
+  if (roleId !== undefined) {
+    principalType = principalTypeOrRoleId;
+    resolvedRoleId = roleId;
+  }
+
+  const role = roleStore.get(resolvedRoleId);
   if (!role) throw new Error('Role not found');
 
-  if (!permissionStore.has(principal)) {
-    permissionStore.set(principal, []);
+  if (!permissionStore.has(principalId)) {
+    permissionStore.set(principalId, []);
   }
 
   // Add all role permissions to principal
-  const permissions = permissionStore.get(principal);
+  const permissions = permissionStore.get(principalId);
   role.permissions.forEach(perm => {
     if (!permissions.includes(perm)) {
       permissions.push(perm);
     }
   });
 
-  notifyPermissionListeners('role_assigned', { principal, roleId });
+  const key = getPrincipalKey(principalId, principalType);
+  if (!roleAssignments.has(key)) {
+    roleAssignments.set(key, []);
+  }
+  const assigned = roleAssignments.get(key);
+  if (!assigned.includes(resolvedRoleId)) {
+    assigned.push(resolvedRoleId);
+  }
+
+  notifyPermissionListeners('role_assigned', { principalId, principalType, roleId: resolvedRoleId });
 };
 
 /**
  * Get user roles
  */
 export const getUserRoles = (userId) => {
-  // This would be implemented based on your system
-  // For now, returning empty array
-  return [];
+  ensureInitialized();
+  const key = getPrincipalKey(userId, 'user');
+  return roleAssignments.get(key) || [];
 };
 
 /**
  * Get role
  */
 export const getRole = (roleId) => {
-  return roleStore.get(roleId);
+  ensureInitialized();
+  return roleStore.get(roleId) || null;
 };
 
 /**
  * List all roles
  */
 export const listRoles = () => {
+  ensureInitialized();
   return Array.from(roleStore.values());
 };
 
@@ -302,6 +355,7 @@ export const listRoles = () => {
  * Subscribe to permission events
  */
 export const onPermissionEvent = (eventType, callback) => {
+  ensureInitialized();
   if (!permissionListeners.has(eventType)) {
     permissionListeners.set(eventType, []);
   }
@@ -399,7 +453,7 @@ function getCurrentUserId() {
 }
 
 // Initialize default roles on load
-initializeDefaultRoles();
+ensureInitialized();
 
 export default {
   createCustomRole,

@@ -223,43 +223,49 @@ describe('Team Collaboration System', () => {
   });
 
   describe('Team Events', () => {
-    it('should emit team creation event', (done) => {
-      const unsubscribe = teams.onTeamEvent('team_created', (event) => {
-        expect(event.teamId).toBeDefined();
-        expect(event.teamName).toBeDefined();
-        unsubscribe();
-        done();
-      });
+    it('should emit team creation event', async () => {
+      await new Promise((resolve) => {
+        const unsubscribe = teams.onTeamEvent('team_created', (event) => {
+          expect(event.teamId).toBeDefined();
+          expect(event.teamName).toBeDefined();
+          unsubscribe();
+          resolve();
+        });
 
-      teams.createTeam('Event Test Team');
+        teams.createTeam('Event Test Team');
+      });
     });
 
-    it('should emit member added event', (done) => {
+    it('should emit member added event', async () => {
       const team = teams.createTeam('Test Team');
 
-      const unsubscribe = teams.onMemberEvent('member_added', (event) => {
-        expect(event.memberId).toBeDefined();
-        unsubscribe();
-        done();
-      });
+      await new Promise((resolve) => {
+        const unsubscribe = teams.onMemberEvent('member_added', (event) => {
+          expect(event.memberId).toBeDefined();
+          unsubscribe();
+          resolve();
+        });
 
-      const invitation = teams.inviteTeamMember(team.id, 'user@example.com', 'editor');
-      teams.acceptTeamInvitation(team.id, invitation.id);
+        const invitation = teams.inviteTeamMember(team.id, 'user@example.com', 'editor');
+        teams.acceptTeamInvitation(team.id, invitation.id);
+      });
     });
 
-    it('should emit member removed event', (done) => {
+    it('should emit member removed event', async () => {
       const team = teams.createTeam('Test Team');
       const invitation = teams.inviteTeamMember(team.id, 'user@example.com', 'editor');
       teams.acceptTeamInvitation(team.id, invitation.id);
 
-      const unsubscribe = teams.onMemberEvent('member_removed', (event) => {
-        expect(event.memberId).toBeDefined();
-        unsubscribe();
-        done();
-      });
+      await new Promise((resolve) => {
+        const unsubscribe = teams.onMemberEvent('member_removed', (event) => {
+          expect(event.memberId).toBeDefined();
+          unsubscribe();
+          resolve();
+        });
 
-      const member = teams.getTeamMembers(team.id).find(m => m.email === 'user@example.com');
-      teams.removeTeamMember(team.id, member.id);
+        const member = teams.getTeamMembers(team.id).find(m => m.email === 'user@example.com');
+        teams.removeTeamMember(team.id, member.id);
+      });
     });
   });
 

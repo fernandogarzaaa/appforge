@@ -309,28 +309,32 @@ describe('Advanced Permissions System', () => {
   });
 
   describe('Permission Events', () => {
-    it('should emit permission granted event', (done) => {
-      const unsubscribe = perms.onPermissionEvent('permission_granted', (event) => {
-        expect(event.principalId).toBeDefined();
-        expect(event.permission).toBeDefined();
-        unsubscribe();
-        done();
-      });
+    it('should emit permission granted event', async () => {
+      await new Promise((resolve) => {
+        const unsubscribe = perms.onPermissionEvent('permission_granted', (event) => {
+          expect(event.principalId).toBeDefined();
+          expect(event.permission).toBeDefined();
+          unsubscribe();
+          resolve();
+        });
 
-      perms.grantPermission('user-1', 'view_team');
+        perms.grantPermission('user-1', 'view_team');
+      });
     });
 
-    it('should emit role assigned event', (done) => {
+    it('should emit role assigned event', async () => {
       const role = perms.createCustomRole('Test', '', []);
 
-      const unsubscribe = perms.onPermissionEvent('role_assigned', (event) => {
-        expect(event.principalId).toBeDefined();
-        expect(event.roleId).toBeDefined();
-        unsubscribe();
-        done();
-      });
+      await new Promise((resolve) => {
+        const unsubscribe = perms.onPermissionEvent('role_assigned', (event) => {
+          expect(event.principalId).toBeDefined();
+          expect(event.roleId).toBeDefined();
+          unsubscribe();
+          resolve();
+        });
 
-      perms.assignRole('user-1', 'user', role.id);
+        perms.assignRole('user-1', 'user', role.id);
+      });
     });
   });
 });
