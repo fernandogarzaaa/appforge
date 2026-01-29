@@ -49,7 +49,7 @@ The repository's git configuration uses a credential helper that requires the `G
 ### Option 2: Use SSH Instead of HTTPS
 
 1. Set up SSH keys if you haven't already:
-   - Follow [GitHub's SSH key guide](https://docs.github.com/en/authentication/connecting-to-github-with-ssh)
+   - Follow <a href="https://docs.github.com/en/authentication/connecting-to-github-with-ssh">GitHub's SSH key guide</a>
 
 2. Change the remote URL to use SSH:
    ```bash
@@ -68,7 +68,7 @@ The repository's git configuration uses a credential helper that requires the `G
 ### Option 3: Use Git Credential Manager
 
 1. Install Git Credential Manager:
-   - [Download and install](https://github.com/git-ecosystem/git-credential-manager)
+   - <a href="https://github.com/git-ecosystem/git-credential-manager">Download and install</a>
 
 2. Remove the current credential helper:
    ```bash
@@ -80,7 +80,7 @@ The repository's git configuration uses a credential helper that requires the `G
 ### Option 4: Use GitHub CLI (gh)
 
 1. Install GitHub CLI:
-   - [Installation guide](https://cli.github.com/)
+   - <a href="https://cli.github.com/">Installation guide</a>
 
 2. Authenticate:
    ```bash

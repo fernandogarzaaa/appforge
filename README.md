@@ -440,10 +440,10 @@ For detailed information, see [XENDIT_MIGRATION_GUIDE.md](./XENDIT_MIGRATION_GUI
 
 ### Key Documents
 
-- **[XENDIT_MIGRATION_GUIDE.md](./XENDIT_MIGRATION_GUIDE.md)** - Complete payment migration details
-- **[PROJECT_INTEGRITY_REPORT.md](./PROJECT_INTEGRITY_REPORT.md)** - Project audit and analysis
-- **[FIXES_COMPLETED.md](./FIXES_COMPLETED.md)** - List of all resolved issues
-- **[GIT_PUSH_SETUP.md](./GIT_PUSH_SETUP.md)** - Git authentication and push troubleshooting guide
+- **<a>XENDIT_MIGRATION_GUIDE.md</a>** - Complete payment migration details
+- **<a>PROJECT_INTEGRITY_REPORT.md</a>** - Project audit and analysis
+- **<a>FIXES_COMPLETED.md</a>** - List of all resolved issues
+- **<a>GIT_PUSH_SETUP.md</a>** - Git authentication and push troubleshooting guide
 
 ### API Documentation
 

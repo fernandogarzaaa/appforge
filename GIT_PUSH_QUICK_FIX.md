@@ -53,8 +53,8 @@ git push
 
 ## Full Documentation
 For detailed instructions and troubleshooting, see:
-- **[GIT_PUSH_SETUP.md](./GIT_PUSH_SETUP.md)** - Complete setup guide with all options
-- **[README.md](./README.md#-troubleshooting)** - Troubleshooting section updated
+- **<a>GIT_PUSH_SETUP.md</a>** - Complete setup guide with all options
+- **<a>README.md</a>** - Troubleshooting section updated
 
 ## What Was Fixed
 The repository now includes:
