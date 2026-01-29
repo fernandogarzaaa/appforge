@@ -80,41 +80,116 @@ Return ONLY a JSON array of suggestion objects with format:
     setIsRunning(true);
     setOutput([]);
     setErrors([]);
+    setActiveTab('output');
     
-    // Capture console.log
-    const logs = [];
-    const originalLog = console.log;
-    console.log = (...args) => {
-      logs.push(args.map(arg => 
-        typeof arg === 'object' ? JSON.stringify(arg, null, 2) : String(arg)
-      ).join(' '));
-    };
-
     try {
-      // Run the code
-      const result = eval(code);
-      
-      if (logs.length > 0) {
+      const { logs, result, error } = await executeInSandbox(code);
+
+      if (error) {
+        setErrors([error]);
+        setActiveTab('errors');
+        toast.error('Execution error');
+      } else if (logs.length > 0) {
         setOutput(logs);
+        toast.success('Code executed successfully');
       } else if (result !== undefined) {
         setOutput([String(result)]);
+        toast.success('Code executed successfully');
       } else {
         setOutput(['Code executed successfully']);
+        toast.success('Code executed successfully');
       }
-      
-      toast.success('Code executed successfully');
     } catch (error) {
       setErrors([{
-        message: error.message,
+        message: error.message || 'Execution failed',
         stack: error.stack,
         line: error.lineNumber || 'Unknown'
       }]);
       setActiveTab('errors');
       toast.error('Execution error');
     } finally {
-      console.log = originalLog;
       setIsRunning(false);
     }
+  };
+
+  const executeInSandbox = (userCode) => {
+    return new Promise((resolve) => {
+      const iframe = document.createElement('iframe');
+      iframe.setAttribute('sandbox', 'allow-scripts');
+      iframe.style.display = 'none';
+
+      const timeout = setTimeout(() => {
+        cleanup();
+        resolve({
+          logs: [],
+          error: {
+            message: 'Execution timed out',
+            stack: null,
+            line: 'Unknown'
+          }
+        });
+      }, 3000);
+
+      const onMessage = (event) => {
+        if (event.source !== iframe.contentWindow) {
+          return;
+        }
+        if (event.data?.source !== 'code-playground') {
+          return;
+        }
+        cleanup();
+        resolve(event.data.payload || { logs: [] });
+      };
+
+      const cleanup = () => {
+        clearTimeout(timeout);
+        window.removeEventListener('message', onMessage);
+        iframe.remove();
+      };
+
+      window.addEventListener('message', onMessage);
+
+      const escapedCode = userCode.replace(/<\/script>/gi, '<\\/script>');
+      const html = `<!doctype html>
+<html>
+  <body>
+    <script>
+      (function () {
+        const logs = [];
+        const send = (payload) => parent.postMessage({ source: 'code-playground', payload }, '*');
+        const originalLog = console.log;
+        console.log = (...args) => {
+          const message = args.map(arg =>
+            typeof arg === 'object' ? JSON.stringify(arg, null, 2) : String(arg)
+          ).join(' ');
+          logs.push(message);
+        };
+
+        try {
+          const result = (function () {
+            ${escapedCode}
+          })();
+          send({ logs, result });
+        } catch (err) {
+          send({
+            logs,
+            error: {
+              message: err.message,
+              stack: err.stack || null,
+              line: err.lineNumber || err.line || 'Unknown'
+            }
+          });
+        } finally {
+          console.log = originalLog;
+        }
+      })();
+    </script>
+  </body>
+</html>`;
+
+      iframe.srcdoc = html;
+      document.body.appendChild(iframe);
+    });
   };
 
   const autoDebug = async () => {
