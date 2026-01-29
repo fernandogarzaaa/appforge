@@ -56,7 +56,8 @@ export default function Projects() {
       try {
         const result = await base44.entities.Project.list('-updated_date');
         console.log('Projects loaded:', result);
-        return result;
+        // Handle both array and {data: array} formats
+        return Array.isArray(result) ? result : (result?.data || []);
       } catch (err) {
         console.error('Failed to load projects:', err);
         return [];
