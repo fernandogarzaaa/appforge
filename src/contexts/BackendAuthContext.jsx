@@ -1,7 +1,7 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import { authService } from '@/api/appforge';
 
-export const BackendAuthContext = createContext();
+export const BackendAuthContext = createContext(null);
 
 /**
  * Authentication context for backend (Express) API

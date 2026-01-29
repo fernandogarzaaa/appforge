@@ -91,7 +91,7 @@ export default function CollaborationChat() {
             <>
               <AnimatePresence>
                 {messages.map((msg, index) => {
-                  const user = activeUsers.find((u) => u.userId === msg.userId);
+                  const _user = activeUsers.find((u) => u.userId === msg.userId);
 
                   return (
                     <motion.div
