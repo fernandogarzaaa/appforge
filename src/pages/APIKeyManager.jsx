@@ -17,10 +17,36 @@ import { toast } from 'sonner';
 export default function APIKeyManager() {
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [newKey, setNewKey] = useState(null);
-  const { keys, createKey, revokeKey } = useAPIKeys();
-  const queryClient = useQueryClient();
+  const [showValue, setShowValue] = useState({});
+  const { keys: apiKeys, createKey, revokeKey } = useAPIKeys();
+  const _queryClient = useQueryClient();
 
-  const handleCreateKey = async (name, scopes) => {
+  // Create mutation-like objects for compatibility
+  const createKeyMutation = {
+    mutate: async (data) => {
+      try {
+        const key = await createKey(data.name, data.scopes);
+        setNewKey(key);
+        toast.success('API key created successfully');
+      } catch (error) {
+        toast.error('Failed to create API key');
+      }
+    },
+    isPending: false
+  };
+
+  const revokeKeyMutation = {
+    mutate: async (keyId) => {
+      try {
+        await revokeKey(keyId);
+        toast.success('API key revoked successfully');
+      } catch (error) {
+        toast.error('Failed to revoke API key');
+      }
+    }
+  };
+
+  const _handleCreateKey = async (name, scopes) => {
     try {
       const newKey = await createKey(name, scopes);
       toast.success('API key created successfully');
@@ -31,7 +57,7 @@ export default function APIKeyManager() {
     }
   };
 
-  const handleRevokeKey = async (keyId) => {
+  const _handleRevokeKey = async (keyId) => {
     try {
       await revokeKey(keyId);
       toast.success('API key revoked successfully');

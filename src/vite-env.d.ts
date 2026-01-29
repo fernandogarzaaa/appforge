@@ -103,6 +103,19 @@ interface AnalyticsEvent {
   properties?: Record<string, any>
 }
 
+// Axios error type extension
+interface AxiosError extends Error {
+  response?: {
+    data?: {
+      message?: string
+      error?: string
+    }
+    status?: number
+  }
+  request?: any
+  config?: any
+}
+
 // Base44 SDK type extensions
 interface Base44Client {
   auth: {

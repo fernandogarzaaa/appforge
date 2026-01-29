@@ -41,7 +41,7 @@ export const BackendAuthProvider = ({ children }) => {
   const login = async (email, password) => {
     setError(null);
     try {
-      const response = await authService.login(email, password);
+      const response = await authService.login({ email, password });
       setUser(response.user);
       setIsAuthenticated(true);
       return response;
@@ -54,7 +54,7 @@ export const BackendAuthProvider = ({ children }) => {
   const register = async (username, email, password) => {
     setError(null);
     try {
-      const response = await authService.register(username, email, password);
+      const response = await authService.register({ username, email, password });
       setUser(response.user);
       setIsAuthenticated(true);
       return response;
