@@ -1,6 +1,6 @@
 # Commit Notes
 
-## Commit c2f28f6 / 82a6705: Initial AppForge Platform Implementation
+## Commit 82a6705: Initial AppForge Platform Implementation
 
 **Original commit message:** "updated"
 
