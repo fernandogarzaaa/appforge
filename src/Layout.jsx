@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
+import { useBackendAuth } from '@/contexts/BackendAuthContext';
 import Sidebar from '@/components/layout/Sidebar';
 import Header from '@/components/layout/Header';
 import HelpSidebar from '@/components/help/HelpSidebar';
@@ -8,6 +9,7 @@ export default function Layout({ children, currentPageName: _currentPageName, on
   const [user, setUser] = useState(null);
   const [currentProject, setCurrentProject] = useState(null);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const { logout: backendLogout, user: backendUser } = useBackendAuth();
 
   useEffect(() => {
     loadUser();
@@ -32,6 +34,7 @@ export default function Layout({ children, currentPageName: _currentPageName, on
 
   const handleLogout = () => {
     base44.auth.logout();
+    backendLogout(); // Also logout from backend
   };
 
   return (

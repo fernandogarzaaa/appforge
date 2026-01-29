@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
+import { userService } from '@/api/appforge';
+import { useBackendAuth } from '@/contexts/BackendAuthContext';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { Search, Plus, Grid3X3, List, Filter, FolderKanban } from 'lucide-react';
+import { Search, Plus, Grid3X3, List, Filter, FolderKanban, Database } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Badge } from '@/components/ui/badge';
 import {
   Dialog,
   DialogContent,
@@ -22,6 +25,7 @@ import {
 import ProjectCard from '@/components/dashboard/ProjectCard';
 import EmptyState from '@/components/common/EmptyState';
 import { AnimatePresence } from 'framer-motion';
+import { useToast } from '@/components/ui/use-toast';
 
 const projectIcons = ['📁', '🚀', '💼', '🎨', '📱', '🌐', '🛒', '📊', '🎮', '📝', '🔧', '💡'];
 const projectColors = ['#6366f1', '#8b5cf6', '#ec4899', '#f43f5e', '#f97316', '#eab308', '#22c55e', '#14b8a6', '#06b6d4', '#3b82f6'];
@@ -43,7 +47,10 @@ export default function Projects() {
   const [selectedTemplate, setSelectedTemplate] = useState(null);
 
   const queryClient = useQueryClient();
+  const { isAuthenticated } = useBackendAuth();
+  const { toast } = useToast();
 
+  // Fetch base44 projects
   const { data: projects = [], isLoading, error } = useQuery({
     queryKey: ['projects'],
     queryFn: async () => {
@@ -53,11 +60,21 @@ export default function Projects() {
         return result;
       } catch (err) {
         console.error('Failed to load projects:', err);
-        // Return empty array instead of throwing to prevent white screen
         return [];
       }
     },
     retry: 1,
+  });
+
+  // Fetch backend projects (optional - shows integration)
+  const { data: backendProjects = [] } = useQuery({
+    queryKey: ['backendProjects'],
+    queryFn: () => userService.listProjects(),
+    enabled: isAuthenticated,
+    retry: 1,
+    onError: () => {
+      // Silent fail - backend projects are optional
+    }
   });
 
   const createMutation = useMutation({

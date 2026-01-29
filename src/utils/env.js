@@ -24,7 +24,7 @@ export function validateEnv() {
   }
 
   // Validate URL formats
-  const urlVars = ['VITE_BASE44_API_URL', 'VITE_APP_URL'];
+  const urlVars = ['VITE_BASE44_API_URL', 'VITE_APP_URL', 'VITE_API_URL'];
   for (const varName of urlVars) {
     const value = import.meta.env[varName];
     if (value && !isValidUrl(value)) {
@@ -56,6 +56,11 @@ export const env = {
     username: import.meta.env.VITE_BASE44_USERNAME || '',
     password: import.meta.env.VITE_BASE44_PASSWORD || '',
     apiUrl: import.meta.env.VITE_BASE44_API_URL || 'https://appforge.fun',
+  },
+
+  // Backend API
+  backend: {
+    apiUrl: import.meta.env.VITE_API_URL || 'http://localhost:5000/api',
   },
 
   // Application Settings

@@ -6,6 +6,8 @@ import __Layout from './Layout.jsx';
 import Dashboard from './pages/Dashboard';
 import Projects from './pages/Projects';
 import Landing from './pages/Landing';
+import Login from './pages/Login';
+import Register from './pages/Register';
 
 // Lazy load all other pages for code splitting
 const AdvancedSearch = lazy(() => import('./pages/AdvancedSearch'));
@@ -50,7 +52,6 @@ const IntegrationAnalytics = lazy(() => import('./pages/IntegrationAnalytics'));
 const IntegrationHub = lazy(() => import('./pages/IntegrationHub'));
 const IntegrationTemplates = lazy(() => import('./pages/IntegrationTemplates'));
 const Integrations = lazy(() => import('./pages/Integrations'));
-const LLMSettings = lazy(() => import('./pages/LLMSettings'));
 const MediaStudio = lazy(() => import('./pages/MediaStudio'));
 const MedicalAI = lazy(() => import('./pages/MedicalAI'));
 const MobileStudio = lazy(() => import('./pages/MobileStudio'));
@@ -58,7 +59,6 @@ const NFTMarketplace = lazy(() => import('./pages/NFTMarketplace'));
 const NFTStudio = lazy(() => import('./pages/NFTStudio'));
 const Notifications = lazy(() => import('./pages/Notifications'));
 const PageEditor = lazy(() => import('./pages/PageEditor'));
-const SystemStatus = lazy(() => import('./pages/SystemStatus'));
 const PredictiveAnalytics = lazy(() => import('./pages/PredictiveAnalytics'));
 const ProjectViewer = lazy(() => import('./pages/ProjectViewer'));
 const ProjectExport = lazy(() => import('./pages/ProjectExport'));
@@ -71,6 +71,7 @@ const ProjectTasks = lazy(() => import('./pages/ProjectTasks'));
 const ReferralProgram = lazy(() => import('./pages/ReferralProgram'));
 const Roadmap = lazy(() => import('./pages/Roadmap'));
 const RoleManagement = lazy(() => import('./pages/RoleManagement'));
+const SecurityFeatures = lazy(() => import('./pages/SecurityFeatures'));
 const SocialMediaHub = lazy(() => import('./pages/SocialMediaHub'));
 const SubscriptionSuccess = lazy(() => import('./pages/SubscriptionSuccess'));
 const Support = lazy(() => import('./pages/Support'));
@@ -140,7 +141,8 @@ const PAGES = {
     "IntegrationTemplates": withSuspense(IntegrationTemplates),
     "Integrations": withSuspense(Integrations),
     "Landing": Landing, // Core - eager load
-    "LLMSettings": withSuspense(LLMSettings),
+    "Login": Login, // Auth - eager load
+    "Register": Register, // Auth - eager load
     "MediaStudio": withSuspense(MediaStudio),
     "MedicalAI": withSuspense(MedicalAI),
     "MobileStudio": withSuspense(MobileStudio),
@@ -148,7 +150,6 @@ const PAGES = {
     "NFTStudio": withSuspense(NFTStudio),
     "Notifications": withSuspense(Notifications),
     "PageEditor": withSuspense(PageEditor),
-    "SystemStatus": withSuspense(SystemStatus),
     "PredictiveAnalytics": withSuspense(PredictiveAnalytics),
     "Pricing": withSuspense(Pricing),
     "Profile": withSuspense(Profile),
@@ -161,6 +162,7 @@ const PAGES = {
     "ReferralProgram": withSuspense(ReferralProgram),
     "Roadmap": withSuspense(Roadmap),
     "RoleManagement": withSuspense(RoleManagement),
+    "SecurityFeatures": withSuspense(SecurityFeatures),
     "SocialMediaHub": withSuspense(SocialMediaHub),
     "SubscriptionSuccess": withSuspense(SubscriptionSuccess),
     "Support": withSuspense(Support),
@@ -179,4 +181,5 @@ export const pagesConfig = {
     mainPage: "Dashboard",
     Pages: PAGES,
     Layout: __Layout,
+    publicPages: ['Landing', 'Login', 'Register', 'Pricing', 'Guide']
 };

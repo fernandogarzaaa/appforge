@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { base44 } from '@/api/base44Client';
+import { quantumService } from '@/api/appforge';
 import { useQuery } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
-import { FolderKanban, Database, FileCode, Component, ArrowRight, Sparkles, Plus } from 'lucide-react';
+import { FolderKanban, Database, FileCode, Component, ArrowRight, Sparkles, Plus, Zap } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import StatCard from '@/components/dashboard/StatCard';
@@ -11,14 +12,32 @@ import ProjectCard from '@/components/dashboard/ProjectCard';
 import EmptyState from '@/components/common/EmptyState';
 import { motion } from 'framer-motion';
 import Skeletons from '@/components/common/Skeletons';
+import { useToast } from '@/components/ui/use-toast';
+import { useBackendAuth } from '@/contexts/BackendAuthContext';
+import QuantumCircuitDisplay from '@/components/QuantumCircuitDisplay';
+import QuantumCircuitVisualizer from '@/components/QuantumCircuitVisualizer';
+import QuantumCircuitEducation from '@/components/QuantumCircuitEducation';
 
 export default function Dashboard() {
   const [ideaInput, setIdeaInput] = useState('');
   const [isCreating, setIsCreating] = useState(false);
+  const { toast } = useToast();
+  const { isAuthenticated } = useBackendAuth();
 
   const { data: projects = [], isLoading } = useQuery({
     queryKey: ['projects'],
     queryFn: () => base44.entities.Project.list('-updated_date', 6),
+  });
+
+  // Fetch quantum circuits from backend if authenticated
+  const { data: quantumCircuits = [], isLoading: isLoadingCircuits } = useQuery({
+    queryKey: ['quantumCircuits'],
+    queryFn: () => quantumService.listCircuits(),
+    enabled: isAuthenticated, // Only fetch if authenticated with backend
+    retry: 1,
+    onError: (error) => {
+      console.error('Failed to load quantum circuits:', error);
+    }
   });
 
   const totalStats = projects.reduce(
@@ -78,7 +97,7 @@ export default function Dashboard() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.15 }}
-        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 mb-6"
+        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-3 mb-6"
       >
         <StatCard
           title="Total Projects"
@@ -112,6 +131,16 @@ export default function Dashboard() {
           change="+15%"
           changeType="increase"
         />
+        {isAuthenticated && (
+          <StatCard
+            title="Quantum Circuits"
+            value={isLoadingCircuits ? '...' : quantumCircuits.length}
+            icon={Zap}
+            gradient="bg-gradient-to-br from-cyan-500 to-blue-600"
+            change="New"
+            changeType="increase"
+          />
+        )}
       </motion.div>
 
       {/* Quick Actions */}
@@ -141,6 +170,39 @@ export default function Dashboard() {
           </Link>
         </div>
       </motion.div>
+
+      {/* Quantum Computing Section */}
+      {isAuthenticated && (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3, delay: 0.1 }}
+          className="mb-6"
+        >
+          <h2 className="text-base font-semibold text-gray-900 mb-4">Quantum Computing Lab</h2>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            {/* Quantum Circuits Display */}
+            <QuantumCircuitDisplay 
+              data={quantumCircuits && quantumCircuits[0]}
+              loading={isLoadingCircuits}
+            />
+            
+            {/* Quantum Circuit Visualizer */}
+            <QuantumCircuitVisualizer 
+              initialQubits={3}
+              onCircuitChange={(circuit) => {
+                // Handle circuit changes
+                console.log('Circuit updated:', circuit);
+              }}
+            />
+          </div>
+
+          {/* Quantum Education Section */}
+          <div className="mt-4">
+            <QuantumCircuitEducation />
+          </div>
+        </motion.div>
+      )}
 
       {/* Recent Projects */}
       <div className="mb-6">

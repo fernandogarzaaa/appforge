@@ -9,14 +9,20 @@ import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 import { ThemeProvider } from '@/context/ThemeContext';
 import { LLMProvider } from '@/contexts/LLMContext';
+import { BackendAuthProvider } from '@/contexts/BackendAuthContext';
+import { ActivityProvider } from '@/contexts/ActivityContext';
+import { CollaborationProvider } from '@/contexts/CollaborationContext';
+import { PrivateRoute } from '@/components/PrivateRoute';
+import { OfflineIndicator } from '@/hooks/useOfflineDetection';
 import { SearchModal } from '@/components/SearchModal';
 import ErrorBoundary from '@/components/ErrorBoundary';
 import { useState, useEffect } from 'react';
 import { validateEnv } from '@/utils/env';
 import errorTracker, { setUser, clearUser } from '@/utils/errorTracking';
 import { startHealthMonitoring } from '@/utils/healthCheck';
+import { useToast } from '@/components/ui/use-toast';
 
-const { Pages, Layout, mainPage } = pagesConfig;
+const { Pages, Layout, mainPage, publicPages = [] } = pagesConfig;
 const mainPageKey = mainPage ?? Object.keys(Pages)[0];
 const MainPage = mainPageKey ? Pages[mainPageKey] : <></>;
 
@@ -26,6 +32,22 @@ const LayoutWrapper = ({ children, currentPageName, onSearchOpen }) => Layout ?
 
 const AuthenticatedApp = ({ onSearchOpen }) => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
+  const { toast } = useToast();
+
+  // Set up global auth error handler
+  useEffect(() => {
+    window.__showAuthError = (message) => {
+      toast({
+        variant: 'destructive',
+        title: 'Authentication Error',
+        description: message
+      });
+    };
+    
+    return () => {
+      delete window.__showAuthError;
+    };
+  }, [toast]);
 
   // Show loading spinner while checking app public settings or auth
   if (isLoadingPublicSettings || isLoadingAuth) {
@@ -62,17 +84,22 @@ const AuthenticatedApp = ({ onSearchOpen }) => {
           <MainPage />
         </LayoutWrapper>
       } />
-      {Object.entries(Pages).map(([path, Page]) => (
-        <Route
-          key={path}
-          path={`/${path}`}
-          element={
-            <LayoutWrapper currentPageName={path} onSearchOpen={onSearchOpen}>
-              <Page />
-            </LayoutWrapper>
-          }
-        />
-      ))}
+      {Object.entries(Pages).map(([path, Page]) => {
+        const isPublic = publicPages.includes(path);
+        const element = (
+          <LayoutWrapper currentPageName={path} onSearchOpen={onSearchOpen}>
+            <Page />
+          </LayoutWrapper>
+        );
+        
+        return (
+          <Route
+            key={path}
+            path={`/${path}`}
+            element={isPublic ? element : <PrivateRoute>{element}</PrivateRoute>}
+          />
+        );
+      })}
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );
@@ -103,14 +130,19 @@ function App() {
       <ThemeProvider>
         <LLMProvider>
           <AuthProvider>
-            <QueryClientProvider client={queryClientInstance}>
-              <Router>
-                <NavigationTracker />
-                <AuthenticatedApp onSearchOpen={() => setSearchOpen(true)} />
-                <SearchModal isOpen={searchOpen} onClose={() => setSearchOpen(false)} />
-              </Router>
-              <Toaster />
-            </QueryClientProvider>
+            <BackendAuthProvider>
+              <ActivityProvider>
+                <CollaborationProvider>
+                  <QueryClientProvider client={queryClientInstance}>
+                  <Router>
+                    <NavigationTracker />
+                    <AuthenticatedApp onSearchOpen={() => setSearchOpen(true)} />
+                    <SearchModal isOpen={searchOpen} onClose={() => setSearchOpen(false)} />
+                    <OfflineIndicator />
+                  </Router>
+                  <Toaster />
+                </QueryClientProvider>                </CollaborationProvider>              </ActivityProvider>
+            </BackendAuthProvider>
           </AuthProvider>
         </LLMProvider>
       </ThemeProvider>

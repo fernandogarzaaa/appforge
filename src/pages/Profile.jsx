@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
+import { userService } from '@/api/appforge';
+import { useBackendAuth } from '@/contexts/BackendAuthContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -12,18 +14,37 @@ import {
   Save, Check, AlertCircle, Crown
 } from 'lucide-react';
 import { toast } from 'sonner';
-import { useQueryClient } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 
 export default function Profile() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
   const [profileData, setProfileData] = useState({
-    full_name: '',
+    username: '',
     email: ''
   });
-
+  const { user: backendUser, isAuthenticated } = useBackendAuth();
   const queryClient = useQueryClient();
+
+  // Fetch backend profile
+  const { data: backendProfile, isLoading: isLoadingProfile } = useQuery({
+    queryKey: ['backendProfile'],
+    queryFn: () => userService.getProfile(),
+    enabled: isAuthenticated,
+    retry: 1
+  });
+
+  // Update profile mutation
+  const updateProfileMutation = useMutation({
+    mutationFn: (data) => userService.updateProfile(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['backendProfile'] });
+      toast.success('Profile updated successfully');
+    },
+    onError: (error) => {
+      toast.error(error.response?.data?.message || 'Failed to update profile');
+    }
+  });
 
   useEffect(() => {
     loadUser();

@@ -2,6 +2,7 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import { LogOut, User, Search } from 'lucide-react';
 import { DarkModeToggle } from '@/components/DarkModeToggle';
+import { NotificationBell } from '@/components/NotificationBell';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -31,6 +32,7 @@ export default function Header({ user, onLogout, onSearchOpen }) {
           </kbd>
         </Button>
         <DarkModeToggle />
+        <NotificationBell />
         {user && (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
