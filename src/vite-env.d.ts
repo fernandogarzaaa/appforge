@@ -42,6 +42,13 @@ interface Window {
     setUser(user: { id?: string; email?: string; username?: string } | null): void
   }
   gtag?: (command: string, action: string, params?: any) => void
+  __showAuthError?: (message: string) => void
+  errorTracker?: {
+    capture(error: Error | string, context?: any): void
+    captureException(error: Error, context?: any): void
+    captureMessage(message: string, level?: string, context?: any): void
+    clearErrors(): void
+  }
 }
 
 // Performance API extensions

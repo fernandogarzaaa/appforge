@@ -8,7 +8,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { cn } from '@/lib/utils';
 
 // Card Skeleton
-export function CardSkeleton({ className }) {
+export function CardSkeleton({ className = "" }) {
   return (
     <div className={cn("rounded-xl border bg-white dark:bg-gray-900 p-6 space-y-4", className)}>
       <div className="flex items-center gap-3">
@@ -28,7 +28,7 @@ export function CardSkeleton({ className }) {
 }
 
 // List Item Skeleton
-export function ListItemSkeleton({ className }) {
+export function ListItemSkeleton({ className = "" }) {
   return (
     <div className={cn("flex items-center gap-3 p-4 border-b last:border-b-0", className)}>
       <Skeleton className="h-10 w-10 rounded-full flex-shrink-0" />
@@ -42,7 +42,7 @@ export function ListItemSkeleton({ className }) {
 }
 
 // Table Row Skeleton
-export function TableRowSkeleton({ columns = 4, className }) {
+export function TableRowSkeleton({ columns = 4, className = "" }) {
   return (
     <tr className={cn("border-b", className)}>
       {Array.from({ length: columns }).map((_, i) => (
@@ -55,7 +55,7 @@ export function TableRowSkeleton({ columns = 4, className }) {
 }
 
 // Form Field Skeleton
-export function FormFieldSkeleton({ className }) {
+export function FormFieldSkeleton({ className = "" }) {
   return (
     <div className={cn("space-y-2", className)}>
       <Skeleton className="h-4 w-24" />
@@ -65,7 +65,7 @@ export function FormFieldSkeleton({ className }) {
 }
 
 // Stats Card Skeleton
-export function StatsCardSkeleton({ className }) {
+export function StatsCardSkeleton({ className = "" }) {
   return (
     <div className={cn("rounded-xl border bg-white dark:bg-gray-900 p-6", className)}>
       <div className="flex items-center justify-between mb-4">
@@ -79,7 +79,7 @@ export function StatsCardSkeleton({ className }) {
 }
 
 // Project Card Skeleton
-export function ProjectCardSkeleton({ className }) {
+export function ProjectCardSkeleton({ className = "" }) {
   return (
     <div className={cn("rounded-xl border bg-white dark:bg-gray-900 p-6 space-y-4", className)}>
       <div className="flex items-start justify-between">
@@ -106,7 +106,7 @@ export function ProjectCardSkeleton({ className }) {
 }
 
 // Page Header Skeleton
-export function PageHeaderSkeleton({ className }) {
+export function PageHeaderSkeleton({ className = "" }) {
   return (
     <div className={cn("space-y-4", className)}>
       <div className="flex items-center justify-between">
@@ -121,7 +121,7 @@ export function PageHeaderSkeleton({ className }) {
 }
 
 // Chat Message Skeleton
-export function ChatMessageSkeleton({ isUser = false, className }) {
+export function ChatMessageSkeleton({ isUser = false, className = "" }) {
   return (
     <div className={cn("flex gap-4", isUser ? "justify-end" : "justify-start", className)}>
       {!isUser && <Skeleton className="h-10 w-10 rounded-lg flex-shrink-0" />}
@@ -134,7 +134,7 @@ export function ChatMessageSkeleton({ isUser = false, className }) {
 }
 
 // Settings Section Skeleton
-export function SettingsSectionSkeleton({ className }) {
+export function SettingsSectionSkeleton({ className = "" }) {
   return (
     <div className={cn("rounded-xl border bg-white dark:bg-gray-900 p-6 space-y-6", className)}>
       <div className="space-y-2">
@@ -157,7 +157,7 @@ export function SettingsSectionSkeleton({ className }) {
 }
 
 // Dashboard Grid Skeleton
-export function DashboardSkeleton({ className }) {
+export function DashboardSkeleton({ className = "" }) {
   return (
     <div className={cn("space-y-6", className)}>
       {/* Header */}
