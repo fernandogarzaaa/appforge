@@ -1,0 +1,12 @@
+# Page snapshot
+
+```yaml
+- generic [active]:
+  - generic:
+    - generic:
+      - generic:
+        - region "Notifications (F8)":
+          - list
+      - generic:
+        - region "Notifications alt+T"
+```

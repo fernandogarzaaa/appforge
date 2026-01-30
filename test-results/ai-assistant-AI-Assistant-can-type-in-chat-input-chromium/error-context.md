@@ -1,0 +1,41 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e3]:
+  - generic:
+    - region "Notifications (F8)":
+      - list
+  - generic:
+    - region "Notifications alt+T"
+  - generic:
+    - region "Notifications alt+T"
+  - generic [ref=e9]:
+    - img "AppForge logo" [ref=e13]
+    - generic [ref=e14]:
+      - heading "Welcome to AppForge" [level=1] [ref=e15]
+      - paragraph [ref=e16]: Sign in to continue
+    - generic [ref=e17]:
+      - button "Continue with Google" [ref=e19] [cursor=pointer]:
+        - img [ref=e21]
+        - generic [ref=e26]: Continue with Google
+      - generic [ref=e30]: or
+      - generic [ref=e31]:
+        - generic [ref=e32]:
+          - generic [ref=e33]:
+            - text: Email
+            - generic [ref=e34]:
+              - img [ref=e35]
+              - textbox "Email" [ref=e38]:
+                - /placeholder: you@example.com
+          - generic [ref=e39]:
+            - text: Password
+            - generic [ref=e40]:
+              - img [ref=e41]
+              - textbox "Password" [ref=e44]:
+                - /placeholder: ••••••••
+        - generic [ref=e45]:
+          - button "Sign in" [ref=e46] [cursor=pointer]
+          - generic [ref=e47]:
+            - button "Forgot password?" [ref=e48] [cursor=pointer]
+            - button "Need an account? Sign up" [ref=e49] [cursor=pointer]
+```
