@@ -1,3 +1,4 @@
+<!-- markdownlint-disable MD009 -->
 # AppForge Feature Implementation Roadmap
 
 ## ✅ Phase 1: Quick Wins & Infrastructure (COMPLETE)

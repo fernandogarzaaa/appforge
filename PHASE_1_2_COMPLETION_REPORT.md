@@ -1,3 +1,4 @@
+<!-- markdownlint-disable MD013 -->
 # AppForge Feature Implementation - Phase 1 & 2 Complete ✅
 
 ## Executive Summary

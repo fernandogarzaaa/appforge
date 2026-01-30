@@ -1,3 +1,4 @@
+# cSpell:ignore VITE Vercel vercel amondnet nwtgck Buildx buildx DOCKERHUB
 name: Deploy to Production
 
 on:

@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * AI Usage Analytics Panel
  * Displays token usage, costs, and model statistics

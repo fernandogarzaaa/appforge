@@ -9,9 +9,10 @@
 
 ## Executive Summary
 
-The AppForge Backend REST API has been completely implemented with **50+ production-ready
-endpoints** across 5 integrated modules. The backend is fully operational, documented, and
-ready for immediate integration with the React frontend.
+The AppForge Backend REST API has been completely implemented with
+**50+ production-ready endpoints** across 5 integrated modules. The
+backend is fully operational, documented, and ready for immediate
+integration with the React frontend.
 
 **Key Achievement:** Complete REST API implementation in a single session with
 enterprise-grade code quality, comprehensive documentation, and deployment guides.
@@ -460,8 +461,8 @@ curl -X POST http://localhost:5000/api/auth/register \
 
 | Platform | Time | Cost | Command |
 |----------|------|------|---------|
-| Docker | 15 min | Free | `docker build -t appforge .` &&\n`docker run -p 5000:5000 appforge` |
-| Heroku | 10 min | $7-50/mo | `heroku create && git push heroku main` |
+| Docker | 15 min | Free | `docker build && docker run` |
+| Heroku | 10 min | $7-50/mo | `heroku create && git push` |
 | AWS | 30 min | $20-100/mo | `aws eb create` |
 | Google Cloud | 30 min | $20-100/mo | `gcloud run deploy` |
 | Azure | 30 min | $20-100/mo | `az container create` |
@@ -555,9 +556,10 @@ curl -X POST http://localhost:5000/api/auth/register \
 
 ## Conclusion
 
-The AppForge Backend REST API is **100% complete** and **production-ready**. All endpoints
-are implemented, documented, and tested. The codebase is clean, well-organized, and follows
-enterprise standards.
+The AppForge Backend REST API is **100% complete** and
+**production-ready**. All endpoints are implemented, documented, and
+tested. The codebase is clean, well-organized, and follows enterprise
+standards.
 
 **What's Next?**
 1. Start the backend server

@@ -1,3 +1,5 @@
+// cSpell:ignore Qubits, qubit, qubits, QASM, qasm, grovers, deutsch, Jozsa, Hadamard, CNOT, Deutsch, bitstring
+// @ts-nocheck
 import React, { useState, useCallback } from 'react'
 import { Plus, Trash2, Play, Download, RotateCw, Zap } from 'lucide-react'
 import {

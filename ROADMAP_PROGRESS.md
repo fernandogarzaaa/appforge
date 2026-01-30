@@ -1,3 +1,4 @@
+<!-- markdownlint-disable MD013 -->
 # AppForge Feature Roadmap Progress
 
 ## Overall Progress: 25/25 Features Planned Across 8 Phases

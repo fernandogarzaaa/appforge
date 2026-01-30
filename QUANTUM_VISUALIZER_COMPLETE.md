@@ -1,3 +1,4 @@
+<!-- markdownlint-disable MD013 MD026 MD036 -->
 # 🎯 Quantum Circuit Visualizer Complete
 
 Interactive quantum computing lab added to Dashboard!

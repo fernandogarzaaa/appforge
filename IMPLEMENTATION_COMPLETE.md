@@ -1,3 +1,4 @@
+<!-- markdownlint-disable MD009 MD036 -->
 # 🚀 Full-Stack Integration Complete
 
 All suggested improvements have been implemented successfully!

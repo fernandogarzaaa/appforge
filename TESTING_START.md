@@ -1,3 +1,4 @@
+<!-- markdownlint-disable MD036 -->
 # 🧪 START FULL APPLICATION TESTING
 
 ## Quick Start - Follow These Steps

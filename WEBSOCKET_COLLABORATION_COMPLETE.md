@@ -1,3 +1,4 @@
+<!-- markdownlint-disable MD013 MD036 -->
 # 🚀 Real-time WebSocket Collaboration System
 
 **Complete real-time collaboration with presence awareness, live cursors, and conflict resolution**

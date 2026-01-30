@@ -1,3 +1,4 @@
+<!-- markdownlint-disable MD029 -->
 # Backend Implementation - Complete File Listing
 
 ## Summary
@@ -76,7 +77,7 @@
    - GET /api/auth/me
    - POST /api/auth/logout
 
-7. **backend/src/routes/quantumRoutes.js** (80 lines)
+2. **backend/src/routes/quantumRoutes.js** (80 lines)
    - All quantum computing endpoints
    - Circuit management routes
    - Algorithm execution routes

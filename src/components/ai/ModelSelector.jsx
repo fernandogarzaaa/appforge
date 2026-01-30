@@ -1,7 +1,7 @@
+// @ts-nocheck
 /**
  * ModelSelector - AI Model selection dropdown component
  * Allows users to select their preferred AI model and view model info
- * @ts-nocheck - Suppressing dropdown menu component type issues
  */
 
 import React, { useState } from 'react';

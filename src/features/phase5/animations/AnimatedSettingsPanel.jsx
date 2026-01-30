@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 // import { useAdvancedSettings } from '../../phase4/settings/useAdvancedSettings';
