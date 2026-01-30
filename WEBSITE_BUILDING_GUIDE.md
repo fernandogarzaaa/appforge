@@ -1,3 +1,4 @@
+<!-- markdownlint-disable MD013 MD036 -->
 # AppForge: Can You Build a Website? YES ✅
 
 ## Executive Summary

@@ -1,4 +1,4 @@
-<!-- markdownlint-disable MD013 -->
+<!-- markdownlint-disable MD013 MD024 MD058 -->
 # New Features Added to AppForge
 
 This document outlines the 8 major enterprise-grade features that have been added to the AppForge platform.

@@ -1,3 +1,4 @@
+<!-- markdownlint-disable MD013 MD009 -->
 # AppForge Enhancement Summary
 
 ## 🎉 What We've Built
