@@ -59,80 +59,87 @@ jobs:
           path: dist/
           retention-days: 1
 
-  # Deploy to Vercel
-  deploy-vercel:
-    runs-on: ubuntu-latest
-    needs: build
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && secrets.VERCEL_TOKEN != ''
-    steps:
-      - uses: actions/checkout@v4
-      
-      - name: Download build artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: dist
-          path: dist/
-      
-      - name: Deploy to Vercel
-        uses: amondnet/vercel-action@v25
-        with:
-          vercel-token: ${{ secrets.VERCEL_TOKEN }}
-          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
-          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
-          vercel-args: '--prod'
+  # Deployment jobs are commented out until secrets are configured in GitHub repository settings
+  # To enable deployments, add the required secrets in Settings > Secrets and variables > Actions:
+  # - VERCEL_TOKEN, VERCEL_ORG_ID, VERCEL_PROJECT_ID (for Vercel)
+  # - NETLIFY_AUTH_TOKEN, NETLIFY_SITE_ID (for Netlify)
+  # - DOCKERHUB_USERNAME, DOCKERHUB_TOKEN (for Docker Hub)
+  # - BASE44_USERNAME, BASE44_PASSWORD, BASE44_API_URL, SENTRY_DSN (for application)
 
-  # Deploy to Netlify (alternative)
-  deploy-netlify:
-    runs-on: ubuntu-latest
-    needs: build
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && secrets.NETLIFY_AUTH_TOKEN != ''
-    steps:
-      - uses: actions/checkout@v4
-      
-      - name: Download build artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: dist
-          path: dist/
-      
-      - name: Deploy to Netlify
-        uses: nwtgck/actions-netlify@v2
-        with:
-          publish-dir: './dist'
-          production-deploy: true
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          deploy-message: "Deploy from GitHub Actions"
-        env:
-          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+  # # Deploy to Vercel
+  # deploy-vercel:
+  #   runs-on: ubuntu-latest
+  #   needs: build
+  #   if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     
+  #     - name: Download build artifacts
+  #       uses: actions/download-artifact@v4
+  #       with:
+  #         name: dist
+  #         path: dist/
+  #     
+  #     - name: Deploy to Vercel
+  #       uses: amondnet/vercel-action@v25
+  #       with:
+  #         vercel-token: ${{ secrets.VERCEL_TOKEN }}
+  #         vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+  #         vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+  #         vercel-args: '--prod'
 
-  # Build and push Docker image
-  docker:
-    runs-on: ubuntu-latest
-    needs: build
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && secrets.DOCKERHUB_USERNAME != ''
-    steps:
-      - uses: actions/checkout@v4
-      
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-      
-      - name: Login to Docker Hub
-        uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-      
-      - name: Build and push
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          push: true
-          tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/appforge:latest
-            ${{ secrets.DOCKERHUB_USERNAME }}/appforge:${{ github.sha }}
-          build-args: |
-            VITE_BASE44_USERNAME=${{ secrets.BASE44_USERNAME }}
-            VITE_BASE44_PASSWORD=${{ secrets.BASE44_PASSWORD }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+  # # Deploy to Netlify (alternative)
+  # deploy-netlify:
+  #   runs-on: ubuntu-latest
+  #   needs: build
+  #   if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     
+  #     - name: Download build artifacts
+  #       uses: actions/download-artifact@v4
+  #       with:
+  #         name: dist
+  #         path: dist/
+  #     
+  #     - name: Deploy to Netlify
+  #       uses: nwtgck/actions-netlify@v2
+  #       with:
+  #         publish-dir: './dist'
+  #         production-deploy: true
+  #         github-token: ${{ secrets.GITHUB_TOKEN }}
+  #         deploy-message: "Deploy from GitHub Actions"
+  #       env:
+  #         NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+  #         NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+
+  # # Build and push Docker image
+  # docker:
+  #   runs-on: ubuntu-latest
+  #   needs: build
+  #   if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     
+  #     - name: Set up Docker Buildx
+  #       uses: docker/setup-buildx-action@v3
+  #     
+  #     - name: Login to Docker Hub
+  #       uses: docker/login-action@v3
+  #       with:
+  #         username: ${{ secrets.DOCKERHUB_USERNAME }}
+  #         password: ${{ secrets.DOCKERHUB_TOKEN }}
+  #     
+  #     - name: Build and push
+  #       uses: docker/build-push-action@v5
+  #       with:
+  #         context: .
+  #         push: true
+  #         tags: |
+  #           ${{ secrets.DOCKERHUB_USERNAME }}/appforge:latest
+  #           ${{ secrets.DOCKERHUB_USERNAME }}/appforge:${{ github.sha }}
+  #         build-args: |
+  #           VITE_BASE44_USERNAME=${{ secrets.BASE44_USERNAME }}
+  #           VITE_BASE44_PASSWORD=${{ secrets.BASE44_PASSWORD }}
+  #         cache-from: type=gha
+  #         cache-to: type=gha,mode=max
