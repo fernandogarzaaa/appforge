@@ -1,3 +1,4 @@
+<!-- markdownlint-disable MD009 MD013 MD036 -->
 # ✅ COMPLETE: All Suggestions Implemented
 
 **AppForge - Feature Implementation Package Complete**  

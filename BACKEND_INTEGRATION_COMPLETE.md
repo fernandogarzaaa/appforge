@@ -1,3 +1,4 @@
+<!-- markdownlint-disable MD013 MD036 -->
 # Backend Integration Complete
 
 ## Summary

@@ -1,3 +1,4 @@
+<!-- markdownlint-disable MD009 MD013 -->
 # 🎉 Complete Feature Implementation Package
 
 **AppForge Expansion Initiative**  

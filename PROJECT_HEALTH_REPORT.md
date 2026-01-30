@@ -1,3 +1,4 @@
+<!-- markdownlint-disable MD013 MD036 -->
 # 🏥 Project Health Report
 **Generated:** January 28, 2026  
 **Status:** ✅ HEALTHY

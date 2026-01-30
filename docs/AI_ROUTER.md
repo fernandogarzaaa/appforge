@@ -1,3 +1,4 @@
+<!-- markdownlint-disable MD013 -->
 # AI Model Router Documentation
 
 ## Overview

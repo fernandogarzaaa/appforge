@@ -1,3 +1,4 @@
+<!-- markdownlint-disable MD013 -->
 # 📊 Database Schema & Entities
 
 **AppForge Data Model**  

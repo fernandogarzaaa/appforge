@@ -1,3 +1,4 @@
+<!-- markdownlint-disable MD013 -->
 # 🔌 Complete REST API Endpoints
 
 **AppForge API Reference**  

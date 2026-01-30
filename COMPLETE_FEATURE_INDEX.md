@@ -1,3 +1,4 @@
+<!-- markdownlint-disable MD009 MD013 MD036 -->
 # 📚 Complete Feature Implementation Index
 
 **AppForge Expansion Complete Package**  
