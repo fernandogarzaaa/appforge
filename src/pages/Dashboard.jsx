@@ -5,17 +5,16 @@ import { useQuery } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { 
-  FolderKanban, Database, FileCode, Component, ArrowRight, Sparkles, Plus, Zap, 
-  ShieldCheck, Rocket, TrendingUp, Users, Globe, Smartphone, Brain, LayoutTemplate,
-  Code, Activity, Coins, Blocks, Clock
+  FolderKanban, Database, FileCode, Component, Sparkles, Plus, Zap, 
+  ShieldCheck, Rocket, Users, Globe, Smartphone, Brain, LayoutTemplate,
+  Code, Activity, Coins
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import StatCard from '@/components/dashboard/StatCard';
 import ProjectCard from '@/components/dashboard/ProjectCard';
-import EmptyState from '@/components/common/EmptyState';
 import { motion } from 'framer-motion';
 import Skeletons from '@/components/common/Skeletons';
 import { useToast } from '@/components/ui/use-toast';
