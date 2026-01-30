@@ -1,4 +1,5 @@
-# 🚀 Real-time WebSocket Collaboration - Complete!
+<!-- markdownlint-disable MD026 MD036 -->
+# Real-time WebSocket Collaboration
 
 ## Summary
 

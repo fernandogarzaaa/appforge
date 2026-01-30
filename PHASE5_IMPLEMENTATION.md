@@ -1,3 +1,4 @@
+<!-- markdownlint-disable MD013 -->
 # Phase 5: Enterprise Features - Implementation Guide
 
 **Status:** ✅ IMPLEMENTED  

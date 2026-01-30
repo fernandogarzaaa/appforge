@@ -1,3 +1,4 @@
+<!-- markdownlint-disable MD009 MD013 -->
 # 📚 Phase 4 Documentation Index
 
 **Generated:** January 29, 2026  

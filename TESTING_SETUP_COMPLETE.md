@@ -1,3 +1,4 @@
+<!-- markdownlint-disable MD007 MD009 MD026 MD029 MD036 -->
 # Testing Suite Implementation Complete ✅
 
 ## 📋 What's Been Setup

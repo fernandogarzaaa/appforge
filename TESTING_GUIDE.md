@@ -1,3 +1,4 @@
+<!-- markdownlint-disable MD026 -->
 # Testing Guide
 
 ## Unit Tests with Vitest

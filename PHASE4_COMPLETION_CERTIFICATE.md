@@ -1,3 +1,4 @@
+<!-- markdownlint-disable MD013 MD036 -->
 # 🏆 Phase 4 Completion Certificate
 
 **Project:** AppForge - AI-Powered Website Builder  

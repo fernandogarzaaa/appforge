@@ -1,3 +1,4 @@
+<!-- markdownlint-disable MD026 MD036 -->
 # 🎯 Feature Implementation Complete - Status Update
 
 **Session: Real-time WebSocket Collaboration**

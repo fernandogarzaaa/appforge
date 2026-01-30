@@ -1,3 +1,4 @@
+<!-- markdownlint-disable MD013 MD036 -->
 # Session Summary: AppForge Phase 4 Completion
 
 **Session Date:** January 29, 2026  

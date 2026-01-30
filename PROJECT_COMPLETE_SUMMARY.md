@@ -1,3 +1,4 @@
+<!-- markdownlint-disable MD026 -->
 # 🎉 Phase 5 Complete: Enterprise Features - Final Summary
 
 ## ✅ What Was Delivered

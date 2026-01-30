@@ -1,3 +1,4 @@
+<!-- markdownlint-disable MD013 -->
 # Phase 4 Implementation Complete: Admin, Analytics, Onboarding, Settings
 
 ## Overview

@@ -1,3 +1,4 @@
+<!-- markdownlint-disable MD013 MD029 MD036 -->
 # 🔔 Activity Feed & Notifications System Complete
 
 Real-time activity tracking and notification system integrated!
