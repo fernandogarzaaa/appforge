@@ -47,6 +47,81 @@ export const encryptionSchema = Joi.object({
   algorithm: Joi.string().valid('AES', 'RSA').optional()
 });
 
+// Team schemas
+export const teamSchemas = {
+  createTeam: Joi.object({
+    name: Joi.string().trim().min(3).max(100).required(),
+    description: Joi.string().trim().max(500).allow(''),
+    settings: Joi.object({
+      isPublic: Joi.boolean(),
+      allowMemberInvites: Joi.boolean(),
+      requireApproval: Joi.boolean(),
+      maxMembers: Joi.number().integer().min(1).max(1000)
+    })
+  }),
+
+  updateTeam: Joi.object({
+    name: Joi.string().trim().min(3).max(100),
+    description: Joi.string().trim().max(500).allow(''),
+    settings: Joi.object({
+      isPublic: Joi.boolean(),
+      allowMemberInvites: Joi.boolean(),
+      requireApproval: Joi.boolean(),
+      maxMembers: Joi.number().integer().min(1).max(1000)
+    })
+  }),
+
+  addMember: Joi.object({
+    userId: Joi.string().required(),
+    role: Joi.string().valid('member', 'admin', 'viewer').default('member')
+  }),
+
+  updateMemberRole: Joi.object({
+    role: Joi.string().valid('member', 'admin', 'viewer').required()
+  }),
+
+  transferOwnership: Joi.object({
+    newOwnerId: Joi.string().required()
+  })
+};
+
+// Permission schemas
+export const permissionSchemas = {
+  checkPermission: Joi.object({
+    userId: Joi.string(),
+    action: Joi.string()
+      .valid('read', 'create', 'update', 'delete', 'execute', 'manage', 'admin')
+      .required(),
+    resourceType: Joi.string()
+      .valid('project', 'team', 'deployment', 'apiKey', 'environment', 'quantum', 'collaboration')
+      .required(),
+    resourceId: Joi.string().required()
+  }),
+
+  grantPermission: Joi.object({
+    userId: Joi.string().required(),
+    action: Joi.string()
+      .valid('read', 'create', 'update', 'delete', 'execute', 'manage', 'admin')
+      .required(),
+    resourceType: Joi.string()
+      .valid('project', 'team', 'deployment', 'apiKey', 'environment', 'quantum', 'collaboration')
+      .required(),
+    resourceId: Joi.string().required(),
+    expiresAt: Joi.date().iso().greater('now').allow(null)
+  }),
+
+  revokePermission: Joi.object({
+    userId: Joi.string().required(),
+    action: Joi.string()
+      .valid('read', 'create', 'update', 'delete', 'execute', 'manage', 'admin')
+      .required(),
+    resourceType: Joi.string()
+      .valid('project', 'team', 'deployment', 'apiKey', 'environment', 'quantum', 'collaboration')
+      .required(),
+    resourceId: Joi.string().required()
+  })
+};
+
 export const gdprRequestSchema = Joi.object({
   requestType: Joi.string().valid('data-export', 'deletion', 'portability').required(),
   userId: Joi.string().required(),
