@@ -157,7 +157,7 @@ export const projectsService = {
       // Get all projects and filter client-side
       // Base44 entities.filter doesn't support complex queries like $contains
       const allProjects = await base44.entities.Project.filter({});
-      const projects = allProjects.filter(p => 
+      const projects = (allProjects instanceof Array ? allProjects : []).filter(p => 
         p.name?.toLowerCase().includes(query.toLowerCase()) ||
         p.description?.toLowerCase().includes(query.toLowerCase())
       );

@@ -22,6 +22,7 @@ export const AnalyticsDashboard = () => {
 
   const [activeTab, setActiveTab] = useState('overview');
   const [trendingFeatures, setTrendingFeatures] = useState([]);
+  /** @type {[{highEngagement?: number; mediumEngagement?: number; lowEngagement?: number;}, (e) => void]} */
   const [engagementMetrics, setEngagementMetrics] = useState({});
   const [selectedFeature, setSelectedFeature] = useState(null);
 

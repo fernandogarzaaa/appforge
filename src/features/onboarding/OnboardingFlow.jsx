@@ -60,6 +60,7 @@ export const OnboardingFlow = () => {
   };
 
   const progress = getOnboardingProgress();
+  const progressPercentage = progress?.percentage ? parseFloat(progress.percentage) : 0;
 
   const handleStartTour = (tourName, steps) => {
     startTour(tourName, steps);
@@ -76,7 +77,7 @@ export const OnboardingFlow = () => {
           <h2 className="text-2xl font-bold text-white">Onboarding & Tutorials</h2>
         </div>
         <div className="text-right">
-          <p className="text-green-400 font-bold text-lg">{progress}%</p>
+          <p className="text-green-400 font-bold text-lg">{progressPercentage}%</p>
           <p className="text-slate-400 text-sm">Complete</p>
         </div>
       </div>
@@ -86,7 +87,7 @@ export const OnboardingFlow = () => {
         <div className="w-full bg-slate-700 rounded-full h-3">
           <div
             className="h-3 rounded-full bg-gradient-to-r from-green-500 to-blue-500 transition-all duration-300"
-            style={{ width: `${progress}%` }}
+            style={{ width: `${progressPercentage}%` }}
           />
         </div>
         <p className="text-slate-400 text-sm text-center">
@@ -155,7 +156,7 @@ export const OnboardingFlow = () => {
             </div>
           ))}
 
-          {progress === 100 && (
+          {progressPercentage === 100 && (
             <div className="bg-gradient-to-r from-green-500/10 to-blue-500/10 border border-green-500/50 rounded-lg p-4">
               <div className="flex items-center justify-between">
                 <div>

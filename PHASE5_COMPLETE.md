@@ -329,7 +329,8 @@ teams.updateMemberRole(teamId, memberId, 'admin')
 import * as perms from '@/utils/advancedPermissions'
 
 // Create role
-const role = perms.createCustomRole('Manager', 'Manages projects', ['create_projects', 'edit_projects'])
+const role = perms.createCustomRole('Manager', 'Manages projects',
+  ['create_projects', 'edit_projects'])
 
 // Grant access
 perms.grantResourceAccess(projectId, 'project', userId, 'user', 'editor')
@@ -345,10 +346,12 @@ if (perms.checkResourceAccess(projectId, userId, 'editor')) {
 import * as webhooks from '@/utils/webhooks'
 
 // Create webhook
-const wh = webhooks.createWebhook('https://api.example.com/webhook', ['user.created', 'project.updated'])
+const wh = webhooks.createWebhook('https://api.example.com/webhook',
+  ['user.created', 'project.updated'])
 
 // Trigger event
-webhooks.triggerWebhook('user.created', { userId: '123', email: 'user@example.com' })
+webhooks.triggerWebhook('user.created',
+  { userId: '123', email: 'user@example.com' })
 
 // Monitor
 webhooks.onWebhookEvent('delivery_failed', (delivery) => {
@@ -428,7 +431,7 @@ Rate Limit Check:    <1ms
 ✅ Webhooks System          - Enterprise integrations  
 ✅ Rate Limiting System     - API protection  
 
-**Status: PRODUCTION READY ✅**
+## Status: PRODUCTION READY
 
 ---
 

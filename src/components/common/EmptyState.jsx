@@ -2,7 +2,7 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import { motion } from 'framer-motion';
 
-export default function EmptyState({ icon: Icon, title, description, actionLabel, onAction }) {
+export default function EmptyState({ icon: Icon = null, title = '', description = '', actionLabel = '', onAction = null } = {}) {
   return (
     <motion.div
       initial={{ opacity: 0 }}

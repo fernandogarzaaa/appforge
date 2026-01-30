@@ -269,20 +269,16 @@ export const useAccessibility = () => {
   }), []);
 
   /**
-   * Get screen reader announcement element
+   * Get screen reader announcement element data
+   * @returns {object} Props for the announcement div element
    */
-  const getAnnouncementElement = useCallback(() => (
-    <div
-      className="sr-only"
-      role="status"
-      aria-live="polite"
-      aria-atomic="true"
-    >
-      {announcements.map((a) => (
-        <div key={a.id}>{a.message}</div>
-      ))}
-    </div>
-  ), [announcements]);
+  const getAnnouncementElement = useCallback(() => ({
+    className: "sr-only",
+    role: "status",
+    'aria-live': "polite",
+    'aria-atomic': "true",
+    children: announcements.map((a) => ({ key: a.id, text: a.message }))
+  }), [announcements]);
 
   return {
     // States

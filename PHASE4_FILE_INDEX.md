@@ -179,9 +179,7 @@
    - All environment variables documented
 ```
 
-### Configuration Files
-
-#### Test Configuration
+### Test Configuration Files
 ```
 ✅ vitest.config.coverage.js
    - Coverage reporting configuration
@@ -369,7 +367,7 @@ AppForge Root/
 
 ## 🔍 How to Find Files
 
-### By Purpose
+### Quick Navigation Guide
 
 **If you want to learn testing:**
 → Read `TESTING.md`
@@ -439,8 +437,7 @@ AppForge Root/
 - ✅ 3 project documentation files
 - ✅ 15+ total files
 
-### Configuration Files
-- ✅ Vitest coverage config
+### Project Configuration Files
 - ✅ Playwright config
 - ✅ Docker configuration
 - ✅ CI/CD pipeline

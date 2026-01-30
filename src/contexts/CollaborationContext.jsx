@@ -8,7 +8,7 @@ import { getWebSocketService } from '@/services/webSocketService';
 import { useBackendAuth } from '@/contexts/BackendAuthContext';
 import { useActivity } from '@/contexts/ActivityContext';
 
-const CollaborationContext = createContext();
+const CollaborationContext = createContext(null);
 
 export function CollaborationProvider({ children }) {
   const { user } = useBackendAuth();

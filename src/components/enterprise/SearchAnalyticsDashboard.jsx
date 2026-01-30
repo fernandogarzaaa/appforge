@@ -30,12 +30,16 @@ export function SearchAnalyticsDashboard() {
 
   // Subscribe to analytics updates
   useEffect(() => {
-    const unsubscribe = SearchAnalytics.subscribe(() => {
+    const unsubscribe = SearchAnalytics.subscribe?.(() => {
       refreshData();
-    });
+    }) || (() => {});
     
     refreshData();
-    return unsubscribe;
+    return () => {
+      if (typeof unsubscribe === 'function') {
+        unsubscribe();
+      }
+    };
   }, [selectedPeriod]);
 
   const refreshData = () => {

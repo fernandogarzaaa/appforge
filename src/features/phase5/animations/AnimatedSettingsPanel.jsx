@@ -1,6 +1,8 @@
 import React, { useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useAdvancedSettings } from '../../phase4/settings/useAdvancedSettings';
+// import { useAdvancedSettings } from '../../phase4/settings/useAdvancedSettings';
+// Placeholder - hook not available in animation version
+const useAdvancedSettings = () => ({});
 import { useAnimations } from './useAnimations';
 import { useAccessibility } from '../accessibility/useAccessibility';
 import { useResponsive } from '../responsive/useResponsive';

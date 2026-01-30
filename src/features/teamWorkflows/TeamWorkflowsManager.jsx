@@ -31,6 +31,7 @@ export function TeamWorkflowsManager() {
     createPRNotificationAutomation,
     deleteAutomation,
     toggleAutomation,
+    deleteWebhook,
     connectService,
     disconnectService,
     getServiceHealth

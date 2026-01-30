@@ -1,6 +1,8 @@
 import React, { useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useOnboarding } from '../../phase4/onboarding/useOnboarding';
+// import { useOnboarding } from '../../phase4/onboarding/useOnboarding';
+// Placeholder - hook not available in animation version
+const useOnboarding = () => ({});
 import { useAnimations } from './useAnimations';
 import { useAccessibility } from '../accessibility/useAccessibility';
 import { useResponsive } from '../responsive/useResponsive';

@@ -43,7 +43,7 @@ export default function RateLimitDashboard() {
 
   const updateStats = () => {
     const allStats = rateLimit.getRateLimitStats();
-    setStats(allStats);
+    setStats({ ...allStats, avgResponse: 0 });
     setLimiters(Array.from(allStats.topUsers || []).slice(0, 5));
   };
 

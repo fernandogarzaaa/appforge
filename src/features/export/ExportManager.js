@@ -31,6 +31,7 @@ export class ExportManager {
       ['Success Rate', `${data.successRate || 0}%`],
     ];
     
+    // @ts-ignore - jsPDF autoTable plugin adds this method dynamically
     doc.autoTable({
       startY: 40,
       head: [summaryData[0]],
@@ -40,7 +41,8 @@ export class ExportManager {
     
     // Charts as images (if provided)
     if (data.chartImages) {
-      let yPosition = doc.lastAutoTable.finalY + 10;
+      // @ts-ignore - lastAutoTable is added by jsPDF-AutoTable plugin
+      let yPosition = (doc.lastAutoTable?.finalY || 40) + 10;
       Object.entries(data.chartImages).forEach(([title, imgData]) => {
         if (yPosition > 250) {
           doc.addPage();
@@ -85,12 +87,19 @@ export class ExportManager {
   /**
    * Export data as Excel (simple approach)
    */
-  static exportAsExcel(data, sheetName = 'Sheet1', filename = 'export.xlsx') {
-    const xlsx = require('xlsx');
-    const worksheet = xlsx.utils.json_to_sheet(data);
-    const workbook = xlsx.utils.book_new();
-    xlsx.utils.book_append_sheet(workbook, worksheet, sheetName);
-    xlsx.writeFile(workbook, filename);
+  static async exportAsExcel(data, sheetName = 'Sheet1', filename = 'export.xlsx') {
+    try {
+      // @ts-ignore - xlsx module installed but types may not be available
+      const xlsx = (await import('xlsx')).default || (await import('xlsx'));
+      const worksheet = xlsx.utils.json_to_sheet(data);
+      const workbook = xlsx.utils.book_new();
+      xlsx.utils.book_append_sheet(workbook, worksheet, sheetName);
+      xlsx.writeFile(workbook, filename);
+    } catch (error) {
+      console.error('xlsx library not available:', error);
+      // Fallback to CSV export
+      this.exportAsCSV(data, Object.keys(data[0] || {}).map(key => ({ key, header: key })), filename.replace('.xlsx', '.csv'));
+    }
   }
 
   /**

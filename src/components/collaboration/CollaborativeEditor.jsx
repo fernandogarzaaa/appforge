@@ -154,7 +154,7 @@ export default function CollaborativeEditor({ documentId, initialContent = '' })
   // Save document
   const handleSave = () => {
     setSavedContent(content);
-    setLastSavedVersion(documentVersion);
+    _setLastSavedVersion(documentVersion);
 
     sendEdit({
       type: 'save',

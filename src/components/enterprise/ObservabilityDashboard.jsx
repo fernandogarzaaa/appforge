@@ -35,7 +35,14 @@ export default function ObservabilityDashboard() {
     source: 'Gateway',
   });
 
-  useEffect(() => subscribe(setSnapshot), []);
+  useEffect(() => {
+    const unsubscribe = subscribe(setSnapshot);
+    return () => {
+      if (typeof unsubscribe === 'function') {
+        unsubscribe();
+      }
+    };
+  }, []);
 
   const latestMetrics = useMemo(() => snapshot.metrics.slice(0, 8), [snapshot]);
   const latestTraces = useMemo(() => snapshot.traces.slice(0, 4), [snapshot]);
@@ -174,7 +181,7 @@ export default function ObservabilityDashboard() {
             <input
               type="number"
               value={metricValue}
-              onChange={(e) => setMetricValue(e.target.value)}
+              onChange={(e) => setMetricValue(Number(e.target.value) || 0)}
               className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-sm bg-white dark:bg-gray-900"
             />
             <button

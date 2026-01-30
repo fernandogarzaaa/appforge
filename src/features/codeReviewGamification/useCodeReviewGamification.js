@@ -207,8 +207,7 @@ export function useCodeReviewGamification() {
     return {
       reviews: {
         current: userStats.reviewsCompleted,
-        targets: [1, 10, 50, 100],
-        current: userStats.reviewsCompleted
+        targets: [1, 10, 50, 100]
       },
       streak: {
         current: userStats.currentStreak,

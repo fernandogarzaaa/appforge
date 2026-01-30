@@ -168,7 +168,7 @@ export class SearchIndex {
     // Cache results
     this._cacheResults(cacheKey, searchResults);
 
-    return searchResults;
+    return /** @type {any} */ (searchResults);
   }
 
   /**

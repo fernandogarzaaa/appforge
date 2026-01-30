@@ -25,7 +25,7 @@ export default function APIKeyManager() {
   const createKeyMutation = {
     mutate: async (data) => {
       try {
-        const key = await createKey(data.name, data.scopes);
+        const key = await createKey({ name: data.name, scopes: data.scopes });
         setNewKey(key);
         toast.success('API key created successfully');
       } catch (error) {
@@ -48,7 +48,7 @@ export default function APIKeyManager() {
 
   const _handleCreateKey = async (name, scopes) => {
     try {
-      const newKey = await createKey(name, scopes);
+      const newKey = await createKey({ name, scopes });
       toast.success('API key created successfully');
       return newKey;
     } catch (error) {

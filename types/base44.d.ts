@@ -87,6 +87,7 @@ declare module '@base44/sdk' {
   }
 
   export interface EntityCRUD {
+    filter(filters: {}): unknown;
     list(options?: any): Promise<{ data: any[] }>;
     get(id: string): Promise<{ data: any }>;
     create(data: any): Promise<{ data: any }>;

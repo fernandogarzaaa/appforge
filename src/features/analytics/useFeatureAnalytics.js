@@ -42,7 +42,7 @@ export function useFeatureAnalytics() {
     }
 
     updated[featureName].usageCount++;
-    updated[featureUsage][featureName].lastUsed = new Date().toISOString();
+    updated[featureName].lastUsed = new Date().toISOString();
 
     setFeatureUsage(updated);
     localStorage.setItem('appforge_feature_usage', JSON.stringify(updated));
@@ -188,7 +188,7 @@ export function useFeatureAnalytics() {
     // Usage frequency (0-40 points)
     score += Math.min(40, usage.usageCount / 10);
     // User adoption (0-40 points)
-    score += parseFloat(getFeatureAdoption(featureName)) * 0.4;
+    score += parseFloat(String(getFeatureAdoption(featureName))) * 0.4;
     // Consistency (0-20 points)
     const daysSince = Math.floor(
       (Date.now() - new Date(usage.lastUsed || usage.firstUsed).getTime()) / (1000 * 60 * 60 * 24)

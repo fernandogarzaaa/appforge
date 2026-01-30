@@ -455,7 +455,8 @@ userSchema.index({ createdAt: -1 });
 
 ### Response Compression
 
-Already enabled with `compression()` middleware. Gzip is automatic for responses >1KB.
+Already enabled with `compression()` middleware. Gzip is automatic for
+responses >1KB.
 
 ## Security Best Practices
 

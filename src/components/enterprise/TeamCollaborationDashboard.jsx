@@ -3,16 +3,14 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+// Tab components not used in this file
 import { Input } from '@/components/ui/input';
 import { 
   Users, 
   Activity, 
   MessageSquare, 
   AtSign,
-  Circle,
   Send,
-  Bell,
   TrendingUp
 } from 'lucide-react';
 import { UserPresence, ActivityFeed, Mentions, CollaborativeRoom } from '@/utils/collaboration';

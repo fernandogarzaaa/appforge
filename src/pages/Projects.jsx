@@ -75,6 +75,7 @@ export default function Projects() {
     // Silent fail - backend projects are optional
   });
 
+  /** @type {import('@tanstack/react-query').UseMutationResult<any, Error, {name: string; status?: string; color?: string; icon?: string; description?: string;}>} */
   const createMutation = useMutation({
     mutationFn: async (data) => {
       console.log('Mutation called with:', data);
@@ -95,6 +96,7 @@ export default function Projects() {
     },
   });
 
+  /** @type {import('@tanstack/react-query').UseMutationResult<any, Error, string>} */
   const deleteMutation = useMutation({
     mutationFn: (id) => base44.entities.Project.delete(id),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['projects'] }),

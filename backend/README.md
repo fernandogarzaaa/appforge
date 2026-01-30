@@ -1,10 +1,11 @@
 # AppForge Backend REST API
 
-> Complete, production-ready Express.js REST API for AppForge platform with quantum computing, real-time collaboration, data security, and user management.
+> Complete, production-ready Express.js REST API for AppForge platform with
+quantum computing, real-time collaboration, data security, and user management.
 
-[![Status](https://img.shields.io/badge/status-production%20ready-brightgreen)]()
-[![Node Version](https://img.shields.io/badge/node-18%2B-brightgreen)]()
-[![License](https://img.shields.io/badge/license-MIT-blue)]()
+[![Status](https://img.shields.io/badge/status-production%20ready-brightgreen)](#status)
+[![Node Version](https://img.shields.io/badge/node-18%2B-brightgreen)](#requirements)
+[![License](https://img.shields.io/badge/license-MIT-blue)](#license)
 
 ## 🚀 Quick Start
 

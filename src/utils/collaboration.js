@@ -186,7 +186,7 @@ export class ActivityFeed {
    * @param {string} projectId - Project ID (optional)
    * @returns {Object} Activity stats
    */
-  static getStats(projectId) {
+  static getStats(projectId = null) {
     let activities = collaborationStore.activities;
     
     if (projectId) {

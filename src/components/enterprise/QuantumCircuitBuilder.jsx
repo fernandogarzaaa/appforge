@@ -50,13 +50,13 @@ export default function QuantumCircuitBuilder() {
         newCircuit = QuantumAlgorithms.bellStateGenerator(algorithmParams.numPairs).circuit
         break
       case 'grover':
-        newCircuit = QuantumAlgorithms.groversAlgorithm(algorithmParams.numQubits, 1).circuit
+        newCircuit = QuantumAlgorithms.groversAlgorithm(algorithmParams?.numQubits || algorithmParams?.numPairs || 1, 1).circuit
         break
       case 'deutsch':
-        newCircuit = QuantumAlgorithms.deutschJozsaAlgorithm(algorithmParams.numQubits).circuit
+        newCircuit = QuantumAlgorithms.deutschJozsaAlgorithm(algorithmParams?.numQubits || algorithmParams?.numPairs || 1).circuit
         break
       case 'qft':
-        newCircuit = QuantumAlgorithms.quantumFourierTransform(algorithmParams.numQubits).circuit
+        newCircuit = QuantumAlgorithms.quantumFourierTransform(algorithmParams?.numQubits || algorithmParams?.numPairs || 1).circuit
         break
       default:
         return

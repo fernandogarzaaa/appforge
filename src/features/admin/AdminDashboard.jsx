@@ -140,12 +140,12 @@ export const AdminDashboard = () => {
             <div className="bg-slate-800 rounded-lg p-4">
               <div className="flex justify-between items-center mb-2">
                 <span className="text-slate-300">CPU Usage</span>
-                <span className="text-slate-400 text-sm">{systemHealth.cpu || 0}%</span>
+                <span className="text-slate-400 text-sm">{systemHealth.cpuUsage || 0}%</span>
               </div>
               <div className="w-full bg-slate-700 rounded-full h-2">
                 <div
-                  className={`h-2 rounded-full ${getHealthStatus(100 - (systemHealth.cpu || 0)).color}`}
-                  style={{ width: `${systemHealth.cpu || 0}%` }}
+                  className={`h-2 rounded-full ${getHealthStatus(100 - (systemHealth.cpuUsage || 0)).color}`}
+                  style={{ width: `${systemHealth.cpuUsage || 0}%` }}
                 />
               </div>
               <p className="text-slate-400 text-xs mt-2">Optimal: &lt;70%</p>
@@ -155,12 +155,12 @@ export const AdminDashboard = () => {
             <div className="bg-slate-800 rounded-lg p-4">
               <div className="flex justify-between items-center mb-2">
                 <span className="text-slate-300">Memory Usage</span>
-                <span className="text-slate-400 text-sm">{systemHealth.memory || 0}%</span>
+                <span className="text-slate-400 text-sm">{systemHealth.memoryUsage || 0}%</span>
               </div>
               <div className="w-full bg-slate-700 rounded-full h-2">
                 <div
-                  className={`h-2 rounded-full ${getHealthStatus(100 - (systemHealth.memory || 0)).color}`}
-                  style={{ width: `${systemHealth.memory || 0}%` }}
+                  className={`h-2 rounded-full ${getHealthStatus(100 - (systemHealth.memoryUsage || 0)).color}`}
+                  style={{ width: `${systemHealth.memoryUsage || 0}%` }}
                 />
               </div>
               <p className="text-slate-400 text-xs mt-2">Optimal: &lt;80%</p>

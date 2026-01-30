@@ -199,7 +199,7 @@ export function GitWorkflowsManager() {
             value={commitMessage}
             onChange={(e) => setCommitMessage(e.target.value)}
             className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded bg-white dark:bg-slate-700 text-slate-900 dark:text-white resize-none"
-            rows="3"
+            rows={3}
           />
           <button
             onClick={handleLintMessage}

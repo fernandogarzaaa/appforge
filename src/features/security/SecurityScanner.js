@@ -113,19 +113,19 @@ export const scanDependencies = (packageJson) => {
     ...packageJson.devDependencies || {}
   };
 
-  Object.entries(deps).forEach(([package, version]) => {
-    const vulns = knownVulnerabilities.filter(v => v.package === package);
+  Object.entries(deps).forEach(([packageName, version]) => {
+    const vulns = knownVulnerabilities.filter(v => v.package === packageName);
     vulns.forEach(vuln => {
       if (versionInRange(version, vuln.affectedVersions)) {
         vulnerabilities.push({
           id: `DEP_${vuln.cveId}`,
           type: 'DEPENDENCY_VULNERABILITY',
-          package,
+          package: packageName,
           version,
           cveId: vuln.cveId,
           severity: vuln.severity,
           description: vuln.description,
-          recommendation: `Update ${package} to version ${vuln.patchedVersion}`,
+          recommendation: `Update ${packageName} to version ${vuln.patchedVersion}`,
           url: `https://nvd.nist.gov/vuln/detail/${vuln.cveId}`
         });
       }

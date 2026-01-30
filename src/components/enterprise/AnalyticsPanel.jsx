@@ -74,8 +74,11 @@ export default function AnalyticsPanel() {
     analytics.flushAnalytics();
     // Show toast notification
     const btn = event.target;
-    btn.textContent = 'Flushed!';
-    setTimeout(() => { btn.textContent = 'Flush Now'; }, 2000);
+    const button = btn;
+    if (button instanceof HTMLElement) {
+      button.textContent = 'Flushed!';
+      setTimeout(() => { button.textContent = 'Flush Now'; }, 2000);
+    }
   };
 
   const getChartData = () => {

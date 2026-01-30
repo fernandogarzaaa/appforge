@@ -69,7 +69,7 @@
    - Get teams
 
 ### Routes (5 files - 410 lines)
-6. **backend/src/routes/authRoutes.js** (60 lines)
+1. **backend/src/routes/authRoutes.js** (60 lines)
    - POST /api/auth/register
    - POST /api/auth/login
    - POST /api/auth/refresh

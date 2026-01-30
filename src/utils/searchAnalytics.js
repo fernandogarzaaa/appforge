@@ -2,6 +2,7 @@
  * Search Analytics System
  * Tracks and analyzes search behavior, popular queries, and search performance
  */
+import React from 'react';
 
 // In-memory storage for search analytics
 const searchAnalyticsStore = {
@@ -307,7 +308,11 @@ export function useSearchAnalytics() {
     const unsubscribe = SearchAnalytics.subscribe(() => {
       setMetrics(SearchAnalytics.getMetrics());
     });
-    return unsubscribe;
+    return () => {
+      if (typeof unsubscribe === 'function') {
+        unsubscribe();
+      }
+    };
   }, []);
 
   return {

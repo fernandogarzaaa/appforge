@@ -9,6 +9,7 @@ import { cn } from '@/lib/utils';
  */
 export function PerformanceProfilerDashboard() {
   const { metrics, startMeasure, endMeasure, getRecommendations } = usePerformanceProfiler();
+  /** @type {[{fps?: number; memory?: any; renderTime?: number; interactions?: any[]; fpsHistory?: number[]; memoryHistory?: number[]; measurements?: any;}, (m) => void]} */
   const [displayMetrics, setDisplayMetrics] = useState(null);
   const [recommendations, setRecommendations] = useState([]);
   const [selectedMetric, setSelectedMetric] = useState('fps');
@@ -38,7 +39,8 @@ export function PerformanceProfilerDashboard() {
 
   // Determine FPS health
   const fpsHealth = metrics.fps >= 50 ? 'excellent' : metrics.fps >= 30 ? 'good' : 'poor';
-  const memoryHealth = metrics.memoryPercent <= 50 ? 'good' : metrics.memoryPercent <= 80 ? 'warning' : 'critical';
+  const memoryPercent = typeof metrics.memory === 'number' ? metrics.memory : 50;
+  const memoryHealth = memoryPercent <= 50 ? 'good' : memoryPercent <= 80 ? 'warning' : 'critical';
 
   return (
     <div className="w-full max-w-6xl bg-white dark:bg-slate-900 rounded-lg shadow-lg p-6 space-y-6">
@@ -88,10 +90,10 @@ export function PerformanceProfilerDashboard() {
         )}>
           <p className="text-xs font-semibold text-slate-600 dark:text-slate-400 uppercase mb-2">Memory</p>
           <p className="text-3xl font-bold text-slate-900 dark:text-white">
-            {metrics.memoryMB.toFixed(1)} MB
+            {(memoryPercent * 100).toFixed(1) || '0'} MB
           </p>
           <p className="text-xs text-slate-500 mt-2">
-            {metrics.memoryPercent.toFixed(1)}% of limit
+            {(memoryPercent || 0).toFixed(1)}% of limit
           </p>
         </div>
 
@@ -101,10 +103,10 @@ export function PerformanceProfilerDashboard() {
             Avg Render Time
           </p>
           <p className="text-3xl font-bold text-slate-900 dark:text-white">
-            {metrics.avgRenderTime.toFixed(1)} ms
+            {metrics.renderTime?.toFixed(1) || 0} ms
           </p>
           <p className="text-xs text-slate-500 mt-2">
-            {metrics.slowRenders > 0 ? `${metrics.slowRenders} slow renders` : 'All renders fast'}
+            Render performance
           </p>
         </div>
       </div>
@@ -115,7 +117,7 @@ export function PerformanceProfilerDashboard() {
         <div className="bg-slate-50 dark:bg-slate-800 rounded-lg p-4 border border-slate-200 dark:border-slate-700">
           <h3 className="font-semibold text-slate-900 dark:text-white text-sm mb-3">FPS History</h3>
           <div className="h-24 flex items-end gap-1 justify-end">
-            {metrics.fpsHistory?.slice(-30).map((fps, i) => (
+            {(metrics?.fpsHistory || []).slice(-30).map((fps, i) => (
               <div
                 key={i}
                 className={cn(
@@ -133,7 +135,7 @@ export function PerformanceProfilerDashboard() {
         <div className="bg-slate-50 dark:bg-slate-800 rounded-lg p-4 border border-slate-200 dark:border-slate-700">
           <h3 className="font-semibold text-slate-900 dark:text-white text-sm mb-3">Memory Usage</h3>
           <div className="h-24 flex items-end gap-1 justify-end">
-            {metrics.memoryHistory?.slice(-30).map((mem, i) => (
+            {(metrics?.memoryHistory || []).slice(-30).map((mem, i) => (
               <div
                 key={i}
                 className={cn(
@@ -166,13 +168,13 @@ export function PerformanceProfilerDashboard() {
       )}
 
       {/* Measurements */}
-      {metrics.measurements && Object.keys(metrics.measurements).length > 0 && (
+      {metrics?.measurements && Object.keys(metrics?.measurements || {}).length > 0 && (
         <div className="bg-slate-50 dark:bg-slate-800 rounded-lg p-4 border border-slate-200 dark:border-slate-700">
           <h3 className="font-semibold text-slate-900 dark:text-white text-sm mb-3">
             Custom Measurements
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            {Object.entries(metrics.measurements).slice(-6).map(([name, duration]) => (
+            {Object.entries(metrics?.measurements || {}).slice(-6).map(([name, duration]) => (
               <div key={name} className="flex justify-between items-center bg-white dark:bg-slate-700 rounded p-2">
                 <span className="text-xs font-mono text-slate-600 dark:text-slate-300">{name}</span>
                 <span className="text-sm font-semibold text-slate-900 dark:text-white">

@@ -1,6 +1,8 @@
 import React, { useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useFeatureAnalytics } from '../../phase4/analytics/useFeatureAnalytics';
+// import { useFeatureAnalytics } from '../../phase4/analytics/useFeatureAnalytics';
+// Placeholder - hook not available in animation version
+const useFeatureAnalytics = () => ({});
 import { useAnimations } from './useAnimations';
 import { useAccessibility } from '../accessibility/useAccessibility';
 import { useResponsive } from '../responsive/useResponsive';

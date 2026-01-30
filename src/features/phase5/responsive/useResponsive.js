@@ -232,6 +232,7 @@ export const useResponsive = () => {
     return (
       ('ontouchstart' in window) ||
       (navigator.maxTouchPoints > 0) ||
+      // @ts-ignore - msMaxTouchPoints is deprecated but may exist in older browsers
       (navigator.msMaxTouchPoints > 0)
     );
   }, []);

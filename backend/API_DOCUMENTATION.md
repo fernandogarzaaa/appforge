@@ -1,7 +1,8 @@
 # AppForge Backend REST API Documentation
 
 ## Overview
-Complete REST API for AppForge with support for quantum computing, real-time collaboration, data security, and user management.
+Complete REST API for AppForge with support for quantum computing, real-time
+collaboration, data security, and user management.
 
 **Base URL:** `http://localhost:5000/api`  
 **API Version:** 1.0.0  

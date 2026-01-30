@@ -30,6 +30,12 @@ export default function ProjectViewer() {
     enabled: !!id,
   });
 
+  // Type-safe array references
+  /** @type {any[]} */
+  const entitiesArray = entities || [];
+  /** @type {any[]} */
+  const pagesArray = pages || [];
+
   // Generate custom content based on project description
   const generateCustomContent = () => {
     if (!project) return null;
@@ -261,11 +267,11 @@ export default function ProjectViewer() {
             </TabsTrigger>
             <TabsTrigger value="database" className="gap-2">
               <Database className="w-4 h-4" />
-              Database ({entities.length})
+              Database ({entitiesArray.length})
             </TabsTrigger>
             <TabsTrigger value="pages" className="gap-2">
               <FileCode className="w-4 h-4" />
-              Pages ({pages.length})
+              Pages ({pagesArray.length})
             </TabsTrigger>
           </TabsList>
 
@@ -303,9 +309,9 @@ export default function ProjectViewer() {
                 </div>
 
                 {/* Show entities if they exist */}
-                {entities.length > 0 && (
+                {entitiesArray.length > 0 && (
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
-                    {entities.map((entity) => (
+                    {entitiesArray.map((entity) => (
                       <div key={entity.id} className="bg-white rounded-lg shadow-md p-6 border border-gray-200">
                         <Database className="w-8 h-8 text-indigo-600 mb-3" />
                         <h3 className="text-lg font-semibold text-gray-900 mb-2">{entity.name}</h3>
@@ -318,7 +324,7 @@ export default function ProjectViewer() {
                 )}
 
                 {/* Show custom generated content */}
-                {entities.length === 0 && customContent && (
+                {entitiesArray.length === 0 && customContent && (
                   <div className="max-w-4xl mx-auto">
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
                       {customContent.features.map((feature, idx) => (
@@ -337,7 +343,7 @@ export default function ProjectViewer() {
 
           <TabsContent value="database">
             <div className="space-y-4">
-              {entities.map((entity, idx) => (
+              {entitiesArray.map((entity, idx) => (
                 <div key={entity.id || idx} className="bg-white rounded-lg border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow">
                   {/* Entity Header */}
                   <div className="bg-gradient-to-r from-indigo-50 to-purple-50 px-6 py-4 border-b border-gray-200">
@@ -480,7 +486,7 @@ export default function ProjectViewer() {
                   )}
                 </div>
               ))}
-              {entities.length === 0 && (
+              {entitiesArray.length === 0 && (
                 <div className="text-center py-12 bg-white rounded-lg border border-gray-200">
                   <Database className="w-12 h-12 text-gray-300 mx-auto mb-3" />
                   <p className="text-gray-500">No database entities yet</p>
@@ -491,7 +497,7 @@ export default function ProjectViewer() {
 
           <TabsContent value="pages">
             <div className="space-y-4">
-              {pages.map((page) => (
+              {pagesArray.map((page) => (
                 <div key={page.id} className="bg-white rounded-lg shadow border border-gray-200 p-6">
                   <div className="flex items-center justify-between">
                     <div>
@@ -505,7 +511,7 @@ export default function ProjectViewer() {
                   </div>
                 </div>
               ))}
-              {pages.length === 0 && (
+              {pagesArray.length === 0 && (
                 <div className="text-center py-12 bg-white rounded-lg border border-gray-200">
                   <FileCode className="w-12 h-12 text-gray-300 mx-auto mb-3" />
                   <p className="text-gray-500">No pages created yet</p>

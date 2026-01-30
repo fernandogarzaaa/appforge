@@ -1,6 +1,6 @@
 import { useEffect, useState, createContext, useContext } from 'react';
 
-const ThemeContext = createContext();
+const ThemeContext = createContext(null);
 
 /**
  * Theme management hook with custom themes and time-based switching

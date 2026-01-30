@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Activity, Users, Settings, AlertCircle, BarChart3, FileJson, Trash2, Plus } from 'lucide-react';
-import { useAdminDashboard } from '../../phase4/admin/useAdminDashboard';
+// import { useAdminDashboard } from '../../phase4/admin/useAdminDashboard';
+// Placeholder - hook not available in animation version
+const useAdminDashboard = () => ({});
 import { useAnimations } from './useAnimations';
 import { useAccessibility } from '../accessibility/useAccessibility';
 import { useResponsive } from '../responsive/useResponsive';

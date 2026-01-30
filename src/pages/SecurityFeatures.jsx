@@ -32,6 +32,7 @@ export default function Security() {
   });
 
   // Encrypt mutation
+  /** @type {import('@tanstack/react-query').UseMutationResult<any, Error, string>} */
   const encryptMutation = useMutation({
     mutationFn: (text) => securityService.encrypt(text),
     onSuccess: (data) => {
@@ -42,12 +43,13 @@ export default function Security() {
       toast({
         variant: 'destructive',
         title: 'Encryption failed',
-        description: error.response?.data?.message || 'An error occurred'
+        description: error.message || 'An error occurred'
       });
     }
   });
 
   // Decrypt mutation
+  /** @type {import('@tanstack/react-query').UseMutationResult<any, Error, string>} */
   const decryptMutation = useMutation({
     mutationFn: (encrypted) => securityService.decrypt(encrypted),
     onSuccess: (data) => {
@@ -58,12 +60,13 @@ export default function Security() {
       toast({
         variant: 'destructive',
         title: 'Decryption failed',
-        description: error.response?.data?.message || 'An error occurred'
+        description: error.message || 'An error occurred'
       });
     }
   });
 
   // Anonymize mutation
+  /** @type {import('@tanstack/react-query').UseMutationResult<any, Error, string>} */
   const anonymizeMutation = useMutation({
     mutationFn: (text) => securityService.anonymize(text),
     onSuccess: (data) => {
@@ -74,12 +77,13 @@ export default function Security() {
       toast({
         variant: 'destructive',
         title: 'Anonymization failed',
-        description: error.response?.data?.message || 'An error occurred'
+        description: error.message || 'An error occurred'
       });
     }
   });
 
   // Submit GDPR request
+  /** @type {import('@tanstack/react-query').UseMutationResult<any, Error, string>} */
   const gdprRequestMutation = useMutation({
     mutationFn: (type) => securityService.submitGdprRequest(type),
     onSuccess: () => {
@@ -93,7 +97,7 @@ export default function Security() {
       toast({
         variant: 'destructive',
         title: 'Request failed',
-        description: error.response?.data?.message || 'An error occurred'
+        description: error.message || 'An error occurred'
       });
     }
   });

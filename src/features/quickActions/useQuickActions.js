@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 
 /**
  * Quick Actions Manager
@@ -26,7 +26,7 @@ export function useQuickActions() {
   }, [hideContextMenu]);
 
   // Close menu on click outside
-  useState(() => {
+  useEffect(() => {
     const handleClick = () => hideContextMenu();
     document.addEventListener('click', handleClick);
     return () => document.removeEventListener('click', handleClick);
