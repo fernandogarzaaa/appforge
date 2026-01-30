@@ -1,3 +1,4 @@
+<!-- markdownlint-disable MD013 MD026 -->
 # Phase 6-8 Complete: Enterprise Features Implementation
 
 ## 🎉 Overview

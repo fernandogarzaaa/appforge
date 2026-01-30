@@ -1,3 +1,4 @@
+<!-- markdownlint-disable MD013 MD024 MD036 -->
 # Implementation Summary: AppForge Recommendations
 
 **Completion Date:** January 28, 2026

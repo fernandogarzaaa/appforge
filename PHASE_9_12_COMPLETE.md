@@ -1,3 +1,4 @@
+<!-- markdownlint-disable MD013 MD036 -->
 # Phase 9-12 Implementation Complete! 🎉
 
 ## Summary of Major Enhancements

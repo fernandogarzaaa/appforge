@@ -1,3 +1,4 @@
+<!-- markdownlint-disable MD013 -->
 # Search Analytics & Indexing - Implementation Summary
 
 ## Overview

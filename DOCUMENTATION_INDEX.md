@@ -1,3 +1,4 @@
+<!-- markdownlint-disable MD013 -->
 # AppForge Documentation Index
 
 Complete index of all documentation files for easy navigation.

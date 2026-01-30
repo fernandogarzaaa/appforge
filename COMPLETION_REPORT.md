@@ -1,3 +1,4 @@
+<!-- markdownlint-disable MD013 MD024 MD036 -->
 # ✅ COMPLETION REPORT: All 10 Recommendations Implemented
 
 **Project:** AppForge Payment Integration Documentation  

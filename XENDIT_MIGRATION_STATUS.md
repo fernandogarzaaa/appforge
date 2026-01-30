@@ -1,3 +1,4 @@
+<!-- markdownlint-disable MD013 MD026 -->
 # ✅ Xendit Migration Complete - Ready for Testing
 
 ## Migration Status: **95% Complete**
