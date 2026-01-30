@@ -1,3 +1,4 @@
+<!-- markdownlint-disable MD013 MD026 -->
 # UI Enhancement Summary
 
 ## Overview

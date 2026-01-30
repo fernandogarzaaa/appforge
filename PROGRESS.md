@@ -1,3 +1,4 @@
+<!-- markdownlint-disable MD058 -->
 # AppForge Development Progress Summary
 
 ## 📊 Overall Status: Phase 4 Complete (6,300+ lines deployed)

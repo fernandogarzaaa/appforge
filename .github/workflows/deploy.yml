@@ -45,6 +45,8 @@ jobs:
       - name: Build application
         run: npm run build
         env:
+          # These secrets need to be configured in GitHub repository settings
+          # Go to Settings > Secrets and variables > Actions > New repository secret
           VITE_BASE44_USERNAME: ${{ secrets.BASE44_USERNAME }}
           VITE_BASE44_PASSWORD: ${{ secrets.BASE44_PASSWORD }}
           VITE_BASE44_API_URL: ${{ secrets.BASE44_API_URL }}
