@@ -1,3 +1,4 @@
+<!-- markdownlint-disable MD009 MD025 -->
 # AppForge Website Building Process - Visual Summary
 
 ## 🎯 Can You Build a Website? 

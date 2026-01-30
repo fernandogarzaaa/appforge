@@ -1,3 +1,4 @@
+<!-- markdownlint-disable MD013 MD026 -->
 # AI Model Router - Quick Reference
 
 ## 🎯 Routing at a Glance

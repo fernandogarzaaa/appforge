@@ -1,3 +1,4 @@
+<!-- markdownlint-disable MD013 MD036 -->
 # AppForge Positioning Strategy: Superior to Base44
 
 ## 🎯 Core Positioning Statement

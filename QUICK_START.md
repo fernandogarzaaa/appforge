@@ -1,3 +1,4 @@
+<!-- markdownlint-disable MD013 -->
 # Quick Start Guide - New Features
 
 ## 🎯 Getting Started with AppForge's New Features

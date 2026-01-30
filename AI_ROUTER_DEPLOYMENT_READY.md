@@ -1,3 +1,4 @@
+<!-- markdownlint-disable MD013 MD024 -->
 # 🎉 AI Model Router - Implementation Complete
 
 ## ✅ Project Status: PRODUCTION READY

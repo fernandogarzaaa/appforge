@@ -1,3 +1,4 @@
+<!-- markdownlint-disable MD013 -->
 # 🤖 AI Model Router Implementation - Complete Summary
 
 **Date:** January 28, 2026  

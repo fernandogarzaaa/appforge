@@ -1,3 +1,4 @@
+<!-- markdownlint-disable MD013 MD024 -->
 # 🚀 Implementation Priority & Phased Rollout Plan
 
 **Current Version:** 0.0.0  

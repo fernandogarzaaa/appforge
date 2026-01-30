@@ -1,3 +1,4 @@
+<!-- markdownlint-disable MD013 MD025 -->
 # AppForge vs Base44: Superior Platform Comparison
 
 ## 🎯 Executive Summary
