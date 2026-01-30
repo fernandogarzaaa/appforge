@@ -46,7 +46,9 @@ describe('Team Invites Utilities', () => {
       const expiry = calculateInviteExpiry();
       const now = new Date();
       const diffDays = Math.floor((expiry - now) / (1000 * 60 * 60 * 24));
-      expect(diffDays).toBe(7);
+      // Allow 6 or 7 days to account for timing at day boundaries
+      expect(diffDays).toBeGreaterThanOrEqual(6);
+      expect(diffDays).toBeLessThanOrEqual(7);
     });
   });
 
