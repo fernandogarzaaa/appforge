@@ -167,6 +167,7 @@ npx playwright test  # Terminal 2
 - Lazy-loaded feature bundles
 
 ### Largest Bundles
+
 | Module | Size | Gzipped | Component |
 |--------|------|---------|-----------|
 | vendor-charts | 456.46 kB | 119.60 kB | Analytics charts |
