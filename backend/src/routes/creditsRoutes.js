@@ -4,12 +4,13 @@
  * Updated: January 2026
  */
 
-const express = require('express');
+import express from 'express';
+import { CreditManager } from '../models/UserCredits.js';
+import { StripeService } from '../services/stripeService.js';
+import SubscriptionTierCalculator from '../services/subscriptionTierCalculator.js';
+import { checkCreditsMiddleware } from '../middleware/costProtection.js';
+
 const router = express.Router();
-const { CreditManager } = require('../models/UserCredits');
-const { StripeService } = require('../services/stripeService');
-const SubscriptionTierCalculator = require('../services/subscriptionTierCalculator');
-const { checkCreditsMiddleware } = require('../middleware/costProtection');
 
 const calculator = new SubscriptionTierCalculator(0.80);
 
@@ -266,4 +267,4 @@ router.get('/recommendations', async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

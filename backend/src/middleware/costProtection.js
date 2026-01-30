@@ -4,9 +4,9 @@
  * Updated: January 2026
  */
 
-const { CreditManager } = require('../models/UserCredits');
-const { calculateApiCost } = require('../config/apiPricing');
-const SubscriptionTierCalculator = require('../services/subscriptionTierCalculator');
+import { CreditManager } from '../models/UserCredits.js';
+import { calculateApiCost } from '../config/apiPricing.js';
+import SubscriptionTierCalculator from '../services/subscriptionTierCalculator.js';
 
 const calculator = new SubscriptionTierCalculator(0.80);
 
@@ -232,7 +232,7 @@ const rateLimitByTierMiddleware = (req, res, next) => {
   }
 };
 
-module.exports = {
+export {
   checkCreditsMiddleware,
   deductCreditsMiddleware,
   checkTierLimitsMiddleware,

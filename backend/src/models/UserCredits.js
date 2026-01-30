@@ -4,7 +4,7 @@
  * Updated: January 2026
  */
 
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 // User Credits Schema
 const userCreditsSchema = new mongoose.Schema({
@@ -397,9 +397,5 @@ class CreditManager {
   }
 }
 
-module.exports = {
-  UserCredits,
-  ApiUsageLog,
-  MonthlySummary,
-  CreditManager
-};
+export { UserCredits, ApiUsageLog, MonthlySummary, CreditManager };
+export default { UserCredits, ApiUsageLog, MonthlySummary, CreditManager };

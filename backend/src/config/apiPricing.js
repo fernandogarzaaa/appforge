@@ -4,7 +4,7 @@
  * Updated: January 2026
  */
 
-const API_PRICING = {
+export const API_PRICING = {
   // OpenAI Pricing (per 1K tokens)
   openai: {
     provider: 'OpenAI',
@@ -134,7 +134,7 @@ const API_PRICING = {
  * @param {number} outputTokens - Number of output tokens
  * @returns {number} Cost in dollars
  */
-const calculateApiCost = (provider, model, inputTokens, outputTokens) => {
+export const calculateApiCost = (provider, model, inputTokens = 0, outputTokens = 0) => {
   const providerConfig = API_PRICING[provider];
   if (!providerConfig) return 0;
 
@@ -157,7 +157,4 @@ const calculateApiCost = (provider, model, inputTokens, outputTokens) => {
   return Math.round(cost * 10000) / 10000; // Round to 4 decimals
 };
 
-module.exports = {
-  API_PRICING,
-  calculateApiCost
-};
+export default { API_PRICING, calculateApiCost };

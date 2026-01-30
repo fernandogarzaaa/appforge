@@ -16,6 +16,8 @@ import securityRoutes from './routes/securityRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 import teamRoutes from './routes/teamRoutes.js';
 import permissionRoutes from './routes/permissionRoutes.js';
+import creditsRoutes from './routes/creditsRoutes.js';
+import { handleStripeWebhook } from './services/stripeService.js';
 import WebSocketServer from './websocket/index.js';
 
 // Load environment variables
@@ -46,6 +48,13 @@ if (NODE_ENV === 'development') {
 } else {
   app.use(morgan('combined'));
 }
+
+// Stripe webhook endpoint (MUST be before body parser middleware)
+// Stripe requires raw body for signature verification
+app.post('/webhook/stripe', 
+  express.raw({ type: 'application/json' }),
+  handleStripeWebhook
+);
 
 // Body parser middleware
 app.use(express.json({ limit: '50mb' }));
@@ -87,6 +96,7 @@ app.use('/api/security', securityRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/teams', teamRoutes);
 app.use('/api/permissions', permissionRoutes);
+app.use('/api/credits', creditsRoutes);
 
 // 404 handler
 app.use((req, res) => {

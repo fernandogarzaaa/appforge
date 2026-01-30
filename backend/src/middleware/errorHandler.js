@@ -3,6 +3,20 @@
  * Catches all errors and formats them consistently
  */
 
+/**
+ * Custom Application Error class
+ */
+export class AppError extends Error {
+  constructor(message, statusCode = 500) {
+    super(message);
+    this.statusCode = statusCode;
+    this.status = `${statusCode}`.startsWith('4') ? 'fail' : 'error';
+    this.isOperational = true;
+
+    Error.captureStackTrace(this, this.constructor);
+  }
+}
+
 const errorHandler = (err, req, res, next) => {
   const status = err.status || err.statusCode || 500;
   const message = err.message || 'Internal Server Error';
@@ -78,4 +92,5 @@ const errorHandler = (err, req, res, next) => {
   });
 };
 
+export { errorHandler };
 export default errorHandler;

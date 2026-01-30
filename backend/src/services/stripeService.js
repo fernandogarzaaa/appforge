@@ -4,9 +4,13 @@
  * Updated: January 2026
  */
 
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
-const SubscriptionTierCalculator = require('../services/subscriptionTierCalculator');
-const { CreditManager } = require('../models/UserCredits');
+import Stripe from 'stripe';
+import SubscriptionTierCalculator from './subscriptionTierCalculator.js';
+import { CreditManager } from '../models/UserCredits.js';
+
+const stripe = process.env.STRIPE_SECRET_KEY 
+  ? new Stripe(process.env.STRIPE_SECRET_KEY)
+  : null;
 
 const calculator = new SubscriptionTierCalculator(0.80); // 80% profit margin
 
@@ -165,7 +169,7 @@ class StripeService {
     const userId = subscription.metadata?.userId;
     if (!userId) return;
 
-    const { UserCredits } = require('../models/UserCredits');
+    const { UserCredits } = await import('../models/UserCredits.js');
     const credits = await UserCredits.findOne({ userId });
 
     if (credits) {
@@ -193,7 +197,7 @@ class StripeService {
     const userId = invoice.subscription_details?.metadata?.userId;
     if (!userId) return;
 
-    const { UserCredits } = require('../models/UserCredits');
+    const { UserCredits } = await import('../models/UserCredits.js');
     const credits = await UserCredits.findOne({ userId });
 
     if (credits) {
@@ -209,7 +213,7 @@ class StripeService {
     const userId = invoice.subscription_details?.metadata?.userId;
     if (!userId) return;
 
-    const { UserCredits } = require('../models/UserCredits');
+    const { UserCredits } = await import('../models/UserCredits.js');
     const credits = await UserCredits.findOne({ userId });
 
     if (credits) {
@@ -296,7 +300,5 @@ const handleStripeWebhook = async (event) => {
   }
 };
 
-module.exports = {
-  StripeService,
-  handleStripeWebhook
-};
+export { StripeService, handleStripeWebhook };
+export default StripeService;

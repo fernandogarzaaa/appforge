@@ -4,7 +4,7 @@
  * Updated: January 2026
  */
 
-const { API_PRICING, calculateApiCost } = require('./apiPricing');
+import { API_PRICING, calculateApiCost } from '../config/apiPricing.js';
 
 /**
  * Calculate fair user subscription price based on 80% profit margin
@@ -232,4 +232,4 @@ class SubscriptionTierCalculator {
   }
 }
 
-module.exports = SubscriptionTierCalculator;
+export default SubscriptionTierCalculator;
