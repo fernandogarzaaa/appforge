@@ -6,6 +6,7 @@ import { base44 } from '@/api/base44Client';
 import { ExternalLink, Code, Eye, Database, FileCode, Globe } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import LivePreview from '@/components/preview/LivePreview';
 
 export default function ProjectViewer() {
   const { id } = useParams();
@@ -266,6 +267,10 @@ export default function ProjectViewer() {
               <Eye className="w-4 h-4" />
               Live Preview
             </TabsTrigger>
+            <TabsTrigger value="live-preview" className="gap-2">
+              <Globe className="w-4 h-4" />
+              Real-Time Preview
+            </TabsTrigger>
             <TabsTrigger value="database" className="gap-2">
               <Database className="w-4 h-4" />
               Database ({entitiesArray.length})
@@ -275,6 +280,10 @@ export default function ProjectViewer() {
               Pages ({pagesArray.length})
             </TabsTrigger>
           </TabsList>
+
+          <TabsContent value="live-preview">
+            <LivePreview projectId={id} />
+          </TabsContent>
 
           <TabsContent value="preview">
             <div className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">

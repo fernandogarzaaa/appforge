@@ -10,6 +10,8 @@ import { Textarea } from '@/components/ui/textarea';
 import { generateEnhancedEntities } from '@/utils/enhancedEntityGeneration';
 import { generateBusinessContent } from '@/utils/intelligentContentGenerator';
 import { AIAgent } from '@/utils/aiAgentCore';
+import { extractDomainContext, generateDomainSpecificPlan } from '@/utils/domainContextExtractor';
+import { QuantumInspiredAI } from '@/utils/quantumInspiredAI';
 import { useLLM } from '@/contexts/LLMContext';
 import ModelSelector from '@/components/ai/ModelSelector';
 import AIUsagePanel from '@/components/ai/AIUsagePanel';
@@ -108,10 +110,50 @@ export default function AIAssistant() {
   };
 
   const startAIAgentConversation = async (idea) => {
+    // 🧠 QUANTUM-ENHANCED PROMPT PROCESSING
+    // Step 1: Use quantum AI to analyze the prompt with superposition (parallel exploration)
+    const quantumAI = new QuantumInspiredAI();
+    
+    // Step 2: Extract domain context with AI
+    const domainContext = extractDomainContext(idea);
+    
+    // Step 3: Use quantum decision making for ambiguous prompts
+    let enhancedIdea = idea;
+    let confidenceBoost = '';
+    
+    if (domainContext.domain) {
+      const confidence = Math.round(domainContext.contextConfidence * 100);
+      confidenceBoost = `\n\n🎯 **AI Analysis**: Detected **${domainContext.domainName}** business (${confidence}% confidence)\n💡 **Key Features**: ${domainContext.matchedKeywords.slice(0, 3).join(', ')}`;
+      
+      // Use quantum decision making to optimize feature selection
+      try {
+        const options = domainContext.domain.features.map(f => ({
+          name: f,
+          criteria: {
+            relevance: domainContext.matchedKeywords.some(k => f.toLowerCase().includes(k.toLowerCase())) ? 0.9 : 0.5,
+            complexity: 0.6, // Medium complexity
+            value: 0.8 // High value
+          }
+        }));
+        
+        const optimalFeatures = quantumAI.quantumDecisionMaker(options, {
+          relevance: 0.5,
+          complexity: 0.2,
+          value: 0.3
+        });
+        
+        if (optimalFeatures && optimalFeatures.length > 0) {
+          confidenceBoost += `\n🚀 **Recommended Features**: ${optimalFeatures.slice(0, 3).map(f => f.name).join(', ')}`;
+        }
+      } catch (quantumError) {
+        console.warn('Quantum optimization skipped:', quantumError);
+      }
+    }
+    
     // Create initial welcome message from AI
     const welcomeMessage = {
       role: 'assistant',
-      content: `🎉 Awesome! I'm building: **"${idea}"**\n\n✨ Let me ask a few quick questions to make it perfect:\n\n1. Who will use this? (e.g., customers, team members, personal)\n2. What's the #1 thing it should do?\n3. Any must-have features?\n\n💡 **Meanwhile, I'm already:**\n- Creating your project\n- Setting up the database\n- Building the pages\n\nJust answer when ready, or type "go" and I'll use smart defaults!`,
+      content: `🎉 Awesome! I'm building: **"${idea}"**${confidenceBoost}\n\n✨ Let me ask a few quick questions to make it perfect:\n\n1. Who will use this? (e.g., customers, team members, personal)\n2. What's the #1 thing it should do?\n3. Any must-have features?\n\n💡 **Meanwhile, I'm already:**\n- 🧠 Analyzing with Quantum AI\n- 🎯 Using domain-specific knowledge\n- 🏗️ Creating your project\n- 📊 Setting up the database\n- 🎨 Building the pages\n\nJust answer when ready, or type "go" and I'll use smart defaults!`,
       timestamp: new Date().toISOString()
     };
 
@@ -138,8 +180,27 @@ export default function AIAssistant() {
       
       const projectName = extractProjectName(idea);
       
-      // Pre-detect features for metadata
-      const { features: detectedFeatures } = generateEnhancedEntities(idea);
+      // Use domain-specific plan if available (high confidence)
+      let detectedFeatures = {};
+      let enhancedEntities = [];
+      
+      if (domainContext.domain && domainContext.contextConfidence > 0.7) {
+        // Generate domain-specific plan with quantum optimization
+        const domainPlan = generateDomainSpecificPlan(idea, domainContext);
+        
+        if (domainPlan && domainPlan.entities) {
+          enhancedEntities = domainPlan.entities;
+          detectedFeatures = domainPlan.metadata?.features || {};
+          
+          console.log('📋 Using domain-specific plan:', domainPlan.name);
+          console.log('✨ Features:', Object.keys(detectedFeatures).filter(k => detectedFeatures[k]));
+        }
+      } else {
+        // Fallback to traditional entity generation
+        const entityGeneration = generateEnhancedEntities(idea);
+        enhancedEntities = entityGeneration.entities;
+        detectedFeatures = entityGeneration.features;
+      }
       
       const newProject = await base44.entities.Project.create({
         name: projectName,
@@ -149,6 +210,12 @@ export default function AIAssistant() {
         status: 'active',
         metadata: {
           ai_generated: true,
+          quantum_enhanced: true,
+          domain_context: domainContext.domain ? {
+            type: domainContext.domainName,
+            confidence: domainContext.contextConfidence,
+            keywords: domainContext.matchedKeywords
+          } : null,
           features: detectedFeatures,
           enhanced_schema: true,
           creation_timestamp: new Date().toISOString()
@@ -166,12 +233,9 @@ export default function AIAssistant() {
 
         // Actually create entities and pages based on the idea
         try {
-          // Use enhanced entity generation with advanced schemas, validations, and APIs
-          const { entities: enhancedEntities, features } = generateEnhancedEntities(idea);
-          
           setMessages(prev => [...prev, {
             role: 'assistant',
-            content: `🔧 **Detected Features**: ${Object.entries(features).filter(([_, v]) => v).map(([k]) => k).join(', ') || 'basic website'}\n📦 **Creating ${enhancedEntities.length} entities** with advanced schemas, validations, and API endpoints...`
+            content: `🔧 **Detected Features**: ${Object.entries(detectedFeatures).filter(([_, v]) => v).map(([k]) => k).join(', ') || 'basic website'}\n📦 **Creating ${enhancedEntities.length} entities** with advanced schemas, validations, and API endpoints...`
           }]);
 
           // Generate intelligent content based on business context
@@ -200,7 +264,7 @@ export default function AIAssistant() {
                 indexes: entityData.indexes || [],
                 relationships: entityData.relationships || [],
                 api_endpoints: entityData.api_endpoints || {},
-                features: features
+                features: detectedFeatures
               }
             });
             createdEntities.push(entity);
