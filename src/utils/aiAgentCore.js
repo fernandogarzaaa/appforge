@@ -2,9 +2,11 @@
  * AI Agent Core - Advanced AI Agent System
  * Provides autonomous, multi-step reasoning with tool usage and memory
  * Enhanced with Quantum-Inspired AI for superior performance
+ * Enhanced with Domain-Aware Context Extraction for domain-specific planning
  */
 
 import { QuantumInspiredAI } from './quantumInspiredAI';
+import { extractDomainContext, generateDomainSpecificPlan } from './domainContextExtractor';
 
 /**
  * AI Agent Tools - Functions the agent can call
@@ -232,12 +234,36 @@ export class AgentPlanner {
   }
   
   async createPlan(userRequest, context, base44) {
+    // Extract domain context from user request
+    const domainContext = extractDomainContext(userRequest);
+    
+    // Try to generate domain-specific plan first
+    let domainPlan = null;
+    if (domainContext.domain) {
+      domainPlan = generateDomainSpecificPlan(userRequest, domainContext);
+      console.log(`🎯 Domain Context: ${domainContext.domainName} (Confidence: ${(domainContext.contextConfidence * 100).toFixed(0)}%)`);
+      console.log(`📋 Identified keywords: ${domainContext.matchedKeywords.join(', ')}`);
+    }
+    
+    // If domain plan generated and confidence is high, use it
+    if (domainPlan && domainContext.contextConfidence > 0.7) {
+      this.currentPlan = domainPlan;
+      return domainPlan;
+    }
+    
+    // Fall back to LLM-based planning if no domain identified
     const planningPrompt = `You are an AI Agent helping to build a software project.
 
 User Request: ${userRequest}
 
 Current Context:
 ${JSON.stringify(context, null, 2)}
+
+${domainContext.domain ? `DOMAIN CONTEXT: This appears to be a ${domainContext.domainName} request.
+Domain-specific requirements:
+${domainContext.specifications.features.slice(0, 5).map(f => `- ${f.name}: ${f.description}`).join('\n')}
+
+Please create a plan that includes these domain-specific features.` : ''}
 
 Create a detailed step-by-step plan to accomplish this request. Consider:
 - What entities/data models are needed
