@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { ChevronDown, Settings, Users, Key, Shield, BarChart3, Menu, X } from 'lucide-react';
+import { Settings, Users, Key, Shield, BarChart3, Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 export default function AdminNavigation() {

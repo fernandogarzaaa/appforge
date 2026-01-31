@@ -56,7 +56,7 @@ export default function UserManagement() {
   const [searchTerm, setSearchTerm] = useState('');
   const [filterRole, setFilterRole] = useState('all');
   const [filterStatus, setFilterStatus] = useState('all');
-  const [editingId, setEditingId] = useState(null);
+  const [_editingId, _setEditingId] = useState(null);
 
   const filteredUsers = users.filter(user => {
     const matchesSearch = user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -104,7 +104,7 @@ export default function UserManagement() {
     }
   };
 
-  const getStatusIcon = (status) => {
+  const _getStatusIcon = (status) => {
     switch (status) {
       case 'active':
         return <CheckCircle className="w-4 h-4" />;

@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import HelpTooltip from '@/components/help/HelpTooltip';
-import { Copy, Eye, EyeOff, Plus, Trash2, Edit2, Check, X } from 'lucide-react';
+import { Copy, Eye, EyeOff, Plus, Trash2, Check } from 'lucide-react';
 
 export default function APIKeyManagement() {
   const [apiKeys, setApiKeys] = useState([
@@ -31,7 +30,7 @@ export default function APIKeyManagement() {
   ]);
 
   const [isAddingKey, setIsAddingKey] = useState(false);
-  const [editingId, setEditingId] = useState(null);
+  const [_editingId, _setEditingId] = useState(null);
   const [newKey, setNewKey] = useState({ name: '', type: 'openai', value: '' });
   const [visibleKey, setVisibleKey] = useState(null);
   const [copied, setCopied] = useState(null);

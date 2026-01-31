@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import HelpTooltip from '@/components/help/HelpTooltip';
-import { Settings, Save, AlertCircle, CheckCircle } from 'lucide-react';
+import { Save, AlertCircle, CheckCircle } from 'lucide-react';
 
 export default function AdminSettings() {
   const [settings, setSettings] = useState({
@@ -37,7 +36,7 @@ export default function AdminSettings() {
 
   const [isSaving, setIsSaving] = useState(false);
   const [saveStatus, setSaveStatus] = useState(null);
-  const [expandedSection, setExpandedSection] = useState('api');
+  const [_expandedSection, _setExpandedSection] = useState('api');
 
   const handleSettingChange = (key, value) => {
     setSettings({ ...settings, [key]: value });
