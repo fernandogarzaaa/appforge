@@ -3,7 +3,6 @@
  * Code understanding, optimization, security, and more
  */
 
-/* eslint-disable no-undef */
 // @ts-ignore - base44.integrations is part of future integration
 import { base44 } from '@/api/base44Client';
 
