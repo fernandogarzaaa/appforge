@@ -47,12 +47,12 @@ jobs:
         env:
           # These secrets need to be configured in GitHub repository settings
           # Go to Settings > Secrets and variables > Actions > New repository secret
-          VITE_BASE44_USERNAME: ${{ secrets.BASE44_USERNAME }}
-          VITE_BASE44_PASSWORD: ${{ secrets.BASE44_PASSWORD }}
-          VITE_BASE44_API_URL: ${{ secrets.BASE44_API_URL }}
+          VITE_BASE44_USERNAME: ${{ secrets.BASE44_USERNAME || '' }}
+          VITE_BASE44_PASSWORD: ${{ secrets.BASE44_PASSWORD || '' }}
+          VITE_BASE44_API_URL: ${{ secrets.BASE44_API_URL || '' }}
           VITE_APP_ENV: production
           VITE_ENABLE_ERROR_TRACKING: true
-          VITE_SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
+          VITE_SENTRY_DSN: ${{ secrets.SENTRY_DSN || '' }}
       
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
