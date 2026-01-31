@@ -1,30 +1,84 @@
-# AppForge Backend REST API
+# AppForge Backend - Production Infrastructure
 
-> Complete, production-ready Express.js REST API for AppForge platform with
-quantum computing, real-time collaboration, data security, and user management.
+> Complete, production-ready Express.js backend with 50+ REST endpoints, real-time WebSocket collaboration, dual database support (MongoDB + PostgreSQL), Stripe payments, and Docker deployment.
 
 [![Status](https://img.shields.io/badge/status-production%20ready-brightgreen)](#status)
 [![Node Version](https://img.shields.io/badge/node-18%2B-brightgreen)](#requirements)
 [![License](https://img.shields.io/badge/license-MIT-blue)](#license)
 
-## 🚀 Quick Start
+## 🚀 Quick Start - Docker (Recommended)
 
-### Installation
+```bash
+cd backend
+cp .env.example .env
+# Edit .env with your configuration
+docker-compose up -d
+```
+
+**Services started:**
+- Backend API: http://localhost:5000
+- WebSocket: http://localhost:5001
+- Frontend: http://localhost:5173
+- MongoDB: localhost:27017
+- PostgreSQL: localhost:5432
+
+Visit `http://localhost:5000/health` - You should see all services healthy!
+
+## 🚀 Quick Start - Local Development
 
 ```bash
 cd backend
 npm install
 cp .env.example .env
+# Configure .env with database credentials
+npm run migrate  # Set up databases
 npm run dev
 ```
-
-Visit `http://localhost:5000/health` - You should see a success response!
 
 ## 📚 Documentation
 
 - **[API Documentation](API_DOCUMENTATION.md)** - 150+ endpoints with examples
 - **[Setup Guide](BACKEND_SETUP.md)** - Installation, configuration, deployment
 - **[Implementation Summary](IMPLEMENTATION_SUMMARY.md)** - Architecture overview
+
+## 🛠️ New Production Features
+
+### ✅ Database Configuration (database.js)
+- **Dual Database Support**: MongoDB + PostgreSQL
+- **Connection Pooling**: Max 10 connections
+- **Auto-Sync**: Models sync in development
+- **Health Monitoring**: Connection status tracking
+- **Graceful Shutdown**: Clean disconnection
+
+### ✅ Enterprise Logging (logger.js)
+- **Winston Logger**: 5 log levels (error, warn, info, http, debug)
+- **File Rotation**: 5MB max per file, 5 files kept
+- **Separate Logs**: app.log, error.log, exceptions.log, rejections.log
+- **Morgan Integration**: HTTP request logging
+- **Exception Handling**: Uncaught exception/rejection logging
+
+### ✅ Docker Deployment (Dockerfile)
+- **Multi-stage Build**: Production-optimized image
+- **Non-root User**: Enhanced security (nodejs:1001)
+- **Health Check**: Every 30 seconds
+- **Ports**: 5000 (API), 5001 (WebSocket)
+- **Alpine Base**: Minimal image size
+
+### ✅ Complete Stack (docker-compose.yml)
+- **Frontend**: React app on port 5173
+- **Backend**: API + WebSocket on ports 5000/5001
+- **MongoDB 7**: Database with authentication (port 27017)
+- **PostgreSQL 16**: SQL database with init scripts (port 5432)
+- **Redis 7**: Caching and sessions (port 6379)
+- **Nginx**: Reverse proxy (ports 80/443)
+- **Health Checks**: All services monitored
+- **Volume Persistence**: Data survives container restarts
+
+### ✅ Database Migrations
+- **init-postgres.sql**: PostgreSQL schema with tables, indexes, triggers
+- **migrate.js**: Automated migration runner for both databases
+- **Collections**: MongoDB with validation rules
+- **Indexes**: Optimized queries for all tables
 
 ## 🏗️ API Modules
 
