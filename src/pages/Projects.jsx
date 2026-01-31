@@ -3,7 +3,7 @@ import { base44 } from '@/api/base44Client';
 import { userService } from '@/api/appforge';
 import { useBackendAuth } from '@/contexts/BackendAuthContext';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { Search, Plus, Grid3X3, List, Filter, FolderKanban } from 'lucide-react';
+import { Search, Plus, Grid3X3, List, Filter, FolderKanban, Trash2, Copy, CheckSquare, Square } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -44,6 +44,8 @@ export default function Projects() {
     status: 'draft',
   });
   const [_selectedTemplate, _setSelectedTemplate] = useState(null);
+  const [selectedProjects, setSelectedProjects] = useState(new Set());
+  const [isSelectionMode, setIsSelectionMode] = useState(false);
 
   const queryClient = useQueryClient();
   const { isAuthenticated } = useBackendAuth();
@@ -102,6 +104,39 @@ export default function Projects() {
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['projects'] }),
   });
 
+  // Batch delete mutation
+  const batchDeleteMutation = useMutation({
+    mutationFn: async (ids) => {
+      await Promise.all(ids.map(id => base44.entities.Project.delete(id)));
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['projects'] });
+      setSelectedProjects(new Set());
+      setIsSelectionMode(false);
+    },
+  });
+
+  // Batch duplicate mutation
+  const batchDuplicateMutation = useMutation({
+    mutationFn: async (ids) => {
+      const projectsToDuplicate = projects.filter(p => ids.includes(p.id));
+      await Promise.all(projectsToDuplicate.map(project => 
+        base44.entities.Project.create({
+          name: `${project.name} (Copy)`,
+          description: project.description,
+          icon: project.icon,
+          color: project.color,
+          status: 'draft'
+        })
+      ));
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['projects'] });
+      setSelectedProjects(new Set());
+      setIsSelectionMode(false);
+    },
+  });
+
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.get('new') === 'true') {
@@ -139,6 +174,34 @@ export default function Projects() {
     createMutation.mutate(projectData);
   };
 
+  const toggleProjectSelection = (projectId) => {
+    const newSelection = new Set(selectedProjects);
+    if (newSelection.has(projectId)) {
+      newSelection.delete(projectId);
+    } else {
+      newSelection.add(projectId);
+    }
+    setSelectedProjects(newSelection);
+  };
+
+  const toggleSelectAll = () => {
+    if (selectedProjects.size === paginatedProjects.length) {
+      setSelectedProjects(new Set());
+    } else {
+      setSelectedProjects(new Set(paginatedProjects.map(p => p.id)));
+    }
+  };
+
+  const handleBatchDelete = () => {
+    if (window.confirm(`Delete ${selectedProjects.size} project(s)? This action cannot be undone.`)) {
+      batchDeleteMutation.mutate(Array.from(selectedProjects));
+    }
+  };
+
+  const handleBatchDuplicate = () => {
+    batchDuplicateMutation.mutate(Array.from(selectedProjects));
+  };
+
   return (
     <div className="p-6 lg:p-8 max-w-7xl mx-auto">
       {/* Header */}
@@ -147,14 +210,80 @@ export default function Projects() {
           <h1 className="text-3xl font-bold text-gray-900 mb-1">Projects</h1>
           <p className="text-gray-500">Manage and organize all your applications</p>
         </div>
-        <Button
-          onClick={() => setShowNewDialog(true)}
-          className="bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white rounded-xl h-11 px-6 shadow-lg shadow-indigo-500/25"
-        >
-          <Plus className="w-4 h-4 mr-2" />
-          New Project
-        </Button>
+        <div className="flex gap-2">
+          {filteredProjects.length > 0 && (
+            <Button
+              variant={isSelectionMode ? "default" : "outline"}
+              onClick={() => {
+                setIsSelectionMode(!isSelectionMode);
+                setSelectedProjects(new Set());
+              }}
+              className={isSelectionMode ? "bg-gray-900 hover:bg-gray-800 text-white rounded-xl h-11 px-4" : "rounded-xl h-11 px-4"}
+            >
+              {isSelectionMode ? (
+                <>
+                  <CheckSquare className="w-4 h-4 mr-2" />
+                  Exit Selection
+                </>
+              ) : (
+                <>
+                  <Square className="w-4 h-4 mr-2" />
+                  Select
+                </>
+              )}
+            </Button>
+          )}
+          <Button
+            onClick={() => setShowNewDialog(true)}
+            className="bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white rounded-xl h-11 px-6 shadow-lg shadow-indigo-500/25"
+          >
+            <Plus className="w-4 h-4 mr-2" />
+            New Project
+          </Button>
+        </div>
       </div>
+
+      {/* Bulk Actions Toolbar */}
+      {isSelectionMode && selectedProjects.size > 0 && (
+        <div className="bg-indigo-50 border border-indigo-200 rounded-xl p-4 mb-4 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 text-sm font-medium text-gray-900">
+              <CheckSquare className="w-4 h-4 text-indigo-600" />
+              {selectedProjects.size} project{selectedProjects.size > 1 ? 's' : ''} selected
+            </div>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={toggleSelectAll}
+              className="h-8 rounded-lg text-xs"
+            >
+              {selectedProjects.size === paginatedProjects.length ? 'Deselect All' : 'Select All'}
+            </Button>
+          </div>
+          <div className="flex gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleBatchDuplicate}
+              disabled={batchDuplicateMutation.isPending}
+              className="h-8 rounded-lg text-xs"
+            >
+              <Copy className="w-3.5 h-3.5 mr-1.5" />
+              {batchDuplicateMutation.isPending ? 'Duplicating...' : 'Duplicate'}
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleBatchDelete}
+              disabled={batchDeleteMutation.isPending}
+              className="h-8 rounded-lg text-xs text-red-600 hover:bg-red-50 hover:text-red-700 border-red-200"
+            >
+              <Trash2 className="w-3.5 h-3.5 mr-1.5" />
+              {batchDeleteMutation.isPending ? 'Deleting...' : 'Delete'}
+            </Button>
+          </div>
+        </div>
+      )}
 
       {/* Filters */}
       <div className="flex flex-col sm:flex-row gap-4 mb-6">
@@ -238,6 +367,9 @@ export default function Projects() {
                   onDelete={(p) => deleteMutation.mutate(p.id)}
                   onDuplicate={() => {}}
                   onClone={() => {}}
+                  isSelectionMode={isSelectionMode}
+                  isSelected={selectedProjects.has(project.id)}
+                  onToggleSelect={() => toggleProjectSelection(project.id)}
                 />
               ))}
             </AnimatePresence>
