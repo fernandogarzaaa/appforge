@@ -186,6 +186,7 @@ After:  "What do you want to build?"
 ## 📊 Capabilities Comparison
 
 ### Before Enhancement:
+
 | Feature | Status |
 |---------|--------|
 | Simple chat | ✅ |
@@ -202,6 +203,9 @@ After:  "What do you want to build?"
 | Learning | ❌ |
 
 ### After Enhancement:
+
+| Feature | Status |
+|---------|--------|
 | Feature | Status |
 |---------|--------|
 | Simple chat | ✅ |

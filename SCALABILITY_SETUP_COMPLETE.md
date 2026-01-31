@@ -141,6 +141,7 @@ Error Rate: 0.3%
 ## 📊 Capacity Analysis
 
 ### Before Optimizations
+
 | Metric | Capacity |
 |--------|----------|
 | Daily Users | 500-1,000 |
@@ -150,6 +151,7 @@ Error Rate: 0.3%
 | Scaling | Vertical only |
 
 ### After Optimizations
+
 | Metric | Capacity |
 |--------|----------|
 | Daily Users | **10,000-15,000** ✅ |

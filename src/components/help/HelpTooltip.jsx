@@ -1,7 +1,16 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import { HelpCircle } from 'lucide-react';
 
-export default function HelpTooltip({ content, title, children, position = 'top' }) {
+/**
+ * HelpTooltip Component
+ * Displays contextual help information on hover
+ * @param {string} content - The help text to display
+ * @param {string} title - Optional title for the tooltip
+ * @param {ReactNode} children - Optional child element (replaces default help icon)
+ * @param {string} position - Position of tooltip: 'top' | 'bottom' | 'left' | 'right'
+ */
+function HelpTooltip({ content, title, children = null, position = 'top' }) {
   const [isVisible, setIsVisible] = useState(false);
 
   const positionClasses = {
@@ -41,3 +50,18 @@ export default function HelpTooltip({ content, title, children, position = 'top'
     </div>
   );
 }
+
+HelpTooltip.propTypes = {
+  content: PropTypes.string.isRequired,
+  title: PropTypes.string,
+  children: PropTypes.node,
+  position: PropTypes.oneOf(['top', 'bottom', 'left', 'right'])
+};
+
+HelpTooltip.defaultProps = {
+  title: undefined,
+  children: null,
+  position: 'top'
+};
+
+export default HelpTooltip;

@@ -206,7 +206,9 @@ export default function APIConfiguration() {
                   variant="outline"
                   onClick={() => {
                     const input = document.querySelector('input[type="password"]');
-                    input.type = input.type === 'password' ? 'text' : 'password';
+                    if (input && input instanceof HTMLInputElement) {
+                      input.type = input.type === 'password' ? 'text' : 'password';
+                    }
                   }}
                 >
                   Show
