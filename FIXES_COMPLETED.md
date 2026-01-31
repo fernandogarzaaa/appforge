@@ -63,7 +63,7 @@
 - **Severity:** Moderate (XSS via HTML export)
 - **Version:** 2.0.3 (latest available)
 - **Status:** Awaiting upstream security patch
-- **Mitigation:** 
+- **Mitigation** 
   - Sanitize all user input
   - Disable HTML export feature if not needed
   - Monitor for quill v2.0.4+ release
