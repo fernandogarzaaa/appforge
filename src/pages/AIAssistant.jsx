@@ -8,6 +8,8 @@ import {
 } from 'lucide-react';
 import { Textarea } from '@/components/ui/textarea';
 import { generateEnhancedEntities } from '@/utils/enhancedEntityGeneration';
+import { generateBusinessContent } from '@/utils/intelligentContentGenerator';
+import { AIAgent } from '@/utils/aiAgentCore';
 import { useLLM } from '@/contexts/LLMContext';
 import ModelSelector from '@/components/ai/ModelSelector';
 import AIUsagePanel from '@/components/ai/AIUsagePanel';
@@ -58,10 +60,20 @@ export default function AIAssistant() {
   const [user, setUser] = useState(null);
   const [suggestedTools, setSuggestedTools] = useState([]);
   const [showCommandPalette, setShowCommandPalette] = useState(false);
+  const [aiAgent, setAiAgent] = useState(null);
+  const [currentPlan, setCurrentPlan] = useState(null);
+  const [executionProgress, setExecutionProgress] = useState(null);
+  const [agentMode, setAgentMode] = useState(false); // Toggle between chat and agent mode
   const messagesEndRef = useRef(null);
   
   // LLM Context for model selection and usage tracking
   const { query: llmQuery, selectedModel, getModelInfo } = useLLM();
+  
+  // Initialize AI Agent
+  useEffect(() => {
+    const agent = new AIAgent(base44);
+    setAiAgent(agent);
+  }, []);
 
   const urlParams = new URLSearchParams(window.location.search);
   const projectId = urlParams.get('projectId');
@@ -162,9 +174,25 @@ export default function AIAssistant() {
             content: `🔧 **Detected Features**: ${Object.entries(features).filter(([_, v]) => v).map(([k]) => k).join(', ') || 'basic website'}\n📦 **Creating ${enhancedEntities.length} entities** with advanced schemas, validations, and API endpoints...`
           }]);
 
+          // Generate intelligent content based on business context
+          let businessContent = null;
+          try {
+            businessContent = await generateBusinessContent(idea, base44);
+            
+            if (businessContent.context.businessName) {
+              setMessages(prev => [...prev, {
+                role: 'assistant',
+                content: `🎯 **Understood!** Building website for **${businessContent.context.businessName}**\n✨ Generating realistic content for your ${businessContent.context.businessType}...`
+              }]);
+            }
+          } catch (contentError) {
+            console.error('Content generation error:', contentError);
+          }
+
           // Create all enhanced entities with proper relationships and validations
+          const createdEntities = [];
           for (const entityData of enhancedEntities) {
-            await base44.entities.Entity.create({
+            const entity = await base44.entities.Entity.create({
               project_id: newProject.id,
               name: entityData.name,
               schema: entityData.schema,
@@ -175,25 +203,75 @@ export default function AIAssistant() {
                 features: features
               }
             });
+            createdEntities.push(entity);
           }
 
-          // Create a main page
+          // Populate sample data if available (using entity map for intelligent routing)
+          if (businessContent && businessContent.entityMap) {
+            const totalItems = Object.values(businessContent.entityMap).reduce((sum, items) => sum + items.length, 0);
+            const entityTypes = Object.keys(businessContent.entityMap);
+            
+            setMessages(prev => [...prev, {
+              role: 'assistant',
+              content: `📝 **Adding sample data**: ${totalItems} items across ${entityTypes.length} ${entityTypes.length === 1 ? 'entity' : 'entities'} (${businessContent.context.currency})...`
+            }]);
+
+            // Populate each entity type
+            for (const [entityName, items] of Object.entries(businessContent.entityMap)) {
+              const entity = createdEntities.find(e => e.name === entityName);
+              if (entity && items && items.length > 0) {
+                for (const item of items) {
+                  try {
+                    // Generate slug if not present
+                    const itemData = {
+                      ...item,
+                      slug: item.slug || (item.name || item.title || 'item').toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')
+                    };
+                    
+                    await base44.entities[entity.name].create(itemData);
+                  } catch (itemError) {
+                    console.error(`Failed to create ${entityName} item:`, itemError);
+                  }
+                }
+              }
+            }
+          }
+
+          // Create a main page with intelligent content
+          const pageContent = businessContent?.pageContent || {
+            hero_headline: 'Welcome',
+            hero_subheadline: 'Your business description',
+            about_section: idea
+          };
+
           await base44.entities.Page.create({
             project_id: newProject.id,
             name: 'Home',
             path: '/',
             content: {
               type: 'generated',
-              description: idea,
+              businessContext: businessContent?.context,
+              heroHeadline: pageContent.hero_headline,
+              heroSubheadline: pageContent.hero_subheadline,
+              aboutSection: pageContent.about_section,
+              uniqueSellingPoints: pageContent.unique_selling_points,
+              callToAction: pageContent.call_to_action,
+              metaDescription: pageContent.meta_description,
               entities: enhancedEntities.map(e => e.name)
             }
           });
 
           // Show completion
           setTimeout(() => {
+            const totalItems = businessContent?.entityMap 
+              ? Object.values(businessContent.entityMap).reduce((sum, items) => sum + items.length, 0)
+              : 0;
+            const businessName = businessContent?.context?.businessName || 'your website';
+            const businessType = businessContent?.context?.businessType || 'website';
+            
             const completeMessage = {
               role: 'assistant',
-              content: `🎉 **Your website is LIVE!**\n\n✅ Database created\n✅ Pages built\n✅ Ready to use\n\n🔗 [**View Your Website →**](/projects/${newProject.id})\n\n💬 Want to customize it? Just tell me what to change!`,
+              content: `🎉 **${businessName} is LIVE!**\n\n✅ Database structure created\n${totalItems > 0 ? `✅ ${totalItems} sample items added\n` : ''}✅ Professional content generated\n✅ Ready to customize\n\n🔗 [**View Your ${businessType.charAt(0).toUpperCase() + businessType.slice(1)} →**](/projects/${newProject.id})\n\n💬 What would you like to customize? (colors, add more items, change layout, etc.)`,
               timestamp: new Date().toISOString()
             };
             setMessages(prev => [...prev, completeMessage]);
@@ -277,6 +355,75 @@ export default function AIAssistant() {
     setIsLoading(true);
 
     try {
+      // Check if agent mode is enabled and user wants autonomous execution
+      const shouldUseAgent = agentMode || /\b(build|create|make|generate|implement|setup|configure)\b/i.test(currentInput);
+      
+      if (shouldUseAgent && aiAgent && projectId) {
+        // Use AI Agent for autonomous multi-step execution
+        const { plan, context } = await aiAgent.processRequest(currentInput, projectId);
+        setCurrentPlan(plan);
+        
+        // Show the plan to user
+        const planMessage = {
+          role: 'assistant',
+          content: `🤖 **I've created a plan to accomplish this:**\n\n**Goal:** ${plan.goal}\n\n**Steps:**\n${plan.steps.map((s, i) => `${i + 1}. ${s.description} _(${s.reasoning})_`).join('\n')}\n\n**Estimated time:** ${plan.estimated_duration}\n**Complexity:** ${plan.complexity}\n\n✨ Executing now...`,
+          timestamp: new Date().toISOString(),
+          metadata: { isPlan: true, plan }
+        };
+        
+        setMessages(prev => [...prev, planMessage]);
+        
+        // Execute each step
+        for (let i = 0; i < plan.steps.length; i++) {
+          const step = plan.steps[i];
+          const progress = aiAgent.getProgress();
+          setExecutionProgress(progress);
+          
+          const stepStartMsg = {
+            role: 'assistant',
+            content: `⏳ **Step ${step.step}:** ${step.description}...`,
+            timestamp: new Date().toISOString(),
+            metadata: { isStepUpdate: true }
+          };
+          setMessages(prev => [...prev, stepStartMsg]);
+          
+          const result = await aiAgent.executeStep(step, projectId);
+          
+          if (result.success) {
+            const stepDoneMsg = {
+              role: 'assistant',
+              content: `✅ **Step ${step.step} completed:** ${step.description}`,
+              timestamp: new Date().toISOString(),
+              metadata: { isStepUpdate: true, success: true }
+            };
+            setMessages(prev => [...prev, stepDoneMsg]);
+          } else {
+            const stepErrorMsg = {
+              role: 'assistant',
+              content: `⚠️ **Step ${step.step} failed:** ${result.error}\n\n🔧 **Self-correction:** ${result.correction?.correction || 'Trying alternative approach...'}`,
+              timestamp: new Date().toISOString(),
+              metadata: { isStepUpdate: true, success: false, error: result.error }
+            };
+            setMessages(prev => [...prev, stepErrorMsg]);
+          }
+        }
+        
+        // Final completion
+        const finalProgress = aiAgent.getProgress();
+        const completionMsg = {
+          role: 'assistant',
+          content: `🎉 **Plan completed!**\n\n✅ ${finalProgress.completed}/${finalProgress.total} steps successful (${finalProgress.percentage}%)\n\nWhat would you like to do next?`,
+          timestamp: new Date().toISOString(),
+          metadata: { isCompletion: true, progress: finalProgress }
+        };
+        setMessages(prev => [...prev, completionMsg]);
+        
+        setIsLoading(false);
+        setExecutionProgress(null);
+        return;
+      }
+      
+      // Regular chat mode (existing logic)
       // Suggest relevant tools based on input (using LLM context)
       const toolResult = await llmQuery(`Analyze this request and suggest which tools would be most helpful: "${currentInput}"
 
@@ -395,8 +542,27 @@ Provide helpful, actionable responses with code examples when relevant. Be conci
           >
             <Plus className="w-4 h-4 mr-2" />
             New Chat
-          </Button>
-        </div>
+          </Button>          
+          <div className="mt-3 p-3 bg-gradient-to-r from-purple-50 to-indigo-50 rounded-lg">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-sm font-medium text-gray-700">🤖 Agent Mode</span>
+              <button
+                onClick={() => setAgentMode(!agentMode)}
+                className={cn(
+                  "relative w-11 h-6 rounded-full transition-colors",
+                  agentMode ? "bg-indigo-600" : "bg-gray-300"
+                )}
+              >
+                <span className={cn(
+                  "absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full transition-transform",
+                  agentMode ? "translate-x-5" : "translate-x-0"
+                )} />
+              </button>
+            </div>
+            <p className="text-xs text-gray-600">
+              {agentMode ? "Autonomous multi-step execution" : "Interactive chat mode"}
+            </p>
+          </div>        </div>
 
         <ScrollArea className="flex-1">
           <div className="p-2">
