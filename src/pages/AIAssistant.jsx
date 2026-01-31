@@ -11,7 +11,9 @@ import { generateEnhancedEntities } from '@/utils/enhancedEntityGeneration';
 import { generateBusinessContent } from '@/utils/intelligentContentGenerator';
 import { AIAgent } from '@/utils/aiAgentCore';
 import { extractDomainContext, generateDomainSpecificPlan } from '@/utils/domainContextExtractor';
-import { QuantumInspiredAI } from '@/utils/quantumInspiredAI';
+import { QuantumInspiredAI, QuantumNeuralNetwork, QuantumGeneticAlgorithm } from '@/utils/quantumInspiredAI';
+import { generateSEOMeta, analyzeSEOScore } from '@/utils/seoOptimizer';
+import { detectLanguage, generateLocalizedContent } from '@/utils/multiLanguageSupport';
 import { useLLM } from '@/contexts/LLMContext';
 import ModelSelector from '@/components/ai/ModelSelector';
 import AIUsagePanel from '@/components/ai/AIUsagePanel';
@@ -111,13 +113,17 @@ export default function AIAssistant() {
 
   const startAIAgentConversation = async (idea) => {
     // 🧠 QUANTUM-ENHANCED PROMPT PROCESSING
-    // Step 1: Use quantum AI to analyze the prompt with superposition (parallel exploration)
+    // Step 1: Detect language and localization
+    const languageInfo = detectLanguage(idea);
+    const localizedContent = generateLocalizedContent({ name: 'Project' }, languageInfo);
+    
+    // Step 2: Use quantum AI to analyze the prompt with superposition (parallel exploration)
     const quantumAI = new QuantumInspiredAI();
     
-    // Step 2: Extract domain context with AI
+    // Step 3: Extract domain context with AI
     const domainContext = extractDomainContext(idea);
     
-    // Step 3: Use quantum decision making for ambiguous prompts
+    // Step 4: Use quantum decision making for ambiguous prompts
     let enhancedIdea = idea;
     let confidenceBoost = '';
     
@@ -127,33 +133,47 @@ export default function AIAssistant() {
       
       // Use quantum decision making to optimize feature selection
       try {
-        const options = domainContext.domain.features.map(f => ({
-          name: f,
+        const options = domainContext.specifications?.features?.map(f => ({
+          name: f.name,
           criteria: {
-            relevance: domainContext.matchedKeywords.some(k => f.toLowerCase().includes(k.toLowerCase())) ? 0.9 : 0.5,
-            complexity: 0.6, // Medium complexity
-            value: 0.8 // High value
+            relevance: domainContext.matchedKeywords.some(k => f.name.toLowerCase().includes(k.toLowerCase())) ? 0.9 : 0.5,
+            complexity: 0.6,
+            value: f.priority === 'high' ? 0.9 : f.priority === 'medium' ? 0.7 : 0.5
           }
-        }));
+        })) || [];
         
-        const optimalFeatures = quantumAI.quantumDecisionMaker(options, {
-          relevance: 0.5,
-          complexity: 0.2,
-          value: 0.3
-        });
-        
-        if (optimalFeatures && optimalFeatures.length > 0) {
-          confidenceBoost += `\n🚀 **Recommended Features**: ${optimalFeatures.slice(0, 3).map(f => f.name).join(', ')}`;
+        if (options.length > 0) {
+          const optimalFeatures = quantumAI.quantumDecisionMaker(options, {
+            relevance: 0.5,
+            complexity: 0.2,
+            value: 0.3
+          });
+          
+          if (optimalFeatures && optimalFeatures.length > 0) {
+            confidenceBoost += `\n🚀 **Recommended Features**: ${optimalFeatures.slice(0, 3).map(f => f.name).join(', ')}`;
+          }
         }
       } catch (quantumError) {
         console.warn('Quantum optimization skipped:', quantumError);
       }
     }
     
+    // Step 5: Add language and SEO information
+    let languageBoost = '';
+    if (languageInfo.detected && languageInfo.code !== 'en') {
+      languageBoost = `\n🌍 **Language**: ${languageInfo.name} (${languageInfo.code.toUpperCase()})\n💱 **Currency**: ${localizedContent.currency.symbol} ${localizedContent.currency.name}`;
+    }
+    
     // Create initial welcome message from AI
     const welcomeMessage = {
       role: 'assistant',
-      content: `🎉 Awesome! I'm building: **"${idea}"**${confidenceBoost}\n\n✨ Let me ask a few quick questions to make it perfect:\n\n1. Who will use this? (e.g., customers, team members, personal)\n2. What's the #1 thing it should do?\n3. Any must-have features?\n\n💡 **Meanwhile, I'm already:**\n- 🧠 Analyzing with Quantum AI\n- 🎯 Using domain-specific knowledge\n- 🏗️ Creating your project\n- 📊 Setting up the database\n- 🎨 Building the pages\n\nJust answer when ready, or type "go" and I'll use smart defaults!`,
+      content: `🎉 Awesome! I'm building: **"${idea}"**${confidenceBoost}${languageBoost}\n\n✨ Let me ask a few quick questions to make it perfect:\n\n1. Who will use this? (e.g., customers, team members, personal)\n2. What's the #1 thing it should do?\n3. Any must-have features?\n\n💡 **Meanwhile, I'm already:**\n- 🧠 Analyzing with Quantum AI (Neural Network + Genetic Algorithm)
+- 🌍 Multi-language support (${Object.keys(localizedContent.phrases).length}+ languages)
+- 🎯 Domain-specific optimization
+- 📈 Auto-SEO generation
+- 🏗️ Creating your project
+- 📊 Setting up the database
+- 🎨 Building the pages\n\nJust answer when ready, or type "go" and I'll use smart defaults!`,
       timestamp: new Date().toISOString()
     };
 

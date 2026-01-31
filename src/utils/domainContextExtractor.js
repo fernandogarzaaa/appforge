@@ -183,6 +183,189 @@ const DOMAIN_SPECIFICATIONS = {
       { name: 'User', fields: ['email', 'password', 'profile', 'subscriptionPlan', 'createdDate'] },
       { name: 'Subscription', fields: ['userId', 'plan', 'status', 'billingCycle', 'nextBillingDate'] }
     ]
+  },
+
+  gym: {
+    name: 'Gym/Fitness Center',
+    keywords: ['gym', 'fitness', 'fitness center', 'health club', 'workout', 'training', 'crossfit', 'yoga studio'],
+    features: [
+      { name: 'class_schedule', description: 'Display fitness class timetable', priority: 'high' },
+      { name: 'membership_plans', description: 'Show membership tiers and pricing', priority: 'high' },
+      { name: 'trainer_profiles', description: 'Showcase personal trainers and instructors', priority: 'high' },
+      { name: 'online_booking', description: 'Book classes and personal training sessions', priority: 'high' },
+      { name: 'workout_programs', description: 'Display training programs and plans', priority: 'medium' },
+      { name: 'nutrition_plans', description: 'Meal plans and nutrition guidance', priority: 'medium' },
+      { name: 'progress_tracking', description: 'Track member fitness progress', priority: 'medium' },
+      { name: 'equipment_showcase', description: 'Display gym facilities and equipment', priority: 'medium' },
+      { name: 'success_stories', description: 'Member testimonials and transformations', priority: 'low' },
+      { name: 'free_trial', description: 'Sign up for free trial sessions', priority: 'high' }
+    ],
+    pages: [
+      { name: 'home', purpose: 'Hero with gym photos and call-to-action' },
+      { name: 'classes', purpose: 'Class schedule and descriptions' },
+      { name: 'trainers', purpose: 'Personal trainer profiles' },
+      { name: 'membership', purpose: 'Membership plans and pricing' },
+      { name: 'facilities', purpose: 'Gym equipment and amenities' },
+      { name: 'contact', purpose: 'Location, hours, contact form' }
+    ],
+    entities: [
+      { name: 'Class', fields: ['name', 'description', 'instructor', 'duration', 'difficulty', 'schedule', 'capacity', 'image'] },
+      { name: 'Trainer', fields: ['name', 'bio', 'specialties', 'certifications', 'experience', 'photo', 'availability'] },
+      { name: 'Membership', fields: ['planName', 'price', 'duration', 'benefits', 'classAccess', 'ptSessions'] },
+      { name: 'Booking', fields: ['memberId', 'classId', 'date', 'time', 'status', 'checkedIn'] }
+    ],
+    colors: {
+      primary: '#FF6B35', // Energetic orange
+      secondary: '#004E89', // Strong blue
+      accent: '#F7B801', // Motivating gold
+      background: '#1A1A1D' // Dark/modern
+    }
+  },
+
+  hotel: {
+    name: 'Hotel/Travel',
+    keywords: ['hotel', 'resort', 'accommodation', 'travel', 'booking', 'vacation', 'hospitality', 'inn', 'motel'],
+    features: [
+      { name: 'room_listings', description: 'Display available rooms and suites', priority: 'high' },
+      { name: 'booking_system', description: 'Online reservation and availability calendar', priority: 'high' },
+      { name: 'amenities_showcase', description: 'Hotel facilities and services', priority: 'high' },
+      { name: 'photo_gallery', description: 'High-quality room and property photos', priority: 'high' },
+      { name: 'pricing_calculator', description: 'Dynamic pricing based on dates and occupancy', priority: 'high' },
+      { name: 'special_offers', description: 'Promotions and package deals', priority: 'medium' },
+      { name: 'guest_reviews', description: 'Customer ratings and testimonials', priority: 'medium' },
+      { name: 'local_attractions', description: 'Nearby points of interest', priority: 'medium' },
+      { name: 'concierge_services', description: 'Additional services and requests', priority: 'low' }
+    ],
+    pages: [
+      { name: 'home', purpose: 'Stunning hero with booking widget' },
+      { name: 'rooms', purpose: 'Room types, photos, and pricing' },
+      { name: 'amenities', purpose: 'Facilities, dining, spa, pool' },
+      { name: 'location', purpose: 'Map, directions, local attractions' },
+      { name: 'booking', purpose: 'Reservation interface' },
+      { name: 'contact', purpose: 'Contact and customer service' }
+    ],
+    entities: [
+      { name: 'Room', fields: ['type', 'description', 'beds', 'capacity', 'amenities', 'pricePerNight', 'images', 'availability'] },
+      { name: 'Reservation', fields: ['guestName', 'email', 'phone', 'checkIn', 'checkOut', 'roomId', 'guests', 'totalPrice', 'status'] },
+      { name: 'Guest', fields: ['name', 'email', 'phone', 'address', 'loyaltyPoints', 'bookingHistory'] },
+      { name: 'Review', fields: ['guestId', 'rating', 'comment', 'date', 'verified', 'response'] }
+    ],
+    colors: {
+      primary: '#2C3E50', // Elegant navy
+      secondary: '#C79A6C', // Luxury gold
+      accent: '#E8F4F8', // Serene blue
+      background: '#FFFFFF' // Clean white
+    }
+  },
+
+  realestate: {
+    name: 'Real Estate',
+    keywords: ['real estate', 'property', 'realtor', 'housing', 'apartment', 'home sale', 'rental', 'listing'],
+    features: [
+      { name: 'property_listings', description: 'Searchable property database', priority: 'high' },
+      { name: 'advanced_search', description: 'Filter by price, location, beds, type', priority: 'high' },
+      { name: 'virtual_tours', description: '360° property tours and videos', priority: 'high' },
+      { name: 'map_integration', description: 'Interactive property map', priority: 'high' },
+      { name: 'agent_profiles', description: 'Real estate agent bios and contacts', priority: 'high' },
+      { name: 'mortgage_calculator', description: 'Calculate monthly payments', priority: 'medium' },
+      { name: 'saved_favorites', description: 'Save and compare properties', priority: 'medium' },
+      { name: 'scheduling_tours', description: 'Book property viewings', priority: 'medium' },
+      { name: 'market_insights', description: 'Local market trends and data', priority: 'low' }
+    ],
+    pages: [
+      { name: 'home', purpose: 'Search bar and featured listings' },
+      { name: 'listings', purpose: 'Property search with filters' },
+      { name: 'property', purpose: 'Individual property details' },
+      { name: 'agents', purpose: 'Real estate agent directory' },
+      { name: 'neighborhoods', purpose: 'Area guides and insights' },
+      { name: 'contact', purpose: 'Inquiry and contact form' }
+    ],
+    entities: [
+      { name: 'Property', fields: ['title', 'address', 'price', 'beds', 'baths', 'sqft', 'type', 'status', 'description', 'photos', 'agentId', 'features'] },
+      { name: 'Agent', fields: ['name', 'bio', 'phone', 'email', 'photo', 'specialties', 'listings', 'soldCount', 'rating'] },
+      { name: 'Inquiry', fields: ['propertyId', 'name', 'email', 'phone', 'message', 'tourDate', 'status'] },
+      { name: 'Favorite', fields: ['userId', 'propertyId', 'savedDate', 'notes'] }
+    ],
+    colors: {
+      primary: '#1E3A8A', // Professional blue
+      secondary: '#059669', // Trust green
+      accent: '#DC2626', // Attention red
+      background: '#F9FAFB' // Light gray
+    }
+  },
+
+  education: {
+    name: 'Education/Online Courses',
+    keywords: ['course', 'education', 'learning', 'training', 'school', 'academy', 'tutorial', 'elearning', 'lms'],
+    features: [
+      { name: 'course_catalog', description: 'Browse available courses', priority: 'high' },
+      { name: 'enrollment_system', description: 'Sign up and enroll in courses', priority: 'high' },
+      { name: 'video_lessons', description: 'Video content delivery', priority: 'high' },
+      { name: 'progress_tracking', description: 'Track student progress and completion', priority: 'high' },
+      { name: 'quizzes_assignments', description: 'Assessments and homework', priority: 'high' },
+      { name: 'certificates', description: 'Issue completion certificates', priority: 'medium' },
+      { name: 'discussion_forums', description: 'Student community and Q&A', priority: 'medium' },
+      { name: 'instructor_profiles', description: 'Teacher bios and credentials', priority: 'medium' },
+      { name: 'live_sessions', description: 'Live webinars and classes', priority: 'medium' },
+      { name: 'resource_library', description: 'Downloadable materials', priority: 'low' }
+    ],
+    pages: [
+      { name: 'home', purpose: 'Course highlights and featured instructors' },
+      { name: 'courses', purpose: 'Course catalog with search' },
+      { name: 'course_detail', purpose: 'Individual course page with curriculum' },
+      { name: 'instructors', purpose: 'Instructor profiles' },
+      { name: 'dashboard', purpose: 'Student learning dashboard' },
+      { name: 'about', purpose: 'About the platform' }
+    ],
+    entities: [
+      { name: 'Course', fields: ['title', 'description', 'instructorId', 'category', 'level', 'duration', 'price', 'curriculum', 'thumbnail', 'enrollCount'] },
+      { name: 'Lesson', fields: ['courseId', 'title', 'content', 'videoUrl', 'duration', 'order', 'isFree'] },
+      { name: 'Enrollment', fields: ['studentId', 'courseId', 'enrollDate', 'progress', 'completionDate', 'certificateIssued'] },
+      { name: 'Instructor', fields: ['name', 'bio', 'expertise', 'photo', 'rating', 'studentCount', 'coursesCreated'] },
+      { name: 'Quiz', fields: ['lessonId', 'questions', 'passingScore', 'timeLimit'] }
+    ],
+    colors: {
+      primary: '#7C3AED', // Educational purple
+      secondary: '#0891B2', // Learning cyan
+      accent: '#F59E0B', // Achievement amber
+      background: '#FEFEFE' // Clean white
+    }
+  },
+
+  medical: {
+    name: 'Medical/Healthcare',
+    keywords: ['medical', 'clinic', 'doctor', 'healthcare', 'hospital', 'dental', 'pharmacy', 'health'],
+    features: [
+      { name: 'appointment_booking', description: 'Schedule medical appointments', priority: 'high' },
+      { name: 'doctor_directory', description: 'Find doctors by specialty', priority: 'high' },
+      { name: 'services_list', description: 'Medical services and procedures', priority: 'high' },
+      { name: 'patient_portal', description: 'Access medical records and results', priority: 'high' },
+      { name: 'insurance_info', description: 'Accepted insurance providers', priority: 'high' },
+      { name: 'telemedicine', description: 'Virtual consultations', priority: 'medium' },
+      { name: 'prescription_refills', description: 'Request medication refills', priority: 'medium' },
+      { name: 'health_resources', description: 'Educational health content', priority: 'low' },
+      { name: 'emergency_info', description: 'Emergency contact and hours', priority: 'high' }
+    ],
+    pages: [
+      { name: 'home', purpose: 'Hero with appointment booking' },
+      { name: 'doctors', purpose: 'Medical staff directory' },
+      { name: 'services', purpose: 'Medical services offered' },
+      { name: 'appointments', purpose: 'Book appointment interface' },
+      { name: 'patient_portal', purpose: 'Secure patient login area' },
+      { name: 'contact', purpose: 'Location, hours, emergency info' }
+    ],
+    entities: [
+      { name: 'Doctor', fields: ['name', 'specialty', 'qualifications', 'bio', 'photo', 'availability', 'languages', 'rating'] },
+      { name: 'Appointment', fields: ['patientId', 'doctorId', 'date', 'time', 'type', 'status', 'reason', 'notes'] },
+      { name: 'Patient', fields: ['name', 'email', 'phone', 'dateOfBirth', 'address', 'insuranceProvider', 'medicalHistory'] },
+      { name: 'Service', fields: ['name', 'description', 'category', 'duration', 'price', 'doctors'] }
+    ],
+    colors: {
+      primary: '#0EA5E9', // Medical blue
+      secondary: '#10B981', // Health green
+      accent: '#EF4444', // Emergency red
+      background: '#F8FAFC' // Clean clinical
+    }
   }
 };
 
