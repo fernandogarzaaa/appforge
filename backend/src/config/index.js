@@ -13,7 +13,13 @@ export const getDatabaseConfig = () => ({
   options: {
     useNewUrlParser: true,
     useUnifiedTopology: true,
-    retryWrites: true
+    retryWrites: true,
+    maxPoolSize: parseInt(process.env.MONGODB_MAX_POOL_SIZE) || 50,
+    minPoolSize: parseInt(process.env.MONGODB_MIN_POOL_SIZE) || 10,
+    maxIdleTimeMS: 30000,
+    serverSelectionTimeoutMS: 5000,
+    socketTimeoutMS: 45000,
+    family: 4 // Use IPv4, skip trying IPv6
   }
 });
 

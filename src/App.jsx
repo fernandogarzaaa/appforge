@@ -90,6 +90,9 @@ const AuthenticatedApp = ({ onSearchOpen }) => {
       } />
       {Object.entries(Pages).map(([path, Page]) => {
         const isPublic = publicPages.includes(path);
+        // Pages that require backend authentication (optional - most pages use Base44 auth)
+        const requiresBackendAuth = ['Profile', 'TeamManagement'].includes(path);
+        
         const element = (
           <LayoutWrapper currentPageName={path} onSearchOpen={onSearchOpen}>
             <Page />
@@ -100,7 +103,7 @@ const AuthenticatedApp = ({ onSearchOpen }) => {
           <Route
             key={path}
             path={`/${path}`}
-            element={isPublic ? element : <PrivateRoute>{element}</PrivateRoute>}
+            element={requiresBackendAuth ? <PrivateRoute>{element}</PrivateRoute> : element}
           />
         );
       })}
