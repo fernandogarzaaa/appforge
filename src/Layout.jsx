@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
 import { useBackendAuth } from '@/contexts/BackendAuthContext';
-import Sidebar from '@/components/layout/Sidebar';
+import ConsolidatedAISidebar from '@/components/sidebar/ConsolidatedAISidebar';
 import Header from '@/components/layout/Header';
 import HelpSidebar from '@/components/help/HelpSidebar';
 
@@ -39,7 +39,7 @@ export default function Layout({ children, currentPageName: _currentPageName, on
 
   return (
     <div className="flex h-screen bg-[#fafbfc] dark:bg-gray-950">
-      <Sidebar 
+      <ConsolidatedAISidebar 
         currentProject={currentProject} 
         collapsed={sidebarCollapsed}
         user={user}
