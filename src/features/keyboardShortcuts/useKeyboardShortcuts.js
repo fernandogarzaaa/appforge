@@ -3,31 +3,55 @@ import { useEffect, useState } from 'react';
 /**
  * Keyboard Shortcuts Management Hook
  * Manage custom keyboard shortcuts with presets
+ * Persists to backend API instead of localStorage
  */
 export function useKeyboardShortcuts() {
-  const [shortcuts, setShortcuts] = useState(() => {
-    const saved = localStorage.getItem('appforge_shortcuts');
-    return saved ? JSON.parse(saved) : getDefaultShortcuts();
-  });
+  const [shortcuts, setShortcuts] = useState(getDefaultShortcuts());
+  const [preset, setPreset] = useState('default');
+  const [isLoading, setIsLoading] = useState(true);
 
-  const [preset, setPreset] = useState(() => {
-    return localStorage.getItem('appforge_shortcut_preset') || 'default';
-  });
-
-  // Save to localStorage
+  // Load shortcuts from backend on mount
   useEffect(() => {
-    localStorage.setItem('appforge_shortcuts', JSON.stringify(shortcuts));
-  }, [shortcuts]);
+    loadKeyboardShortcuts();
+  }, []);
 
-  useEffect(() => {
-    localStorage.setItem('appforge_shortcut_preset', preset);
-  }, [preset]);
+  const loadKeyboardShortcuts = async () => {
+    try {
+      const response = await fetch('/api/user/keyboard-shortcuts', {
+        credentials: 'include'
+      });
+      if (response.ok) {
+        const data = await response.json();
+        setShortcuts(data.shortcuts || getDefaultShortcuts());
+        setPreset(data.preset || 'default');
+      }
+    } catch (error) {
+      console.error('Failed to load keyboard shortcuts:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const saveKeyboardShortcuts = async (newShortcuts, newPreset) => {
+    try {
+      await fetch('/api/user/keyboard-shortcuts', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({
+          shortcuts: newShortcuts,
+          preset: newPreset
+        })
+      });
+    } catch (error) {
+      console.error('Failed to save keyboard shortcuts:', error);
+    }
+  };
 
   const updateShortcut = (id, keys) => {
-    setShortcuts(prev => ({
-      ...prev,
-      [id]: keys
-    }));
+    const updated = { ...shortcuts, [id]: keys };
+    setShortcuts(updated);
+    saveKeyboardShortcuts(updated, preset);
   };
 
   const applyPreset = (presetName) => {
@@ -41,12 +65,15 @@ export function useKeyboardShortcuts() {
     if (presets[presetName]) {
       setShortcuts(presets[presetName]);
       setPreset(presetName);
+      saveKeyboardShortcuts(presets[presetName], presetName);
     }
   };
 
   const resetToDefault = () => {
-    setShortcuts(getDefaultShortcuts());
+    const defaults = getDefaultShortcuts();
+    setShortcuts(defaults);
     setPreset('default');
+    saveKeyboardShortcuts(defaults, 'default');
   };
 
   return {

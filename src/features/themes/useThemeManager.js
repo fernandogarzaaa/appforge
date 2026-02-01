@@ -4,20 +4,36 @@ const ThemeContext = createContext(null);
 
 /**
  * Theme management hook with custom themes and time-based switching
+ * Persists to backend API instead of localStorage
  */
 export function useThemeManager() {
-  const [theme, setTheme] = useState(() => {
-    return localStorage.getItem('appforge_theme') || 'light';
-  });
+  const [theme, setTheme] = useState('light');
+  const [customTheme, setCustomTheme] = useState(getDefaultCustomTheme());
+  const [timeBasedTheme, setTimeBasedTheme] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const [customTheme, setCustomTheme] = useState(() => {
-    const saved = localStorage.getItem('appforge_custom_theme');
-    return saved ? JSON.parse(saved) : getDefaultCustomTheme();
-  });
+  // Load theme settings from backend on mount
+  useEffect(() => {
+    loadThemeSettings();
+  }, []);
 
-  const [timeBasedTheme, setTimeBasedTheme] = useState(() => {
-    return localStorage.getItem('appforge_time_based_theme') === 'true';
-  });
+  const loadThemeSettings = async () => {
+    try {
+      const response = await fetch('/api/user/theme-settings', {
+        credentials: 'include'
+      });
+      if (response.ok) {
+        const data = await response.json();
+        setTheme(data.theme || 'light');
+        setCustomTheme(data.customTheme || getDefaultCustomTheme());
+        setTimeBasedTheme(data.timeBasedTheme || false);
+      }
+    } catch (error) {
+      console.error('Failed to load theme settings:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   // Apply theme to DOM
   useEffect(() => {
@@ -27,11 +43,10 @@ export function useThemeManager() {
     } else {
       root.classList.remove('dark');
     }
-    localStorage.setItem('appforge_theme', theme);
 
     // Apply custom CSS variables
     if (customTheme) {
-      Object.entries(customTheme.colors).forEach(([key, value]) => {
+      Object.entries(customTheme.colors || {}).forEach(([key, value]) => {
         root.style.setProperty(`--color-${key}`, value);
       });
     }
@@ -52,23 +67,43 @@ export function useThemeManager() {
     return () => clearInterval(interval);
   }, [timeBasedTheme]);
 
+  const saveThemeSettings = async (newTheme, newCustom, newTimeBased) => {
+    try {
+      await fetch('/api/user/theme-settings', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({
+          theme: newTheme,
+          customTheme: newCustom,
+          timeBasedTheme: newTimeBased
+        })
+      });
+    } catch (error) {
+      console.error('Failed to save theme settings:', error);
+    }
+  };
+
   const switchTheme = (newTheme) => {
     setTheme(newTheme);
+    saveThemeSettings(newTheme, customTheme, timeBasedTheme);
   };
 
   const toggleTheme = () => {
-    setTheme(prev => prev === 'light' ? 'dark' : 'light');
+    const newTheme = theme === 'light' ? 'dark' : 'light';
+    setTheme(newTheme);
+    saveThemeSettings(newTheme, customTheme, timeBasedTheme);
   };
 
   const updateCustomTheme = (updates) => {
     const updated = { ...customTheme, ...updates };
     setCustomTheme(updated);
-    localStorage.setItem('appforge_custom_theme', JSON.stringify(updated));
+    saveThemeSettings(theme, updated, timeBasedTheme);
   };
 
   const enableTimeBasedTheme = (enabled) => {
     setTimeBasedTheme(enabled);
-    localStorage.setItem('appforge_time_based_theme', enabled);
+    saveThemeSettings(theme, customTheme, enabled);
   };
 
   return {
