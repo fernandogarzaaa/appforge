@@ -124,7 +124,7 @@ export default function ConsolidatedAISidebar({ currentProject, collapsed, onTog
       <motion.div
         initial={{ width: 80 }}
         animate={{ width: 80 }}
-        className="bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800 h-screen flex flex-col p-4 gap-6"
+        className="bg-white dark:bg-gray-900 h-screen flex flex-col p-3 gap-8 shadow-sm"
       >
         {/* Logo/Collapse Button */}
         <div className="flex justify-center">
@@ -213,11 +213,11 @@ export default function ConsolidatedAISidebar({ currentProject, collapsed, onTog
     <motion.div
       initial={{ width: 280 }}
       animate={{ width: 280 }}
-      className="bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800 h-screen flex flex-col overflow-hidden"
+      className="bg-white dark:bg-gray-900 h-screen flex flex-col overflow-hidden shadow-sm"
     >
       {/* Header */}
-      <div className="px-6 py-4 flex items-center justify-between border-b border-gray-200 dark:border-gray-800">
-        <h2 className="text-sm font-bold text-gray-900 dark:text-white tracking-wide">APPFORGE</h2>
+      <div className="px-6 py-5 flex items-center justify-between border-b border-gray-100 dark:border-gray-800/50">
+        <h2 className="text-xs font-semibold text-gray-600 dark:text-gray-400 tracking-wider">APPFORGE</h2>
         <TooltipProvider>
           <RadixTooltip>
             <TooltipTrigger asChild>
@@ -225,7 +225,7 @@ export default function ConsolidatedAISidebar({ currentProject, collapsed, onTog
                 variant="ghost"
                 size="icon"
                 onClick={onToggle}
-                className="h-8 w-8"
+                className="h-7 w-7 hover:bg-gray-100 dark:hover:bg-gray-800/50"
               >
                 <ChevronDown className="w-4 h-4" />
               </Button>
@@ -236,24 +236,24 @@ export default function ConsolidatedAISidebar({ currentProject, collapsed, onTog
       </div>
 
       {/* Scrollable Content */}
-      <div className="flex-1 overflow-y-auto px-3 py-4">
+      <div className="flex-1 overflow-y-auto px-4 py-6 space-y-8">
         <Accordion type="multiple" value={expandedGroups} onValueChange={setExpandedGroups}>
           {/* Main Navigation */}
           <AccordionItem value="main" className="border-none">
-            <AccordionTrigger className="px-3 py-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider hover:no-underline">
+            <AccordionTrigger className="px-0 py-3 text-xs font-medium text-gray-500 dark:text-gray-500 uppercase tracking-wider hover:no-underline hover:text-gray-600 dark:hover:text-gray-400">
               Core
             </AccordionTrigger>
-            <AccordionContent className="pb-3 pt-1">
-              <div className="flex flex-col gap-1">
+            <AccordionContent className="pb-4 pt-2 space-y-2">
+              <div className="flex flex-col gap-2">
                 {mainItems.map((item) => (
                   <Link
                     key={item.href}
                     to={item.href}
                     className={cn(
-                      'flex items-center gap-3 px-3 py-2 rounded-md text-sm transition-all duration-200',
+                      'flex items-center gap-3 px-3 py-2.5 rounded-md text-sm transition-all duration-200 group',
                       isActive(item.href)
-                        ? 'bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-300 font-medium'
-                        : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800/50'
+                        ? 'bg-indigo-50 dark:bg-indigo-900/20 text-indigo-700 dark:text-indigo-300 font-medium'
+                        : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800/30 hover:text-gray-700 dark:hover:text-gray-300'
                     )}
                   >
                     <item.icon className="w-4 h-4 flex-shrink-0" />
@@ -266,26 +266,29 @@ export default function ConsolidatedAISidebar({ currentProject, collapsed, onTog
 
           {/* AI & Model Router */}
           <AccordionItem value="ai" className="border-none">
-            <AccordionTrigger className="px-3 py-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider hover:no-underline">
+            <AccordionTrigger className="px-0 py-3 text-xs font-medium text-gray-500 dark:text-gray-500 uppercase tracking-wider hover:no-underline hover:text-gray-600 dark:hover:text-gray-400">
               AI & Models
             </AccordionTrigger>
-            <AccordionContent className="pb-3 pt-1">
+            <AccordionContent className="pb-4 pt-2 space-y-3">
               {/* AI Model Router - Consolidated */}
-              <div className="mb-3">
+              <div className="mb-3 -mx-1">
                 <AIModelRouter />
               </div>
 
+              {/* Divider */}
+              <div className="h-px bg-gray-100 dark:bg-gray-800/50" />
+
               {/* AI Features */}
-              <div className="flex flex-col gap-1">
+              <div className="flex flex-col gap-2 pt-1">
                 {aiItems.map((item) => (
                   <Link
                     key={item.href}
                     to={item.href}
                     className={cn(
-                      'flex items-center gap-3 px-3 py-2 rounded-md text-sm transition-all duration-200',
+                      'flex items-center gap-3 px-3 py-2.5 rounded-md text-sm transition-all duration-200',
                       isActive(item.href)
-                        ? 'bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-300 font-medium'
-                        : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800/50'
+                        ? 'bg-indigo-50 dark:bg-indigo-900/20 text-indigo-700 dark:text-indigo-300 font-medium'
+                        : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800/30 hover:text-gray-700 dark:hover:text-gray-300'
                     )}
                   >
                     <item.icon className="w-4 h-4 flex-shrink-0" />
@@ -298,20 +301,20 @@ export default function ConsolidatedAISidebar({ currentProject, collapsed, onTog
 
           {/* Build Section */}
           <AccordionItem value="build" className="border-none">
-            <AccordionTrigger className="px-3 py-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider hover:no-underline">
+            <AccordionTrigger className="px-0 py-3 text-xs font-medium text-gray-500 dark:text-gray-500 uppercase tracking-wider hover:no-underline hover:text-gray-600 dark:hover:text-gray-400">
               Build
             </AccordionTrigger>
-            <AccordionContent className="pb-3 pt-1">
-              <div className="flex flex-col gap-1">
+            <AccordionContent className="pb-4 pt-2 space-y-2">
+              <div className="flex flex-col gap-2">
                 {buildItems.map((item) => (
                   <Link
                     key={item.href}
                     to={item.href}
                     className={cn(
-                      'flex items-center gap-3 px-3 py-2 rounded-md text-sm transition-all duration-200',
+                      'flex items-center gap-3 px-3 py-2.5 rounded-md text-sm transition-all duration-200',
                       isActive(item.href)
-                        ? 'bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-300 font-medium'
-                        : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800/50'
+                        ? 'bg-indigo-50 dark:bg-indigo-900/20 text-indigo-700 dark:text-indigo-300 font-medium'
+                        : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800/30 hover:text-gray-700 dark:hover:text-gray-300'
                     )}
                   >
                     <item.icon className="w-4 h-4 flex-shrink-0" />
@@ -324,20 +327,20 @@ export default function ConsolidatedAISidebar({ currentProject, collapsed, onTog
 
           {/* Templates */}
           <AccordionItem value="templates" className="border-none">
-            <AccordionTrigger className="px-3 py-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider hover:no-underline">
+            <AccordionTrigger className="px-0 py-3 text-xs font-medium text-gray-500 dark:text-gray-500 uppercase tracking-wider hover:no-underline hover:text-gray-600 dark:hover:text-gray-400">
               Templates
             </AccordionTrigger>
-            <AccordionContent className="pb-3 pt-1">
-              <div className="flex flex-col gap-1">
+            <AccordionContent className="pb-4 pt-2 space-y-2">
+              <div className="flex flex-col gap-2">
                 {templateItems.map((item) => (
                   <Link
                     key={item.href}
                     to={item.href}
                     className={cn(
-                      'flex items-center gap-3 px-3 py-2 rounded-md text-sm transition-all duration-200',
+                      'flex items-center gap-3 px-3 py-2.5 rounded-md text-sm transition-all duration-200',
                       isActive(item.href)
-                        ? 'bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-300 font-medium'
-                        : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800/50'
+                        ? 'bg-indigo-50 dark:bg-indigo-900/20 text-indigo-700 dark:text-indigo-300 font-medium'
+                        : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800/30 hover:text-gray-700 dark:hover:text-gray-300'
                     )}
                   >
                     <item.icon className="w-4 h-4 flex-shrink-0" />
@@ -350,20 +353,20 @@ export default function ConsolidatedAISidebar({ currentProject, collapsed, onTog
 
           {/* Enterprise */}
           <AccordionItem value="enterprise" className="border-none">
-            <AccordionTrigger className="px-3 py-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider hover:no-underline">
+            <AccordionTrigger className="px-0 py-3 text-xs font-medium text-gray-500 dark:text-gray-500 uppercase tracking-wider hover:no-underline hover:text-gray-600 dark:hover:text-gray-400">
               Enterprise
             </AccordionTrigger>
-            <AccordionContent className="pb-3 pt-1">
-              <div className="flex flex-col gap-1">
+            <AccordionContent className="pb-4 pt-2 space-y-2">
+              <div className="flex flex-col gap-2">
                 {enterpriseItems.map((item) => (
                   <Link
                     key={item.href}
                     to={item.href}
                     className={cn(
-                      'flex items-center gap-3 px-3 py-2 rounded-md text-sm transition-all duration-200',
+                      'flex items-center gap-3 px-3 py-2.5 rounded-md text-sm transition-all duration-200',
                       isActive(item.href)
-                        ? 'bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-300 font-medium'
-                        : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800/50'
+                        ? 'bg-indigo-50 dark:bg-indigo-900/20 text-indigo-700 dark:text-indigo-300 font-medium'
+                        : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800/30 hover:text-gray-700 dark:hover:text-gray-300'
                     )}
                   >
                     <item.icon className="w-4 h-4 flex-shrink-0" />
@@ -376,20 +379,20 @@ export default function ConsolidatedAISidebar({ currentProject, collapsed, onTog
 
           {/* Web3 */}
           <AccordionItem value="web3" className="border-none">
-            <AccordionTrigger className="px-3 py-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider hover:no-underline">
+            <AccordionTrigger className="px-0 py-3 text-xs font-medium text-gray-500 dark:text-gray-500 uppercase tracking-wider hover:no-underline hover:text-gray-600 dark:hover:text-gray-400">
               Web3
             </AccordionTrigger>
-            <AccordionContent className="pb-3 pt-1">
-              <div className="flex flex-col gap-1">
+            <AccordionContent className="pb-4 pt-2 space-y-2">
+              <div className="flex flex-col gap-2">
                 {web3Items.map((item) => (
                   <Link
                     key={item.href}
                     to={item.href}
                     className={cn(
-                      'flex items-center gap-3 px-3 py-2 rounded-md text-sm transition-all duration-200',
+                      'flex items-center gap-3 px-3 py-2.5 rounded-md text-sm transition-all duration-200',
                       isActive(item.href)
-                        ? 'bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-300 font-medium'
-                        : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800/50'
+                        ? 'bg-indigo-50 dark:bg-indigo-900/20 text-indigo-700 dark:text-indigo-300 font-medium'
+                        : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800/30 hover:text-gray-700 dark:hover:text-gray-300'
                     )}
                   >
                     <item.icon className="w-4 h-4 flex-shrink-0" />
@@ -403,17 +406,17 @@ export default function ConsolidatedAISidebar({ currentProject, collapsed, onTog
       </div>
 
       {/* Footer */}
-      <div className="px-3 py-3 border-t border-gray-200 dark:border-gray-800">
+      <div className="px-4 py-6 border-t border-gray-100 dark:border-gray-800/50">
         <TooltipProvider>
           <RadixTooltip>
             <TooltipTrigger asChild>
               <Link
                 to={createPageUrl('LLMSettings')}
                 className={cn(
-                  'flex items-center gap-3 px-3 py-2 rounded-md text-sm transition-all duration-200',
+                  'flex items-center gap-3 px-3 py-2.5 rounded-md text-sm transition-all duration-200',
                   isActive(createPageUrl('LLMSettings'))
-                    ? 'bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-300'
-                    : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800/50'
+                    ? 'bg-indigo-50 dark:bg-indigo-900/20 text-indigo-700 dark:text-indigo-300'
+                    : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800/30 hover:text-gray-700 dark:hover:text-gray-300'
                 )}
               >
                 <Settings className="w-4 h-4 flex-shrink-0" />
