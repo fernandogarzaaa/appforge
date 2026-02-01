@@ -4,6 +4,7 @@
  */
 
 import mongoose from 'mongoose';
+import { encrypt, decrypt } from '../utils/encryption.js';
 
 const teamWorkflowsSchema = new mongoose.Schema({
   teamId: {
@@ -90,7 +91,58 @@ const teamWorkflowsSchema = new mongoose.Schema({
 // Update the updatedAt field before saving
 teamWorkflowsSchema.pre('save', function(next) {
   this.updatedAt = Date.now();
+  
+  // Encrypt sensitive fields
+  this.webhooks.forEach((webhook) => {
+    if (webhook.secret && !webhook.secret.includes(':')) {
+      webhook.secret = encrypt(webhook.secret);
+    }
+  });
+  
+  this.integrations.forEach((integration) => {
+    if (integration.apiKey && !integration.apiKey.includes(':')) {
+      integration.apiKey = encrypt(integration.apiKey);
+    }
+  });
+  
   next();
 });
+
+// Decrypt sensitive fields after finding
+teamWorkflowsSchema.post('find', function(docs) {
+  if (Array.isArray(docs)) {
+    docs.forEach(doc => decryptDoc(doc));
+  }
+});
+
+teamWorkflowsSchema.post('findOne', function(doc) {
+  if (doc) decryptDoc(doc);
+});
+
+function decryptDoc(doc) {
+  if (doc?.webhooks) {
+    doc.webhooks.forEach((webhook) => {
+      if (webhook.secret && webhook.secret.includes(':')) {
+        try {
+          webhook.secret = decrypt(webhook.secret);
+        } catch (error) {
+          console.warn('Failed to decrypt webhook secret:', error.message);
+        }
+      }
+    });
+  }
+  
+  if (doc?.integrations) {
+    doc.integrations.forEach((integration) => {
+      if (integration.apiKey && integration.apiKey.includes(':')) {
+        try {
+          integration.apiKey = decrypt(integration.apiKey);
+        } catch (error) {
+          console.warn('Failed to decrypt integration apiKey:', error.message);
+        }
+      }
+    });
+  }
+}
 
 export default mongoose.model('TeamWorkflows', teamWorkflowsSchema);

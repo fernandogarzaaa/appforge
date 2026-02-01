@@ -8,6 +8,7 @@ import { authenticate } from '../middleware/auth.js';
 import { AppError } from '../middleware/errorHandler.js';
 import asyncHandler from '../utils/asyncHandler.js';
 import cache from '../utils/cache.js';
+import { readLimiter, adminLimiter } from '../middleware/rateLimiting.js';
 import AdminConfiguration from '../models/AdminConfiguration.js';
 
 const router = express.Router();
@@ -55,10 +56,10 @@ router.use(authenticate);
  * GET /api/admin/api-configurations
  * Get all API configurations
  */
-router.get('/api-configurations', asyncHandler(async (req, res) => {
+router.get('/api-configurations', readLimiter, asyncHandler(async (req, res) => {
   const userId = getUserId(req);
   const cacheKey = `admin:${userId}:api-configurations`;
-  const cached = cache.get(cacheKey);
+  const cached = await cache.get(cacheKey);
   if (cached) {
     return res.json(cached);
   }
@@ -76,7 +77,7 @@ router.get('/api-configurations', asyncHandler(async (req, res) => {
     settings: adminConfig.settings
   };
 
-  cache.set(cacheKey, payload, CACHE_TTL_MS);
+  await cache.set(cacheKey, payload, CACHE_TTL_MS);
   res.json(payload);
 }));
 
@@ -84,7 +85,7 @@ router.get('/api-configurations', asyncHandler(async (req, res) => {
  * POST /api/admin/api-configurations
  * Save API configurations
  */
-router.post('/api-configurations', asyncHandler(async (req, res) => {
+router.post('/api-configurations', adminLimiter, asyncHandler(async (req, res) => {
   const userId = getUserId(req);
   const { configurations, settings } = req.body;
 
@@ -107,7 +108,7 @@ router.post('/api-configurations', asyncHandler(async (req, res) => {
   adminConfig.lastModifiedBy = userId;
 
   await adminConfig.save();
-  cache.del(`admin:${userId}:api-configurations`);
+  await cache.del(`admin:${userId}:api-configurations`);
 
   res.json({
     success: true,

@@ -4,6 +4,7 @@
  */
 
 import mongoose from 'mongoose';
+import { encrypt, decrypt } from '../utils/encryption.js';
 
 const adminConfigurationSchema = new mongoose.Schema({
   userId: {
@@ -75,7 +76,52 @@ const adminConfigurationSchema = new mongoose.Schema({
 // Update the updatedAt field before saving
 adminConfigurationSchema.pre('save', function(next) {
   this.updatedAt = Date.now();
+  
+  // Encrypt sensitive fields
+  if (this.settings?.encryptionEnabled !== false) {
+    this.configurations.forEach((config) => {
+      if (config.apiKey && !config.apiKey.includes(':')) {
+        config.apiKey = encrypt(config.apiKey);
+      }
+      if (config.apiSecret && !config.apiSecret.includes(':')) {
+        config.apiSecret = encrypt(config.apiSecret);
+      }
+    });
+  }
+  
   next();
 });
+
+// Decrypt sensitive fields after finding
+adminConfigurationSchema.post('find', function(docs) {
+  if (Array.isArray(docs)) {
+    docs.forEach(doc => decryptDoc(doc));
+  }
+});
+
+adminConfigurationSchema.post('findOne', function(doc) {
+  if (doc) decryptDoc(doc);
+});
+
+function decryptDoc(doc) {
+  if (doc?.configurations) {
+    doc.configurations.forEach((config) => {
+      if (config.apiKey && config.apiKey.includes(':')) {
+        try {
+          config.apiKey = decrypt(config.apiKey);
+        } catch (error) {
+          console.warn('Failed to decrypt apiKey:', error.message);
+        }
+      }
+      if (config.apiSecret && config.apiSecret.includes(':')) {
+        try {
+          config.apiSecret = decrypt(config.apiSecret);
+        } catch (error) {
+          console.warn('Failed to decrypt apiSecret:', error.message);
+        }
+      }
+    });
+  }
+}
 
 export default mongoose.model('AdminConfiguration', adminConfigurationSchema);

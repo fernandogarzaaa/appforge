@@ -8,6 +8,7 @@ import { authenticate } from '../middleware/auth.js';
 import { AppError } from '../middleware/errorHandler.js';
 import asyncHandler from '../utils/asyncHandler.js';
 import cache from '../utils/cache.js';
+import { readLimiter, strictWriteLimiter } from '../middleware/rateLimiting.js';
 import UserSettings from '../models/UserSettings.js';
 
 const router = express.Router();
@@ -36,10 +37,10 @@ router.use(authenticate);
  * GET /api/user/llm-settings
  * Get user's LLM settings and preferences
  */
-router.get('/llm-settings', asyncHandler(async (req, res) => {
+router.get('/llm-settings', readLimiter, asyncHandler(async (req, res) => {
   const userId = getUserId(req);
   const cacheKey = `user:${userId}:llm-settings`;
-  const cached = cache.get(cacheKey);
+  const cached = await await cache.get(cacheKey);
   if (cached) {
     return res.json(cached);
   }
@@ -60,7 +61,7 @@ router.get('/llm-settings', asyncHandler(async (req, res) => {
     usage: settings.llmUsage
   };
 
-  cache.set(cacheKey, payload, CACHE_TTL_MS);
+  await await cache.set(cacheKey, payload, CACHE_TTL_MS);
   res.json(payload);
 }));
 
@@ -68,7 +69,7 @@ router.get('/llm-settings', asyncHandler(async (req, res) => {
  * POST /api/user/llm-settings
  * Save user's LLM settings and preferences
  */
-router.post('/llm-settings', asyncHandler(async (req, res) => {
+router.post('/llm-settings', strictWriteLimiter, asyncHandler(async (req, res) => {
   const userId = getUserId(req);
   const { selectedModel, settings, usage } = req.body;
 
@@ -91,7 +92,7 @@ router.post('/llm-settings', asyncHandler(async (req, res) => {
   }
 
   await userSettings.save();
-  cache.del(`user:${userId}:llm-settings`);
+  await cache.del(`user:${userId}:llm-settings`);
 
   res.json({
     success: true,
@@ -106,7 +107,7 @@ router.post('/llm-settings', asyncHandler(async (req, res) => {
  * DELETE /api/user/llm-usage
  * Clear user's LLM usage statistics
  */
-router.delete('/llm-usage', asyncHandler(async (req, res) => {
+router.delete('/llm-usage', strictWriteLimiter, asyncHandler(async (req, res) => {
   const userId = getUserId(req);
 
   let userSettings = await UserSettings.findOne({ userId });
@@ -122,7 +123,7 @@ router.delete('/llm-usage', asyncHandler(async (req, res) => {
     await userSettings.save();
   }
 
-  cache.del(`user:${userId}:llm-settings`);
+  await cache.del(`user:${userId}:llm-settings`);
 
   res.json({
     success: true,
@@ -138,7 +139,7 @@ router.delete('/llm-usage', asyncHandler(async (req, res) => {
 router.get('/theme-settings', asyncHandler(async (req, res) => {
   const userId = getUserId(req);
   const cacheKey = `user:${userId}:theme-settings`;
-  const cached = cache.get(cacheKey);
+  const cached = await cache.get(cacheKey);
   if (cached) {
     return res.json(cached);
   }
@@ -159,7 +160,7 @@ router.get('/theme-settings', asyncHandler(async (req, res) => {
     timeBasedTheme: settings.theme.timeBasedTheme
   };
 
-  cache.set(cacheKey, payload, CACHE_TTL_MS);
+  await cache.set(cacheKey, payload, CACHE_TTL_MS);
   res.json(payload);
 }));
 
@@ -167,7 +168,7 @@ router.get('/theme-settings', asyncHandler(async (req, res) => {
  * POST /api/user/theme-settings
  * Save user's theme preferences
  */
-router.post('/theme-settings', asyncHandler(async (req, res) => {
+router.post('/theme-settings', strictWriteLimiter, asyncHandler(async (req, res) => {
   const userId = getUserId(req);
   const { theme, customTheme, timeBasedTheme } = req.body;
 
@@ -193,7 +194,7 @@ router.post('/theme-settings', asyncHandler(async (req, res) => {
   if (timeBasedTheme !== undefined) userSettings.theme.timeBasedTheme = timeBasedTheme;
 
   await userSettings.save();
-  cache.del(`user:${userId}:theme-settings`);
+  await cache.del(`user:${userId}:theme-settings`);
 
   res.json({
     success: true,
@@ -212,7 +213,7 @@ router.post('/theme-settings', asyncHandler(async (req, res) => {
 router.get('/keyboard-shortcuts', asyncHandler(async (req, res) => {
   const userId = getUserId(req);
   const cacheKey = `user:${userId}:keyboard-shortcuts`;
-  const cached = cache.get(cacheKey);
+  const cached = await cache.get(cacheKey);
   if (cached) {
     return res.json(cached);
   }
@@ -230,7 +231,7 @@ router.get('/keyboard-shortcuts', asyncHandler(async (req, res) => {
     preset: settings.keyboardShortcuts.preset
   };
 
-  cache.set(cacheKey, payload, CACHE_TTL_MS);
+  await cache.set(cacheKey, payload, CACHE_TTL_MS);
   res.json(payload);
 }));
 
@@ -238,7 +239,7 @@ router.get('/keyboard-shortcuts', asyncHandler(async (req, res) => {
  * POST /api/user/keyboard-shortcuts
  * Save user's keyboard shortcuts
  */
-router.post('/keyboard-shortcuts', asyncHandler(async (req, res) => {
+router.post('/keyboard-shortcuts', strictWriteLimiter, asyncHandler(async (req, res) => {
   const userId = getUserId(req);
   const { shortcuts, preset } = req.body;
 
@@ -257,7 +258,7 @@ router.post('/keyboard-shortcuts', asyncHandler(async (req, res) => {
   if (preset) userSettings.keyboardShortcuts.preset = preset;
 
   await userSettings.save();
-  cache.del(`user:${userId}:keyboard-shortcuts`);
+  await cache.del(`user:${userId}:keyboard-shortcuts`);
 
   res.json({
     success: true,
@@ -275,7 +276,7 @@ router.post('/keyboard-shortcuts', asyncHandler(async (req, res) => {
 router.get('/advanced-settings', asyncHandler(async (req, res) => {
   const userId = getUserId(req);
   const cacheKey = `user:${userId}:advanced-settings`;
-  const cached = cache.get(cacheKey);
+  const cached = await cache.get(cacheKey);
   if (cached) {
     return res.json(cached);
   }
@@ -292,7 +293,7 @@ router.get('/advanced-settings', asyncHandler(async (req, res) => {
     settings: settings.advancedSettings
   };
 
-  cache.set(cacheKey, payload, CACHE_TTL_MS);
+  await cache.set(cacheKey, payload, CACHE_TTL_MS);
   res.json(payload);
 }));
 
@@ -300,7 +301,7 @@ router.get('/advanced-settings', asyncHandler(async (req, res) => {
  * POST /api/user/advanced-settings
  * Save user's advanced settings
  */
-router.post('/advanced-settings', asyncHandler(async (req, res) => {
+router.post('/advanced-settings', strictWriteLimiter, asyncHandler(async (req, res) => {
   const userId = getUserId(req);
   const { settings } = req.body;
 
@@ -317,7 +318,7 @@ router.post('/advanced-settings', asyncHandler(async (req, res) => {
   }
 
   await userSettings.save();
-  cache.del(`user:${userId}:advanced-settings`);
+  await cache.del(`user:${userId}:advanced-settings`);
 
   res.json({
     success: true,
@@ -328,3 +329,4 @@ router.post('/advanced-settings', asyncHandler(async (req, res) => {
 }));
 
 export default router;
+

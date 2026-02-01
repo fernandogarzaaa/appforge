@@ -8,6 +8,7 @@ import { authenticate } from '../middleware/auth.js';
 import { AppError } from '../middleware/errorHandler.js';
 import asyncHandler from '../utils/asyncHandler.js';
 import cache from '../utils/cache.js';
+import { readLimiter, strictWriteLimiter } from '../middleware/rateLimiting.js';
 import TeamWorkflows from '../models/TeamWorkflows.js';
 
 const router = express.Router();
@@ -30,10 +31,10 @@ router.use(authenticate);
  * GET /api/team/workflows
  * Get all team workflows
  */
-router.get('/workflows', asyncHandler(async (req, res) => {
+router.get('/workflows', readLimiter, asyncHandler(async (req, res) => {
   const teamId = getTeamId(req);
   const cacheKey = `team:${teamId}:workflows`;
-  const cached = cache.get(cacheKey);
+  const cached = await cache.get(cacheKey);
   if (cached) {
     return res.json(cached);
   }
@@ -52,7 +53,7 @@ router.get('/workflows', asyncHandler(async (req, res) => {
     automations: teamWorkflows.automations
   };
 
-  cache.set(cacheKey, payload, CACHE_TTL_MS);
+  await cache.set(cacheKey, payload, CACHE_TTL_MS);
   res.json(payload);
 }));
 
@@ -60,7 +61,7 @@ router.get('/workflows', asyncHandler(async (req, res) => {
  * POST /api/team/workflows
  * Create or update team workflows
  */
-router.post('/workflows', asyncHandler(async (req, res) => {
+router.post('/workflows', strictWriteLimiter, asyncHandler(async (req, res) => {
   const teamId = getTeamId(req);
   const { workflows, webhooks, automations } = req.body;
 
@@ -79,7 +80,7 @@ router.post('/workflows', asyncHandler(async (req, res) => {
   if (automations) teamWorkflows.automations = automations;
 
   await teamWorkflows.save();
-  cache.del(`team:${teamId}:workflows`);
+  await cache.del(`team:${teamId}:workflows`);
 
   res.json({
     success: true,

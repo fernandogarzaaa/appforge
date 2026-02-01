@@ -1,38 +1,35 @@
 /**
- * Simple in-memory cache with TTL support
+ * Cache utility - Uses Redis when available, falls back to in-memory
  */
 
-const cacheStore = new Map();
+import redisCache from './redisCache.js';
 
-const getCacheEntry = (key) => {
-  const entry = cacheStore.get(key);
-  if (!entry) return null;
-
-  if (entry.expiresAt && Date.now() > entry.expiresAt) {
-    cacheStore.delete(key);
-    return null;
-  }
-
-  return entry.value;
+// Wrapper functions that delegate to Redis cache
+const getCacheEntry = async (key) => {
+  return await redisCache.get(key);
 };
 
-const setCacheEntry = (key, value, ttlMs = 60000) => {
-  const expiresAt = ttlMs ? Date.now() + ttlMs : null;
-  cacheStore.set(key, { value, expiresAt });
+const setCacheEntry = async (key, value, ttlMs = 60000) => {
+  return await redisCache.set(key, value, ttlMs);
 };
 
-const deleteCacheEntry = (key) => {
-  cacheStore.delete(key);
+const deleteCacheEntry = async (key) => {
+  return await redisCache.del(key);
 };
 
-const clearCache = () => {
-  cacheStore.clear();
+const clearCache = async () => {
+  return await redisCache.clear();
 };
 
-export { getCacheEntry, setCacheEntry, deleteCacheEntry, clearCache };
+const deletePattern = async (pattern) => {
+  return await redisCache.delPattern(pattern);
+};
+
+export { getCacheEntry, setCacheEntry, deleteCacheEntry, clearCache, deletePattern };
 export default {
   get: getCacheEntry,
   set: setCacheEntry,
   del: deleteCacheEntry,
-  clear: clearCache
+  clear: clearCache,
+  delPattern: deletePattern
 };
