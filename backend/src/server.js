@@ -17,6 +17,9 @@ import userRoutes from './routes/userRoutes.js';
 import teamRoutes from './routes/teamRoutes.js';
 import permissionRoutes from './routes/permissionRoutes.js';
 import creditsRoutes from './routes/creditsRoutes.js';
+import settingsRoutes from './routes/settingsRoutes.js';
+import teamSettingsRoutes from './routes/teamSettingsRoutes.js';
+import adminRoutes from './routes/adminRoutes.js';
 import { handleStripeWebhook } from './services/stripeService.js';
 import WebSocketServer from './websocket/index.js';
 
@@ -97,6 +100,11 @@ app.use('/api/users', userRoutes);
 app.use('/api/teams', teamRoutes);
 app.use('/api/permissions', permissionRoutes);
 app.use('/api/credits', creditsRoutes);
+
+// Frontend persistence layer routes
+app.use('/api/user', settingsRoutes);
+app.use('/api/team', teamSettingsRoutes);
+app.use('/api/admin', adminRoutes);
 
 // 404 handler
 app.use((req, res) => {

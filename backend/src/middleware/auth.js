@@ -7,7 +7,20 @@ import jwt from 'jsonwebtoken';
 
 export const authenticate = (req, res, next) => {
   try {
-    const token = req.headers.authorization?.split(' ')[1];
+    // Try to get token from Authorization header first
+    let token = req.headers.authorization?.split(' ')[1];
+    
+    // If not in header, try to parse from cookies manually
+    if (!token && req.headers.cookie) {
+      const cookies = req.headers.cookie.split(';');
+      for (const cookie of cookies) {
+        const [name, value] = cookie.trim().split('=');
+        if (name === 'token') {
+          token = decodeURIComponent(value);
+          break;
+        }
+      }
+    }
 
     if (!token) {
       return res.status(401).json({
