@@ -1,4 +1,5 @@
 import { useState, useCallback, useEffect } from 'react';
+import { fetchJson } from '@/utils/api';
 
 /**
  * useTeamWorkflows Hook
@@ -21,16 +22,13 @@ export function useTeamWorkflows() {
 
   const loadTeamWorkflows = async () => {
     try {
-      const response = await fetch('/api/team/workflows', {
+      const data = await fetchJson('/api/team/workflows', {
         credentials: 'include'
       });
-      if (response.ok) {
-        const data = await response.json();
-        setWorkflows(data.workflows || []);
-        setWebhooks(data.webhooks || []);
-        setAutomations(data.automations || []);
-        setIntegratedServices(data.services || {});
-      }
+      setWorkflows(data.workflows || []);
+      setWebhooks(data.webhooks || []);
+      setAutomations(data.automations || []);
+      setIntegratedServices(data.services || {});
     } catch (error) {
       console.error('Failed to load team workflows:', error);
     } finally {
@@ -41,7 +39,7 @@ export function useTeamWorkflows() {
   // Save workflows to backend
   const saveToBackend = useCallback(async (type, data) => {
     try {
-      await fetch('/api/team/workflows', {
+      await fetchJson('/api/team/workflows', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',

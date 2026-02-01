@@ -9,6 +9,7 @@ const teamWorkflowsSchema = new mongoose.Schema({
   teamId: {
     type: String,
     required: true,
+    unique: true,
     index: true
   },
 

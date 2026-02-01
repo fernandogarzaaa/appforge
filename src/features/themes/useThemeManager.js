@@ -1,4 +1,5 @@
 import { useEffect, useState, createContext, useContext } from 'react';
+import { fetchJson } from '@/utils/api';
 
 const ThemeContext = createContext(null);
 
@@ -19,15 +20,12 @@ export function useThemeManager() {
 
   const loadThemeSettings = async () => {
     try {
-      const response = await fetch('/api/user/theme-settings', {
+      const data = await fetchJson('/api/user/theme-settings', {
         credentials: 'include'
       });
-      if (response.ok) {
-        const data = await response.json();
-        setTheme(data.theme || 'light');
-        setCustomTheme(data.customTheme || getDefaultCustomTheme());
-        setTimeBasedTheme(data.timeBasedTheme || false);
-      }
+      setTheme(data.theme || 'light');
+      setCustomTheme(data.customTheme || getDefaultCustomTheme());
+      setTimeBasedTheme(data.timeBasedTheme || false);
     } catch (error) {
       console.error('Failed to load theme settings:', error);
     } finally {
@@ -69,7 +67,7 @@ export function useThemeManager() {
 
   const saveThemeSettings = async (newTheme, newCustom, newTimeBased) => {
     try {
-      await fetch('/api/user/theme-settings', {
+      await fetchJson('/api/user/theme-settings', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',

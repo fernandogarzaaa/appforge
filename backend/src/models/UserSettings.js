@@ -118,28 +118,15 @@ const userSettingsSchema = new mongoose.Schema({
     }
   },
 
-  // Advanced Settings
+  // Advanced Settings (flexible payload for UI settings groups)
   advancedSettings: {
-    autoSave: {
-      type: Boolean,
-      default: true
-    },
-    notifications: {
-      type: Boolean,
-      default: true
-    },
-    analytics: {
-      type: Boolean,
-      default: true
-    },
-    privacy: {
-      type: String,
-      enum: ['public', 'private', 'friends-only'],
-      default: 'private'
-    },
-    dataRetention: {
-      type: Number,
-      default: 90 // days
+    type: mongoose.Schema.Types.Mixed,
+    default: {
+      autoSave: true,
+      notifications: true,
+      analytics: true,
+      privacy: 'private',
+      dataRetention: 90 // days
     }
   },
 

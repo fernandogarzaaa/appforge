@@ -1,4 +1,5 @@
 import { useState, useCallback, useEffect } from 'react';
+import { fetchJson } from '@/utils/api';
 
 /**
  * useAdvancedSettings Hook
@@ -47,16 +48,13 @@ export function useAdvancedSettings() {
 
   const loadAdvancedSettings = async () => {
     try {
-      const response = await fetch('/api/user/advanced-settings', {
+      const data = await fetchJson('/api/user/advanced-settings', {
         credentials: 'include'
       });
-      if (response.ok) {
-        const data = await response.json();
-        if (data.userSettings) setUserSettings(data.userSettings);
-        if (data.customSettings) setCustomSettings(data.customSettings);
-        if (data.settingsHistory) setSettingsHistory(data.settingsHistory);
-        if (data.settingsGroups) setSettingsGroups(data.settingsGroups);
-      }
+      if (data.settings?.userSettings) setUserSettings(data.settings.userSettings);
+      if (data.settings?.customSettings) setCustomSettings(data.settings.customSettings);
+      if (data.settings?.settingsHistory) setSettingsHistory(data.settings.settingsHistory);
+      if (data.settings?.settingsGroups) setSettingsGroups(data.settings.settingsGroups);
     } catch (error) {
       console.error('Failed to load advanced settings:', error);
     } finally {
@@ -66,11 +64,11 @@ export function useAdvancedSettings() {
 
   const saveAdvancedSettings = useCallback(async (newSettings) => {
     try {
-      await fetch('/api/user/advanced-settings', {
+      await fetchJson('/api/user/advanced-settings', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
-        body: JSON.stringify(newSettings)
+        body: JSON.stringify({ settings: newSettings })
       });
     } catch (error) {
       console.error('Failed to save advanced settings:', error);
@@ -92,13 +90,18 @@ export function useAdvancedSettings() {
     current[keys[keys.length - 1]] = value;
 
     setUserSettings(updated);
-    saveAdvancedSettings({ userSettings: updated });
+    saveAdvancedSettings({
+      userSettings: updated,
+      customSettings,
+      settingsHistory,
+      settingsGroups
+    });
 
     // Add to history
     addSettingsHistory(key, oldValue, value);
 
     return updated;
-  }, [userSettings, saveAdvancedSettings]);
+  }, [userSettings, customSettings, settingsHistory, settingsGroups, saveAdvancedSettings]);
 
   // Add to settings history
   const addSettingsHistory = useCallback((key, oldValue, newValue) => {
@@ -112,8 +115,13 @@ export function useAdvancedSettings() {
 
     const updated = [historyEntry, ...settingsHistory].slice(0, 500);
     setSettingsHistory(updated);
-    saveAdvancedSettings({ settingsHistory: updated });
-  }, [settingsHistory, saveAdvancedSettings]);
+    saveAdvancedSettings({
+      userSettings,
+      customSettings,
+      settingsHistory: updated,
+      settingsGroups
+    });
+  }, [userSettings, customSettings, settingsHistory, settingsGroups, saveAdvancedSettings]);
 
   // Reset settings to default
   const resetToDefaults = useCallback(() => {
@@ -147,8 +155,13 @@ export function useAdvancedSettings() {
     };
 
     setUserSettings(defaults);
-    saveAdvancedSettings({ userSettings: defaults });
-  }, [saveAdvancedSettings]);
+    saveAdvancedSettings({
+      userSettings: defaults,
+      customSettings,
+      settingsHistory,
+      settingsGroups
+    });
+  }, [customSettings, settingsGroups, settingsHistory, saveAdvancedSettings]);
 
   // Create custom setting
   const createCustomSetting = useCallback((key, value, metadata = {}) => {
@@ -161,10 +174,15 @@ export function useAdvancedSettings() {
     };
 
     setCustomSettings(updated);
-    saveAdvancedSettings({ customSettings: updated });
+    saveAdvancedSettings({
+      userSettings,
+      customSettings: updated,
+      settingsHistory,
+      settingsGroups
+    });
 
     return updated[key];
-  }, [customSettings, saveAdvancedSettings]);
+  }, [customSettings, settingsGroups, settingsHistory, userSettings, saveAdvancedSettings]);
 
   // Update custom setting
   const updateCustomSetting = useCallback((key, value) => {
@@ -177,11 +195,16 @@ export function useAdvancedSettings() {
       };
 
       setCustomSettings(updated);
-      localStorage.setItem('appforge_custom_settings', JSON.stringify(updated));
+      saveAdvancedSettings({
+        userSettings,
+        customSettings: updated,
+        settingsHistory,
+        settingsGroups
+      });
     }
 
     return updated[key];
-  }, [customSettings]);
+  }, [customSettings, settingsGroups, settingsHistory, userSettings, saveAdvancedSettings]);
 
   // Get setting with path notation
   const getSetting = useCallback((key, defaultValue = null) => {

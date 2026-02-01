@@ -16,7 +16,8 @@ collaboration, data security, and user management.
 3. [Real-time Collaboration](#real-time-collaboration)
 4. [Data Security & Privacy](#data-security--privacy)
 5. [User & Project Management](#user--project-management)
-6. [Error Handling](#error-handling)
+6. [Frontend Persistence](#frontend-persistence)
+7. [Error Handling](#error-handling)
 
 ---
 
@@ -762,6 +763,138 @@ Organize users into teams.
     "owner": "user-uuid",
     "createdAt": "2026-01-29T10:00:00Z"
   }
+}
+```
+
+---
+
+## Frontend Persistence
+
+### User LLM Settings
+
+**GET** `/api/user/llm-settings`  
+Retrieve the user's LLM settings and usage.
+
+**Response:**
+```json
+{
+  "userId": "user-uuid",
+  "selectedModel": "base44",
+  "apiKey": "",
+  "settings": {
+    "temperature": 0.7,
+    "maxTokens": 2000
+  },
+  "usage": {
+    "totalTokens": 0,
+    "totalCost": 0,
+    "queryCount": 0,
+    "modelBreakdown": {},
+    "history": []
+  }
+}
+```
+
+**POST** `/api/user/llm-settings`  
+Save the user's LLM preferences and usage.
+
+**Request Body:**
+```json
+{
+  "selectedModel": "chatgpt",
+  "settings": {
+    "temperature": 0.6,
+    "maxTokens": 1500
+  },
+  "usage": {
+    "queryCount": 3
+  }
+}
+```
+
+**DELETE** `/api/user/llm-usage`  
+Reset usage statistics.
+
+---
+
+### Theme Settings
+
+**GET** `/api/user/theme-settings`  
+Retrieve current theme preferences.
+
+**POST** `/api/user/theme-settings`  
+Persist theme preferences.
+
+---
+
+### Keyboard Shortcuts
+
+**GET** `/api/user/keyboard-shortcuts`  
+Retrieve custom keyboard shortcuts.
+
+**POST** `/api/user/keyboard-shortcuts`  
+Persist custom keyboard shortcuts.
+
+---
+
+### Advanced Settings
+
+**GET** `/api/user/advanced-settings`  
+Retrieve advanced settings payload.
+
+**POST** `/api/user/advanced-settings`  
+Persist advanced settings payload.
+
+**Request Body Example:**
+```json
+{
+  "settings": {
+    "userSettings": {
+      "language": "en",
+      "timezone": "UTC"
+    },
+    "customSettings": {},
+    "settingsHistory": []
+  }
+}
+```
+
+---
+
+### Team Workflows
+
+**GET** `/api/team/workflows`  
+Retrieve workflows, webhooks, and automations for the team.
+
+**POST** `/api/team/workflows`  
+Persist workflows, webhooks, and automations.
+
+---
+
+### Admin API Configurations
+
+**GET** `/api/admin/api-configurations`  
+Retrieve configured API providers and admin settings.
+
+**POST** `/api/admin/api-configurations`  
+Persist API provider configurations.
+
+**Request Body Example:**
+```json
+{
+  "configurations": [
+    {
+      "provider": "openai",
+      "name": "openai",
+      "apiKey": "sk-...",
+      "baseUrl": "https://api.openai.com/v1",
+      "active": true,
+      "config": {
+        "model": "gpt-4",
+        "timeout": 30
+      }
+    }
+  ]
 }
 ```
 

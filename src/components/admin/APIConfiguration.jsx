@@ -1,40 +1,46 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import HelpTooltip from '@/components/help/HelpTooltip';
 import { Settings, TestTube, CheckCircle, AlertCircle, Loader } from 'lucide-react';
+import { fetchJson } from '@/utils/api';
+
+const createDefaultConfigs = () => ({
+  openai: {
+    apiKey: '',
+    model: 'gpt-4',
+    baseUrl: 'https://api.openai.com/v1',
+    timeout: 30,
+    configured: false,
+    lastTested: null
+  },
+  anthropic: {
+    apiKey: '',
+    model: 'claude-3-opus',
+    baseUrl: 'https://api.anthropic.com',
+    timeout: 30,
+    configured: false,
+    lastTested: null
+  },
+  google: {
+    apiKey: '',
+    model: 'gemini-pro',
+    baseUrl: 'https://generativelanguage.googleapis.com',
+    timeout: 30,
+    configured: false,
+    lastTested: null
+  }
+});
 
 export default function APIConfiguration() {
   const [activeProvider, setActiveProvider] = useState('openai');
   const [isTestingConnection, setIsTestingConnection] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isSaving, setIsSaving] = useState(false);
   const [testResults, setTestResults] = useState({});
-  const [configs, setConfigs] = useState({
-    openai: {
-      apiKey: '',
-      model: 'gpt-4',
-      baseUrl: 'https://api.openai.com/v1',
-      timeout: 30,
-      configured: false,
-      lastTested: null
-    },
-    anthropic: {
-      apiKey: '',
-      model: 'claude-3-opus',
-      baseUrl: 'https://api.anthropic.com',
-      timeout: 30,
-      configured: false,
-      lastTested: null
-    },
-    google: {
-      apiKey: '',
-      model: 'gemini-pro',
-      baseUrl: 'https://generativelanguage.googleapis.com',
-      timeout: 30,
-      configured: false,
-      lastTested: null
-    }
-  });
+  const [configs, setConfigs] = useState(() => createDefaultConfigs());
+  const [statusMessage, setStatusMessage] = useState(null);
 
   const providers = [
     {
@@ -68,6 +74,44 @@ export default function APIConfiguration() {
         [field]: value
       }
     });
+  };
+
+  useEffect(() => {
+    loadConfigurations();
+  }, []);
+
+  const loadConfigurations = async () => {
+    try {
+      setIsLoading(true);
+      const data = await fetchJson('/api/admin/api-configurations', {
+        credentials: 'include'
+      });
+
+      const baseConfigs = createDefaultConfigs();
+      (data.configurations || []).forEach((config) => {
+        if (!config?.provider || !baseConfigs[config.provider]) return;
+
+        baseConfigs[config.provider] = {
+          ...baseConfigs[config.provider],
+          apiKey: config.apiKey || '',
+          baseUrl: config.baseUrl || baseConfigs[config.provider].baseUrl,
+          model: config.config?.model || baseConfigs[config.provider].model,
+          timeout: config.config?.timeout ?? baseConfigs[config.provider].timeout,
+          configured: config.active ?? baseConfigs[config.provider].configured,
+          lastTested: config.lastTested
+            ? new Date(config.lastTested).toLocaleString()
+            : null
+        };
+      });
+
+      setConfigs(baseConfigs);
+      setStatusMessage(null);
+    } catch (error) {
+      console.error('Failed to load API configurations:', error);
+      setStatusMessage({ type: 'error', message: 'Failed to load API configurations.' });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleTestConnection = async (provider) => {
@@ -114,18 +158,35 @@ export default function APIConfiguration() {
 
   const handleSaveConfiguration = async () => {
     try {
+      setIsSaving(true);
+      setStatusMessage(null);
+
+      const configurations = Object.entries(configs).map(([provider, config]) => ({
+        provider,
+        name: provider,
+        apiKey: config.apiKey,
+        baseUrl: config.baseUrl,
+        active: config.configured,
+        config: {
+          model: config.model,
+          timeout: config.timeout
+        }
+      }));
+
       // Save configurations to backend API
       // Using a backend endpoint that stores API keys securely
-      await fetch('/api/admin/api-configurations', {
+      await fetchJson('/api/admin/api-configurations', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include', // Include auth cookie
-        body: JSON.stringify(configs)
+        body: JSON.stringify({ configurations })
       });
-      alert('Configuration saved successfully!');
+      setStatusMessage({ type: 'success', message: 'Configuration saved successfully!' });
     } catch (error) {
       console.error('Failed to save configuration:', error);
-      alert('Failed to save configuration');
+      setStatusMessage({ type: 'error', message: 'Failed to save configuration.' });
+    } finally {
+      setIsSaving(false);
     }
   };
 
@@ -149,6 +210,24 @@ export default function APIConfiguration() {
           </div>
         </CardHeader>
         <CardContent>
+          {isLoading && (
+            <div className="flex items-center gap-2 text-sm text-gray-500 mb-4">
+              <Loader className="w-4 h-4 animate-spin" />
+              Loading configurations...
+            </div>
+          )}
+          {statusMessage && (
+            <div
+              className={`flex items-center gap-2 text-sm rounded-md px-3 py-2 mb-4 ${
+                statusMessage.type === 'error'
+                  ? 'bg-red-50 text-red-700'
+                  : 'bg-green-50 text-green-700'
+              }`}
+            >
+              <AlertCircle className="w-4 h-4" />
+              {statusMessage.message}
+            </div>
+          )}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-6">
             {providers.map(provider => (
               <button
@@ -175,9 +254,14 @@ export default function APIConfiguration() {
                 <p className="text-xs text-gray-600">{provider.description}</p>
               </button>
             ))}
+                disabled={isSaving}
           </div>
-        </CardContent>
-      </Card>
+                {isSaving ? (
+                  <Loader className="w-4 h-4 mr-2 animate-spin" />
+                ) : (
+                  <Settings className="w-4 h-4 mr-2" />
+                )}
+                Save Configuration
 
       {/* Configuration Form */}
       {currentProvider && (

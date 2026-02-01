@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { fetchJson } from '@/utils/api';
 
 /**
  * Keyboard Shortcuts Management Hook
@@ -17,14 +18,11 @@ export function useKeyboardShortcuts() {
 
   const loadKeyboardShortcuts = async () => {
     try {
-      const response = await fetch('/api/user/keyboard-shortcuts', {
+      const data = await fetchJson('/api/user/keyboard-shortcuts', {
         credentials: 'include'
       });
-      if (response.ok) {
-        const data = await response.json();
-        setShortcuts(data.shortcuts || getDefaultShortcuts());
-        setPreset(data.preset || 'default');
-      }
+      setShortcuts(data.shortcuts || getDefaultShortcuts());
+      setPreset(data.preset || 'default');
     } catch (error) {
       console.error('Failed to load keyboard shortcuts:', error);
     } finally {
@@ -34,7 +32,7 @@ export function useKeyboardShortcuts() {
 
   const saveKeyboardShortcuts = async (newShortcuts, newPreset) => {
     try {
-      await fetch('/api/user/keyboard-shortcuts', {
+      await fetchJson('/api/user/keyboard-shortcuts', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',

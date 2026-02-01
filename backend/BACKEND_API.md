@@ -84,6 +84,47 @@ backend/
 
 ## API Endpoints
 
+### Frontend Persistence
+
+#### GET /api/user/llm-settings
+Returns persisted LLM preferences and usage.
+
+#### POST /api/user/llm-settings
+Updates LLM preferences and usage.
+
+#### DELETE /api/user/llm-usage
+Resets usage statistics.
+
+#### GET /api/user/theme-settings
+Returns theme preferences.
+
+#### POST /api/user/theme-settings
+Updates theme preferences.
+
+#### GET /api/user/keyboard-shortcuts
+Returns custom keyboard shortcuts.
+
+#### POST /api/user/keyboard-shortcuts
+Updates custom keyboard shortcuts.
+
+#### GET /api/user/advanced-settings
+Returns advanced settings payload.
+
+#### POST /api/user/advanced-settings
+Updates advanced settings payload.
+
+#### GET /api/team/workflows
+Returns workflows, webhooks, and automations for the team.
+
+#### POST /api/team/workflows
+Updates workflows, webhooks, and automations.
+
+#### GET /api/admin/api-configurations
+Returns configured API providers and admin settings.
+
+#### POST /api/admin/api-configurations
+Updates API provider configurations.
+
 ### Team Management
 
 #### GET /api/teams

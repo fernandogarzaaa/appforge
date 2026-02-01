@@ -5,6 +5,7 @@
 
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { base44 } from '@/api/base44Client';
+import { fetchJson } from '@/utils/api';
 
 // Available AI Models
 export const AI_MODELS = {
@@ -131,13 +132,13 @@ export function LLMProvider({ children }) {
 
   const loadLLMSettings = async () => {
     try {
-      const response = await fetch('/api/user/llm-settings', {
+      const data = await fetchJson('/api/user/llm-settings', {
         credentials: 'include'
       });
-      if (response.ok) {
-        const data = await response.json();
-        setSettings(data.settings || settings);
-        setUsage(data.usage || usage);
+      setSettings(data.settings || settings);
+      setUsage(data.usage || usage);
+      if (data.selectedModel) {
+        setSelectedModel(data.selectedModel);
       }
     } catch (error) {
       console.error('Failed to load LLM settings from backend:', error);
@@ -152,11 +153,11 @@ export function LLMProvider({ children }) {
 
   const saveLLMSettings = async () => {
     try {
-      await fetch('/api/user/llm-settings', {
+      await fetchJson('/api/user/llm-settings', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
-        body: JSON.stringify({ settings, usage })
+        body: JSON.stringify({ settings, usage, selectedModel })
       });
     } catch (error) {
       console.error('Failed to save LLM settings:', error);
