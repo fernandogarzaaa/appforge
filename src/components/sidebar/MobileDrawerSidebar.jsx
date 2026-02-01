@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
+import { useAnalytics } from '@/hooks/useAnalytics';
 import {
   Settings,
   Code,
@@ -34,13 +35,20 @@ import AIModelRouter from './AIModelRouter';
 
 function MobileDrawerSidebar({ currentProject, user, onClose }) {
   const location = useLocation();
+  const { trackDrawerOpened, trackDrawerClosed, trackSectionCollapsed, trackSectionExpanded } = useAnalytics();
   const isAdminUser = user?.email?.toLowerCase() === 'fernandogarzaaa@gmail.com';
   const [expandedGroups, setExpandedGroups] = useState(['ai', 'build', 'main']);
 
   const toggleGroup = (group) => {
-    setExpandedGroups((prev) =>
-      prev.includes(group) ? prev.filter((g) => g !== group) : [...prev, group]
-    );
+    setExpandedGroups((prev) => {
+      const isExpanding = !prev.includes(group);
+      if (isExpanding) {
+        trackSectionExpanded(`mobile_${group}`);
+      } else {
+        trackSectionCollapsed(`mobile_${group}`);
+      }
+      return isExpanding ? [...prev, group] : prev.filter((g) => g !== group);
+    });
   };
 
   const isActive = (href) => {
@@ -112,7 +120,10 @@ function MobileDrawerSidebar({ currentProject, user, onClose }) {
   ];
 
   return (
-    <Dialog>
+    <Dialog onOpenChange={(open) => {
+      if (open) trackDrawerOpened();
+      else trackDrawerClosed();
+    }}>
       <DialogTrigger asChild>
         <Button variant="ghost" size="icon" className="md:hidden">
           <Menu className="w-6 h-6" />

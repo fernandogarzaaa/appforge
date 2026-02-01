@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useLLM, AI_MODELS } from '@/contexts/LLMContext';
 import { useModelSearch, useKeyboardShortcuts } from '@/hooks/useSearch';
+import { useAnalytics } from '@/hooks/useAnalytics';
 import {
   Check,
   ChevronDown,
@@ -25,6 +26,7 @@ import { Badge } from '@/components/ui/badge';
 
 function AIModelRouter() {
   const { selectedModel, availableModels, updateSettings, settings } = useLLM();
+  const { trackModelSelection, trackSearch, trackKeyboardShortcut } = useAnalytics();
   const [displayModel, setDisplayModel] = useState(selectedModel || 'base44');
   const [showAdvanced, setShowAdvanced] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
@@ -39,7 +41,9 @@ function AIModelRouter() {
   // Keyboard shortcuts: Ctrl/Cmd + 1-9 to switch models
   const handleModelShortcut = (index) => {
     if (index < modelsList.length) {
-      handleModelSelect(modelsList[index].id);
+      const model = modelsList[index];
+      trackKeyboardShortcut(`Ctrl/Cmd+${index + 1}`, model.name);
+      handleModelSelect(model.id);
     }
   };
 
@@ -55,6 +59,8 @@ function AIModelRouter() {
   )] || AI_MODELS.BASE44;
 
   const handleModelSelect = (modelId) => {
+    const model = AI_MODELS[Object.keys(AI_MODELS).find((key) => AI_MODELS[key].id === modelId)];
+    trackModelSelection(modelId, model.name, model.provider, model.costPer1k);
     setDisplayModel(modelId);
     updateSettings({ selectedModel: modelId });
     setShowSearch(false);
@@ -115,7 +121,10 @@ function AIModelRouter() {
                 type="text"
                 placeholder="Search models..."
                 value={query}
-                onChange={(e) => setQuery(e.target.value)}
+                onChange={(e) => {
+                  setQuery(e.target.value);
+                  trackSearch(e.target.value, filteredModels.length);
+                }}
                 className="w-full pl-7 pr-7 py-1.5 text-xs bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-md outline-none transition-all focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
               />
               {query && (

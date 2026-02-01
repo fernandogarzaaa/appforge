@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
+import { useAnalytics } from '@/hooks/useAnalytics';
 import {
   Settings,
   Code,
@@ -51,13 +52,20 @@ function propsAreEqual(prevProps, nextProps) {
 
 function ConsolidatedAISidebar({ currentProject, collapsed, onToggle, user }) {
   const location = useLocation();
+  const { trackSectionCollapsed, trackSectionExpanded } = useAnalytics();
   const isAdminUser = user?.email?.toLowerCase() === 'fernandogarzaaa@gmail.com';
   const [expandedGroups, setExpandedGroups] = useState(['ai', 'build', 'main']);
 
   const toggleGroup = (group) => {
-    setExpandedGroups((prev) =>
-      prev.includes(group) ? prev.filter((g) => g !== group) : [...prev, group]
-    );
+    setExpandedGroups((prev) => {
+      const isExpanding = !prev.includes(group);
+      if (isExpanding) {
+        trackSectionExpanded(group);
+      } else {
+        trackSectionCollapsed(group);
+      }
+      return isExpanding ? [...prev, group] : prev.filter((g) => g !== group);
+    });
   };
 
   const isActive = (href) => {
