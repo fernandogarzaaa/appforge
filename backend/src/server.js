@@ -22,6 +22,7 @@ import teamSettingsRoutes from './routes/teamSettingsRoutes.js';
 import adminRoutes from './routes/adminRoutes.js';
 import { handleStripeWebhook } from './services/stripeService.js';
 import WebSocketServer from './websocket/index.js';
+import mongoose from 'mongoose';
 
 // Load environment variables
 dotenv.config();
@@ -124,6 +125,28 @@ const httpServer = createServer(app);
 // Initialize WebSocket server
 const wsServer = new WebSocketServer(httpServer);
 console.log('✅ WebSocket server initialized');
+
+// Initialize MongoDB connection
+async function initializeDatabase() {
+  try {
+    const mongoUri = process.env.MONGODB_URI || 'mongodb://localhost:27017/appforge';
+    
+    await mongoose.connect(mongoUri, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      maxPoolSize: 10,
+      serverSelectionTimeoutMS: 5000,
+    });
+    
+    console.log(`✅ MongoDB connected: ${mongoUri}`);
+  } catch (error) {
+    console.warn(`⚠️  MongoDB connection failed: ${error.message}`);
+    console.warn('Database features will be unavailable. Server will continue without persistence.');
+  }
+}
+
+// Connect to database before starting server
+await initializeDatabase();
 
 // Start server
 if (process.env.NODE_ENV !== 'test') {
