@@ -33,6 +33,7 @@ const __dirname = dirname(__filename);
 const app = express();
 const PORT = process.env.PORT || 5000;
 const NODE_ENV = process.env.NODE_ENV || 'development';
+const IS_TEST = NODE_ENV === 'test' || process.argv.includes('--test');
 
 // Security Middleware
 app.use(helmet());
@@ -119,15 +120,34 @@ app.use((req, res) => {
 // Global error handler (must be last)
 app.use(errorHandler);
 
-// Create HTTP server for WebSocket integration
-const httpServer = createServer(app);
+export let httpServer = null;
+export let wsServer = null;
 
-// Initialize WebSocket server
-const wsServer = new WebSocketServer(httpServer);
-console.log('✅ WebSocket server initialized');
+if (!IS_TEST) {
+  // Create HTTP server for WebSocket integration
+  httpServer = createServer(app);
+
+  // Initialize WebSocket server
+  wsServer = new WebSocketServer(httpServer);
+  console.log('✅ WebSocket server initialized');
+}
+
+export async function closeServer() {
+  if (wsServer && typeof wsServer.close === 'function') {
+    await wsServer.close();
+  }
+
+  if (httpServer && typeof httpServer.close === 'function') {
+    await new Promise((resolve) => httpServer.close(resolve));
+  }
+
+  if (mongoose.connection?.readyState) {
+    await mongoose.disconnect();
+  }
+}
 
 // Initialize MongoDB connection
-async function initializeDatabase() {
+export async function initializeDatabase() {
   try {
     const mongoUri = process.env.MONGODB_URI || 'mongodb://localhost:27017/appforge';
     
@@ -145,24 +165,27 @@ async function initializeDatabase() {
   }
 }
 
-// Connect to database before starting server
-await initializeDatabase();
-
-// Start server
-if (process.env.NODE_ENV !== 'test') {
-  httpServer.listen(PORT, () => {
-    console.log(`🚀 AppForge Backend Server`);
-    console.log(`📍 Running on http://localhost:${PORT}`);
-    console.log(`🌍 Environment: ${NODE_ENV}`);
-    console.log(`⏰ Started at ${new Date().toISOString()}`);
-    console.log(`🔌 WebSocket server ready for real-time collaboration`);
-    
-    // Log WebSocket stats every 5 minutes
-    setInterval(() => {
-      const stats = wsServer.getStats();
-      console.log(`📊 WebSocket Stats: ${stats.connectedUsers} users, ${stats.activeRooms} rooms, ${stats.onlineUsers} online`);
-    }, 300000);
-  });
+// Start server (avoid top-level await in tests)
+if (!IS_TEST && httpServer && wsServer) {
+  initializeDatabase()
+    .catch(() => {
+      // Initialization already logs its own warnings.
+    })
+    .finally(() => {
+      httpServer.listen(PORT, () => {
+        console.log(`🚀 AppForge Backend Server`);
+        console.log(`📍 Running on http://localhost:${PORT}`);
+        console.log(`🌍 Environment: ${NODE_ENV}`);
+        console.log(`⏰ Started at ${new Date().toISOString()}`);
+        console.log(`🔌 WebSocket server ready for real-time collaboration`);
+        
+        // Log WebSocket stats every 5 minutes
+        setInterval(() => {
+          const stats = wsServer.getStats();
+          console.log(`📊 WebSocket Stats: ${stats.connectedUsers} users, ${stats.activeRooms} rooms, ${stats.onlineUsers} online`);
+        }, 300000);
+      });
+    });
 }
 
 export default app;

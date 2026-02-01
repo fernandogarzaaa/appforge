@@ -305,9 +305,9 @@ export default function ProjectViewer() {
               {/* Website Preview */}
               <div className="p-8 min-h-[600px] bg-gradient-to-br from-white to-gray-50">
                 <div className="text-center mb-12">
-                  <h1 className="text-4xl font-bold text-gray-900 mb-4">
+                  <h2 className="text-4xl font-bold text-gray-900 mb-4">
                     {customContent?.hero || project.name}
-                  </h1>
+                  </h2>
                   <p className="text-xl text-gray-600 max-w-2xl mx-auto">
                     {customContent?.subtitle || project.description}
                   </p>

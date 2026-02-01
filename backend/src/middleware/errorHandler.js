@@ -21,13 +21,15 @@ const errorHandler = (err, req, res, next) => {
   const status = err.status || err.statusCode || 500;
   const message = err.message || 'Internal Server Error';
 
-  // Log error
-  console.error(`[ERROR] ${status} - ${message}`, {
-    url: req.originalUrl,
-    method: req.method,
-    body: req.body,
-    timestamp: new Date().toISOString()
-  });
+  // Log error (suppress in tests)
+  if (process.env.NODE_ENV !== 'test' && !process.argv.includes('--test')) {
+    console.error(`[ERROR] ${status} - ${message}`, {
+      url: req.originalUrl,
+      method: req.method,
+      body: req.body,
+      timestamp: new Date().toISOString()
+    });
+  }
 
   // Validation errors (Joi or custom validation)
   if (err.details && Array.isArray(err.details)) {

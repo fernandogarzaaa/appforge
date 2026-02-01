@@ -94,7 +94,11 @@ export default function Sidebar({ currentProject, collapsed, onToggle, user }) {
             <h2 className="font-bold text-gray-900 dark:text-white">AppForge</h2>
           </div>
         )}
-        <button onClick={onToggle} className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white">
+        <button 
+          onClick={onToggle} 
+          aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+          className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
+        >
           {collapsed ? <Menu className="w-5 h-5" /> : <X className="w-5 h-5" />}
         </button>
       </div>

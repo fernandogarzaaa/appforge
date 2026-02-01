@@ -14,7 +14,7 @@ export default function Header({ user, onLogout, onSearchOpen }) {
   return (
     <header className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 px-6 py-4 flex items-center justify-between">
       <div>
-        <h1 className="text-lg font-semibold text-gray-900 dark:text-white">Development Studio</h1>
+        <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Development Studio</h2>
         <p className="text-xs text-gray-500 dark:text-gray-400">AI-powered application builder</p>
       </div>
 

@@ -52,7 +52,8 @@ export function createPersistenceRateLimiter(options = {}) {
       prefix: 'ratelimit:',
       sendCommand: (...args) => redisCache.redis.call(...args)
     });
-  } else {
+  } else if (process.env.NODE_ENV !== 'test' && !process.argv.includes('--test')) {
+    // Only warn in production/development, suppress in tests
     console.warn('⚠️  Rate limiting using in-memory store (not suitable for distributed systems)');
   }
 

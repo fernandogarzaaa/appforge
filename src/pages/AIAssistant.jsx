@@ -11,8 +11,7 @@ import { generateEnhancedEntities } from '@/utils/enhancedEntityGeneration';
 import { generateBusinessContent } from '@/utils/intelligentContentGenerator';
 import { AIAgent } from '@/utils/aiAgentCore';
 import { extractDomainContext, generateDomainSpecificPlan } from '@/utils/domainContextExtractor';
-import { QuantumInspiredAI, QuantumNeuralNetwork, QuantumGeneticAlgorithm } from '@/utils/quantumInspiredAI';
-import { generateSEOMeta, analyzeSEOScore } from '@/utils/seoOptimizer';
+import { QuantumInspiredAI } from '@/utils/quantumInspiredAI';
 import { detectLanguage, generateLocalizedContent } from '@/utils/multiLanguageSupport';
 import { useLLM } from '@/contexts/LLMContext';
 import ModelSelector from '@/components/ai/ModelSelector';
@@ -738,6 +737,7 @@ Provide helpful, actionable responses with code examples when relevant. Be conci
                 <button
                   key={action.label}
                   onClick={() => setInput(action.prompt)}
+                  aria-label={action.label}
                   className="p-6 bg-white rounded-xl border-2 border-gray-100 hover:border-indigo-500 hover:shadow-lg transition-all group"
                 >
                   <action.icon className="w-8 h-8 mb-3 text-gray-400 group-hover:text-indigo-600 transition-colors mx-auto" />

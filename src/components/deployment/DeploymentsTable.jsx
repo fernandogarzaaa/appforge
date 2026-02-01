@@ -88,7 +88,10 @@ export const DeploymentsTable = ({
             >
               <div className="flex items-center gap-4">
                 {/* Expand Icon */}
-                <button className="flex-shrink-0 text-gray-400 dark:text-gray-600">
+                <button 
+                  aria-label={expandedId === deployment.id ? "Collapse deployment details" : "Expand deployment details"}
+                  className="flex-shrink-0 text-gray-400 dark:text-gray-600"
+                >
                   {expandedId === deployment.id ? (
                     <ChevronUp className="w-5 h-5" />
                   ) : (

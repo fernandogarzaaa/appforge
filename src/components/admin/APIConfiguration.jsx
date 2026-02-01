@@ -254,14 +254,9 @@ export default function APIConfiguration() {
                 <p className="text-xs text-gray-600">{provider.description}</p>
               </button>
             ))}
-                disabled={isSaving}
           </div>
-                {isSaving ? (
-                  <Loader className="w-4 h-4 mr-2 animate-spin" />
-                ) : (
-                  <Settings className="w-4 h-4 mr-2" />
-                )}
-                Save Configuration
+        </CardContent>
+      </Card>
 
       {/* Configuration Form */}
       {currentProvider && (
@@ -463,3 +458,4 @@ export default function APIConfiguration() {
     </div>
   );
 }
+

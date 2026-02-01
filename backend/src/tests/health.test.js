@@ -1,7 +1,11 @@
-import test from 'node:test';
+import test, { after } from 'node:test';
 import assert from 'node:assert/strict';
 import request from 'supertest';
-import app from '../server.js';
+import app, { closeServer } from '../server.js';
+
+after(async () => {
+  await closeServer();
+});
 
 test('GET /health returns OK', async () => {
   const res = await request(app).get('/health');

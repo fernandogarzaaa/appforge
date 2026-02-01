@@ -357,6 +357,12 @@ export class WebSocketServer {
       onlineUsers: Array.from(this.presence.values()).filter(s => s === 'online').length
     };
   }
+
+  close() {
+    if (this.io) {
+      this.io.close();
+    }
+  }
 }
 
 export default WebSocketServer;

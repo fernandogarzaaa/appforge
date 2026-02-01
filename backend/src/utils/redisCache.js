@@ -10,7 +10,10 @@ class RedisCache {
     this.redis = null;
     this.isConnected = false;
     this.fallbackCache = new Map();
-    this.initializeRedis();
+    this.isTestEnv = process.env.NODE_ENV === 'test' || process.argv.includes('--test');
+    if (!this.isTestEnv) {
+      this.initializeRedis();
+    }
   }
 
   initializeRedis() {
@@ -36,23 +39,34 @@ class RedisCache {
       });
 
       this.redis.on('connect', () => {
-        console.log('✅ Redis connected');
+        if (!this.isTestEnv) {
+          console.log('✅ Redis connected');
+        }
         this.isConnected = true;
       });
 
       this.redis.on('error', (err) => {
-        console.warn('⚠️  Redis error (falling back to in-memory cache):', err.message);
+        // Only log in production/development, suppress in tests
+        if (!this.isTestEnv) {
+          console.warn('⚠️  Redis error (falling back to in-memory cache):', err.message);
+        }
         this.isConnected = false;
       });
 
       this.redis.on('close', () => {
-        console.log('⚠️  Redis connection closed');
+        // Only log in production/development, suppress in tests
+        if (!this.isTestEnv) {
+          console.log('⚠️  Redis connection closed');
+        }
         this.isConnected = false;
       });
 
       // Attempt connection
       this.redis.connect().catch((err) => {
-        console.warn('⚠️  Redis connection failed (using in-memory cache):', err.message);
+        // Only log initial failure if not in test mode
+        if (!this.isTestEnv) {
+          console.warn('⚠️  Redis connection failed (using in-memory cache):', err.message);
+        }
         this.isConnected = false;
       });
     } catch (error) {

@@ -6,6 +6,7 @@ import { MongoMemoryServer } from 'mongodb-memory-server';
 
 let app;
 let mongoServer;
+let closeServerFn;
 
 const registerAndLogin = async () => {
   const email = `user-${Date.now()}@example.com`;
@@ -32,10 +33,19 @@ before(async () => {
 
   const imported = await import('../server.js');
   app = imported.default;
+  closeServerFn = imported.closeServer;
+  if (imported.initializeDatabase) {
+    await imported.initializeDatabase();
+  }
 });
 
 after(async () => {
-  await mongoose.connection.close();
+  if (closeServerFn) {
+    await closeServerFn();
+  }
+  if (mongoose.connection?.readyState) {
+    await mongoose.connection.close();
+  }
   if (mongoServer) {
     await mongoServer.stop();
   }

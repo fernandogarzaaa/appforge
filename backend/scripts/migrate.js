@@ -19,7 +19,7 @@ dotenv.config();
 /**
  * Run MongoDB migrations
  */
-async function migrateMongoD B() {
+async function migrateMongoDB() {
   try {
     const uri = process.env.MONGODB_URI || 'mongodb://localhost:27017/appforge';
     await mongoose.connect(uri);

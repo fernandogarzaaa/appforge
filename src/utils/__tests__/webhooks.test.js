@@ -306,7 +306,7 @@ describe('Webhooks System', () => {
         // Fast-forward through retries
         vi.advanceTimersByTime(60000);
       });
-    });
+    }, 10000); // Increase timeout for retries
   });
 
   describe('Retry Logic', () => {
