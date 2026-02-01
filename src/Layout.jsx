@@ -42,6 +42,7 @@ export default function Layout({ children, currentPageName: _currentPageName, on
       <Sidebar 
         currentProject={currentProject} 
         collapsed={sidebarCollapsed}
+        user={user}
         onToggle={() => setSidebarCollapsed(!sidebarCollapsed)}
       />
       <div className="flex-1 flex flex-col overflow-hidden">

@@ -9,9 +9,10 @@ import {
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
 
-export default function Sidebar({ currentProject, collapsed, onToggle }) {
+export default function Sidebar({ currentProject, collapsed, onToggle, user }) {
   const [expandedGroups, setExpandedGroups] = useState(['main', 'templates']);
   const location = useLocation();
+  const isAdminUser = user?.email?.toLowerCase() === 'fernandogarzaaa@gmail.com';
 
   const toggleGroup = (group) => {
     setExpandedGroups(prev => 
@@ -33,6 +34,9 @@ export default function Sidebar({ currentProject, collapsed, onToggle }) {
         { label: 'Dashboard', icon: Sparkles, href: createPageUrl('Dashboard') },
         { label: 'Projects', icon: FolderKanban, href: createPageUrl('Projects') },
         { label: 'AI Assistant', icon: Zap, href: createPageUrl('AIAssistant') },
+        ...(isAdminUser
+          ? [{ label: 'Admin Dashboard', icon: ShieldCheck, href: createPageUrl('AdminDashboard') }]
+          : [])
       ]
     },
     {

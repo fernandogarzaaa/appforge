@@ -8,7 +8,6 @@ export { default as authService } from './authService';
 export { default as projectService } from './projectService';
 export { default as entityService } from './entityService';
 export { default as teamService } from './teamService';
-export { default as websocketService } from './websocketService';
 
 // Legacy services (to be migrated)
 export { default as apiKeysService } from './apiKeys';
@@ -18,6 +17,9 @@ export { default as projectsService } from './projects';
 
 // Re-export client utilities
 export { default as appforgeClient, getAuthToken, setAuthToken, clearAuthToken } from '../appforgeClient';
+
+// Local bindings for initialization logic
+import { getAuthToken } from '../appforgeClient';
 
 /**
  * Initialize API services
@@ -37,8 +39,11 @@ export function initializeAPI(config = {}) {
   });
 
   // Auto-connect WebSocket if enabled and user is authenticated
+  // Lazy load websocketService to avoid circular dependency
   if (autoConnect && getAuthToken()) {
-    websocketService.connect();
+    import('./websocketService').then(({ default: websocketService }) => {
+      websocketService.connect();
+    });
   }
 
   return {
@@ -47,6 +52,9 @@ export function initializeAPI(config = {}) {
     initialized: true
   };
 }
+
+// Export websocketService separately to avoid circular dependency issues
+export { default as websocketService } from './websocketService';
 
 /**
  * Health check for API services
