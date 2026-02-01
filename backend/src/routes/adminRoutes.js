@@ -5,6 +5,7 @@
 
 import express from 'express';
 import { authenticate } from '../middleware/auth.js';
+import AdminConfiguration from '../models/AdminConfiguration.js';
 
 const router = express.Router();
 
@@ -15,15 +16,21 @@ router.use(authenticate);
  * GET /api/admin/api-configurations
  * Get all API configurations
  */
-router.get('/api-configurations', (req, res) => {
+router.get('/api-configurations', async (req, res) => {
   try {
     const userId = req.user?.id || 'default-user';
 
-    // Check if user is admin (for now, allow all authenticated users)
+    let adminConfig = await AdminConfiguration.findOne({ userId });
+    
+    if (!adminConfig) {
+      adminConfig = new AdminConfiguration({ userId });
+      await adminConfig.save();
+    }
+
     res.json({
       userId,
-      configurations: [],
-      providers: []
+      configurations: adminConfig.configurations,
+      settings: adminConfig.settings
     });
   } catch (error) {
     res.status(500).json({ error: 'Failed to load API configurations', details: error.message });
@@ -34,17 +41,30 @@ router.get('/api-configurations', (req, res) => {
  * POST /api/admin/api-configurations
  * Save API configurations
  */
-router.post('/api-configurations', (req, res) => {
+router.post('/api-configurations', async (req, res) => {
   try {
     const userId = req.user?.id || 'default-user';
-    const { configurations } = req.body;
+    const { configurations, settings } = req.body;
 
-    // TODO: Store in database with encryption
+    let adminConfig = await AdminConfiguration.findOne({ userId });
+    
+    if (!adminConfig) {
+      adminConfig = new AdminConfiguration({ userId });
+    }
+
+    if (configurations) adminConfig.configurations = configurations;
+    if (settings) adminConfig.settings = { ...adminConfig.settings, ...settings };
+    
+    adminConfig.lastModifiedBy = userId;
+
+    await adminConfig.save();
+
     res.json({
       success: true,
       message: 'API configurations saved',
       userId,
-      configurations
+      configurations: adminConfig.configurations,
+      settings: adminConfig.settings
     });
   } catch (error) {
     res.status(500).json({ error: 'Failed to save API configurations', details: error.message });

@@ -5,6 +5,7 @@
 
 import express from 'express';
 import { authenticate } from '../middleware/auth.js';
+import UserSettings from '../models/UserSettings.js';
 
 const router = express.Router();
 
@@ -15,29 +16,24 @@ router.use(authenticate);
  * GET /api/user/llm-settings
  * Get user's LLM settings and preferences
  */
-router.get('/llm-settings', (req, res) => {
+router.get('/llm-settings', async (req, res) => {
   try {
     const userId = req.user?.id || 'default-user';
     
-    // Return cached or stored settings (for now, return defaults)
+    let settings = await UserSettings.findOne({ userId });
+    
+    if (!settings) {
+      // Create default settings if not found
+      settings = new UserSettings({ userId });
+      await settings.save();
+    }
+
     res.json({
       userId,
-      selectedModel: 'gpt-4',
-      apiKey: '',
-      settings: {
-        temperature: 0.7,
-        maxTokens: 2000,
-        topP: 1,
-        frequencyPenalty: 0,
-        presencePenalty: 0
-      },
-      usage: {
-        totalTokens: 0,
-        totalCost: 0,
-        queryCount: 0,
-        modelBreakdown: {},
-        history: []
-      }
+      selectedModel: settings.llmSettings.selectedModel,
+      apiKey: settings.llmSettings.apiKey,
+      settings: settings.llmSettings.settings,
+      usage: settings.llmUsage
     });
   } catch (error) {
     res.status(500).json({ error: 'Failed to load LLM settings', details: error.message });
@@ -48,19 +44,30 @@ router.get('/llm-settings', (req, res) => {
  * POST /api/user/llm-settings
  * Save user's LLM settings and preferences
  */
-router.post('/llm-settings', (req, res) => {
+router.post('/llm-settings', async (req, res) => {
   try {
     const userId = req.user?.id || 'default-user';
     const { selectedModel, settings } = req.body;
 
-    // TODO: Store in database
-    // For now, just acknowledge receipt
+    let userSettings = await UserSettings.findOne({ userId });
+    
+    if (!userSettings) {
+      userSettings = new UserSettings({ userId });
+    }
+
+    userSettings.llmSettings.selectedModel = selectedModel || userSettings.llmSettings.selectedModel;
+    if (settings) {
+      userSettings.llmSettings.settings = { ...userSettings.llmSettings.settings, ...settings };
+    }
+
+    await userSettings.save();
+
     res.json({
       success: true,
       message: 'LLM settings saved',
       userId,
-      selectedModel,
-      settings
+      selectedModel: userSettings.llmSettings.selectedModel,
+      settings: userSettings.llmSettings.settings
     });
   } catch (error) {
     res.status(500).json({ error: 'Failed to save LLM settings', details: error.message });
@@ -71,11 +78,23 @@ router.post('/llm-settings', (req, res) => {
  * DELETE /api/user/llm-usage
  * Clear user's LLM usage statistics
  */
-router.delete('/llm-usage', (req, res) => {
+router.delete('/llm-usage', async (req, res) => {
   try {
     const userId = req.user?.id || 'default-user';
 
-    // TODO: Clear usage data in database
+    let userSettings = await UserSettings.findOne({ userId });
+    
+    if (userSettings) {
+      userSettings.llmUsage = {
+        totalTokens: 0,
+        totalCost: 0,
+        queryCount: 0,
+        modelBreakdown: new Map(),
+        history: []
+      };
+      await userSettings.save();
+    }
+
     res.json({
       success: true,
       message: 'LLM usage cleared',
@@ -90,21 +109,24 @@ router.delete('/llm-usage', (req, res) => {
  * GET /api/user/theme-settings
  * Get user's theme preferences
  */
-router.get('/theme-settings', (req, res) => {
+router.get('/theme-settings', async (req, res) => {
   try {
     const userId = req.user?.id || 'default-user';
 
+    let settings = await UserSettings.findOne({ userId });
+    
+    if (!settings) {
+      settings = new UserSettings({ userId });
+      await settings.save();
+    }
+
     res.json({
       userId,
-      theme: 'light',
+      theme: settings.theme.currentTheme,
       customTheme: {
-        colors: {
-          primary: '#3b82f6',
-          secondary: '#1f2937',
-          accent: '#f59e0b'
-        }
+        colors: Object.fromEntries(settings.theme.customTheme.colors)
       },
-      timeBasedTheme: false
+      timeBasedTheme: settings.theme.timeBasedTheme
     });
   } catch (error) {
     res.status(500).json({ error: 'Failed to load theme settings', details: error.message });
@@ -115,19 +137,32 @@ router.get('/theme-settings', (req, res) => {
  * POST /api/user/theme-settings
  * Save user's theme preferences
  */
-router.post('/theme-settings', (req, res) => {
+router.post('/theme-settings', async (req, res) => {
   try {
     const userId = req.user?.id || 'default-user';
     const { theme, customTheme, timeBasedTheme } = req.body;
 
-    // TODO: Store in database
+    let userSettings = await UserSettings.findOne({ userId });
+    
+    if (!userSettings) {
+      userSettings = new UserSettings({ userId });
+    }
+
+    if (theme) userSettings.theme.currentTheme = theme;
+    if (customTheme && customTheme.colors) {
+      userSettings.theme.customTheme.colors = new Map(Object.entries(customTheme.colors));
+    }
+    if (timeBasedTheme !== undefined) userSettings.theme.timeBasedTheme = timeBasedTheme;
+
+    await userSettings.save();
+
     res.json({
       success: true,
       message: 'Theme settings saved',
       userId,
-      theme,
-      customTheme,
-      timeBasedTheme
+      theme: userSettings.theme.currentTheme,
+      customTheme: { colors: Object.fromEntries(userSettings.theme.customTheme.colors) },
+      timeBasedTheme: userSettings.theme.timeBasedTheme
     });
   } catch (error) {
     res.status(500).json({ error: 'Failed to save theme settings', details: error.message });
@@ -138,14 +173,21 @@ router.post('/theme-settings', (req, res) => {
  * GET /api/user/keyboard-shortcuts
  * Get user's keyboard shortcuts
  */
-router.get('/keyboard-shortcuts', (req, res) => {
+router.get('/keyboard-shortcuts', async (req, res) => {
   try {
     const userId = req.user?.id || 'default-user';
 
+    let settings = await UserSettings.findOne({ userId });
+    
+    if (!settings) {
+      settings = new UserSettings({ userId });
+      await settings.save();
+    }
+
     res.json({
       userId,
-      shortcuts: {},
-      preset: 'default'
+      shortcuts: Object.fromEntries(settings.keyboardShortcuts.shortcuts),
+      preset: settings.keyboardShortcuts.preset
     });
   } catch (error) {
     res.status(500).json({ error: 'Failed to load keyboard shortcuts', details: error.message });
@@ -156,18 +198,30 @@ router.get('/keyboard-shortcuts', (req, res) => {
  * POST /api/user/keyboard-shortcuts
  * Save user's keyboard shortcuts
  */
-router.post('/keyboard-shortcuts', (req, res) => {
+router.post('/keyboard-shortcuts', async (req, res) => {
   try {
     const userId = req.user?.id || 'default-user';
     const { shortcuts, preset } = req.body;
 
-    // TODO: Store in database
+    let userSettings = await UserSettings.findOne({ userId });
+    
+    if (!userSettings) {
+      userSettings = new UserSettings({ userId });
+    }
+
+    if (shortcuts) {
+      userSettings.keyboardShortcuts.shortcuts = new Map(Object.entries(shortcuts));
+    }
+    if (preset) userSettings.keyboardShortcuts.preset = preset;
+
+    await userSettings.save();
+
     res.json({
       success: true,
       message: 'Keyboard shortcuts saved',
       userId,
-      shortcuts,
-      preset
+      shortcuts: Object.fromEntries(userSettings.keyboardShortcuts.shortcuts),
+      preset: userSettings.keyboardShortcuts.preset
     });
   } catch (error) {
     res.status(500).json({ error: 'Failed to save keyboard shortcuts', details: error.message });
@@ -178,19 +232,20 @@ router.post('/keyboard-shortcuts', (req, res) => {
  * GET /api/user/advanced-settings
  * Get user's advanced settings
  */
-router.get('/advanced-settings', (req, res) => {
+router.get('/advanced-settings', async (req, res) => {
   try {
     const userId = req.user?.id || 'default-user';
 
+    let settings = await UserSettings.findOne({ userId });
+    
+    if (!settings) {
+      settings = new UserSettings({ userId });
+      await settings.save();
+    }
+
     res.json({
       userId,
-      settings: {
-        autoSave: true,
-        notifications: true,
-        analytics: true,
-        privacy: 'private',
-        dataRetention: 90
-      }
+      settings: settings.advancedSettings
     });
   } catch (error) {
     res.status(500).json({ error: 'Failed to load advanced settings', details: error.message });
@@ -201,17 +256,28 @@ router.get('/advanced-settings', (req, res) => {
  * POST /api/user/advanced-settings
  * Save user's advanced settings
  */
-router.post('/advanced-settings', (req, res) => {
+router.post('/advanced-settings', async (req, res) => {
   try {
     const userId = req.user?.id || 'default-user';
     const { settings } = req.body;
 
-    // TODO: Store in database
+    let userSettings = await UserSettings.findOne({ userId });
+    
+    if (!userSettings) {
+      userSettings = new UserSettings({ userId });
+    }
+
+    if (settings) {
+      userSettings.advancedSettings = { ...userSettings.advancedSettings, ...settings };
+    }
+
+    await userSettings.save();
+
     res.json({
       success: true,
       message: 'Advanced settings saved',
       userId,
-      settings
+      settings: userSettings.advancedSettings
     });
   } catch (error) {
     res.status(500).json({ error: 'Failed to save advanced settings', details: error.message });
