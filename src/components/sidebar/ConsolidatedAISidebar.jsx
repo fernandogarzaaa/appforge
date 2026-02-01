@@ -39,7 +39,17 @@ import {
 import { Button } from '@/components/ui/button';
 import AIModelRouter from './AIModelRouter';
 
-export default function ConsolidatedAISidebar({ currentProject, collapsed, onToggle, user }) {
+// Custom comparison function to prevent unnecessary re-renders
+function propsAreEqual(prevProps, nextProps) {
+  return (
+    prevProps.collapsed === nextProps.collapsed &&
+    prevProps.user?.email === nextProps.user?.email &&
+    prevProps.currentProject?.id === nextProps.currentProject?.id &&
+    prevProps.onToggle === nextProps.onToggle
+  );
+}
+
+function ConsolidatedAISidebar({ currentProject, collapsed, onToggle, user }) {
   const location = useLocation();
   const isAdminUser = user?.email?.toLowerCase() === 'fernandogarzaaa@gmail.com';
   const [expandedGroups, setExpandedGroups] = useState(['ai', 'build', 'main']);
@@ -430,3 +440,5 @@ export default function ConsolidatedAISidebar({ currentProject, collapsed, onTog
     </motion.div>
   );
 }
+
+export default React.memo(ConsolidatedAISidebar, propsAreEqual);

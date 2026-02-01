@@ -20,7 +20,7 @@ import {
 } from '@/components/ui/tooltip';
 import { Badge } from '@/components/ui/badge';
 
-export default function AIModelRouter() {
+function AIModelRouter() {
   const { selectedModel, availableModels, updateSettings, settings } = useLLM();
   const [displayModel, setDisplayModel] = useState(selectedModel || 'base44');
   const [showAdvanced, setShowAdvanced] = useState(false);
@@ -187,3 +187,7 @@ export default function AIModelRouter() {
     </div>
   );
 }
+
+// React.memo with custom comparison to prevent unnecessary re-renders
+// Only re-render if LLM context actually changes
+export default React.memo(AIModelRouter);

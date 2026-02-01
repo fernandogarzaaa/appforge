@@ -10,12 +10,15 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 
-export default function Header({ user, onLogout, onSearchOpen }) {
+export default function Header({ user, onLogout, onSearchOpen, mobileMenu }) {
   return (
     <header className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 px-6 py-4 flex items-center justify-between">
-      <div>
-        <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Development Studio</h2>
-        <p className="text-xs text-gray-500 dark:text-gray-400">AI-powered application builder</p>
+      <div className="flex items-center gap-4">
+        {mobileMenu}
+        <div>
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Development Studio</h2>
+          <p className="text-xs text-gray-500 dark:text-gray-400">AI-powered application builder</p>
+        </div>
       </div>
 
       <div className="flex items-center gap-4">
