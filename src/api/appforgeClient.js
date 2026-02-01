@@ -6,14 +6,24 @@ const baseURL = import.meta.env.VITE_API_URL || env?.backend?.apiUrl || 'http://
 const appforgeClient = axios.create({
   baseURL,
   timeout: 15000,
+  withCredentials: true, // Include cookies in requests
   headers: {
     'Content-Type': 'application/json'
   }
 });
 
-export const getAuthToken = () => localStorage.getItem('token');
-export const setAuthToken = (token) => localStorage.setItem('token', token);
-export const clearAuthToken = () => localStorage.removeItem('token');
+// Token management now uses HTTP-only cookies (set by server)
+export const getAuthToken = () => {
+  // Tokens are in HTTP-only cookies, not accessible to JS
+  // Server handles auth via cookie headers
+  return null; // Return null since tokens are server-managed
+};
+export const setAuthToken = (token) => {
+  // Deprecated - server sets token in HTTP-only cookie
+};
+export const clearAuthToken = () => {
+  // Deprecated - server clears token on logout
+};
 
 appforgeClient.interceptors.request.use((config) => {
   const token = getAuthToken();

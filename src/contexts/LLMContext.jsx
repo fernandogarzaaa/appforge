@@ -123,39 +123,45 @@ export function LLMProvider({ children }) {
     preferredModel: null,
   });
 
-  // Load saved settings on mount
+  // Load saved settings from backend on mount
   useEffect(() => {
-    const savedSettings = localStorage.getItem('llm_settings');
-    if (savedSettings) {
-      try {
-        setSettings(JSON.parse(savedSettings));
-      } catch (e) {
-        console.error('Failed to load LLM settings:', e);
-      }
-    }
-    
-    const savedUsage = localStorage.getItem('llm_usage');
-    if (savedUsage) {
-      try {
-        setUsage(JSON.parse(savedUsage));
-      } catch (e) {
-        console.error('Failed to load LLM usage:', e);
-      }
-    }
-
-    // Check available models
+    loadLLMSettings();
     checkAvailableModels();
   }, []);
 
-  // Save settings when changed
-  useEffect(() => {
-    localStorage.setItem('llm_settings', JSON.stringify(settings));
-  }, [settings]);
+  const loadLLMSettings = async () => {
+    try {
+      const response = await fetch('/api/user/llm-settings', {
+        credentials: 'include'
+      });
+      if (response.ok) {
+        const data = await response.json();
+        setSettings(data.settings || settings);
+        setUsage(data.usage || usage);
+      }
+    } catch (error) {
+      console.error('Failed to load LLM settings from backend:', error);
+      // Fall back to empty settings
+    }
+  };
 
-  // Save usage when changed
+  // Auto-save settings to backend when changed
   useEffect(() => {
-    localStorage.setItem('llm_usage', JSON.stringify(usage));
-  }, [usage]);
+    saveLLMSettings();
+  }, [settings, usage]);
+
+  const saveLLMSettings = async () => {
+    try {
+      await fetch('/api/user/llm-settings', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ settings, usage })
+      });
+    } catch (error) {
+      console.error('Failed to save LLM settings:', error);
+    }
+  };
 
   // Check which models are available based on API keys
   const checkAvailableModels = async () => {
@@ -366,7 +372,8 @@ export function LLMProvider({ children }) {
       modelBreakdown: {},
       history: [],
     });
-    localStorage.removeItem('llm_usage');
+    // Clear usage on backend
+    await fetch('/api/user/llm-usage', { method: 'DELETE', credentials: 'include' });
   }, []);
 
   // Get model info

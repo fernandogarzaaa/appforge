@@ -19,19 +19,13 @@ export const BackendAuthProvider = ({ children }) => {
   }, []);
 
   const checkAuth = async () => {
-    const token = localStorage.getItem('token');
-    if (!token) {
-      setIsLoading(false);
-      return;
-    }
-
+    // No need to check token - server sends it via HTTP-only cookie
     try {
-      const userData = await authService.me();
+      const userData = await authService.getCurrentUser();
       setUser(userData);
       setIsAuthenticated(true);
     } catch (err) {
       console.error('Auth check failed:', err);
-      localStorage.removeItem('token');
       setIsAuthenticated(false);
     } finally {
       setIsLoading(false);

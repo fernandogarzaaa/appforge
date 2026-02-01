@@ -112,10 +112,21 @@ export default function APIConfiguration() {
     }
   };
 
-  const handleSaveConfiguration = () => {
-    // Save to backend or local storage
-    localStorage.setItem('apiConfigs', JSON.stringify(configs));
-    alert('Configuration saved successfully!');
+  const handleSaveConfiguration = async () => {
+    try {
+      // Save configurations to backend API
+      // Using a backend endpoint that stores API keys securely
+      await fetch('/api/admin/api-configurations', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include', // Include auth cookie
+        body: JSON.stringify(configs)
+      });
+      alert('Configuration saved successfully!');
+    } catch (error) {
+      console.error('Failed to save configuration:', error);
+      alert('Failed to save configuration');
+    }
   };
 
   const currentConfig = configs[activeProvider];
