@@ -3,6 +3,7 @@ import { useState, useCallback, useEffect } from 'react';
 /**
  * useAdvancedSettings Hook
  * Manage advanced application settings and preferences
+ * Persists to backend API instead of localStorage
  */
 export function useAdvancedSettings() {
   const [userSettings, setUserSettings] = useState({
@@ -37,17 +38,43 @@ export function useAdvancedSettings() {
   const [settingsGroups, setSettingsGroups] = useState([]);
   const [customSettings, setCustomSettings] = useState({});
   const [settingsHistory, setSettingsHistory] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  // Initialize from localStorage
+  // Load settings from backend on mount
   useEffect(() => {
-    const saved = localStorage.getItem('appforge_user_settings');
-    if (saved) setUserSettings(JSON.parse(saved));
+    loadAdvancedSettings();
+  }, []);
 
-    const custom = localStorage.getItem('appforge_custom_settings');
-    if (custom) setCustomSettings(JSON.parse(custom));
+  const loadAdvancedSettings = async () => {
+    try {
+      const response = await fetch('/api/user/advanced-settings', {
+        credentials: 'include'
+      });
+      if (response.ok) {
+        const data = await response.json();
+        if (data.userSettings) setUserSettings(data.userSettings);
+        if (data.customSettings) setCustomSettings(data.customSettings);
+        if (data.settingsHistory) setSettingsHistory(data.settingsHistory);
+        if (data.settingsGroups) setSettingsGroups(data.settingsGroups);
+      }
+    } catch (error) {
+      console.error('Failed to load advanced settings:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
-    const history = localStorage.getItem('appforge_settings_history');
-    if (history) setSettingsHistory(JSON.parse(history));
+  const saveAdvancedSettings = useCallback(async (newSettings) => {
+    try {
+      await fetch('/api/user/advanced-settings', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify(newSettings)
+      });
+    } catch (error) {
+      console.error('Failed to save advanced settings:', error);
+    }
   }, []);
 
   // Update user settings
@@ -65,13 +92,13 @@ export function useAdvancedSettings() {
     current[keys[keys.length - 1]] = value;
 
     setUserSettings(updated);
-    localStorage.setItem('appforge_user_settings', JSON.stringify(updated));
+    saveAdvancedSettings({ userSettings: updated });
 
     // Add to history
     addSettingsHistory(key, oldValue, value);
 
     return updated;
-  }, [userSettings]);
+  }, [userSettings, saveAdvancedSettings]);
 
   // Add to settings history
   const addSettingsHistory = useCallback((key, oldValue, newValue) => {
@@ -85,8 +112,8 @@ export function useAdvancedSettings() {
 
     const updated = [historyEntry, ...settingsHistory].slice(0, 500);
     setSettingsHistory(updated);
-    localStorage.setItem('appforge_settings_history', JSON.stringify(updated));
-  }, [settingsHistory]);
+    saveAdvancedSettings({ settingsHistory: updated });
+  }, [settingsHistory, saveAdvancedSettings]);
 
   // Reset settings to default
   const resetToDefaults = useCallback(() => {
@@ -120,8 +147,8 @@ export function useAdvancedSettings() {
     };
 
     setUserSettings(defaults);
-    localStorage.setItem('appforge_user_settings', JSON.stringify(defaults));
-  }, []);
+    saveAdvancedSettings({ userSettings: defaults });
+  }, [saveAdvancedSettings]);
 
   // Create custom setting
   const createCustomSetting = useCallback((key, value, metadata = {}) => {
@@ -134,10 +161,10 @@ export function useAdvancedSettings() {
     };
 
     setCustomSettings(updated);
-    localStorage.setItem('appforge_custom_settings', JSON.stringify(updated));
+    saveAdvancedSettings({ customSettings: updated });
 
     return updated[key];
-  }, [customSettings]);
+  }, [customSettings, saveAdvancedSettings]);
 
   // Update custom setting
   const updateCustomSetting = useCallback((key, value) => {

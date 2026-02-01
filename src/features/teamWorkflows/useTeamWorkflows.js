@@ -3,6 +3,7 @@ import { useState, useCallback, useEffect } from 'react';
 /**
  * useTeamWorkflows Hook
  * Manages team automations, webhooks, and workflow integrations
+ * Persists to backend API instead of localStorage
  * 
  * @returns {Object} Team workflows management interface
  */
@@ -11,23 +12,44 @@ export function useTeamWorkflows() {
   const [webhooks, setWebhooks] = useState([]);
   const [automations, setAutomations] = useState([]);
   const [integratedServices, setIntegratedServices] = useState({});
+  const [isLoading, setIsLoading] = useState(true);
 
-  // Initialize from localStorage
+  // Load workflows from backend on mount
   useEffect(() => {
-    const savedWorkflows = localStorage.getItem('appforge_workflows');
-    const savedWebhooks = localStorage.getItem('appforge_webhooks');
-    const savedAutomations = localStorage.getItem('appforge_automations');
-    const savedServices = localStorage.getItem('appforge_services');
-
-    if (savedWorkflows) setWorkflows(JSON.parse(savedWorkflows));
-    if (savedWebhooks) setWebhooks(JSON.parse(savedWebhooks));
-    if (savedAutomations) setAutomations(JSON.parse(savedAutomations));
-    if (savedServices) setIntegratedServices(JSON.parse(savedServices));
+    loadTeamWorkflows();
   }, []);
 
-  // Save to localStorage
-  const saveToStorage = useCallback((key, data) => {
-    localStorage.setItem(key, JSON.stringify(data));
+  const loadTeamWorkflows = async () => {
+    try {
+      const response = await fetch('/api/team/workflows', {
+        credentials: 'include'
+      });
+      if (response.ok) {
+        const data = await response.json();
+        setWorkflows(data.workflows || []);
+        setWebhooks(data.webhooks || []);
+        setAutomations(data.automations || []);
+        setIntegratedServices(data.services || {});
+      }
+    } catch (error) {
+      console.error('Failed to load team workflows:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Save workflows to backend
+  const saveToBackend = useCallback(async (type, data) => {
+    try {
+      await fetch('/api/team/workflows', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ [type]: data })
+      });
+    } catch (error) {
+      console.error('Failed to save team workflows:', error);
+    }
   }, []);
 
   /**
@@ -47,9 +69,9 @@ export function useTeamWorkflows() {
     };
     const updated = [...workflows, newWorkflow];
     setWorkflows(updated);
-    saveToStorage('appforge_workflows', updated);
+    saveToBackend('workflows', updated);
     return newWorkflow;
-  }, [workflows, saveToStorage]);
+  }, [workflows, saveToBackend]);
 
   /**
    * Delete a workflow
@@ -57,8 +79,8 @@ export function useTeamWorkflows() {
   const deleteWorkflow = useCallback((workflowId) => {
     const updated = workflows.filter(w => w.id !== workflowId);
     setWorkflows(updated);
-    saveToStorage('appforge_workflows', updated);
-  }, [workflows, saveToStorage]);
+    saveToBackend('workflows', updated);
+  }, [workflows, saveToBackend]);
 
   /**
    * Enable/disable a workflow
@@ -68,8 +90,8 @@ export function useTeamWorkflows() {
       w.id === workflowId ? { ...w, enabled: !w.enabled } : w
     );
     setWorkflows(updated);
-    saveToStorage('appforge_workflows', updated);
-  }, [workflows, saveToStorage]);
+    saveToBackend('workflows', updated);
+  }, [workflows, saveToBackend]);
 
   /**
    * Register a webhook integration
@@ -88,9 +110,9 @@ export function useTeamWorkflows() {
     };
     const updated = [...webhooks, newWebhook];
     setWebhooks(updated);
-    saveToStorage('appforge_webhooks', updated);
+    saveToBackend('webhooks', updated);
     return newWebhook;
-  }, [webhooks, saveToStorage]);
+  }, [webhooks, saveToBackend]);
 
   /**
    * Verify webhook by sending test event
@@ -102,9 +124,9 @@ export function useTeamWorkflows() {
         : w
     );
     setWebhooks(updated);
-    saveToStorage('appforge_webhooks', updated);
+    saveToBackend('webhooks', updated);
     return true;
-  }, [webhooks, saveToStorage]);
+  }, [webhooks, saveToBackend]);
 
   /**
    * Delete a webhook
