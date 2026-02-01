@@ -148,3 +148,75 @@ export function useSearch(data = []) {
     stats
   };
 }
+
+/**
+ * Hook for filtering navigation items with search
+ * @param {Array} items - Navigation items with label and optional keywords
+ */
+export function useNavSearch(items = []) {
+  const [query, setQuery] = useState('');
+
+  const filteredItems = useMemo(() => {
+    if (!query.trim()) return items;
+
+    const lowerQuery = query.toLowerCase();
+    return items.filter((item) => {
+      const label = item.label?.toLowerCase() || '';
+      const keywords = item.keywords?.map((k) => k.toLowerCase()).join(' ') || '';
+      return label.includes(lowerQuery) || keywords.includes(lowerQuery);
+    });
+  }, [query, items]);
+
+  return {
+    query,
+    setQuery,
+    filteredItems,
+    hasResults: filteredItems.length > 0,
+  };
+}
+
+/**
+ * Hook for keyboard shortcuts (Ctrl/Cmd + numbers for model switching)
+ */
+export function useKeyboardShortcuts(onSwitch, maxModels = 9) {
+  const handleKeyDown = useCallback((e) => {
+    if ((e.ctrlKey || e.metaKey) && e.key >= '1' && e.key <= '9') {
+      e.preventDefault();
+      const index = parseInt(e.key, 10) - 1;
+      if (index < maxModels && onSwitch) {
+        onSwitch(index);
+      }
+    }
+  }, [onSwitch, maxModels]);
+
+  return { handleKeyDown };
+}
+
+/**
+ * Hook for searching LLM models
+ */
+export function useModelSearch(models = []) {
+  const [query, setQuery] = useState('');
+
+  const filteredModels = useMemo(() => {
+    if (!query.trim()) return models;
+
+    const lowerQuery = query.toLowerCase();
+    return models.filter((model) => {
+      const matchesName = model.name?.toLowerCase().includes(lowerQuery);
+      const matchesProvider = model.provider?.toLowerCase().includes(lowerQuery);
+      const matchesStrengths = model.strengths?.some((s) =>
+        s.toLowerCase().includes(lowerQuery)
+      );
+      return matchesName || matchesProvider || matchesStrengths;
+    });
+  }, [query, models]);
+
+  return {
+    query,
+    setQuery,
+    filteredModels,
+    hasResults: filteredModels.length > 0,
+  };
+}
+

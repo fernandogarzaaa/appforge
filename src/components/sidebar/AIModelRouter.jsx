@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useLLM, AI_MODELS } from '@/contexts/LLMContext';
+import { useModelSearch, useKeyboardShortcuts } from '@/hooks/useSearch';
 import {
   Check,
   ChevronDown,
   MoreHorizontal,
+  Search,
+  X,
 } from 'lucide-react';
 import {
   DropdownMenu,
@@ -24,10 +27,28 @@ function AIModelRouter() {
   const { selectedModel, availableModels, updateSettings, settings } = useLLM();
   const [displayModel, setDisplayModel] = useState(selectedModel || 'base44');
   const [showAdvanced, setShowAdvanced] = useState(false);
+  const [showSearch, setShowSearch] = useState(false);
+  
+  const modelsList = Object.values(AI_MODELS);
+  const { query, setQuery, filteredModels } = useModelSearch(modelsList);
 
   useEffect(() => {
     setDisplayModel(selectedModel || 'base44');
   }, [selectedModel]);
+
+  // Keyboard shortcuts: Ctrl/Cmd + 1-9 to switch models
+  const handleModelShortcut = (index) => {
+    if (index < modelsList.length) {
+      handleModelSelect(modelsList[index].id);
+    }
+  };
+
+  const { handleKeyDown } = useKeyboardShortcuts(handleModelShortcut, modelsList.length);
+
+  useEffect(() => {
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [handleKeyDown]);
 
   const currentModel = AI_MODELS[Object.keys(AI_MODELS).find(
     (key) => AI_MODELS[key].id === displayModel
@@ -36,9 +57,11 @@ function AIModelRouter() {
   const handleModelSelect = (modelId) => {
     setDisplayModel(modelId);
     updateSettings({ selectedModel: modelId });
+    setShowSearch(false);
+    setQuery('');
   };
 
-  const modelsList = Object.values(AI_MODELS);
+  const displayedModels = showSearch && query.trim() ? filteredModels : modelsList;
 
   return (
     <div className="space-y-3">
@@ -71,8 +94,8 @@ function AIModelRouter() {
         </RadixTooltip>
       </TooltipProvider>
 
-      {/* Model Switcher Button */}
-      <DropdownMenu>
+      {/* Model Switcher Button with Search */}
+      <DropdownMenu open={showSearch} onOpenChange={setShowSearch}>
         <DropdownMenuTrigger asChild>
           <Button
             variant="outline"
@@ -83,56 +106,103 @@ function AIModelRouter() {
             <ChevronDown className="w-3 h-3 ml-1 flex-shrink-0 opacity-60" />
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="start" className="w-64">
-          <div className="px-2 py-1.5 text-xs font-medium text-gray-500 dark:text-gray-400">
-            AVAILABLE MODELS
-          </div>
-          {modelsList.map((model) => (
-            <DropdownMenuItem
-              key={model.id}
-              onClick={() => handleModelSelect(model.id)}
-              className="flex items-start gap-3 px-3 py-2.5 cursor-pointer"
-            >
-              <div className="flex-1 min-w-0 py-1">
-                <div className="flex items-center gap-2">
-                  <span className="text-lg">{model.icon}</span>
-                  <div>
-                    <p className="text-sm font-medium text-gray-900 dark:text-white">
-                      {model.name}
-                    </p>
-                    <p className="text-xs text-gray-500 dark:text-gray-400">
-                      {model.provider}
-                    </p>
-                  </div>
-                </div>
-                <p className="text-xs text-gray-600 dark:text-gray-400 mt-1.5 leading-snug">
-                  {model.description}
-                </p>
-                <div className="flex gap-1 mt-2 flex-wrap">
-                  {model.strengths.slice(0, 2).map((strength) => (
-                    <Badge
-                      key={strength}
-                      variant="secondary"
-                      className="text-xs px-1.5 py-0 text-gray-700 dark:text-gray-300"
-                    >
-                      {strength}
-                    </Badge>
-                  ))}
-                  {model.strengths.length > 2 && (
-                    <Badge
-                      variant="secondary"
-                      className="text-xs px-1.5 py-0 text-gray-700 dark:text-gray-300"
-                    >
-                      +{model.strengths.length - 2}
-                    </Badge>
-                  )}
-                </div>
-              </div>
-              {displayModel === model.id && (
-                <Check className="w-4 h-4 text-indigo-600 dark:text-indigo-400 flex-shrink-0 mt-1" />
+        <DropdownMenuContent align="start" className="w-64 p-0">
+          {/* Search Input */}
+          <div className="px-3 py-2 border-b border-gray-200 dark:border-gray-700 sticky top-0 bg-white dark:bg-gray-950">
+            <div className="relative flex items-center">
+              <Search className="w-3.5 h-3.5 text-gray-400 absolute left-2" />
+              <input
+                type="text"
+                placeholder="Search models..."
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                className="w-full pl-7 pr-7 py-1.5 text-xs bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-md outline-none transition-all focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+              />
+              {query && (
+                <button
+                  onClick={() => setQuery('')}
+                  className="absolute right-2 text-gray-400 hover:text-gray-600"
+                >
+                  <X className="w-3.5 h-3.5" />
+                </button>
               )}
-            </DropdownMenuItem>
-          ))}
+            </div>
+            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+              {displayedModels.length} {displayedModels.length === 1 ? 'model' : 'models'}
+              {query && ` matching "${query}"`}
+            </p>
+          </div>
+
+          {/* Models List */}
+          <div className="max-h-80 overflow-y-auto">
+            {displayedModels.length === 0 ? (
+              <div className="px-3 py-4 text-center text-xs text-gray-500 dark:text-gray-400">
+                No models found
+              </div>
+            ) : (
+              <>
+                <div className="px-2 py-1.5 text-xs font-medium text-gray-500 dark:text-gray-400 sticky top-0 bg-white dark:bg-gray-950">
+                  AVAILABLE MODELS (Ctrl/Cmd + 1-9 to switch)
+                </div>
+                {displayedModels.map((model, index) => (
+                  <DropdownMenuItem
+                    key={model.id}
+                    onClick={() => handleModelSelect(model.id)}
+                    className="flex items-start gap-3 px-3 py-2.5 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800/50"
+                  >
+                    <div className="flex-1 min-w-0 py-1">
+                      <div className="flex items-center gap-2">
+                        <span className="text-lg">{model.icon}</span>
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2">
+                            <p className="text-sm font-medium text-gray-900 dark:text-white">
+                              {model.name}
+                            </p>
+                            {index < 9 && (
+                              <Badge
+                                variant="outline"
+                                className="text-xs px-1.5 py-0 text-gray-600 dark:text-gray-400 border-gray-300 dark:border-gray-600"
+                              >
+                                ⌘{index + 1}
+                              </Badge>
+                            )}
+                          </div>
+                          <p className="text-xs text-gray-500 dark:text-gray-400">
+                            {model.provider}
+                          </p>
+                        </div>
+                      </div>
+                      <p className="text-xs text-gray-600 dark:text-gray-400 mt-1.5 leading-snug">
+                        {model.description}
+                      </p>
+                      <div className="flex gap-1 mt-2 flex-wrap">
+                        {model.strengths.slice(0, 2).map((strength) => (
+                          <Badge
+                            key={strength}
+                            variant="secondary"
+                            className="text-xs px-1.5 py-0 text-gray-700 dark:text-gray-300"
+                          >
+                            {strength}
+                          </Badge>
+                        ))}
+                        {model.strengths.length > 2 && (
+                          <Badge
+                            variant="secondary"
+                            className="text-xs px-1.5 py-0 text-gray-700 dark:text-gray-300"
+                          >
+                            +{model.strengths.length - 2}
+                          </Badge>
+                        )}
+                      </div>
+                    </div>
+                    {displayModel === model.id && (
+                      <Check className="w-4 h-4 text-indigo-600 dark:text-indigo-400 flex-shrink-0 mt-1" />
+                    )}
+                  </DropdownMenuItem>
+                ))}
+              </>
+            )}
+          </div>
         </DropdownMenuContent>
       </DropdownMenu>
 
