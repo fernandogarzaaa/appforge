@@ -372,8 +372,8 @@ export function LLMProvider({ children }) {
       modelBreakdown: {},
       history: [],
     });
-    // Clear usage on backend
-    await fetch('/api/user/llm-usage', { method: 'DELETE', credentials: 'include' });
+    // Clear usage on backend (no await needed, fire and forget)
+    fetch('/api/user/llm-usage', { method: 'DELETE', credentials: 'include' });
   }, []);
 
   // Get model info
