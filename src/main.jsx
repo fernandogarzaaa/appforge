@@ -8,11 +8,22 @@ import App from '@/App.jsx'
 import '@/index.css'
 import { initializeAPI } from '@/api/services'
 
+// Initialize Sentry for error tracking (MUST be first)
+import { initializeSentry, setSentryContext } from '@/lib/sentryConfig'
+initializeSentry();
+
 // Initialize API services
 initializeAPI({
   apiUrl: import.meta.env.VITE_API_URL,
   wsUrl: import.meta.env.VITE_WS_URL,
   autoConnect: import.meta.env.VITE_WS_AUTO_CONNECT === 'true'
+});
+
+// Set initial Sentry context
+setSentryContext('environment', {
+  apiUrl: import.meta.env.VITE_API_URL || 'http://localhost:5000/api',
+  wsUrl: import.meta.env.VITE_WS_URL || 'http://localhost:5001',
+  appVersion: import.meta.env.VITE_APP_VERSION || 'unknown',
 });
 
 console.log('[AppForge] API services initialized', {

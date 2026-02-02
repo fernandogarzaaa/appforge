@@ -3,24 +3,65 @@ require('@testing-library/jest-dom');
 
 // Mock WASM modules
 jest.mock('quantum_core', () => ({
-  HolographicConsensus: jest.fn(() => ({
-    superpose_models: jest.fn(() => 0.8),
-    measure_entropy: jest.fn(() => 0.5),
-    measure_coherence: jest.fn(() => 0.9),
-  })),
-  TunnelingScanner: jest.fn(() => ({
-    calculate_tunneling_probability: jest.fn(() => 0.3),
-    run_penetration_test: jest.fn(() => ({ risk: 0.25 })),
-  })),
-  ZenoStabilizer: jest.fn(() => ({
-    calculate_stability: jest.fn(() => 0.95),
-    is_state_frozen: jest.fn(() => true),
-  })),
-  RenormalizationEngine: jest.fn(() => ({
-    predict_criticality: jest.fn(() => 0.1),
-    coarse_grain: jest.fn(() => 0.05),
-  })),
+  HolographicConsensus: class {
+    superpose_models() { return 0.8; }
+    measure_entropy() { return 0.5; }
+    measure_coherence() { return 0.9; }
+  },
+  TunnelingScanner: class {
+    calculate_tunneling_probability() { return 0.3; }
+    run_penetration_test() { return { risk: 0.25 }; }
+    scan() { return Promise.resolve([]); }
+  },
+  ZenoStabilizer: class {
+    calculate_stability() { return 0.95; }
+    is_state_frozen() { return true; }
+  },
+  RenormalizationEngine: class {
+    predict_criticality() { return 0.1; }
+    coarse_grain() { return 0.05; }
+  },
+  QuantumAnnealer: {
+    optimize: jest.fn(() => Promise.resolve({ optimized: true, energy: 0.5 })),
+  },
+  EntangledState: {
+    create: jest.fn(() => ({ entanglement: 0.9 })),
+  },
+  SuperpositionSynthesizer: {
+    synthesize: jest.fn(() => Promise.resolve({ superposition: 0.8 })),
+  },
 }));
+
+// Mock quantum-core pkg
+jest.mock('@/quantum-core/pkg/quantum_core', () => ({
+  HolographicConsensus: class {
+    superpose_models() { return 0.8; }
+    measure_entropy() { return 0.5; }
+    measure_coherence() { return 0.9; }
+  },
+  TunnelingScanner: class {
+    calculate_tunneling_probability() { return 0.3; }
+    run_penetration_test() { return { risk: 0.25 }; }
+    scan() { return Promise.resolve([]); }
+  },
+  ZenoStabilizer: class {
+    calculate_stability() { return 0.95; }
+    is_state_frozen() { return true; }
+  },
+  RenormalizationEngine: class {
+    predict_criticality() { return 0.1; }
+    coarse_grain() { return 0.05; }
+  },
+  QuantumAnnealer: {
+    optimize: jest.fn(() => Promise.resolve({ optimized: true, energy: 0.5 })),
+  },
+  EntangledState: {
+    create: jest.fn(() => ({ entanglement: 0.9 })),
+  },
+  SuperpositionSynthesizer: {
+    synthesize: jest.fn(() => Promise.resolve({ superposition: 0.8 })),
+  },
+}), { virtual: true });
 
 // Global test utilities
 global.testUtils = {
