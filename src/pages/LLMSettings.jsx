@@ -4,7 +4,7 @@
  * Configure AI model API keys and preferences
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useLLM, AI_MODELS } from '@/contexts/LLMContext';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -32,6 +32,7 @@ import { motion } from 'framer-motion';
 import { toast } from 'sonner';
 import AIUsagePanel from '@/components/ai/AIUsagePanel';
 import ModelSelector from '@/components/ai/ModelSelector';
+import { persistenceService } from '@/api/services';
 
 export default function LLMSettings() {
   const { 
@@ -58,25 +59,36 @@ export default function LLMSettings() {
   
   const [isSaving, setIsSaving] = useState(false);
   const [testingModel, setTestingModel] = useState(null);
+  const [serverState, setServerState] = useState(null);
 
   // Load saved API keys from localStorage
   useEffect(() => {
-    const savedKeys = localStorage.getItem('llm_api_keys');
-    if (savedKeys) {
+    (async () => {
       try {
-        const parsed = JSON.parse(savedKeys);
-        setApiKeys(parsed);
+        const result = await persistenceService.getUserState();
+        if (result?.state?.llmApiKeys) {
+          setApiKeys(result.state.llmApiKeys);
+        } else {
+          // fallback to legacy localStorage once for migration
+          const savedKeys = localStorage.getItem('llm_api_keys');
+          if (savedKeys) {
+            const parsed = JSON.parse(savedKeys);
+            setApiKeys(parsed);
+          }
+        }
+        setServerState(result?.state || {});
       } catch (e) {
-        console.error('Failed to load API keys:', e);
+        console.error('Failed to load user state:', e);
       }
-    }
+    })();
   }, []);
 
   const handleSaveKeys = async () => {
     setIsSaving(true);
     try {
-      // Save to localStorage (in a real app, you'd want to securely store these)
-      localStorage.setItem('llm_api_keys', JSON.stringify(apiKeys));
+      const nextState = { ...(serverState || {}), llmApiKeys: apiKeys };
+      const saved = await persistenceService.saveUserState({ state: nextState });
+      setServerState(saved?.state || nextState);
       
       // Re-check available models
       await checkAvailableModels();
@@ -319,7 +331,7 @@ export default function LLMSettings() {
                 API Key Configuration
               </CardTitle>
               <CardDescription>
-                Add your API keys to enable different AI models. Keys are stored locally in your browser.
+                 Add your API keys to enable different AI models. Keys are stored with your account and never logged.
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">

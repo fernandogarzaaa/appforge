@@ -3,6 +3,8 @@
  * Centralized event tracking for models, sidebar interactions, and performance metrics
  */
 
+import { persistenceService } from '@/api/services';
+
 const STORAGE_KEY = 'appforge_analytics';
 const PERFORMANCE_KEY = 'appforge_performance';
 
@@ -39,6 +41,15 @@ class AnalyticsService {
 
     this.events.push(event);
     this.saveEvents();
+
+    // Fire-and-forget persistence to backend
+    persistenceService.recordAnalyticsEvent({
+      event: eventType,
+      properties: eventData,
+      metadata: { localId: event.id }
+    }).catch(() => {
+      // Swallow errors to avoid breaking UX; local cache remains
+    });
     return event;
   }
 

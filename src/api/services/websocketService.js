@@ -119,6 +119,19 @@ class WebSocketService {
     this.socket.on('user-left', (data) => {
       this.emit('user-left', data);
     });
+
+    // Persistence events
+    this.socket.on('state:updated', (data) => {
+      this.emit('state:updated', data);
+    });
+
+    this.socket.on('analytics:event', (data) => {
+      this.emit('analytics:event', data);
+    });
+
+    this.socket.on('sync:log', (data) => {
+      this.emit('sync:log', data);
+    });
   }
 
   /**

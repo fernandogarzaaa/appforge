@@ -131,3 +131,68 @@ test('persists admin API configurations', async () => {
   assert.equal(getRes.body.configurations.length, 1);
   assert.equal(getRes.body.configurations[0].provider, 'openai');
 });
+
+test('user state upsert and retrieve', async () => {
+  const token = await registerAndLogin();
+
+  const payload = {
+    state: { llmApiKeys: { openai: 'sk-test' } },
+    version: 2,
+    deviceId: 'web'
+  };
+
+  const saveRes = await request(app)
+    .put('/api/persistence/user-state')
+    .set('Authorization', `Bearer ${token}`)
+    .send(payload);
+
+  assert.equal(saveRes.status, 201);
+  assert.equal(saveRes.body.success, true);
+  assert.equal(saveRes.body.data.version, 2);
+
+  const getRes = await request(app)
+    .get('/api/persistence/user-state')
+    .set('Authorization', `Bearer ${token}`);
+
+  assert.equal(getRes.status, 200);
+  assert.equal(getRes.body.data.state.llmApiKeys.openai, 'sk-test');
+});
+
+test('analytics event validation fails without event name', async () => {
+  const token = await registerAndLogin();
+
+  const res = await request(app)
+    .post('/api/persistence/analytics')
+    .set('Authorization', `Bearer ${token}`)
+    .send({ properties: { foo: 'bar' } });
+
+  assert.equal(res.status, 400);
+});
+
+test('sync log records and lists', async () => {
+  const token = await registerAndLogin();
+
+  const createRes = await request(app)
+    .post('/api/persistence/sync/logs')
+    .set('Authorization', `Bearer ${token}`)
+    .send({
+      entityType: 'project',
+      entityId: 'proj-1',
+      action: 'update',
+      status: 'success',
+      version: 3,
+      diff: { field: 'name' }
+    });
+
+  assert.equal(createRes.status, 201);
+  assert.equal(createRes.body.success, true);
+
+  const listRes = await request(app)
+    .get('/api/persistence/sync/logs')
+    .set('Authorization', `Bearer ${token}`)
+    .query({ entityType: 'project', entityId: 'proj-1' });
+
+  assert.equal(listRes.status, 200);
+  assert.ok(listRes.body.data.length >= 1);
+  assert.equal(listRes.body.data[0].entityId, 'proj-1');
+});
