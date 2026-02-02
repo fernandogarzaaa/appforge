@@ -26,6 +26,8 @@
     "build:analyzer:release": "cd static-analyzer-core && wasm-pack build --release --target web --out-dir ../src/static-analyzer-core/pkg"
   },
   "dependencies": {
+    "@apollo/client": "^3.11.0",
+    "@apollo/server": "^4.10.5",
     "@base44/sdk": "^0.8.3",
     "@base44/vite-plugin": "^0.2.14",
     "@hello-pangea/dnd": "^17.0.0",
@@ -94,7 +96,13 @@
     "vaul": "^1.1.2",
     "web-vitals": "^5.1.0",
     "zod": "^3.24.2",
-    "zustand": "^5.0.10"
+    "zustand": "^5.0.10",
+    "graphql": "^16.9.0",
+    "graphql-tag": "^2.12.6",
+    "apollo-server-express": "^3.12.0",
+    "bull": "^4.11.1",
+    "helmet": "^7.1.0",
+    "cors": "^2.8.5"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.11.0",
