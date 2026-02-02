@@ -1,0 +1,27 @@
+Proprietary License (All Rights Reserved)
+
+Copyright (c) 2026 AppForge. All rights reserved.
+
+This software and associated documentation (the "Software") are the
+confidential and proprietary information of AppForge ("Licensor").
+
+You may:
+- Install and use the Software solely for internal evaluation.
+- Not redistribute, sublicense, rent, lease, loan, or otherwise make the Software available to any third party without prior written consent from Licensor.
+
+You may NOT:
+- Copy, modify, or create derivative works of the Software.
+- Reverse engineer, decompile, or disassemble the Software except to the extent required by applicable law.
+- Remove or alter any proprietary notices, labels, or marks on the Software.
+
+Warranty Disclaimer:
+THE SOFTWARE IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT.
+
+Limitation of Liability:
+IN NO EVENT SHALL LICENSOR BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES, OR ANY LOSS OF PROFITS OR REVENUE, ARISING OUT OF OR RELATED TO THE USE OF THE SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
+
+Termination:
+This license automatically terminates if you fail to comply with any term. Upon termination, you must cease all use and destroy all copies of the Software.
+
+Contact:
+For commercial licensing or redistribution rights, contact: legal@appforge.example
