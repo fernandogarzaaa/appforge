@@ -1,6 +1,23 @@
-# Quick Reference Guide
+# Technical Debt Remediation - Quick Reference Guide
+**Updated:** February 2, 2026  
+**Commits:** `398b2a0`, `d194596`, `644e43d`  
+**Status:** ✅ Planning Complete, Ready for Implementation
 
-Fast lookup for common tasks and information.
+---
+
+## 🎯 The Two Critical Items (20-hour fix = +$3.5M-$5M valuation)
+
+### Item #1: Database Transition (12-16 hours)
+- **Problem:** Data lost on cache clear, no persistence, can't scale
+- **Solution:** Backend API + PostgreSQL/MongoDB persistence layer
+- **Impact:** +$1.5M-$2M | Enables enterprise sales
+- **Docs:** `TECHNICAL_DEBT_REMEDIATION.md` (Section 1)
+
+### Item #2: Real-time Collaboration (6-8 hours)  
+- **Problem:** No multi-user support, competitors have this feature
+- **Solution:** Socket.io WebSocket server + Operational Transform
+- **Impact:** +$2M-$3M | Competitive feature parity
+- **Docs:** `TECHNICAL_DEBT_REMEDIATION.md` (Section 2)
 
 ---
 
@@ -8,6 +25,10 @@ Fast lookup for common tasks and information.
 
 | Document | Purpose | Best For |
 |----------|---------|----------|
+| `TECHNICAL_DEBT_REMEDIATION.md` | Full technical plan with code examples | Developers |
+| `IMPLEMENTATION_CHECKLIST.md` | Phase-by-phase tasks with checkboxes | Project managers |
+| `VALUATION_IMPACT_ANALYSIS.md` | Business impact & acquisition scenarios | Executives/Investors |
+| `QUICK_REFERENCE.md` | This file - quick lookup |
 | [README.md](./README.md) | Project overview and setup | Getting started |
 | [CONTRIBUTING.md](./CONTRIBUTING.md) | Development guidelines | Contributing code |
 | [docs/API.md](./docs/API.md) | API endpoint reference | Using payment APIs |
