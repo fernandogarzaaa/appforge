@@ -1,5 +1,5 @@
 // Jest setup file
-import '@testing-library/jest-dom';
+require('@testing-library/jest-dom');
 
 // Mock WASM modules
 jest.mock('quantum_core', () => ({
