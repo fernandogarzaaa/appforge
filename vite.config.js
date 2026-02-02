@@ -16,6 +16,11 @@ export default defineConfig({
     }),
     react(),
   ],
+  optimizeDeps: {
+    // Exclude the WASM glue so Vite doesn't try to prebundle it
+    exclude: ['@/quantum-core/pkg/quantum_core']
+  },
+  assetsInclude: ['**/*.wasm'],
   build: {
     // Increase chunk size warning limit (we have proper code splitting now)
     chunkSizeWarningLimit: 800,

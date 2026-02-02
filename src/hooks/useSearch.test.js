@@ -175,7 +175,11 @@ describe('useSearch Hook', () => {
     
     expect(result.current.isSearching).toBe(true);
     
-    vi.runAllTimers();
+    act(() => {
+      vi.runAllTimers();
+    });
+
+    expect(result.current.isSearching).toBe(false);
     vi.useRealTimers();
   });
 

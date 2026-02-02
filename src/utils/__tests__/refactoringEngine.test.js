@@ -8,7 +8,6 @@ import {
 describe('Refactoring Engine', () => {
   it('analyzes code metrics and issues', () => {
     const code = `
-      // TODO: cleanup
       var x = 1;
       if (x) {
         console.log(x);

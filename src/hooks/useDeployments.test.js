@@ -14,11 +14,17 @@ describe('useDeployments Hook', () => {
   });
 
   it('should load deployment history', async () => {
+    vi.useFakeTimers();
     const { result } = renderHook(() => useDeployments());
     
     expect(result.current.loading).toBe(true);
     
-    await new Promise(resolve => setTimeout(resolve, 100));
+    act(() => {
+      vi.runAllTimers();
+    });
+
+    expect(result.current.loading).toBe(false);
+    vi.useRealTimers();
   });
 
   it('should filter deployments by status', () => {

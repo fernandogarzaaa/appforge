@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { BrowserRouter } from 'react-router-dom';
+import { RouterProvider, createMemoryRouter } from 'react-router-dom';
 import AIModelRouter from '@/components/sidebar/AIModelRouter';
 import { LLMProvider } from '@/contexts/LLMContext';
 
@@ -47,6 +47,21 @@ vi.mock('@/components/ui/tooltip', () => ({
   TooltipProvider: ({ children }) => <div>{children}</div>,
 }));
 
+const renderWithRouter = (ui) => {
+  const router = createMemoryRouter(
+    [{ path: '/', element: ui }],
+    {
+      initialEntries: ['/'],
+      future: {
+        v7_startTransition: true,
+        v7_relativeSplatPath: true,
+      },
+    }
+  );
+
+  return render(<RouterProvider router={router} />);
+};
+
 describe('AIModelRouter Component', () => {
   const baseLLMContext = {
     selectedModel: 'gpt4',
@@ -61,12 +76,10 @@ describe('AIModelRouter Component', () => {
   });
 
   it('renders without crashing', () => {
-    render(
-      <BrowserRouter>
-        <LLMProvider value={mockLLMContext}>
-          <AIModelRouter />
-        </LLMProvider>
-      </BrowserRouter>
+    renderWithRouter(
+      <LLMProvider value={mockLLMContext}>
+        <AIModelRouter />
+      </LLMProvider>
     );
 
     expect(screen.getByText(/Active Model/i)).toBeInTheDocument();
@@ -74,24 +87,20 @@ describe('AIModelRouter Component', () => {
   });
 
   it('displays current model name and provider', () => {
-    render(
-      <BrowserRouter>
-        <LLMProvider value={mockLLMContext}>
-          <AIModelRouter />
-        </LLMProvider>
-      </BrowserRouter>
+    renderWithRouter(
+      <LLMProvider value={mockLLMContext}>
+        <AIModelRouter />
+      </LLMProvider>
     );
 
     expect(screen.getByText(/Active Model/i)).toBeInTheDocument();
   });
 
   it('opens dropdown when Switch Model button is clicked', async () => {
-    render(
-      <BrowserRouter>
-        <LLMProvider value={mockLLMContext}>
-          <AIModelRouter />
-        </LLMProvider>
-      </BrowserRouter>
+    renderWithRouter(
+      <LLMProvider value={mockLLMContext}>
+        <AIModelRouter />
+      </LLMProvider>
     );
 
     const switchButton = screen.getByText(/Switch Model/i);
@@ -105,12 +114,10 @@ describe('AIModelRouter Component', () => {
   it('filters models based on search query', async () => {
     const user = userEvent.setup();
 
-    render(
-      <BrowserRouter>
-        <LLMProvider value={mockLLMContext}>
-          <AIModelRouter />
-        </LLMProvider>
-      </BrowserRouter>
+    renderWithRouter(
+      <LLMProvider value={mockLLMContext}>
+        <AIModelRouter />
+      </LLMProvider>
     );
 
     const switchButton = screen.getByText(/Switch Model/i);
@@ -125,12 +132,10 @@ describe('AIModelRouter Component', () => {
   });
 
   it('shows keyboard shortcut badges', async () => {
-    render(
-      <BrowserRouter>
-        <LLMProvider value={mockLLMContext}>
-          <AIModelRouter />
-        </LLMProvider>
-      </BrowserRouter>
+    renderWithRouter(
+      <LLMProvider value={mockLLMContext}>
+        <AIModelRouter />
+      </LLMProvider>
     );
 
     const switchButton = screen.getByText(/Switch Model/i);
@@ -144,12 +149,10 @@ describe('AIModelRouter Component', () => {
   it('clears search when X button is clicked', async () => {
     const user = userEvent.setup();
 
-    render(
-      <BrowserRouter>
-        <LLMProvider value={mockLLMContext}>
-          <AIModelRouter />
-        </LLMProvider>
-      </BrowserRouter>
+    renderWithRouter(
+      <LLMProvider value={mockLLMContext}>
+        <AIModelRouter />
+      </LLMProvider>
     );
 
     const switchButton = screen.getByText(/Switch Model/i);
@@ -168,12 +171,10 @@ describe('AIModelRouter Component', () => {
       updateSettings: mockUpdateSettings,
     };
 
-    render(
-      <BrowserRouter>
-        <LLMProvider value={mockLLMContext}>
-          <AIModelRouter />
-        </LLMProvider>
-      </BrowserRouter>
+    renderWithRouter(
+      <LLMProvider value={mockLLMContext}>
+        <AIModelRouter />
+      </LLMProvider>
     );
 
     const switchButton = screen.getByText(/Switch Model/i);
@@ -192,12 +193,10 @@ describe('AIModelRouter Component', () => {
   it('shows model count in search results', async () => {
     const user = userEvent.setup();
 
-    render(
-      <BrowserRouter>
-        <LLMProvider value={mockLLMContext}>
-          <AIModelRouter />
-        </LLMProvider>
-      </BrowserRouter>
+    renderWithRouter(
+      <LLMProvider value={mockLLMContext}>
+        <AIModelRouter />
+      </LLMProvider>
     );
 
     const switchButton = screen.getByText(/Switch Model/i);
@@ -208,24 +207,20 @@ describe('AIModelRouter Component', () => {
   });
 
   it('displays advanced options toggle', () => {
-    render(
-      <BrowserRouter>
-        <LLMProvider value={mockLLMContext}>
-          <AIModelRouter />
-        </LLMProvider>
-      </BrowserRouter>
+    renderWithRouter(
+      <LLMProvider value={mockLLMContext}>
+        <AIModelRouter />
+      </LLMProvider>
     );
 
     expect(screen.getByText(/Show advanced/i)).toBeInTheDocument();
   });
 
   it('toggles advanced options visibility', async () => {
-    render(
-      <BrowserRouter>
-        <LLMProvider value={mockLLMContext}>
-          <AIModelRouter />
-        </LLMProvider>
-      </BrowserRouter>
+    renderWithRouter(
+      <LLMProvider value={mockLLMContext}>
+        <AIModelRouter />
+      </LLMProvider>
     );
 
     const advancedButton = screen.getByText(/Show advanced/i);
@@ -237,12 +232,10 @@ describe('AIModelRouter Component', () => {
   });
 
   it('displays cost information in advanced mode', async () => {
-    render(
-      <BrowserRouter>
-        <LLMProvider value={mockLLMContext}>
-          <AIModelRouter />
-        </LLMProvider>
-      </BrowserRouter>
+    renderWithRouter(
+      <LLMProvider value={mockLLMContext}>
+        <AIModelRouter />
+      </LLMProvider>
     );
 
     const advancedButton = screen.getByText(/Show advanced/i);
@@ -264,12 +257,10 @@ describe('AIModelRouter Keyboard Shortcuts', () => {
       settings: {},
     };
 
-    render(
-      <BrowserRouter>
-        <LLMProvider value={mockLLMContext}>
-          <AIModelRouter />
-        </LLMProvider>
-      </BrowserRouter>
+    renderWithRouter(
+      <LLMProvider value={mockLLMContext}>
+        <AIModelRouter />
+      </LLMProvider>
     );
 
     // Simulate Ctrl+1 key press
@@ -293,12 +284,10 @@ describe('AIModelRouter Keyboard Shortcuts', () => {
       settings: {},
     };
 
-    render(
-      <BrowserRouter>
-        <LLMProvider value={mockLLMContext}>
-          <AIModelRouter />
-        </LLMProvider>
-      </BrowserRouter>
+    renderWithRouter(
+      <LLMProvider value={mockLLMContext}>
+        <AIModelRouter />
+      </LLMProvider>
     );
 
     // Simulate Cmd+1 (metaKey) key press

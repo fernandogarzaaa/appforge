@@ -92,7 +92,7 @@ const integrations = {
     { name: 'Pinterest', description: 'Visual discovery', icon: Share2, status: 'available', color: 'red', rating: 4.4 }
   ],
   payment: [
-    { name: 'Xendit', description: 'Payment processing & invoices', icon: CreditCard, status: 'connected', color: 'blue', rating: 4.9 },
+    { name: 'PayMongo', description: 'Payment processing & invoices', icon: CreditCard, status: 'connected', color: 'emerald', rating: 4.9 },
     { name: 'PayPal', description: 'Digital payments', icon: CreditCard, status: 'available', color: 'blue', rating: 4.6 },
     { name: 'Square', description: 'Payment platform', icon: CreditCard, status: 'available', color: 'slate', rating: 4.7 },
     { name: 'Braintree', description: 'Payment gateway', icon: CreditCard, status: 'available', color: 'blue', rating: 4.5 },

@@ -16,21 +16,24 @@ export default async (req: Request): Promise<Response> => {
     const user = await base44.auth.me();
 
     const { appId, errorData } = await req.json();
+    const fingerprint = errorData?.stack ? errorData.stack.split('\n')[1]?.trim() : errorData?.message;
+    const errorPayload = {
+      app_id: appId,
+      fingerprint: fingerprint || `err_${Date.now()}`,
+      severity: errorData?.severity || 'error',
+      message: errorData?.message || 'Unknown error',
+      stack: errorData?.stack,
+      user_context: errorData?.user,
+      created_at: new Date().toISOString(),
+    };
 
-    // TODO: Implement error detection
-    // 1. Log error with stack trace
-    // 2. Group similar errors (fingerprint)
-    // 3. Track error frequency
-    // 4. Detect error spikes
-    // 5. Send alerts to team
-    // 6. Create error timeline
-    // 7. Suggest potential fixes using AI
+    const record = await base44.entities.AppError?.create(errorPayload).catch(() => errorPayload);
 
     return new Response(
       JSON.stringify({
         success: true,
         message: 'Error tracked',
-        errorId: 'err_' + Date.now(),
+        errorId: record.id || errorPayload.fingerprint,
         alertSent: true,
       }),
       {

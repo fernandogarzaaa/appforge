@@ -1,25 +1,28 @@
 import { useState, useCallback, useEffect } from 'react';
+import { persistenceService, websocketService } from '@/api/services';
 
 /**
  * useOnboarding Hook
  * Manage user onboarding flows, tours, and tutorials
  */
+const defaultOnboardingState = {
+  completed: false,
+  currentStep: 0,
+  completedSteps: [],
+  skipped: false,
+  startedAt: null,
+  completedAt: null
+};
+
 export function useOnboarding() {
-  const [onboardingState, setOnboardingState] = useState({
-    completed: false,
-    currentStep: 0,
-    completedSteps: [],
-    skipped: false,
-    startedAt: null,
-    completedAt: null
-  });
+  const [onboardingState, setOnboardingState] = useState(defaultOnboardingState);
 
   const [activeTours, setActiveTours] = useState([]);
   const [tourProgress, setTourProgress] = useState({});
   const [tutorials, setTutorials] = useState([]);
+  const [serverState, setServerState] = useState(null);
 
-  // Initialize from localStorage
-  useEffect(() => {
+  const loadFromLocalStorage = () => {
     const saved = localStorage.getItem('appforge_onboarding_state');
     if (saved) setOnboardingState(JSON.parse(saved));
 
@@ -31,7 +34,57 @@ export function useOnboarding() {
 
     const savedTutorials = localStorage.getItem('appforge_tutorials');
     if (savedTutorials) setTutorials(JSON.parse(savedTutorials));
+  };
+
+  // Initialize from persistence service with legacy fallback
+  useEffect(() => {
+    let mounted = true;
+    (async () => {
+      try {
+        const result = await persistenceService.getUserState();
+        if (!mounted) return;
+
+        setServerState(result);
+        const persisted = result?.state?.onboarding;
+        if (persisted) {
+          setOnboardingState(persisted.onboardingState || defaultOnboardingState);
+          setActiveTours(persisted.activeTours || []);
+          setTourProgress(persisted.tourProgress || {});
+          setTutorials(persisted.tutorials || []);
+        } else {
+          loadFromLocalStorage();
+        }
+      } catch (error) {
+        console.error('Failed to load onboarding state; falling back to localStorage', error);
+        loadFromLocalStorage();
+      }
+    })();
+
+    return () => {
+      mounted = false;
+    };
   }, []);
+
+  const persistOnboardingState = useCallback(async (partial = {}) => {
+    const nextOnboarding = {
+      onboardingState,
+      activeTours,
+      tourProgress,
+      tutorials,
+      ...partial
+    };
+
+    try {
+      const nextState = {
+        ...(serverState?.state || {}),
+        onboarding: nextOnboarding
+      };
+      const saved = await persistenceService.saveUserState({ state: nextState });
+      setServerState(saved);
+    } catch (error) {
+      console.error('Failed to persist onboarding state', error);
+    }
+  }, [onboardingState, activeTours, tourProgress, tutorials, serverState]);
 
   // Start onboarding
   const startOnboarding = useCallback(() => {
@@ -44,8 +97,8 @@ export function useOnboarding() {
       completedAt: null
     };
     setOnboardingState(state);
-    localStorage.setItem('appforge_onboarding_state', JSON.stringify(state));
-  }, []);
+    persistOnboardingState({ onboardingState: state });
+  }, [persistOnboardingState]);
 
   // Complete onboarding step
   const completeStep = useCallback((stepIndex) => {
@@ -55,8 +108,8 @@ export function useOnboarding() {
     }
     updated.currentStep = stepIndex + 1;
     setOnboardingState(updated);
-    localStorage.setItem('appforge_onboarding_state', JSON.stringify(updated));
-  }, [onboardingState]);
+    persistOnboardingState({ onboardingState: updated });
+  }, [onboardingState, persistOnboardingState]);
 
   // Skip onboarding
   const skipOnboarding = useCallback(() => {
@@ -67,8 +120,8 @@ export function useOnboarding() {
       completedAt: new Date().toISOString()
     };
     setOnboardingState(updated);
-    localStorage.setItem('appforge_onboarding_state', JSON.stringify(updated));
-  }, [onboardingState]);
+    persistOnboardingState({ onboardingState: updated });
+  }, [onboardingState, persistOnboardingState]);
 
   // Complete entire onboarding
   const completeOnboarding = useCallback(() => {
@@ -78,8 +131,8 @@ export function useOnboarding() {
       completedAt: new Date().toISOString()
     };
     setOnboardingState(updated);
-    localStorage.setItem('appforge_onboarding_state', JSON.stringify(updated));
-  }, [onboardingState]);
+    persistOnboardingState({ onboardingState: updated });
+  }, [onboardingState, persistOnboardingState]);
 
   // Get onboarding progress
   const getOnboardingProgress = useCallback(() => {
@@ -108,7 +161,7 @@ export function useOnboarding() {
 
     const updated = [...activeTours, tour];
     setActiveTours(updated);
-    localStorage.setItem('appforge_active_tours', JSON.stringify(updated));
+    persistOnboardingState({ activeTours: updated });
 
     setTourProgress(prev => ({
       ...prev,
@@ -116,7 +169,7 @@ export function useOnboarding() {
     }));
 
     return tour;
-  }, [activeTours]);
+  }, [activeTours, persistOnboardingState]);
 
   // Advance tour step
   const advanceTourStep = useCallback((tourName) => {
@@ -135,7 +188,7 @@ export function useOnboarding() {
     });
 
     setActiveTours(updated);
-    localStorage.setItem('appforge_active_tours', JSON.stringify(updated));
+    persistOnboardingState({ activeTours: updated });
 
     setTourProgress(prev => ({
       ...prev,
@@ -144,19 +197,19 @@ export function useOnboarding() {
         completed: updated.find(t => t.name === tourName)?.completed || false
       }
     }));
-  }, [activeTours]);
+  }, [activeTours, persistOnboardingState]);
 
   // Skip tour
   const skipTour = useCallback((tourName) => {
     const updated = activeTours.filter(tour => tour.name !== tourName);
     setActiveTours(updated);
-    localStorage.setItem('appforge_active_tours', JSON.stringify(updated));
+    persistOnboardingState({ activeTours: updated });
 
     setTourProgress(prev => ({
       ...prev,
       [tourName]: { currentStep: -1, completed: true, skipped: true }
     }));
-  }, [activeTours]);
+  }, [activeTours, persistOnboardingState]);
 
   // Create tutorial
   const createTutorial = useCallback((tutorialConfig) => {
@@ -177,10 +230,10 @@ export function useOnboarding() {
 
     const updated = [...tutorials, tutorial];
     setTutorials(updated);
-    localStorage.setItem('appforge_tutorials', JSON.stringify(updated));
+    persistOnboardingState({ tutorials: updated });
 
     return tutorial;
-  }, [tutorials]);
+  }, [tutorials, persistOnboardingState]);
 
   // Track tutorial view
   const trackTutorialView = useCallback((tutorialId) => {
@@ -192,8 +245,8 @@ export function useOnboarding() {
     });
 
     setTutorials(updated);
-    localStorage.setItem('appforge_tutorials', JSON.stringify(updated));
-  }, [tutorials]);
+    persistOnboardingState({ tutorials: updated });
+  }, [tutorials, persistOnboardingState]);
 
   // Rate tutorial
   const rateTutorial = useCallback((tutorialId, rating) => {
@@ -206,8 +259,8 @@ export function useOnboarding() {
     });
 
     setTutorials(updated);
-    localStorage.setItem('appforge_tutorials', JSON.stringify(updated));
-  }, [tutorials]);
+    persistOnboardingState({ tutorials: updated });
+  }, [tutorials, persistOnboardingState]);
 
   // Get recommended tutorials
   const getRecommendedTutorials = useCallback((category = null, limit = 5) => {
@@ -231,6 +284,24 @@ export function useOnboarding() {
   const getTutorialsByCategory = useCallback((category) => {
     return tutorials.filter(t => t.category === category);
   }, [tutorials]);
+
+  // Keep local state in sync when server broadcasts updates
+  useEffect(() => {
+    websocketService.connect();
+
+    const handleStateUpdated = (payload) => {
+      const persisted = payload?.state?.onboarding;
+      if (!persisted) return;
+      setOnboardingState(persisted.onboardingState || defaultOnboardingState);
+      setActiveTours(persisted.activeTours || []);
+      setTourProgress(persisted.tourProgress || {});
+      setTutorials(persisted.tutorials || []);
+      setServerState(payload);
+    };
+
+    websocketService.on('state:updated', handleStateUpdated);
+    return () => websocketService.off('state:updated', handleStateUpdated);
+  }, []);
 
   // Create onboarding checklist
   const createOnboardingChecklist = useCallback(() => {

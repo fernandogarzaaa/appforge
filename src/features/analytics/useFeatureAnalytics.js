@@ -1,4 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
+import { persistenceService, websocketService } from '@/api/services';
+import { toast } from 'sonner';
 
 /**
  * useFeatureAnalytics Hook
@@ -10,21 +12,101 @@ export function useFeatureAnalytics() {
   const [featureMetrics, setFeatureMetrics] = useState({});
   const [analyticsEvents, setAnalyticsEvents] = useState([]);
   const [sessionData, setSessionData] = useState({});
+  const [serverState, setServerState] = useState(null);
 
-  // Initialize from localStorage
+  const loadFromLocalStorage = () => {
+    const savedUsage = localStorage.getItem('appforge_feature_usage');
+    if (savedUsage) setFeatureUsage(JSON.parse(savedUsage));
+
+    const savedEngagement = localStorage.getItem('appforge_user_engagement');
+    if (savedEngagement) setUserEngagement(JSON.parse(savedEngagement));
+
+    const savedMetrics = localStorage.getItem('appforge_feature_metrics');
+    if (savedMetrics) setFeatureMetrics(JSON.parse(savedMetrics));
+  };
+
+  // Initialize from persistence service with legacy localStorage fallback
   useEffect(() => {
-    const saved = localStorage.getItem('appforge_feature_usage');
-    if (saved) setFeatureUsage(JSON.parse(saved));
+    let mounted = true;
+    (async () => {
+      try {
+        const [stateResult, eventsResult] = await Promise.all([
+          persistenceService.getUserState(),
+          persistenceService.listAnalyticsEvents(200).catch(() => [])
+        ]);
 
-    const engagement = localStorage.getItem('appforge_user_engagement');
-    if (engagement) setUserEngagement(JSON.parse(engagement));
+        if (!mounted) return;
 
-    const metrics = localStorage.getItem('appforge_feature_metrics');
-    if (metrics) setFeatureMetrics(JSON.parse(metrics));
+        setServerState(stateResult);
+        const persisted = stateResult?.state?.featureAnalytics;
+        if (persisted) {
+          setFeatureUsage(persisted.featureUsage || {});
+          setUserEngagement(persisted.userEngagement || {});
+          setFeatureMetrics(persisted.featureMetrics || {});
+          setSessionData(persisted.sessionData || {});
+        } else {
+          loadFromLocalStorage();
+        }
 
-    const events = localStorage.getItem('appforge_analytics_events');
-    if (events) setAnalyticsEvents(JSON.parse(events));
+        if (Array.isArray(eventsResult)) {
+          setAnalyticsEvents(eventsResult);
+        } else {
+          const savedEvents = localStorage.getItem('appforge_analytics_events');
+          if (savedEvents) setAnalyticsEvents(JSON.parse(savedEvents));
+        }
+      } catch (error) {
+        console.error('Failed to load analytics state; falling back to localStorage', error);
+        loadFromLocalStorage();
+        const savedEvents = localStorage.getItem('appforge_analytics_events');
+        if (savedEvents) setAnalyticsEvents(JSON.parse(savedEvents));
+      }
+    })();
+
+    return () => {
+      mounted = false;
+    };
   }, []);
+
+  const persistAnalyticsState = useCallback(async (partial) => {
+    const nextFeatureAnalytics = {
+      featureUsage,
+      userEngagement,
+      featureMetrics,
+      sessionData,
+      ...partial
+    };
+
+    try {
+      const nextState = {
+        ...(serverState?.state || {}),
+        featureAnalytics: nextFeatureAnalytics
+      };
+      const saved = await persistenceService.saveUserState({ state: nextState });
+      setServerState(saved);
+    } catch (error) {
+      console.error('Failed to persist analytics state', error);
+    }
+  }, [featureUsage, userEngagement, featureMetrics, sessionData, serverState]);
+
+  // Record analytics event
+  const recordEvent = useCallback((eventType, eventName, metadata = {}) => {
+    const event = {
+      id: Date.now(),
+      timestamp: new Date().toISOString(),
+      type: eventType,
+      name: eventName,
+      metadata,
+      userId: sessionStorage.getItem('userId') || 'anonymous'
+    };
+
+    const updated = [event, ...analyticsEvents].slice(0, 10000);
+    setAnalyticsEvents(updated);
+    persistenceService.recordAnalyticsEvent(event).catch((error) => {
+      console.error('Failed to record analytics event', error);
+    });
+
+    return event;
+  }, [analyticsEvents]);
 
   // Track feature usage
   const trackFeatureUsage = useCallback((featureName, metadata = {}) => {
@@ -45,31 +127,13 @@ export function useFeatureAnalytics() {
     updated[featureName].lastUsed = new Date().toISOString();
 
     setFeatureUsage(updated);
-    localStorage.setItem('appforge_feature_usage', JSON.stringify(updated));
+    persistAnalyticsState({ featureUsage: updated });
 
     // Record event
     recordEvent('feature_usage', featureName, metadata);
 
     return updated[featureName];
-  }, [featureUsage]);
-
-  // Record analytics event
-  const recordEvent = useCallback((eventType, eventName, metadata = {}) => {
-    const event = {
-      id: Date.now(),
-      timestamp: new Date().toISOString(),
-      type: eventType,
-      name: eventName,
-      metadata,
-      userId: sessionStorage.getItem('userId') || 'anonymous'
-    };
-
-    const updated = [event, ...analyticsEvents].slice(0, 10000);
-    setAnalyticsEvents(updated);
-    localStorage.setItem('appforge_analytics_events', JSON.stringify(updated));
-
-    return event;
-  }, [analyticsEvents]);
+  }, [featureUsage, persistAnalyticsState, recordEvent]);
 
   // Track user engagement
   const trackUserEngagement = useCallback((userId, action, duration = 0) => {
@@ -98,11 +162,11 @@ export function useFeatureAnalytics() {
       actionsPerDay > 10 ? 'high' : actionsPerDay > 5 ? 'medium' : 'low';
 
     setUserEngagement(updated);
-    localStorage.setItem('appforge_user_engagement', JSON.stringify(updated));
+    persistAnalyticsState({ userEngagement: updated });
     recordEvent('user_engagement', action, { userId, duration });
 
     return updated[userId];
-  }, [userEngagement, recordEvent]);
+  }, [userEngagement, recordEvent, persistAnalyticsState]);
 
   // Calculate feature adoption
   const getFeatureAdoption = useCallback((featureName) => {
@@ -225,6 +289,34 @@ export function useFeatureAnalytics() {
 
     return report;
   }, [featureUsage, userEngagement, getTrendingFeatures, getEngagementMetrics, analyticsEvents]);
+
+  // Real-time updates via WebSocket events
+  useEffect(() => {
+    websocketService.connect();
+
+    const handleAnalyticsEvent = (payload) => {
+      setAnalyticsEvents((prev) => [payload, ...prev].slice(0, 10000));
+      toast.message('New analytics activity', { description: payload?.name || payload?.type });
+    };
+
+    const handleStateUpdated = (payload) => {
+      const persisted = payload?.state?.featureAnalytics;
+      if (!persisted) return;
+      setFeatureUsage(persisted.featureUsage || {});
+      setUserEngagement(persisted.userEngagement || {});
+      setFeatureMetrics(persisted.featureMetrics || {});
+      setSessionData(persisted.sessionData || {});
+      setServerState(payload);
+    };
+
+    websocketService.on('analytics:event', handleAnalyticsEvent);
+    websocketService.on('state:updated', handleStateUpdated);
+
+    return () => {
+      websocketService.off('analytics:event', handleAnalyticsEvent);
+      websocketService.off('state:updated', handleStateUpdated);
+    };
+  }, []);
 
   return {
     // Tracking

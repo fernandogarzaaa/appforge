@@ -1,6 +1,6 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.6';
 import { logger } from './utils/logger.ts';
-import { createPaymentLink } from './utils/xenditClient.ts';
+import { createPaymentLink } from './utils/paymongoClient.ts';
 
 Deno.serve(async (req) => {
   try {
@@ -18,28 +18,28 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Missing required fields: planName, amount' }, { status: 400 });
     }
 
-    const xenditSecretKey = Deno.env.get('XENDIT_SECRET_KEY');
+    const paymongoSecretKey = Deno.env.get('PAYMONGO_SECRET_KEY');
     const appId = Deno.env.get('BASE44_APP_ID');
     
-    if (!xenditSecretKey) {
-      logger.error('XENDIT_SECRET_KEY not configured');
+    if (!paymongoSecretKey) {
+      logger.error('PAYMONGO_SECRET_KEY not configured');
       return Response.json({ error: 'Payment service not configured' }, { status: 500 });
     }
 
     // Get origin for redirect URLs
     const origin = new URL(req.url).origin;
 
-    // Create Xendit invoice (payment link)
+    // Create PayMongo payment link
     const invoice = await createPaymentLink(
       user.id || user.email,
       Math.round(amount * 100) / 100, // Ensure proper decimal
       description || `Subscription: ${planName}`,
       user.email,
       `${origin}/billing/success?invoice_id={invoice_id}`,
-      xenditSecretKey
+      paymongoSecretKey
     );
 
-    logger.info(`Xendit invoice created: ${invoice.id}`);
+    logger.info(`PayMongo invoice created: ${invoice.id}`);
 
     return Response.json({ 
       url: invoice.invoice_url,

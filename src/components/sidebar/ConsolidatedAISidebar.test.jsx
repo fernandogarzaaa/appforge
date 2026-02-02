@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
-import { BrowserRouter } from 'react-router-dom';
+import { RouterProvider, createMemoryRouter } from 'react-router-dom';
 import ConsolidatedAISidebar from '@/components/sidebar/ConsolidatedAISidebar';
 import { LLMProvider } from '@/contexts/LLMContext';
 
@@ -37,6 +37,21 @@ vi.mock('@/components/ui/button', () => ({
   ),
 }));
 
+const renderWithRouter = (ui) => {
+  const router = createMemoryRouter(
+    [{ path: '/', element: ui }],
+    {
+      initialEntries: ['/'],
+      future: {
+        v7_startTransition: true,
+        v7_relativeSplatPath: true,
+      },
+    }
+  );
+
+  return render(<RouterProvider router={router} />);
+};
+
 describe('ConsolidatedAISidebar Component', () => {
   const mockUser = {
     email: 'test@example.com',
@@ -60,36 +75,30 @@ describe('ConsolidatedAISidebar Component', () => {
   });
 
   it('renders without crashing', () => {
-    render(
-      <BrowserRouter>
-        <LLMProvider>
-          <ConsolidatedAISidebar {...defaultProps} />
-        </LLMProvider>
-      </BrowserRouter>
+    renderWithRouter(
+      <LLMProvider>
+        <ConsolidatedAISidebar {...defaultProps} />
+      </LLMProvider>
     );
 
     expect(screen.getByText(/APPFORGE/i)).toBeInTheDocument();
   });
 
   it('displays header with APPFORGE branding', () => {
-    render(
-      <BrowserRouter>
-        <LLMProvider>
-          <ConsolidatedAISidebar {...defaultProps} />
-        </LLMProvider>
-      </BrowserRouter>
+    renderWithRouter(
+      <LLMProvider>
+        <ConsolidatedAISidebar {...defaultProps} />
+      </LLMProvider>
     );
 
     expect(screen.getByText(/APPFORGE/i)).toBeInTheDocument();
   });
 
   it('shows collapse button in expanded state', () => {
-    render(
-      <BrowserRouter>
-        <LLMProvider>
-          <ConsolidatedAISidebar {...defaultProps} />
-        </LLMProvider>
-      </BrowserRouter>
+    renderWithRouter(
+      <LLMProvider>
+        <ConsolidatedAISidebar {...defaultProps} />
+      </LLMProvider>
     );
 
     const collapseButtons = screen.getAllByRole('button', {
@@ -99,12 +108,10 @@ describe('ConsolidatedAISidebar Component', () => {
   });
 
   it('renders all accordion sections', () => {
-    render(
-      <BrowserRouter>
-        <LLMProvider>
-          <ConsolidatedAISidebar {...defaultProps} />
-        </LLMProvider>
-      </BrowserRouter>
+    renderWithRouter(
+      <LLMProvider>
+        <ConsolidatedAISidebar {...defaultProps} />
+      </LLMProvider>
     );
 
     expect(screen.getByRole('tab', { name: /Core/i })).toBeInTheDocument();
@@ -116,34 +123,39 @@ describe('ConsolidatedAISidebar Component', () => {
   });
 
   it('includes AIModelRouter component', () => {
-    render(
-      <BrowserRouter>
-        <LLMProvider>
-          <ConsolidatedAISidebar {...defaultProps} />
-        </LLMProvider>
-      </BrowserRouter>
+    renderWithRouter(
+      <LLMProvider>
+        <ConsolidatedAISidebar {...defaultProps} />
+      </LLMProvider>
     );
 
     expect(screen.getByTestId('ai-model-router')).toBeInTheDocument();
   });
 
   it('displays admin section only for admin users', () => {
-    const { rerender } = render(
-      <BrowserRouter>
-        <LLMProvider>
-          <ConsolidatedAISidebar {...defaultProps} user={mockUser} />
-        </LLMProvider>
-      </BrowserRouter>
+    const { rerender } = renderWithRouter(
+      <LLMProvider>
+        <ConsolidatedAISidebar {...defaultProps} user={mockUser} />
+      </LLMProvider>
     );
 
     expect(screen.queryByText(/Admin/i)).not.toBeInTheDocument();
 
     rerender(
-      <BrowserRouter>
-        <LLMProvider>
-          <ConsolidatedAISidebar {...defaultProps} user={mockAdminUser} />
-        </LLMProvider>
-      </BrowserRouter>
+      <RouterProvider router={createMemoryRouter(
+        [{ path: '/', element: (
+          <LLMProvider>
+            <ConsolidatedAISidebar {...defaultProps} user={mockAdminUser} />
+          </LLMProvider>
+        ) }],
+        {
+          initialEntries: ['/'],
+          future: {
+            v7_startTransition: true,
+            v7_relativeSplatPath: true,
+          },
+        }
+      )} />
     );
 
     expect(screen.getByText(/Admin/i)).toBeInTheDocument();
@@ -152,12 +164,10 @@ describe('ConsolidatedAISidebar Component', () => {
   it('calls onToggle when collapse button is clicked', () => {
     const onToggle = vi.fn();
 
-    render(
-      <BrowserRouter>
-        <LLMProvider>
-          <ConsolidatedAISidebar {...defaultProps} onToggle={onToggle} />
-        </LLMProvider>
-      </BrowserRouter>
+    renderWithRouter(
+      <LLMProvider>
+        <ConsolidatedAISidebar {...defaultProps} onToggle={onToggle} />
+      </LLMProvider>
     );
 
     const collapseButtons = screen.getAllByRole('button', {
@@ -171,12 +181,10 @@ describe('ConsolidatedAISidebar Component', () => {
   });
 
   it('renders collapsed state when collapsed prop is true', () => {
-    const { container } = render(
-      <BrowserRouter>
-        <LLMProvider>
-          <ConsolidatedAISidebar {...defaultProps} collapsed={true} />
-        </LLMProvider>
-      </BrowserRouter>
+    const { container } = renderWithRouter(
+      <LLMProvider>
+        <ConsolidatedAISidebar {...defaultProps} collapsed={true} />
+      </LLMProvider>
     );
 
     // Collapsed sidebar should have width-80 instead of full width
@@ -185,24 +193,20 @@ describe('ConsolidatedAISidebar Component', () => {
   });
 
   it('shows Settings link in footer', () => {
-    render(
-      <BrowserRouter>
-        <LLMProvider>
-          <ConsolidatedAISidebar {...defaultProps} />
-        </LLMProvider>
-      </BrowserRouter>
+    renderWithRouter(
+      <LLMProvider>
+        <ConsolidatedAISidebar {...defaultProps} />
+      </LLMProvider>
     );
 
     expect(screen.getByRole('link', { name: /Settings/i })).toBeInTheDocument();
   });
 
   it('contains Core navigation items', () => {
-    render(
-      <BrowserRouter>
-        <LLMProvider>
-          <ConsolidatedAISidebar {...defaultProps} />
-        </LLMProvider>
-      </BrowserRouter>
+    renderWithRouter(
+      <LLMProvider>
+        <ConsolidatedAISidebar {...defaultProps} />
+      </LLMProvider>
     );
 
     expect(screen.getByRole('link', { name: /Dashboard/i })).toBeInTheDocument();
@@ -210,12 +214,10 @@ describe('ConsolidatedAISidebar Component', () => {
   });
 
   it('contains Build section items', () => {
-    render(
-      <BrowserRouter>
-        <LLMProvider>
-          <ConsolidatedAISidebar {...defaultProps} />
-        </LLMProvider>
-      </BrowserRouter>
+    renderWithRouter(
+      <LLMProvider>
+        <ConsolidatedAISidebar {...defaultProps} />
+      </LLMProvider>
     );
 
     expect(screen.getByRole('link', { name: /Bot Builder/i })).toBeInTheDocument();
@@ -224,12 +226,10 @@ describe('ConsolidatedAISidebar Component', () => {
   });
 
   it('contains Enterprise section items', () => {
-    render(
-      <BrowserRouter>
-        <LLMProvider>
-          <ConsolidatedAISidebar {...defaultProps} />
-        </LLMProvider>
-      </BrowserRouter>
+    renderWithRouter(
+      <LLMProvider>
+        <ConsolidatedAISidebar {...defaultProps} />
+      </LLMProvider>
     );
 
     expect(screen.getByRole('link', { name: /Data Privacy/i })).toBeInTheDocument();
@@ -239,12 +239,10 @@ describe('ConsolidatedAISidebar Component', () => {
   });
 
   it('is memoized to prevent unnecessary re-renders', () => {
-    const { rerender } = render(
-      <BrowserRouter>
-        <LLMProvider>
-          <ConsolidatedAISidebar {...defaultProps} />
-        </LLMProvider>
-      </BrowserRouter>
+    const { rerender } = renderWithRouter(
+      <LLMProvider>
+        <ConsolidatedAISidebar {...defaultProps} />
+      </LLMProvider>
     );
 
     // Component should be memoized
@@ -261,12 +259,10 @@ describe('ConsolidatedAISidebar Collapsed State', () => {
   };
 
   it('renders collapsed sidebar with icons only', () => {
-    render(
-      <BrowserRouter>
-        <LLMProvider>
-          <ConsolidatedAISidebar {...defaultProps} />
-        </LLMProvider>
-      </BrowserRouter>
+    renderWithRouter(
+      <LLMProvider>
+        <ConsolidatedAISidebar {...defaultProps} />
+      </LLMProvider>
     );
 
     // Collapsed sidebar should still render navigation
@@ -277,12 +273,10 @@ describe('ConsolidatedAISidebar Collapsed State', () => {
   });
 
   it('shows expand button in collapsed state', () => {
-    render(
-      <BrowserRouter>
-        <LLMProvider>
-          <ConsolidatedAISidebar {...defaultProps} />
-        </LLMProvider>
-      </BrowserRouter>
+    renderWithRouter(
+      <LLMProvider>
+        <ConsolidatedAISidebar {...defaultProps} />
+      </LLMProvider>
     );
 
     const expandButtons = screen.queryAllByRole('button', {

@@ -68,7 +68,7 @@ const suggestedFeatures = [
     icon: Link2,
     color: 'orange',
     features: [
-      { name: 'Xendit Advanced', description: 'Subscriptions, invoices, payment links', priority: 'high' },
+      { name: 'PayMongo Advanced', description: 'Subscriptions, invoices, payment links', priority: 'high' },
       { name: 'Email Providers', description: 'SendGrid, Mailchimp integration', priority: 'medium' },
       { name: 'SMS/WhatsApp', description: 'Twilio integration for messaging', priority: 'medium' },
       { name: 'Cloud Storage', description: 'AWS S3, Google Cloud Storage', priority: 'high' }

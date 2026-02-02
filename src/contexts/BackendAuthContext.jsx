@@ -21,7 +21,7 @@ export const BackendAuthProvider = ({ children }) => {
   const checkAuth = async () => {
     // No need to check token - server sends it via HTTP-only cookie
     try {
-      const userData = await authService.getCurrentUser();
+      const userData = await authService.me();
       setUser(userData);
       setIsAuthenticated(true);
     } catch (err) {

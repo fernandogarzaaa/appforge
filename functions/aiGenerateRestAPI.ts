@@ -16,23 +16,38 @@ export default async (req: Request): Promise<Response> => {
     const user = await base44.auth.me();
 
     const { description, language = 'typescript' } = await req.json();
+    if (!description || description.trim().length < 8) {
+      return new Response(JSON.stringify({ error: 'Provide a longer description for the API' }), {
+        status: 400,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
 
-    // TODO: Implement AI code generation logic
-    // 1. Parse natural language description
-    // 2. Call Claude/ChatGPT to generate API endpoints
-    // 3. Generate CRUD operations based on entity name
-    // 4. Create validation schemas
-    // 5. Add error handling and logging
-    // 6. Save generated functions to project
-    // 7. Return generated code for review
+    const entityName = description.split(' ')[0].toLowerCase();
+    const baseRoute = `/api/${entityName}`;
+
+    const scaffold = {
+      endpoints: [
+        { method: 'GET', path: `${baseRoute}`, description: `List ${entityName}` },
+        { method: 'GET', path: `${baseRoute}/:id`, description: `Get ${entityName} by id` },
+        { method: 'POST', path: `${baseRoute}`, description: `Create ${entityName}` },
+        { method: 'PUT', path: `${baseRoute}/:id`, description: `Update ${entityName}` },
+        { method: 'DELETE', path: `${baseRoute}/:id`, description: `Delete ${entityName}` },
+      ],
+      validation: ['body schema', 'params schema'],
+    };
+
+    const sampleCode = `// Generated ${language} REST scaffold\n` +
+      `// Entity: ${entityName}\n` +
+      `// Description: ${description}\n` +
+      `export const routes = ${JSON.stringify(scaffold.endpoints, null, 2)};`;
 
     return new Response(
       JSON.stringify({
         success: true,
-        message: 'API generation started',
-        functions: [
-          // Generated functions will appear here
-        ],
+        message: 'API generation completed locally (AI stub)',
+        functions: scaffold.endpoints,
+        code: sampleCode,
       }),
       {
         status: 200,

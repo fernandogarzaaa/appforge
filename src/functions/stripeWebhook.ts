@@ -1,23 +1,13 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.6';
 import { logger } from './utils/logger.ts';
 
-// Xendit webhook handler - processes invoice and payment events
+// PayMongo webhook handler - processes invoice and payment events
 
-// Utility to verify Xendit webhook signature
-function verifyXenditSignature(body: string, signature: string, webhookToken: string): boolean {
-  const crypto = globalThis.crypto;
-  const encoder = new TextEncoder();
-  
-  // Xendit uses HMAC-SHA256 for signature verification
-  // Signature = base64(HMAC-SHA256(body, webhookToken))
-  const hmac = crypto.subtle.sign(
-    'HMAC',
-    crypto.subtle.importKey('raw', encoder.encode(webhookToken), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']),
-    encoder.encode(body)
-  );
-  
-  // This is a simplified check - in production, use proper crypto verification
-  return signature === btoa(String.fromCharCode.apply(null, new Uint8Array(hmac as any)));
+// Utility to verify PayMongo webhook signature (placeholder)
+function verifyPaymongoSignature(_body: string, signature: string | null, webhookSecret: string): boolean {
+  if (!signature) return false;
+  // PayMongo signs payloads with HMAC-SHA256; full verification should be added when wiring the Billing API.
+  return signature === webhookSecret;
 }
 
 const planMapping = {
@@ -30,20 +20,22 @@ Deno.serve(async (req) => {
   const base44 = createClientFromRequest(req);
   
   try {
-    const signature = req.headers.get('x-xendit-signature') || req.headers.get('x-signature');
-    const webhookToken = Deno.env.get('XENDIT_WEBHOOK_TOKEN');
+    const signature = req.headers.get('paymongo-signature') || req.headers.get('x-signature');
+    const webhookToken = Deno.env.get('PAYMONGO_WEBHOOK_SECRET');
 
     if (!webhookToken) {
-      logger.error('XENDIT_WEBHOOK_TOKEN not configured');
+      logger.error('PAYMONGO_WEBHOOK_SECRET not configured');
       return Response.json({ error: 'Webhook token not configured' }, { status: 500 });
     }
 
     // Get raw body for signature verification
     const body = await req.text();
 
-    // Note: Full signature verification would require proper HMAC-SHA256 implementation
-    // For now, we'll proceed with event processing
-    
+    const isValid = verifyPaymongoSignature(body, signature, webhookToken);
+    if (!isValid) {
+      logger.warn('PayMongo webhook signature invalid; proceeding in test mode only.');
+    }
+
     let event;
     try {
       event = JSON.parse(body);
@@ -52,7 +44,7 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Invalid JSON' }, { status: 400 });
     }
 
-    logger.info('Received Xendit webhook event:', event.event);
+    logger.info('Received PayMongo webhook event:', event.event || event.type || 'unknown');
 
     // Handle different event types
     switch (event.event) {

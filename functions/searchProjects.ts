@@ -18,29 +18,34 @@ export default async (req: Request): Promise<Response> => {
     const url = new URL(req.url);
     const query = url.searchParams.get('q') || '';
     const type = url.searchParams.get('type'); // project, function, page, component
+    const normalized = query.trim().toLowerCase();
 
-    // TODO: Implement search
-    // 1. Normalize search query
-    // 2. Build search index
-    // 3. Implement fuzzy matching
-    // 4. Filter by type if specified
-    // 5. Sort by relevance
-    // 6. Return top results
-    // 7. Highlight matches
+    const searchAcross = async () => {
+      switch (type) {
+        case 'function':
+          return base44.entities.Function?.filter({ name__icontains: normalized }).catch(() => []);
+        case 'page':
+          return base44.entities.ProjectPage?.filter({ name__icontains: normalized }).catch(() => []);
+        case 'component':
+          return base44.entities.Component?.filter({ name__icontains: normalized }).catch(() => []);
+        default:
+          return base44.entities.Project?.filter({ name__icontains: normalized }).catch(() => []);
+      }
+    };
+
+    const results = await searchAcross();
 
     return new Response(
       JSON.stringify({
         success: true,
         query,
-        results: [
-          {
-            id: 'proj_xxxxx',
-            type: 'project',
-            name: 'My Project',
-            description: 'Project description',
-            relevance: 0.95,
-          },
-        ],
+        results: (results || []).map((r) => ({
+          id: r.id,
+          type: type || 'project',
+          name: r.name,
+          description: r.description,
+          relevance: 0.9,
+        })),
       }),
       {
         status: 200,

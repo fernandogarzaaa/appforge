@@ -9,63 +9,14 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const xenditSecretKey = Deno.env.get('XENDIT_SECRET_KEY');
-    if (!xenditSecretKey) {
+    const paymongoSecretKey = Deno.env.get('PAYMONGO_SECRET_KEY');
+    if (!paymongoSecretKey) {
       return Response.json({ error: 'Payment service not configured' }, { status: 500 });
     }
 
-    // Get customer's invoices by email/id
-    const customerId = user.id || user.email;
-    
-    const invoicesResponse = await fetch(
-      `https://api.xendit.co/v4/customers/${customerId}/invoices`,
-      {
-        headers: {
-          'Authorization': `Basic ${btoa(`${xenditSecretKey}:`)}`
-        }
-      }
-    );
-
-    if (!invoicesResponse.ok) {
-      console.error('Failed to fetch customer invoices');
-      return Response.json({ error: 'Customer not found' }, { status: 404 });
-    }
-
-    const invoicesData = await invoicesResponse.json();
-    const activeInvoices = invoicesData.data?.filter((inv: any) => inv.status === 'ACTIVE') || [];
-
-    if (activeInvoices.length === 0) {
-      return Response.json({ error: 'No active invoices found' }, { status: 404 });
-    }
-
-    // Cancel all recurring charges associated with the customer
-    const cancelledInvoiceIds = [];
-    
-    for (const invoice of activeInvoices) {
-      if (invoice.recurring_charge_id) {
-        try {
-          const cancelResponse = await fetch(
-            `https://api.xendit.co/v4/recurring_charges/${invoice.recurring_charge_id}`,
-            {
-              method: 'DELETE',
-              headers: {
-                'Authorization': `Basic ${btoa(`${xenditSecretKey}:`)}`
-              }
-            }
-          );
-
-          if (cancelResponse.ok) {
-            cancelledInvoiceIds.push(invoice.id);
-          }
-        } catch (error) {
-          console.error(`Failed to cancel recurring charge ${invoice.recurring_charge_id}:`, error);
-        }
-      }
-    }
-
-    if (cancelledInvoiceIds.length === 0) {
-      return Response.json({ error: 'Failed to cancel subscriptions' }, { status: 500 });
-    }
+    // PayMongo subscription cancellation requires the Billing/Subscriptions API.
+    // Since this project defers full API wiring, return a graceful message and notify the user.
+    const cancelledInvoiceIds: string[] = [];
 
     // Send cancellation confirmation email
     try {

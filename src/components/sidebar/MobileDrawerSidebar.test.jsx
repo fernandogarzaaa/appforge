@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import { BrowserRouter } from 'react-router-dom';
+import { RouterProvider, createMemoryRouter } from 'react-router-dom';
 import MobileDrawerSidebar from '@/components/sidebar/MobileDrawerSidebar';
 import { LLMProvider } from '@/contexts/LLMContext';
 
@@ -10,10 +10,11 @@ vi.mock('@/components/sidebar/AIModelRouter', () => ({
 }));
 
 vi.mock('@/components/ui/dialog', () => ({
-  Dialog: ({ children, ...props }) => <div data-testid="dialog" {...props}>{children}</div>,
+  Dialog: ({ children, onOpenChange, ...props }) => <div data-testid="dialog" {...props}>{children}</div>,
   DialogTrigger: ({ children, asChild, ...props }) => <div {...props}>{children}</div>,
   DialogContent: ({ children, ...props }) => <div {...props}>{children}</div>,
-  DialogClose: ({ children, asChild, ...props }) => <button {...props}>{children}</button>,
+  // Use non-button wrapper to avoid nested button warnings in tests
+  DialogClose: ({ children, asChild, ...props }) => <div role="button" tabIndex={0} {...props}>{children}</div>,
 }));
 
 vi.mock('@/components/ui/button', () => ({
@@ -23,6 +24,21 @@ vi.mock('@/components/ui/button', () => ({
     </button>
   ),
 }));
+
+const renderWithRouter = (ui) => {
+  const router = createMemoryRouter(
+    [{ path: '/', element: ui }],
+    {
+      initialEntries: ['/'],
+      future: {
+        v7_startTransition: true,
+        v7_relativeSplatPath: true,
+      },
+    }
+  );
+
+  return render(<RouterProvider router={router} />);
+};
 
 describe('MobileDrawerSidebar Component', () => {
   const mockUser = {
@@ -46,12 +62,10 @@ describe('MobileDrawerSidebar Component', () => {
   });
 
   it('renders hamburger menu button for mobile', () => {
-    render(
-      <BrowserRouter>
-        <LLMProvider>
-          <MobileDrawerSidebar {...defaultProps} />
-        </LLMProvider>
-      </BrowserRouter>
+    renderWithRouter(
+      <LLMProvider>
+        <MobileDrawerSidebar {...defaultProps} />
+      </LLMProvider>
     );
 
     // Hamburger button should be hidden on desktop (md:hidden)
@@ -60,24 +74,20 @@ describe('MobileDrawerSidebar Component', () => {
   });
 
   it('includes Dialog component for drawer', () => {
-    render(
-      <BrowserRouter>
-        <LLMProvider>
-          <MobileDrawerSidebar {...defaultProps} />
-        </LLMProvider>
-      </BrowserRouter>
+    renderWithRouter(
+      <LLMProvider>
+        <MobileDrawerSidebar {...defaultProps} />
+      </LLMProvider>
     );
 
     expect(screen.getByTestId('dialog')).toBeInTheDocument();
   });
 
   it('displays APPFORGE branding in drawer header', async () => {
-    render(
-      <BrowserRouter>
-        <LLMProvider>
-          <MobileDrawerSidebar {...defaultProps} />
-        </LLMProvider>
-      </BrowserRouter>
+    renderWithRouter(
+      <LLMProvider>
+        <MobileDrawerSidebar {...defaultProps} />
+      </LLMProvider>
     );
 
     // Open the drawer
@@ -91,24 +101,20 @@ describe('MobileDrawerSidebar Component', () => {
   });
 
   it('includes AIModelRouter in drawer', () => {
-    render(
-      <BrowserRouter>
-        <LLMProvider>
-          <MobileDrawerSidebar {...defaultProps} />
-        </LLMProvider>
-      </BrowserRouter>
+    renderWithRouter(
+      <LLMProvider>
+        <MobileDrawerSidebar {...defaultProps} />
+      </LLMProvider>
     );
 
     expect(screen.getByTestId('mobile-ai-model-router')).toBeInTheDocument();
   });
 
   it('renders all navigation sections in drawer', async () => {
-    render(
-      <BrowserRouter>
-        <LLMProvider>
-          <MobileDrawerSidebar {...defaultProps} />
-        </LLMProvider>
-      </BrowserRouter>
+    renderWithRouter(
+      <LLMProvider>
+        <MobileDrawerSidebar {...defaultProps} />
+      </LLMProvider>
     );
 
     // Navigation items should be present
@@ -117,12 +123,10 @@ describe('MobileDrawerSidebar Component', () => {
   });
 
   it('displays Core section with Dashboard and Projects', async () => {
-    render(
-      <BrowserRouter>
-        <LLMProvider>
-          <MobileDrawerSidebar {...defaultProps} />
-        </LLMProvider>
-      </BrowserRouter>
+    renderWithRouter(
+      <LLMProvider>
+        <MobileDrawerSidebar {...defaultProps} />
+      </LLMProvider>
     );
 
     expect(screen.getByRole('heading', { name: /Core/i })).toBeInTheDocument();
@@ -131,84 +135,70 @@ describe('MobileDrawerSidebar Component', () => {
   });
 
   it('displays AI & Models section', async () => {
-    render(
-      <BrowserRouter>
-        <LLMProvider>
-          <MobileDrawerSidebar {...defaultProps} />
-        </LLMProvider>
-      </BrowserRouter>
+    renderWithRouter(
+      <LLMProvider>
+        <MobileDrawerSidebar {...defaultProps} />
+      </LLMProvider>
     );
 
     expect(screen.getByText(/AI & Models/i)).toBeInTheDocument();
   });
 
   it('displays Build section', async () => {
-    render(
-      <BrowserRouter>
-        <LLMProvider>
-          <MobileDrawerSidebar {...defaultProps} />
-        </LLMProvider>
-      </BrowserRouter>
+    renderWithRouter(
+      <LLMProvider>
+        <MobileDrawerSidebar {...defaultProps} />
+      </LLMProvider>
     );
 
     expect(screen.getByRole('heading', { name: /Build/i })).toBeInTheDocument();
   });
 
   it('displays Templates section', async () => {
-    render(
-      <BrowserRouter>
-        <LLMProvider>
-          <MobileDrawerSidebar {...defaultProps} />
-        </LLMProvider>
-      </BrowserRouter>
+    renderWithRouter(
+      <LLMProvider>
+        <MobileDrawerSidebar {...defaultProps} />
+      </LLMProvider>
     );
 
     expect(screen.getByText(/Templates/i)).toBeInTheDocument();
   });
 
   it('displays Enterprise section', async () => {
-    render(
-      <BrowserRouter>
-        <LLMProvider>
-          <MobileDrawerSidebar {...defaultProps} />
-        </LLMProvider>
-      </BrowserRouter>
+    renderWithRouter(
+      <LLMProvider>
+        <MobileDrawerSidebar {...defaultProps} />
+      </LLMProvider>
     );
 
     expect(screen.getByText(/Enterprise/i)).toBeInTheDocument();
   });
 
   it('displays Web3 section', async () => {
-    render(
-      <BrowserRouter>
-        <LLMProvider>
-          <MobileDrawerSidebar {...defaultProps} />
-        </LLMProvider>
-      </BrowserRouter>
+    renderWithRouter(
+      <LLMProvider>
+        <MobileDrawerSidebar {...defaultProps} />
+      </LLMProvider>
     );
 
     expect(screen.getByText(/Web3/i)).toBeInTheDocument();
   });
 
   it('displays Settings link in footer', async () => {
-    render(
-      <BrowserRouter>
-        <LLMProvider>
-          <MobileDrawerSidebar {...defaultProps} />
-        </LLMProvider>
-      </BrowserRouter>
+    renderWithRouter(
+      <LLMProvider>
+        <MobileDrawerSidebar {...defaultProps} />
+      </LLMProvider>
     );
 
     expect(screen.getByText(/Settings/i)).toBeInTheDocument();
   });
 
   it('shows Admin section only for admin users', () => {
-    const { rerender } = render(
-      <BrowserRouter>
-        <LLMProvider>
-          <MobileDrawerSidebar {...defaultProps} user={mockUser} />
-        </LLMProvider>
-      </BrowserRouter>
+    const { rerender } = renderWithRouter(
+      <LLMProvider>
+        <MobileDrawerSidebar {...defaultProps} user={mockUser} />
+      </LLMProvider>
     );
 
     // Admin should not be visible for non-admin users
@@ -218,11 +208,20 @@ describe('MobileDrawerSidebar Component', () => {
 
     // Now test with admin user
     rerender(
-      <BrowserRouter>
-        <LLMProvider>
-          <MobileDrawerSidebar {...defaultProps} user={mockAdminUser} />
-        </LLMProvider>
-      </BrowserRouter>
+      <RouterProvider router={createMemoryRouter(
+        [{ path: '/', element: (
+          <LLMProvider>
+            <MobileDrawerSidebar {...defaultProps} user={mockAdminUser} />
+          </LLMProvider>
+        ) }],
+        {
+          initialEntries: ['/'],
+          future: {
+            v7_startTransition: true,
+            v7_relativeSplatPath: true,
+          },
+        }
+      )} />
     );
 
     expect(screen.getByText(/Admin/i)).toBeInTheDocument();
@@ -231,12 +230,10 @@ describe('MobileDrawerSidebar Component', () => {
   it('calls onClose when navigation item is clicked', () => {
     const onClose = vi.fn();
 
-    render(
-      <BrowserRouter>
-        <LLMProvider>
-          <MobileDrawerSidebar {...defaultProps} onClose={onClose} />
-        </LLMProvider>
-      </BrowserRouter>
+    renderWithRouter(
+      <LLMProvider>
+        <MobileDrawerSidebar {...defaultProps} onClose={onClose} />
+      </LLMProvider>
     );
 
     // Navigation links should exist
@@ -245,12 +242,10 @@ describe('MobileDrawerSidebar Component', () => {
   });
 
   it('is memoized to prevent unnecessary re-renders', () => {
-    render(
-      <BrowserRouter>
-        <LLMProvider>
-          <MobileDrawerSidebar {...defaultProps} />
-        </LLMProvider>
-      </BrowserRouter>
+    renderWithRouter(
+      <LLMProvider>
+        <MobileDrawerSidebar {...defaultProps} />
+      </LLMProvider>
     );
 
     // Component should be memoized
@@ -258,12 +253,10 @@ describe('MobileDrawerSidebar Component', () => {
   });
 
   it('has responsive styling with hidden on desktop', () => {
-    const { container } = render(
-      <BrowserRouter>
-        <LLMProvider>
-          <MobileDrawerSidebar {...defaultProps} />
-        </LLMProvider>
-      </BrowserRouter>
+    const { container } = renderWithRouter(
+      <LLMProvider>
+        <MobileDrawerSidebar {...defaultProps} />
+      </LLMProvider>
     );
 
     // Button should have md:hidden class (visible only on mobile)
@@ -273,12 +266,10 @@ describe('MobileDrawerSidebar Component', () => {
   });
 
   it('displays proper section structure', () => {
-    render(
-      <BrowserRouter>
-        <LLMProvider>
-          <MobileDrawerSidebar {...defaultProps} />
-        </LLMProvider>
-      </BrowserRouter>
+    renderWithRouter(
+      <LLMProvider>
+        <MobileDrawerSidebar {...defaultProps} />
+      </LLMProvider>
     );
 
     // At least some section headers should be present
@@ -295,12 +286,10 @@ describe('MobileDrawerSidebar Dark Mode', () => {
   };
 
   it('supports dark mode styling', () => {
-    const { container } = render(
-      <BrowserRouter>
-        <LLMProvider>
-          <MobileDrawerSidebar {...defaultProps} />
-        </LLMProvider>
-      </BrowserRouter>
+    const { container } = renderWithRouter(
+      <LLMProvider>
+        <MobileDrawerSidebar {...defaultProps} />
+      </LLMProvider>
     );
 
     // Check for dark mode classes

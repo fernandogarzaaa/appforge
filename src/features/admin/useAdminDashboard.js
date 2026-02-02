@@ -1,17 +1,21 @@
 import { useState, useEffect, useCallback } from 'react';
+import { persistenceService, websocketService } from '@/api/services';
+import { toast } from 'sonner';
 
 /**
  * useAdminDashboard Hook
  * Manage admin settings, feature toggles, and system health
  */
+const defaultAdminSettings = {
+  appName: 'AppForge',
+  version: '1.0.0',
+  environment: 'production',
+  maintenanceMode: false,
+  debugMode: false
+};
+
 export function useAdminDashboard() {
-  const [adminSettings, setAdminSettings] = useState({
-    appName: 'AppForge',
-    version: '1.0.0',
-    environment: 'production',
-    maintenanceMode: false,
-    debugMode: false
-  });
+  const [adminSettings, setAdminSettings] = useState(defaultAdminSettings);
 
   const [featureToggles, setFeatureToggles] = useState({});
   const [systemHealth, setSystemHealth] = useState({
@@ -26,11 +30,11 @@ export function useAdminDashboard() {
   const [logs, setLogs] = useState([]);
   const [users, setUsers] = useState([]);
   const [permissions, setPermissions] = useState({});
+  const [serverState, setServerState] = useState(null);
 
-  // Initialize from localStorage
-  useEffect(() => {
-    const saved = localStorage.getItem('appforge_admin_settings');
-    if (saved) setAdminSettings(JSON.parse(saved));
+  const loadFromLocalStorage = () => {
+    const savedSettings = localStorage.getItem('appforge_admin_settings');
+    if (savedSettings) setAdminSettings(JSON.parse(savedSettings));
 
     const toggles = localStorage.getItem('appforge_feature_toggles');
     if (toggles) setFeatureToggles(JSON.parse(toggles));
@@ -40,25 +44,100 @@ export function useAdminDashboard() {
 
     const savedUsers = localStorage.getItem('appforge_admin_users');
     if (savedUsers) setUsers(JSON.parse(savedUsers));
+  };
+
+  // Initialize from persistence service with legacy fallback
+  useEffect(() => {
+    let mounted = true;
+    (async () => {
+      try {
+        const [stateResult, syncLogs] = await Promise.all([
+          persistenceService.getUserState(),
+          persistenceService.listSyncLogs({ limit: 50 }).catch(() => [])
+        ]);
+        if (!mounted) return;
+
+        setServerState(stateResult);
+        const persisted = stateResult?.state?.adminDashboard;
+        if (persisted) {
+          setAdminSettings(persisted.adminSettings || defaultAdminSettings);
+          setFeatureToggles(persisted.featureToggles || {});
+          setLogs(persisted.logs || []);
+          setUsers(persisted.users || []);
+          setPermissions(persisted.permissions || {});
+        } else {
+          loadFromLocalStorage();
+        }
+
+        if (Array.isArray(syncLogs) && syncLogs.length) {
+          setLogs((prev) => [...syncLogs, ...prev].slice(0, 1000));
+        }
+      } catch (error) {
+        console.error('Failed to load admin dashboard state; falling back to localStorage', error);
+        loadFromLocalStorage();
+      }
+    })();
+
+    return () => {
+      mounted = false;
+    };
   }, []);
+
+  const persistAdminState = useCallback(async (partial = {}) => {
+    const nextAdmin = {
+      adminSettings,
+      featureToggles,
+      logs,
+      users,
+      permissions,
+      ...partial
+    };
+
+    try {
+      const nextState = {
+        ...(serverState?.state || {}),
+        adminDashboard: nextAdmin
+      };
+      const saved = await persistenceService.saveUserState({ state: nextState });
+      setServerState(saved);
+    } catch (error) {
+      console.error('Failed to persist admin dashboard state', error);
+    }
+  }, [adminSettings, featureToggles, logs, users, permissions, serverState]);
+
+  // Add admin log entry
+  const addLog = useCallback((type, message, level = 'info') => {
+    const logEntry = {
+      id: Date.now(),
+      timestamp: new Date().toISOString(),
+      type,
+      message,
+      level,
+      user: 'admin'
+    };
+
+    const updated = [logEntry, ...logs].slice(0, 1000); // Keep last 1000 logs
+    setLogs(updated);
+    persistAdminState({ logs: updated });
+  }, [logs, persistAdminState]);
 
   // Update admin settings
   const updateSettings = useCallback((newSettings) => {
     const updated = { ...adminSettings, ...newSettings };
     setAdminSettings(updated);
-    localStorage.setItem('appforge_admin_settings', JSON.stringify(updated));
+    persistAdminState({ adminSettings: updated });
     addLog('settings', `Updated admin settings`, 'info');
     return updated;
-  }, [adminSettings]);
+  }, [adminSettings, addLog, persistAdminState]);
 
   // Toggle feature on/off
   const toggleFeature = useCallback((featureName, enabled) => {
     const updated = { ...featureToggles, [featureName]: enabled };
     setFeatureToggles(updated);
-    localStorage.setItem('appforge_feature_toggles', JSON.stringify(updated));
+    persistAdminState({ featureToggles: updated });
     addLog('feature_toggle', `${featureName}: ${enabled ? 'enabled' : 'disabled'}`, 'info');
     return updated;
-  }, [featureToggles]);
+  }, [featureToggles, addLog, persistAdminState]);
 
   // Check system health
   const checkSystemHealth = useCallback(() => {
@@ -77,23 +156,7 @@ export function useAdminDashboard() {
     setSystemHealth(health);
     addLog('health_check', `System status: ${health.status}`, 'info');
     return health;
-  }, []);
-
-  // Add admin log entry
-  const addLog = useCallback((type, message, level = 'info') => {
-    const logEntry = {
-      id: Date.now(),
-      timestamp: new Date().toISOString(),
-      type,
-      message,
-      level,
-      user: 'admin'
-    };
-
-    const updated = [logEntry, ...logs].slice(0, 1000); // Keep last 1000 logs
-    setLogs(updated);
-    localStorage.setItem('appforge_admin_logs', JSON.stringify(updated));
-  }, [logs]);
+  }, [addLog]);
 
   // Manage users
   const addUser = useCallback((user) => {
@@ -106,10 +169,10 @@ export function useAdminDashboard() {
     };
     const updated = [...users, newUser];
     setUsers(updated);
-    localStorage.setItem('appforge_admin_users', JSON.stringify(updated));
+    persistAdminState({ users: updated });
     addLog('user_management', `Added user: ${user.email}`, 'info');
     return newUser;
-  }, [users, addLog]);
+  }, [users, addLog, persistAdminState]);
 
   // Update user role
   const updateUserRole = useCallback((userId, role) => {
@@ -117,9 +180,9 @@ export function useAdminDashboard() {
       u.id === userId ? { ...u, role } : u
     );
     setUsers(updated);
-    localStorage.setItem('appforge_admin_users', JSON.stringify(updated));
+    persistAdminState({ users: updated });
     addLog('user_management', `Updated user role to ${role}`, 'info');
-  }, [users, addLog]);
+  }, [users, addLog, persistAdminState]);
 
   // Deactivate user
   const deactivateUser = useCallback((userId) => {
@@ -127,17 +190,17 @@ export function useAdminDashboard() {
       u.id === userId ? { ...u, status: 'inactive' } : u
     );
     setUsers(updated);
-    localStorage.setItem('appforge_admin_users', JSON.stringify(updated));
+    persistAdminState({ users: updated });
     addLog('user_management', `Deactivated user`, 'warning');
-  }, [users, addLog]);
+  }, [users, addLog, persistAdminState]);
 
   // Set permissions
   const setUserPermissions = useCallback((userId, perms) => {
     const updated = { ...permissions, [userId]: perms };
     setPermissions(updated);
-    localStorage.setItem('appforge_permissions', JSON.stringify(updated));
+    persistAdminState({ permissions: updated });
     addLog('permissions', `Updated user permissions`, 'info');
-  }, [permissions, addLog]);
+  }, [permissions, addLog, persistAdminState]);
 
   // Get user permissions
   const getUserPermissions = useCallback((userId) => {
@@ -181,9 +244,45 @@ export function useAdminDashboard() {
   // Clear logs
   const clearLogs = useCallback(() => {
     setLogs([]);
-    localStorage.removeItem('appforge_admin_logs');
     addLog('system', 'Logs cleared', 'info');
-  }, [addLog]);
+    persistAdminState({ logs: [] });
+  }, [addLog, persistAdminState]);
+
+  // Real-time updates via WebSocket events
+  useEffect(() => {
+    websocketService.connect();
+
+    const handleStateUpdated = (payload) => {
+      const persisted = payload?.state?.adminDashboard;
+      if (!persisted) return;
+      setAdminSettings(persisted.adminSettings || defaultAdminSettings);
+      setFeatureToggles(persisted.featureToggles || {});
+      setLogs(persisted.logs || []);
+      setUsers(persisted.users || []);
+      setPermissions(persisted.permissions || {});
+      setServerState(payload);
+    };
+
+    const handleSyncLog = (payload) => {
+      setLogs((prev) => {
+        const next = [payload, ...prev].slice(0, 1000);
+        persistAdminState({ logs: next });
+        return next;
+      });
+
+      toast.message('Sync status update', {
+        description: payload?.message || payload?.status || 'New sync activity'
+      });
+    };
+
+    websocketService.on('state:updated', handleStateUpdated);
+    websocketService.on('sync:log', handleSyncLog);
+
+    return () => {
+      websocketService.off('state:updated', handleStateUpdated);
+      websocketService.off('sync:log', handleSyncLog);
+    };
+  }, [persistAdminState]);
 
   // Get system statistics
   const getSystemStats = useCallback(() => {

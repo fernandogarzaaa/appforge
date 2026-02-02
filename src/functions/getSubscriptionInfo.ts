@@ -1,6 +1,6 @@
 // deno-lint-ignore-file allow-importingTsExtensions
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.6';
-import { getCustomerInvoices } from './utils/xenditClient.ts';
+import { getCustomerInvoices } from './utils/paymongoClient.ts';
 
 Deno.serve(async (req: Request): Promise<Response> => {
   try {
@@ -11,14 +11,15 @@ Deno.serve(async (req: Request): Promise<Response> => {
       return Response.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const xenditSecretKey = Deno.env.get('XENDIT_SECRET_KEY');
+    const paymongoSecretKey = Deno.env.get('PAYMONGO_SECRET_KEY');
     
-    if (!xenditSecretKey) {
+    if (!paymongoSecretKey) {
       return Response.json({ error: 'Payment service not configured' }, { status: 500 });
     }
 
-    // Get customer's invoices from Xendit
-    const invoices = await getCustomerInvoices(user.id || user.email, 1, xenditSecretKey);
+    // PayMongo currently returns invoices via Billing/Subscriptions API.
+    // This shim returns an empty array until that wiring is complete.
+    const invoices = await getCustomerInvoices(user.id || user.email, 1, paymongoSecretKey);
 
     if (!invoices || invoices.length === 0) {
       return Response.json({
@@ -42,7 +43,7 @@ Deno.serve(async (req: Request): Promise<Response> => {
         customer_email: latestInvoice.customer?.email,
       },
       status: 'active',
-      payment_provider: 'xendit'
+      payment_provider: 'paymongo'
     }, { status: 200 });
   } catch (error) {
     console.error('Get subscription error:', error);

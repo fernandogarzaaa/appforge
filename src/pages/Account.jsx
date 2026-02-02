@@ -288,17 +288,17 @@ export default function AccountPage() {
               </CardHeader>
               <CardContent>
                 <p className="text-slate-600 mb-4">
-                  To update your payment method, please use the Xendit dashboard:
+                  To update your payment method, please use the PayMongo dashboard:
                 </p>
                 <Button
-                  onClick={() => window.open('https://dashboard.xendit.co', '_blank')}
+                  onClick={() => window.open('https://dashboard.paymongo.com', '_blank')}
                   className="bg-blue-600 hover:bg-blue-700"
                 >
                   <CreditCard className="w-4 h-4 mr-2" />
-                  Go to Xendit Dashboard
+                  Go to PayMongo Dashboard
                 </Button>
                 <p className="text-xs text-slate-500 mt-4">
-                  You'll be able to manage your payments and view transaction history through the Xendit dashboard.
+                  You'll be able to manage your payments and view transaction history through the PayMongo dashboard.
                 </p>
               </CardContent>
             </Card>

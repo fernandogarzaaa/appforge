@@ -1,10 +1,10 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.6';
-import { getCustomerInvoices } from '../src/functions/utils/xenditClient.ts';
+import { getCustomerInvoices } from '../src/functions/utils/paymongoClient.ts';
 
 const planPrices = {
-  'price_1StWdZ8rNvlz2v0BtngMRUyS': { name: 'Basic', price: 20 },
-  'price_1StWdZ8rNvlz2v0BV7sIV4A9': { name: 'Pro', price: 30 },
-  'price_1StWdZ8rNvlz2v0BSl7yx4v7': { name: 'Premium', price: 99 }
+  paymongo_basic_plan: { name: 'Basic', price: 20 },
+  paymongo_pro_plan: { name: 'Pro', price: 30 },
+  paymongo_premium_plan: { name: 'Premium', price: 99 }
 };
 
 Deno.serve(async (req) => {
@@ -16,13 +16,13 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const xenditSecretKey = Deno.env.get('XENDIT_SECRET_KEY');
-    if (!xenditSecretKey) {
+    const paymongoSecretKey = Deno.env.get('PAYMONGO_SECRET_KEY');
+    if (!paymongoSecretKey) {
       return Response.json({ error: 'Payment service not configured' }, { status: 500 });
     }
 
     try {
-      // Get customer invoices from Xendit
+      // Get customer invoices from PayMongo (stubbed until Billing API is wired)
       const invoices = await getCustomerInvoices(user.email);
 
       if (!invoices || invoices.length === 0) {
@@ -70,7 +70,7 @@ Deno.serve(async (req) => {
         invoice_url: activeInvoice.invoice_url
       }, { status: 200 });
     } catch (error) {
-      console.error('Xendit error:', error);
+      console.error('PayMongo error:', error);
       return Response.json({ error: 'Failed to fetch subscription' }, { status: 500 });
     }
   } catch (error) {

@@ -3,6 +3,8 @@
  * Handles environment variable management with encryption and validation
  */
 
+import { encryptString, decryptString } from './cryptoUtils';
+
 export const ENV_VAR_TYPES = {
   STRING: 'string',
   NUMBER: 'number',
@@ -157,27 +159,23 @@ export const parseEnvFileContent = (content) => {
 };
 
 /**
- * Encrypt environment variable (placeholder)
+ * Encrypt environment variable using AES-256-GCM
  * @param {string} value - Value to encrypt
+ * @param {string} [secretOverride] - Optional secret override
  * @returns {string} Encrypted value
  */
-export const encryptValue = (value) => {
-  // TODO: Implement real encryption (e.g., tweetnacl)
-  return btoa(value);
+export const encryptValue = (value, secretOverride) => {
+  return encryptString(value, secretOverride);
 };
 
 /**
- * Decrypt environment variable (placeholder)
+ * Decrypt environment variable using AES-256-GCM
  * @param {string} encrypted - Encrypted value
+ * @param {string} [secretOverride] - Optional secret override
  * @returns {string} Decrypted value
  */
-export const decryptValue = (encrypted) => {
-  // TODO: Implement real decryption
-  try {
-    return atob(encrypted);
-  } catch {
-    return encrypted;
-  }
+export const decryptValue = (encrypted, secretOverride) => {
+  return decryptString(encrypted, secretOverride);
 };
 
 /**

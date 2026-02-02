@@ -127,6 +127,7 @@ export class OIDCAuthProvider {
     this.config = config instanceof OIDCConfig ? config : new OIDCConfig(config);
     this.pkceVerifiers = new Map();
     this.nonces = new Map();
+    this.jwksCache = null;
   }
 
   /**
@@ -341,8 +342,8 @@ export class OIDCAuthProvider {
         }
       }
 
-      // TODO: Validate signature using JWKS
-      // In production, use a proper JWT library like jsonwebtoken
+      // Validate signature using JWKS
+      await this._validateSignature(idToken, header);
 
       return decodedPayload;
     } catch (error) {
@@ -425,6 +426,99 @@ export class OIDCAuthProvider {
    */
   _generateRandomString(length) {
     return crypto.randomBytes(length).toString('base64url').substring(0, length);
+  }
+
+  async _validateSignature(idToken, headerBase64) {
+    if (!this.config.jwksUri) {
+      throw new Error('JWKS URI is not configured');
+    }
+
+    const header = JSON.parse(Buffer.from(headerBase64, 'base64').toString());
+    const jwks = await this._getJwks();
+    const key = jwks.keys.find(k => k.kid === header.kid);
+
+    if (!key) {
+      throw new Error('Signing key not found in JWKS');
+    }
+
+    const publicKey = this._jwkToPem(key);
+    const verifier = crypto.createVerify('RSA-SHA256');
+    const [headerPart, payloadPart, signaturePart] = idToken.split('.');
+    verifier.update(`${headerPart}.${payloadPart}`);
+    verifier.end();
+
+    const signature = Buffer.from(signaturePart, 'base64url');
+    const isValid = verifier.verify(publicKey, signature);
+
+    if (!isValid) {
+      throw new Error('Invalid token signature');
+    }
+
+    return true;
+    const verified = verifier.verify(publicKey, signature);
+
+    if (!verified) {
+      throw new Error('Invalid ID token signature');
+    }
+  }
+
+  async _getJwks() {
+    if (this.jwksCache) return this.jwksCache;
+
+    const response = await fetch(this.config.jwksUri);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch JWKS: ${response.statusText}`);
+    }
+
+    this.jwksCache = await response.json();
+    return this.jwksCache;
+  }
+
+  _jwkToPem(jwk) {
+    if (jwk.kty !== 'RSA') {
+      throw new Error('Unsupported JWK type');
+    }
+
+    const toBuffer = (b64) => Buffer.from(b64, 'base64');
+    const modulus = toBuffer(jwk.n.replace(/-/g, '+').replace(/_/g, '/'));
+    const exponent = toBuffer(jwk.e.replace(/-/g, '+').replace(/_/g, '/'));
+
+    const encodeLength = (len) => {
+      if (len <= 127) return Buffer.from([len]);
+      const buffer = Buffer.alloc(4);
+      buffer.writeUInt32BE(len, 0);
+      const i = buffer.findIndex(b => b !== 0);
+      return Buffer.concat([Buffer.from([0x80 | (4 - i)]), buffer.slice(i)]);
+    };
+
+    const constructSequence = (items) => {
+      const totalLength = items.reduce((sum, item) => sum + item.length, 0);
+      return Buffer.concat([Buffer.from([0x30]), encodeLength(totalLength), ...items]);
+    };
+
+    const constructInteger = (buffer) => {
+      if (buffer[0] & 0x80) {
+        return Buffer.concat([Buffer.from([0x02]), encodeLength(buffer.length + 1), Buffer.from([0x00]), buffer]);
+      }
+      return Buffer.concat([Buffer.from([0x02]), encodeLength(buffer.length), buffer]);
+    };
+
+    const modulusInt = constructInteger(modulus);
+    const exponentInt = constructInteger(exponent);
+    const pubKeyDer = constructSequence([modulusInt, exponentInt]);
+
+    const bitString = Buffer.concat([
+      Buffer.from([0x00]),
+      pubKeyDer,
+    ]);
+
+    const rsaAlgorithmId = Buffer.from('300d06092a864886f70d0101010500', 'hex');
+    const der = constructSequence([
+      rsaAlgorithmId,
+      Buffer.concat([Buffer.from([0x03]), encodeLength(bitString.length), bitString]),
+    ]);
+
+    return `-----BEGIN PUBLIC KEY-----\n${der.toString('base64').match(/.{1,64}/g).join('\n')}\n-----END PUBLIC KEY-----`;
   }
 }
 

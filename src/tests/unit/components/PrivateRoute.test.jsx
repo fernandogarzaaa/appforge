@@ -1,29 +1,39 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen } from '@testing-library/react'
-import { MemoryRouter, Routes, Route } from 'react-router-dom'
+import { RouterProvider, createMemoryRouter } from 'react-router-dom'
 import PrivateRoute from '@/components/PrivateRoute'
 import { BackendAuthContext } from '@/contexts/BackendAuthContext'
 
 const MockComponent = () => <div>Protected Content</div>
 const LoginComponent = () => <div>Login Page</div>
 
-const renderWithRouter = (component, isAuthenticated = false) => {
+const renderWithRouter = (component, authOverrides = {}) => {
   const mockAuthContext = {
-    isAuthenticated,
-    user: isAuthenticated ? { id: '1', email: 'test@test.com' } : null,
+    isAuthenticated: false,
+    user: null,
     login: vi.fn(),
     logout: vi.fn(),
     loading: false,
+    ...authOverrides,
   }
+
+  const router = createMemoryRouter(
+    [
+      { path: '/login', element: <LoginComponent /> },
+      { path: '/protected', element: component },
+    ],
+    {
+      initialEntries: ['/protected'],
+      future: {
+        v7_startTransition: true,
+        v7_relativeSplatPath: true,
+      },
+    }
+  )
 
   return render(
     <BackendAuthContext.Provider value={mockAuthContext}>
-      <MemoryRouter initialEntries={['/protected']}>
-        <Routes>
-          <Route path="/login" element={<LoginComponent />} />
-          <Route path="/protected" element={component} />
-        </Routes>
-      </MemoryRouter>
+      <RouterProvider router={router} />
     </BackendAuthContext.Provider>
   )
 }
@@ -40,7 +50,10 @@ describe('PrivateRoute', () => {
       </PrivateRoute>
     )
     
-    renderWithRouter(privateRoute, true)
+    renderWithRouter(privateRoute, {
+      isAuthenticated: true,
+      user: { id: '1', email: 'test@test.com' },
+    })
     
     expect(screen.getByText('Protected Content')).toBeInTheDocument()
   })
@@ -52,37 +65,23 @@ describe('PrivateRoute', () => {
       </PrivateRoute>
     )
     
-    renderWithRouter(privateRoute, false)
+    renderWithRouter(privateRoute)
     
     expect(screen.getByText('Login Page')).toBeInTheDocument()
     expect(screen.queryByText('Protected Content')).not.toBeInTheDocument()
   })
 
   it('should show loading state while checking authentication', () => {
-    const mockAuthContext = {
-      isAuthenticated: false,
-      loading: true,
-      user: null,
-      login: vi.fn(),
-      logout: vi.fn(),
-    }
-
     const privateRoute = (
       <PrivateRoute>
         <MockComponent />
       </PrivateRoute>
     )
 
-    render(
-      <BackendAuthContext.Provider value={mockAuthContext}>
-        <MemoryRouter initialEntries={['/protected']}>
-          <Routes>
-            <Route path="/login" element={<LoginComponent />} />
-            <Route path="/protected" element={privateRoute} />
-          </Routes>
-        </MemoryRouter>
-      </BackendAuthContext.Provider>
-    )
+    renderWithRouter(privateRoute, {
+      isAuthenticated: false,
+      loading: true,
+    })
 
     // Should not show login or protected content while loading
     expect(screen.queryByText('Protected Content')).not.toBeInTheDocument()

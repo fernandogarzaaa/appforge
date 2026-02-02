@@ -42,8 +42,26 @@ export default function ChatOpsInterface() {
       response = `Active Alerts:\n${activeAlerts?.slice(0, 3).map(a => `• ${a.id}: ${a.severity}`).join('\n') || 'No active alerts'}`;
     } else if (command.startsWith('/acknowledge')) {
       const alertId = command.split(' ')[1];
-      response = `Alert ${alertId} acknowledged!`;
-      // TODO: Call acknowledge mutation
+      if (!alertId) {
+        response = 'Please provide an alert id. Usage: /acknowledge <id>';
+      } else {
+        try {
+          await base44.entities.AnomalyAlert.update(alertId, {
+            status: 'acknowledged',
+            acknowledged_at: new Date().toISOString(),
+            acknowledged_by: 'chatops'
+          });
+          // Call mutation to persist acknowledgement
+          await base44.mutations?.acknowledgeAlert?.({
+            alertId,
+            timestamp: new Date().toISOString(),
+            source: 'chatops-interface'
+          }).catch(() => null);
+          response = `Alert ${alertId} acknowledged!`;
+        } catch (error) {
+          response = `Failed to acknowledge ${alertId}: ${error.message}`;
+        }
+      }
     } else if (command === '/help') {
       response = `Available Commands:\n/status - System status\n/alerts - List active alerts\n/acknowledge <id> - Acknowledge alert\n/predictions - View predictions\n/help - Show this help`;
     } else if (command === '/predictions') {

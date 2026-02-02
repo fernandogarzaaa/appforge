@@ -2,28 +2,27 @@
  * Payment Configuration
  * Centralized configuration for all payment-related settings
  * 
- * IMPORTANT: Update these price IDs after creating plans in Xendit dashboard
- * See XENDIT_MIGRATION_GUIDE.md for instructions
+ * IMPORTANT: Update these price IDs after creating plans in PayMongo dashboard
+ * See PAYMONGO_MIGRATION_GUIDE.md for instructions
  */
 
 /**
- * Xendit Plan Configuration
+ * PayMongo Plan Configuration
  * 
- * Steps to set up Xendit plans:
- * 1. Log into Xendit Dashboard (https://dashboard.xendit.co)
- * 2. Navigate to Products > Recurring Plans
- * 3. Create three recurring plans:
- *    - Basic Plan: $20/month USD
+ * Steps to set up PayMongo recurring plans:
+ * 1. Log into PayMongo Dashboard (https://dashboard.paymongo.com)
+ * 2. Create three recurring products/plans:
+ *    - Basic Plan: $20/month USD (or PHP equivalent)
  *    - Pro Plan: $30/month USD  
  *    - Premium Plan: $99/month USD
- * 4. Copy the generated price IDs below
+ * 3. Copy the generated plan/price IDs below
  * 
- * For now, we're using Stripe price IDs as placeholders for backward compatibility.
- * These will be replaced with Xendit recurring plan IDs once created.
+ * For now, we're using placeholder IDs for backward compatibility.
+ * Replace them with PayMongo plan IDs once created.
  */
 
 export interface PlanConfig {
-  id: string;           // Price/Plan ID from Xendit
+  id: string;           // Price/Plan ID from PayMongo
   name: string;         // Display name
   price: number;        // Price in USD
   description: string;  // Plan description
@@ -32,15 +31,25 @@ export interface PlanConfig {
   intervalCount: number;
 }
 
+const PAYMONGO_BASIC_PLAN_ID = (typeof process !== 'undefined' && process.env?.PAYMONGO_BASIC_PLAN_ID)
+  || (typeof import !== 'undefined' && typeof import.meta !== 'undefined' && import.meta.env?.VITE_PAYMONGO_BASIC_PLAN_ID)
+  || 'paymongo_basic_plan';
+const PAYMONGO_PRO_PLAN_ID = (typeof process !== 'undefined' && process.env?.PAYMONGO_PRO_PLAN_ID)
+  || (typeof import !== 'undefined' && typeof import.meta !== 'undefined' && import.meta.env?.VITE_PAYMONGO_PRO_PLAN_ID)
+  || 'paymongo_pro_plan';
+const PAYMONGO_PREMIUM_PLAN_ID = (typeof process !== 'undefined' && process.env?.PAYMONGO_PREMIUM_PLAN_ID)
+  || (typeof import !== 'undefined' && typeof import.meta !== 'undefined' && import.meta.env?.VITE_PAYMONGO_PREMIUM_PLAN_ID)
+  || 'paymongo_premium_plan';
+
 /**
  * Available subscription plans
  * 
- * TODO: Replace these Stripe IDs with Xendit recurring plan IDs
+ * TODO: Replace these placeholders with PayMongo recurring plan IDs
  * Current IDs are temporary placeholders from the old Stripe integration
  */
 export const PLAN_CONFIGS: Record<string, PlanConfig> = {
-  'price_1StWdZ8rNvlz2v0BtngMRUyS': {
-    id: 'price_1StWdZ8rNvlz2v0BtngMRUyS',
+  [PAYMONGO_BASIC_PLAN_ID]: {
+    id: PAYMONGO_BASIC_PLAN_ID,
     name: 'Basic',
     price: 20,
     description: 'Perfect for small projects',
@@ -53,8 +62,8 @@ export const PLAN_CONFIGS: Record<string, PlanConfig> = {
     interval: 'MONTH',
     intervalCount: 1
   },
-  'price_1StWdZ8rNvlz2v0BV7sIV4A9': {
-    id: 'price_1StWdZ8rNvlz2v0BV7sIV4A9',
+  [PAYMONGO_PRO_PLAN_ID]: {
+    id: PAYMONGO_PRO_PLAN_ID,
     name: 'Pro',
     price: 30,
     description: 'For growing teams',
@@ -68,8 +77,8 @@ export const PLAN_CONFIGS: Record<string, PlanConfig> = {
     interval: 'MONTH',
     intervalCount: 1
   },
-  'price_1StWdZ8rNvlz2v0BSl7yx4v7': {
-    id: 'price_1StWdZ8rNvlz2v0BSl7yx4v7',
+  [PAYMONGO_PREMIUM_PLAN_ID]: {
+    id: PAYMONGO_PREMIUM_PLAN_ID,
     name: 'Premium',
     price: 99,
     description: 'For enterprises',
@@ -102,18 +111,16 @@ export const getAllPlans = (): PlanConfig[] => {
 };
 
 /**
- * Map legacy Stripe price ID to Xendit plan (for migration period)
+ * Map legacy Stripe price ID to PayMongo plan (for migration period)
  * 
  * During migration, this helps maintain backward compatibility
  * with existing database records that store Stripe price IDs
  */
-export const mapStripePriceToXenditPlan = (stripePriceId: string): string => {
-  // For now, return the same ID since we're using placeholders
-  // Once Xendit plans are created, update this mapping:
+export const mapStripePriceToPaymongoPlan = (stripePriceId: string): string => {
   const mapping: Record<string, string> = {
-    'price_1StWdZ8rNvlz2v0BtngMRUyS': 'XENDIT_BASIC_PLAN_ID',    // TODO: Replace
-    'price_1StWdZ8rNvlz2v0BV7sIV4A9': 'XENDIT_PRO_PLAN_ID',      // TODO: Replace  
-    'price_1StWdZ8rNvlz2v0BSl7yx4v7': 'XENDIT_PREMIUM_PLAN_ID'   // TODO: Replace
+    'price_1StWdZ8rNvlz2v0BtngMRUyS': PAYMONGO_BASIC_PLAN_ID,
+    'price_1StWdZ8rNvlz2v0BV7sIV4A9': PAYMONGO_PRO_PLAN_ID,
+    'price_1StWdZ8rNvlz2v0BSl7yx4v7': PAYMONGO_PREMIUM_PLAN_ID,
   };
   
   return mapping[stripePriceId] || stripePriceId;
@@ -135,14 +142,14 @@ export const getPlanNameByAmount = (amount: number): string => {
  */
 export const PAYMENT_CONFIG = {
   CURRENCY: 'USD',
-  PROVIDER: 'Xendit',
-  WEBHOOK_ENDPOINT: '/api/webhooks/xendit',
+  PROVIDER: 'PayMongo',
+  WEBHOOK_ENDPOINT: '/api/webhooks/paymongo',
   SUCCESS_URL: '/?payment=success',
   CANCEL_URL: '/?payment=canceled',
   
-  // Xendit API settings
-  API_VERSION: '2020-02-14',
-  API_BASE: 'https://api.xendit.co/v4',
+  // PayMongo API settings
+  API_VERSION: '2023-08-01',
+  API_BASE: 'https://api.paymongo.com/v1',
   
   // Retry settings
   MAX_RETRIES: 3,

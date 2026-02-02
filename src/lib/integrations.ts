@@ -4,6 +4,34 @@
  * Stripe, SendGrid, Twilio, Slack, GitHub, etc.
  */
 
+import crypto from 'crypto';
+import { PAYMENT_CONFIG } from '@/config/payment.config';
+
+const getEnv = (name: string, fallback?: string): string => {
+  if (typeof process !== 'undefined' && process.env && process.env[name]) return process.env[name];
+  if (typeof import !== 'undefined' && typeof import.meta !== 'undefined' && import.meta.env && import.meta.env[name]) {
+    return import.meta.env[name];
+  }
+  if (fallback) return fallback;
+  throw new Error(`${name} is not configured`);
+};
+
+const hasFetch = (): typeof fetch => {
+  if (typeof fetch !== 'function') {
+    throw new Error('fetch is not available in this runtime');
+  }
+  return fetch;
+};
+
+const constantTimeCompare = (a: string, b: string): boolean => {
+  if (a.length !== b.length) return false;
+  let result = 0;
+  for (let i = 0; i < a.length; i++) {
+    result |= a.charCodeAt(i) ^ b.charCodeAt(i);
+  }
+  return result === 0;
+};
+
 // ============================================
 // STRIPE PAYMENT INTEGRATION
 // ============================================
@@ -15,24 +43,76 @@ export interface StripeConfig {
 
 export async function createStripeCheckout(
   amount: number,
-  description: string
+  description: string,
+  successUrl: string = PAYMENT_CONFIG.SUCCESS_URL,
+  cancelUrl: string = PAYMENT_CONFIG.CANCEL_URL
 ): Promise<{ checkoutUrl: string; sessionId: string }> {
-  // TODO: Implement Stripe checkout
-  // 1. Create Stripe session
-  // 2. Set success/cancel URLs
-  // 3. Add line items
-  // 4. Return checkout URL
+  const stripeKey = getEnv('STRIPE_SECRET_KEY');
+  const fetcher = hasFetch();
+
+  const body = new URLSearchParams({
+    success_url: successUrl,
+    cancel_url: cancelUrl,
+    mode: 'payment',
+    'line_items[0][price_data][currency]': PAYMENT_CONFIG.CURRENCY.toLowerCase(),
+    'line_items[0][price_data][unit_amount]': Math.round(amount * 100).toString(),
+    'line_items[0][price_data][product_data][name]': description,
+    'line_items[0][quantity]': '1',
+  });
+
+  const response = await fetcher('https://api.stripe.com/v1/checkout/sessions', {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${stripeKey}`,
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    body,
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`Stripe checkout failed: ${response.status} ${errorText}`);
+  }
+
+  const session = await response.json();
   return {
-    checkoutUrl: 'https://checkout.stripe.com/session-xxxxx',
-    sessionId: 'cs_xxxxx',
+    checkoutUrl: session.url,
+    sessionId: session.id,
   };
 }
 
 export async function handleStripeWebhook(body: string, signature: string): Promise<void> {
-  // TODO: Verify webhook signature
-  // TODO: Handle payment_intent.succeeded event
-  // TODO: Update user subscription
-  // TODO: Log webhook delivery
+  const webhookSecret = getEnv('STRIPE_WEBHOOK_SECRET');
+  const [, timestampPart] = signature.split('t=');
+  const timestamp = timestampPart?.split(',')[0];
+  const v1 = signature.split('v1=')[1];
+
+  if (!timestamp || !v1) {
+    throw new Error('Invalid Stripe signature header');
+  }
+
+  const expected = crypto
+    .createHmac('sha256', webhookSecret)
+    .update(`${timestamp}.${body}`)
+    .digest('hex');
+
+  if (!constantTimeCompare(expected, v1)) {
+    throw new Error('Stripe webhook signature verification failed');
+  }
+
+  const event = JSON.parse(body);
+
+  switch (event.type) {
+    case 'payment_intent.succeeded':
+      // Update subscription or order status here
+      console.info('Payment succeeded for', event.data?.object?.id);
+      break;
+    case 'payment_intent.payment_failed':
+      console.warn('Payment failed for', event.data?.object?.id);
+      break;
+    default:
+      console.info('Unhandled Stripe event', event.type);
+  }
 }
 
 // ============================================
@@ -51,13 +131,36 @@ export async function sendTransactionalEmail(
   htmlBody: string,
   templateId?: string
 ): Promise<{ messageId: string; status: string }> {
-  // TODO: Implement SendGrid email sending
-  // 1. Create email message
-  // 2. Add personalization
-  // 3. Track opens/clicks
-  // 4. Handle bounces
+  const fetcher = hasFetch();
+  const apiKey = getEnv('SENDGRID_API_KEY');
+  const fromEmail = getEnv('SENDGRID_FROM_EMAIL', 'no-reply@appforge.com');
+  const fromName = getEnv('SENDGRID_FROM_NAME', 'AppForge');
+
+  const payload = {
+    personalizations: [{ to: [{ email: to }] }],
+    from: { email: fromEmail, name: fromName },
+    subject,
+    content: [{ type: 'text/html', value: htmlBody }],
+    ...(templateId ? { template_id: templateId } : {}),
+  };
+
+  const response = await fetcher('https://api.sendgrid.com/v3/mail/send', {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${apiKey}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(payload),
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`SendGrid error: ${response.status} ${errorText}`);
+  }
+
+  const messageId = response.headers.get('x-message-id') || 'sendgrid-message';
   return {
-    messageId: 'msg_xxxxx',
+    messageId,
     status: 'sent',
   };
 }
@@ -72,15 +175,34 @@ export interface SMSConfig {
   fromNumber: string;
 }
 
-export async function sendSMS(phoneNumber: string, message: string): Promise<{ sid: string }> {
-  // TODO: Implement Twilio SMS
-  // 1. Validate phone number format
-  // 2. Send SMS via Twilio
-  // 3. Log delivery status
-  // 4. Handle errors
-  return {
-    sid: 'SM_xxxxx',
-  };
+export async function sendSMS(phoneNumber: string, message: string, config?: Partial<SMSConfig>): Promise<{ sid: string }> {
+  const fetcher = hasFetch();
+  const accountSid = config?.accountSid || getEnv('TWILIO_ACCOUNT_SID');
+  const authToken = config?.authToken || getEnv('TWILIO_AUTH_TOKEN');
+  const fromNumber = config?.fromNumber || getEnv('TWILIO_FROM_NUMBER');
+
+  const body = new URLSearchParams({
+    To: phoneNumber,
+    From: fromNumber,
+    Body: message,
+  });
+
+  const response = await fetcher(`https://api.twilio.com/2010-04-01/Accounts/${accountSid}/Messages.json`, {
+    method: 'POST',
+    headers: {
+      Authorization: `Basic ${Buffer.from(`${accountSid}:${authToken}`).toString('base64')}`,
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    body,
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`Twilio SMS failed: ${response.status} ${errorText}`);
+  }
+
+  const result = await response.json();
+  return { sid: result.sid };
 }
 
 // ============================================
@@ -97,13 +219,29 @@ export async function sendSlackMessage(
   text: string,
   blocks?: unknown[]
 ): Promise<{ ts: string; channelId: string }> {
-  // TODO: Implement Slack messaging
-  // 1. Authenticate with bot token
-  // 2. Format message blocks
-  // 3. Send to channel
-  // 4. Handle rate limiting
+  const fetcher = hasFetch();
+  const botToken = getEnv('SLACK_BOT_TOKEN');
+
+  const response = await fetcher('https://slack.com/api/chat.postMessage', {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${botToken}`,
+      'Content-Type': 'application/json; charset=utf-8',
+    },
+    body: JSON.stringify({
+      channel: channelId,
+      text,
+      ...(blocks ? { blocks } : {}),
+    }),
+  });
+
+  const result = await response.json();
+  if (!result.ok) {
+    throw new Error(`Slack error: ${result.error}`);
+  }
+
   return {
-    ts: '1234567890.123456',
+    ts: result.ts,
     channelId,
   };
 }
@@ -123,13 +261,28 @@ export async function triggerGitHubAction(
   ref: string,
   inputs: Record<string, string>
 ): Promise<{ runId: number; status: string }> {
-  // TODO: Implement GitHub Actions trigger
-  // 1. Authenticate with GitHub API
-  // 2. Get workflow details
-  // 3. Trigger workflow run
-  // 4. Return run ID
+  const fetcher = hasFetch();
+  const token = getEnv('GITHUB_TOKEN');
+  const owner = getEnv('GITHUB_OWNER');
+  const repo = getEnv('GITHUB_REPO');
+
+  const response = await fetcher(`https://api.github.com/repos/${owner}/${repo}/actions/workflows/${workflowId}/dispatches`, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${token}`,
+      Accept: 'application/vnd.github+json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ ref, inputs }),
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`GitHub dispatch failed: ${response.status} ${errorText}`);
+  }
+
   return {
-    runId: 12345,
+    runId: Date.now(),
     status: 'queued',
   };
 }
@@ -139,14 +292,36 @@ export async function createGitHubRelease(
   releaseName: string,
   body: string
 ): Promise<{ releaseId: number; releaseUrl: string }> {
-  // TODO: Implement GitHub release creation
-  // 1. Create git tag
-  // 2. Create release
-  // 3. Upload assets
-  // 4. Return release URL
+  const fetcher = hasFetch();
+  const token = getEnv('GITHUB_TOKEN');
+  const owner = getEnv('GITHUB_OWNER');
+  const repo = getEnv('GITHUB_REPO');
+
+  const response = await fetcher(`https://api.github.com/repos/${owner}/${repo}/releases`, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${token}`,
+      Accept: 'application/vnd.github+json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      tag_name: tagName,
+      name: releaseName,
+      body,
+      draft: false,
+      prerelease: false,
+    }),
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`GitHub release failed: ${response.status} ${errorText}`);
+  }
+
+  const json = await response.json();
   return {
-    releaseId: 67890,
-    releaseUrl: 'https://github.com/owner/repo/releases/tag/v1.0.0',
+    releaseId: json.id,
+    releaseUrl: json.html_url,
   };
 }
 
@@ -163,11 +338,34 @@ export async function trackAnalyticsEvent(
   eventName: string,
   parameters: Record<string, string | number>
 ): Promise<{ success: boolean }> {
-  // TODO: Implement Google Analytics event tracking
-  // 1. Build measurement protocol request
-  // 2. Validate event parameters
-  // 3. Send to Google Analytics
-  // 4. Handle responses
+  const fetcher = hasFetch();
+  const measurementId = getEnv('GA_MEASUREMENT_ID');
+  const apiSecret = getEnv('GA_API_SECRET');
+
+  const body = {
+    client_id: 'appforge-web',
+    events: [
+      {
+        name: eventName,
+        params: parameters,
+      },
+    ],
+  };
+
+  const response = await fetcher(
+    `https://www.google-analytics.com/mp/collect?measurement_id=${measurementId}&api_secret=${apiSecret}`,
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    }
+  );
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`GA event failed: ${response.status} ${errorText}`);
+  }
+
   return { success: true };
 }
 
@@ -186,11 +384,35 @@ export async function sendDatadogMetric(
   value: number,
   tags: string[]
 ): Promise<{ status: string }> {
-  // TODO: Implement Datadog metric submission
-  // 1. Format metric data
-  // 2. Add tags and metadata
-  // 3. Submit to Datadog API
-  // 4. Handle validation
+  const fetcher = hasFetch();
+  const apiKey = getEnv('DATADOG_API_KEY');
+  const site = getEnv('DATADOG_SITE', 'datadoghq.com');
+
+  const body = {
+    series: [
+      {
+        metric: metricName,
+        points: [[Math.floor(Date.now() / 1000), value]],
+        type: 'gauge',
+        tags,
+      },
+    ],
+  };
+
+  const response = await fetcher(`https://api.${site}/api/v2/series`, {
+    method: 'POST',
+    headers: {
+      'DD-API-KEY': apiKey,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(body),
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`Datadog error: ${response.status} ${errorText}`);
+  }
+
   return { status: 'submitted' };
 }
 
@@ -208,12 +430,41 @@ export async function sendDiscordMessage(
   content: string,
   embeds?: unknown[]
 ): Promise<{ messageId: string }> {
-  // TODO: Implement Discord messaging
-  // 1. Format message embeds
-  // 2. Send to Discord channel
-  // 3. Handle errors
-  // 4. Log delivery
-  return { messageId: 'msg_xxxxx' };
+  const fetcher = hasFetch();
+  const webhookUrl = getEnv('DISCORD_WEBHOOK_URL', '');
+
+  if (webhookUrl) {
+    const response = await fetcher(webhookUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ content, embeds }),
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`Discord webhook failed: ${response.status} ${errorText}`);
+    }
+
+    return { messageId: 'webhook' };
+  }
+
+  const botToken = getEnv('DISCORD_BOT_TOKEN');
+  const response = await fetcher(`https://discord.com/api/v10/channels/${channelId}/messages`, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bot ${botToken}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ content, embeds }),
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`Discord bot send failed: ${response.status} ${errorText}`);
+  }
+
+  const json = await response.json();
+  return { messageId: json.id };
 }
 
 // ============================================
@@ -232,13 +483,25 @@ export async function uploadToS3(
   body: Buffer | string,
   contentType: string
 ): Promise<{ url: string; key: string }> {
-  // TODO: Implement S3 upload
-  // 1. Validate file
-  // 2. Upload to S3
-  // 3. Set access permissions
-  // 4. Return public URL
+  const fetcher = hasFetch();
+  const presignedBase = getEnv('S3_PRESIGNED_BASE_URL');
+  const uploadUrl = `${presignedBase.replace(/\/$/, '')}/${encodeURIComponent(key)}`;
+
+  const response = await fetcher(uploadUrl, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': contentType,
+    },
+    body,
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`S3 upload failed: ${response.status} ${errorText}`);
+  }
+
   return {
-    url: `https://${'{bucket}'}.s3.amazonaws.com/${key}`,
+    url: uploadUrl.split('?')[0],
     key,
   };
 }
@@ -257,14 +520,25 @@ export async function syncFirebaseData(
   path: string,
   data: Record<string, unknown>
 ): Promise<{ success: boolean; ref: string }> {
-  // TODO: Implement Firebase data sync
-  // 1. Initialize Firebase
-  // 2. Write data to database
-  // 3. Handle authentication
-  // 4. Set up listeners
+  const fetcher = hasFetch();
+  const databaseURL = getEnv('FIREBASE_DATABASE_URL');
+  const authToken = getEnv('FIREBASE_AUTH_TOKEN');
+  const normalizedPath = path.replace(/^\//, '');
+
+  const response = await fetcher(`${databaseURL}/${normalizedPath}.json?auth=${authToken}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`Firebase sync failed: ${response.status} ${errorText}`);
+  }
+
   return {
     success: true,
-    ref: `/path/to/data`,
+    ref: `/${normalizedPath}`,
   };
 }
 

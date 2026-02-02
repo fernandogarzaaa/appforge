@@ -10,6 +10,8 @@
  * - Default fallback → Base44 LLM
  */
 
+import { validateWithRust } from '@/utils/quantum/rustBridge';
+
 export enum AIModel {
   CHATGPT = 'chatgpt',
   CLAUDE = 'claude',
@@ -23,6 +25,34 @@ export interface AIRouterConfig {
   fallbackToBase44?: boolean;
   enableAutoRouting?: boolean;
   retryOnFailure?: boolean;
+}
+
+export interface ModelResponseCandidate {
+  model: AIModel;
+  content: string;
+  confidence: number; // 0-1
+}
+
+export interface QuantumConsensusResult {
+  truthProbability: number;
+  selected: ModelResponseCandidate | null;
+  responses: ModelResponseCandidate[];
+  usedQuantum: boolean;
+  threshold: number;
+  strict: boolean;
+  rejected: boolean;
+  reason: string;
+}
+
+const QUANTUM_VALIDATION_ENABLED = import.meta.env.VITE_QUANTUM_VALIDATION === 'true';
+const QUANTUM_STRICT_MODE = import.meta.env.VITE_QUANTUM_STRICT_MODE === 'true';
+const QUANTUM_DEFAULT_THRESHOLD = clampThreshold(
+  Number.parseFloat(import.meta.env.VITE_QUANTUM_MIN_SCORE ?? '0.95')
+);
+
+function clampThreshold(value: number | undefined, fallback = 0.95): number {
+  if (!Number.isFinite(value as number)) return fallback;
+  return Math.min(Math.max(value as number, 0), 1);
 }
 
 export interface RoutingDecision {
@@ -348,6 +378,110 @@ export function smartRoute(
     fallbacks: getFallbackChain(selectedModel),
     available,
     formattedPrompt
+  };
+}
+
+/**
+ * Run quantum consensus (Rust/WASM) across multiple model responses.
+ * Uses the highest-confidence response by default and falls back to Base44 if consensus is weak.
+ */
+export async function applyQuantumConsensus(
+  responses: ModelResponseCandidate[],
+  options: { enabled?: boolean; threshold?: number; strict?: boolean; log?: boolean } = {}
+): Promise<QuantumConsensusResult> {
+  const {
+    enabled = QUANTUM_VALIDATION_ENABLED,
+    threshold = QUANTUM_DEFAULT_THRESHOLD,
+    strict = QUANTUM_STRICT_MODE,
+    log = false
+  } = options;
+
+  const resolvedThreshold = clampThreshold(threshold, QUANTUM_DEFAULT_THRESHOLD);
+
+  if (!responses || responses.length === 0) {
+    return {
+      truthProbability: 0,
+      selected: null,
+      responses: [],
+      usedQuantum: false,
+      threshold: resolvedThreshold,
+      strict,
+      rejected: true,
+      reason: 'No responses provided'
+    };
+  }
+
+  const sorted = [...responses].sort((a, b) => b.confidence - a.confidence);
+  const defaultPick = sorted[0] ?? null;
+  const base44Fallback = sorted.find((r) => r.model === AIModel.BASE44) || defaultPick;
+
+  const averageConfidence =
+    responses.reduce((sum, r) => sum + Math.max(0, r.confidence), 0) /
+    responses.length;
+
+  if (!enabled) {
+    return {
+      truthProbability: averageConfidence,
+      selected: defaultPick,
+      responses,
+      usedQuantum: false,
+      threshold: resolvedThreshold,
+      strict,
+      rejected: false,
+      reason: 'Quantum validation disabled'
+    };
+  }
+
+  let truthProbability = averageConfidence;
+  let usedQuantum = false;
+  let reason = 'Quantum validation used average confidence';
+  let rejected = false;
+
+  try {
+    truthProbability = await validateWithRust(
+      responses.map((r) => ({ text: r.content, confidence: r.confidence }))
+    );
+    usedQuantum = true;
+    reason = 'Quantum validation succeeded';
+  } catch (error) {
+    console.error('[QuantumCore] Consensus evaluation failed, using average confidence', error);
+  }
+
+  let selected: ModelResponseCandidate | null = defaultPick;
+
+  if (truthProbability < resolvedThreshold) {
+    if (strict) {
+      rejected = true;
+      selected = null;
+      reason = `[Quantum] rejected below threshold (${truthProbability.toFixed(3)} < ${resolvedThreshold})`;
+    } else {
+      selected = base44Fallback;
+      reason = `[Quantum] fell back to ${selected?.model ?? 'unknown'} (score ${truthProbability.toFixed(3)} < ${resolvedThreshold})`;
+    }
+  } else {
+    reason = `[Quantum] accepted primary (score ${truthProbability.toFixed(3)} >= ${resolvedThreshold})`;
+  }
+
+  if (log || strict) {
+    console.warn('[QuantumConsensus]', {
+      truthProbability,
+      threshold: resolvedThreshold,
+      strict,
+      rejected,
+      selectedModel: selected?.model,
+      reason
+    });
+  }
+
+  return {
+    truthProbability,
+    selected,
+    responses,
+    usedQuantum,
+    threshold: resolvedThreshold,
+    strict,
+    rejected,
+    reason
   };
 }
 

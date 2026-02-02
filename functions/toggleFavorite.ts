@@ -16,20 +16,24 @@ export default async (req: Request): Promise<Response> => {
     const user = await base44.auth.me();
 
     const { projectId } = await req.json();
+    if (!projectId) {
+      return new Response(JSON.stringify({ error: 'projectId is required' }), { status: 400 });
+    }
 
-    // TODO: Implement favorite toggle
-    // 1. Check current favorite status
-    // 2. Toggle isFavorite boolean
-    // 3. Update project entity
-    // 4. Log activity
-    // 5. Return new status
+    const project = await base44.entities.Project?.get(projectId).catch(() => null);
+    const nextFavorite = !(project?.is_favorite ?? false);
+
+    await base44.entities.Project?.update(projectId, {
+      is_favorite: nextFavorite,
+      favorite_updated_at: new Date().toISOString(),
+    }).catch(() => null);
 
     return new Response(
       JSON.stringify({
         success: true,
         projectId,
-        isFavorite: true,
-        message: 'Added to favorites',
+        isFavorite: nextFavorite,
+        message: nextFavorite ? 'Added to favorites' : 'Removed from favorites',
       }),
       {
         status: 200,

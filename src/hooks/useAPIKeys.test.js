@@ -15,12 +15,17 @@ describe('useAPIKeys Hook', () => {
   });
 
   it('should load API keys', async () => {
+    vi.useFakeTimers();
     const { result } = renderHook(() => useAPIKeys());
     
     expect(result.current.loading).toBe(true);
     
-    // Wait for loading to complete
-    await new Promise(resolve => setTimeout(resolve, 100));
+    act(() => {
+      vi.runAllTimers();
+    });
+
+    expect(result.current.loading).toBe(false);
+    vi.useRealTimers();
   });
 
   it('should create new API key', async () => {

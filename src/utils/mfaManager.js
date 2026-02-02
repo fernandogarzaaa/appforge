@@ -4,6 +4,7 @@
  */
 
 import crypto from 'crypto';
+import { sendSMS, sendTransactionalEmail } from '@/lib/integrations';
 
 export const MFA_METHODS = {
   TOTP: 'totp',
@@ -401,8 +402,14 @@ export class MFAManager {
 
     const { code, expiresIn } = this.otpProvider.generateCode(`sms_${userId}`);
 
-    // TODO: Integrate with SMS provider (Twilio, etc.)
-    console.log(`SMS code for ${userMFA.sms.phoneNumber}: ${code}`);
+    try {
+      await sendSMS(
+        userMFA.sms.phoneNumber,
+        `Your AppForge verification code is ${code}. Valid for ${Math.round(expiresIn / 60)} minutes.`
+      );
+    } catch (error) {
+      throw new Error(`Failed to send SMS code: ${error.message}`);
+    }
 
     return {
       success: true,
@@ -446,9 +453,16 @@ export class MFAManager {
     }
 
     const { code, expiresIn } = this.otpProvider.generateCode(`email_${userId}`);
-
-    // TODO: Send email with code
-    console.log(`Email code for ${userMFA.email.email}: ${code}`);
+    
+    try {
+      await sendTransactionalEmail(
+        userMFA.email.email,
+        'Your AppForge verification code',
+        `<p>Use this code to complete your login:</p><h2 style="color: #4f46e5; font-size: 32px; letter-spacing: 4px;">${code}</h2><p>This code expires in ${Math.round(expiresIn / 60)} minutes.</p><p style="color: #6b7280; font-size: 12px;">If you didn't request this code, please ignore this email.</p>`
+      );
+    } catch (error) {
+      throw new Error(`Failed to send email code: ${error.message}`);
+    }
 
     return {
       success: true,

@@ -3,20 +3,17 @@
  * Handles encryption, masking, and secure storage
  */
 
-// Simple encryption (for demo - use crypto library in production)
-export function encryptAPIKey(key) {
-  // TODO: Use actual encryption library (e.g., tweetnacl, libsodium)
-  // For now, we'll just return the key with a marker
-  // In production, use: import nacl from 'tweetnacl'
-  return `encrypted:${btoa(key)}`;
+import { encryptString, decryptString } from './cryptoUtils';
+
+// Encrypt API key with AES-256-GCM and versioned prefix
+export function encryptAPIKey(key, secretOverride) {
+  if (!key) return '';
+  return encryptString(key, secretOverride);
 }
 
-export function decryptAPIKey(encrypted) {
-  if (!encrypted.startsWith('encrypted:')) {
-    return encrypted;
-  }
-  // TODO: Use actual decryption
-  return atob(encrypted.replace('encrypted:', ''));
+export function decryptAPIKey(encrypted, secretOverride) {
+  if (!encrypted || typeof encrypted !== 'string') return '';
+  return decryptString(encrypted, secretOverride);
 }
 
 // Mask API key - show only last 8 characters
@@ -72,15 +69,11 @@ export function isKeyExpiringSoon(createdDate) {
 }
 
 // Encrypt a value (for environment variables)
-export function encryptValue(value) {
-  // TODO: Use actual encryption library
-  return `encrypted:${btoa(value)}`;
+export function encryptValue(value, secretOverride) {
+  return encryptString(value, secretOverride);
 }
 
 // Decrypt a value (for environment variables)
-export function decryptValue(encryptedValue) {
-  if (!encryptedValue || !encryptedValue.startsWith('encrypted:')) {
-    return encryptedValue;
-  }
-  return atob(encryptedValue.replace('encrypted:', ''));
+export function decryptValue(encryptedValue, secretOverride) {
+  return decryptString(encryptedValue, secretOverride);
 }

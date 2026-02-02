@@ -8,7 +8,7 @@ const plans = [
     name: 'Basic',
     price: 20,
     description: 'Perfect for getting started',
-    priceId: 'price_1StWdZ8rNvlz2v0BtngMRUyS',
+    priceId: 'paymongo_basic_plan',
     features: [
       'Up to 10 workflows',
       'Basic automation',
@@ -21,7 +21,7 @@ const plans = [
     name: 'Pro',
     price: 30,
     description: 'For growing teams',
-    priceId: 'price_1StWdZ8rNvlz2v0BV7sIV4A9',
+    priceId: 'paymongo_pro_plan',
     popular: true,
     features: [
       'Unlimited workflows',
@@ -36,7 +36,7 @@ const plans = [
     name: 'Premium',
     price: 99,
     description: 'For enterprise needs',
-    priceId: 'price_1StWdZ8rNvlz2v0BSl7yx4v7',
+    priceId: 'paymongo_premium_plan',
     features: [
       'Everything in Pro',
       'Dedicated support',
@@ -173,7 +173,7 @@ export default function PricingPage() {
             💳 <strong>Test Mode:</strong> Use card <code className="bg-amber-100 px-2 py-1 rounded">4242 4242 4242 4242</code> with any future expiry and CVC to test payments.
           </p>
           <p className="text-xs text-amber-700 mt-2">
-            To accept real payments, claim your Xendit account in Dashboard &gt; Integrations.
+            To accept real payments, connect your PayMongo account in Dashboard &gt; Integrations.
           </p>
         </div>
       </div>

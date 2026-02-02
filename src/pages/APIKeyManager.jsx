@@ -301,7 +301,7 @@ function CreateKeyModal({ open, onClose, onSubmit, isPending }) {
             <Input
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-              placeholder="e.g., Xendit Production Key"
+              placeholder="e.g., PayMongo Production Key"
             />
           </div>
 
@@ -310,7 +310,7 @@ function CreateKeyModal({ open, onClose, onSubmit, isPending }) {
             <Input
               value={formData.service_name}
               onChange={(e) => setFormData({ ...formData, service_name: e.target.value })}
-              placeholder="e.g., Xendit, OpenAI, Zapier"
+              placeholder="e.g., PayMongo, OpenAI, Zapier"
             />
           </div>
 
