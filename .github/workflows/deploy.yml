@@ -26,6 +26,11 @@ jobs:
       - name: Setup Rust
         uses: dtolnay/rust-toolchain@stable
 
+      - name: Cache Rust
+        uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: "quantum-core\nstatic-analyzer-core"
+
       - name: Install wasm-pack
         run: cargo install wasm-pack
       
@@ -53,6 +58,11 @@ jobs:
 
       - name: Setup Rust
         uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache Rust
+        uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: "quantum-core\nstatic-analyzer-core"
 
       - name: Install wasm-pack
         run: cargo install wasm-pack
