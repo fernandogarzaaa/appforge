@@ -6,7 +6,7 @@
  * approach critical points (imminent failure/phase transition).
  */
 
-import * as QuantumCore from '../../quantum-core/pkg/quantum_core';
+import * as QuantumCore from '@/quantum-core/pkg/quantum_core';
 
 export interface CriticalityAnalysis {
   criticality: number; // 0-1, 0=stable, 1=critical

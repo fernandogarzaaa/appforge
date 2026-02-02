@@ -6,7 +6,7 @@
  * can be bypassed through probabilistic attack vectors.
  */
 
-import * as QuantumCore from '../../quantum-core/pkg/quantum_core';
+import * as QuantumCore from '@/quantum-core/pkg/quantum_core';
 
 export interface TunnelingAnalysis {
   breachProbability: number;

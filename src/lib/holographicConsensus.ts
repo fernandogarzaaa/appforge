@@ -11,7 +11,7 @@
  * which parts represent hallucinations (destructive interference).
  */
 
-import * as quantum_core from '../../quantum-core/pkg/quantum_core';
+import * as quantum_core from '@/quantum-core/pkg/quantum_core';
 
 // ============================================================================
 // Type Definitions

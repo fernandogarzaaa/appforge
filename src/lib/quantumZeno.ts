@@ -6,7 +6,7 @@
  * Monitors code integrity and recommends testing frequency.
  */
 
-import * as QuantumCore from '../../quantum-core/pkg/quantum_core';
+import * as QuantumCore from '@/quantum-core/pkg/quantum_core';
 
 export interface StabilityMetrics {
   stability: number; // 0-1, code integrity level
