@@ -20,8 +20,10 @@ import creditsRoutes from './routes/creditsRoutes.js';
 import settingsRoutes from './routes/settingsRoutes.js';
 import teamSettingsRoutes from './routes/teamSettingsRoutes.js';
 import adminRoutes from './routes/adminRoutes.js';
+import persistenceRoutes from './routes/persistenceRoutes.js';
 import { handleStripeWebhook } from './services/stripeService.js';
 import WebSocketServer from './websocket/index.js';
+import { setIO } from './websocket/emitter.js';
 import mongoose from 'mongoose';
 
 // Load environment variables
@@ -102,6 +104,7 @@ app.use('/api/users', userRoutes);
 app.use('/api/teams', teamRoutes);
 app.use('/api/permissions', permissionRoutes);
 app.use('/api/credits', creditsRoutes);
+app.use('/api/persistence', persistenceRoutes);
 
 // Frontend persistence layer routes
 app.use('/api/user', settingsRoutes);
@@ -129,6 +132,7 @@ if (!IS_TEST) {
 
   // Initialize WebSocket server
   wsServer = new WebSocketServer(httpServer);
+  setIO(wsServer.io);
   console.log('✅ WebSocket server initialized');
 }
 

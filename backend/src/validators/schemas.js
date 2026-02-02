@@ -128,6 +128,43 @@ export const gdprRequestSchema = Joi.object({
   reason: Joi.string().optional()
 });
 
+export const persistenceSchemas = {
+  userStateUpsert: Joi.object({
+    state: Joi.object().default({}),
+    version: Joi.number().integer().min(1).default(1),
+    checksum: Joi.string().optional(),
+    deviceId: Joi.string().optional(),
+    platform: Joi.string().optional(),
+    appVersion: Joi.string().optional(),
+    lastSyncedAt: Joi.date().iso().optional(),
+    dirtySince: Joi.date().iso().optional(),
+    metadata: Joi.object().default({})
+  }),
+
+  analyticsEvent: Joi.object({
+    event: Joi.string().required(),
+    sessionId: Joi.string().optional(),
+    properties: Joi.object().default({}),
+    durationMs: Joi.number().min(0).optional(),
+    success: Joi.boolean().default(true),
+    source: Joi.string().optional(),
+    context: Joi.object().default({}),
+    metadata: Joi.object().default({})
+  }),
+
+  syncLog: Joi.object({
+    entityType: Joi.string().required(),
+    entityId: Joi.string().required(),
+    action: Joi.string().valid('create', 'update', 'delete', 'conflict', 'resolve').required(),
+    direction: Joi.string().valid('push', 'pull').default('push'),
+    status: Joi.string().valid('success', 'failed', 'pending').default('success'),
+    version: Joi.number().integer().min(1).default(1),
+    diff: Joi.object().default({}),
+    error: Joi.string().optional(),
+    metadata: Joi.object().default({})
+  })
+};
+
 export const validate = (schema, data) => {
   const { error, value } = schema.validate(data, {
     abortEarly: false,

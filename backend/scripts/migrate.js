@@ -70,6 +70,51 @@ async function migrateMongoDB() {
             }
           }
         }
+      },
+      {
+        name: 'userstates',
+        validator: {
+          $jsonSchema: {
+            bsonType: 'object',
+            required: ['userId'],
+            properties: {
+              userId: { bsonType: 'objectId' },
+              state: { bsonType: 'object' },
+              version: { bsonType: 'int' }
+            }
+          }
+        }
+      },
+      {
+        name: 'analytics',
+        validator: {
+          $jsonSchema: {
+            bsonType: 'object',
+            required: ['event'],
+            properties: {
+              event: { bsonType: 'string' },
+              userId: { bsonType: 'objectId' },
+              sessionId: { bsonType: 'string' },
+              properties: { bsonType: 'object' }
+            }
+          }
+        }
+      },
+      {
+        name: 'synclogs',
+        validator: {
+          $jsonSchema: {
+            bsonType: 'object',
+            required: ['userId', 'entityType', 'entityId', 'action'],
+            properties: {
+              userId: { bsonType: 'objectId' },
+              entityType: { bsonType: 'string' },
+              entityId: { bsonType: 'string' },
+              action: { bsonType: 'string' },
+              status: { bsonType: 'string' }
+            }
+          }
+        }
       }
     ];
 
@@ -100,6 +145,15 @@ async function migrateMongoDB() {
     
     await db.collection('pages').createIndex({ projectId: 1 });
     await db.collection('pages').createIndex({ path: 1 });
+
+    await db.collection('userstates').createIndex({ userId: 1, updatedAt: -1 });
+    await db.collection('userstates').createIndex({ userId: 1, deviceId: 1 });
+
+    await db.collection('analytics').createIndex({ userId: 1, createdAt: -1 });
+    await db.collection('analytics').createIndex({ event: 1, createdAt: -1 });
+
+    await db.collection('synclogs').createIndex({ userId: 1, createdAt: -1 });
+    await db.collection('synclogs').createIndex({ entityType: 1, entityId: 1, createdAt: -1 });
 
     logger.info('✅ MongoDB indexes created');
 

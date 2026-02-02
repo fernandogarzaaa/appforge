@@ -8,6 +8,7 @@ export { default as authService } from './authService';
 export { default as projectService } from './projectService';
 export { default as entityService } from './entityService';
 export { default as teamService } from './teamService';
+export { default as persistenceService } from './persistenceService';
 
 // Legacy services (to be migrated)
 export { default as apiKeysService } from './apiKeys';
