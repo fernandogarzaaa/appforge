@@ -2,6 +2,26 @@ use wasm_bindgen::prelude::*;
 use num_complex::Complex;
 use std::f64::consts::PI;
 
+// Expose quantum annealer for AI model selection
+pub mod annealer_model_selection;
+pub use annealer_model_selection::{QuantumAnnealer, ModelMetrics};
+
+// Expose holographic consensus engine for multi-model AI consensus
+pub mod holographic;
+pub use holographic::HolographicConsensus;
+
+// Expose quantum tunneling penetration tester for security analysis
+pub mod quantum_tunneling;
+pub use quantum_tunneling::TunnelingScanner;
+
+// Expose quantum Zeno stabilizer for code integrity monitoring
+pub mod zeno;
+pub use zeno::ZenoStabilizer;
+
+// Expose renormalization group engine for criticality prediction
+pub mod renormalization;
+pub use renormalization::RenormalizationEngine;
+
 /// QuantumState represents a semantic confidence state.
 #[wasm_bindgen]
 pub struct QuantumState {

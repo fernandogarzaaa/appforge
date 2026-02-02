@@ -1,0 +1,11 @@
+C:\Users\ferna\Downloads\appforge-main\quantum-core\target\wasm32-unknown-unknown\release\deps\getrandom-4e117e78fd139f76.d: C:\Users\ferna\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\getrandom-0.2.17\src\lib.rs C:\Users\ferna\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\getrandom-0.2.17\src\error.rs C:\Users\ferna\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\getrandom-0.2.17\src\util.rs C:\Users\ferna\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\getrandom-0.2.17\src\error_impls.rs C:\Users\ferna\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\getrandom-0.2.17\src\js.rs
+
+C:\Users\ferna\Downloads\appforge-main\quantum-core\target\wasm32-unknown-unknown\release\deps\libgetrandom-4e117e78fd139f76.rlib: C:\Users\ferna\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\getrandom-0.2.17\src\lib.rs C:\Users\ferna\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\getrandom-0.2.17\src\error.rs C:\Users\ferna\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\getrandom-0.2.17\src\util.rs C:\Users\ferna\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\getrandom-0.2.17\src\error_impls.rs C:\Users\ferna\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\getrandom-0.2.17\src\js.rs
+
+C:\Users\ferna\Downloads\appforge-main\quantum-core\target\wasm32-unknown-unknown\release\deps\libgetrandom-4e117e78fd139f76.rmeta: C:\Users\ferna\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\getrandom-0.2.17\src\lib.rs C:\Users\ferna\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\getrandom-0.2.17\src\error.rs C:\Users\ferna\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\getrandom-0.2.17\src\util.rs C:\Users\ferna\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\getrandom-0.2.17\src\error_impls.rs C:\Users\ferna\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\getrandom-0.2.17\src\js.rs
+
+C:\Users\ferna\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\getrandom-0.2.17\src\lib.rs:
+C:\Users\ferna\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\getrandom-0.2.17\src\error.rs:
+C:\Users\ferna\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\getrandom-0.2.17\src\util.rs:
+C:\Users\ferna\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\getrandom-0.2.17\src\error_impls.rs:
+C:\Users\ferna\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\getrandom-0.2.17\src\js.rs:

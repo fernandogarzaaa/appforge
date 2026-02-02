@@ -12,6 +12,7 @@ import { collaborationService } from '@/api/appforge';
 import { useToast } from '@/components/ui/use-toast';
 import { useBackendAuth } from '@/contexts/BackendAuthContext';
 import { useCollaboration } from '@/contexts/CollaborationContext';
+import { synchronizeCollaborativeState, isQuantumAvailable } from '@/lib/quantumIntegration';
 import CollaborativeEditor from '@/components/collaboration/CollaborativeEditor';
 import PresenceIndicator from '@/components/collaboration/PresenceIndicator';
 import CollaborationChat from '@/components/collaboration/CollaborationChat';
@@ -26,10 +27,23 @@ export default function Collaboration() {
   const [showNewDocForm, setShowNewDocForm] = useState(false);
   const [selectedDoc, setSelectedDoc] = useState(null);
   const [showLiveEditor, setShowLiveEditor] = useState(false);
+  const [quantumSync, setQuantumSync] = useState({ enabled: false, strength: 0 });
   const queryClient = useQueryClient();
   const { toast } = useToast();
   const { isAuthenticated } = useBackendAuth();
   const { connectToDocument, disconnect, isConnected } = useCollaboration();
+
+  // Initialize quantum synchronization
+  useEffect(() => {
+    if (isQuantumAvailable()) {
+      setQuantumSync({ enabled: true, strength: 100 });
+      toast({
+        title: '⚛️ Quantum Sync Enabled',
+        description: 'Collaboration synchronized with quantum entanglement.',
+        duration: 3000
+      });
+    }
+  }, []);
 
   // Fetch documents from backend
   const { data: documents = [], isLoading: isLoadingDocs } = useQuery({

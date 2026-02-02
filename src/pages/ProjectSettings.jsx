@@ -3,9 +3,10 @@ import { base44 } from '@/api/base44Client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
+import { useQuantum } from '@/hooks/useQuantum';
 import { 
   Settings, Save, Trash2, Globe, Palette,
-  AlertTriangle, Copy
+  AlertTriangle, Copy, Zap
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -47,6 +48,8 @@ export default function ProjectSettings() {
   const [project, setProject] = useState(null);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [hasChanges, setHasChanges] = useState(false);
+  const [quantumOptimizing, setQuantumOptimizing] = useState(false);
+  const { optimizeDeps, available: quantumAvailable } = useQuantum();
 
   const urlParams = new URLSearchParams(window.location.search);
   const projectId = urlParams.get('projectId');
