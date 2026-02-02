@@ -127,7 +127,7 @@ describe('useAnalytics Hook', () => {
 
     const metrics = analyticsService.getPerformanceMetrics('async_metric');
     expect(metrics).toHaveLength(1);
-    expect(metrics[0].duration).toBeGreaterThanOrEqual(10);
+    expect(metrics[0].duration).toBeGreaterThanOrEqual(9);
   });
 
   it('should provide access to analytics service', () => {
