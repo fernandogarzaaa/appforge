@@ -1,0 +1,24 @@
+{
+  "name": "static-analyzer-core",
+  "type": "module",
+  "collaborators": [
+    "AppForge Contributors"
+  ],
+  "description": "Static analysis core for AppForge (WASM)",
+  "version": "0.1.0",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fernandogarzaaa/appforge"
+  },
+  "files": [
+    "static_analyzer_core_bg.wasm",
+    "static_analyzer_core.js",
+    "static_analyzer_core.d.ts"
+  ],
+  "main": "static_analyzer_core.js",
+  "types": "static_analyzer_core.d.ts",
+  "sideEffects": [
+    "./snippets/*"
+  ]
+}

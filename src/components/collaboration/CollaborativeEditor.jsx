@@ -20,6 +20,7 @@ import {
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { motion } from 'framer-motion';
+import { useStaticAnalyzer } from '@/hooks/useStaticAnalyzer';
 
 const USER_COLORS = [
   '#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA07A', '#98D8C8',
@@ -42,6 +43,15 @@ export default function CollaborativeEditor({ documentId, initialContent = '' })
     sendMessage,
     sendCursor,
   } = useCollaboration();
+
+  const analyzerEnabled =
+    typeof import.meta !== 'undefined' &&
+    (import.meta.env?.VITE_STATIC_ANALYZER_ENABLED ?? 'true') !== 'false';
+
+  const { analyze, issues, isAnalyzing, lastDurationMs } = useStaticAnalyzer({
+    enabled: analyzerEnabled,
+    debounceMs: 200,
+  });
 
   const [content, setContent] = useState(initialContent);
   const [savedContent, setSavedContent] = useState(initialContent);
@@ -83,6 +93,13 @@ export default function CollaborativeEditor({ documentId, initialContent = '' })
     setRedoStack([]); // Clear redo stack on new edit
 
     setContent(newContent);
+
+    if (analyzerEnabled) {
+      analyze({
+        path: `doc-${documentId || 'untitled'}.txt`,
+        source: newContent,
+      });
+    }
 
     // Clear previous timeout
     if (updateTimeoutRef.current) {
@@ -238,6 +255,16 @@ export default function CollaborativeEditor({ documentId, initialContent = '' })
               <span>v{documentVersion}</span>
               <span>{lineCount} lines</span>
               <span>{charCount} chars</span>
+              <span>
+                Static Analysis: {analyzerEnabled ? 'on' : 'off'}
+              </span>
+              <span>
+                Issues: {issues.length}
+                {isAnalyzing ? ' (running)' : ''}
+              </span>
+              {lastDurationMs !== null && (
+                <span>{lastDurationMs.toFixed(1)} ms</span>
+              )}
             </div>
           </div>
         </CardHeader>
@@ -306,6 +333,17 @@ export default function CollaborativeEditor({ documentId, initialContent = '' })
             </Button>
           </div>
 
+          {/* Static Analysis Summary */}
+          <div className="flex flex-wrap items-center gap-3 text-xs text-slate-600 dark:text-slate-400">
+            <span className="font-medium">Static Analysis</span>
+            <Badge variant={analyzerEnabled ? 'outline' : 'secondary'}>
+              {analyzerEnabled ? 'Enabled' : 'Disabled'}
+            </Badge>
+            <span>Issues: {issues.length}</span>
+            {isAnalyzing && <span className="text-blue-600 dark:text-blue-400">Running...</span>}
+            {lastDurationMs !== null && <span>Last pass: {lastDurationMs.toFixed(1)} ms</span>}
+          </div>
+
           {/* Editor */}
           <div className="relative">
             <textarea
@@ -359,6 +397,38 @@ export default function CollaborativeEditor({ documentId, initialContent = '' })
             <span>Redos: {redoStack.length}</span>
             <span>Edit history: {editHistory.length}</span>
           </div>
+
+          {issues.length > 0 && (
+            <div className="space-y-2 text-sm">
+              <div className="text-xs font-semibold text-slate-700 dark:text-slate-200">Findings</div>
+              <div className="space-y-1">
+                {issues.slice(0, 8).map((issue, idx) => (
+                  <div
+                    key={`${issue.path}-${issue.rule}-${idx}`}
+                    className="flex items-start gap-3 rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/60 p-3"
+                  >
+                    <Badge
+                      variant={issue.severity === 'error' ? 'destructive' : 'outline'}
+                      className="capitalize"
+                    >
+                      {issue.severity}
+                    </Badge>
+                    <div className="space-y-1">
+                      <div className="font-medium text-slate-900 dark:text-slate-100">{issue.message}</div>
+                      <div className="text-xs text-slate-600 dark:text-slate-300">
+                        {issue.path}:{issue.start.line}:{issue.start.column} ({issue.rule})
+                      </div>
+                      {issue.snippet && (
+                        <div className="text-xs font-mono text-slate-700 dark:text-slate-200 bg-white/60 dark:bg-slate-950/60 rounded px-2 py-1">
+                          {issue.snippet}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </CardContent>
       </Card>
 

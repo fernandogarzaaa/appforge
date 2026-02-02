@@ -19,7 +19,11 @@
     "test:e2e:ui": "playwright test --ui",
     "test:e2e:headed": "playwright test --headed",
     "test:e2e:debug": "playwright test --debug",
-    "test:all": "npm run test && npm run test:e2e"
+    "test:all": "npm run test && npm run test:e2e",
+    "build:quantum": "cd quantum-core && wasm-pack build --target web --out-dir ../src/quantum-core/pkg",
+    "build:quantum:release": "cd quantum-core && wasm-pack build --release --target web --out-dir ../src/quantum-core/pkg",
+    "build:analyzer": "cd static-analyzer-core && wasm-pack build --target web --out-dir ../src/static-analyzer-core/pkg",
+    "build:analyzer:release": "cd static-analyzer-core && wasm-pack build --release --target web --out-dir ../src/static-analyzer-core/pkg"
   },
   "dependencies": {
     "@base44/sdk": "^0.8.3",

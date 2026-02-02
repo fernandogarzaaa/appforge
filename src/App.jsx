@@ -145,7 +145,7 @@ function App() {
               <ActivityProvider>
                 <CollaborationProvider>
                   <QueryClientProvider client={queryClientInstance}>
-                  <Router>
+                  <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
                     <NavigationTracker />
                     {/* Phase 1 Features */}
                     <CommandPalette />
