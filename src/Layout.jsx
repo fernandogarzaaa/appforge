@@ -1,3 +1,7 @@
+/*
+ * AppForge layout container
+ * Licensed under the Apache License, Version 2.0. See LICENSE for details.
+ */
 import React, { useState, useEffect, Suspense, lazy } from 'react';
 import { base44 } from '@/api/base44Client';
 import { useBackendAuth } from '@/contexts/BackendAuthContext';

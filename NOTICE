@@ -1,0 +1,14 @@
+AppForge
+Copyright (c) 2026 AppForge. All rights reserved.
+
+This product includes software developed by AppForge and third parties.
+
+License:
+- Primary license: Apache License 2.0 (see LICENSE).
+- Additional offered licenses: MIT, Apache-2.0, GPL-3.0, and PROPRIETARY (see LICENSES/).
+
+Attributions:
+- Third-party dependencies are listed in package.json and are governed by their respective licenses.
+- If distributing binaries or bundles, include this NOTICE, the root LICENSE, and all relevant files from LICENSES/.
+
+For proprietary/commercial use, contact legal@appforge.example.

@@ -1,3 +1,7 @@
+/*
+ * AppForge core application shell
+ * Licensed under the Apache License, Version 2.0. See LICENSE for details.
+ */
 import { Toaster } from "@/components/ui/toaster"
 import { QueryClientProvider } from '@tanstack/react-query'
 import { queryClientInstance } from '@/lib/query-client'

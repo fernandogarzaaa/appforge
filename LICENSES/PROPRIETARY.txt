@@ -2,26 +2,30 @@ Proprietary License (All Rights Reserved)
 
 Copyright (c) 2026 AppForge. All rights reserved.
 
-This software and associated documentation (the "Software") are the
-confidential and proprietary information of AppForge ("Licensor").
+This software and associated documentation (the "Software") are the confidential and proprietary information of AppForge ("Licensor").
 
-You may:
-- Install and use the Software solely for internal evaluation.
-- Not redistribute, sublicense, rent, lease, loan, or otherwise make the Software available to any third party without prior written consent from Licensor.
+Grant:
+- Non-transferable, non-sublicensable, revocable license to install and use the Software solely for internal evaluation.
+- Production, redistribution, OEM, or hosting rights require a separate written agreement.
 
-You may NOT:
-- Copy, modify, or create derivative works of the Software.
-- Reverse engineer, decompile, or disassemble the Software except to the extent required by applicable law.
-- Remove or alter any proprietary notices, labels, or marks on the Software.
+Restrictions:
+- No copying, modification, translation, or creation of derivative works.
+- No redistribution, sublicensing, renting, leasing, lending, or hosting for third parties without written consent.
+- No reverse engineering, decompiling, or disassembling except where permitted by law.
+- Do not remove or alter proprietary notices, labels, or marks.
+
+Data and Security:
+- You are responsible for access control and security of any data processed with the Software.
+- No transfer of AppForge intellectual property rights is granted.
 
 Warranty Disclaimer:
-THE SOFTWARE IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT.
+THE SOFTWARE IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, TITLE, AND NON-INFRINGEMENT.
 
 Limitation of Liability:
-IN NO EVENT SHALL LICENSOR BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES, OR ANY LOSS OF PROFITS OR REVENUE, ARISING OUT OF OR RELATED TO THE USE OF THE SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
+IN NO EVENT SHALL LICENSOR BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES, OR ANY LOSS OF PROFITS OR REVENUE, ARISING OUT OF OR RELATED TO THE SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
 
 Termination:
-This license automatically terminates if you fail to comply with any term. Upon termination, you must cease all use and destroy all copies of the Software.
+This license terminates automatically upon breach. Upon termination, you must cease all use and destroy all copies of the Software.
 
 Contact:
-For commercial licensing or redistribution rights, contact: legal@appforge.example
+For commercial, redistribution, or production licensing, contact: legal@appforge.example
