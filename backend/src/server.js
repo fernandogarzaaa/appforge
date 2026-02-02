@@ -29,6 +29,16 @@ import mongoose from 'mongoose';
 // Load environment variables
 dotenv.config();
 
+// Initialize Sentry (must be first)
+import { initializeSentry, sentryRequestHandler, sentryTracingHandler, sentryErrorHandler } from './config/sentry.js';
+import { sanitizeInput } from './middleware/validation.js';
+
+// Advanced observability & tracing
+import { tracingMiddleware } from './middleware/distributedTracing.js';
+import { profilingMiddleware, MemoryProfiler } from './middleware/performanceProfiling.js';
+import { quantumFailoverMiddleware, createQuantumHealthEndpoint, createQuantumResetEndpoint } from './middleware/quantumFailover.js';
+import { queryResultCacheMiddleware } from './middleware/cacheDecorator.js';
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
@@ -37,8 +47,30 @@ const PORT = process.env.PORT || 5000;
 const NODE_ENV = process.env.NODE_ENV || 'development';
 const IS_TEST = NODE_ENV === 'test' || process.argv.includes('--test');
 
+// Initialize Sentry error tracking
+if (!IS_TEST) {
+  initializeSentry(app);
+}
+
 // Security Middleware
 app.use(helmet());
+
+// Sentry request handler (must be before routes)
+if (!IS_TEST && process.env.SENTRY_DSN) {
+  app.use(sentryRequestHandler());
+  app.use(sentryTracingHandler());
+}
+
+// Distributed tracing (cross-service request tracking)
+if (!IS_TEST) {
+  app.use(tracingMiddleware);
+}
+
+// Performance profiling (execution time & memory tracking)
+if (!IS_TEST) {
+  app.use(profilingMiddleware);
+}
+
 app.use(cors({
   origin: process.env.FRONTEND_URL || 'http://localhost:5173',
   credentials: true,
@@ -67,8 +99,14 @@ app.post('/webhook/stripe',
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
+// Input sanitization (XSS protection)
+app.use(sanitizeInput);
+
 // Rate limiting
 app.use('/api/', rateLimiter);
+
+// Quantum failover middleware (graceful degradation)
+app.use('/api/quantum', quantumFailoverMiddleware);
 
 // Health check endpoint
 app.get('/health', (req, res) => {
@@ -79,6 +117,12 @@ app.get('/health', (req, res) => {
     environment: NODE_ENV
   });
 });
+
+// Quantum service health check (for circuit breaker status)
+app.get('/api/quantum/health', createQuantumHealthEndpoint());
+
+// Quantum circuit breaker reset (admin only)
+app.post('/api/quantum/reset', createQuantumResetEndpoint());
 
 // API status endpoint
 app.get('/api/status', (req, res) => {
@@ -119,6 +163,11 @@ app.use((req, res) => {
     timestamp: new Date().toISOString()
   });
 });
+
+// Sentry error handler (must be before other error handlers)
+if (!IS_TEST && process.env.SENTRY_DSN) {
+  app.use(sentryErrorHandler());
+}
 
 // Global error handler (must be last)
 app.use(errorHandler);
