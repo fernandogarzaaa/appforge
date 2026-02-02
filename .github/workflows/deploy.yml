@@ -22,9 +22,21 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Install wasm-pack
+        run: cargo install wasm-pack
       
       - name: Install dependencies
         run: npm ci
+
+      - name: Build quantum WASM
+        run: npm run build:quantum
+
+      - name: Build analyzer WASM
+        run: npm run build:analyzer
 
   # Build application
   build:
@@ -38,9 +50,21 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Install wasm-pack
+        run: cargo install wasm-pack
       
       - name: Install dependencies
         run: npm ci
+
+      - name: Build quantum WASM
+        run: npm run build:quantum
+
+      - name: Build analyzer WASM
+        run: npm run build:analyzer
       
       - name: Build application
         run: npm run build

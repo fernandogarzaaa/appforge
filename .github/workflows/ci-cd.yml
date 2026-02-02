@@ -22,9 +22,21 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Install wasm-pack
+        run: cargo install wasm-pack
       
       - name: Install dependencies
         run: npm ci --legacy-peer-deps
+
+      - name: Build quantum WASM
+        run: npm run build:quantum
+
+      - name: Build analyzer WASM
+        run: npm run build:analyzer
       
       - name: Run unit tests
         run: npm run test
