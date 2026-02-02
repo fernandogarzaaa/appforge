@@ -154,6 +154,7 @@ function ConsolidatedAISidebar({ currentProject, collapsed, onToggle, user }) {
                   size="icon"
                   onClick={onToggle}
                   className="w-10 h-10"
+                  aria-label="Expand sidebar"
                 >
                   <ChevronRight className="w-5 h-5" />
                 </Button>
@@ -215,6 +216,7 @@ function ConsolidatedAISidebar({ currentProject, collapsed, onToggle, user }) {
                   size="icon"
                   onClick={onToggle}
                   className="w-10 h-10"
+                  aria-label="Expand"
                 >
                   <ChevronRight className="w-5 h-5" />
                 </Button>
@@ -244,6 +246,7 @@ function ConsolidatedAISidebar({ currentProject, collapsed, onToggle, user }) {
                 size="icon"
                 onClick={onToggle}
                 className="h-7 w-7 hover:bg-gray-100 dark:hover:bg-gray-800/50"
+                aria-label="Collapse sidebar"
               >
                 <ChevronDown className="w-4 h-4" />
               </Button>

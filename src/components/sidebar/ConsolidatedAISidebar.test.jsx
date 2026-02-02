@@ -93,7 +93,7 @@ describe('ConsolidatedAISidebar Component', () => {
     );
 
     const collapseButtons = screen.getAllByRole('button', {
-      name: /Collapse|Expand/i,
+      name: /Collapse sidebar/i,
     });
     expect(collapseButtons.length).toBeGreaterThan(0);
   });
@@ -107,12 +107,12 @@ describe('ConsolidatedAISidebar Component', () => {
       </BrowserRouter>
     );
 
-    expect(screen.getByText(/Core/i)).toBeInTheDocument();
-    expect(screen.getByText(/AI & Models/i)).toBeInTheDocument();
-    expect(screen.getByText(/Build/i)).toBeInTheDocument();
-    expect(screen.getByText(/Templates/i)).toBeInTheDocument();
-    expect(screen.getByText(/Enterprise/i)).toBeInTheDocument();
-    expect(screen.getByText(/Web3/i)).toBeInTheDocument();
+    expect(screen.getByRole('tab', { name: /Core/i })).toBeInTheDocument();
+    expect(screen.getByRole('tab', { name: /AI & Models/i })).toBeInTheDocument();
+    expect(screen.getByRole('tab', { name: /Build/i })).toBeInTheDocument();
+    expect(screen.getByRole('tab', { name: /Templates/i })).toBeInTheDocument();
+    expect(screen.getByRole('tab', { name: /Enterprise/i })).toBeInTheDocument();
+    expect(screen.getByRole('tab', { name: /Web3/i })).toBeInTheDocument();
   });
 
   it('includes AIModelRouter component', () => {
@@ -161,7 +161,7 @@ describe('ConsolidatedAISidebar Component', () => {
     );
 
     const collapseButtons = screen.getAllByRole('button', {
-      name: /Collapse/i,
+      name: /Collapse sidebar/i,
     });
 
     if (collapseButtons.length > 0) {
@@ -193,7 +193,7 @@ describe('ConsolidatedAISidebar Component', () => {
       </BrowserRouter>
     );
 
-    expect(screen.getByText(/Settings/i)).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /Settings/i })).toBeInTheDocument();
   });
 
   it('contains Core navigation items', () => {
@@ -205,8 +205,8 @@ describe('ConsolidatedAISidebar Component', () => {
       </BrowserRouter>
     );
 
-    expect(screen.getByText(/Dashboard/i)).toBeInTheDocument();
-    expect(screen.getByText(/Projects/i)).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /Dashboard/i })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /Projects/i })).toBeInTheDocument();
   });
 
   it('contains Build section items', () => {
@@ -218,7 +218,9 @@ describe('ConsolidatedAISidebar Component', () => {
       </BrowserRouter>
     );
 
-    expect(screen.getByText(/Bot Builder|Workflows|Mobile Studio/i)).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /Bot Builder/i })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /Workflows/i })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /Mobile Studio/i })).toBeInTheDocument();
   });
 
   it('contains Enterprise section items', () => {
@@ -230,7 +232,10 @@ describe('ConsolidatedAISidebar Component', () => {
       </BrowserRouter>
     );
 
-    expect(screen.getByText(/Data Privacy|Observability|Search Analytics|Team/i)).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /Data Privacy/i })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /Observability/i })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /Search Analytics/i })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /Team/i })).toBeInTheDocument();
   });
 
   it('is memoized to prevent unnecessary re-renders', () => {

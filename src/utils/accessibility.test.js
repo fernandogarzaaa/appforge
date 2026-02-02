@@ -215,7 +215,9 @@ describe('Accessibility Utilities', () => {
         onNavigate,
       });
 
-      navigator.next();
+      const event = { key: 'ArrowDown', preventDefault: vi.fn() };
+      navigator.handleKeyDown(event);
+
       expect(onNavigate).toHaveBeenCalledWith(1, items[1]);
     });
   });
@@ -236,9 +238,15 @@ describe('Accessibility Utilities', () => {
   describe('checkTouchTargetSize', () => {
     it('should validate minimum touch target size', () => {
       const button = document.createElement('button');
-      button.style.width = '50px';
-      button.style.height = '50px';
       document.body.appendChild(button);
+      button.getBoundingClientRect = () => ({
+        width: 50,
+        height: 50,
+        top: 0,
+        left: 0,
+        right: 50,
+        bottom: 50,
+      });
 
       const result = checkTouchTargetSize(button);
 
@@ -250,9 +258,15 @@ describe('Accessibility Utilities', () => {
 
     it('should recommend size increase for small targets', () => {
       const button = document.createElement('button');
-      button.style.width = '20px';
-      button.style.height = '20px';
       document.body.appendChild(button);
+      button.getBoundingClientRect = () => ({
+        width: 20,
+        height: 20,
+        top: 0,
+        left: 0,
+        right: 20,
+        bottom: 20,
+      });
 
       const result = checkTouchTargetSize(button);
 
@@ -308,19 +322,24 @@ describe('Accessibility Utilities', () => {
     });
 
     it('should create accessible tooltip', () => {
-      const { tooltip } = createTooltip(trigger, 'Tooltip content');
+      const { tooltip, destroy } = createTooltip(trigger, 'Tooltip content');
 
       expect(trigger.hasAttribute('aria-describedby')).toBe(true);
       expect(tooltip.getAttribute('role')).toBe('tooltip');
       expect(tooltip.textContent).toBe('Tooltip content');
+
+      destroy();
     });
 
     it('should show tooltip on hover', () => {
-      const { tooltip } = createTooltip(trigger, 'Test tooltip');
+      const { tooltip, destroy } = createTooltip(trigger, 'Test tooltip');
 
       trigger.dispatchEvent(new MouseEvent('mouseenter', { bubbles: true }));
 
       expect(document.body.contains(tooltip)).toBe(true);
+
+      destroy();
+      expect(document.body.contains(tooltip)).toBe(false);
     });
 
     it('should hide tooltip on leave', () => {
@@ -336,14 +355,14 @@ describe('Accessibility Utilities', () => {
 
     it('should clean up event listeners', () => {
       const { destroy } = createTooltip(trigger, 'Test');
-      
+
       const mouseenterSpy = vi.fn();
       trigger.addEventListener('mouseenter', mouseenterSpy);
 
       destroy();
 
       trigger.dispatchEvent(new MouseEvent('mouseenter', { bubbles: true }));
-      
+
       // Original tooltip listener should be removed
       expect(document.querySelector('[role="tooltip"]')).toBeNull();
     });

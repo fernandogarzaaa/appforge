@@ -216,7 +216,7 @@ describe('useAICompletion', () => {
 
   it('should debounce API calls', async () => {
     vi.useFakeTimers();
-    
+
     aiCodeCompletionService.getCompletions.mockResolvedValue([]);
 
     const { rerender } = renderHook(
@@ -242,11 +242,10 @@ describe('useAICompletion', () => {
       vi.advanceTimersByTime(300);
     });
 
-    // Now it should have called once with the latest value
-    await waitFor(() => {
-      expect(aiCodeCompletionService.getCompletions).toHaveBeenCalledTimes(1);
-    });
+    await Promise.resolve();
 
+    // Now it should have called once with the latest value
+    expect(aiCodeCompletionService.getCompletions).toHaveBeenCalledTimes(1);
     expect(aiCodeCompletionService.getCompletions).toHaveBeenCalledWith(
       expect.objectContaining({ code: 'cons' })
     );
@@ -255,7 +254,9 @@ describe('useAICompletion', () => {
   });
 
   it('should abort previous requests', async () => {
-    aiCodeCompletionService.getCompletions.mockImplementation(() => 
+    vi.useFakeTimers();
+
+    aiCodeCompletionService.getCompletions.mockImplementation(() =>
       new Promise(resolve => setTimeout(() => resolve([]), 1000))
     );
 
@@ -269,18 +270,26 @@ describe('useAICompletion', () => {
       { initialProps: { code: 'test1' } }
     );
 
-    await act(async () => {
-      await new Promise(resolve => setTimeout(resolve, 350));
+    // Trigger first debounce
+    act(() => {
+      vi.advanceTimersByTime(300);
     });
 
     // Change code before first request completes
     rerender({ code: 'test2' });
 
-    await act(async () => {
-      await new Promise(resolve => setTimeout(resolve, 350));
+    // Trigger second debounce
+    act(() => {
+      vi.advanceTimersByTime(300);
     });
 
-    // Should have made 2 calls (first aborted, second completed)
+    // Resolve pending promises
+    act(() => {
+      vi.advanceTimersByTime(1000);
+    });
+
     expect(aiCodeCompletionService.getCompletions).toHaveBeenCalledTimes(2);
+
+    vi.useRealTimers();
   });
 });

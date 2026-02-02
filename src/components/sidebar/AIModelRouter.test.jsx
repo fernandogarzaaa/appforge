@@ -5,6 +5,17 @@ import { BrowserRouter } from 'react-router-dom';
 import AIModelRouter from '@/components/sidebar/AIModelRouter';
 import { LLMProvider } from '@/contexts/LLMContext';
 
+let mockLLMContext;
+
+vi.mock('@/contexts/LLMContext', async () => {
+  const actual = await vi.importActual('@/contexts/LLMContext');
+  return {
+    ...actual,
+    useLLM: () => mockLLMContext,
+    LLMProvider: ({ children }) => <div>{children}</div>,
+  };
+});
+
 // Mock Radix UI components
 vi.mock('@/components/ui/dropdown-menu', () => ({
   DropdownMenu: ({ children }) => <div data-testid="dropdown-menu">{children}</div>,
@@ -37,7 +48,7 @@ vi.mock('@/components/ui/tooltip', () => ({
 }));
 
 describe('AIModelRouter Component', () => {
-  const mockLLMContext = {
+  const baseLLMContext = {
     selectedModel: 'gpt4',
     availableModels: ['gpt4', 'gpt3'],
     updateSettings: vi.fn(),
@@ -46,6 +57,7 @@ describe('AIModelRouter Component', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
+    mockLLMContext = { ...baseLLMContext, updateSettings: vi.fn() };
   });
 
   it('renders without crashing', () => {
@@ -151,14 +163,14 @@ describe('AIModelRouter Component', () => {
 
   it('calls updateSettings when model is selected', async () => {
     const mockUpdateSettings = vi.fn();
-    const context = {
+    mockLLMContext = {
       ...mockLLMContext,
       updateSettings: mockUpdateSettings,
     };
 
     render(
       <BrowserRouter>
-        <LLMProvider value={context}>
+        <LLMProvider value={mockLLMContext}>
           <AIModelRouter />
         </LLMProvider>
       </BrowserRouter>
@@ -237,29 +249,24 @@ describe('AIModelRouter Component', () => {
     fireEvent.click(advancedButton);
 
     await waitFor(() => {
-      expect(screen.getByText(/Cost/i)).toBeInTheDocument();
+      expect(screen.getAllByText(/Cost/i).length).toBeGreaterThan(0);
     });
   });
 });
 
 describe('AIModelRouter Keyboard Shortcuts', () => {
-  const mockLLMContext = {
-    selectedModel: 'gpt4',
-    availableModels: ['gpt4', 'gpt3'],
-    updateSettings: vi.fn(),
-    settings: {},
-  };
-
   it('responds to Ctrl+1 keyboard shortcut', async () => {
     const mockUpdateSettings = vi.fn();
-    const context = {
-      ...mockLLMContext,
+    mockLLMContext = {
+      selectedModel: 'gpt4',
+      availableModels: ['gpt4', 'gpt3'],
       updateSettings: mockUpdateSettings,
+      settings: {},
     };
 
     render(
       <BrowserRouter>
-        <LLMProvider value={context}>
+        <LLMProvider value={mockLLMContext}>
           <AIModelRouter />
         </LLMProvider>
       </BrowserRouter>
@@ -279,14 +286,16 @@ describe('AIModelRouter Keyboard Shortcuts', () => {
 
   it('responds to Cmd+1 on Mac', async () => {
     const mockUpdateSettings = vi.fn();
-    const context = {
-      ...mockLLMContext,
+    mockLLMContext = {
+      selectedModel: 'gpt4',
+      availableModels: ['gpt4', 'gpt3'],
       updateSettings: mockUpdateSettings,
+      settings: {},
     };
 
     render(
       <BrowserRouter>
-        <LLMProvider value={context}>
+        <LLMProvider value={mockLLMContext}>
           <AIModelRouter />
         </LLMProvider>
       </BrowserRouter>

@@ -292,7 +292,12 @@ describe('Webhooks System', () => {
     });
 
     it('should emit delivery_failed event on retry exhaustion', async () => {
-      const wh = webhooks.createWebhook('https://invalid-domain-12345.com', ['event']);
+      const originalFetch = global.fetch;
+      global.fetch = vi.fn().mockRejectedValue(new Error('Network error'));
+
+      const wh = webhooks.createWebhook('https://invalid-domain-12345.com', ['event'], {
+        retryPolicy: { maxRetries: 0 },
+      });
 
       await new Promise((resolve) => {
         const unsub = webhooks.onWebhookEvent('delivery_failed', (event) => {
@@ -302,11 +307,10 @@ describe('Webhooks System', () => {
         });
 
         webhooks.triggerWebhook('event', {});
-
-        // Fast-forward through retries
-        vi.advanceTimersByTime(60000);
       });
-    }, 10000); // Increase timeout for retries
+
+      global.fetch = originalFetch;
+    });
   });
 
   describe('Retry Logic', () => {

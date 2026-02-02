@@ -81,7 +81,8 @@ describe('MobileDrawerSidebar Component', () => {
     );
 
     // Open the drawer
-    const openButton = screen.getByRole('button', { name: '' });
+    const openButton = screen.getAllByRole('button').find((button) => button.className.includes('md:hidden'));
+    expect(openButton).toBeTruthy();
     fireEvent.click(openButton);
 
     await waitFor(() => {
@@ -111,7 +112,8 @@ describe('MobileDrawerSidebar Component', () => {
     );
 
     // Navigation items should be present
-    expect(screen.getByText(/Dashboard|Projects/i)).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /Dashboard/i })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /Projects/i })).toBeInTheDocument();
   });
 
   it('displays Core section with Dashboard and Projects', async () => {
@@ -123,9 +125,9 @@ describe('MobileDrawerSidebar Component', () => {
       </BrowserRouter>
     );
 
-    expect(screen.getByText(/Core/i)).toBeInTheDocument();
-    expect(screen.getByText(/Dashboard/i)).toBeInTheDocument();
-    expect(screen.getByText(/Projects/i)).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /Core/i })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /Dashboard/i })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /Projects/i })).toBeInTheDocument();
   });
 
   it('displays AI & Models section', async () => {
@@ -149,7 +151,7 @@ describe('MobileDrawerSidebar Component', () => {
       </BrowserRouter>
     );
 
-    expect(screen.getByText(/Build/i)).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /Build/i })).toBeInTheDocument();
   });
 
   it('displays Templates section', async () => {
@@ -265,8 +267,9 @@ describe('MobileDrawerSidebar Component', () => {
     );
 
     // Button should have md:hidden class (visible only on mobile)
-    const button = screen.getByRole('button');
-    expect(button.className).toContain('md:hidden');
+    const mobileButton = screen.getAllByRole('button').find((button) => button.className.includes('md:hidden'));
+    expect(mobileButton).toBeTruthy();
+    expect(mobileButton.className).toContain('md:hidden');
   });
 
   it('displays proper section structure', () => {
@@ -279,8 +282,8 @@ describe('MobileDrawerSidebar Component', () => {
     );
 
     // At least some section headers should be present
-    expect(screen.getByText(/Core/i)).toBeInTheDocument();
-    expect(screen.getByText(/Build/i)).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /Core/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /Build/i })).toBeInTheDocument();
   });
 });
 
