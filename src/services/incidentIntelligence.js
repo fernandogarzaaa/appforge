@@ -1,30 +1,21 @@
+import { loadPersistedState, savePersistedState } from '@/services/persistenceStore';
+
 const STORAGE_KEY = 'appforge_incident_events';
+const STATE_KEY = 'incidentIntelligence';
 
-const load = () => {
-  if (typeof window === 'undefined') return [];
-  const raw = window.localStorage.getItem(STORAGE_KEY);
-  if (!raw) return [];
-  try {
-    return JSON.parse(raw);
-  } catch (error) {
-    return [];
-  }
-};
+const load = () => loadPersistedState({ storageKey: STORAGE_KEY, stateKey: STATE_KEY, fallback: [] });
 
-const save = (value) => {
-  if (typeof window === 'undefined') return;
-  window.localStorage.setItem(STORAGE_KEY, JSON.stringify(value));
-};
+const save = (value) => savePersistedState({ storageKey: STORAGE_KEY, stateKey: STATE_KEY, value });
 
-const addEvent = (event) => {
-  const events = load();
+const addEvent = async (event) => {
+  const events = await load();
   const next = [...events, event];
-  save(next);
+  await save(next);
   return next;
 };
 
 export const IncidentIntelligenceService = {
-  recordEvent({ type, message, severity = 'info', metadata = {} }) {
+  async recordEvent({ type, message, severity = 'info', metadata = {} }) {
     const event = {
       id: `evt_${Date.now()}`,
       type,
@@ -33,12 +24,12 @@ export const IncidentIntelligenceService = {
       metadata,
       createdAt: new Date().toISOString(),
     };
-    addEvent(event);
+    await addEvent(event);
     return event;
   },
 
-  queryIncident(question) {
-    const events = load();
+  async queryIncident(question) {
+    const events = await load();
     const related = events.filter((event) =>
       question ? event.message.toLowerCase().includes(question.toLowerCase()) : true
     );
@@ -75,13 +66,15 @@ export const IncidentIntelligenceService = {
     ];
   },
 
-  reconstructTimeline() {
-    const events = load();
-    return events.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+  async reconstructTimeline() {
+    const events = await load();
+    return events.sort(
+      (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+    );
   },
 
-  groupAlerts() {
-    const events = load();
+  async groupAlerts() {
+    const events = await load();
     const grouped = events.reduce((acc, event) => {
       const key = event.type || 'unknown';
       if (!acc[key]) acc[key] = [];

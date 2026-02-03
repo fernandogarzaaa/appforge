@@ -1,28 +1,30 @@
+import { loadPersistedState, savePersistedState } from '@/services/persistenceStore';
+
 const STORAGE_KEY = 'appforge_collaboration_hub';
+const STATE_KEY = 'collaborationHub';
 
-const load = () => {
-  if (typeof window === 'undefined') return { warRooms: [], activity: [] };
-  const raw = window.localStorage.getItem(STORAGE_KEY);
-  if (!raw) return { warRooms: [], activity: [] };
-  try {
-    return JSON.parse(raw);
-  } catch (error) {
-    return { warRooms: [], activity: [] };
-  }
-};
+const load = () =>
+  loadPersistedState({
+    storageKey: STORAGE_KEY,
+    stateKey: STATE_KEY,
+    fallback: { warRooms: [], activity: [] },
+  });
 
-const save = (value) => {
-  if (typeof window === 'undefined') return;
-  window.localStorage.setItem(STORAGE_KEY, JSON.stringify(value));
-};
+const save = (value) => savePersistedState({ storageKey: STORAGE_KEY, stateKey: STATE_KEY, value });
 
 export const CollaborationHubService = {
-  listWarRooms() {
-    return load().warRooms || [];
+  async listWarRooms() {
+    const state = await load();
+    return state.warRooms || [];
   },
 
-  createWarRoom(name, incidentId) {
-    const state = load();
+  async listActivity() {
+    const state = await load();
+    return state.activity || [];
+  },
+
+  async createWarRoom(name, incidentId) {
+    const state = await load();
     const room = {
       id: `room_${Date.now()}`,
       name,
@@ -30,12 +32,12 @@ export const CollaborationHubService = {
       createdAt: new Date().toISOString(),
     };
     const next = { ...state, warRooms: [room, ...state.warRooms] };
-    save(next);
+    await save(next);
     return room;
   },
 
-  logActivity(entry) {
-    const state = load();
+  async logActivity(entry) {
+    const state = await load();
     const next = {
       ...state,
       activity: [
@@ -43,7 +45,7 @@ export const CollaborationHubService = {
         ...state.activity,
       ],
     };
-    save(next);
+    await save(next);
     return next.activity[0];
   },
 };

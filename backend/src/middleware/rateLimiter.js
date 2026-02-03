@@ -12,28 +12,37 @@ import Redis from 'ioredis';
 let redisClient = null;
 let store = undefined;
 
-if (process.env.REDIS_URL) {
-  try {
-    redisClient = new Redis(process.env.REDIS_URL, {
-      enableOfflineQueue: false,
-      maxRetriesPerRequest: 3
-    });
+// Async initialization function
+async function initializeRateLimiter() {
+  if (process.env.REDIS_URL) {
+    try {
+      redisClient = new Redis(process.env.REDIS_URL, {
+        enableOfflineQueue: false,
+        maxRetriesPerRequest: 3,
+        lazyConnect: true
+      });
 
-    redisClient.on('error', (err) => {
-      console.error('Redis rate limiter connection error:', err.message);
-    });
+      redisClient.on('error', (err) => {
+        console.error('Redis rate limiter connection error:', err.message);
+      });
 
-    redisClient.on('connect', () => {
-      console.log('✅ Redis rate limiter connected');
-    });
+      redisClient.on('connect', () => {
+        console.log('✅ Redis rate limiter connected');
+      });
 
-    store = new RedisStore({
-      client: redisClient,
-      prefix: 'rl:', // rate limit prefix
-      sendCommand: (...args) => redisClient.call(...args)
-    });
-  } catch (error) {
-    console.warn('⚠️  Redis not available, using in-memory rate limiting:', error.message);
+      // Wait for Redis connection before creating store
+      await redisClient.connect();
+
+      store = new RedisStore({
+        client: redisClient,
+        prefix: 'rl:', // rate limit prefix
+        sendCommand: (...args) => redisClient.call(...args)
+      });
+    } catch (error) {
+      console.warn('⚠️  Redis not available, using in-memory rate limiting:', error.message);
+      redisClient = null;
+      store = undefined;
+    }
   }
 }
 
@@ -55,4 +64,4 @@ const rateLimiter = rateLimit({
 });
 
 export default rateLimiter;
-export { redisClient };
+export { redisClient, initializeRateLimiter };

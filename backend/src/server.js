@@ -8,7 +8,7 @@ import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import { createServer } from 'http';
 import errorHandler from './middleware/errorHandler.js';
-import rateLimiter from './middleware/rateLimiter.js';
+import rateLimiter, { initializeRateLimiter } from './middleware/rateLimiter.js';
 import authRoutes from './routes/authRoutes.js';
 import quantumRoutes from './routes/quantumRoutes.js';
 import collaborationRoutes from './routes/collaborationRoutes.js';
@@ -209,8 +209,6 @@ export async function initializeDatabase() {
     const mongoUri = process.env.MONGODB_URI || 'mongodb://localhost:27017/appforge';
     
     await mongoose.connect(mongoUri, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
       maxPoolSize: 10,
       serverSelectionTimeoutMS: 5000,
     });
@@ -224,7 +222,10 @@ export async function initializeDatabase() {
 
 // Start server (avoid top-level await in tests)
 if (!IS_TEST && httpServer && wsServer) {
-  initializeDatabase()
+  Promise.all([
+    initializeDatabase(),
+    initializeRateLimiter()
+  ])
     .catch(() => {
       // Initialization already logs its own warnings.
     })

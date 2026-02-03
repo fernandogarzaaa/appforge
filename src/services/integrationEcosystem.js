@@ -1,28 +1,20 @@
+import { loadPersistedState, savePersistedState } from '@/services/persistenceStore';
+
 const STORAGE_KEY = 'appforge_integrations_v2';
+const STATE_KEY = 'integrationEcosystem';
 
-const load = () => {
-  if (typeof window === 'undefined') return [];
-  const raw = window.localStorage.getItem(STORAGE_KEY);
-  if (!raw) return [];
-  try {
-    return JSON.parse(raw);
-  } catch (error) {
-    return [];
-  }
-};
+const load = () =>
+  loadPersistedState({ storageKey: STORAGE_KEY, stateKey: STATE_KEY, fallback: [] });
 
-const save = (value) => {
-  if (typeof window === 'undefined') return;
-  window.localStorage.setItem(STORAGE_KEY, JSON.stringify(value));
-};
+const save = (value) => savePersistedState({ storageKey: STORAGE_KEY, stateKey: STATE_KEY, value });
 
 export const IntegrationEcosystemService = {
-  listIntegrations() {
+  async listIntegrations() {
     return load();
   },
 
-  connectIntegration(type, config) {
-    const integrations = load();
+  async connectIntegration(type, config) {
+    const integrations = await load();
     const entry = {
       id: `integration_${Date.now()}`,
       type,
@@ -31,13 +23,13 @@ export const IntegrationEcosystemService = {
       connectedAt: new Date().toISOString(),
     };
     const next = [entry, ...integrations];
-    save(next);
+    await save(next);
     return entry;
   },
 
-  disconnectIntegration(id) {
-    const next = load().filter((item) => item.id !== id);
-    save(next);
+  async disconnectIntegration(id) {
+    const next = (await load()).filter((item) => item.id !== id);
+    await save(next);
     return next;
   },
 };

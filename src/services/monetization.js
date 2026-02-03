@@ -1,31 +1,22 @@
+import { loadPersistedState, savePersistedState } from '@/services/persistenceStore';
+
 const STORAGE_KEY = 'appforge_tiers';
+const STATE_KEY = 'monetization';
 
-const load = () => {
-  if (typeof window === 'undefined') return [];
-  const raw = window.localStorage.getItem(STORAGE_KEY);
-  if (!raw) return [];
-  try {
-    return JSON.parse(raw);
-  } catch (error) {
-    return [];
-  }
-};
+const load = () => loadPersistedState({ storageKey: STORAGE_KEY, stateKey: STATE_KEY, fallback: [] });
 
-const save = (value) => {
-  if (typeof window === 'undefined') return;
-  window.localStorage.setItem(STORAGE_KEY, JSON.stringify(value));
-};
+const save = (value) => savePersistedState({ storageKey: STORAGE_KEY, stateKey: STATE_KEY, value });
 
 export const MonetizationService = {
-  listTiers() {
+  async listTiers() {
     return load();
   },
 
-  addTier(name, limits) {
-    const tiers = load();
+  async addTier(name, limits) {
+    const tiers = await load();
     const entry = { id: `tier_${Date.now()}`, name, limits };
     const next = [entry, ...tiers];
-    save(next);
+    await save(next);
     return entry;
   },
 };

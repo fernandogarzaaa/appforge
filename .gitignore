@@ -74,6 +74,15 @@ dump.rdb
 .next/
 .nuxt/
 
+# Rust Build Artifacts
+quantum-core/target/
+static-analyzer-core/target/
+**/target/debug/
+**/target/release/
+**/target/.rustc_info.json
+**/*.rs.bk
+Cargo.lock
+
 # Backup files
 *.bak
 *.backup

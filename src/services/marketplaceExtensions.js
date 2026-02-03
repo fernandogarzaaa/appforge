@@ -1,31 +1,22 @@
+import { loadPersistedState, savePersistedState } from '@/services/persistenceStore';
+
 const STORAGE_KEY = 'appforge_marketplace_extensions';
+const STATE_KEY = 'marketplaceExtensions';
 
-const load = () => {
-  if (typeof window === 'undefined') return [];
-  const raw = window.localStorage.getItem(STORAGE_KEY);
-  if (!raw) return [];
-  try {
-    return JSON.parse(raw);
-  } catch (error) {
-    return [];
-  }
-};
+const load = () => loadPersistedState({ storageKey: STORAGE_KEY, stateKey: STATE_KEY, fallback: [] });
 
-const save = (value) => {
-  if (typeof window === 'undefined') return;
-  window.localStorage.setItem(STORAGE_KEY, JSON.stringify(value));
-};
+const save = (value) => savePersistedState({ storageKey: STORAGE_KEY, stateKey: STATE_KEY, value });
 
 export const MarketplaceExtensionsService = {
-  listPlugins() {
+  async listPlugins() {
     return load();
   },
 
-  addPlugin(name, category) {
-    const plugins = load();
+  async addPlugin(name, category) {
+    const plugins = await load();
     const entry = { id: `plugin_${Date.now()}`, name, category };
     const next = [entry, ...plugins];
-    save(next);
+    await save(next);
     return entry;
   },
 };

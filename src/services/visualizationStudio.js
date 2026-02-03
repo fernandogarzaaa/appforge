@@ -1,43 +1,35 @@
+import { loadPersistedState, savePersistedState } from '@/services/persistenceStore';
+
 const STORAGE_KEY = 'appforge_visualization_state';
+const STATE_KEY = 'visualizationStudio';
 
-const load = () => {
-  if (typeof window === 'undefined') return { graphs: [], heatmaps: [] };
-  const raw = window.localStorage.getItem(STORAGE_KEY);
-  if (!raw) return { graphs: [], heatmaps: [] };
-  try {
-    return JSON.parse(raw);
-  } catch (error) {
-    return { graphs: [], heatmaps: [] };
-  }
-};
+const load = () =>
+  loadPersistedState({ storageKey: STORAGE_KEY, stateKey: STATE_KEY, fallback: { graphs: [], heatmaps: [] } });
 
-const save = (value) => {
-  if (typeof window === 'undefined') return;
-  window.localStorage.setItem(STORAGE_KEY, JSON.stringify(value));
-};
+const save = (value) => savePersistedState({ storageKey: STORAGE_KEY, stateKey: STATE_KEY, value });
 
 export const VisualizationStudioService = {
-  getState() {
+  async getState() {
     return load();
   },
 
-  saveGraph(graph) {
-    const state = load();
+  async saveGraph(graph) {
+    const state = await load();
     const next = {
       ...state,
       graphs: [graph, ...state.graphs],
     };
-    save(next);
+    await save(next);
     return next;
   },
 
-  addHeatmap(heatmap) {
-    const state = load();
+  async addHeatmap(heatmap) {
+    const state = await load();
     const next = {
       ...state,
       heatmaps: [heatmap, ...state.heatmaps],
     };
-    save(next);
+    await save(next);
     return next;
   },
 };

@@ -1,31 +1,22 @@
+import { loadPersistedState, savePersistedState } from '@/services/persistenceStore';
+
 const STORAGE_KEY = 'appforge_product_analytics';
+const STATE_KEY = 'productAnalytics';
 
-const load = () => {
-  if (typeof window === 'undefined') return [];
-  const raw = window.localStorage.getItem(STORAGE_KEY);
-  if (!raw) return [];
-  try {
-    return JSON.parse(raw);
-  } catch (error) {
-    return [];
-  }
-};
+const load = () => loadPersistedState({ storageKey: STORAGE_KEY, stateKey: STATE_KEY, fallback: [] });
 
-const save = (value) => {
-  if (typeof window === 'undefined') return;
-  window.localStorage.setItem(STORAGE_KEY, JSON.stringify(value));
-};
+const save = (value) => savePersistedState({ storageKey: STORAGE_KEY, stateKey: STATE_KEY, value });
 
 export const ProductAnalyticsService = {
-  recordEvent(event) {
-    const events = load();
+  async recordEvent(event) {
+    const events = await load();
     const entry = { id: `metric_${Date.now()}`, ...event };
     const next = [entry, ...events];
-    save(next);
+    await save(next);
     return entry;
   },
 
-  listEvents() {
+  async listEvents() {
     return load();
   },
 };

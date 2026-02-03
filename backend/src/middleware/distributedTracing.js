@@ -10,26 +10,19 @@ import * as Sentry from '@sentry/node';
  * Creates parent transaction for cross-service tracing
  */
 export const tracingMiddleware = (req, res, next) => {
-  const transaction = Sentry.startTransaction({
+  // Skip tracing if Sentry is not configured
+  if (!process.env.SENTRY_DSN) {
+    return next();
+  }
+  
+  const transaction = Sentry.startSpan({
     op: 'http.server',
     name: `${req.method} ${req.path}`,
-    source: 'url',
-    tags: {
-      'http.method': req.method,
-      'http.url': req.path,
-    },
-    data: {
-      'http.request.method': req.method,
-      'http.request.path': req.path,
-      'http.request.headers': {
-        'user-agent': req.get('user-agent'),
-        'content-type': req.get('content-type'),
-      },
-    },
+  }, () => {
+    // Store transaction in request for use in other middlewares
+    req.sentrySpan = Sentry.getActiveSpan();
+    return next();
   });
-
-  // Store transaction on request for child spans
-  req.transaction = transaction;
 
   // Automatically capture response time
   const start = Date.now();
@@ -37,19 +30,9 @@ export const tracingMiddleware = (req, res, next) => {
   res.on('finish', () => {
     const duration = Date.now() - start;
     
-    if (transaction) {
-      transaction.setTag('http.status_code', res.statusCode);
-      transaction.setData('http.response.status_code', res.statusCode);
-      transaction.setData('http.response.time_ms', duration);
-      
-      // Set status based on HTTP code
-      if (res.statusCode >= 400) {
-        transaction.setStatus('error');
-      } else {
-        transaction.setStatus('ok');
-      }
-      
-      transaction.finish();
+    if (req.sentrySpan) {
+      req.sentrySpan.setAttribute('http.status_code', res.statusCode);
+      req.sentrySpan.setAttribute('http.response.time_ms', duration);
     }
   });
 

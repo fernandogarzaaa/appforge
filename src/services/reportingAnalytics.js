@@ -1,31 +1,22 @@
+import { loadPersistedState, savePersistedState } from '@/services/persistenceStore';
+
 const STORAGE_KEY = 'appforge_reports';
+const STATE_KEY = 'reportingAnalytics';
 
-const load = () => {
-  if (typeof window === 'undefined') return [];
-  const raw = window.localStorage.getItem(STORAGE_KEY);
-  if (!raw) return [];
-  try {
-    return JSON.parse(raw);
-  } catch (error) {
-    return [];
-  }
-};
+const load = () => loadPersistedState({ storageKey: STORAGE_KEY, stateKey: STATE_KEY, fallback: [] });
 
-const save = (value) => {
-  if (typeof window === 'undefined') return;
-  window.localStorage.setItem(STORAGE_KEY, JSON.stringify(value));
-};
+const save = (value) => savePersistedState({ storageKey: STORAGE_KEY, stateKey: STATE_KEY, value });
 
 export const ReportingAnalyticsService = {
-  listReports() {
+  async listReports() {
     return load();
   },
 
-  scheduleReport(name, cadence) {
-    const reports = load();
+  async scheduleReport(name, cadence) {
+    const reports = await load();
     const entry = { id: `report_${Date.now()}`, name, cadence };
     const next = [entry, ...reports];
-    save(next);
+    await save(next);
     return entry;
   },
 };

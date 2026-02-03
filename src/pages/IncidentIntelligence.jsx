@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -8,25 +8,36 @@ import { IncidentIntelligenceService } from '@/services/incidentIntelligence';
 export default function IncidentIntelligence() {
   const [question, setQuestion] = useState('');
   const [result, setResult] = useState(null);
-  const [events, setEvents] = useState(() => IncidentIntelligenceService.reconstructTimeline());
+  const [events, setEvents] = useState([]);
 
-  const handleQuery = () => {
-    const response = IncidentIntelligenceService.queryIncident(question);
+  useEffect(() => {
+    let active = true;
+    (async () => {
+      const timeline = await IncidentIntelligenceService.reconstructTimeline();
+      if (active) setEvents(timeline);
+    })();
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  const handleQuery = async () => {
+    const response = await IncidentIntelligenceService.queryIncident(question);
     setResult(response);
   };
 
-  const handleSeed = () => {
-    IncidentIntelligenceService.recordEvent({
+  const handleSeed = async () => {
+    await IncidentIntelligenceService.recordEvent({
       type: 'checkout',
       message: 'Checkout failed at 3pm due to payment gateway timeout',
       severity: 'high',
     });
-    IncidentIntelligenceService.recordEvent({
+    await IncidentIntelligenceService.recordEvent({
       type: 'database',
       message: 'Database latency spike detected in us-east-1',
       severity: 'medium',
     });
-    setEvents(IncidentIntelligenceService.reconstructTimeline());
+    setEvents(await IncidentIntelligenceService.reconstructTimeline());
   };
 
   return (
