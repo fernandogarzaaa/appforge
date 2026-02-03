@@ -114,7 +114,7 @@ export function initializeSentry() {
     ],
   });
 
-  console.log('[Sentry] Initialized with environment:', Sentry.getCurrentHub().getClient()?.getOptions().environment);
+  console.log('[Sentry] Initialized');
   
   return Sentry;
 }
