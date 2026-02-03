@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
 import { Card, CardContent } from '@/components/ui/card';
@@ -15,6 +15,31 @@ export default function IntegrationTriggerManager() {
   const [showDialog, setShowDialog] = useState(false);
   const [editingRule, setEditingRule] = useState(null);
   const queryClient = useQueryClient();
+  const [formState, setFormState] = useState({
+    ruleName: '',
+    triggerSource: 'anomaly_alert',
+    slackEnabled: false,
+    slackWebhookUrl: '',
+    slackChannel: '',
+    slackMessage: '🚨 Incident: {{title}}',
+    pagerdutyEnabled: false,
+    jiraEnabled: false,
+  });
+
+  useEffect(() => {
+    if (!showDialog) return;
+
+    setFormState({
+      ruleName: editingRule?.rule_name || '',
+      triggerSource: editingRule?.trigger_source || 'anomaly_alert',
+      slackEnabled: Boolean(editingRule?.slack_config?.enabled),
+      slackWebhookUrl: editingRule?.slack_config?.webhook_url || '',
+      slackChannel: editingRule?.slack_config?.channel || '',
+      slackMessage: editingRule?.slack_config?.message || '🚨 Incident: {{title}}',
+      pagerdutyEnabled: Boolean(editingRule?.pagerduty_config?.enabled),
+      jiraEnabled: Boolean(editingRule?.jira_config?.enabled),
+    });
+  }, [editingRule, showDialog]);
 
   const { data: rules } = useQuery({
     queryKey: ['integration-trigger-rules'],
@@ -57,6 +82,43 @@ export default function IntegrationTriggerManager() {
   };
 
   const activeRules = rules?.filter(r => r.is_active) || [];
+
+  const handleSaveRule = () => {
+    if (!formState.ruleName.trim()) {
+      toast.error('Rule name is required');
+      return;
+    }
+
+    if (formState.slackEnabled && !formState.slackWebhookUrl.trim()) {
+      toast.error('Slack webhook URL is required when Slack is enabled');
+      return;
+    }
+
+    const payload = {
+      rule_name: formState.ruleName.trim(),
+      trigger_source: formState.triggerSource,
+      is_active: true,
+      trigger_conditions: editingRule?.trigger_conditions || {},
+      slack_config: {
+        enabled: formState.slackEnabled,
+        webhook_url: formState.slackWebhookUrl.trim() || null,
+        channel: formState.slackChannel.trim() || null,
+        message: formState.slackMessage.trim() || null,
+      },
+      pagerduty_config: {
+        enabled: formState.pagerdutyEnabled,
+      },
+      jira_config: {
+        enabled: formState.jiraEnabled,
+      },
+    };
+
+    if (editingRule) {
+      updateMutation.mutate({ id: editingRule.id, data: payload });
+    } else {
+      createMutation.mutate(payload);
+    }
+  };
 
   return (
     <div className="space-y-4">
@@ -157,12 +219,19 @@ export default function IntegrationTriggerManager() {
           <div className="space-y-4">
             <div>
               <label className="text-sm font-semibold">Rule Name</label>
-              <Input placeholder="e.g., Critical Alert to Slack" defaultValue={editingRule?.rule_name} />
+              <Input
+                placeholder="e.g., Critical Alert to Slack"
+                value={formState.ruleName}
+                onChange={(e) => setFormState((prev) => ({ ...prev, ruleName: e.target.value }))}
+              />
             </div>
 
             <div>
               <label className="text-sm font-semibold">Trigger Source</label>
-              <Select defaultValue={editingRule?.trigger_source || 'anomaly_alert'}>
+              <Select
+                value={formState.triggerSource}
+                onValueChange={(value) => setFormState((prev) => ({ ...prev, triggerSource: value }))}
+              >
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
@@ -179,19 +248,70 @@ export default function IntegrationTriggerManager() {
               <h4 className="font-semibold text-sm">Target Integrations</h4>
               
               <div className="flex items-center gap-2 p-3 border rounded">
-                <Checkbox defaultChecked={editingRule?.slack_config?.enabled} />
+                <Checkbox
+                  checked={formState.slackEnabled}
+                  onCheckedChange={(checked) =>
+                    setFormState((prev) => ({ ...prev, slackEnabled: Boolean(checked) }))
+                  }
+                />
                 <Slack className="w-4 h-4" />
                 <label className="text-sm">Send to Slack</label>
               </div>
 
+              {formState.slackEnabled && (
+                <div className="space-y-3 border rounded p-3 bg-slate-50">
+                  <div>
+                    <label className="text-sm font-semibold">Slack Webhook URL</label>
+                    <Input
+                      placeholder="https://hooks.slack.com/services/..."
+                      value={formState.slackWebhookUrl}
+                      onChange={(e) =>
+                        setFormState((prev) => ({ ...prev, slackWebhookUrl: e.target.value }))
+                      }
+                    />
+                  </div>
+                  <div>
+                    <label className="text-sm font-semibold">Channel (optional)</label>
+                    <Input
+                      placeholder="#alerts"
+                      value={formState.slackChannel}
+                      onChange={(e) =>
+                        setFormState((prev) => ({ ...prev, slackChannel: e.target.value }))
+                      }
+                    />
+                  </div>
+                  <div>
+                    <label className="text-sm font-semibold">Message Template</label>
+                    <Input
+                      placeholder="🚨 Incident: {{title}}"
+                      value={formState.slackMessage}
+                      onChange={(e) =>
+                        setFormState((prev) => ({ ...prev, slackMessage: e.target.value }))
+                      }
+                    />
+                    <p className="text-xs text-slate-500 mt-1">Supports tokens like {{title}}, {{severity}}, {{service}}</p>
+                  </div>
+                </div>
+              )}
+
               <div className="flex items-center gap-2 p-3 border rounded">
-                <Checkbox defaultChecked={editingRule?.pagerduty_config?.enabled} />
+                <Checkbox
+                  checked={formState.pagerdutyEnabled}
+                  onCheckedChange={(checked) =>
+                    setFormState((prev) => ({ ...prev, pagerdutyEnabled: Boolean(checked) }))
+                  }
+                />
                 <AlertCircle className="w-4 h-4" />
                 <label className="text-sm">Create PagerDuty Incident</label>
               </div>
 
               <div className="flex items-center gap-2 p-3 border rounded">
-                <Checkbox defaultChecked={editingRule?.jira_config?.enabled} />
+                <Checkbox
+                  checked={formState.jiraEnabled}
+                  onCheckedChange={(checked) =>
+                    setFormState((prev) => ({ ...prev, jiraEnabled: Boolean(checked) }))
+                  }
+                />
                 <Zap className="w-4 h-4" />
                 <label className="text-sm">Create Jira Ticket</label>
               </div>
@@ -199,13 +319,7 @@ export default function IntegrationTriggerManager() {
 
             <div className="flex gap-2 pt-4">
               <Button variant="outline" onClick={() => setShowDialog(false)}>Cancel</Button>
-              <Button onClick={() => {
-                if (editingRule) {
-                  updateMutation.mutate({ id: editingRule.id, data: {} });
-                } else {
-                  createMutation.mutate({});
-                }
-              }}>
+              <Button onClick={handleSaveRule}>
                 Save Rule
               </Button>
             </div>
