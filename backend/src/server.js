@@ -38,6 +38,7 @@ import { tracingMiddleware } from './middleware/distributedTracing.js';
 import { profilingMiddleware, MemoryProfiler } from './middleware/performanceProfiling.js';
 import { quantumFailoverMiddleware, createQuantumHealthEndpoint, createQuantumResetEndpoint } from './middleware/quantumFailover.js';
 import { queryResultCacheMiddleware } from './middleware/cacheDecorator.js';
+import { setupSwagger } from './config/swagger.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -138,6 +139,9 @@ app.get('/api/status', (req, res) => {
     }
   });
 });
+
+// Setup Swagger/OpenAPI documentation
+setupSwagger(app);
 
 // API routes
 app.use('/api/auth', authRoutes);

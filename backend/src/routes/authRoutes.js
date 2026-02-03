@@ -1,5 +1,7 @@
 /**
  * Authentication Routes
+ * @module routes/authRoutes
+ * @description Handles user authentication including login, registration, token refresh
  */
 
 import express from 'express';
@@ -11,8 +13,53 @@ import { loginSchema, registerSchema } from '../validators/schemas.js';
 const router = express.Router();
 
 /**
- * POST /api/auth/register
- * Register a new user
+ * @swagger
+ * /auth/register:
+ *   post:
+ *     summary: Register a new user account
+ *     description: Creates a new user account with email and password
+ *     tags: [Authentication]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - email
+ *               - password
+ *               - name
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 format: email
+ *                 example: user@example.com
+ *               password:
+ *                 type: string
+ *                 format: password
+ *                 minLength: 8
+ *                 example: securePassword123!
+ *               name:
+ *                 type: string
+ *                 example: John Doe
+ *     responses:
+ *       201:
+ *         description: User successfully registered
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                 user:
+ *                   $ref: '#/components/schemas/User'
+ *                 token:
+ *                   type: string
+ *       400:
+ *         $ref: '#/components/responses/ValidationError'
+ *       409:
+ *         description: Email already registered
  */
 router.post('/register', (req, res, next) => {
   try {
@@ -24,8 +71,50 @@ router.post('/register', (req, res, next) => {
 });
 
 /**
- * POST /api/auth/login
- * Login user and return JWT token
+ * @swagger
+ * /auth/login:
+ *   post:
+ *     summary: User login with credentials
+ *     description: Authenticates user and returns JWT access token and refresh token
+ *     tags: [Authentication]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - email
+ *               - password
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 format: email
+ *                 example: user@example.com
+ *               password:
+ *                 type: string
+ *                 format: password
+ *                 example: securePassword123!
+ *     responses:
+ *       200:
+ *         description: Login successful
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 token:
+ *                   type: string
+ *                   description: JWT access token (valid for 7 days)
+ *                 refreshToken:
+ *                   type: string
+ *                   description: Refresh token for obtaining new access token
+ *                 user:
+ *                   $ref: '#/components/schemas/User'
+ *       401:
+ *         $ref: '#/components/responses/UnauthorizedError'
+ *       400:
+ *         $ref: '#/components/responses/ValidationError'
  */
 router.post('/login', (req, res, next) => {
   try {
@@ -37,14 +126,60 @@ router.post('/login', (req, res, next) => {
 });
 
 /**
- * POST /api/auth/refresh
- * Refresh JWT token
+ * @swagger
+ * /auth/refresh:
+ *   post:
+ *     summary: Refresh authentication token
+ *     description: Uses refresh token to obtain a new access token without re-entering credentials
+ *     tags: [Authentication]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - refreshToken
+ *             properties:
+ *               refreshToken:
+ *                 type: string
+ *                 description: Valid refresh token from login response
+ *     responses:
+ *       200:
+ *         description: Token refreshed successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 token:
+ *                   type: string
+ *                   description: New JWT access token
+ *       401:
+ *         $ref: '#/components/responses/UnauthorizedError'
+ *       400:
+ *         $ref: '#/components/responses/ValidationError'
  */
 router.post('/refresh', refreshToken);
 
 /**
- * GET /api/auth/me
- * Get current user (requires authentication)
+ * @swagger
+ * /auth/me:
+ *   get:
+ *     summary: Get current user profile
+ *     description: Returns authenticated user's profile information
+ *     tags: [Authentication]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: User profile retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ *       401:
+ *         $ref: '#/components/responses/UnauthorizedError'
  */
 router.get('/me', authenticate, getCurrentUser);
 
