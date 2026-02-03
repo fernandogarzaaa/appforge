@@ -109,6 +109,30 @@ function MobileDrawerSidebar({ currentProject, user, onClose }) {
     { label: 'Team', icon: Users, href: createPageUrl('TeamCollaboration') },
   ];
 
+  const operationsItems = [
+    { label: 'Incident Intelligence', icon: Activity, href: createPageUrl('IncidentIntelligence') },
+    { label: 'Visualization Studio', icon: Blocks, href: createPageUrl('VisualizationStudio') },
+    { label: 'Reporting & Analytics', icon: BarChart3, href: createPageUrl('ReportingAnalytics') },
+    { label: 'Product Analytics', icon: BarChart3, href: createPageUrl('ProductAnalytics') },
+    { label: 'Intelligent Automation', icon: Zap, href: createPageUrl('IntelligentAutomation') },
+    { label: 'Realtime Collaboration', icon: Users, href: createPageUrl('RealtimeCollaboration') },
+  ];
+
+  const platformItems = [
+    { label: 'Integration Ecosystem', icon: Blocks, href: createPageUrl('IntegrationEcosystem') },
+    { label: 'Data Pipeline', icon: Activity, href: createPageUrl('DataPipeline') },
+    { label: 'Performance & Scalability', icon: Activity, href: createPageUrl('PerformanceScalability') },
+    { label: 'RBAC & Tenancy', icon: ShieldCheck, href: createPageUrl('RbacTenancy') },
+    { label: 'Enterprise Security', icon: ShieldCheck, href: createPageUrl('EnterpriseSecurity') },
+    { label: 'Developer Experience', icon: Code, href: createPageUrl('DeveloperExperience') },
+    { label: 'Intelligent Interface', icon: Sparkles, href: createPageUrl('IntelligentInterface') },
+  ];
+
+  const growthItems = [
+    { label: 'Monetization', icon: Coins, href: createPageUrl('Monetization') },
+    { label: 'Marketplace Extensions', icon: LayoutTemplate, href: createPageUrl('MarketplaceExtensions') },
+  ];
+
   const templateItems = [
     { label: 'Marketplace', icon: LayoutTemplate, href: createPageUrl('TemplateMarketplace') },
     { label: 'Integration', icon: Blocks, href: createPageUrl('IntegrationTemplates') },
@@ -152,6 +176,9 @@ function MobileDrawerSidebar({ currentProject, user, onClose }) {
           <SectionGroup title="Build" items={buildItems} />
           <SectionGroup title="Templates" items={templateItems} />
           <SectionGroup title="Enterprise" items={enterpriseItems} />
+          <SectionGroup title="Operations" items={operationsItems} />
+          <SectionGroup title="Platform" items={platformItems} />
+          <SectionGroup title="Growth" items={growthItems} />
           <SectionGroup title="Web3" items={web3Items} />
         </div>
 

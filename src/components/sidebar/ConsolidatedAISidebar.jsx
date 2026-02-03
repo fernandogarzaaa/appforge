@@ -127,6 +127,30 @@ function ConsolidatedAISidebar({ currentProject, collapsed, onToggle, user }) {
     { label: 'Team', icon: Users, href: createPageUrl('TeamCollaboration') },
   ];
 
+  const operationsItems = [
+    { label: 'Incident Intelligence', icon: Activity, href: createPageUrl('IncidentIntelligence') },
+    { label: 'Visualization Studio', icon: Blocks, href: createPageUrl('VisualizationStudio') },
+    { label: 'Reporting & Analytics', icon: BarChart3, href: createPageUrl('ReportingAnalytics') },
+    { label: 'Product Analytics', icon: BarChart3, href: createPageUrl('ProductAnalytics') },
+    { label: 'Intelligent Automation', icon: Zap, href: createPageUrl('IntelligentAutomation') },
+    { label: 'Realtime Collaboration', icon: Users, href: createPageUrl('RealtimeCollaboration') },
+  ];
+
+  const platformItems = [
+    { label: 'Integration Ecosystem', icon: Blocks, href: createPageUrl('IntegrationEcosystem') },
+    { label: 'Data Pipeline', icon: Activity, href: createPageUrl('DataPipeline') },
+    { label: 'Performance & Scalability', icon: Activity, href: createPageUrl('PerformanceScalability') },
+    { label: 'RBAC & Tenancy', icon: ShieldCheck, href: createPageUrl('RbacTenancy') },
+    { label: 'Enterprise Security', icon: ShieldCheck, href: createPageUrl('EnterpriseSecurity') },
+    { label: 'Developer Experience', icon: Code, href: createPageUrl('DeveloperExperience') },
+    { label: 'Intelligent Interface', icon: Sparkles, href: createPageUrl('IntelligentInterface') },
+  ];
+
+  const growthItems = [
+    { label: 'Monetization', icon: Coins, href: createPageUrl('Monetization') },
+    { label: 'Marketplace Extensions', icon: LayoutTemplate, href: createPageUrl('MarketplaceExtensions') },
+  ];
+
   const templateItems = [
     { label: 'Marketplace', icon: LayoutTemplate, href: createPageUrl('TemplateMarketplace') },
     { label: 'Integration', icon: Blocks, href: createPageUrl('IntegrationTemplates') },
@@ -380,6 +404,84 @@ function ConsolidatedAISidebar({ currentProject, collapsed, onToggle, user }) {
             <AccordionContent className="pb-4 pt-2 space-y-2">
               <div className="flex flex-col gap-2">
                 {enterpriseItems.map((item) => (
+                  <Link
+                    key={item.href}
+                    to={item.href}
+                    className={cn(
+                      'flex items-center gap-3 px-3 py-2.5 rounded-md text-sm transition-all duration-200',
+                      isActive(item.href)
+                        ? 'bg-indigo-50 dark:bg-indigo-900/20 text-indigo-700 dark:text-indigo-300 font-medium'
+                        : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800/30 hover:text-gray-700 dark:hover:text-gray-300'
+                    )}
+                  >
+                    <item.icon className="w-4 h-4 flex-shrink-0" />
+                    <span>{item.label}</span>
+                  </Link>
+                ))}
+              </div>
+            </AccordionContent>
+          </AccordionItem>
+
+          {/* Operations */}
+          <AccordionItem value="operations" className="border-none">
+            <AccordionTrigger className="px-0 py-3 text-xs font-medium text-gray-500 dark:text-gray-500 uppercase tracking-wider hover:no-underline hover:text-gray-600 dark:hover:text-gray-400">
+              Operations
+            </AccordionTrigger>
+            <AccordionContent className="pb-4 pt-2 space-y-2">
+              <div className="flex flex-col gap-2">
+                {operationsItems.map((item) => (
+                  <Link
+                    key={item.href}
+                    to={item.href}
+                    className={cn(
+                      'flex items-center gap-3 px-3 py-2.5 rounded-md text-sm transition-all duration-200',
+                      isActive(item.href)
+                        ? 'bg-indigo-50 dark:bg-indigo-900/20 text-indigo-700 dark:text-indigo-300 font-medium'
+                        : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800/30 hover:text-gray-700 dark:hover:text-gray-300'
+                    )}
+                  >
+                    <item.icon className="w-4 h-4 flex-shrink-0" />
+                    <span>{item.label}</span>
+                  </Link>
+                ))}
+              </div>
+            </AccordionContent>
+          </AccordionItem>
+
+          {/* Platform */}
+          <AccordionItem value="platform" className="border-none">
+            <AccordionTrigger className="px-0 py-3 text-xs font-medium text-gray-500 dark:text-gray-500 uppercase tracking-wider hover:no-underline hover:text-gray-600 dark:hover:text-gray-400">
+              Platform
+            </AccordionTrigger>
+            <AccordionContent className="pb-4 pt-2 space-y-2">
+              <div className="flex flex-col gap-2">
+                {platformItems.map((item) => (
+                  <Link
+                    key={item.href}
+                    to={item.href}
+                    className={cn(
+                      'flex items-center gap-3 px-3 py-2.5 rounded-md text-sm transition-all duration-200',
+                      isActive(item.href)
+                        ? 'bg-indigo-50 dark:bg-indigo-900/20 text-indigo-700 dark:text-indigo-300 font-medium'
+                        : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800/30 hover:text-gray-700 dark:hover:text-gray-300'
+                    )}
+                  >
+                    <item.icon className="w-4 h-4 flex-shrink-0" />
+                    <span>{item.label}</span>
+                  </Link>
+                ))}
+              </div>
+            </AccordionContent>
+          </AccordionItem>
+
+          {/* Growth */}
+          <AccordionItem value="growth" className="border-none">
+            <AccordionTrigger className="px-0 py-3 text-xs font-medium text-gray-500 dark:text-gray-500 uppercase tracking-wider hover:no-underline hover:text-gray-600 dark:hover:text-gray-400">
+              Growth
+            </AccordionTrigger>
+            <AccordionContent className="pb-4 pt-2 space-y-2">
+              <div className="flex flex-col gap-2">
+                {growthItems.map((item) => (
                   <Link
                     key={item.href}
                     to={item.href}

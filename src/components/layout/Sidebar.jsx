@@ -76,6 +76,39 @@ export default function Sidebar({ currentProject, collapsed, onToggle, user }) {
         { label: 'Team Collaboration', icon: Users, href: createPageUrl('TeamCollaboration') },
         { label: 'Security', icon: ShieldCheck, href: createPageUrl('Security') },
       ]
+    },
+    {
+      id: 'operations',
+      label: 'Operations',
+      items: [
+        { label: 'Incident Intelligence', icon: Activity, href: createPageUrl('IncidentIntelligence') },
+        { label: 'Visualization Studio', icon: Blocks, href: createPageUrl('VisualizationStudio') },
+        { label: 'Reporting & Analytics', icon: BarChart3, href: createPageUrl('ReportingAnalytics') },
+        { label: 'Product Analytics', icon: BarChart3, href: createPageUrl('ProductAnalytics') },
+        { label: 'Intelligent Automation', icon: Zap, href: createPageUrl('IntelligentAutomation') },
+        { label: 'Realtime Collaboration', icon: Users, href: createPageUrl('RealtimeCollaboration') },
+      ]
+    },
+    {
+      id: 'platform',
+      label: 'Platform',
+      items: [
+        { label: 'Integration Ecosystem', icon: Blocks, href: createPageUrl('IntegrationEcosystem') },
+        { label: 'Data Pipeline', icon: Activity, href: createPageUrl('DataPipeline') },
+        { label: 'Performance & Scalability', icon: Activity, href: createPageUrl('PerformanceScalability') },
+        { label: 'RBAC & Tenancy', icon: ShieldCheck, href: createPageUrl('RbacTenancy') },
+        { label: 'Enterprise Security', icon: ShieldCheck, href: createPageUrl('EnterpriseSecurity') },
+        { label: 'Developer Experience', icon: Code, href: createPageUrl('DeveloperExperience') },
+        { label: 'Intelligent Interface', icon: Sparkles, href: createPageUrl('IntelligentInterface') },
+      ]
+    },
+    {
+      id: 'growth',
+      label: 'Growth',
+      items: [
+        { label: 'Monetization', icon: Coins, href: createPageUrl('Monetization') },
+        { label: 'Marketplace Extensions', icon: LayoutTemplate, href: createPageUrl('MarketplaceExtensions') },
+      ]
     }
   ];
 
