@@ -33,10 +33,6 @@ export function initializeSentry() {
     // Performance Monitoring - sample 100% of transactions in development, 10% in production
     tracesSampleRate: isDevelopment ? 1.0 : 0.1,
     
-    // Session replay - capture 10% of replays
-    replaysSessionSampleRate: 0.1,
-    replaysOnErrorSampleRate: 1.0,
-    
     // Release tracking
     release: import.meta.env.VITE_APP_VERSION || 'unknown',
     
@@ -52,7 +48,6 @@ export function initializeSentry() {
           /^\//,
         ].filter(Boolean),
       }),
-      new Sentry.Replay(),
     ],
     
     // Attach stack traces to errors
