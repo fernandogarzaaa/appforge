@@ -15,6 +15,7 @@ A comprehensive, full-stack application platform built with modern technologies 
 - [Configuration](#configuration)
 - [Development](#development)
 - [Testing](#testing)
+- [Public Demo Checklist](#public-demo-checklist)
 - [Payment Integration (Xendit)](#payment-integration)
 - [Deployment](#deployment)
 - [Documentation](#documentation)
@@ -111,7 +112,7 @@ A comprehensive, full-stack application platform built with modern technologies 
 - **Hugging Face** - ML model registry
 
 ### Development & Testing
-- **Vitest 2.1.8** - Unit testing
+- **Vitest 4.x** - Unit testing
 - **React Testing Library** - Component testing
 - **ESLint 9.19.0** - Code linting
 - **TypeScript** - Type safety (via jsconfig.json)
@@ -329,7 +330,39 @@ npm run test:watch
 npm run test:coverage
 ```
 
-### Test UI Dashboard
+## ✅ Public Demo Checklist
+
+Use this checklist to prepare a stable, shareable demo instance.
+
+### Environment & Hosting
+- [ ] Deploy to a public URL (Vercel/Netlify/Railway)
+- [ ] Configure production env vars in the hosting provider
+- [ ] Enable HTTPS and set correct `VITE_APP_URL`
+- [ ] Verify build cache and cold start behavior
+
+### Data & Accounts
+- [ ] Seed demo data (projects, incidents, alerts, dashboards)
+- [ ] Create demo accounts with limited permissions
+- [ ] Add “Reset demo data” script or cron
+- [ ] Verify demo account rate limits
+
+### UX & Reliability
+- [ ] Load time under 3s on cold start
+- [ ] No console errors in production
+- [ ] Mobile responsiveness verified on key screens
+- [ ] Error boundaries show friendly messaging
+
+### Security & Access
+- [ ] Lock down admin-only routes
+- [ ] Disable destructive actions in demo mode
+- [ ] Use read-only integrations or mock data
+- [ ] Confirm no secrets in client bundle
+
+### Demo Flow
+- [ ] Landing page explains value + demo credentials
+- [ ] 3-minute guided walkthrough available
+- [ ] “Try it now” CTA links to demo
+- [ ] Link to docs and support contact
 
 ```bash
 npm run test:ui

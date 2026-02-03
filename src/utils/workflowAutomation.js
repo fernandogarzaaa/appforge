@@ -3,6 +3,8 @@
  * Webhook triggers, scheduled jobs, email/SMS integrations
  */
 
+import { sendSlackWebhook } from '@/utils/integrations/slack';
+
 export const TRIGGER_TYPES = {
   WEBHOOK: 'webhook',
   SCHEDULE: 'schedule',
@@ -349,12 +351,49 @@ export class WorkflowAutomation {
    */
   static async _sendSlackMessage(action, data) {
     const { channel, message, webhookUrl } = action;
-    
+
+    const resolvedChannel = this._processTemplate(channel, data);
+    const resolvedMessage = this._processTemplate(message, data);
+
+    const blocks = resolvedChannel
+      ? [
+          {
+            type: 'section',
+            text: {
+              type: 'mrkdwn',
+              text: `*Channel:* ${resolvedChannel}`,
+            },
+          },
+          {
+            type: 'section',
+            text: {
+              type: 'mrkdwn',
+              text: resolvedMessage,
+            },
+          },
+        ]
+      : [
+          {
+            type: 'section',
+            text: {
+              type: 'mrkdwn',
+              text: resolvedMessage,
+            },
+          },
+        ];
+
+    const response = await sendSlackWebhook({
+      webhookUrl,
+      text: resolvedMessage,
+      blocks,
+    });
+
     return {
-      channel: this._processTemplate(channel, data),
-      message: this._processTemplate(message, data),
+      channel: resolvedChannel,
+      message: resolvedMessage,
       webhookUrl,
       sentAt: new Date().toISOString(),
+      response,
     };
   }
 
