@@ -1,1 +1,338 @@
-run 21598495071 is still in progress; logs will be available when it is complete
+dependency-check	Set up job	∩╗┐2026-02-03T09:59:21.8014421Z Current runner version: '2.331.0'
+dependency-check	Set up job	2026-02-03T09:59:21.8039771Z ##[group]Runner Image Provisioner
+dependency-check	Set up job	2026-02-03T09:59:21.8040827Z Hosted Compute Agent
+dependency-check	Set up job	2026-02-03T09:59:21.8041374Z Version: 20260123.484
+dependency-check	Set up job	2026-02-03T09:59:21.8042224Z Commit: 6bd6555ca37d84114959e1c76d2c01448ff61c5d
+dependency-check	Set up job	2026-02-03T09:59:21.8042909Z Build Date: 2026-01-23T19:41:17Z
+dependency-check	Set up job	2026-02-03T09:59:21.8043551Z Worker ID: {9f54189b-a927-4b9f-b9b0-de7b98756261}
+dependency-check	Set up job	2026-02-03T09:59:21.8044645Z Azure Region: eastus
+dependency-check	Set up job	2026-02-03T09:59:21.8045237Z ##[endgroup]
+dependency-check	Set up job	2026-02-03T09:59:21.8046650Z ##[group]Operating System
+dependency-check	Set up job	2026-02-03T09:59:21.8047343Z Ubuntu
+dependency-check	Set up job	2026-02-03T09:59:21.8047788Z 24.04.3
+dependency-check	Set up job	2026-02-03T09:59:21.8048249Z LTS
+dependency-check	Set up job	2026-02-03T09:59:21.8048795Z ##[endgroup]
+dependency-check	Set up job	2026-02-03T09:59:21.8049307Z ##[group]Runner Image
+dependency-check	Set up job	2026-02-03T09:59:21.8049854Z Image: ubuntu-24.04
+dependency-check	Set up job	2026-02-03T09:59:21.8050361Z Version: 20260126.10.1
+dependency-check	Set up job	2026-02-03T09:59:21.8051372Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260126.10/images/ubuntu/Ubuntu2404-Readme.md
+dependency-check	Set up job	2026-02-03T09:59:21.8053158Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20260126.10
+dependency-check	Set up job	2026-02-03T09:59:21.8054239Z ##[endgroup]
+dependency-check	Set up job	2026-02-03T09:59:21.8055242Z ##[group]GITHUB_TOKEN Permissions
+dependency-check	Set up job	2026-02-03T09:59:21.8057402Z Contents: read
+dependency-check	Set up job	2026-02-03T09:59:21.8058122Z Metadata: read
+dependency-check	Set up job	2026-02-03T09:59:21.8058856Z Packages: read
+dependency-check	Set up job	2026-02-03T09:59:21.8059641Z ##[endgroup]
+dependency-check	Set up job	2026-02-03T09:59:21.8061663Z Secret source: Actions
+dependency-check	Set up job	2026-02-03T09:59:21.8062452Z Prepare workflow directory
+dependency-check	Set up job	2026-02-03T09:59:21.8381766Z Prepare all required actions
+dependency-check	Set up job	2026-02-03T09:59:21.8421183Z Getting action download info
+dependency-check	Set up job	2026-02-03T09:59:22.1492579Z Download action repository 'actions/checkout@v4' (SHA:34e114876b0b11c390a56381ad16ebd13914f8d5)
+dependency-check	Set up job	2026-02-03T09:59:22.2582854Z Download action repository 'actions/setup-node@v4' (SHA:49933ea5288caeca8642d1e84afbd3f7d6820020)
+dependency-check	Set up job	2026-02-03T09:59:22.5114789Z Complete job name: dependency-check
+dependency-check	Checkout code	∩╗┐2026-02-03T09:59:22.5794929Z ##[group]Run actions/checkout@v4
+dependency-check	Checkout code	2026-02-03T09:59:22.5795779Z with:
+dependency-check	Checkout code	2026-02-03T09:59:22.5796219Z   repository: fernandogarzaaa/appforge
+dependency-check	Checkout code	2026-02-03T09:59:22.5796908Z   token: ***
+dependency-check	Checkout code	2026-02-03T09:59:22.5797282Z   ssh-strict: true
+dependency-check	Checkout code	2026-02-03T09:59:22.5797675Z   ssh-user: git
+dependency-check	Checkout code	2026-02-03T09:59:22.5798072Z   persist-credentials: true
+dependency-check	Checkout code	2026-02-03T09:59:22.5798519Z   clean: true
+dependency-check	Checkout code	2026-02-03T09:59:22.5798921Z   sparse-checkout-cone-mode: true
+dependency-check	Checkout code	2026-02-03T09:59:22.5799388Z   fetch-depth: 1
+dependency-check	Checkout code	2026-02-03T09:59:22.5799775Z   fetch-tags: false
+dependency-check	Checkout code	2026-02-03T09:59:22.5800166Z   show-progress: true
+dependency-check	Checkout code	2026-02-03T09:59:22.5800566Z   lfs: false
+dependency-check	Checkout code	2026-02-03T09:59:22.5800922Z   submodules: false
+dependency-check	Checkout code	2026-02-03T09:59:22.5801318Z   set-safe-directory: true
+dependency-check	Checkout code	2026-02-03T09:59:22.5801946Z ##[endgroup]
+dependency-check	Checkout code	2026-02-03T09:59:22.6877332Z Syncing repository: fernandogarzaaa/appforge
+dependency-check	Checkout code	2026-02-03T09:59:22.6879038Z ##[group]Getting Git version info
+dependency-check	Checkout code	2026-02-03T09:59:22.6879724Z Working directory is '/home/runner/work/appforge/appforge'
+dependency-check	Checkout code	2026-02-03T09:59:22.6880632Z [command]/usr/bin/git version
+dependency-check	Checkout code	2026-02-03T09:59:22.6959329Z git version 2.52.0
+dependency-check	Checkout code	2026-02-03T09:59:22.6985244Z ##[endgroup]
+dependency-check	Checkout code	2026-02-03T09:59:22.6999763Z Temporarily overriding HOME='/home/runner/work/_temp/c49cce12-7d31-4800-b7ed-f75aea67caea' before making global git config changes
+dependency-check	Checkout code	2026-02-03T09:59:22.7001113Z Adding repository directory to the temporary git global config as a safe directory
+dependency-check	Checkout code	2026-02-03T09:59:22.7012878Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/appforge/appforge
+dependency-check	Checkout code	2026-02-03T09:59:22.7053283Z Deleting the contents of '/home/runner/work/appforge/appforge'
+dependency-check	Checkout code	2026-02-03T09:59:22.7057023Z ##[group]Initializing the repository
+dependency-check	Checkout code	2026-02-03T09:59:22.7061465Z [command]/usr/bin/git init /home/runner/work/appforge/appforge
+dependency-check	Checkout code	2026-02-03T09:59:22.7168309Z hint: Using 'master' as the name for the initial branch. This default branch name
+dependency-check	Checkout code	2026-02-03T09:59:22.7169879Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+dependency-check	Checkout code	2026-02-03T09:59:22.7171485Z hint: to use in all of your new repositories, which will suppress this warning,
+dependency-check	Checkout code	2026-02-03T09:59:22.7173103Z hint: call:
+dependency-check	Checkout code	2026-02-03T09:59:22.7173915Z hint:
+dependency-check	Checkout code	2026-02-03T09:59:22.7174809Z hint: 	git config --global init.defaultBranch <name>
+dependency-check	Checkout code	2026-02-03T09:59:22.7175425Z hint:
+dependency-check	Checkout code	2026-02-03T09:59:22.7175989Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+dependency-check	Checkout code	2026-02-03T09:59:22.7176958Z hint: 'development'. The just-created branch can be renamed via this command:
+dependency-check	Checkout code	2026-02-03T09:59:22.7177655Z hint:
+dependency-check	Checkout code	2026-02-03T09:59:22.7178181Z hint: 	git branch -m <name>
+dependency-check	Checkout code	2026-02-03T09:59:22.7178682Z hint:
+dependency-check	Checkout code	2026-02-03T09:59:22.7179264Z hint: Disable this message with "git config set advice.defaultBranchName false"
+dependency-check	Checkout code	2026-02-03T09:59:22.7180228Z Initialized empty Git repository in /home/runner/work/appforge/appforge/.git/
+dependency-check	Checkout code	2026-02-03T09:59:22.7184416Z [command]/usr/bin/git remote add origin https://github.com/fernandogarzaaa/appforge
+dependency-check	Checkout code	2026-02-03T09:59:22.7219229Z ##[endgroup]
+dependency-check	Checkout code	2026-02-03T09:59:22.7219965Z ##[group]Disabling automatic garbage collection
+dependency-check	Checkout code	2026-02-03T09:59:22.7222984Z [command]/usr/bin/git config --local gc.auto 0
+dependency-check	Checkout code	2026-02-03T09:59:22.7251837Z ##[endgroup]
+dependency-check	Checkout code	2026-02-03T09:59:22.7252527Z ##[group]Setting up auth
+dependency-check	Checkout code	2026-02-03T09:59:22.7258851Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+dependency-check	Checkout code	2026-02-03T09:59:22.7288289Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+dependency-check	Checkout code	2026-02-03T09:59:22.7647386Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+dependency-check	Checkout code	2026-02-03T09:59:22.7676742Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+dependency-check	Checkout code	2026-02-03T09:59:22.7922189Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+dependency-check	Checkout code	2026-02-03T09:59:22.7956704Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+dependency-check	Checkout code	2026-02-03T09:59:22.8219323Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+dependency-check	Checkout code	2026-02-03T09:59:22.8258123Z ##[endgroup]
+dependency-check	Checkout code	2026-02-03T09:59:22.8259459Z ##[group]Fetching the repository
+dependency-check	Checkout code	2026-02-03T09:59:22.8268374Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +16f366d4c982ab1a5bc5cd54af336131b5f89365:refs/remotes/origin/main
+dependency-check	Checkout code	2026-02-03T09:59:35.1550693Z From https://github.com/fernandogarzaaa/appforge
+dependency-check	Checkout code	2026-02-03T09:59:35.1553161Z  * [new ref]         16f366d4c982ab1a5bc5cd54af336131b5f89365 -> origin/main
+dependency-check	Checkout code	2026-02-03T09:59:35.1585138Z ##[endgroup]
+dependency-check	Checkout code	2026-02-03T09:59:35.1586230Z ##[group]Determining the checkout info
+dependency-check	Checkout code	2026-02-03T09:59:35.1587751Z ##[endgroup]
+dependency-check	Checkout code	2026-02-03T09:59:35.1593037Z [command]/usr/bin/git sparse-checkout disable
+dependency-check	Checkout code	2026-02-03T09:59:35.1636712Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+dependency-check	Checkout code	2026-02-03T09:59:35.1663133Z ##[group]Checking out the ref
+dependency-check	Checkout code	2026-02-03T09:59:35.1666780Z [command]/usr/bin/git checkout --progress --force -B main refs/remotes/origin/main
+dependency-check	Checkout code	2026-02-03T09:59:36.2157467Z Updating files:  57% (1659/2899)
+dependency-check	Checkout code	2026-02-03T09:59:36.4066378Z Updating files:  58% (1682/2899)
+dependency-check	Checkout code	2026-02-03T09:59:36.5504892Z Updating files:  59% (1711/2899)
+dependency-check	Checkout code	2026-02-03T09:59:36.5722460Z Updating files:  60% (1740/2899)
+dependency-check	Checkout code	2026-02-03T09:59:36.5734253Z Updating files:  61% (1769/2899)
+dependency-check	Checkout code	2026-02-03T09:59:36.5746590Z Updating files:  62% (1798/2899)
+dependency-check	Checkout code	2026-02-03T09:59:36.5758445Z Updating files:  63% (1827/2899)
+dependency-check	Checkout code	2026-02-03T09:59:36.5770307Z Updating files:  64% (1856/2899)
+dependency-check	Checkout code	2026-02-03T09:59:36.5781897Z Updating files:  65% (1885/2899)
+dependency-check	Checkout code	2026-02-03T09:59:36.5794015Z Updating files:  66% (1914/2899)
+dependency-check	Checkout code	2026-02-03T09:59:36.5805864Z Updating files:  67% (1943/2899)
+dependency-check	Checkout code	2026-02-03T09:59:36.5826505Z Updating files:  68% (1972/2899)
+dependency-check	Checkout code	2026-02-03T09:59:36.6244077Z Updating files:  69% (2001/2899)
+dependency-check	Checkout code	2026-02-03T09:59:36.8033193Z Updating files:  70% (2030/2899)
+dependency-check	Checkout code	2026-02-03T09:59:36.9781647Z Updating files:  71% (2059/2899)
+dependency-check	Checkout code	2026-02-03T09:59:37.0866349Z Updating files:  72% (2088/2899)
+dependency-check	Checkout code	2026-02-03T09:59:37.0944721Z Updating files:  73% (2117/2899)
+dependency-check	Checkout code	2026-02-03T09:59:37.0967632Z Updating files:  74% (2146/2899)
+dependency-check	Checkout code	2026-02-03T09:59:37.0995457Z Updating files:  75% (2175/2899)
+dependency-check	Checkout code	2026-02-03T09:59:37.1025794Z Updating files:  76% (2204/2899)
+dependency-check	Checkout code	2026-02-03T09:59:37.1057135Z Updating files:  77% (2233/2899)
+dependency-check	Checkout code	2026-02-03T09:59:37.1088339Z Updating files:  78% (2262/2899)
+dependency-check	Checkout code	2026-02-03T09:59:37.1120966Z Updating files:  79% (2291/2899)
+dependency-check	Checkout code	2026-02-03T09:59:37.1156827Z Updating files:  80% (2320/2899)
+dependency-check	Checkout code	2026-02-03T09:59:37.1177498Z Updating files:  81% (2349/2899)
+dependency-check	Checkout code	2026-02-03T09:59:37.1198523Z Updating files:  82% (2378/2899)
+dependency-check	Checkout code	2026-02-03T09:59:37.1222581Z Updating files:  83% (2407/2899)
+dependency-check	Checkout code	2026-02-03T09:59:37.1245541Z Updating files:  84% (2436/2899)
+dependency-check	Checkout code	2026-02-03T09:59:37.1262154Z Updating files:  85% (2465/2899)
+dependency-check	Checkout code	2026-02-03T09:59:37.1275201Z Updating files:  86% (2494/2899)
+dependency-check	Checkout code	2026-02-03T09:59:37.1289032Z Updating files:  87% (2523/2899)
+dependency-check	Checkout code	2026-02-03T09:59:37.1304467Z Updating files:  88% (2552/2899)
+dependency-check	Checkout code	2026-02-03T09:59:37.1321792Z Updating files:  89% (2581/2899)
+dependency-check	Checkout code	2026-02-03T09:59:37.1343952Z Updating files:  90% (2610/2899)
+dependency-check	Checkout code	2026-02-03T09:59:37.1364250Z Updating files:  91% (2639/2899)
+dependency-check	Checkout code	2026-02-03T09:59:37.1386096Z Updating files:  92% (2668/2899)
+dependency-check	Checkout code	2026-02-03T09:59:37.1406609Z Updating files:  93% (2697/2899)
+dependency-check	Checkout code	2026-02-03T09:59:37.1430656Z Updating files:  94% (2726/2899)
+dependency-check	Checkout code	2026-02-03T09:59:37.1448705Z Updating files:  95% (2755/2899)
+dependency-check	Checkout code	2026-02-03T09:59:37.1469982Z Updating files:  96% (2784/2899)
+dependency-check	Checkout code	2026-02-03T09:59:37.1502951Z Updating files:  97% (2813/2899)
+dependency-check	Checkout code	2026-02-03T09:59:37.1542432Z Updating files:  98% (2842/2899)
+dependency-check	Checkout code	2026-02-03T09:59:37.1562737Z Updating files:  99% (2871/2899)
+dependency-check	Checkout code	2026-02-03T09:59:37.1563328Z Updating files: 100% (2899/2899)
+dependency-check	Checkout code	2026-02-03T09:59:37.1563967Z Updating files: 100% (2899/2899), done.
+dependency-check	Checkout code	2026-02-03T09:59:37.1605808Z Switched to a new branch 'main'
+dependency-check	Checkout code	2026-02-03T09:59:37.1609119Z branch 'main' set up to track 'origin/main'.
+dependency-check	Checkout code	2026-02-03T09:59:37.1691280Z ##[endgroup]
+dependency-check	Checkout code	2026-02-03T09:59:37.1730904Z [command]/usr/bin/git log -1 --format=%H
+dependency-check	Checkout code	2026-02-03T09:59:37.1753987Z 16f366d4c982ab1a5bc5cd54af336131b5f89365
+dependency-check	Setup Node.js	∩╗┐2026-02-03T09:59:37.1977291Z ##[group]Run actions/setup-node@v4
+dependency-check	Setup Node.js	2026-02-03T09:59:37.1977856Z with:
+dependency-check	Setup Node.js	2026-02-03T09:59:37.1978181Z   node-version: 20.x
+dependency-check	Setup Node.js	2026-02-03T09:59:37.1978524Z   cache: npm
+dependency-check	Setup Node.js	2026-02-03T09:59:37.1978759Z   cache-dependency-path: backend/package-lock.json
+dependency-check	Setup Node.js	2026-02-03T09:59:37.1979055Z   always-auth: false
+dependency-check	Setup Node.js	2026-02-03T09:59:37.1979254Z   check-latest: false
+dependency-check	Setup Node.js	2026-02-03T09:59:37.1979581Z   token: ***
+dependency-check	Setup Node.js	2026-02-03T09:59:37.1979753Z ##[endgroup]
+dependency-check	Setup Node.js	2026-02-03T09:59:37.3832630Z Found in cache @ /opt/hostedtoolcache/node/20.20.0/x64
+dependency-check	Setup Node.js	2026-02-03T09:59:37.3838694Z ##[group]Environment details
+dependency-check	Setup Node.js	2026-02-03T09:59:40.0798855Z node: v20.20.0
+dependency-check	Setup Node.js	2026-02-03T09:59:40.0799266Z npm: 10.8.2
+dependency-check	Setup Node.js	2026-02-03T09:59:40.0799554Z yarn: 1.22.22
+dependency-check	Setup Node.js	2026-02-03T09:59:40.0801213Z ##[endgroup]
+dependency-check	Setup Node.js	2026-02-03T09:59:40.0820988Z [command]/opt/hostedtoolcache/node/20.20.0/x64/bin/npm config get cache
+dependency-check	Setup Node.js	2026-02-03T09:59:40.3909760Z /home/runner/.npm
+dependency-check	Setup Node.js	2026-02-03T09:59:40.4830950Z Cache hit for: node-cache-Linux-x64-npm-23e39b09a7a1c80e363c35cecc91feebc5d82ece14369e872e5e50e3be2bc7f9
+dependency-check	Setup Node.js	2026-02-03T09:59:40.7710995Z Received 25014869 of 25014869 (100.0%), 101.9 MBs/sec
+dependency-check	Setup Node.js	2026-02-03T09:59:40.7711962Z Cache Size: ~24 MB (25014869 B)
+dependency-check	Setup Node.js	2026-02-03T09:59:40.7739690Z [command]/usr/bin/tar -xf /home/runner/work/_temp/0531d922-56c2-4649-83a2-575114a08455/cache.tzst -P -C /home/runner/work/appforge/appforge --use-compress-program unzstd
+dependency-check	Setup Node.js	2026-02-03T09:59:40.8998173Z Cache restored successfully
+dependency-check	Setup Node.js	2026-02-03T09:59:40.9050973Z Cache restored from key: node-cache-Linux-x64-npm-23e39b09a7a1c80e363c35cecc91feebc5d82ece14369e872e5e50e3be2bc7f9
+dependency-check	Install dependencies	∩╗┐2026-02-03T09:59:40.9196326Z ##[group]Run npm ci --legacy-peer-deps
+dependency-check	Install dependencies	2026-02-03T09:59:40.9196741Z [36;1mnpm ci --legacy-peer-deps[0m
+dependency-check	Install dependencies	2026-02-03T09:59:40.9238289Z shell: /usr/bin/bash -e {0}
+dependency-check	Install dependencies	2026-02-03T09:59:40.9238557Z ##[endgroup]
+dependency-check	Install dependencies	2026-02-03T09:59:44.0076935Z npm warn deprecated inflight@1.0.6: This module is not supported, and leaks memory. Do not use it. Check out lru-cache if you want a good and tested way to coalesce async requests by a key value, which is much more comprehensive and powerful.
+dependency-check	Install dependencies	2026-02-03T09:59:44.0341751Z npm warn deprecated lodash.get@4.4.2: This package is deprecated. Use the optional chaining (?.) operator instead.
+dependency-check	Install dependencies	2026-02-03T09:59:44.0731207Z npm warn deprecated supertest@6.3.4: Please upgrade to supertest v7.1.3+, see release notes at https://github.com/forwardemail/supertest/releases/tag/v7.1.3 - maintenance is supported by Forward Email @ https://forwardemail.net
+dependency-check	Install dependencies	2026-02-03T09:59:44.0775449Z npm warn deprecated lodash.isequal@4.5.0: This package is deprecated. Use require('node:util').isDeepStrictEqual instead.
+dependency-check	Install dependencies	2026-02-03T09:59:44.0894557Z npm warn deprecated @humanwhocodes/config-array@0.13.0: Use @eslint/config-array instead
+dependency-check	Install dependencies	2026-02-03T09:59:44.0946468Z npm warn deprecated rimraf@3.0.2: Rimraf versions prior to v4 are no longer supported
+dependency-check	Install dependencies	2026-02-03T09:59:44.1494571Z npm warn deprecated glob@7.2.3: Glob versions prior to v9 are no longer supported
+dependency-check	Install dependencies	2026-02-03T09:59:44.1577755Z npm warn deprecated @humanwhocodes/object-schema@2.0.3: Use @eslint/object-schema instead
+dependency-check	Install dependencies	2026-02-03T09:59:44.1712269Z npm warn deprecated glob@7.1.6: Glob versions prior to v9 are no longer supported
+dependency-check	Install dependencies	2026-02-03T09:59:44.4887530Z npm warn deprecated superagent@8.1.2: Please upgrade to superagent v10.2.2+, see release notes at https://github.com/forwardemail/superagent/releases/tag/v10.2.2 - maintenance is supported by Forward Email @ https://forwardemail.net
+dependency-check	Install dependencies	2026-02-03T09:59:45.3864829Z npm warn deprecated eslint@8.57.1: This version is no longer supported. Please see https://eslint.org/version-support for other options.
+dependency-check	Install dependencies	2026-02-03T09:59:48.1824340Z 
+dependency-check	Install dependencies	2026-02-03T09:59:48.1825056Z added 468 packages, and audited 469 packages in 7s
+dependency-check	Install dependencies	2026-02-03T09:59:48.1825672Z 
+dependency-check	Install dependencies	2026-02-03T09:59:48.1826379Z 62 packages are looking for funding
+dependency-check	Install dependencies	2026-02-03T09:59:48.1826945Z   run `npm fund` for details
+dependency-check	Install dependencies	2026-02-03T09:59:48.1903973Z 
+dependency-check	Install dependencies	2026-02-03T09:59:48.1904770Z 1 moderate severity vulnerability
+dependency-check	Install dependencies	2026-02-03T09:59:48.1905393Z 
+dependency-check	Install dependencies	2026-02-03T09:59:48.1906083Z To address all issues (including breaking changes), run:
+dependency-check	Install dependencies	2026-02-03T09:59:48.1906871Z   npm audit fix --force
+dependency-check	Install dependencies	2026-02-03T09:59:48.1907299Z 
+dependency-check	Install dependencies	2026-02-03T09:59:48.1907659Z Run `npm audit` for details.
+dependency-check	Check for vulnerabilities	∩╗┐2026-02-03T09:59:48.2399625Z ##[group]Run npm audit --audit-level=moderate
+dependency-check	Check for vulnerabilities	2026-02-03T09:59:48.2400194Z [36;1mnpm audit --audit-level=moderate[0m
+dependency-check	Check for vulnerabilities	2026-02-03T09:59:48.2440104Z shell: /usr/bin/bash -e {0}
+dependency-check	Check for vulnerabilities	2026-02-03T09:59:48.2440484Z ##[endgroup]
+dependency-check	Check for vulnerabilities	2026-02-03T09:59:48.9174250Z # npm audit report
+dependency-check	Check for vulnerabilities	2026-02-03T09:59:48.9174592Z 
+dependency-check	Check for vulnerabilities	2026-02-03T09:59:48.9174740Z eslint  <9.26.0
+dependency-check	Check for vulnerabilities	2026-02-03T09:59:48.9175124Z Severity: moderate
+dependency-check	Check for vulnerabilities	2026-02-03T09:59:48.9176375Z eslint has a Stack Overflow when serializing objects with circular references - https://github.com/advisories/GHSA-p5wg-g6qr-c7cg
+dependency-check	Check for vulnerabilities	2026-02-03T09:59:48.9177550Z fix available via `npm audit fix --force`
+dependency-check	Check for vulnerabilities	2026-02-03T09:59:48.9178266Z Will install eslint@9.39.2, which is a breaking change
+dependency-check	Check for vulnerabilities	2026-02-03T09:59:48.9178825Z node_modules/eslint
+dependency-check	Check for vulnerabilities	2026-02-03T09:59:48.9179040Z 
+dependency-check	Check for vulnerabilities	2026-02-03T09:59:48.9179294Z 1 moderate severity vulnerability
+dependency-check	Check for vulnerabilities	2026-02-03T09:59:48.9179592Z 
+dependency-check	Check for vulnerabilities	2026-02-03T09:59:48.9180027Z To address all issues (including breaking changes), run:
+dependency-check	Check for vulnerabilities	2026-02-03T09:59:48.9180591Z   npm audit fix --force
+dependency-check	Check for vulnerabilities	2026-02-03T09:59:48.9292244Z ##[error]Process completed with exit code 1.
+dependency-check	Generate SBOM (Software Bill of Materials)	∩╗┐2026-02-03T09:59:48.9337182Z ##[group]Run npm sbom --sbom-format=json --sbom-output=sbom.json 2>/dev/null || echo "SBOM generation not available"
+dependency-check	Generate SBOM (Software Bill of Materials)	2026-02-03T09:59:48.9338016Z [36;1mnpm sbom --sbom-format=json --sbom-output=sbom.json 2>/dev/null || echo "SBOM generation not available"[0m
+dependency-check	Generate SBOM (Software Bill of Materials)	2026-02-03T09:59:48.9370635Z shell: /usr/bin/bash -e {0}
+dependency-check	Generate SBOM (Software Bill of Materials)	2026-02-03T09:59:48.9370884Z ##[endgroup]
+dependency-check	Generate SBOM (Software Bill of Materials)	2026-02-03T09:59:49.1375647Z SBOM generation not available
+dependency-check	Post Setup Node.js	∩╗┐2026-02-03T09:59:49.1455584Z Post job cleanup.
+dependency-check	Post Setup Node.js	2026-02-03T09:59:49.3219393Z Cache hit occurred on the primary key node-cache-Linux-x64-npm-23e39b09a7a1c80e363c35cecc91feebc5d82ece14369e872e5e50e3be2bc7f9, not saving cache.
+dependency-check	Post Checkout code	∩╗┐2026-02-03T09:59:49.3348960Z Post job cleanup.
+dependency-check	Post Checkout code	2026-02-03T09:59:49.4312656Z [command]/usr/bin/git version
+dependency-check	Post Checkout code	2026-02-03T09:59:49.4353498Z git version 2.52.0
+dependency-check	Post Checkout code	2026-02-03T09:59:49.4399031Z Temporarily overriding HOME='/home/runner/work/_temp/24fc42f5-ad80-494b-8e77-fbbd5da41c7a' before making global git config changes
+dependency-check	Post Checkout code	2026-02-03T09:59:49.4400623Z Adding repository directory to the temporary git global config as a safe directory
+dependency-check	Post Checkout code	2026-02-03T09:59:49.4405942Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/appforge/appforge
+dependency-check	Post Checkout code	2026-02-03T09:59:49.4445548Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+dependency-check	Post Checkout code	2026-02-03T09:59:49.4479987Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+dependency-check	Post Checkout code	2026-02-03T09:59:49.4730127Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+dependency-check	Post Checkout code	2026-02-03T09:59:49.4754926Z http.https://github.com/.extraheader
+dependency-check	Post Checkout code	2026-02-03T09:59:49.4767639Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+dependency-check	Post Checkout code	2026-02-03T09:59:49.4800991Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+dependency-check	Post Checkout code	2026-02-03T09:59:49.5042307Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+dependency-check	Post Checkout code	2026-02-03T09:59:49.5076188Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+dependency-check	Complete job	∩╗┐2026-02-03T09:59:49.5430659Z Cleaning up orphan processes
+api-documentation	Set up job	∩╗┐2026-02-03T09:59:21.9930487Z Current runner version: '2.331.0'
+api-documentation	Set up job	2026-02-03T09:59:21.9955252Z ##[group]Runner Image Provisioner
+api-documentation	Set up job	2026-02-03T09:59:21.9956129Z Hosted Compute Agent
+api-documentation	Set up job	2026-02-03T09:59:21.9956710Z Version: 20260123.484
+api-documentation	Set up job	2026-02-03T09:59:21.9957260Z Commit: 6bd6555ca37d84114959e1c76d2c01448ff61c5d
+api-documentation	Set up job	2026-02-03T09:59:21.9958053Z Build Date: 2026-01-23T19:41:17Z
+api-documentation	Set up job	2026-02-03T09:59:21.9958694Z Worker ID: {22a619ad-60a1-40e5-99d2-da314a802d99}
+api-documentation	Set up job	2026-02-03T09:59:21.9959381Z Azure Region: northcentralus
+api-documentation	Set up job	2026-02-03T09:59:21.9959909Z ##[endgroup]
+api-documentation	Set up job	2026-02-03T09:59:21.9961381Z ##[group]Operating System
+api-documentation	Set up job	2026-02-03T09:59:21.9962005Z Ubuntu
+api-documentation	Set up job	2026-02-03T09:59:21.9962693Z 24.04.3
+api-documentation	Set up job	2026-02-03T09:59:21.9963289Z LTS
+api-documentation	Set up job	2026-02-03T09:59:21.9963722Z ##[endgroup]
+api-documentation	Set up job	2026-02-03T09:59:21.9964210Z ##[group]Runner Image
+api-documentation	Set up job	2026-02-03T09:59:21.9964815Z Image: ubuntu-24.04
+api-documentation	Set up job	2026-02-03T09:59:21.9965345Z Version: 20260126.10.1
+api-documentation	Set up job	2026-02-03T09:59:21.9966325Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260126.10/images/ubuntu/Ubuntu2404-Readme.md
+api-documentation	Set up job	2026-02-03T09:59:21.9967983Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20260126.10
+api-documentation	Set up job	2026-02-03T09:59:21.9968859Z ##[endgroup]
+api-documentation	Set up job	2026-02-03T09:59:21.9970006Z ##[group]GITHUB_TOKEN Permissions
+api-documentation	Set up job	2026-02-03T09:59:21.9971800Z Contents: read
+api-documentation	Set up job	2026-02-03T09:59:21.9972687Z Metadata: read
+api-documentation	Set up job	2026-02-03T09:59:21.9973204Z Packages: read
+api-documentation	Set up job	2026-02-03T09:59:21.9973706Z ##[endgroup]
+api-documentation	Set up job	2026-02-03T09:59:21.9975735Z Secret source: Actions
+api-documentation	Set up job	2026-02-03T09:59:21.9976482Z Prepare workflow directory
+api-documentation	Set up job	2026-02-03T09:59:22.0317514Z Prepare all required actions
+api-documentation	Set up job	2026-02-03T09:59:22.0372533Z Getting action download info
+api-documentation	Set up job	2026-02-03T09:59:22.3722882Z ##[error]This request has been automatically failed because it uses a deprecated version of `actions/upload-artifact: v3`. Learn more: https://github.blog/changelog/2024-04-16-deprecation-notice-v3-of-the-artifact-actions/
+security-audit (20.x)	Set up job	∩╗┐2026-02-03T09:59:23.4063007Z Current runner version: '2.331.0'
+security-audit (20.x)	Set up job	2026-02-03T09:59:23.4086140Z ##[group]Runner Image Provisioner
+security-audit (20.x)	Set up job	2026-02-03T09:59:23.4087036Z Hosted Compute Agent
+security-audit (20.x)	Set up job	2026-02-03T09:59:23.4087709Z Version: 20260123.484
+security-audit (20.x)	Set up job	2026-02-03T09:59:23.4088269Z Commit: 6bd6555ca37d84114959e1c76d2c01448ff61c5d
+security-audit (20.x)	Set up job	2026-02-03T09:59:23.4088875Z Build Date: 2026-01-23T19:41:17Z
+security-audit (20.x)	Set up job	2026-02-03T09:59:23.4089500Z Worker ID: {af668c1a-c716-41b0-ab77-ef82fbc1af86}
+security-audit (20.x)	Set up job	2026-02-03T09:59:23.4090122Z Azure Region: westcentralus
+security-audit (20.x)	Set up job	2026-02-03T09:59:23.4090655Z ##[endgroup]
+security-audit (20.x)	Set up job	2026-02-03T09:59:23.4091959Z ##[group]Operating System
+security-audit (20.x)	Set up job	2026-02-03T09:59:23.4092522Z Ubuntu
+security-audit (20.x)	Set up job	2026-02-03T09:59:23.4092958Z 24.04.3
+security-audit (20.x)	Set up job	2026-02-03T09:59:23.4093356Z LTS
+security-audit (20.x)	Set up job	2026-02-03T09:59:23.4093803Z ##[endgroup]
+security-audit (20.x)	Set up job	2026-02-03T09:59:23.4094225Z ##[group]Runner Image
+security-audit (20.x)	Set up job	2026-02-03T09:59:23.4094745Z Image: ubuntu-24.04
+security-audit (20.x)	Set up job	2026-02-03T09:59:23.4095185Z Version: 20260126.10.1
+security-audit (20.x)	Set up job	2026-02-03T09:59:23.4096075Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260126.10/images/ubuntu/Ubuntu2404-Readme.md
+security-audit (20.x)	Set up job	2026-02-03T09:59:23.4097700Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20260126.10
+security-audit (20.x)	Set up job	2026-02-03T09:59:23.4098500Z ##[endgroup]
+security-audit (20.x)	Set up job	2026-02-03T09:59:23.4099455Z ##[group]GITHUB_TOKEN Permissions
+security-audit (20.x)	Set up job	2026-02-03T09:59:23.4101427Z Contents: read
+security-audit (20.x)	Set up job	2026-02-03T09:59:23.4101918Z Metadata: read
+security-audit (20.x)	Set up job	2026-02-03T09:59:23.4102388Z Packages: read
+security-audit (20.x)	Set up job	2026-02-03T09:59:23.4102833Z ##[endgroup]
+security-audit (20.x)	Set up job	2026-02-03T09:59:23.4104865Z Secret source: Actions
+security-audit (20.x)	Set up job	2026-02-03T09:59:23.4105533Z Prepare workflow directory
+security-audit (20.x)	Set up job	2026-02-03T09:59:23.4459923Z Prepare all required actions
+security-audit (20.x)	Set up job	2026-02-03T09:59:23.4497088Z Getting action download info
+security-audit (20.x)	Set up job	2026-02-03T09:59:23.8624400Z ##[error]This request has been automatically failed because it uses a deprecated version of `actions/upload-artifact: v3`. Learn more: https://github.blog/changelog/2024-04-16-deprecation-notice-v3-of-the-artifact-actions/
+notify-security	Set up job	∩╗┐2026-02-03T09:59:29.0076329Z Current runner version: '2.331.0'
+notify-security	Set up job	2026-02-03T09:59:29.0100009Z ##[group]Runner Image Provisioner
+notify-security	Set up job	2026-02-03T09:59:29.0100786Z Hosted Compute Agent
+notify-security	Set up job	2026-02-03T09:59:29.0101420Z Version: 20260123.484
+notify-security	Set up job	2026-02-03T09:59:29.0102006Z Commit: 6bd6555ca37d84114959e1c76d2c01448ff61c5d
+notify-security	Set up job	2026-02-03T09:59:29.0103279Z Build Date: 2026-01-23T19:41:17Z
+notify-security	Set up job	2026-02-03T09:59:29.0103967Z Worker ID: {99e47a4c-4b6d-44eb-ae71-fc2f396cbf00}
+notify-security	Set up job	2026-02-03T09:59:29.0104771Z Azure Region: eastus2
+notify-security	Set up job	2026-02-03T09:59:29.0105322Z ##[endgroup]
+notify-security	Set up job	2026-02-03T09:59:29.0107235Z ##[group]Operating System
+notify-security	Set up job	2026-02-03T09:59:29.0107893Z Ubuntu
+notify-security	Set up job	2026-02-03T09:59:29.0108338Z 24.04.3
+notify-security	Set up job	2026-02-03T09:59:29.0108899Z LTS
+notify-security	Set up job	2026-02-03T09:59:29.0109371Z ##[endgroup]
+notify-security	Set up job	2026-02-03T09:59:29.0109884Z ##[group]Runner Image
+notify-security	Set up job	2026-02-03T09:59:29.0110414Z Image: ubuntu-24.04
+notify-security	Set up job	2026-02-03T09:59:29.0111010Z Version: 20260126.10.1
+notify-security	Set up job	2026-02-03T09:59:29.0111971Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260126.10/images/ubuntu/Ubuntu2404-Readme.md
+notify-security	Set up job	2026-02-03T09:59:29.0114019Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20260126.10
+notify-security	Set up job	2026-02-03T09:59:29.0114966Z ##[endgroup]
+notify-security	Set up job	2026-02-03T09:59:29.0116151Z ##[group]GITHUB_TOKEN Permissions
+notify-security	Set up job	2026-02-03T09:59:29.0118485Z Contents: read
+notify-security	Set up job	2026-02-03T09:59:29.0119209Z Metadata: read
+notify-security	Set up job	2026-02-03T09:59:29.0119723Z Packages: read
+notify-security	Set up job	2026-02-03T09:59:29.0120230Z ##[endgroup]
+notify-security	Set up job	2026-02-03T09:59:29.0122445Z Secret source: Actions
+notify-security	Set up job	2026-02-03T09:59:29.0123363Z Prepare workflow directory
+notify-security	Set up job	2026-02-03T09:59:29.0436609Z Prepare all required actions
+notify-security	Set up job	2026-02-03T09:59:29.0527269Z Complete job name: notify-security
+notify-security	Notify security team	∩╗┐2026-02-03T09:59:29.1235503Z ##[group]Run echo "ΓÜá∩╕Å Security audit detected issues in refs/heads/main"
+notify-security	Notify security team	2026-02-03T09:59:29.1236585Z [36;1mecho "ΓÜá∩╕Å Security audit detected issues in refs/heads/main"[0m
+notify-security	Notify security team	2026-02-03T09:59:29.1237421Z [36;1mecho "Commit: 16f366d4c982ab1a5bc5cd54af336131b5f89365"[0m
+notify-security	Notify security team	2026-02-03T09:59:29.1238552Z [36;1mecho "Run: https://github.com/fernandogarzaaa/appforge/actions/runs/21625640401"[0m
+notify-security	Notify security team	2026-02-03T09:59:29.2003623Z shell: /usr/bin/bash -e {0}
+notify-security	Notify security team	2026-02-03T09:59:29.2005103Z ##[endgroup]
+notify-security	Notify security team	2026-02-03T09:59:29.2388721Z ΓÜá∩╕Å Security audit detected issues in refs/heads/main
+notify-security	Notify security team	2026-02-03T09:59:29.2390102Z Commit: 16f366d4c982ab1a5bc5cd54af336131b5f89365
+notify-security	Notify security team	2026-02-03T09:59:29.2391652Z Run: https://github.com/fernandogarzaaa/appforge/actions/runs/21625640401
+notify-security	Complete job	∩╗┐2026-02-03T09:59:29.2526181Z Cleaning up orphan processes
