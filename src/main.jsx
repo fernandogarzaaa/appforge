@@ -9,7 +9,7 @@ import '@/index.css'
 import { initializeAPI } from '@/api/services'
 
 // Initialize Sentry for error tracking (MUST be first)
-import { initializeSentry, setSentryContext } from '@/lib/sentryConfig'
+import { initializeSentry, setSentryContext } from '@/lib/sentryConfig.jsx'
 initializeSentry();
 
 // Initialize API services
