@@ -459,6 +459,24 @@ For detailed information, see [XENDIT_MIGRATION_GUIDE.md](./XENDIT_MIGRATION_GUI
    - Set production URLs
 
 3. **Deploy to Production**
+
+### Demo Deployment (Vercel)
+
+1. **Import the repo** into Vercel.
+2. **Framework preset:** Vite (auto-detected by vercel.json).
+3. **Build Command:** `npm run build`
+4. **Output Directory:** `dist`
+5. **Environment Variables:** copy required values from [.env.example](.env.example)
+6. **Deploy** and verify client-side routing works.
+
+### Demo Deployment (Railway)
+
+1. **Create a new Railway project** and connect the repo.
+2. **Builder:** Nixpacks (auto-detected via railway.json).
+3. **Build Command:** `npm run build`
+4. **Start Command:** `npm run preview -- --host 0.0.0.0 --port $PORT`
+5. **Environment Variables:** copy required values from [.env.example](.env.example)
+6. **Deploy** and verify healthcheck at `/`.
    - Upload `dist/` folder to your hosting
    - Configure serverless functions for Deno
    - Set environment variables on host
