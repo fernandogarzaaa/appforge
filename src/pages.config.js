@@ -96,6 +96,7 @@ import IntegrationAnalytics from './pages/IntegrationAnalytics';
 import IntegrationHub from './pages/IntegrationHub';
 import Integrations from './pages/Integrations';
 import IntegrationTemplates from './pages/IntegrationTemplates';
+import IncidentIntelligence from './pages/IncidentIntelligence';
 import Landing from './pages/Landing';
 import LLMSettings from './pages/LLMSettings';
 import Login from './pages/Login';
@@ -192,6 +193,7 @@ export const PAGES = {
   IntegrationHub,
   Integrations,
   IntegrationTemplates,
+  IncidentIntelligence,
   Landing,
   LLMSettings,
   Login,
