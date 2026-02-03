@@ -66,6 +66,7 @@ import CentralAnalytics from './pages/CentralAnalytics';
 import ChatbotManager from './pages/ChatbotManager';
 import CodePlayground from './pages/CodePlayground';
 import CodeRefactoring from './pages/CodeRefactoring';
+import CodeGenerator from './pages/CodeGenerator';
 import Collaboration from './pages/Collaboration';
 import Components from './pages/Components';
 import ContentStudio from './pages/ContentStudio';
@@ -98,6 +99,7 @@ import IntegrationTemplates from './pages/IntegrationTemplates';
 import Landing from './pages/Landing';
 import LLMSettings from './pages/LLMSettings';
 import Login from './pages/Login';
+import Marketplace from './pages/Marketplace';
 import MediaStudio from './pages/MediaStudio';
 import MedicalAI from './pages/MedicalAI';
 import MLIntegration from './pages/MLIntegration';
@@ -160,6 +162,7 @@ export const PAGES = {
   ChatbotManager,
   CodePlayground,
   CodeRefactoring,
+  CodeGenerator,
   Collaboration,
   Components,
   ContentStudio,
@@ -192,6 +195,7 @@ export const PAGES = {
   Landing,
   LLMSettings,
   Login,
+  Marketplace,
   MediaStudio,
   MedicalAI,
   MLIntegration,

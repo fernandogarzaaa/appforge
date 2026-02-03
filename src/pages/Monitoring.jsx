@@ -4,11 +4,14 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Activity, Clock, CheckCircle, XCircle, AlertCircle, TrendingUp } from 'lucide-react';
+import { AdvancedMonitoringService } from '@/services/advancedMonitoring';
 
 export default function Monitoring() {
   const [metrics, setMetrics] = useState(null);
   const [jobs, setJobs] = useState([]);
   const [traces, setTraces] = useState([]);
+  const [advancedMetrics, setAdvancedMetrics] = useState([]);
+  const [alertPolicies, setAlertPolicies] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -69,6 +72,8 @@ export default function Monitoring() {
     fetchMetrics();
     fetchJobs();
     fetchTraces();
+    setAdvancedMetrics(AdvancedMonitoringService.listMetrics());
+    setAlertPolicies(AdvancedMonitoringService.listAlertPolicies());
     setLoading(false);
 
     // Connect to SSE stream for real-time updates
@@ -85,6 +90,7 @@ export default function Monitoring() {
       const interval = setInterval(() => {
         fetchMetrics();
         fetchJobs();
+        setAdvancedMetrics(AdvancedMonitoringService.listMetrics());
       }, 5000);
       return () => clearInterval(interval);
     };
@@ -376,6 +382,49 @@ export default function Monitoring() {
           </Card>
         </TabsContent>
       </Tabs>
+
+      {/* Advanced Monitoring */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Advanced Monitoring</CardTitle>
+          <CardDescription>Custom metrics, alert policies, and Prometheus export.</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="grid md:grid-cols-2 gap-4">
+            <div>
+              <p className="text-sm font-medium text-slate-700 mb-2">Custom Metrics</p>
+              {advancedMetrics.length === 0 ? (
+                <p className="text-sm text-muted-foreground">No custom metrics registered yet.</p>
+              ) : (
+                <div className="space-y-2">
+                  {advancedMetrics.slice(0, 6).map((metric, index) => (
+                    <div key={`${metric.name}-${index}`} className="text-xs font-mono text-slate-600">
+                      {metric.name}: {metric.value}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+            <div>
+              <p className="text-sm font-medium text-slate-700 mb-2">Alert Policies</p>
+              {alertPolicies.length === 0 ? (
+                <p className="text-sm text-muted-foreground">No alert policies configured yet.</p>
+              ) : (
+                <div className="space-y-2">
+                  {alertPolicies.map((policy) => (
+                    <div key={policy.id} className="text-sm">
+                      <span className="font-semibold">{policy.name}</span> · {policy.severity}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+          <div className="bg-slate-900 text-slate-100 text-xs p-3 rounded-lg overflow-auto">
+            {AdvancedMonitoringService.exportPrometheus() || '# Prometheus metrics will appear here'}
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 }
