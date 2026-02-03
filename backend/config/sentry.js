@@ -4,7 +4,15 @@
  */
 
 import * as Sentry from '@sentry/node';
-import { ProfilingIntegration } from '@sentry/profiling-node';
+
+// Try to import profiling integration (optional)
+let ProfilingIntegration;
+try {
+  const profiling = await import('@sentry/profiling-node');
+  ProfilingIntegration = profiling.ProfilingIntegration;
+} catch (err) {
+  console.warn('⚠️  @sentry/profiling-node not installed - profiling disabled');
+}
 
 /**
  * Initialize Sentry with environment-specific configuration
@@ -32,8 +40,8 @@ export function initializeSentry(app) {
       // Express integration for automatic instrumentation
       new Sentry.Integrations.Http({ tracing: true }),
       new Sentry.Integrations.Express({ app }),
-      new ProfilingIntegration(),
-    ],
+      ProfilingIntegration ? new ProfilingIntegration() : null,
+    ].filter(Boolean),
     
     // Filter out health checks and other noise
     beforeSend(event, hint) {
