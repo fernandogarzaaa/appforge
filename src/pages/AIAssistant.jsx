@@ -4,7 +4,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { 
   Sparkles, Send, Plus, Trash2, MessageSquare,
   Loader2, Copy, Check, Code, FileCode, Database,
-  Globe, Brain, Zap, MessageCircle, ArrowLeft, BarChart3
+  Globe, Brain, Zap, MessageCircle, ArrowLeft, BarChart3, ChevronDown
 } from 'lucide-react';
 import { Textarea } from '@/components/ui/textarea';
 import { generateEnhancedEntities } from '@/utils/enhancedEntityGeneration';
@@ -67,6 +67,9 @@ export default function AIAssistant() {
   const [currentPlan, setCurrentPlan] = useState(null);
   const [executionProgress, setExecutionProgress] = useState(null);
   const [agentMode, setAgentMode] = useState(false); // Toggle between chat and agent mode
+  const [selectedProject, setSelectedProject] = useState(null);
+  const [availableProjects, setAvailableProjects] = useState([]);
+  const [showProjectSelector, setShowProjectSelector] = useState(false);
   const messagesEndRef = useRef(null);
   
   // LLM Context for model selection and usage tracking
@@ -79,13 +82,20 @@ export default function AIAssistant() {
   }, []);
 
   const urlParams = new URLSearchParams(window.location.search);
-  const projectId = urlParams.get('projectId');
+  const urlProjectId = urlParams.get('projectId');
   const autoStart = urlParams.get('auto_start');
   const initialIdea = urlParams.get('idea');
   const queryClient = useQueryClient();
+  const projectId = selectedProject?.id || urlProjectId;
 
   useEffect(() => {
     loadUser();
+    loadProjects();
+
+    // Set project from URL if provided
+    if (urlProjectId && !selectedProject) {
+      // Will be set once projects are loaded
+    }
 
     // Auto-start AI agent if coming from Dashboard
     if (autoStart === 'true' && initialIdea && !messages.length) {
@@ -104,6 +114,23 @@ export default function AIAssistant() {
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [autoStart, initialIdea]);
+
+  const loadProjects = async () => {
+    try {
+      const projects = await base44.entities.Project.list();
+      setAvailableProjects(projects || []);
+      
+      // Set project from URL if available
+      if (urlProjectId && projects) {
+        const matchedProject = projects.find(p => p.id === urlProjectId);
+        if (matchedProject) {
+          setSelectedProject(matchedProject);
+        }
+      }
+    } catch (error) {
+      console.error('Failed to load projects:', error);
+    }
+  };
 
   const loadUser = async () => {
     const userData = await base44.auth.me();
@@ -380,38 +407,85 @@ export default function AIAssistant() {
     }
   };
 
+  // Use 'general' as workspace ID when no project is selected
+  const workspaceId = projectId || 'general';
+
   const { data: documents = [] } = useQuery({
     queryKey: ['documents', projectId],
-    queryFn: () => base44.entities.ProjectDocument.filter({ project_id: projectId }),
+    queryFn: () => projectId ? base44.entities.ProjectDocument.filter({ project_id: projectId }) : Promise.resolve([]),
     enabled: !!projectId
   });
 
   const { data: conversations = [] } = useQuery({
-    queryKey: ['conversations', projectId],
-    queryFn: () => base44.entities.Conversation.filter({ project_id: projectId }, '-updated_date'),
-    enabled: !!projectId,
+    queryKey: ['conversations', workspaceId],
+    queryFn: () => {
+      if (projectId) {
+        return base44.entities.Conversation.filter({ project_id: projectId }, '-updated_date');
+      } else {
+        // For general workspace, try to fetch from localStorage or create new
+        const stored = localStorage.getItem(`conversations_${workspaceId}`);
+        return stored ? JSON.parse(stored) : [];
+      }
+    },
   });
 
   const [activeConversation, setActiveConversation] = useState(null);
 
   const createConversationMutation = useMutation({
-    mutationFn: (data) => base44.entities.Conversation.create(data),
+    mutationFn: (data) => {
+      if (projectId) {
+        return base44.entities.Conversation.create(data);
+      } else {
+        // Store in localStorage for general workspace
+        const conv = { id: Date.now().toString(), ...data, created_date: new Date().toISOString() };
+        const stored = localStorage.getItem(`conversations_${workspaceId}`);
+        const conversations = stored ? JSON.parse(stored) : [];
+        conversations.push(conv);
+        localStorage.setItem(`conversations_${workspaceId}`, JSON.stringify(conversations));
+        return Promise.resolve(conv);
+      }
+    },
     onSuccess: (newConv) => {
-      queryClient.invalidateQueries({ queryKey: ['conversations', projectId] });
+      queryClient.invalidateQueries({ queryKey: ['conversations', workspaceId] });
       setActiveConversation(newConv);
       setMessages([]);
     },
   });
 
   const updateConversationMutation = useMutation({
-    mutationFn: ({ id, data }) => base44.entities.Conversation.update(id, data),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['conversations', projectId] }),
+    mutationFn: ({ id, data }) => {
+      if (projectId) {
+        return base44.entities.Conversation.update(id, data);
+      } else {
+        // Update in localStorage for general workspace
+        const stored = localStorage.getItem(`conversations_${workspaceId}`);
+        const conversations = stored ? JSON.parse(stored) : [];
+        const index = conversations.findIndex(c => c.id === id);
+        if (index >= 0) {
+          conversations[index] = { ...conversations[index], ...data, updated_date: new Date().toISOString() };
+          localStorage.setItem(`conversations_${workspaceId}`, JSON.stringify(conversations));
+        }
+        return Promise.resolve(conversations[index]);
+      }
+    },
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['conversations', workspaceId] }),
   });
 
   const deleteConversationMutation = useMutation({
-    mutationFn: (id) => base44.entities.Conversation.delete(id),
+    mutationFn: (id) => {
+      if (projectId) {
+        return base44.entities.Conversation.delete(id);
+      } else {
+        // Delete from localStorage for general workspace
+        const stored = localStorage.getItem(`conversations_${workspaceId}`);
+        const conversations = stored ? JSON.parse(stored) : [];
+        const filtered = conversations.filter(c => c.id !== id);
+        localStorage.setItem(`conversations_${workspaceId}`, JSON.stringify(filtered));
+        return Promise.resolve();
+      }
+    },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['conversations', projectId] });
+      queryClient.invalidateQueries({ queryKey: ['conversations', workspaceId] });
       setActiveConversation(null);
       setMessages([]);
     },
@@ -601,24 +675,77 @@ Provide helpful, actionable responses with code examples when relevant. Be conci
     setSuggestedTools([]);
   };
 
-  // Allow AI Assistant to work without project when auto-starting
-  if (!projectId && autoStart !== 'true') {
-    return (
-      <div className="flex items-center justify-center h-full">
-        <EmptyState
-          icon={Sparkles}
-          title="No Project Selected"
-          description="Please select a project to use the AI Assistant."
-        />
-      </div>
-    );
-  }
+  // AI Assistant can now work with or without a project
 
   return (
     <div className="flex h-[calc(100vh-4rem)]">
       {/* Conversations Sidebar */}
       <div className="w-72 bg-white border-r border-gray-100 flex flex-col">
-        <div className="p-4 border-b border-gray-50">
+        <div className="p-4 border-b border-gray-50 space-y-3">
+          {/* Project Selector */}
+          <div className="relative">
+            <button
+              onClick={() => setShowProjectSelector(!showProjectSelector)}
+              className="w-full flex items-center justify-between px-3 py-2 rounded-lg bg-gray-50 hover:bg-gray-100 border border-gray-200 text-sm"
+            >
+              <div className="flex items-center gap-2 flex-1 text-left">
+                <Database className="w-4 h-4 text-gray-600" />
+                <span className="text-gray-700 font-medium truncate">
+                  {selectedProject?.name || 'General Workspace'}
+                </span>
+              </div>
+              <ChevronDown className={cn("w-4 h-4 text-gray-600 transition-transform", showProjectSelector && "rotate-180")} />
+            </button>
+
+            {/* Project Dropdown */}
+            {showProjectSelector && (
+              <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-50 max-h-48 overflow-y-auto">
+                {/* General Workspace Option */}
+                <button
+                  onClick={() => {
+                    setSelectedProject(null);
+                    setShowProjectSelector(false);
+                    setActiveConversation(null);
+                    setMessages([]);
+                  }}
+                  className={cn(
+                    "w-full text-left px-3 py-2 hover:bg-gray-50 border-b border-gray-100 text-sm",
+                    !selectedProject && "bg-indigo-50 text-indigo-700 font-medium"
+                  )}
+                >
+                  <div className="flex items-center gap-2">
+                    <Sparkles className="w-4 h-4" />
+                    General Workspace
+                  </div>
+                  <p className="text-xs opacity-75 ml-6">Conversations not tied to a project</p>
+                </button>
+
+                {/* Project Options */}
+                {availableProjects.map((project) => (
+                  <button
+                    key={project.id}
+                    onClick={() => {
+                      setSelectedProject(project);
+                      setShowProjectSelector(false);
+                      setActiveConversation(null);
+                      setMessages([]);
+                    }}
+                    className={cn(
+                      "w-full text-left px-3 py-2 hover:bg-gray-50 border-b border-gray-100 text-sm",
+                      selectedProject?.id === project.id && "bg-indigo-50 text-indigo-700 font-medium"
+                    )}
+                  >
+                    <div className="flex items-center gap-2">
+                      <Database className="w-4 h-4" />
+                      {project.name}
+                    </div>
+                    {project.description && <p className="text-xs opacity-75 ml-6">{project.description}</p>}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+
           <Button
             onClick={handleNewChat}
             className="w-full bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white rounded-xl h-11"
