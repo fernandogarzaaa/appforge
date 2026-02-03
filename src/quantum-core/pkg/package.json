@@ -1,0 +1,20 @@
+{
+  "name": "quantum-core",
+  "type": "module",
+  "collaborators": [
+    "AppForge Contributors"
+  ],
+  "description": "Quantum interference validator for AI consensus (WASM core)",
+  "version": "0.1.0",
+  "license": "Apache-2.0",
+  "files": [
+    "quantum_core_bg.wasm",
+    "quantum_core.js",
+    "quantum_core.d.ts"
+  ],
+  "main": "quantum_core.js",
+  "types": "quantum_core.d.ts",
+  "sideEffects": [
+    "./snippets/*"
+  ]
+}
