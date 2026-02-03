@@ -241,6 +241,93 @@ export class QuantumRenormalizationEngine {
       },
     };
   }
+
+  /**
+   * Predict criticality using Renormalization Group Flow
+   * Detects phase transitions through scaling analysis
+   * C = 1 / (1 + exp(-scale * (metric_variation - threshold)))
+   */
+  private predictCriticality(metrics: number[]): number {
+    if (metrics.length === 0) return 0;
+    
+    // Calculate variance as deviation metric
+    const mean = metrics.reduce((a, b) => a + b, 0) / metrics.length;
+    const variance = metrics.reduce((sum, x) => sum + (x - mean) ** 2, 0) / metrics.length;
+    const stdDev = Math.sqrt(variance);
+    
+    // Normalized deviation (0-1 scale)
+    const deviation = Math.min(stdDev, 1);
+    
+    // RG flow: criticality emerges at scaling transitions
+    const scaleFactor = this.scaleFactor;
+    const criticalThreshold = 0.5;
+    
+    // Sigmoid: smooth transition to criticality
+    const exponent = scaleFactor * (deviation - criticalThreshold);
+    return 1 / (1 + Math.exp(-exponent));
+  }
+
+  /**
+   * Get system health status based on metrics
+   */
+  private getSystemHealth(metrics: number[]): string {
+    const criticality = this.predictCriticality(metrics);
+    
+    if (criticality > 0.8) return '💥 CRITICAL';
+    if (criticality > 0.6) return '🔴 Danger';
+    if (criticality > 0.4) return '🟠 Warning';
+    if (criticality > 0.2) return '🟡 Caution';
+    return '🟢 Healthy';
+  }
+
+  /**
+   * Calculate RG flow evolution (criticality at different scales)
+   */
+  private flowEvolution(metrics: number[]): number {
+    // RG flow: apply renormalization group transformation
+    // In simplified form: coarse-grain and recalculate criticality
+    const coarseGrained = this.coarseGrain(metrics);
+    return this.predictCriticality(coarseGrained);
+  }
+
+  /**
+   * Coarse-grain metrics (Kadanoff transformation)
+   * Group nearby metrics and average them
+   */
+  private coarseGrain(metrics: number[]): number[] {
+    if (metrics.length <= 1) return metrics;
+    
+    const blockSize = Math.ceil(metrics.length / this.scaleFactor);
+    const result: number[] = [];
+    
+    for (let i = 0; i < metrics.length; i += blockSize) {
+      const block = metrics.slice(i, i + blockSize);
+      const average = block.reduce((a, b) => a + b, 0) / block.length;
+      result.push(average);
+    }
+    
+    return result;
+  }
+
+  /**
+   * Estimate time to criticality
+   */
+  private estimateTimeToCriticality(
+    metrics: number[],
+    currentCriticality: number
+  ): number {
+    const criticalThreshold = 0.95;
+    
+    if (currentCriticality >= criticalThreshold) {
+      return 0; // Already critical
+    }
+    
+    // Estimate based on divergence rate
+    const divergenceRate = Math.max(0.01, currentCriticality / 10);
+    const timeToReachThreshold = (criticalThreshold - currentCriticality) / divergenceRate;
+    
+    return Math.max(0, timeToReachThreshold);
+  }
 }
 
 export const renormalization = new QuantumRenormalizationEngine();

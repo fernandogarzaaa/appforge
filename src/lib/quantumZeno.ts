@@ -180,6 +180,102 @@ export class QuantumZenoMonitor {
   getLatest(): StabilityMetrics | null {
     return this.metricsHistory[this.metricsHistory.length - 1] || null;
   }
+
+  /**
+   * Calculate stability using Quantum Zeno Effect
+   * S(t) = exp(-t / τ_coherence) where τ is coherence time
+   * Observation frequency suppresses degradation: S_obs = exp(-t/τ * sqrt(1/f))
+   */
+  private calculateStability(
+    observationFrequency: number,
+    timeElapsed: number
+  ): number {
+    if (observationFrequency === 0) {
+      // No observation - pure exponential decay
+      return Math.exp(-timeElapsed / this.coherenceTime);
+    }
+    
+    // Zeno Effect: more frequent observations slow decay
+    // Effective decay rate is reduced by observation frequency
+    const observationSuppressionFactor = Math.sqrt(observationFrequency + 1);
+    const effectiveDecayTime = timeElapsed / observationSuppressionFactor;
+    return Math.exp(-effectiveDecayTime / this.coherenceTime);
+  }
+
+  /**
+   * Calculate how "frozen" the state is (Zeno Effect intensity)
+   */
+  private calculateFreezeDepth(
+    observationFrequency: number,
+    timeElapsed: number
+  ): number {
+    if (observationFrequency === 0) return 0;
+    
+    // Freeze depth increases with observation frequency
+    // At high frequency, state becomes nearly frozen
+    const freezeIntensity = 1 - Math.exp(-observationFrequency * timeElapsed);
+    return Math.min(freezeIntensity, 1.0);
+  }
+
+  /**
+   * Check if state is frozen (Zeno Effect active, stability > 0.99)
+   */
+  private isStateFrozen(stability: number): boolean {
+    return stability > 0.99;
+  }
+
+  /**
+   * Get observation recommendation based on stability
+   */
+  private getObservationRecommendation(stability: number): string {
+    if (stability > 0.99) {
+      return '✅ State frozen - Zeno Effect active, code fully protected by continuous testing';
+    }
+    if (stability > 0.95) {
+      return '👍 Excellent stability - Maintain current testing frequency';
+    }
+    if (stability > 0.90) {
+      return '⚠️ Stability declining - Increase testing frequency to maintain integrity';
+    }
+    if (stability > 0.75) {
+      return '🚨 Significant degradation - Increase testing frequency immediately';
+    }
+    return '💥 Critical degradation - Emergency intervention required';
+  }
+
+  /**
+   * Calculate required observation frequency for target stability
+   */
+  private requiredObservationFrequency(
+    timePeriod: number,
+    desiredStability: number
+  ): number {
+    if (desiredStability >= 1) return Infinity;
+    if (desiredStability <= 0) return 0;
+    
+    // From: S = exp(-t/τ * 1/sqrt(f))
+    // Solve for f: f = (t / (τ * ln(1/S)))^2
+    const logRatio = Math.log(1 / desiredStability);
+    const baseFrequency = timePeriod / (this.coherenceTime * logRatio);
+    return Math.max(baseFrequency * baseFrequency, 0.001);
+  }
+
+  /**
+   * Generate degradation timeline without testing
+   */
+  private degradationTimeline(points: number = 100): number[] {
+    const timeline: number[] = [];
+    const maxTime = this.coherenceTime * 5; // 5 coherence times
+    
+    for (let i = 0; i < points; i++) {
+      const t = (maxTime / points) * i;
+      // No observation: pure decay
+      const stability = Math.exp(-t / this.coherenceTime);
+      timeline.push(stability);
+    }
+    
+    return timeline;
+  }
 }
 
 export const zeno = new QuantumZenoMonitor();

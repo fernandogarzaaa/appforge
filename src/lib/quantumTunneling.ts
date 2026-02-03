@@ -133,6 +133,37 @@ export class QuantumTunnelingAnalyzer {
   getLatest(): TunnelingAnalysis | null {
     return this.analysisHistory[this.analysisHistory.length - 1] || null;
   }
+
+  /**
+   * Calculate tunneling probability using WKB approximation
+   * P ≈ exp(-2/ℏ ∫ √(2m(V(x)-E)) dx)
+   * Simplified version: P = exp(-barrier_strength / attack_sophistication)
+   */
+  private calculateTunnelingProbability(
+    barrierStrength: number,
+    attackSophistication: number
+  ): number {
+    if (attackSophistication === 0) return 0;
+    
+    // WKB-like approximation
+    const effectiveBarrier = barrierStrength * this.defenseComplexity;
+    const exponent = -effectiveBarrier / (attackSophistication + 0.001);
+    return Math.exp(exponent);
+  }
+
+  /**
+   * Calculate required barrier for attack resistance
+   */
+  private requiredBarrierForAttack(
+    attackLevel: number,
+    confidenceLevel: number = 0.99
+  ): number {
+    // Solve: confidenceLevel = 1 - exp(-barrier / attack)
+    // barrier = -attack * ln(1 - confidenceLevel)
+    const targetBreach = 1 - confidenceLevel;
+    if (targetBreach >= 1) return 1;
+    return -attackLevel * Math.log(targetBreach);
+  }
 }
 
 export const tunneling = new QuantumTunnelingAnalyzer();
