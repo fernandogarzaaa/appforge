@@ -170,10 +170,14 @@ export function captureException(error, context = {}) {
  * Start a performance transaction
  */
 export function startTransaction(name, op = 'http.request') {
-  return Sentry.startTransaction({
-    op,
-    name,
-  });
+  if (typeof Sentry.startTransaction === 'function') {
+    return Sentry.startTransaction({
+      op,
+      name,
+    });
+  }
+
+  return null;
 }
 
 /**
