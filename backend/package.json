@@ -31,7 +31,6 @@
   "license": "MIT",
   "dependencies": {
     "@sentry/node": "^10.38.0",
-    "@sentry/tracing": "^7.120.4",
     "axios": "^1.6.2",
     "bcryptjs": "^2.4.3",
     "compression": "^1.7.4",

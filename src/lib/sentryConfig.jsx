@@ -4,7 +4,6 @@
  */
 
 import * as Sentry from '@sentry/react';
-import { BrowserTracing } from '@sentry/tracing';
 
 /**
  * Initialize Sentry with environment-specific configuration
@@ -38,11 +37,11 @@ export function initializeSentry() {
     
     // Integrations
     integrations: [
-      new BrowserTracing({
+      Sentry.browserTracingIntegration({
         // Measure absolute time for first contentful paint from navigationStart
         traceFetch: true,
         traceXHR: true,
-        tracingOrigins: [
+        tracePropagationTargets: [
           'localhost',
           import.meta.env.VITE_API_URL?.replace(/^https?:\/\//, ''),
           /^\//,
