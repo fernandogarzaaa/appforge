@@ -8,11 +8,6 @@
 import React, { useState, useEffect } from 'react';
 import { useLLM, AI_MODELS } from '@/contexts/LLMContext';
 import { isQuantumAvailable } from '@/lib/quantumIntegration';
-import { 
-  executeSecurityAnalysis, 
-  executeStabilityMonitoring, 
-  detectCriticality 
-} from '@/lib/aiRouter';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -86,6 +81,12 @@ export default function ModelSelector({
 
   const analyzeWithQuantum = async () => {
     try {
+      const {
+        executeSecurityAnalysis,
+        executeStabilityMonitoring,
+        detectCriticality
+      } = await import('@/lib/aiRouter');
+
       // Security analysis
       const secAnalysis = await executeSecurityAnalysis({
         name: 'API Gateway',
