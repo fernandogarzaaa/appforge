@@ -106,6 +106,21 @@ import MedicalAI from './pages/MedicalAI';
 import MLIntegration from './pages/MLIntegration';
 import MobileStudio from './pages/MobileStudio';
 import Monitoring from './pages/Monitoring';
+import DeveloperExperience from './pages/DeveloperExperience';
+import VisualizationStudio from './pages/VisualizationStudio';
+import IntegrationEcosystem from './pages/IntegrationEcosystem';
+import CollaborationHub from './pages/CollaborationHub';
+import RbacTenancy from './pages/RbacTenancy';
+import PerformanceScalability from './pages/PerformanceScalability';
+import DataPipeline from './pages/DataPipeline';
+import IntelligentInterface from './pages/IntelligentInterface';
+import ReportingAnalytics from './pages/ReportingAnalytics';
+import Monetization from './pages/Monetization';
+import MarketplaceExtensions from './pages/MarketplaceExtensions';
+import EnterpriseSecurity from './pages/EnterpriseSecurity';
+import ProductAnalytics from './pages/ProductAnalytics';
+import IntelligentAutomation from './pages/IntelligentAutomation';
+import RealtimeCollaboration from './pages/RealtimeCollaboration';
 import NFTMarketplace from './pages/NFTMarketplace';
 import NFTStudio from './pages/NFTStudio';
 import Notifications from './pages/Notifications';
@@ -203,6 +218,21 @@ export const PAGES = {
   MLIntegration,
   MobileStudio,
   Monitoring,
+  DeveloperExperience,
+  VisualizationStudio,
+  IntegrationEcosystem,
+  CollaborationHub,
+  RbacTenancy,
+  PerformanceScalability,
+  DataPipeline,
+  IntelligentInterface,
+  ReportingAnalytics,
+  Monetization,
+  MarketplaceExtensions,
+  EnterpriseSecurity,
+  ProductAnalytics,
+  IntelligentAutomation,
+  RealtimeCollaboration,
   NFTMarketplace,
   NFTStudio,
   Notifications,
