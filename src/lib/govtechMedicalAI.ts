@@ -80,7 +80,7 @@ export class MedicalAIAssistant {
   /**
    * Analyze medical symptoms using AI
    */
-  async analyzeSy mptoms(symptoms: string[], patientHistory?: any): Promise<{
+  async analyzeSymptoms(symptoms: string[], patientHistory?: any): Promise<{
     possibleConditions: Array<{
       condition: string;
       confidence: number;

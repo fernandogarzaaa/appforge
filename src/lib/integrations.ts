@@ -9,7 +9,7 @@ import { PAYMENT_CONFIG } from '@/config/payment.config';
 
 const getEnv = (name: string, fallback?: string): string => {
   if (typeof process !== 'undefined' && process.env && process.env[name]) return process.env[name];
-  if (typeof import !== 'undefined' && typeof import.meta !== 'undefined' && import.meta.env && import.meta.env[name]) {
+  if (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env[name]) {
     return import.meta.env[name];
   }
   if (fallback) return fallback;

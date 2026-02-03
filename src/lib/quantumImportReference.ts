@@ -3,6 +3,8 @@
  * Copy-paste these imports to get started quickly
  */
 
+import React from 'react';
+
 // ============================================
 // CORE QUANTUM MODULES
 // ============================================
@@ -93,7 +95,7 @@ function getMetrics() {
 
 // Example 6: Use dashboard
 function renderDashboard() {
-  return <QuantumMetricsDashboard />;
+  return React.createElement(QuantumMetricsDashboard);
 }
 
 // Example 7: Run ready-to-use examples
@@ -133,11 +135,13 @@ export function MyComponent() {
     return () => clearInterval(interval);
   }, []);
 
-  return (
-    <div>
-      <QuantumMetricsDashboard />
-      {metrics && <pre>{JSON.stringify(metrics, null, 2)}</pre>}
-    </div>
+  return React.createElement(
+    'div',
+    null,
+    React.createElement(QuantumMetricsDashboard),
+    metrics
+      ? React.createElement('pre', null, JSON.stringify(metrics, null, 2))
+      : null
   );
 }
 

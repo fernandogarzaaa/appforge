@@ -148,7 +148,7 @@ class WebhooksManager {
   /**
    * Queue event for delivery with retry logic
    */
-  private async queueEventDelivery(event: WebhookEvent): Promise<void {
+  private async queueEventDelivery(event: WebhookEvent): Promise<void> {
     const webhookId = event.webhookId;
     const events = this.events.get(webhookId);
     if (events) {

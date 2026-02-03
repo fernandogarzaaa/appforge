@@ -32,13 +32,13 @@ export interface PlanConfig {
 }
 
 const PAYMONGO_BASIC_PLAN_ID = (typeof process !== 'undefined' && process.env?.PAYMONGO_BASIC_PLAN_ID)
-  || (typeof import !== 'undefined' && typeof import.meta !== 'undefined' && import.meta.env?.VITE_PAYMONGO_BASIC_PLAN_ID)
+  || (typeof import.meta !== 'undefined' && import.meta.env?.VITE_PAYMONGO_BASIC_PLAN_ID)
   || 'paymongo_basic_plan';
 const PAYMONGO_PRO_PLAN_ID = (typeof process !== 'undefined' && process.env?.PAYMONGO_PRO_PLAN_ID)
-  || (typeof import !== 'undefined' && typeof import.meta !== 'undefined' && import.meta.env?.VITE_PAYMONGO_PRO_PLAN_ID)
+  || (typeof import.meta !== 'undefined' && import.meta.env?.VITE_PAYMONGO_PRO_PLAN_ID)
   || 'paymongo_pro_plan';
 const PAYMONGO_PREMIUM_PLAN_ID = (typeof process !== 'undefined' && process.env?.PAYMONGO_PREMIUM_PLAN_ID)
-  || (typeof import !== 'undefined' && typeof import.meta !== 'undefined' && import.meta.env?.VITE_PAYMONGO_PREMIUM_PLAN_ID)
+  || (typeof import.meta !== 'undefined' && import.meta.env?.VITE_PAYMONGO_PREMIUM_PLAN_ID)
   || 'paymongo_premium_plan';
 
 /**
