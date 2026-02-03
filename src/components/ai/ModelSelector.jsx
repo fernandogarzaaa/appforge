@@ -32,8 +32,7 @@ import {
   Cpu,
   Settings2,
   Shield,
-  Activity,
-  AlertTriangle
+  Activity
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { motion, AnimatePresence } from 'framer-motion';

@@ -6,7 +6,7 @@ import { createPageUrl } from '@/utils';
 import { useQuantum } from '@/hooks/useQuantum';
 import { 
   Settings, Save, Trash2, Globe, Palette,
-  AlertTriangle, Copy, Zap
+  Copy
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';

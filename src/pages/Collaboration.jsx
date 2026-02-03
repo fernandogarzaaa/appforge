@@ -12,7 +12,7 @@ import { collaborationService } from '@/api/appforge';
 import { useToast } from '@/components/ui/use-toast';
 import { useBackendAuth } from '@/contexts/BackendAuthContext';
 import { useCollaboration } from '@/contexts/CollaborationContext';
-import { synchronizeCollaborativeState, isQuantumAvailable } from '@/lib/quantumIntegration';
+import { isQuantumAvailable } from '@/lib/quantumIntegration';
 import CollaborativeEditor from '@/components/collaboration/CollaborativeEditor';
 import PresenceIndicator from '@/components/collaboration/PresenceIndicator';
 import CollaborationChat from '@/components/collaboration/CollaborationChat';

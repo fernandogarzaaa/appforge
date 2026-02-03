@@ -18,19 +18,19 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Loader2, Zap, TrendingDown, CheckCircle, AlertCircle } from 'lucide-react';
+import { Loader2, Zap, CheckCircle, AlertCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useQuantumModelSelector } from '@/hooks/useQuantumModelSelector';
 import { TaskComplexity, SelectionStrategy } from '@/lib/aiRouter';
 
-const complexityDescriptions: Record<TaskComplexity, string> = {
+const complexityDescriptions = {
   [TaskComplexity.LOW]: 'Simple tasks like summarization and classification',
   [TaskComplexity.MEDIUM]: 'Moderate tasks like translation and Q&A',
   [TaskComplexity.HIGH]: 'Complex tasks like reasoning and code generation',
   [TaskComplexity.VERY_HIGH]: 'Advanced tasks like research and strategy',
 };
 
-const strategyDescriptions: Record<SelectionStrategy, string> = {
+const strategyDescriptions = {
   [SelectionStrategy.OPTIMAL]: 'Best balance of cost, speed, and quality',
   [SelectionStrategy.COST_FOCUSED]: 'Minimize cost (70% weight)',
   [SelectionStrategy.SPEED_FOCUSED]: 'Minimize latency (70% weight)',
@@ -67,7 +67,7 @@ export default function QuantumModelSelector() {
     setActiveTab('recommendation');
   };
 
-  const getModelColor = (modelName: string) => {
+  const getModelColor = (modelName) => {
     switch (modelName) {
       case 'GPT-4':
         return 'bg-emerald-500/20 text-emerald-700 dark:text-emerald-300';
@@ -84,7 +84,7 @@ export default function QuantumModelSelector() {
     }
   };
 
-  const getEnergyColor = (energy: number) => {
+  const getEnergyColor = (energy) => {
     if (energy < 0.3) return 'text-green-600 dark:text-green-400';
     if (energy < 0.5) return 'text-yellow-600 dark:text-yellow-400';
     return 'text-red-600 dark:text-red-400';
@@ -121,7 +121,7 @@ export default function QuantumModelSelector() {
               <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
                 Task Complexity
               </label>
-              <Select value={selectedComplexity} onValueChange={(v) => setSelectedComplexity(v as TaskComplexity)}>
+              <Select value={selectedComplexity} onValueChange={(v) => setSelectedComplexity(v)}>
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
@@ -143,7 +143,7 @@ export default function QuantumModelSelector() {
               <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
                 Selection Strategy
               </label>
-              <Select value={selectedStrategy} onValueChange={(v) => setSelectedStrategy(v as SelectionStrategy)}>
+              <Select value={selectedStrategy} onValueChange={(v) => setSelectedStrategy(v)}>
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
