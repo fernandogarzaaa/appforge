@@ -4,12 +4,12 @@
  */
 
 import React from 'react';
-import { useAuth } from '@/contexts/AuthContext';
+import { useBackendAuth } from '@/contexts/BackendAuthContext';
 import { AnalyticsDashboard } from '@/components/analytics/AnalyticsDashboard';
 import { AlertCircle } from 'lucide-react';
 
 export function AnalyticsPage() {
-  const { user } = useAuth?.() || {};
+  const { user } = useBackendAuth?.() || {};
 
   if (!user) {
     return (
