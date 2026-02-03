@@ -43,7 +43,6 @@ import ReactMarkdown from 'react-markdown';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
-import EmptyState from '@/components/common/EmptyState';
 
 const quickActions = [
   { label: 'Create Entity', icon: Database, prompt: 'Create a new entity called ' },
