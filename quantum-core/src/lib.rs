@@ -22,6 +22,14 @@ pub use zeno::ZenoStabilizer;
 pub mod renormalization;
 pub use renormalization::RenormalizationEngine;
 
+// Expose entanglement for team collaboration
+pub mod entanglement;
+pub use entanglement::{EntangledState, CollaborationSync};
+
+// Expose superposition synthesizer for code generation
+pub mod superposition;
+pub use superposition::{SuperpositionSynthesizer, QuantumCodeGenerator};
+
 /// QuantumState represents a semantic confidence state.
 #[wasm_bindgen]
 pub struct QuantumState {
