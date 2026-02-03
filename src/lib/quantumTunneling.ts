@@ -24,18 +24,18 @@ export interface SecurityAsset {
 }
 
 export class QuantumTunnelingAnalyzer {
-  private scanner: QuantumCore.TunnelingScanner;
+  private defenseComplexity: number;
   private analysisHistory: TunnelingAnalysis[] = [];
 
   constructor(defenseComplexity: number = 0.8) {
-    this.scanner = new QuantumCore.TunnelingScanner(defenseComplexity);
+    this.defenseComplexity = defenseComplexity;
   }
 
   /**
    * Analyze breach probability for a security asset
    */
   analyzeBreach(asset: SecurityAsset): TunnelingAnalysis {
-    const breachProbability = this.scanner.calculate_tunneling_probability(
+    const breachProbability = this.calculateTunnelingProbability(
       asset.barrier,
       asset.estimatedAttackLevel
     );
@@ -64,14 +64,12 @@ export class QuantumTunnelingAnalyzer {
     weakestStrength: number;
     vulnerabilityScore: number;
   } {
-    const results = this.scanner.run_penetration_test(100, 0.7);
-    
     // Find index with maximum tunneling probability
     let weakestIndex = 0;
     let maxWeakness = 0;
     
     barriers.forEach((barrier, idx) => {
-      const prob = this.scanner.calculate_tunneling_probability(barrier, 0.7);
+      const prob = this.calculateTunnelingProbability(barrier, 0.7);
       if (prob > maxWeakness) {
         maxWeakness = prob;
         weakestIndex = idx;
@@ -89,7 +87,7 @@ export class QuantumTunnelingAnalyzer {
    * Determine required barrier strength to resist attack
    */
   calculateRequiredDefense(attackLevel: number, confidenceLevel: number = 0.99): number {
-    return this.scanner.required_barrier_for_attack(attackLevel, confidenceLevel);
+    return this.requiredBarrierForAttack(attackLevel, confidenceLevel);
   }
 
   /**

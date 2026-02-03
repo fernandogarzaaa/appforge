@@ -27,12 +27,12 @@ export interface CodeHealthSnapshot {
 }
 
 export class QuantumZenoMonitor {
-  private stabilizer: QuantumCore.ZenoStabilizer;
+  private coherenceTime: number;
   private metricsHistory: StabilityMetrics[] = [];
   private lastObservationTime: number = Date.now();
 
   constructor(coherenceTime: number = 0.5) {
-    this.stabilizer = new QuantumCore.ZenoStabilizer(coherenceTime);
+    this.coherenceTime = coherenceTime;
   }
 
   /**
@@ -42,19 +42,19 @@ export class QuantumZenoMonitor {
     observationFrequency: number,
     timeElapsed: number
   ): StabilityMetrics {
-    const stability = this.stabilizer.calculate_stability(
+    const stability = this.calculateStability(
       observationFrequency,
       timeElapsed
     );
 
-    const isFrozen = this.stabilizer.is_state_frozen(stability);
-    const freezeDepth = this.stabilizer.calculate_freeze_depth(
+    const isFrozen = this.isStateFrozen(stability);
+    const freezeDepth = this.calculateFreezeDepth(
       observationFrequency,
       timeElapsed
     );
 
     const status = this.getStatus(stability);
-    const recommendation = this.stabilizer.get_observation_recommendation(stability);
+    const recommendation = this.getObservationRecommendation(stability);
 
     const metrics: StabilityMetrics = {
       stability,
@@ -81,12 +81,12 @@ export class QuantumZenoMonitor {
   ): CodeHealthSnapshot {
     const metrics = this.measureStability(observationFrequency, timeElapsed);
 
-    const requiredTestFrequency = this.stabilizer.required_observation_frequency(
+    const requiredTestFrequency = this.requiredObservationFrequency(
       86400.0, // 24 hours
       targetStability
     );
 
-    const degradationTimeline = this.stabilizer.degradation_timeline(100);
+    const degradationTimeline = this.degradationTimeline(100);
     const averageDegradation =
       degradationTimeline.reduce((a, b) => a + b, 0) / degradationTimeline.length;
 
@@ -95,7 +95,7 @@ export class QuantumZenoMonitor {
       degradationRate: averageDegradation,
       requiredTestFrequency,
       estimatedTimeToFailure: this.estimateTimeToFailure(
-        stability,
+        metrics.stability,
         observationFrequency
       ),
     };
@@ -108,21 +108,21 @@ export class QuantumZenoMonitor {
     timePeriod: number = 86400, // 24 hours
     desiredStability: number = 0.95
   ): number {
-    return this.stabilizer.required_observation_frequency(timePeriod, desiredStability);
+    return this.requiredObservationFrequency(timePeriod, desiredStability);
   }
 
   /**
    * Check if current code state is frozen (Zeno Effect active)
    */
   isCodeFrozen(stability: number): boolean {
-    return this.stabilizer.is_state_frozen(stability);
+    return this.isStateFrozen(stability);
   }
 
   /**
    * Get degradation timeline without testing
    */
   getDegradationTimeline(points: number = 100): number[] {
-    return this.stabilizer.degradation_timeline(points);
+    return this.degradationTimeline(points);
   }
 
   /**

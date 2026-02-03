@@ -35,21 +35,21 @@ export interface SystemMetrics {
 }
 
 export class QuantumRenormalizationEngine {
-  private engine: QuantumCore.RenormalizationEngine;
+  private scaleFactor: number;
   private analysisHistory: CriticalityAnalysis[] = [];
 
   constructor(scaleFactor: number = 2) {
-    this.engine = new QuantumCore.RenormalizationEngine(scaleFactor);
+    this.scaleFactor = scaleFactor;
   }
 
   /**
    * Analyze metrics for criticality (phase transition detection)
    */
   analyzeMetrics(metrics: number[]): CriticalityAnalysis {
-    const criticality = this.engine.predict_criticality(metrics);
-    const systemHealth = this.engine.get_system_health(metrics);
-    const flowEvolution = this.engine.flow_evolution(metrics);
-    const timeToFailure = this.engine.estimate_time_to_criticality(metrics, 1.0);
+    const criticality = this.predictCriticality(metrics);
+    const systemHealth = this.getSystemHealth(metrics);
+    const flowEvolution = this.flowEvolution(metrics);
+    const timeToFailure = this.estimateTimeToCriticality(metrics, 1.0);
 
     // Find scale where criticality detected (simplified since flow_evolution now returns max)
     const criticalScale = flowEvolution > 0.7 ? 1 : 0;
@@ -72,7 +72,7 @@ export class QuantumRenormalizationEngine {
    */
   detectPhaseTransition(metrics: number[]): PhaseTransitionDetection {
     const criticality = this.analyzeMetrics(metrics);
-    const coarseGrainedMetrics = this.engine.coarse_grain(metrics);
+    const coarseGrainedMetrics = this.coarseGrain(metrics);
 
     const isApproachingCritical = criticality.criticality > 0.6;
     const divergenceRate = this.calculateDivergenceRate(criticality.flowEvolution);
@@ -150,14 +150,14 @@ export class QuantumRenormalizationEngine {
    * Coarse-grain metrics to macro level
    */
   coarseGrainMetrics(metrics: number[]): number[] {
-    return this.engine.coarse_grain(metrics);
+    return this.coarseGrain(metrics);
   }
 
   /**
    * Get RG flow evolution (max criticality across scales)
    */
   getFlowEvolution(metrics: number[]): number {
-    return this.engine.flow_evolution(metrics);
+    return this.flowEvolution(metrics);
   }
 
   /**
