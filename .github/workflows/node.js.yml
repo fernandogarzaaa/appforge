@@ -28,13 +28,15 @@ jobs:
         cache: 'npm'
     - name: Setup Rust
       uses: dtolnay/rust-toolchain@stable
+    - name: Add WASM target
+      run: rustup target add wasm32-unknown-unknown
     - name: Cache Rust
       uses: Swatinem/rust-cache@v2
       with:
         workspaces: "quantum-core\nstatic-analyzer-core"
     - name: Install wasm-pack
       run: cargo install wasm-pack
-    - run: npm ci
+    - run: npm ci --legacy-peer-deps
     - run: npm run build:quantum
       continue-on-error: true
     - run: npm run build:analyzer
