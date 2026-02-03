@@ -44,4 +44,31 @@ export { PerformanceProfilerDashboard } from './performanceProfilerDashboard/Per
 export { useGitWorkflows } from './gitWorkflows/useGitWorkflows';
 export { GitWorkflowsManager } from './gitWorkflows/GitWorkflowsManager';
 
-// Pair Programming (Phase 3 - to be implemented)
+// Phase 3: Collaboration Features
+export { usePairProgramming } from './pairProgramming/usePairProgramming';
+export { PairProgrammingManager } from './pairProgramming/PairProgrammingManager';
+export { useCodeReviewGamification } from './codeReviewGamification/useCodeReviewGamification';
+export { CodeReviewGamification } from './codeReviewGamification/CodeReviewGamification';
+export { StandupReportGenerator } from './standupReports/StandupReportGenerator';
+export { useTeamWorkflows } from './teamWorkflows/useTeamWorkflows';
+
+// Phase 4: Quality & Testing
+export { useSecurityScanner } from './qualityTesting/useSecurityScanner';
+export { usePerformanceRegression } from './qualityTesting/usePerformanceRegression';
+export { useDeploymentTesting } from './qualityTesting/useDeploymentTesting';
+export { CodeQualityTrends } from './qualityTesting/CodeQualityTrends';
+export { ComplianceRuleBuilder } from './qualityTesting/ComplianceRuleBuilder';
+
+// Phase 5: Enterprise & DevOps
+export { useEnvironmentManager } from './enterpriseDevOps/useEnvironmentManager';
+export { useCostOptimization } from './enterpriseDevOps/useCostOptimization';
+export { useSecretsManager } from './enterpriseDevOps/useSecretsManager';
+export { useAuditLogger } from './enterpriseDevOps/useAuditLogger';
+export { useBlueGreenDeployments } from './enterpriseDevOps/useBlueGreenDeployments';
+
+// Phase 6: AI & Advanced Automation
+export { useIntelligentRecovery } from './aiAutomation/useIntelligentRecovery';
+export { useDocumentationGenerator } from './aiAutomation/useDocumentationGenerator';
+export { useResourceAllocator } from './aiAutomation/useResourceAllocator';
+export { useCodeSmellDetector } from './aiAutomation/useCodeSmellDetector';
+export { useLearningMemory } from './aiAutomation/useLearningMemory';
