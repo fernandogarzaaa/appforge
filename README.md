@@ -53,6 +53,14 @@ A comprehensive, full-stack application platform built with modern technologies 
 
 ---
 
+## 📸 Screenshots
+
+| Dashboard | AI Assistant | Integrations |
+| --- | --- | --- |
+| ![Dashboard](assets/screenshots/dashboard.svg) | ![AI Assistant](assets/screenshots/ai-assistant.svg) | ![Integrations](assets/screenshots/integrations.svg) |
+
+---
+
 ## 🛠️ Tech Stack
 
 ### Frontend

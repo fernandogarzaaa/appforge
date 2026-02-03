@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675" role="img" aria-label="AppForge Integrations Screenshot Placeholder">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#fefce8"/>
+      <stop offset="100%" stop-color="#fff7ed"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="675" fill="url(#bg)" />
+  <rect x="80" y="80" width="1040" height="515" rx="24" fill="#ffffff" stroke="#e5e7eb" stroke-width="2" />
+  <rect x="120" y="130" width="220" height="18" rx="9" fill="#fde68a" />
+  <rect x="120" y="180" width="520" height="14" rx="7" fill="#e5e7eb" />
+  <rect x="120" y="220" width="420" height="14" rx="7" fill="#e5e7eb" />
+  <rect x="120" y="270" width="280" height="120" rx="16" fill="#fff7ed" />
+  <rect x="420" y="270" width="280" height="120" rx="16" fill="#fefce8" />
+  <rect x="720" y="270" width="280" height="120" rx="16" fill="#fffbeb" />
+  <rect x="120" y="420" width="880" height="140" rx="16" fill="#f9fafb" />
+  <text x="600" y="360" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="28" fill="#d97706">Integrations Preview</text>
+  <text x="600" y="405" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="16" fill="#6b7280">Replace with an actual screenshot</text>
+</svg>

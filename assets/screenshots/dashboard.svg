@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675" role="img" aria-label="AppForge Dashboard Screenshot Placeholder">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#eef2ff"/>
+      <stop offset="100%" stop-color="#fdf2f8"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="675" fill="url(#bg)" />
+  <rect x="80" y="80" width="1040" height="515" rx="24" fill="#ffffff" stroke="#e5e7eb" stroke-width="2" />
+  <rect x="120" y="130" width="240" height="18" rx="9" fill="#c7d2fe" />
+  <rect x="120" y="180" width="320" height="14" rx="7" fill="#e5e7eb" />
+  <rect x="120" y="210" width="280" height="14" rx="7" fill="#e5e7eb" />
+  <rect x="120" y="260" width="320" height="180" rx="16" fill="#eef2ff" />
+  <rect x="480" y="260" width="320" height="180" rx="16" fill="#f5f3ff" />
+  <rect x="840" y="260" width="240" height="180" rx="16" fill="#fdf2f8" />
+  <rect x="120" y="470" width="960" height="100" rx="16" fill="#f9fafb" />
+  <text x="600" y="360" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="28" fill="#4f46e5">Dashboard Preview</text>
+  <text x="600" y="405" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="16" fill="#6b7280">Replace with an actual screenshot</text>
+</svg>
