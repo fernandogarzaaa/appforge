@@ -171,7 +171,7 @@ describe('MobileDrawerSidebar Component', () => {
       </LLMProvider>
     );
 
-    expect(screen.getByText(/Enterprise/i)).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /Enterprise/i })).toBeInTheDocument();
   });
 
   it('displays Web3 section', async () => {
