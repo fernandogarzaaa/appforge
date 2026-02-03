@@ -15,6 +15,9 @@ export default defineConfig({
       'tests/e2e/**',
       'src/tests/e2e/**',
       'backend/src/tests/**',
+      'backend/src/__tests__/**',
+      'src/lib/__tests__/quantum*.{js,ts}',
+      'src/lib/__tests__/holographic*.{js,ts}',
       'backend/node_modules/**'
     ],
     coverage: {
