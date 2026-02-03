@@ -104,7 +104,7 @@ export default function VisualWorkflowEditor({ initialNodes = [], onSave }) {
             ref={canvasRef}
             onDragOver={handleDragOver}
             onDrop={handleDrop}
-            className="flex-1 bg-gray-50 border border-gray-200 rounded-lg overflow-auto relative"
+            className="flex-1 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg overflow-auto relative"
             style={{ transform: `scale(${zoom})`, transformOrigin: 'top left' }}
           >
             <svg className="absolute inset-0 w-full h-full pointer-events-none">

@@ -93,16 +93,16 @@
   }
 
   ::-webkit-scrollbar-track {
-    background: rgba(0, 0, 0, 0.05);
+    background: hsl(var(--background));
   }
 
   ::-webkit-scrollbar-thumb {
-    background: rgba(0, 0, 0, 0.2);
+    background: hsl(var(--border));
     border-radius: 4px;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: rgba(0, 0, 0, 0.3);
+    background: hsl(var(--muted-foreground));
   }
 
   /* Radix UI Dialog scrolling fix */
@@ -116,15 +116,15 @@
   }
 
   [role="dialog"]::-webkit-scrollbar-track {
-    background: rgba(0, 0, 0, 0.05);
+    background: hsl(var(--background));
   }
 
   [role="dialog"]::-webkit-scrollbar-thumb {
-    background: rgba(0, 0, 0, 0.2);
+    background: hsl(var(--border));
     border-radius: 4px;
   }
 
   [role="dialog"]::-webkit-scrollbar-thumb:hover {
-    background: rgba(0, 0, 0, 0.3);
+    background: hsl(var(--muted-foreground));
   }
 }

@@ -129,7 +129,7 @@ export default function Monitoring() {
       case 'waiting':
       case 'queued': return 'bg-yellow-500';
       case 'failed': return 'bg-red-500';
-      default: return 'bg-gray-500';
+      default: return 'bg-slate-500 dark:bg-slate-600';
     }
   };
 

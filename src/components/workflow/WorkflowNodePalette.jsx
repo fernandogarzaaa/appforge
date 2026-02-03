@@ -46,7 +46,7 @@ export default function WorkflowNodePalette() {
   };
 
   return (
-    <div className="w-72 border-r border-gray-200 bg-white overflow-y-auto">
+    <div className="w-72 border-r border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 overflow-y-auto">
       <div className="p-4 border-b border-gray-200">
         <h3 className="font-semibold text-sm text-gray-900">Node Types</h3>
         <p className="text-xs text-gray-500 mt-1">Drag nodes to canvas</p>

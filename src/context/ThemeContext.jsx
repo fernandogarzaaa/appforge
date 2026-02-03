@@ -6,7 +6,7 @@ import { persist } from 'zustand/middleware';
 const useThemeStore = create(
   persist(
     (set) => ({
-      isDark: false,
+      isDark: window.matchMedia?.('(prefers-color-scheme: dark)').matches ?? false,
       toggleTheme: () => set((state) => ({ isDark: !state.isDark })),
       setTheme: (isDark) => set({ isDark }),
     }),
@@ -25,13 +25,21 @@ export function ThemeProvider({ children }) {
 
   useEffect(() => {
     setMounted(true);
-    // Apply theme on mount
+  }, []);
+
+  useEffect(() => {
+    if (!mounted) return;
+
+    // Apply theme to DOM
+    const root = document.documentElement;
     if (isDark) {
-      document.documentElement.classList.add('dark');
+      root.classList.add('dark');
+      root.style.colorScheme = 'dark';
     } else {
-      document.documentElement.classList.remove('dark');
+      root.classList.remove('dark');
+      root.style.colorScheme = 'light';
     }
-  }, [isDark]);
+  }, [isDark, mounted]);
 
   if (!mounted) {
     return children; // Prevent hydration mismatch

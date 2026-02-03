@@ -382,8 +382,8 @@ export default function ProjectTemplates({ onSelect, selected }) {
             className={cn(
               "text-left p-1.5 rounded-lg border-2 transition-all",
               selected?.id === template.id
-                ? "border-gray-900 bg-gray-50"
-                : "border-gray-200 hover:border-gray-300 bg-white"
+                ? "border-slate-900 bg-slate-50 dark:border-slate-700 dark:bg-slate-900"
+                : "border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 bg-white dark:bg-slate-800"
             )}
           >
             <div className="flex items-start gap-1.5 mb-1">

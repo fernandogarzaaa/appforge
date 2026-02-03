@@ -8,14 +8,14 @@ export function DarkModeToggle() {
   return (
     <button
       onClick={toggleTheme}
-      className="p-2 rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
+      className="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors text-slate-600 dark:text-slate-300"
       aria-label="Toggle dark mode"
       title={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
     >
       {isDark ? (
-        <Sun size={20} className="text-yellow-500" />
+        <Sun size={20} className="text-amber-400" />
       ) : (
-        <Moon size={20} className="text-gray-700" />
+        <Moon size={20} className="text-slate-600" />
       )}
     </button>
   );
