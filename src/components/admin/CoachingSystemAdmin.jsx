@@ -496,35 +496,37 @@ export default function CoachingSystemAdmin() {
         </TabsContent>
 
         <TabsContent value="logs">
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-sm">Recent Audit Logs (Last 20)</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-2 max-h-96 overflow-y-auto">
-            {logs.slice(0, 20).map((log) => (
-              <div
-                key={log.id}
-                className={`p-2 border rounded text-xs ${
-                  log.success ? 'bg-green-50' : 'bg-red-50'
-                }`}
-              >
-                <div className="flex justify-between">
-                  <span className="font-semibold">{log.action_type}</span>
-                  <span className="text-gray-500">
-                    {new Date(log.timestamp).toLocaleTimeString()}
-                  </span>
-                </div>
-                <p className="text-gray-600">User: {log.user_id}</p>
-                {log.agent_id && <p className="text-gray-600">Agent: {log.agent_id}</p>}
-                {log.error_message && (
-                  <p className="text-red-600">Error: {log.error_message}</p>
-                )}
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-sm">Recent Audit Logs (Last 20)</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-2 max-h-96 overflow-y-auto">
+                {logs.slice(0, 20).map((log) => (
+                  <div
+                    key={log.id}
+                    className={`p-2 border rounded text-xs ${
+                      log.success ? 'bg-green-50' : 'bg-red-50'
+                    }`}
+                  >
+                    <div className="flex justify-between">
+                      <span className="font-semibold">{log.action_type}</span>
+                      <span className="text-gray-500">
+                        {new Date(log.timestamp).toLocaleTimeString()}
+                      </span>
+                    </div>
+                    <p className="text-gray-600">User: {log.user_id}</p>
+                    {log.agent_id && <p className="text-gray-600">Agent: {log.agent_id}</p>}
+                    {log.error_message && (
+                      <p className="text-red-600">Error: {log.error_message}</p>
+                    )}
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
+            </CardContent>
+          </Card>
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }
