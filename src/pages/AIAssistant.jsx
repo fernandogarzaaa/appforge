@@ -1,10 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useNavigate } from 'react-router-dom';
 import { 
   Sparkles, Send, Plus, Trash2, MessageSquare,
   Loader2, Copy, Check, Code, FileCode, Database,
-  Globe, Brain, Zap, MessageCircle, ArrowLeft, BarChart3, ChevronDown
+  Globe, Brain, Zap, MessageCircle, ArrowLeft, BarChart3, ChevronDown,
+  Rocket, Wand2
 } from 'lucide-react';
 import { Textarea } from '@/components/ui/textarea';
 import { generateEnhancedEntities } from '@/utils/enhancedEntityGeneration';
@@ -37,6 +39,7 @@ import ProjectAuditorEnhanced from '@/components/ai/ProjectAuditorEnhanced';
 import ProactiveBugDetection from '@/components/ai/ProactiveBugDetection';
 import CodeReviewPanel from '@/components/ai/CodeReviewPanel';
 import ResourceMonitoringPanel from '@/components/ai/ResourceMonitoringPanel';
+import ProjectWizard from '@/components/ProjectWizard';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import ReactMarkdown from 'react-markdown';
@@ -45,6 +48,7 @@ import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
 
 const quickActions = [
+  { label: 'Generate Project', icon: Rocket, prompt: 'WIZARD_MODE', isWizard: true },
   { label: 'Create Entity', icon: Database, prompt: 'Create a new entity called ' },
   { label: 'Build Page', icon: FileCode, prompt: 'Build a page that displays ' },
   { label: 'Generate Component', icon: Code, prompt: 'Generate a React component for ' },
@@ -69,7 +73,9 @@ export default function AIAssistant() {
   const [selectedProject, setSelectedProject] = useState(null);
   const [availableProjects, setAvailableProjects] = useState([]);
   const [showProjectSelector, setShowProjectSelector] = useState(false);
+  const [showProjectWizard, setShowProjectWizard] = useState(false);
   const messagesEndRef = useRef(null);
+  const navigate = useNavigate();
   
   // LLM Context for model selection and usage tracking
   const { query: llmQuery, selectedModel, getModelInfo } = useLLM();
@@ -858,16 +864,36 @@ Provide helpful, actionable responses with code examples when relevant. Be conci
             </div>
             
             {/* Quick Actions Grid */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl w-full mb-12">
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4 max-w-4xl w-full mb-12">
               {quickActions.map((action) => (
                 <button
                   key={action.label}
-                  onClick={() => setInput(action.prompt)}
+                  onClick={() => action.isWizard ? setShowProjectWizard(true) : setInput(action.prompt)}
                   aria-label={action.label}
-                  className="p-6 bg-white dark:bg-gray-800 rounded-xl border-2 border-gray-100 dark:border-gray-700 hover:border-indigo-500 dark:hover:border-indigo-600 hover:shadow-lg transition-all group"
+                  className={cn(
+                    "p-6 bg-white dark:bg-gray-800 rounded-xl border-2 transition-all group",
+                    action.isWizard 
+                      ? "border-indigo-200 dark:border-indigo-800 hover:border-indigo-500 dark:hover:border-indigo-500 hover:shadow-xl bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-900/20 dark:to-purple-900/20 md:col-span-3"
+                      : "border-gray-100 dark:border-gray-700 hover:border-indigo-500 dark:hover:border-indigo-600 hover:shadow-lg"
+                  )}
                 >
-                  <action.icon className="w-8 h-8 mb-3 text-gray-400 group-hover:text-indigo-600 transition-colors mx-auto" />
-                  <div className="font-medium text-sm text-gray-700 group-hover:text-gray-900">{action.label}</div>
+                  {action.isWizard ? (
+                    <div className="flex items-center justify-center gap-4">
+                      <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
+                        <Rocket className="w-7 h-7 text-white" />
+                      </div>
+                      <div className="text-left">
+                        <div className="font-bold text-lg text-gray-900 dark:text-white">Generate Full Project</div>
+                        <div className="text-sm text-gray-500 dark:text-gray-400">Create entities, workflows, and pages from a description</div>
+                      </div>
+                      <Wand2 className="w-6 h-6 text-indigo-500 ml-4" />
+                    </div>
+                  ) : (
+                    <>
+                      <action.icon className="w-8 h-8 mb-3 text-gray-400 group-hover:text-indigo-600 transition-colors mx-auto" />
+                      <div className="font-medium text-sm text-gray-700 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white">{action.label}</div>
+                    </>
+                  )}
                 </button>
               ))}
             </div>
@@ -1288,6 +1314,49 @@ Provide helpful, actionable responses with code examples when relevant. Be conci
               <AIUsagePanel showHistory />
             </div>
           </div>
+        </div>
+      )}
+
+      {/* Project Wizard Modal */}
+      {showProjectWizard && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            className="bg-white dark:bg-gray-900 rounded-2xl shadow-2xl max-w-5xl w-full max-h-[90vh] overflow-auto"
+          >
+            <div className="sticky top-0 bg-white dark:bg-gray-900 border-b dark:border-gray-800 px-6 py-4 flex items-center justify-between z-10">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
+                  <Rocket className="w-5 h-5 text-white" />
+                </div>
+                <div>
+                  <h2 className="text-lg font-bold text-gray-900 dark:text-white">Project Generator</h2>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">Create a complete project from a description</p>
+                </div>
+              </div>
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                onClick={() => setShowProjectWizard(false)}
+                className="text-gray-500 hover:text-gray-700"
+              >
+                <ArrowLeft className="w-4 h-4 mr-2" />
+                Close
+              </Button>
+            </div>
+            <ProjectWizard 
+              onComplete={(result) => {
+                setShowProjectWizard(false);
+                toast.success(`Project "${result.project.name}" created successfully!`);
+                // Navigate to the new project
+                navigate(`/projects/${result.project.id}`);
+              }}
+              onCancel={() => setShowProjectWizard(false)}
+              initialDescription={input}
+            />
+          </motion.div>
         </div>
       )}
 
