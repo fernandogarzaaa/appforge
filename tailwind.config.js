@@ -71,7 +71,6 @@ module.exports = {
   					950: 'rgb(var(--spectrum-amber-950) / <alpha-value>)',
   				},
   			},
-  			colors: {
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
   			card: {

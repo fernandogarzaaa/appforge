@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -11,7 +11,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import HelpTooltip from '@/components/help/HelpTooltip';
 import { 
   Key, Plus, Copy, Trash2, RefreshCw, Eye, EyeOff, Search, 
-  Download, Filter, TrendingUp, AlertCircle, CheckCircle, 
+  Download, TrendingUp, AlertCircle, CheckCircle, 
   BarChart3, Activity, Clock, Shield, ArrowUpDown, X
 } from 'lucide-react';
 import { LineChart, Line, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';

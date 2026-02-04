@@ -8,14 +8,14 @@ import { Textarea } from '@/components/ui/textarea';
 import { Switch } from '@/components/ui/switch';
 import { Slider } from '@/components/ui/slider';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { 
-  Eye, EyeOff, Lock, Unlock, Key, Search, Download, Upload, 
+  Eye, EyeOff, Lock, Key, Search, Download, Upload, 
   History, AlertTriangle, CheckCircle, Clock, Edit2, Save, 
-  X, RotateCw, Shield, Database, Settings, Flag, RefreshCw,
-  ChevronRight, Calendar, User, FileText, Code, Check, Copy
+  X, RotateCw, Shield, Database, Settings, Flag,
+  ChevronRight, User, FileText, Code, Check, Copy
 } from 'lucide-react';
 
 // ConfigEditor Component - JSON/YAML Editor with syntax highlighting
