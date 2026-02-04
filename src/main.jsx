@@ -8,7 +8,11 @@ import App from '@/App.jsx'
 import '@/index.css'
 import { initializeAPI } from '@/api/services'
 
-// Initialize Sentry for error tracking (MUST be first)
+// Initialize tracing (MUST be first)
+import { initializeTracingClient } from '@/lib/tracing.js'
+initializeTracingClient();
+
+// Initialize Sentry for error tracking
 import { initializeSentry, setSentryContext } from '@/lib/sentryConfig.jsx'
 initializeSentry();
 

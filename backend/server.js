@@ -1,7 +1,12 @@
 /**
  * AppForge Backend API Server
  * Enterprise-grade REST API with real-time collaboration
+ * With OpenTelemetry tracing support
  */
+
+// Initialize tracing before importing other modules
+import { initializeTracing } from './tracing.js';
+initializeTracing();
 
 import express from 'express';
 import { createServer } from 'http';
