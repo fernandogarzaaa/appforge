@@ -152,60 +152,60 @@ export default function AdminDashboard() {
           <div className="max-w-7xl mx-auto px-6 py-6 space-y-6">
             {/* System Status Cards */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-              <Card className="border-l-4 border-l-blue-500">
+              <Card className="border-l-4 border-l-blue-500 dark:bg-slate-800/50 dark:border-l-blue-400">
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-medium text-gray-600">Active Users</CardTitle>
+                  <CardTitle className="text-sm font-medium text-gray-600 dark:text-gray-400">Active Users</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="flex items-center justify-between">
-                    <div className="text-3xl font-bold text-gray-900">{activeUsers}</div>
-                    <Users className="w-8 h-8 text-blue-500 opacity-50" />
+                    <div className="text-3xl font-bold text-gray-900 dark:text-white">{activeUsers}</div>
+                    <Users className="w-8 h-8 text-blue-500 dark:text-blue-400 opacity-50" />
                   </div>
-                  <p className="text-xs text-green-600 mt-2">↑ 12% from yesterday</p>
+                  <p className="text-xs text-green-600 dark:text-green-400 mt-2">↑ 12% from yesterday</p>
                 </CardContent>
               </Card>
 
-              <Card className="border-l-4 border-l-purple-500">
+              <Card className="border-l-4 border-l-purple-500 dark:bg-slate-800/50 dark:border-l-purple-400">
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-medium text-gray-600">CPU Usage</CardTitle>
+                  <CardTitle className="text-sm font-medium text-gray-600 dark:text-gray-400">CPU Usage</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="flex items-center justify-between">
-                    <div className="text-3xl font-bold text-gray-900">{systemLoad.cpu.toFixed(1)}%</div>
-                    <Activity className="w-8 h-8 text-purple-500 opacity-50" />
+                    <div className="text-3xl font-bold text-gray-900 dark:text-white">{systemLoad.cpu.toFixed(1)}%</div>
+                    <Activity className="w-8 h-8 text-purple-500 dark:text-purple-400 opacity-50" />
                   </div>
                   <div className="flex items-center gap-2 mt-2">
                     <div className={`w-2 h-2 rounded-full ${cpuStatus.color}`}></div>
-                    <p className="text-xs text-gray-600">{cpuStatus.status}</p>
+                    <p className="text-xs text-gray-600 dark:text-gray-400">{cpuStatus.status}</p>
                   </div>
                 </CardContent>
               </Card>
 
-              <Card className="border-l-4 border-l-green-500">
+              <Card className="border-l-4 border-l-green-500 dark:bg-slate-800/50 dark:border-l-green-400">
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-medium text-gray-600">API Requests</CardTitle>
+                  <CardTitle className="text-sm font-medium text-gray-600 dark:text-gray-400">API Requests</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="flex items-center justify-between">
-                    <div className="text-3xl font-bold text-gray-900">{systemLoad.requests.toLocaleString()}</div>
-                    <TrendingUp className="w-8 h-8 text-green-500 opacity-50" />
+                    <div className="text-3xl font-bold text-gray-900 dark:text-white">{systemLoad.requests.toLocaleString()}</div>
+                    <TrendingUp className="w-8 h-8 text-green-500 dark:text-green-400 opacity-50" />
                   </div>
-                  <p className="text-xs text-gray-600 mt-2">Last hour</p>
+                  <p className="text-xs text-gray-600 dark:text-gray-400 mt-2">Last hour</p>
                 </CardContent>
               </Card>
 
-              <Card className="border-l-4 border-l-orange-500">
+              <Card className="border-l-4 border-l-orange-500 dark:bg-slate-800/50 dark:border-l-orange-400">
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-medium text-gray-600">Memory Usage</CardTitle>
+                  <CardTitle className="text-sm font-medium text-gray-600 dark:text-gray-400">Memory Usage</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="flex items-center justify-between">
-                    <div className="text-3xl font-bold text-gray-900">{systemLoad.memory.toFixed(1)}%</div>
-                    <Database className="w-8 h-8 text-orange-500 opacity-50" />
+                    <div className="text-3xl font-bold text-gray-900 dark:text-white">{systemLoad.memory.toFixed(1)}%</div>
+                    <Database className="w-8 h-8 text-orange-500 dark:text-orange-400 opacity-50" />
                   </div>
-                  <div className="w-full bg-gray-200 rounded-full h-2 mt-2">
+                  <div className="w-full bg-gray-200 dark:bg-slate-700 rounded-full h-2 mt-2">
                     <div 
-                      className="bg-orange-500 h-2 rounded-full transition-all" 
+                      className="bg-orange-500 dark:bg-orange-400 h-2 rounded-full transition-all" 
                       style={{ width: `${systemLoad.memory}%` }}
                     ></div>
                   </div>
