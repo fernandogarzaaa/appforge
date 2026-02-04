@@ -1,6 +1,7 @@
 /**
  * Integration Tests for Queue Infrastructure
  * Run with: npm test
+ * These tests require a running backend server and are skipped in CI
  */
 
 import { describe, it, before, after } from 'node:test';
@@ -8,6 +9,10 @@ import assert from 'node:assert';
 import mongoose from 'mongoose';
 
 const API_URL = process.env.API_URL || 'http://localhost:5000';
+
+// Skip these integration tests in CI environment since they require a running server
+const skipInCI = process.env.CI === 'true';
+
 let authToken = '';
 let testJobId = '';
 let testWebhookId = '';
@@ -31,7 +36,7 @@ async function apiRequest(method, path, body = null) {
   return { response, data };
 }
 
-describe('Queue Infrastructure Integration Tests', () => {
+describe('Queue Infrastructure Integration Tests', { skip: skipInCI }, () => {
   before(async () => {
     // Setup: Login to get auth token
     try {

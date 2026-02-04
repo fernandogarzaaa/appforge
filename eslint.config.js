@@ -6,7 +6,36 @@ import pluginUnusedImports from "eslint-plugin-unused-imports";
 
 export default [
   {
-    ignores: ["src/lib/**/*", "src/components/ui/**/*", "node_modules/**/*", "dist/**/*"],
+    ignores: [
+      // Build and dependencies
+      "node_modules/**/*",
+      "dist/**/*",
+      "build/**/*",
+      ".venv/**/*",
+      "**/*.tgz",
+      // Environment
+      ".env.local",
+      ".env.*.local",
+      ".env",
+      // IDE
+      ".vscode/**/*",
+      ".idea/**/*",
+      "**/*.swp",
+      "**/*.swo",
+      // OS
+      ".DS_Store",
+      "Thumbs.db",
+      // Functions use Deno runtime - different rules
+      "functions/**/*.ts",
+      // Test files with different configuration
+      "tests/**/*.test.ts",
+      // Vite plugins with special requirements
+      "src/vite-plugins/**/*",
+      // UI component library from third-party
+      "src/components/ui/**/*",
+      // Frontend lib - excluded
+      "src/lib/**/*",
+    ],
   },
   {
     files: [
