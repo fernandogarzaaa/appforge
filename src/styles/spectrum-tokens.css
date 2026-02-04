@@ -1,0 +1,252 @@
+/* AppForge Spectrum Design System Tokens */
+
+@layer base {
+  :root {
+    /* ========================================
+       SPECTRUM COLOR PALETTE
+       Purple → Indigo → Cyan (Innovation Journey)
+       ======================================== */
+    
+    /* Spectrum Purple (Primary - Beginner) */
+    --spectrum-purple-50: 250 245 255;
+    --spectrum-purple-100: 243 232 255;
+    --spectrum-purple-200: 233 213 255;
+    --spectrum-purple-300: 216 180 254;
+    --spectrum-purple-400: 192 132 252;
+    --spectrum-purple-500: 168 85 247;
+    --spectrum-purple-600: 147 51 234;
+    --spectrum-purple-700: 126 34 206;
+    --spectrum-purple-800: 107 33 168;
+    --spectrum-purple-900: 88 28 135;
+    --spectrum-purple-950: 59 7 100;
+
+    /* Spectrum Indigo (Secondary - Professional) */
+    --spectrum-indigo-50: 238 242 255;
+    --spectrum-indigo-100: 224 231 255;
+    --spectrum-indigo-200: 199 210 254;
+    --spectrum-indigo-300: 165 180 252;
+    --spectrum-indigo-400: 129 140 248;
+    --spectrum-indigo-500: 99 102 241;
+    --spectrum-indigo-600: 79 70 229;
+    --spectrum-indigo-700: 67 56 202;
+    --spectrum-indigo-800: 55 48 163;
+    --spectrum-indigo-900: 49 46 129;
+    --spectrum-indigo-950: 30 27 75;
+
+    /* Spectrum Cyan (Accent - Quantum) */
+    --spectrum-cyan-50: 236 254 255;
+    --spectrum-cyan-100: 207 250 254;
+    --spectrum-cyan-200: 165 243 252;
+    --spectrum-cyan-300: 103 232 249;
+    --spectrum-cyan-400: 34 211 238;
+    --spectrum-cyan-500: 6 182 212;
+    --spectrum-cyan-600: 8 145 178;
+    --spectrum-cyan-700: 14 116 144;
+    --spectrum-cyan-800: 21 94 117;
+    --spectrum-cyan-900: 22 78 99;
+    --spectrum-cyan-950: 8 51 68;
+
+    /* Warm Amber (Progress/Success) */
+    --spectrum-amber-50: 255 251 235;
+    --spectrum-amber-100: 254 243 199;
+    --spectrum-amber-200: 253 230 138;
+    --spectrum-amber-300: 252 211 77;
+    --spectrum-amber-400: 251 191 36;
+    --spectrum-amber-500: 245 158 11;
+    --spectrum-amber-600: 217 119 6;
+    --spectrum-amber-700: 180 83 9;
+    --spectrum-amber-800: 146 64 14;
+    --spectrum-amber-900: 120 53 15;
+    --spectrum-amber-950: 69 26 3;
+
+    /* Neon Green (Quantum Highlights) */
+    --spectrum-neon-green: 34 197 94;
+    --spectrum-neon-blue: 59 130 246;
+    --spectrum-neon-pink: 236 72 153;
+
+    /* ========================================
+       GRADIENT DEFINITIONS
+       ======================================== */
+    
+    --spectrum-gradient-primary: linear-gradient(135deg, 
+      rgb(var(--spectrum-purple-500)) 0%, 
+      rgb(var(--spectrum-indigo-500)) 100%);
+    
+    --spectrum-gradient-journey: linear-gradient(135deg, 
+      rgb(var(--spectrum-purple-500)) 0%, 
+      rgb(var(--spectrum-indigo-500)) 50%, 
+      rgb(var(--spectrum-cyan-500)) 100%);
+    
+    --spectrum-gradient-quantum: linear-gradient(135deg, 
+      rgb(var(--spectrum-cyan-400)) 0%, 
+      rgb(var(--spectrum-indigo-500)) 50%, 
+      rgb(var(--spectrum-purple-600)) 100%);
+
+    --spectrum-gradient-success: linear-gradient(135deg, 
+      rgb(var(--spectrum-amber-400)) 0%, 
+      rgb(var(--spectrum-amber-600)) 100%);
+
+    /* ========================================
+       SPACING SYSTEM (8px Grid)
+       ======================================== */
+    
+    --spectrum-space-1: 0.5rem;    /* 8px */
+    --spectrum-space-2: 1rem;      /* 16px */
+    --spectrum-space-3: 1.5rem;    /* 24px */
+    --spectrum-space-4: 2rem;      /* 32px */
+    --spectrum-space-5: 2.5rem;    /* 40px */
+    --spectrum-space-6: 3rem;      /* 48px */
+    --spectrum-space-8: 4rem;      /* 64px */
+    --spectrum-space-10: 5rem;     /* 80px */
+    --spectrum-space-12: 6rem;     /* 96px */
+    --spectrum-space-16: 8rem;     /* 128px */
+
+    /* Component-specific spacing */
+    --spectrum-padding-page: var(--spectrum-space-6);
+    --spectrum-padding-section: var(--spectrum-space-8);
+    --spectrum-padding-card: var(--spectrum-space-4);
+    --spectrum-gap-default: var(--spectrum-space-4);
+
+    /* ========================================
+       TYPOGRAPHY SYSTEM
+       ======================================== */
+    
+    /* Font families */
+    --spectrum-font-heading: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --spectrum-font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --spectrum-font-code: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+
+    /* Font sizes */
+    --spectrum-text-xs: 0.75rem;      /* 12px */
+    --spectrum-text-sm: 0.875rem;     /* 14px */
+    --spectrum-text-base: 1rem;       /* 16px */
+    --spectrum-text-lg: 1.125rem;     /* 18px */
+    --spectrum-text-xl: 1.25rem;      /* 20px */
+    --spectrum-text-2xl: 1.5rem;      /* 24px */
+    --spectrum-text-3xl: 1.875rem;    /* 30px */
+    --spectrum-text-4xl: 2.25rem;     /* 36px */
+    --spectrum-text-5xl: 3rem;        /* 48px */
+    --spectrum-text-6xl: 3.75rem;     /* 60px */
+
+    /* Line heights */
+    --spectrum-leading-tight: 1.25;
+    --spectrum-leading-normal: 1.5;
+    --spectrum-leading-relaxed: 1.75;
+
+    /* ========================================
+       ANIMATION TOKENS
+       ======================================== */
+    
+    --spectrum-duration-fast: 150ms;
+    --spectrum-duration-normal: 200ms;
+    --spectrum-duration-slow: 300ms;
+    --spectrum-duration-slower: 500ms;
+
+    --spectrum-ease-default: cubic-bezier(0.4, 0, 0.2, 1);
+    --spectrum-ease-in: cubic-bezier(0.4, 0, 1, 1);
+    --spectrum-ease-out: cubic-bezier(0, 0, 0.2, 1);
+    --spectrum-ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+
+    /* ========================================
+       ELEVATION/SHADOW SYSTEM
+       ======================================== */
+    
+    --spectrum-shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --spectrum-shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+    --spectrum-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+    --spectrum-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+    --spectrum-shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+    --spectrum-shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+
+    /* Quantum glow shadows */
+    --spectrum-shadow-quantum: 0 0 20px rgba(var(--spectrum-cyan-500), 0.3), 
+                                0 0 40px rgba(var(--spectrum-purple-500), 0.2);
+    
+    --spectrum-shadow-quantum-hover: 0 0 30px rgba(var(--spectrum-cyan-500), 0.4), 
+                                      0 0 60px rgba(var(--spectrum-purple-500), 0.3);
+
+    /* ========================================
+       BORDER RADIUS
+       ======================================== */
+    
+    --spectrum-radius-sm: 0.25rem;   /* 4px */
+    --spectrum-radius-md: 0.5rem;    /* 8px */
+    --spectrum-radius-lg: 0.75rem;   /* 12px */
+    --spectrum-radius-xl: 1rem;      /* 16px */
+    --spectrum-radius-2xl: 1.5rem;   /* 24px */
+    --spectrum-radius-full: 9999px;
+  }
+
+  /* ========================================
+     DARK MODE OVERRIDES
+     ======================================== */
+  
+  .dark {
+    /* Adjust purple with subtle tint in dark backgrounds */
+    --background-tinted: 270 5% 6%;
+    --card-tinted: 270 5% 8%;
+    
+    /* Enhance quantum glow in dark mode */
+    --spectrum-shadow-quantum: 0 0 25px rgba(var(--spectrum-cyan-400), 0.4), 
+                                0 0 50px rgba(var(--spectrum-purple-400), 0.3);
+    
+    --spectrum-shadow-quantum-hover: 0 0 35px rgba(var(--spectrum-cyan-400), 0.5), 
+                                      0 0 70px rgba(var(--spectrum-purple-400), 0.4);
+  }
+}
+
+/* ========================================
+   UTILITY CLASSES
+   ======================================== */
+
+@layer utilities {
+  /* Gradient backgrounds */
+  .spectrum-gradient-bg {
+    background: var(--spectrum-gradient-journey);
+  }
+
+  .spectrum-gradient-primary {
+    background: var(--spectrum-gradient-primary);
+  }
+
+  .spectrum-gradient-quantum {
+    background: var(--spectrum-gradient-quantum);
+  }
+
+  .spectrum-gradient-success {
+    background: var(--spectrum-gradient-success);
+  }
+
+  /* Gradient text */
+  .spectrum-gradient-text {
+    background: var(--spectrum-gradient-journey);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  /* Quantum glow effect */
+  .spectrum-quantum-glow {
+    box-shadow: var(--spectrum-shadow-quantum);
+    transition: box-shadow var(--spectrum-duration-normal) var(--spectrum-ease-default);
+  }
+
+  .spectrum-quantum-glow:hover {
+    box-shadow: var(--spectrum-shadow-quantum-hover);
+  }
+
+  /* Typography utilities */
+  .spectrum-heading {
+    font-family: var(--spectrum-font-heading);
+    line-height: var(--spectrum-leading-tight);
+  }
+
+  .spectrum-body {
+    font-family: var(--spectrum-font-body);
+    line-height: var(--spectrum-leading-normal);
+  }
+
+  .spectrum-code {
+    font-family: var(--spectrum-font-code);
+  }
+}

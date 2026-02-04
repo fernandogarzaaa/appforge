@@ -20,6 +20,7 @@ import creditsRoutes from './routes/creditsRoutes.js';
 import settingsRoutes from './routes/settingsRoutes.js';
 import teamSettingsRoutes from './routes/teamSettingsRoutes.js';
 import adminRoutes from './routes/adminRoutes.js';
+import adminDashboardRoutes from './routes/adminDashboardRoutes.js';
 import persistenceRoutes from './routes/persistenceRoutes.js';
 import { handleStripeWebhook } from './services/stripeService.js';
 import WebSocketServer from './websocket/index.js';
@@ -158,6 +159,7 @@ app.use('/api/persistence', persistenceRoutes);
 app.use('/api/user', settingsRoutes);
 app.use('/api/team', teamSettingsRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/admin', adminDashboardRoutes);
 
 // 404 handler
 app.use((req, res) => {
