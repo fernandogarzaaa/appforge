@@ -255,9 +255,9 @@ def qaoa_circuit(graph, beta, gamma):
 
                 <div>
                   <h4 className="font-semibold text-sm mb-2">Unitary Matrix</h4>
-                  <pre className="text-xs font-mono bg-slate-100 dark:bg-slate-800 p-3 rounded overflow-x-auto">
-                    {gate.matrix}
-                  </pre>
+                  <pre className="text-xs font-mono bg-black/10 dark:bg-black/20 p-3 rounded overflow-x-auto backdrop-blur-sm">
+                     {gate.matrix}
+                   </pre>
                 </div>
 
                 <div>
