@@ -49,6 +49,7 @@ const AIUXSuggestions = React.lazy(() => import('@/components/ai/AIUXSuggestions
 const QuantumQueryAnalyzer = React.lazy(() => import('@/components/ai/QuantumQueryAnalyzer'));
 const ProactiveQuantumSuggestions = React.lazy(() => import('@/components/ai/ProactiveQuantumSuggestions'));
 const QuantumReportGenerator = React.lazy(() => import('@/components/ai/QuantumReportGenerator'));
+const QuantumLearningEngine = React.lazy(() => import('@/components/ai/QuantumLearningEngine'));
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import ReactMarkdown from 'react-markdown';
@@ -665,6 +666,23 @@ Provide helpful, actionable responses with code examples when relevant. Be conci
       const updatedMessages = [...newMessages, assistantMessage];
       setMessages(updatedMessages);
 
+      // Capture learning from this interaction
+      if (user) {
+        try {
+          const category = detectCategory(currentInput);
+          await base44.entities.Learning.create({
+            user_id: user.email,
+            prompt: currentInput,
+            response: responseText,
+            feedback_score: 0.7, // Default, user can rate later
+            category,
+            extracted_patterns: extractUserPatterns(currentInput),
+          });
+        } catch (learningError) {
+          console.log('Learning capture skipped:', learningError);
+        }
+      }
+
       if (activeConversation) {
         updateConversationMutation.mutate({
           id: activeConversation.id,
@@ -697,6 +715,24 @@ Provide helpful, actionable responses with code examples when relevant. Be conci
     setMessages([]);
     setActivePanel(null);
     setSuggestedTools([]);
+  };
+
+  // Helper functions for learning
+  const detectCategory = (input) => {
+    const lowerInput = input.toLowerCase();
+    if (/quantum|multiverse|circuit|gate|qubit|entangle/.test(lowerInput)) return 'quantum';
+    if (/component|ui|design|visual/.test(lowerInput)) return 'component';
+    if (/api|rest|endpoint|fetch/.test(lowerInput)) return 'api';
+    if (/workflow|automation|trigger/.test(lowerInput)) return 'workflow';
+    if (/entity|database|model|schema/.test(lowerInput)) return 'project';
+    return 'general';
+  };
+
+  const extractUserPatterns = (input) => {
+    const patterns = [];
+    const keywords = input.match(/\b[a-z]{4,}\b/gi) || [];
+    const uniqueKeywords = [...new Set(keywords)].slice(0, 5);
+    return uniqueKeywords.map((kw) => kw.toLowerCase());
   };
 
   // AI Assistant can now work with or without a project
@@ -1373,7 +1409,15 @@ Provide helpful, actionable responses with code examples when relevant. Be conci
               </Button>
             </div>
             {messages.length > 0 && !activePanel && (
-              <div className="mt-3">
+              <div className="mt-3 space-y-3">
+                <React.Suspense fallback={null}>
+                  <QuantumLearningEngine 
+                    userEmail={user?.email}
+                    onLearningsUpdate={(data) => {
+                      setUserActivity(prev => ({ ...prev, lastLearning: data }));
+                    }}
+                  />
+                </React.Suspense>
                 <ProactiveSuggestions 
                   projectId={projectId} 
                   onApplySuggestion={(suggestion) => setInput(suggestion.action)}
