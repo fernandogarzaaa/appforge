@@ -226,38 +226,38 @@ export default function Dashboard() {
         </Badge>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        {quickActions.map((action, idx) => (
-          <motion.div
-            key={action.title}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3, delay: 0.1 + idx * 0.05 }}
-          >
-            <Link to={action.href}>
-              <Card className="h-full hover:shadow-2xl hover:scale-105 transition-all duration-300 cursor-pointer border-2 hover:border-indigo-300 group">
-                <CardContent className="p-6">
-                  <div className="flex items-start justify-between mb-4">
-                    <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${action.gradient} flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform`}>
-                      <action.icon className="w-6 h-6 text-white" />
-                    </div>
-                    {action.badge && (
-                      <Badge className="bg-gradient-to-r from-indigo-500 to-purple-500 text-white border-0">
-                        {action.badge}
-                      </Badge>
-                    )}
-                  </div>
-                  <h3 className="font-semibold text-gray-900 mb-2 group-hover:text-indigo-600 transition-colors">
-                    {action.title}
-                  </h3>
-                  <p className="text-sm text-gray-600">
-                    {action.description}
-                  </p>
-                </CardContent>
-              </Card>
-            </Link>
-          </motion.div>
-        ))}
-      </div>
+         {quickActions.map((action, idx) => (
+           <motion.div
+             key={action.title}
+             initial={{ opacity: 0, y: 20 }}
+             animate={{ opacity: 1, y: 0 }}
+             transition={{ duration: 0.3, delay: 0.1 + idx * 0.05 }}
+           >
+             <Link to={action.href}>
+               <div className="h-full backdrop-blur-md bg-white/40 dark:bg-slate-900/40 border border-white/30 dark:border-white/10 hover:border-white/50 dark:hover:border-white/20 rounded-2xl hover:shadow-2xl hover:scale-105 transition-all duration-300 cursor-pointer group p-6 space-y-4">
+                 <div className="flex items-start justify-between">
+                   <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${action.gradient} flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform`}>
+                     <action.icon className="w-6 h-6 text-white" />
+                   </div>
+                   {action.badge && (
+                     <Badge className="bg-cyan-500/40 text-cyan-700 dark:text-cyan-300 border border-cyan-300/50 backdrop-blur-sm text-xs">
+                       {action.badge}
+                     </Badge>
+                   )}
+                 </div>
+                 <div>
+                   <h3 className="font-semibold text-gray-900 dark:text-white mb-2 group-hover:text-cyan-600 dark:group-hover:text-cyan-400 transition-colors">
+                     {action.title}
+                   </h3>
+                   <p className="text-sm text-gray-600 dark:text-gray-300">
+                     {action.description}
+                   </p>
+                 </div>
+               </div>
+             </Link>
+           </motion.div>
+         ))}
+       </div>
     </motion.div>
   );
 
