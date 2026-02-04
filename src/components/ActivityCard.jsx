@@ -1,7 +1,7 @@
 import React from 'react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { Trash2, Clock, User, CheckCircle2 } from 'lucide-react'
+import { Trash2, Clock, User, CheckCircle2, Activity } from 'lucide-react'
 import { ActivityIcons, ActivitySeverity } from '@/services/activityService'
 import { formatDistanceToNow } from 'date-fns'
 
