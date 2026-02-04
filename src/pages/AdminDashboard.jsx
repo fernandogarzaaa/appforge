@@ -71,10 +71,10 @@ export default function AdminDashboard() {
 
   const getActivityColor = (status) => {
     switch (status) {
-      case 'success': return 'text-green-600 bg-green-50';
-      case 'warning': return 'text-yellow-600 bg-yellow-50';
-      case 'error': return 'text-red-600 bg-red-50';
-      default: return 'text-gray-600 bg-gray-50';
+      case 'success': return 'text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-950/30';
+      case 'warning': return 'text-yellow-600 dark:text-yellow-400 bg-yellow-50 dark:bg-yellow-950/30';
+      case 'error': return 'text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-950/30';
+      default: return 'text-gray-600 dark:text-gray-400 bg-gray-50 dark:bg-slate-800/50';
     }
   };
 
@@ -87,24 +87,24 @@ export default function AdminDashboard() {
   const cpuStatus = getCPUStatus(systemLoad.cpu);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-slate-50">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-slate-50 dark:from-gray-950 dark:via-slate-900 dark:to-gray-950">
       <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
-        <div className="border-b bg-white/80 backdrop-blur-sm sticky top-0 z-10 shadow-sm">
+        <div className="border-b bg-white/80 dark:bg-slate-900/80 dark:border-slate-800 backdrop-blur-sm sticky top-0 z-10 shadow-sm">
           <div className="max-w-7xl mx-auto px-6 py-4">
             <div className="flex items-center justify-between mb-4">
               <div>
-                <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-3">
-                  <Shield className="w-8 h-8 text-blue-600" />
+                <h1 className="text-3xl font-bold text-gray-900 dark:text-white flex items-center gap-3">
+                  <Shield className="w-8 h-8 text-blue-600 dark:text-blue-400" />
                   Admin Control Center
                 </h1>
-                <p className="text-sm text-gray-600 mt-1">Comprehensive system management and monitoring</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">Comprehensive system management and monitoring</p>
               </div>
               <div className="flex items-center gap-3">
-                <Badge variant="outline" className="text-xs">
+                <Badge variant="outline" className="text-xs dark:border-slate-700 dark:text-gray-300">
                   <Clock className="w-3 h-3 mr-1" />
                   Updated: {lastUpdated.toLocaleTimeString()}
                 </Badge>
-                <Button variant="ghost" size="sm" onClick={() => setLastUpdated(new Date())}>
+                <Button variant="ghost" size="sm" onClick={() => setLastUpdated(new Date())} className="dark:hover:bg-slate-800">
                   <RefreshCw className="w-4 h-4" />
                 </Button>
                 <HelpTooltip 
@@ -114,7 +114,7 @@ export default function AdminDashboard() {
               </div>
             </div>
             
-            <TabsList className="grid w-full max-w-4xl grid-cols-7 bg-gray-100">
+            <TabsList className="grid w-full max-w-4xl grid-cols-7 bg-gray-100 dark:bg-slate-800">
               <TabsTrigger value="overview" className="flex items-center gap-2">
                 <BarChart3 className="w-4 h-4" />
                 <span className="hidden sm:inline">Overview</span>
@@ -152,60 +152,60 @@ export default function AdminDashboard() {
           <div className="max-w-7xl mx-auto px-6 py-6 space-y-6">
             {/* System Status Cards */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-              <Card className="border-l-4 border-l-blue-500">
+              <Card className="border-l-4 border-l-blue-500 dark:bg-slate-800/50 dark:border-l-blue-400">
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-medium text-gray-600">Active Users</CardTitle>
+                  <CardTitle className="text-sm font-medium text-gray-600 dark:text-gray-400">Active Users</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="flex items-center justify-between">
-                    <div className="text-3xl font-bold text-gray-900">{activeUsers}</div>
-                    <Users className="w-8 h-8 text-blue-500 opacity-50" />
+                    <div className="text-3xl font-bold text-gray-900 dark:text-white">{activeUsers}</div>
+                    <Users className="w-8 h-8 text-blue-500 dark:text-blue-400 opacity-50" />
                   </div>
-                  <p className="text-xs text-green-600 mt-2">↑ 12% from yesterday</p>
+                  <p className="text-xs text-green-600 dark:text-green-400 mt-2">↑ 12% from yesterday</p>
                 </CardContent>
               </Card>
 
-              <Card className="border-l-4 border-l-purple-500">
+              <Card className="border-l-4 border-l-purple-500 dark:bg-slate-800/50 dark:border-l-purple-400">
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-medium text-gray-600">CPU Usage</CardTitle>
+                  <CardTitle className="text-sm font-medium text-gray-600 dark:text-gray-400">CPU Usage</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="flex items-center justify-between">
-                    <div className="text-3xl font-bold text-gray-900">{systemLoad.cpu.toFixed(1)}%</div>
-                    <Activity className="w-8 h-8 text-purple-500 opacity-50" />
+                    <div className="text-3xl font-bold text-gray-900 dark:text-white">{systemLoad.cpu.toFixed(1)}%</div>
+                    <Activity className="w-8 h-8 text-purple-500 dark:text-purple-400 opacity-50" />
                   </div>
                   <div className="flex items-center gap-2 mt-2">
                     <div className={`w-2 h-2 rounded-full ${cpuStatus.color}`}></div>
-                    <p className="text-xs text-gray-600">{cpuStatus.status}</p>
+                    <p className="text-xs text-gray-600 dark:text-gray-400">{cpuStatus.status}</p>
                   </div>
                 </CardContent>
               </Card>
 
-              <Card className="border-l-4 border-l-green-500">
+              <Card className="border-l-4 border-l-green-500 dark:bg-slate-800/50 dark:border-l-green-400">
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-medium text-gray-600">API Requests</CardTitle>
+                  <CardTitle className="text-sm font-medium text-gray-600 dark:text-gray-400">API Requests</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="flex items-center justify-between">
-                    <div className="text-3xl font-bold text-gray-900">{systemLoad.requests.toLocaleString()}</div>
-                    <TrendingUp className="w-8 h-8 text-green-500 opacity-50" />
+                    <div className="text-3xl font-bold text-gray-900 dark:text-white">{systemLoad.requests.toLocaleString()}</div>
+                    <TrendingUp className="w-8 h-8 text-green-500 dark:text-green-400 opacity-50" />
                   </div>
-                  <p className="text-xs text-gray-600 mt-2">Last hour</p>
+                  <p className="text-xs text-gray-600 dark:text-gray-400 mt-2">Last hour</p>
                 </CardContent>
               </Card>
 
-              <Card className="border-l-4 border-l-orange-500">
+              <Card className="border-l-4 border-l-orange-500 dark:bg-slate-800/50 dark:border-l-orange-400">
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-medium text-gray-600">Memory Usage</CardTitle>
+                  <CardTitle className="text-sm font-medium text-gray-600 dark:text-gray-400">Memory Usage</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="flex items-center justify-between">
-                    <div className="text-3xl font-bold text-gray-900">{systemLoad.memory.toFixed(1)}%</div>
-                    <Database className="w-8 h-8 text-orange-500 opacity-50" />
+                    <div className="text-3xl font-bold text-gray-900 dark:text-white">{systemLoad.memory.toFixed(1)}%</div>
+                    <Database className="w-8 h-8 text-orange-500 dark:text-orange-400 opacity-50" />
                   </div>
-                  <div className="w-full bg-gray-200 rounded-full h-2 mt-2">
+                  <div className="w-full bg-gray-200 dark:bg-slate-700 rounded-full h-2 mt-2">
                     <div 
-                      className="bg-orange-500 h-2 rounded-full transition-all" 
+                      className="bg-orange-500 dark:bg-orange-400 h-2 rounded-full transition-all" 
                       style={{ width: `${systemLoad.memory}%` }}
                     ></div>
                   </div>
@@ -226,24 +226,24 @@ export default function AdminDashboard() {
                   {recentActivity.map((activity) => (
                     <div 
                       key={activity.id} 
-                      className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+                      className="flex items-center justify-between p-3 bg-gray-50 dark:bg-slate-800/50 dark:border dark:border-slate-700 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700/50 transition-colors"
                     >
                       <div className="flex items-center gap-3">
                         <div className={`p-2 rounded-lg ${getActivityColor(activity.status)}`}>
                           {getActivityIcon(activity.type)}
                         </div>
                         <div>
-                          <p className="font-medium text-sm text-gray-900">
+                          <p className="font-medium text-sm text-gray-900 dark:text-white">
                             {activity.type.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')}
                           </p>
-                          <p className="text-xs text-gray-600">{activity.user}</p>
+                          <p className="text-xs text-gray-600 dark:text-gray-400">{activity.user}</p>
                         </div>
                       </div>
                       <div className="text-right">
                         <Badge variant={activity.status === 'error' ? 'destructive' : 'secondary'} className="text-xs">
                           {activity.status}
                         </Badge>
-                        <p className="text-xs text-gray-500 mt-1">
+                        <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                           {new Date(activity.timestamp).toLocaleTimeString()}
                         </p>
                       </div>
@@ -255,32 +255,32 @@ export default function AdminDashboard() {
 
             {/* Quick Actions */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <Card className="hover:shadow-lg transition-shadow cursor-pointer">
+              <Card className="hover:shadow-lg transition-shadow cursor-pointer dark:bg-slate-800/50">
                 <CardContent className="pt-6">
                   <div className="text-center">
-                    <Users className="w-12 h-12 mx-auto text-blue-500 mb-3" />
-                    <h3 className="font-semibold text-gray-900 mb-2">Manage Users</h3>
-                    <p className="text-sm text-gray-600">View and manage user accounts</p>
+                    <Users className="w-12 h-12 mx-auto text-blue-500 dark:text-blue-400 mb-3" />
+                    <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Manage Users</h3>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">View and manage user accounts</p>
                   </div>
                 </CardContent>
               </Card>
 
-              <Card className="hover:shadow-lg transition-shadow cursor-pointer">
+              <Card className="hover:shadow-lg transition-shadow cursor-pointer dark:bg-slate-800/50">
                 <CardContent className="pt-6">
                   <div className="text-center">
-                    <Shield className="w-12 h-12 mx-auto text-purple-500 mb-3" />
-                    <h3 className="font-semibold text-gray-900 mb-2">System Health</h3>
-                    <p className="text-sm text-gray-600">Monitor system performance</p>
+                    <Shield className="w-12 h-12 mx-auto text-purple-500 dark:text-purple-400 mb-3" />
+                    <h3 className="font-semibold text-gray-900 dark:text-white mb-2">System Health</h3>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">Monitor system performance</p>
                   </div>
                 </CardContent>
               </Card>
 
-              <Card className="hover:shadow-lg transition-shadow cursor-pointer">
+              <Card className="hover:shadow-lg transition-shadow cursor-pointer dark:bg-slate-800/50">
                 <CardContent className="pt-6">
                   <div className="text-center">
-                    <Key className="w-12 h-12 mx-auto text-green-500 mb-3" />
-                    <h3 className="font-semibold text-gray-900 mb-2">API Management</h3>
-                    <p className="text-sm text-gray-600">Generate and manage API keys</p>
+                    <Key className="w-12 h-12 mx-auto text-green-500 dark:text-green-400 mb-3" />
+                    <h3 className="font-semibold text-gray-900 dark:text-white mb-2">API Management</h3>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">Generate and manage API keys</p>
                   </div>
                 </CardContent>
               </Card>
@@ -334,30 +334,30 @@ export default function AdminDashboard() {
                   <div className="space-y-2">
                     {recentActivity.map((activity) => (
                       <div 
-                        key={activity.id} 
-                        className="flex items-center justify-between p-4 bg-white border rounded-lg hover:shadow-md transition-all"
-                      >
-                        <div className="flex items-center gap-4">
-                          <div className={`p-3 rounded-lg ${getActivityColor(activity.status)}`}>
-                            {getActivityIcon(activity.type)}
+                          key={activity.id} 
+                          className="flex items-center justify-between p-4 bg-white dark:bg-slate-800/50 dark:border-slate-700 border rounded-lg hover:shadow-md dark:hover:shadow-lg transition-all"
+                        >
+                          <div className="flex items-center gap-4">
+                            <div className={`p-3 rounded-lg ${getActivityColor(activity.status)}`}>
+                              {getActivityIcon(activity.type)}
+                            </div>
+                            <div>
+                              <p className="font-semibold text-gray-900 dark:text-white">
+                                {activity.type.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')}
+                              </p>
+                              <p className="text-sm text-gray-600 dark:text-gray-400">{activity.user}</p>
+                              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                                {activity.timestamp.toLocaleString()}
+                              </p>
+                            </div>
                           </div>
-                          <div>
-                            <p className="font-semibold text-gray-900">
-                              {activity.type.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')}
-                            </p>
-                            <p className="text-sm text-gray-600">{activity.user}</p>
-                            <p className="text-xs text-gray-500 mt-1">
-                              {activity.timestamp.toLocaleString()}
-                            </p>
+                          <div className="flex items-center gap-3">
+                            <Badge variant={activity.status === 'error' ? 'destructive' : 'secondary'}>
+                              {activity.status}
+                            </Badge>
+                            <Button variant="ghost" size="sm" className="dark:hover:bg-slate-700">View Details</Button>
                           </div>
                         </div>
-                        <div className="flex items-center gap-3">
-                          <Badge variant={activity.status === 'error' ? 'destructive' : 'secondary'}>
-                            {activity.status}
-                          </Badge>
-                          <Button variant="ghost" size="sm">View Details</Button>
-                        </div>
-                      </div>
                     ))}
                   </div>
 
@@ -383,44 +383,44 @@ export default function AdminDashboard() {
                 </CardHeader>
                 <CardContent>
                   <div className="grid md:grid-cols-3 gap-4">
-                    <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
-                      <h3 className="font-semibold text-blue-900 mb-2">Total Records</h3>
-                      <p className="text-3xl font-bold text-blue-600">1,247,583</p>
-                      <p className="text-xs text-blue-600 mt-2">Across all tables</p>
+                    <div className="p-4 bg-blue-50 dark:bg-blue-950/30 rounded-lg border border-blue-200 dark:border-blue-900/50">
+                      <h3 className="font-semibold text-blue-900 dark:text-blue-200 mb-2">Total Records</h3>
+                      <p className="text-3xl font-bold text-blue-600 dark:text-blue-400">1,247,583</p>
+                      <p className="text-xs text-blue-600 dark:text-blue-400 mt-2">Across all tables</p>
                     </div>
-                    <div className="p-4 bg-green-50 rounded-lg border border-green-200">
-                      <h3 className="font-semibold text-green-900 mb-2">Storage Used</h3>
-                      <p className="text-3xl font-bold text-green-600">847 GB</p>
-                      <p className="text-xs text-green-600 mt-2">72% of quota</p>
+                    <div className="p-4 bg-green-50 dark:bg-green-950/30 rounded-lg border border-green-200 dark:border-green-900/50">
+                      <h3 className="font-semibold text-green-900 dark:text-green-200 mb-2">Storage Used</h3>
+                      <p className="text-3xl font-bold text-green-600 dark:text-green-400">847 GB</p>
+                      <p className="text-xs text-green-600 dark:text-green-400 mt-2">72% of quota</p>
                     </div>
-                    <div className="p-4 bg-purple-50 rounded-lg border border-purple-200">
-                      <h3 className="font-semibold text-purple-900 mb-2">Active Connections</h3>
-                      <p className="text-3xl font-bold text-purple-600">23</p>
-                      <p className="text-xs text-purple-600 mt-2">Max: 100</p>
+                    <div className="p-4 bg-purple-50 dark:bg-purple-950/30 rounded-lg border border-purple-200 dark:border-purple-900/50">
+                      <h3 className="font-semibold text-purple-900 dark:text-purple-200 mb-2">Active Connections</h3>
+                      <p className="text-3xl font-bold text-purple-600 dark:text-purple-400">23</p>
+                      <p className="text-xs text-purple-600 dark:text-purple-400 mt-2">Max: 100</p>
                     </div>
                   </div>
 
                   <div className="mt-6 space-y-3">
-                    <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                    <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-slate-800/50 dark:border dark:border-slate-700 rounded-lg">
                       <div>
-                        <p className="font-medium text-gray-900">Users Table</p>
-                        <p className="text-sm text-gray-600">234,567 records</p>
+                        <p className="font-medium text-gray-900 dark:text-white">Users Table</p>
+                        <p className="text-sm text-gray-600 dark:text-gray-400">234,567 records</p>
                       </div>
-                      <Button variant="outline" size="sm">Manage</Button>
+                      <Button variant="outline" size="sm" className="dark:hover:bg-slate-700">Manage</Button>
                     </div>
-                    <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                    <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-slate-800/50 dark:border dark:border-slate-700 rounded-lg">
                       <div>
-                        <p className="font-medium text-gray-900">Projects Table</p>
-                        <p className="text-sm text-gray-600">89,234 records</p>
+                        <p className="font-medium text-gray-900 dark:text-white">Projects Table</p>
+                        <p className="text-sm text-gray-600 dark:text-gray-400">89,234 records</p>
                       </div>
-                      <Button variant="outline" size="sm">Manage</Button>
+                      <Button variant="outline" size="sm" className="dark:hover:bg-slate-700">Manage</Button>
                     </div>
-                    <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                    <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-slate-800/50 dark:border dark:border-slate-700 rounded-lg">
                       <div>
-                        <p className="font-medium text-gray-900">Automations Table</p>
-                        <p className="text-sm text-gray-600">45,123 records</p>
+                        <p className="font-medium text-gray-900 dark:text-white">Automations Table</p>
+                        <p className="text-sm text-gray-600 dark:text-gray-400">45,123 records</p>
                       </div>
-                      <Button variant="outline" size="sm">Manage</Button>
+                      <Button variant="outline" size="sm" className="dark:hover:bg-slate-700">Manage</Button>
                     </div>
                   </div>
 
