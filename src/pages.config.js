@@ -158,12 +158,13 @@ import VisualizationStudio from './pages/VisualizationStudio';
 import Web3Dashboard from './pages/Web3Dashboard';
 import WebhookMonitor from './pages/WebhookMonitor';
 import WorkflowBuilder from './pages/WorkflowBuilder';
+import AdminSecrets from './pages/AdminSecrets';
+import AdminSystemConfig from './pages/AdminSystemConfig';
 import AdminAPIKeys from './pages/AdminAPIKeys';
 import AdminMonitoring from './pages/AdminMonitoring';
 import AdminSecrets from './pages/AdminSecrets';
 import AdminSystemConfig from './pages/AdminSystemConfig';
-import AdminSecrets from './pages/AdminSecrets';
-import AdminSystemConfig from './pages/AdminSystemConfig';
+import AdminAPIKeys from './pages/AdminAPIKeys';
 import __Layout from './Layout.jsx';
 
 
@@ -279,12 +280,13 @@ export const PAGES = {
     "Web3Dashboard": Web3Dashboard,
     "WebhookMonitor": WebhookMonitor,
     "WorkflowBuilder": WorkflowBuilder,
+    "AdminSecrets": AdminSecrets,
+    "AdminSystemConfig": AdminSystemConfig,
     "AdminAPIKeys": AdminAPIKeys,
     "AdminMonitoring": AdminMonitoring,
     "AdminSecrets": AdminSecrets,
     "AdminSystemConfig": AdminSystemConfig,
-    "AdminSecrets": AdminSecrets,
-    "AdminSystemConfig": AdminSystemConfig,
+    "AdminAPIKeys": AdminAPIKeys,
 }
 
 export const pagesConfig = {
