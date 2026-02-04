@@ -205,13 +205,13 @@ def qaoa_circuit(graph, beta, gamma):
   const gate = gateLibrary[selectedGate]
 
   return (
-    <Card>
-      <CardHeader>
+    <Card className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border-0 shadow-xl dark:shadow-slate-950/50">
+      <CardHeader className="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 text-white rounded-t-lg">
         <CardTitle className="flex items-center gap-2">
           <BookOpen className="h-5 w-5" />
           Quantum Computing Guide
         </CardTitle>
-        <CardDescription>Learn about quantum gates and concepts</CardDescription>
+        <CardDescription className="text-white/90">Learn about quantum gates and concepts</CardDescription>
       </CardHeader>
 
       <CardContent>
