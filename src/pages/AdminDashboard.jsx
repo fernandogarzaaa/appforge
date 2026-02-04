@@ -1,13 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import SystemHealthDashboard from '@/components/admin/SystemHealthDashboard';
-import APIKeyManagement from '@/components/admin/APIKeyManagement';
-import AdminSettings from '@/components/admin/AdminSettings';
-import UserManagement from '@/components/admin/UserManagement';
+// Lazy load heavy admin sub-components
+const SystemHealthDashboard = lazy(() => import('@/components/admin/SystemHealthDashboard'));
+const APIKeyManagement = lazy(() => import('@/components/admin/APIKeyManagement'));
+const AdminSettings = lazy(() => import('@/components/admin/AdminSettings'));
+const UserManagement = lazy(() => import('@/components/admin/UserManagement'));
 import HelpTooltip from '@/components/help/HelpTooltip';
 import { Shield, Key, Settings, Users, Activity, Database, Clock, AlertTriangle, TrendingUp, FileText, BarChart3, RefreshCw } from 'lucide-react';
 
@@ -291,21 +292,27 @@ export default function AdminDashboard() {
         {/* System Health Tab */}
         <TabsContent value="health" className="border-0">
           <div className="max-w-7xl mx-auto px-6 py-6">
-            <SystemHealthDashboard />
+            <Suspense fallback={<div className="text-center py-12">Loading...</div>}>
+              <SystemHealthDashboard />
+            </Suspense>
           </div>
         </TabsContent>
 
         {/* Users Tab */}
         <TabsContent value="users" className="border-0">
           <div className="max-w-7xl mx-auto px-6 py-6">
-            <UserManagement />
+            <Suspense fallback={<div className="text-center py-12">Loading...</div>}>
+              <UserManagement />
+            </Suspense>
           </div>
         </TabsContent>
 
         {/* API Keys Tab */}
         <TabsContent value="api-keys" className="border-0">
           <div className="max-w-7xl mx-auto px-6 py-6">
-            <APIKeyManagement />
+            <Suspense fallback={<div className="text-center py-12">Loading...</div>}>
+              <APIKeyManagement />
+            </Suspense>
           </div>
         </TabsContent>
 
@@ -443,7 +450,9 @@ export default function AdminDashboard() {
         {/* Settings Tab */}
         <TabsContent value="settings" className="border-0">
           <div className="max-w-7xl mx-auto px-6 py-6">
-            <AdminSettings />
+            <Suspense fallback={<div className="text-center py-12">Loading...</div>}>
+              <AdminSettings />
+            </Suspense>
           </div>
         </TabsContent>
       </Tabs>
