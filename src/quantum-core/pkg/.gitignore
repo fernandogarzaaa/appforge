@@ -1,7 +1,1 @@
 *
-!.gitignore
-!package.json
-!quantum_core.js
-!quantum_core.d.ts
-!quantum_core_bg.wasm
-!quantum_core_bg.wasm.d.ts

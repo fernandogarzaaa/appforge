@@ -7,6 +7,10 @@
   "description": "Quantum interference validator for AI consensus (WASM core)",
   "version": "0.1.0",
   "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fernandogarzaaa/appforge"
+  },
   "files": [
     "quantum_core_bg.wasm",
     "quantum_core.js",
