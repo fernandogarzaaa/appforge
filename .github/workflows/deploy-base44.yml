@@ -44,7 +44,7 @@ jobs:
           
           # Deploy the project (entities, functions, and site files)
           # Note: First deployment may require manual 'base44 link' setup
-          base44 deploy --verbose || {
+           base44 deploy || {
             echo "⚠️  Deployment failed. If this is the first deployment:"
             echo "   1. Run 'base44 link' locally to connect project"
             echo "   2. Ensure BASE44_API_KEY has proper permissions"
