@@ -70,7 +70,7 @@ jobs:
       # the scan will be skipped and a helpful message will be printed.
       # Setup steps are gated to avoid unnecessary work when SonarCloud is disabled.
       - name: SonarCloud configuration notice
-        if: ${{ secrets.SONAR_TOKEN == '' }}
+        if: ${{ !secrets.SONAR_TOKEN }}
         run: |
           echo "SonarCloud scan skipped: SONAR_TOKEN secret is not configured."
           echo "To enable: create a SonarCloud project under org 'fernandogarzaaa'"
@@ -78,18 +78,18 @@ jobs:
           echo "Settings > Secrets and variables > Actions."
 
       - name: Setup Node.js
-        if: ${{ secrets.SONAR_TOKEN != '' }}
+        if: ${{ secrets.SONAR_TOKEN }}
         uses: actions/setup-node@v4
         with:
           node-version: 22.x
           cache: 'npm'
 
       - name: Install dependencies
-        if: ${{ secrets.SONAR_TOKEN != '' }}
+        if: ${{ secrets.SONAR_TOKEN }}
         run: npm ci
 
       - name: Run tests with coverage
-        if: ${{ secrets.SONAR_TOKEN != '' }}
+        if: ${{ secrets.SONAR_TOKEN }}
         run: npm run test:coverage
         continue-on-error: true
 
@@ -98,7 +98,7 @@ jobs:
       # - Create the SonarCloud project under org 'fernandogarzaaa'.
       # - Ensure the project key matches 'appforge' (see sonar-project.properties).
       - name: SonarCloud Scan
-        if: ${{ secrets.SONAR_TOKEN != '' }}
+        if: ${{ secrets.SONAR_TOKEN }}
         uses: SonarSource/sonarcloud-github-action@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -125,16 +125,6 @@ jobs:
       - name: Install dependencies
         run: npm ci
       
-      - name: Run ESLint
-        run: npm run lint
-        continue-on-error: true
-      
-      - name: Annotate Code Linting Results
-        uses: ataylorme/eslint-annotate-action@v2
-        with:
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-          report-json: "eslint-report.json"
-        continue-on-error: true
       - name: Run ESLint
         run: npm run lint
         continue-on-error: true
