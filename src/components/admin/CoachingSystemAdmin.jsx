@@ -9,6 +9,7 @@ import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { Settings, Activity, Lock, Wallet, TrendingUp, Users, Zap, RefreshCw, Copy, Download } from 'lucide-react';
+import MarketingBotPanel from './MarketingBotPanel';
 
 export default function CoachingSystemAdmin() {
   const [user, setUser] = useState(null);
