@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -11,6 +12,9 @@ import HelpTooltip from '@/components/help/HelpTooltip';
 import { Shield, Key, Settings, Users, Activity, Database, Clock, AlertTriangle, TrendingUp, FileText, BarChart3, RefreshCw } from 'lucide-react';
 
 export default function AdminDashboard() {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const initialTab = searchParams.get('tab') || 'overview';
+  const [activeTab, setActiveTab] = useState(initialTab);
   const [lastUpdated, setLastUpdated] = useState(new Date());
   const [activeUsers, setActiveUsers] = useState(0);
   const [systemLoad, setSystemLoad] = useState({ cpu: 0, memory: 0, requests: 0 });
@@ -39,6 +43,20 @@ export default function AdminDashboard() {
 
     return () => clearInterval(interval);
   }, []);
+
+  useEffect(() => {
+    const tab = searchParams.get('tab');
+    if (tab && tab !== activeTab) {
+      setActiveTab(tab);
+    }
+  }, [searchParams, activeTab]);
+
+  const handleTabChange = (value) => {
+    setActiveTab(value);
+    const nextParams = new URLSearchParams(searchParams);
+    nextParams.set('tab', value);
+    setSearchParams(nextParams, { replace: true });
+  };
 
   const getActivityIcon = (type) => {
     switch (type) {
@@ -70,7 +88,7 @@ export default function AdminDashboard() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-slate-50">
-      <Tabs defaultValue="overview" className="w-full">
+      <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
         <div className="border-b bg-white/80 backdrop-blur-sm sticky top-0 z-10 shadow-sm">
           <div className="max-w-7xl mx-auto px-6 py-4">
             <div className="flex items-center justify-between mb-4">

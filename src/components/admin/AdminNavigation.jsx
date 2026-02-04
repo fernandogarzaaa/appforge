@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Settings, Users, Key, Shield, BarChart3, Menu, X } from 'lucide-react';
+import { Settings, Users, Key, Shield, BarChart3, Activity, Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 export default function AdminNavigation() {
@@ -16,31 +16,42 @@ export default function AdminNavigation() {
     },
     {
       label: 'API Keys',
-      path: '/admin?tab=api-keys',
+      path: '/admin/api-keys',
       icon: Key,
       description: 'Manage API keys'
     },
     {
-      label: 'Settings',
-      path: '/admin?tab=settings',
+      label: 'Secrets',
+      path: '/admin/secrets',
+      icon: Shield,
+      description: 'Manage secrets and flags'
+    },
+    {
+      label: 'System Config',
+      path: '/admin/system-config',
       icon: Settings,
       description: 'Configure application'
+    },
+    {
+      label: 'Monitoring',
+      path: '/admin/monitoring',
+      icon: Activity,
+      description: 'Live metrics and alerts'
     },
     {
       label: 'Users',
       path: '/admin?tab=users',
       icon: Users,
       description: 'Manage user accounts'
-    },
-    {
-      label: 'Security',
-      path: '/admin?tab=security',
-      icon: Shield,
-      description: 'Security settings'
     }
   ];
 
-  const isActive = (path) => location.pathname === path || location.pathname.includes('admin');
+  const isActive = (path) => {
+    const [pathname, search] = path.split('?');
+    if (location.pathname !== pathname) return false;
+    if (!search) return location.pathname === pathname && !location.search;
+    return location.search === `?${search}`;
+  };
 
   return (
     <div className="bg-white border-b border-gray-200 sticky top-16 z-40">

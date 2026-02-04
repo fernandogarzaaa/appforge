@@ -20,11 +20,21 @@ import { PrivateRoute } from '@/components/PrivateRoute';
 import { OfflineIndicator } from '@/hooks/useOfflineDetection';
 import { SearchModal } from '@/components/SearchModal';
 import ErrorBoundary from '@/components/ErrorBoundary';
+import AuthGuard from '@/components/auth/AuthGuard';
+import AdminLayout from '@/components/admin/AdminLayout';
+import AdminAPIKeys from '@/pages/admin/AdminAPIKeys';
+import AdminSecrets from '@/pages/admin/AdminSecrets';
+import AdminSystemConfig from '@/pages/admin/AdminSystemConfig';
+import AdminMonitoring from '@/pages/admin/AdminMonitoring';
+import AdminDashboard from '@/pages/AdminDashboard';
 import { useState, useEffect } from 'react';
 import { validateEnv } from '@/utils/env';
 import errorTracker, { setUser, clearUser } from '@/utils/errorTracking';
 import { startHealthMonitoring } from '@/utils/healthCheck';
 import { useToast } from '@/components/ui/use-toast';
+import { ViewModeProvider } from '@/contexts/ViewModeContext';
+import { NavigationProvider } from '@/contexts/NavigationContext';
+import { ViewModeToggle } from '@/components/navigation/ViewModeToggle';
 // Phase 1 Feature Imports
 import { CommandPalette } from '@/features/commandPalette/CommandPalette';
 import { ContextMenu } from '@/features/quickActions/ContextMenu';
@@ -37,6 +47,12 @@ const MainPage = mainPageKey ? Pages[mainPageKey] : <></>;
 const LayoutWrapper = ({ children, currentPageName, onSearchOpen }) => Layout ?
   <Layout currentPageName={currentPageName} onSearchOpen={onSearchOpen}>{children}</Layout>
   : <>{children}</>;
+
+const AdminRoute = ({ children }) => (
+  <AuthGuard requireAdmin>
+    <AdminLayout>{children}</AdminLayout>
+  </AuthGuard>
+);
 
 const AuthenticatedApp = ({ onSearchOpen }) => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -87,6 +103,31 @@ const AuthenticatedApp = ({ onSearchOpen }) => {
   // Render the main app
   return (
     <Routes>
+      <Route path="/admin" element={
+        <AdminRoute>
+          <AdminDashboard />
+        </AdminRoute>
+      } />
+      <Route path="/admin/api-keys" element={
+        <AdminRoute>
+          <AdminAPIKeys />
+        </AdminRoute>
+      } />
+      <Route path="/admin/secrets" element={
+        <AdminRoute>
+          <AdminSecrets />
+        </AdminRoute>
+      } />
+      <Route path="/admin/system-config" element={
+        <AdminRoute>
+          <AdminSystemConfig />
+        </AdminRoute>
+      } />
+      <Route path="/admin/monitoring" element={
+        <AdminRoute>
+          <AdminMonitoring />
+        </AdminRoute>
+      } />
       <Route path="/" element={
         <LayoutWrapper currentPageName={mainPageKey} onSearchOpen={onSearchOpen}>
           <MainPage />
@@ -145,17 +186,24 @@ function App() {
               <ActivityProvider>
                 <CollaborationProvider>
                   <QueryClientProvider client={queryClientInstance}>
-                  <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
-                    <NavigationTracker />
-                    {/* Phase 1 Features */}
-                    <CommandPalette />
-                    <ContextMenu />
-                    <AuthenticatedApp onSearchOpen={() => setSearchOpen(true)} />
-                    <SearchModal isOpen={searchOpen} onClose={() => setSearchOpen(false)} />
-                    <OfflineIndicator />
-                  </Router>
-                  <Toaster />
-                </QueryClientProvider>                </CollaborationProvider>              </ActivityProvider>
+                    <NavigationProvider>
+                      <ViewModeProvider>
+                        <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+                          <NavigationTracker />
+                          {/* Phase 1 Features */}
+                          <CommandPalette />
+                          <ContextMenu />
+                          <AuthenticatedApp onSearchOpen={() => setSearchOpen(true)} />
+                          <SearchModal isOpen={searchOpen} onClose={() => setSearchOpen(false)} />
+                          <ViewModeToggle />
+                          <OfflineIndicator />
+                        </Router>
+                      </ViewModeProvider>
+                    </NavigationProvider>
+                    <Toaster />
+                  </QueryClientProvider>
+                </CollaborationProvider>
+              </ActivityProvider>
             </BackendAuthProvider>
           </AuthProvider>
         </LLMProvider>
