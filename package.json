@@ -4,6 +4,10 @@
   "version": "0.0.0",
   "license": "Apache-2.0",
   "type": "module",
+  "engines": {
+    "node": ">=20.0.0",
+    "npm": ">=9.0.0"
+  },
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -27,7 +31,7 @@
   },
   "dependencies": {
     "@apollo/client": "^3.11.0",
-    "@apollo/server": "^5.0.2",
+    "@apollo/server": "5.4.0",
     "@base44/sdk": "^0.8.3",
     "@base44/vite-plugin": "^0.2.14",
     "@hello-pangea/dnd": "^17.0.0",
