@@ -9,22 +9,22 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { subscription_id } = await req.json();
+    const { plan_id, transaction_signature } = await req.json();
 
-    if (!subscription_id) {
-      return Response.json({ error: 'Missing subscription_id' }, { status: 400 });
+    if (!plan_id || !transaction_signature) {
+      return Response.json({ error: 'Missing plan_id or transaction_signature' }, { status: 400 });
     }
 
-    // Get subscription details
-    const subscription = await base44.asServiceRole.entities.Subscription.filter({
-      id: subscription_id
+    // Get plan details
+    const plans = await base44.asServiceRole.entities.SubscriptionPlan.filter({
+      id: plan_id
     });
 
-    if (!subscription || subscription.length === 0) {
-      return Response.json({ error: 'Subscription tier not found' }, { status: 404 });
+    if (!plans || plans.length === 0) {
+      return Response.json({ error: 'Plan not found' }, { status: 404 });
     }
 
-    const tier = subscription[0];
+    const plan = plans[0];
 
     // Check if user already has active subscription
     const existing = await base44.asServiceRole.entities.UserSubscription.filter({
@@ -40,19 +40,43 @@ Deno.serve(async (req) => {
       );
     }
 
-    // Create new subscription (pending until payment confirmed)
+    // Create new active subscription
+    const renewDate = new Date();
+    renewDate.setMonth(renewDate.getMonth() + 1);
+
     const userSubscription = await base44.asServiceRole.entities.UserSubscription.create({
       user_id: user.email,
-      subscription_id: subscription_id,
-      tier_name: tier.tier_name,
-      status: 'pending'
+      plan_id: plan_id,
+      status: 'active',
+      started_at: new Date().toISOString(),
+      renews_at: renewDate.toISOString(),
+      auto_renew: true,
+      payment_method: 'solana_wallet',
+      current_usage: {
+        api_calls_used: 0,
+        recommendations_used: 0,
+        workflows_used: 0,
+        agents_created: 0
+      },
+      last_payment_date: new Date().toISOString(),
+      next_payment_amount: plan.price_per_month_sol
+    });
+
+    // Store transaction
+    await base44.asServiceRole.entities.SolanaTransaction.create({
+      user_id: user.email,
+      amount_sol: plan.price_per_month_sol,
+      transaction_signature: transaction_signature,
+      payment_type: 'subscription_upgrade',
+      reference_id: userSubscription.id,
+      status: 'confirmed',
+      timestamp: new Date().toISOString()
     });
 
     return Response.json({
       success: true,
       subscription: userSubscription,
-      amount_sol: tier.price_sol,
-      message: `Subscribe to ${tier.tier_name}`
+      message: `Upgraded to ${plan.name} plan`
     });
   } catch (error) {
     console.error('Subscription upgrade error:', error);
