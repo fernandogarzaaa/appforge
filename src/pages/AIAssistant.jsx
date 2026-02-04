@@ -52,6 +52,7 @@ const QuantumReportGenerator = React.lazy(() => import('@/components/ai/QuantumR
 const QuantumLearningEngine = React.lazy(() => import('@/components/ai/QuantumLearningEngine'));
 const AutoAgentDeployer = React.lazy(() => import('@/components/ai/AutoAgentDeployer'));
 const SuperIntelligenceDashboard = React.lazy(() => import('@/components/ai/SuperIntelligenceDashboard'));
+const ProactiveAnticipationEngine = React.lazy(() => import('@/components/ai/ProactiveAnticipationEngine'));
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import ReactMarkdown from 'react-markdown';
@@ -1432,6 +1433,16 @@ Provide helpful, actionable responses with code examples when relevant. Be conci
             </div>
             {messages.length > 0 && !activePanel && (
               <div className="mt-3 space-y-3">
+                <React.Suspense fallback={null}>
+                  <ProactiveAnticipationEngine 
+                    userEmail={user?.email}
+                    onSuggestionSelect={(suggestion) => {
+                      if (suggestion.action) {
+                        setInput(suggestion.action);
+                      }
+                    }}
+                  />
+                </React.Suspense>
                 <React.Suspense fallback={null}>
                   <SuperIntelligenceDashboard userEmail={user?.email} />
                 </React.Suspense>
