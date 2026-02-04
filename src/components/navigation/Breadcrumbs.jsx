@@ -27,7 +27,7 @@ export default function Breadcrumbs({ items } = {}) {
           const isDots = crumb.label === '...';
           
           return (
-            <React.Fragment key={crumb.path || crumb.label}>
+            <div key={crumb.path || crumb.label}>
               <BreadcrumbItem className="flex items-center">
                 {isLast || isDots ? (
                   <BreadcrumbPage className="text-gray-600 dark:text-gray-400">
@@ -45,7 +45,7 @@ export default function Breadcrumbs({ items } = {}) {
                 )}
               </BreadcrumbItem>
               {!isLast && <BreadcrumbSeparator className="dark:text-gray-700" />}
-            </React.Fragment>
+            </div>
           );
         })}
       </BreadcrumbList>
