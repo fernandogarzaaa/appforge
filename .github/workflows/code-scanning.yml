@@ -63,34 +63,51 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Shallow clones should be disabled for better analysis
-      
+          # Shallow clones should be disabled for better analysis
+          fetch-depth: 0
+
+      # SonarCloud is optional until configured. If SONAR_TOKEN is not set,
+      # the scan will be skipped and a helpful message will be printed.
+      # Setup steps are gated to avoid unnecessary work when SonarCloud is disabled.
+      - name: SonarCloud configuration notice
+        if: ${{ !secrets.SONAR_TOKEN }}
+        run: |
+          echo "SonarCloud scan skipped: SONAR_TOKEN secret is not configured."
+          echo "To enable: create a SonarCloud project under org 'fernandogarzaaa'"
+          echo "with project key 'appforge', then add SONAR_TOKEN in GitHub"
+          echo "Settings > Secrets and variables > Actions."
+
       - name: Setup Node.js
+        if: ${{ secrets.SONAR_TOKEN }}
         uses: actions/setup-node@v4
         with:
           node-version: 22.x
           cache: 'npm'
-      
+
       - name: Install dependencies
+        if: ${{ secrets.SONAR_TOKEN }}
         run: npm ci
-      
+
       - name: Run tests with coverage
+        if: ${{ secrets.SONAR_TOKEN }}
         run: npm run test:coverage
         continue-on-error: true
-      
+
+      # SonarCloud configuration:
+      # - Set SONAR_TOKEN secret in this repo's GitHub Actions secrets.
+      # - Create the SonarCloud project under org 'fernandogarzaaa'.
+      # - Ensure the project key matches 'appforge' (see sonar-project.properties).
       - name: SonarCloud Scan
+        if: ${{ secrets.SONAR_TOKEN }}
         uses: SonarSource/sonarcloud-github-action@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         with:
           args: >
-            -Dsonar.projectKey=appforge-main
-            -Dsonar.organization=your-org
+            -Dsonar.projectKey=appforge
+            -Dsonar.organization=fernandogarzaaa
             -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
-            -Dsonar.sources=src
-            -Dsonar.tests=src
-            -Dsonar.test.inclusions=**/*.test.js,**/*.spec.js
 
   eslint-analysis:
     name: ESLint Code Quality
