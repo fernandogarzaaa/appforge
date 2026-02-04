@@ -358,9 +358,9 @@ def qaoa_circuit(graph, beta, gamma):
               ))}
             </div>
 
-            <div className="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-950/20 dark:to-purple-950/20 border border-blue-200 dark:border-blue-700/50 rounded-lg p-4">
-              <p className="text-sm text-blue-900 dark:text-blue-100 mb-2">
-                <strong>💡 Quantum Advantage Timeline:</strong>
+            <div className="bg-gradient-to-r from-blue-500/20 to-purple-500/20 dark:from-blue-950/40 dark:to-purple-950/40 backdrop-blur-sm border border-blue-300/50 dark:border-blue-700/50 rounded-lg p-4">
+              <p className="text-sm text-blue-900 dark:text-blue-100 mb-2 font-semibold">
+                💡 Quantum Advantage Timeline
               </p>
               <ul className="text-xs text-blue-800 dark:text-blue-200 space-y-1">
                 <li>• <strong>2024-2025:</strong> NISQ advantage emerging in optimization & simulation</li>
