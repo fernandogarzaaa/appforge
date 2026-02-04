@@ -130,67 +130,67 @@ export default function Dashboard() {
     >
       <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
         <div className="space-y-3">
-          <div className="inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold text-indigo-700 bg-indigo-100">
-            Spectrum Journey · Beginner → Quantum
+          <div className="inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold text-cyan-700 bg-cyan-100/50 backdrop-blur-sm border border-cyan-200/50">
+            ✨ Spectrum Journey · Beginner → Quantum
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-gray-900 via-indigo-900 to-purple-900 bg-clip-text text-transparent">
-            Build beautiful apps at the speed of thought
+          <h1 className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-cyan-600 via-blue-600 to-purple-600 bg-clip-text text-transparent leading-tight">
+            Build apps at warp speed
           </h1>
-          <p className="text-lg text-gray-600 max-w-2xl">
-            AppForge adapts to you. Start simple, unlock advanced power, and reach quantum-grade workflows when you need them.
+          <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl">
+            From zero to quantum. One prompt away from production.
           </p>
           <div className="flex flex-wrap gap-3">
             <Link to={createPageUrl('Projects') + '?new=true'}>
-              <Button className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white shadow-lg shadow-indigo-500/30">
+              <Button className="bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700 text-white shadow-xl shadow-cyan-500/30 rounded-xl px-6 h-11">
                 <Plus className="w-4 h-4 mr-2" />
                 New Project
               </Button>
             </Link>
             <Link to={createPageUrl('AIAssistant')}>
-              <Button variant="outline" className="border-indigo-200 text-indigo-700 hover:bg-indigo-50">
+              <Button variant="outline" className="border-white/30 backdrop-blur-sm hover:bg-white/10 hover:border-white/50 rounded-xl px-6 h-11">
                 <Sparkles className="w-4 h-4 mr-2" />
                 Try AI Builder
               </Button>
             </Link>
           </div>
         </div>
-        <div className="flex flex-col items-start gap-3 rounded-2xl border border-indigo-100 bg-white/80 p-5 shadow-xl shadow-indigo-500/10">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
+        <div className="rounded-2xl backdrop-blur-md bg-white/30 dark:bg-slate-900/30 border border-white/30 dark:border-white/10 p-6 shadow-2xl shadow-blue-500/10">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center">
               <Zap className="w-5 h-5 text-white" />
             </div>
             <div>
-              <p className="text-sm font-semibold text-gray-900">Capability Ladder</p>
-              <p className="text-xs text-gray-500">Unlock advanced features as you grow</p>
+              <p className="text-sm font-semibold text-gray-900 dark:text-white">Capability Ladder</p>
+              <p className="text-xs text-gray-500 dark:text-gray-400">Unlock as you grow</p>
             </div>
           </div>
-          <div className="flex items-center gap-2 text-xs text-gray-600">
-            <span className="px-2 py-1 rounded-full bg-indigo-50 text-indigo-700">Starter</span>
-            <span className="px-2 py-1 rounded-full bg-purple-50 text-purple-700">Pro</span>
-            <span className="px-2 py-1 rounded-full bg-cyan-50 text-cyan-700">Quantum</span>
+          <div className="flex items-center gap-2 text-xs">
+            <span className="px-3 py-1 rounded-full bg-cyan-500/20 text-cyan-700 dark:text-cyan-300 backdrop-blur-sm border border-cyan-200/30 dark:border-cyan-500/30">Starter</span>
+            <span className="px-3 py-1 rounded-full bg-blue-500/20 text-blue-700 dark:text-blue-300 backdrop-blur-sm border border-blue-200/30 dark:border-blue-500/30">Pro</span>
+            <span className="px-3 py-1 rounded-full bg-purple-500/20 text-purple-700 dark:text-purple-300 backdrop-blur-sm border border-purple-200/30 dark:border-purple-500/30">Quantum</span>
           </div>
         </div>
       </div>
 
-      <Card className="border-2 border-indigo-200/50 shadow-xl shadow-indigo-500/10 bg-gradient-to-br from-white to-indigo-50/30">
-        <CardContent className="p-6">
-          <div className="flex items-start gap-3 mb-4">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center flex-shrink-0">
-              <Zap className="w-5 h-5 text-white" />
-            </div>
-            <div className="flex-1">
-              <h3 className="text-lg font-semibold text-gray-900 mb-1">Describe your idea</h3>
-              <p className="text-sm text-gray-600">AI will help you build it in minutes</p>
-            </div>
+      <div className="backdrop-blur-md bg-white/40 dark:bg-slate-900/40 border border-white/30 dark:border-white/10 rounded-2xl p-6 shadow-2xl shadow-blue-500/5">
+        <div className="flex items-start gap-3 mb-4">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center flex-shrink-0">
+            <Sparkles className="w-5 h-5 text-white" />
           </div>
-          <div className="relative">
-            <Textarea
-              value={ideaInput}
-              onChange={(e) => setIdeaInput(e.target.value)}
-              placeholder="e.g., 'Build a CRM for real estate with lead tracking and email automation' or 'Create a fitness tracking app with workout plans'"
-              className="min-h-[120px] rounded-xl text-base px-5 py-4 pr-32 border-2 border-indigo-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 resize-none shadow-sm"
-              rows={4}
-            />
+          <div className="flex-1">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-1">Describe your idea</h3>
+            <p className="text-sm text-gray-600 dark:text-gray-300">AI will craft your app in minutes</p>
+          </div>
+        </div>
+        <div className="space-y-3">
+          <Textarea
+            value={ideaInput}
+            onChange={(e) => setIdeaInput(e.target.value)}
+            placeholder="e.g., 'Build a CRM for real estate with lead tracking' or 'Create a fitness app with workout plans'"
+            className="min-h-[100px] rounded-xl text-base px-5 py-4 border border-white/30 dark:border-white/10 backdrop-blur-sm bg-white/50 dark:bg-slate-900/50 focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/30 resize-none shadow-sm placeholder:text-gray-500 dark:placeholder:text-gray-400"
+            rows={4}
+          />
+          <div className="flex justify-end">
             <Button
               onClick={() => {
                 if (ideaInput.trim()) {
@@ -198,14 +198,14 @@ export default function Dashboard() {
                 }
               }}
               disabled={!ideaInput.trim()}
-              className="absolute right-3 bottom-3 h-12 px-6 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white rounded-xl shadow-lg shadow-indigo-500/30 disabled:opacity-50 font-medium"
+              className="bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700 text-white rounded-xl shadow-lg shadow-cyan-500/30 disabled:opacity-50 font-medium px-6 h-11"
             >
               <Sparkles className="w-5 h-5 mr-2" />
               Generate App
             </Button>
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     </motion.div>
   );
 
