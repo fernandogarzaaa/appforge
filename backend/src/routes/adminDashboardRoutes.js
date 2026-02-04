@@ -19,8 +19,8 @@ import {
   updateSecret,
   createSecret,
   deleteSecret,
-  exportConfig as exportSecretsConfig,
-  importConfig as importSecretsConfig
+  exportSecrets as exportSecretsConfig,
+  importSecrets as importSecretsConfig
 } from '../controllers/adminSecretsController.js';
 import {
   listUsers,
