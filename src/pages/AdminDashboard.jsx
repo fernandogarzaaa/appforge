@@ -87,24 +87,24 @@ export default function AdminDashboard() {
   const cpuStatus = getCPUStatus(systemLoad.cpu);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-slate-50">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-slate-50 dark:from-gray-950 dark:via-slate-900 dark:to-gray-950">
       <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
-        <div className="border-b bg-white/80 backdrop-blur-sm sticky top-0 z-10 shadow-sm">
+        <div className="border-b bg-white/80 dark:bg-slate-900/80 dark:border-slate-800 backdrop-blur-sm sticky top-0 z-10 shadow-sm">
           <div className="max-w-7xl mx-auto px-6 py-4">
             <div className="flex items-center justify-between mb-4">
               <div>
-                <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-3">
-                  <Shield className="w-8 h-8 text-blue-600" />
+                <h1 className="text-3xl font-bold text-gray-900 dark:text-white flex items-center gap-3">
+                  <Shield className="w-8 h-8 text-blue-600 dark:text-blue-400" />
                   Admin Control Center
                 </h1>
-                <p className="text-sm text-gray-600 mt-1">Comprehensive system management and monitoring</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">Comprehensive system management and monitoring</p>
               </div>
               <div className="flex items-center gap-3">
-                <Badge variant="outline" className="text-xs">
+                <Badge variant="outline" className="text-xs dark:border-slate-700 dark:text-gray-300">
                   <Clock className="w-3 h-3 mr-1" />
                   Updated: {lastUpdated.toLocaleTimeString()}
                 </Badge>
-                <Button variant="ghost" size="sm" onClick={() => setLastUpdated(new Date())}>
+                <Button variant="ghost" size="sm" onClick={() => setLastUpdated(new Date())} className="dark:hover:bg-slate-800">
                   <RefreshCw className="w-4 h-4" />
                 </Button>
                 <HelpTooltip 
@@ -114,7 +114,7 @@ export default function AdminDashboard() {
               </div>
             </div>
             
-            <TabsList className="grid w-full max-w-4xl grid-cols-7 bg-gray-100">
+            <TabsList className="grid w-full max-w-4xl grid-cols-7 bg-gray-100 dark:bg-slate-800">
               <TabsTrigger value="overview" className="flex items-center gap-2">
                 <BarChart3 className="w-4 h-4" />
                 <span className="hidden sm:inline">Overview</span>
