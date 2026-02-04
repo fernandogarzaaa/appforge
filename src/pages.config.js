@@ -165,6 +165,7 @@ import AdminMonitoring from './pages/AdminMonitoring';
 import AdminSecrets from './pages/AdminSecrets';
 import AdminSystemConfig from './pages/AdminSystemConfig';
 import AdminAPIKeys from './pages/AdminAPIKeys';
+import AdminMonitoring from './pages/AdminMonitoring';
 import __Layout from './Layout.jsx';
 
 
@@ -287,6 +288,7 @@ export const PAGES = {
     "AdminSecrets": AdminSecrets,
     "AdminSystemConfig": AdminSystemConfig,
     "AdminAPIKeys": AdminAPIKeys,
+    "AdminMonitoring": AdminMonitoring,
 }
 
 export const pagesConfig = {
