@@ -4,7 +4,6 @@
  */
 import React, { useState, useEffect, Suspense, lazy } from 'react';
 import { base44 } from '@/api/base44Client';
-import { useBackendAuth } from '@/contexts/BackendAuthContext';
 import { useNavigation } from '@/contexts/NavigationContext';
 import { createPageUrl } from '@/utils';
 import GlobalTopNav from '@/components/navigation/GlobalTopNav';
