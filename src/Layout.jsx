@@ -122,7 +122,12 @@ export default function Layout({ children, currentPageName: _currentPageName, on
     : [];
 
   return (
-    <div className="flex h-screen bg-[#fafbfc] dark:bg-gray-950">
+    <div className="flex h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-slate-50 dark:from-slate-950 dark:via-blue-950/20 dark:to-slate-950 overflow-hidden">
+      {/* Animated gradient background */}
+      <div className="fixed inset-0 -z-10">
+        <div className="absolute inset-0 bg-gradient-to-br from-indigo-100/30 via-transparent to-purple-100/30 dark:from-indigo-950/20 dark:via-transparent dark:to-purple-950/20" />
+      </div>
+
       {/* Desktop Sidebar - Hidden on mobile (< md:768px) */}
       <div className="hidden md:block">
         <Suspense fallback={<SidebarFallback />}>
@@ -155,7 +160,7 @@ export default function Layout({ children, currentPageName: _currentPageName, on
             isActive: window.location.href.includes(item.href),
           }))}
         />
-        <main className="flex-1 overflow-auto bg-[#fafbfc] dark:bg-gray-950">
+        <main className="flex-1 overflow-auto bg-transparent">
           {children}
         </main>
       </div>
