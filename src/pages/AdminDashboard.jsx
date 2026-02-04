@@ -255,32 +255,32 @@ export default function AdminDashboard() {
 
             {/* Quick Actions */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <Card className="hover:shadow-lg transition-shadow cursor-pointer">
+              <Card className="hover:shadow-lg transition-shadow cursor-pointer dark:bg-slate-800/50">
                 <CardContent className="pt-6">
                   <div className="text-center">
-                    <Users className="w-12 h-12 mx-auto text-blue-500 mb-3" />
-                    <h3 className="font-semibold text-gray-900 mb-2">Manage Users</h3>
-                    <p className="text-sm text-gray-600">View and manage user accounts</p>
+                    <Users className="w-12 h-12 mx-auto text-blue-500 dark:text-blue-400 mb-3" />
+                    <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Manage Users</h3>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">View and manage user accounts</p>
                   </div>
                 </CardContent>
               </Card>
 
-              <Card className="hover:shadow-lg transition-shadow cursor-pointer">
+              <Card className="hover:shadow-lg transition-shadow cursor-pointer dark:bg-slate-800/50">
                 <CardContent className="pt-6">
                   <div className="text-center">
-                    <Shield className="w-12 h-12 mx-auto text-purple-500 mb-3" />
-                    <h3 className="font-semibold text-gray-900 mb-2">System Health</h3>
-                    <p className="text-sm text-gray-600">Monitor system performance</p>
+                    <Shield className="w-12 h-12 mx-auto text-purple-500 dark:text-purple-400 mb-3" />
+                    <h3 className="font-semibold text-gray-900 dark:text-white mb-2">System Health</h3>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">Monitor system performance</p>
                   </div>
                 </CardContent>
               </Card>
 
-              <Card className="hover:shadow-lg transition-shadow cursor-pointer">
+              <Card className="hover:shadow-lg transition-shadow cursor-pointer dark:bg-slate-800/50">
                 <CardContent className="pt-6">
                   <div className="text-center">
-                    <Key className="w-12 h-12 mx-auto text-green-500 mb-3" />
-                    <h3 className="font-semibold text-gray-900 mb-2">API Management</h3>
-                    <p className="text-sm text-gray-600">Generate and manage API keys</p>
+                    <Key className="w-12 h-12 mx-auto text-green-500 dark:text-green-400 mb-3" />
+                    <h3 className="font-semibold text-gray-900 dark:text-white mb-2">API Management</h3>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">Generate and manage API keys</p>
                   </div>
                 </CardContent>
               </Card>
