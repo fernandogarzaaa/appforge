@@ -75,18 +75,19 @@ export default function Dashboard() {
       badge: 'New'
     },
     {
+      title: 'AGI Studio',
+      description: 'Create autonomous AI assistants',
+      icon: Brain,
+      href: createPageUrl('AGIStudio'),
+      gradient: 'from-purple-600 to-pink-600',
+      badge: 'AGI'
+    },
+    {
       title: 'Mobile App Studio',
       description: 'Create iOS & Android apps',
       icon: Smartphone,
       href: createPageUrl('MobileStudio'),
       gradient: 'from-green-500 to-emerald-500',
-    },
-    {
-      title: 'NFT & Web3',
-      description: 'Build blockchain applications',
-      icon: Coins,
-      href: createPageUrl('NFTStudio'),
-      gradient: 'from-orange-500 to-red-500',
     },
   ];
 
