@@ -459,21 +459,21 @@ export default function Dashboard() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.5 }}
           >
-            <Card className="border-2 shadow-xl overflow-hidden">
+            <div className="backdrop-blur-md bg-white/40 dark:bg-slate-900/40 border border-white/30 dark:border-white/10 rounded-2xl shadow-2xl shadow-cyan-500/10 overflow-hidden">
               <div className="bg-gradient-to-r from-cyan-600 to-blue-600 p-6 text-white">
-                <div className="flex items-center gap-3 mb-2">
+                <div className="flex items-center gap-3">
                   <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm">
                     <Zap className="w-6 h-6" />
                   </div>
                   <div>
                     <h2 className="text-2xl font-bold">Quantum Computing</h2>
-                    <p className="text-cyan-50 text-sm">
+                    <p className="text-cyan-100 text-sm">
                       Harness quantum power for your applications
                     </p>
                   </div>
                 </div>
               </div>
-              <CardContent className="p-6">
+              <div className="p-6">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
                   {/* Quantum Circuits Display */}
                   <QuantumCircuitDisplay 
