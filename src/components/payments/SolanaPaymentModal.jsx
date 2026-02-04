@@ -104,28 +104,7 @@ export default function SolanaPaymentModal({
     }
   };
 
-  const handleCardPayment = async () => {
-    try {
-      setStatus('connecting');
 
-      // Create Phantom Checkout session
-      const response = await base44.functions.invoke('createPhantomCheckout', {
-        amount_sol: amount,
-        payment_type: paymentType,
-        reference_id: referenceId,
-      });
-
-      if (response.data.success && response.data.checkout_url) {
-        // Redirect to Phantom Checkout
-        window.location.href = response.data.checkout_url;
-      } else {
-        throw new Error(response.data.error || 'Failed to create checkout');
-      }
-    } catch (error) {
-      setStatus('error');
-      setErrorMsg(error.message || 'Payment failed');
-    }
-  };
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
