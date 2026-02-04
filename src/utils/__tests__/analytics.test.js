@@ -9,6 +9,7 @@ describe('Analytics System', () => {
 
   afterEach(() => {
     vi.clearAllMocks();
+    vi.unstubAllGlobals();
   });
 
   describe('trackEvent', () => {
@@ -134,14 +135,17 @@ describe('Analytics System', () => {
       }).not.toThrow();
     });
 
-    it('should handle batch flush', () => {
+    it('should handle batch flush', async () => {
       analytics.trackEvent('test1', {});
       analytics.trackEvent('test2', {});
       analytics.trackEvent('test3', {});
 
-      expect(() => {
-        analytics.flushAnalytics();
-      }).not.toThrow();
+      const fetchMock = vi.fn(async () => ({ ok: true }));
+      vi.stubGlobal('fetch', fetchMock);
+      vi.stubGlobal('location', { origin: 'http://localhost', pathname: '/' });
+
+      await expect(analytics.flushAnalytics()).resolves.toBeUndefined();
+      expect(fetchMock).toHaveBeenCalled();
     });
   });
 
