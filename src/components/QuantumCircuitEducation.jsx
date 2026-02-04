@@ -313,7 +313,7 @@ def qaoa_circuit(graph, beta, gamma):
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: i * 0.1 }}
-                  className="bg-slate-50 dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-700 overflow-hidden hover:border-indigo-300 dark:hover:border-indigo-700 transition-all"
+                  className="bg-white/70 dark:bg-slate-800/70 backdrop-blur-md rounded-lg border border-white/20 dark:border-slate-700/30 overflow-hidden hover:border-indigo-300 dark:hover:border-indigo-700 transition-all"
                 >
                   <div className="p-4 border-b border-slate-200 dark:border-slate-700">
                     <div className="flex items-start justify-between gap-3 mb-3">
