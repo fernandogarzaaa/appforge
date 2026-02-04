@@ -205,18 +205,18 @@ def qaoa_circuit(graph, beta, gamma):
   const gate = gateLibrary[selectedGate]
 
   return (
-    <Card className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border-0 shadow-xl dark:shadow-slate-950/50">
-      <CardHeader className="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 text-white rounded-t-lg">
+    <Card>
+      <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <BookOpen className="h-5 w-5" />
           Quantum Computing Guide
         </CardTitle>
-        <CardDescription className="text-white/90">Learn about quantum gates and concepts</CardDescription>
+        <CardDescription>Learn about quantum gates and concepts</CardDescription>
       </CardHeader>
 
       <CardContent>
         <Tabs defaultValue="gates" className="space-y-4">
-          <TabsList className="grid w-full grid-cols-4 bg-white/50 dark:bg-slate-800/50 backdrop-blur-sm border border-white/20 dark:border-slate-700/30">
+          <TabsList className="grid w-full grid-cols-4">
             <TabsTrigger value="gates">Gates</TabsTrigger>
             <TabsTrigger value="concepts">Concepts</TabsTrigger>
             <TabsTrigger value="algorithms">Algorithms</TabsTrigger>
@@ -240,7 +240,7 @@ def qaoa_circuit(graph, beta, gamma):
             </div>
 
             {gate && (
-              <div className="bg-white/70 dark:bg-slate-800/70 backdrop-blur-md rounded-lg p-4 space-y-3 border border-white/20 dark:border-slate-700/30">
+              <div className="bg-slate-50 dark:bg-slate-900 rounded-lg p-4 space-y-3">
                 <div>
                   <h3 className="font-semibold text-lg">{gate.name}</h3>
                   <p className="text-sm text-muted-foreground mt-1">{gate.description}</p>
@@ -248,16 +248,16 @@ def qaoa_circuit(graph, beta, gamma):
 
                 <div>
                   <h4 className="font-semibold text-sm mb-2">Quantum Effect</h4>
-                  <p className="text-sm font-mono bg-black/10 dark:bg-black/20 p-3 rounded backdrop-blur-sm">
+                  <p className="text-sm font-mono bg-slate-100 dark:bg-slate-800 p-3 rounded">
                     {gate.effect}
                   </p>
                 </div>
 
                 <div>
                   <h4 className="font-semibold text-sm mb-2">Unitary Matrix</h4>
-                  <pre className="text-xs font-mono bg-black/10 dark:bg-black/20 p-3 rounded overflow-x-auto backdrop-blur-sm">
-                     {gate.matrix}
-                   </pre>
+                  <pre className="text-xs font-mono bg-slate-100 dark:bg-slate-800 p-3 rounded overflow-x-auto">
+                    {gate.matrix}
+                  </pre>
                 </div>
 
                 <div>
@@ -286,11 +286,11 @@ def qaoa_circuit(graph, beta, gamma):
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: i * 0.1 }}
-                    className={`bg-white/60 dark:bg-slate-800/60 backdrop-blur-md rounded-lg p-4 border border-white/20 dark:border-slate-700/30 hover:shadow-lg transition-all cursor-pointer group hover:bg-white/80 dark:hover:bg-slate-800/80`}
+                    className={`bg-gradient-to-br from-${concept.color}-50 to-white dark:from-${concept.color}-950/20 dark:to-slate-900 rounded-lg p-4 border-2 border-${concept.color}-200 dark:border-${concept.color}-800/50 hover:shadow-lg transition-all cursor-pointer group`}
                   >
                     <div className="flex items-start gap-3">
-                      <div className={`w-10 h-10 rounded-lg bg-indigo-100 dark:bg-indigo-900/50 flex items-center justify-center group-hover:scale-110 transition-transform`}>
-                         <Icon className={`h-5 w-5 text-indigo-600 dark:text-indigo-400`} />
+                      <div className={`w-10 h-10 rounded-lg bg-${concept.color}-100 dark:bg-${concept.color}-900/50 flex items-center justify-center group-hover:scale-110 transition-transform`}>
+                        <Icon className={`h-5 w-5 text-${concept.color}-600 dark:text-${concept.color}-400`} />
                       </div>
                       <div className="flex-1">
                         <h4 className="font-semibold text-sm mb-1">{concept.title}</h4>
@@ -313,7 +313,7 @@ def qaoa_circuit(graph, beta, gamma):
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: i * 0.1 }}
-                  className="bg-white/70 dark:bg-slate-800/70 backdrop-blur-md rounded-lg border border-white/20 dark:border-slate-700/30 overflow-hidden hover:border-indigo-300 dark:hover:border-indigo-700 transition-all"
+                  className="bg-slate-50 dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-700 overflow-hidden hover:border-indigo-300 dark:hover:border-indigo-700 transition-all"
                 >
                   <div className="p-4 border-b border-slate-200 dark:border-slate-700">
                     <div className="flex items-start justify-between gap-3 mb-3">
@@ -326,31 +326,31 @@ def qaoa_circuit(graph, beta, gamma):
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-3">
-                       <div className="bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm rounded p-3 border border-white/20 dark:border-slate-700/20">
-                         <p className="text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">Quantum Advantage</p>
-                         <p className="text-sm font-medium text-green-700 dark:text-green-400">{study.advantage}</p>
-                       </div>
-                       <div className="bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm rounded p-3 border border-white/20 dark:border-slate-700/20">
-                         <p className="text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">Key Challenge</p>
-                         <p className="text-sm font-medium text-orange-700 dark:text-orange-400">{study.challenge}</p>
-                       </div>
-                     </div>
+                      <div className="bg-white dark:bg-slate-800 rounded p-3">
+                        <p className="text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">Quantum Advantage</p>
+                        <p className="text-sm font-medium text-green-700 dark:text-green-400">{study.advantage}</p>
+                      </div>
+                      <div className="bg-white dark:bg-slate-800 rounded p-3">
+                        <p className="text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">Key Challenge</p>
+                        <p className="text-sm font-medium text-orange-700 dark:text-orange-400">{study.challenge}</p>
+                      </div>
+                    </div>
 
-                     <div className="bg-blue-500/10 dark:bg-blue-900/20 rounded p-3 mt-3 backdrop-blur-sm border border-blue-200/30 dark:border-blue-700/30">
-                       <p className="text-xs font-semibold text-blue-900 dark:text-blue-300 mb-1">Real-World Impact</p>
-                       <p className="text-sm text-blue-800 dark:text-blue-200">{study.realWorldImpact}</p>
-                     </div>
+                    <div className="bg-blue-50 dark:bg-blue-900/20 rounded p-3 mt-3">
+                      <p className="text-xs font-semibold text-blue-900 dark:text-blue-300 mb-1">Real-World Impact</p>
+                      <p className="text-sm text-blue-800 dark:text-blue-200">{study.realWorldImpact}</p>
+                    </div>
                   </div>
 
-                  <div className="p-4 bg-black/40 dark:bg-black/60 backdrop-blur-md border-t border-white/10 dark:border-slate-700/20">
-                    <p className="text-xs font-semibold text-slate-100 mb-2">Code Example</p>
-                    <pre className="text-xs text-slate-100 overflow-x-auto whitespace-pre-wrap break-words font-mono">
+                  <div className="p-4 bg-slate-900 dark:bg-slate-950 border-t border-slate-700">
+                    <p className="text-xs font-semibold text-slate-300 mb-2">Code Example</p>
+                    <pre className="text-xs text-slate-100 overflow-x-auto whitespace-pre-wrap break-words">
                       <code>{study.code}</code>
                     </pre>
                   </div>
 
-                  <div className="px-4 py-3 bg-white/40 dark:bg-slate-800/40 backdrop-blur-sm border-t border-white/10 dark:border-slate-700/20">
-                    <p className="text-xs text-slate-700 dark:text-slate-300">
+                  <div className="px-4 py-3 bg-slate-100 dark:bg-slate-800 border-t border-slate-200 dark:border-slate-700">
+                    <p className="text-xs text-slate-700 dark:text-slate-400">
                       <strong>Organizations:</strong> {study.companies}
                     </p>
                   </div>
@@ -358,9 +358,9 @@ def qaoa_circuit(graph, beta, gamma):
               ))}
             </div>
 
-            <div className="bg-gradient-to-r from-blue-500/20 to-purple-500/20 dark:from-blue-950/40 dark:to-purple-950/40 backdrop-blur-sm border border-blue-300/50 dark:border-blue-700/50 rounded-lg p-4">
-              <p className="text-sm text-blue-900 dark:text-blue-100 mb-2 font-semibold">
-                💡 Quantum Advantage Timeline
+            <div className="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-950/20 dark:to-purple-950/20 border border-blue-200 dark:border-blue-700/50 rounded-lg p-4">
+              <p className="text-sm text-blue-900 dark:text-blue-100 mb-2">
+                <strong>💡 Quantum Advantage Timeline:</strong>
               </p>
               <ul className="text-xs text-blue-800 dark:text-blue-200 space-y-1">
                 <li>• <strong>2024-2025:</strong> NISQ advantage emerging in optimization & simulation</li>
@@ -378,7 +378,7 @@ def qaoa_circuit(graph, beta, gamma):
                   <Code2 className="h-4 w-4" />
                   Building a Bell State
                 </h4>
-                <pre className="bg-black/50 dark:bg-black/70 text-slate-50 p-4 rounded-lg text-xs overflow-x-auto backdrop-blur-sm border border-white/10">
+                <pre className="bg-slate-900 text-slate-50 p-4 rounded-lg text-xs overflow-x-auto">
 {`from qiskit import QuantumCircuit, QuantumRegister
 
 # Create quantum circuit with 2 qubits
@@ -400,7 +400,7 @@ print(qc)`}
                   <Code2 className="h-4 w-4" />
                   Creating Superposition
                 </h4>
-                <pre className="bg-black/50 dark:bg-black/70 text-slate-50 p-4 rounded-lg text-xs overflow-x-auto backdrop-blur-sm border border-white/10">
+                <pre className="bg-slate-900 text-slate-50 p-4 rounded-lg text-xs overflow-x-auto">
 {`from qiskit import QuantumCircuit
 
 # Create single qubit circuit
@@ -414,7 +414,7 @@ print(qc)`}
                 </pre>
               </div>
 
-              <div className="bg-blue-500/20 dark:bg-blue-900/30 backdrop-blur-sm border border-blue-300/50 dark:border-blue-700/50 rounded-lg p-3">
+              <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-700/50 rounded-lg p-3">
                 <p className="text-sm text-blue-900 dark:text-blue-100">
                   💡 <strong>Tip:</strong> Use the Quantum Circuit Designer above to visualize these concepts in real-time!
                 </p>

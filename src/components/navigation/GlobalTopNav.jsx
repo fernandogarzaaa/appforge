@@ -19,40 +19,40 @@ export default function GlobalTopNav({ user, onLogout, mobileMenu, title = 'AppF
   const MenuItem = /** @type {any} */ (DropdownMenuItem);
 
   return (
-    <header className="bg-white/40 dark:bg-slate-950/40 dark:border-slate-800/30 border-b border-gray-200/40 dark:border-slate-700/30 px-3 sm:px-6 py-2.5 sm:py-3 flex items-center justify-between backdrop-blur-xl sticky top-0 z-40 shadow-sm dark:shadow-slate-950/20">
-      <div className="flex items-center gap-1 sm:gap-3 flex-1 min-w-0">
-         {mobileMenu}
-         <div className="min-w-0 flex-1">
-           <h2 className="text-sm sm:text-base font-semibold text-gray-900 dark:text-white truncate">
-             {title}
-           </h2>
-           <div className="hidden sm:block text-xs text-gray-500 dark:text-gray-400">
-             <Breadcrumbs />
-           </div>
-         </div>
-       </div>
+    <header className="bg-white/80 dark:bg-slate-950/80 dark:border-slate-800 border-b border-gray-200 px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between backdrop-blur-sm sticky top-0 z-40">
+      <div className="flex items-center gap-2 sm:gap-4 flex-1 min-w-0">
+        {mobileMenu}
+        <div className="min-w-0 flex-1">
+          <h2 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white truncate">
+            {title}
+          </h2>
+          <div className="hidden sm:block">
+            <Breadcrumbs />
+          </div>
+        </div>
+      </div>
 
-      <div className="flex items-center gap-1 sm:gap-2 shrink-0 min-h-10">
-         <div className="hidden sm:block">
-           <SearchBar onOpen={openSearch} placeholder="Search..." />
-         </div>
-         <button
-           onClick={openSearch}
-           className="sm:hidden p-2 hover:bg-white/50 dark:hover:bg-slate-800/50 rounded-lg transition-colors min-w-9 min-h-9 flex items-center justify-center"
-           aria-label="Search"
-         >
-           <Search className="w-4 h-4 text-gray-600 dark:text-gray-300" />
-         </button>
+      <div className="flex items-center gap-1 sm:gap-3 shrink-0 min-h-11">
+        <div className="hidden sm:block">
+          <SearchBar onOpen={openSearch} placeholder="Search..." />
+        </div>
+        <button
+          onClick={openSearch}
+          className="sm:hidden p-2.5 hover:bg-gray-100 dark:hover:bg-slate-800 rounded-lg transition-colors min-w-11 min-h-11 flex items-center justify-center"
+          aria-label="Search"
+        >
+          <Search className="w-5 h-5 text-gray-600 dark:text-gray-300" />
+        </button>
         <DarkModeToggle />
         <NotificationBell />
         {user && (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <Button
-                  variant="ghost"
-                  className="flex items-center gap-2 h-9 px-2 sm:px-3 hover:bg-white/50 dark:hover:bg-slate-800/50 rounded-lg"
-                >
-                <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-gradient-to-br from-indigo-600 to-indigo-700 dark:from-indigo-500 dark:to-indigo-600 flex items-center justify-center shrink-0 ring-2 ring-white/30">
+              <Button
+                variant="ghost"
+                className="flex items-center gap-2 h-11 px-2 sm:px-3 hover:bg-gray-100 dark:hover:bg-slate-800"
+              >
+                <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-gradient-to-br from-indigo-600 to-indigo-700 dark:from-indigo-500 dark:to-indigo-600 flex items-center justify-center shrink-0">
                   <span className="text-white text-xs sm:text-sm font-bold">
                     {user.full_name?.charAt(0).toUpperCase()}
                   </span>
@@ -64,7 +64,7 @@ export default function GlobalTopNav({ user, onLogout, mobileMenu, title = 'AppF
             </DropdownMenuTrigger>
             <MenuContent
               align="end"
-              className="w-56 bg-white/90 dark:bg-slate-900/90 dark:border-slate-800/50 backdrop-blur-md border border-white/20 dark:border-slate-700/50"
+              className="w-56 dark:bg-slate-900 dark:border-slate-800"
             >
               <MenuItem className="text-xs text-gray-500 dark:text-gray-400 py-2">
                 <User className="w-4 h-4 mr-2 shrink-0" />
