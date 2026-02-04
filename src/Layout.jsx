@@ -139,6 +139,8 @@ export default function Layout({ children, currentPageName: _currentPageName, on
         <GlobalTopNav 
           user={user} 
           onLogout={handleLogout}
+          isDark={isDark}
+          onThemeToggle={toggleTheme}
           mobileMenu={
             <MobileDrawerSidebar 
               currentProject={currentProject}
