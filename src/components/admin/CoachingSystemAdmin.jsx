@@ -5,15 +5,20 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Slider } from '@/components/ui/slider';
 import { Switch } from '@/components/ui/switch';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import { Settings, Activity, Lock } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { Settings, Activity, Lock, Wallet, TrendingUp, Users, Zap } from 'lucide-react';
 
 export default function CoachingSystemAdmin() {
   const [user, setUser] = useState(null);
   const [config, setConfig] = useState(null);
+  const [solanaConfig, setSolanaConfig] = useState(null);
+  const [metrics, setMetrics] = useState(null);
   const [logs, setLogs] = useState([]);
   const [isSaving, setIsSaving] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [activeTab, setActiveTab] = useState('overview');
 
   useEffect(() => {
     verifyAdmin();
@@ -26,6 +31,8 @@ export default function CoachingSystemAdmin() {
       setIsAdmin(userData?.role === 'admin');
       if (userData?.role === 'admin') {
         loadConfig();
+        loadSolanaConfig();
+        loadMetrics();
         loadLogs();
       }
     } catch (error) {
@@ -52,6 +59,41 @@ export default function CoachingSystemAdmin() {
       }
     } catch (error) {
       console.error('Config load error:', error);
+    }
+  };
+
+  const loadSolanaConfig = async () => {
+    try {
+      const configs = await base44.entities.SolanaPaymentConfig.list();
+      if (configs.length > 0) {
+        setSolanaConfig(configs[0]);
+      } else {
+        setSolanaConfig({
+          wallet_address: '',
+          network: 'mainnet-beta',
+          payment_enabled: false,
+          price_per_analysis: 0.1,
+          price_per_workflow: 0.05,
+          total_received_sol: 0,
+          total_transactions: 0
+        });
+      }
+    } catch (error) {
+      console.error('Solana config load error:', error);
+    }
+  };
+
+  const loadMetrics = async () => {
+    try {
+      const metricsData = await base44.entities.CoachingSystemMetrics.list(
+        '-metric_date',
+        1
+      );
+      if (metricsData.length > 0) {
+        setMetrics(metricsData[0]);
+      }
+    } catch (error) {
+      console.error('Metrics load error:', error);
     }
   };
 
@@ -85,6 +127,25 @@ export default function CoachingSystemAdmin() {
     }
   };
 
+  const saveSolanaConfig = async () => {
+    setIsSaving(true);
+    try {
+      const configs = await base44.entities.SolanaPaymentConfig.list();
+      if (configs.length > 0) {
+        await base44.entities.SolanaPaymentConfig.update(configs[0].id, solanaConfig);
+      } else {
+        await base44.entities.SolanaPaymentConfig.create(solanaConfig);
+      }
+      alert('Solana configuration saved!');
+      loadSolanaConfig();
+    } catch (error) {
+      console.error('Save error:', error);
+      alert('Failed to save Solana configuration');
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
   if (!isAdmin) {
     return (
       <div className="p-6 text-center">
@@ -109,13 +170,76 @@ export default function CoachingSystemAdmin() {
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-bold flex items-center gap-2">
           <Settings className="w-6 h-6" />
-          Coaching System Admin
+          Admin Dashboard
         </h1>
         <Badge className="bg-green-600">Active</Badge>
       </div>
 
-      {/* Configuration */}
-      {config && (
+      {/* System Health Metrics */}
+      {metrics && (
+        <div className="grid grid-cols-4 gap-3">
+          <Card>
+            <CardContent className="pt-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-xs text-gray-500">Active Users</p>
+                  <p className="text-2xl font-bold">{metrics.active_users}</p>
+                </div>
+                <Users className="w-8 h-8 text-blue-500 opacity-20" />
+              </div>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardContent className="pt-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-xs text-gray-500">Active Agents</p>
+                  <p className="text-2xl font-bold">{metrics.active_agents}</p>
+                </div>
+                <Zap className="w-8 h-8 text-yellow-500 opacity-20" />
+              </div>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardContent className="pt-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-xs text-gray-500">Uptime</p>
+                  <p className="text-2xl font-bold">{(metrics.system_uptime_percentage || 100).toFixed(1)}%</p>
+                </div>
+                <Activity className="w-8 h-8 text-green-500 opacity-20" />
+              </div>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardContent className="pt-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-xs text-gray-500">Avg Improvement</p>
+                  <p className="text-2xl font-bold">+{(metrics.avg_coaching_improvement || 0).toFixed(0)}%</p>
+                </div>
+                <TrendingUp className="w-8 h-8 text-purple-500 opacity-20" />
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      )}
+
+      {/* Tabs */}
+      <Tabs value={activeTab} onValueChange={setActiveTab}>
+        <TabsList className="grid w-full grid-cols-3">
+          <TabsTrigger value="overview">System Config</TabsTrigger>
+          <TabsTrigger value="payments">
+            <Wallet className="w-4 h-4 mr-2" />
+            Solana Payments
+          </TabsTrigger>
+          <TabsTrigger value="logs">Audit Logs</TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="overview" className="space-y-6">
+
+          {/* Configuration */}
+          {config && (
         <Card>
           <CardHeader>
             <CardTitle className="text-sm">System Configuration</CardTitle>
@@ -234,7 +358,7 @@ export default function CoachingSystemAdmin() {
         </Card>
       )}
 
-      {/* Activity Chart */}
+          {/* Activity Chart */}
       {chartData.length > 0 && (
         <Card>
           <CardHeader>
@@ -256,8 +380,122 @@ export default function CoachingSystemAdmin() {
           </CardContent>
         </Card>
       )}
+        </TabsContent>
 
-      {/* Recent Logs */}
+        <TabsContent value="payments">
+          {solanaConfig && (
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-sm flex items-center gap-2">
+                  <Wallet className="w-4 h-4" />
+                  Solana Payment Configuration
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                {/* Wallet Address */}
+                <div>
+                  <label className="text-sm font-semibold">Wallet Address</label>
+                  <Input
+                    value={solanaConfig.wallet_address}
+                    onChange={(e) =>
+                      setSolanaConfig({ ...solanaConfig, wallet_address: e.target.value })
+                    }
+                    placeholder="Enter your Solana wallet address"
+                    className="mt-2"
+                  />
+                  <p className="text-xs text-gray-500 mt-1">
+                    Public key where payments will be received
+                  </p>
+                </div>
+
+                {/* Network Selection */}
+                <div>
+                  <label className="text-sm font-semibold">Network</label>
+                  <select
+                    value={solanaConfig.network}
+                    onChange={(e) =>
+                      setSolanaConfig({ ...solanaConfig, network: e.target.value })
+                    }
+                    className="w-full text-sm border rounded px-3 py-2 mt-2"
+                  >
+                    <option value="mainnet-beta">Mainnet Beta</option>
+                    <option value="devnet">Devnet (Testing)</option>
+                    <option value="testnet">Testnet</option>
+                  </select>
+                </div>
+
+                {/* Pricing */}
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="text-sm font-semibold">
+                      Price per Analysis (SOL): {solanaConfig.price_per_analysis}
+                    </label>
+                    <Slider
+                      value={[solanaConfig.price_per_analysis]}
+                      onValueChange={(val) =>
+                        setSolanaConfig({ ...solanaConfig, price_per_analysis: val[0] })
+                      }
+                      min={0.01}
+                      max={1}
+                      step={0.01}
+                      className="mt-2"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-sm font-semibold">
+                      Price per Workflow (SOL): {solanaConfig.price_per_workflow}
+                    </label>
+                    <Slider
+                      value={[solanaConfig.price_per_workflow]}
+                      onValueChange={(val) =>
+                        setSolanaConfig({ ...solanaConfig, price_per_workflow: val[0] })
+                      }
+                      min={0.01}
+                      max={1}
+                      step={0.01}
+                      className="mt-2"
+                    />
+                  </div>
+                </div>
+
+                {/* Enable Payments */}
+                <div className="pt-4 border-t flex items-center justify-between">
+                  <span className="text-sm font-semibold">Enable Solana Payments</span>
+                  <Switch
+                    checked={solanaConfig.payment_enabled}
+                    onCheckedChange={(val) =>
+                      setSolanaConfig({ ...solanaConfig, payment_enabled: val })
+                    }
+                  />
+                </div>
+
+                {/* Stats */}
+                {solanaConfig.total_transactions > 0 && (
+                  <div className="p-3 bg-blue-50 rounded border border-blue-200 space-y-1">
+                    <p className="text-sm font-semibold">Payment Stats</p>
+                    <p className="text-xs">Total Transactions: {solanaConfig.total_transactions}</p>
+                    <p className="text-xs">Total Received: {solanaConfig.total_received_sol} SOL</p>
+                    {solanaConfig.last_transaction_date && (
+                      <p className="text-xs text-gray-600">
+                        Last Transaction: {new Date(solanaConfig.last_transaction_date).toLocaleDateString()}
+                      </p>
+                    )}
+                  </div>
+                )}
+
+                <Button
+                  onClick={saveSolanaConfig}
+                  disabled={isSaving || !solanaConfig.wallet_address}
+                  className="w-full bg-gradient-to-r from-purple-600 to-pink-600"
+                >
+                  {isSaving ? 'Saving...' : 'Save Solana Config'}
+                </Button>
+              </CardContent>
+            </Card>
+          )}
+        </TabsContent>
+
+        <TabsContent value="logs">
       <Card>
         <CardHeader>
           <CardTitle className="text-sm">Recent Audit Logs (Last 20)</CardTitle>
