@@ -307,31 +307,30 @@ export default function Dashboard() {
     >
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900">Onboarding Tour</h2>
-          <p className="text-sm text-gray-600">Three quick wins to go from idea to launch</p>
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Get Started</h2>
+          <p className="text-sm text-gray-600 dark:text-gray-300">Three steps to launch in 15 minutes</p>
         </div>
-        <Badge className="bg-slate-100 text-slate-700 border-0">Estimated 15 min</Badge>
+        <Badge className="bg-cyan-500/40 text-cyan-700 dark:text-cyan-300 border border-cyan-300/50 backdrop-blur-sm">15 min</Badge>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {onboardingSteps.map((step, idx) => (
-          <Link key={step.title} to={step.href}>
-            <Card className="h-full border border-slate-200 hover:border-indigo-300 hover:shadow-lg transition">
-              <CardContent className="p-6 space-y-3">
-                <div className="w-12 h-12 rounded-xl bg-indigo-50 text-indigo-700 flex items-center justify-center">
-                  <step.icon className="w-6 h-6" />
-                </div>
-                <div>
-                  <h3 className="font-semibold text-gray-900">{step.title}</h3>
-                  <p className="text-sm text-gray-600">{step.description}</p>
-                </div>
-                <Button variant="ghost" className="px-0 text-indigo-600">
-                  Start step {idx + 1}
-                </Button>
-              </CardContent>
-            </Card>
-          </Link>
-        ))}
-      </div>
+         {onboardingSteps.map((step, idx) => (
+           <Link key={step.title} to={step.href}>
+             <div className="h-full backdrop-blur-md bg-white/40 dark:bg-slate-900/40 border border-white/30 dark:border-white/10 hover:border-white/50 dark:hover:border-white/20 rounded-2xl p-6 space-y-3 hover:shadow-lg transition">
+               <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-cyan-500/30 to-blue-500/30 text-cyan-700 dark:text-cyan-300 flex items-center justify-center">
+                 <step.icon className="w-6 h-6" />
+               </div>
+               <div>
+                 <div className="text-xs font-semibold text-cyan-600 dark:text-cyan-400 mb-1">Step {idx + 1}</div>
+                 <h3 className="font-semibold text-gray-900 dark:text-white">{step.title}</h3>
+                 <p className="text-sm text-gray-600 dark:text-gray-300">{step.description}</p>
+               </div>
+               <Button variant="ghost" className="px-0 text-cyan-600 dark:text-cyan-400 hover:text-cyan-700 dark:hover:text-cyan-300">
+                 Start →
+               </Button>
+             </div>
+           </Link>
+         ))}
+       </div>
     </motion.div>
   );
 
