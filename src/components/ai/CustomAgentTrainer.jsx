@@ -6,6 +6,8 @@ import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { Zap, Send, CheckCircle2 } from 'lucide-react';
+import HyperparameterTuningPanel from './HyperparameterTuningPanel';
+import AgentFeedbackCollector from './AgentFeedbackCollector';
 
 export default function CustomAgentTrainer({ agentId, onTrainingComplete }) {
   const [agent, setAgent] = useState(null);
@@ -83,6 +85,12 @@ export default function CustomAgentTrainer({ agentId, onTrainingComplete }) {
         </div>
       </CardHeader>
       <CardContent className="space-y-4">
+        {/* Feedback Collection */}
+        <AgentFeedbackCollector agentId={agentId} agentName={agent.agent_name} />
+
+        {/* Hyperparameter Tuning */}
+        <HyperparameterTuningPanel agentId={agentId} />
+
         {/* Progress */}
         <div className="space-y-1">
           <div className="flex justify-between text-xs">
