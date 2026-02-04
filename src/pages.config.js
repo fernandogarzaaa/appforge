@@ -80,6 +80,7 @@ import ContractBuilder from './pages/ContractBuilder';
 import CryptoExchange from './pages/CryptoExchange';
 import CryptoGambling from './pages/CryptoGambling';
 import DAOGovernance from './pages/DAOGovernance';
+import Dashboard from './pages/Dashboard';
 import DataAnalytics from './pages/DataAnalytics';
 import DataPipeline from './pages/DataPipeline';
 import DataPrivacy from './pages/DataPrivacy';
@@ -162,7 +163,6 @@ import VisualizationStudio from './pages/VisualizationStudio';
 import Web3Dashboard from './pages/Web3Dashboard';
 import WebhookMonitor from './pages/WebhookMonitor';
 import WorkflowBuilder from './pages/WorkflowBuilder';
-import Dashboard from './pages/Dashboard';
 import __Layout from './Layout.jsx';
 
 
@@ -200,6 +200,7 @@ export const PAGES = {
     "CryptoExchange": CryptoExchange,
     "CryptoGambling": CryptoGambling,
     "DAOGovernance": DAOGovernance,
+    "Dashboard": Dashboard,
     "DataAnalytics": DataAnalytics,
     "DataPipeline": DataPipeline,
     "DataPrivacy": DataPrivacy,
@@ -282,7 +283,6 @@ export const PAGES = {
     "Web3Dashboard": Web3Dashboard,
     "WebhookMonitor": WebhookMonitor,
     "WorkflowBuilder": WorkflowBuilder,
-    "Dashboard": Dashboard,
 }
 
 export const pagesConfig = {
