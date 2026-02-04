@@ -135,3 +135,13 @@ jobs:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           report-json: "eslint-report.json"
         continue-on-error: true
+      - name: Run ESLint
+        run: npm run lint
+        continue-on-error: true
+      
+      - name: Annotate Code Linting Results
+        uses: ataylorme/eslint-annotate-action@v2
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          report-json: "eslint-report.json"
+        continue-on-error: true
