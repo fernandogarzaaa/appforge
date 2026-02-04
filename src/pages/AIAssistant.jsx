@@ -54,6 +54,8 @@ const AutoAgentDeployer = React.lazy(() => import('@/components/ai/AutoAgentDepl
 const SuperIntelligenceDashboard = React.lazy(() => import('@/components/ai/SuperIntelligenceDashboard'));
 const ProactiveAnticipationEngine = React.lazy(() => import('@/components/ai/ProactiveAnticipationEngine'));
 const CustomAgentBuilder = React.lazy(() => import('@/components/ai/CustomAgentBuilder'));
+const AgentCollaborationBuilder = React.lazy(() => import('@/components/ai/AgentCollaborationBuilder'));
+const AgentCollaborationDashboard = React.lazy(() => import('@/components/ai/AgentCollaborationDashboard'));
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import ReactMarkdown from 'react-markdown';
@@ -1434,6 +1436,17 @@ Provide helpful, actionable responses with code examples when relevant. Be conci
             </div>
             {messages.length > 0 && !activePanel && (
               <div className="mt-3 space-y-3">
+                <React.Suspense fallback={null}>
+                  <AgentCollaborationBuilder
+                    userEmail={user?.email}
+                    onWorkflowCreated={() => {
+                      setInput('Agent collaboration workflow created! Execute it to see agents working together.');
+                    }}
+                  />
+                </React.Suspense>
+                <React.Suspense fallback={null}>
+                  <AgentCollaborationDashboard userEmail={user?.email} />
+                </React.Suspense>
                 <React.Suspense fallback={null}>
                   <CustomAgentBuilder 
                     userEmail={user?.email}
