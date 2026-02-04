@@ -52,7 +52,7 @@ export default function GlobalTopNav({ user, onLogout, mobileMenu, title = 'AppF
                   variant="ghost"
                   className="flex items-center gap-2 h-9 px-2 sm:px-3 hover:bg-white/50 dark:hover:bg-slate-800/50 rounded-lg"
                 >
-                <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-gradient-to-br from-indigo-600 to-indigo-700 dark:from-indigo-500 dark:to-indigo-600 flex items-center justify-center shrink-0">
+                <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-gradient-to-br from-indigo-600 to-indigo-700 dark:from-indigo-500 dark:to-indigo-600 flex items-center justify-center shrink-0 ring-2 ring-white/30">
                   <span className="text-white text-xs sm:text-sm font-bold">
                     {user.full_name?.charAt(0).toUpperCase()}
                   </span>
