@@ -17,8 +17,12 @@ const APIExplorer = lazy(() => import('./pages/APIExplorer'));
 const APIKeyManager = lazy(() => import('./pages/APIKeyManager'));
 const Account = lazy(() => import('./pages/Account'));
 const AuditLog = lazy(() => import('./pages/AuditLog'));
+const AdminAPIKeys = lazy(() => import('./pages/AdminAPIKeys'));
 const AdminDashboard = lazy(() => import('./pages/AdminDashboard'));
+const AdminMonitoring = lazy(() => import('./pages/AdminMonitoring'));
+const AdminSecrets = lazy(() => import('./pages/AdminSecrets'));
 const AdminSubscriptions = lazy(() => import('./pages/AdminSubscriptions'));
+const AdminSystemConfig = lazy(() => import('./pages/AdminSystemConfig'));
 const AdvancedAnomalyDetection = lazy(() => import('./pages/AdvancedAnomalyDetection'));
 const Analytics = lazy(() => import('./pages/Analytics'));
 const BotBuilder = lazy(() => import('./pages/BotBuilder'));
@@ -110,8 +114,12 @@ const PAGES = {
     "APIExplorer": withSuspense(APIExplorer),
     "APIKeyManager": withSuspense(APIKeyManager),
     "Account": withSuspense(Account),
+    "AdminAPIKeys": withSuspense(AdminAPIKeys),
     "AdminDashboard": withSuspense(AdminDashboard),
+    "AdminMonitoring": withSuspense(AdminMonitoring),
+    "AdminSecrets": withSuspense(AdminSecrets),
     "AdminSubscriptions": withSuspense(AdminSubscriptions),
+    "AdminSystemConfig": withSuspense(AdminSystemConfig),
     "AdvancedAnomalyDetection": withSuspense(AdvancedAnomalyDetection),
     "AuditLog": withSuspense(AuditLog),
     "Analytics": withSuspense(Analytics),
