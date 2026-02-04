@@ -216,7 +216,7 @@ def qaoa_circuit(graph, beta, gamma):
 
       <CardContent>
         <Tabs defaultValue="gates" className="space-y-4">
-          <TabsList className="grid w-full grid-cols-4">
+          <TabsList className="grid w-full grid-cols-4 bg-white/50 dark:bg-slate-800/50 backdrop-blur-sm border border-white/20 dark:border-slate-700/30">
             <TabsTrigger value="gates">Gates</TabsTrigger>
             <TabsTrigger value="concepts">Concepts</TabsTrigger>
             <TabsTrigger value="algorithms">Algorithms</TabsTrigger>
