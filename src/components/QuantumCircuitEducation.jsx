@@ -240,7 +240,7 @@ def qaoa_circuit(graph, beta, gamma):
             </div>
 
             {gate && (
-              <div className="bg-slate-50 dark:bg-slate-900 rounded-lg p-4 space-y-3">
+              <div className="bg-white/70 dark:bg-slate-800/70 backdrop-blur-md rounded-lg p-4 space-y-3 border border-white/20 dark:border-slate-700/30">
                 <div>
                   <h3 className="font-semibold text-lg">{gate.name}</h3>
                   <p className="text-sm text-muted-foreground mt-1">{gate.description}</p>
