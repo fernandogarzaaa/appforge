@@ -378,7 +378,7 @@ def qaoa_circuit(graph, beta, gamma):
                   <Code2 className="h-4 w-4" />
                   Building a Bell State
                 </h4>
-                <pre className="bg-slate-900 text-slate-50 p-4 rounded-lg text-xs overflow-x-auto">
+                <pre className="bg-black/50 dark:bg-black/70 text-slate-50 p-4 rounded-lg text-xs overflow-x-auto backdrop-blur-sm border border-white/10">
 {`from qiskit import QuantumCircuit, QuantumRegister
 
 # Create quantum circuit with 2 qubits
