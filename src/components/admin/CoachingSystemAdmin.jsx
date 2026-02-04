@@ -8,9 +8,9 @@ import { Switch } from '@/components/ui/switch';
 import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import { Settings, Activity, Lock, Wallet, TrendingUp, Users, Zap, RefreshCw, Copy, Download, CreditCard } from 'lucide-react';
+import { Settings, Activity, Lock, Wallet, TrendingUp, Users, Zap, RefreshCw, Copy, Download } from 'lucide-react';
 import MarketingBotPanel from './MarketingBotPanel';
-import SubscriptionTierManager from './SubscriptionTierManager';
+import SubscriptionPlanManager from './SubscriptionPlanManager';
 
 export default function CoachingSystemAdmin() {
   const [user, setUser] = useState(null);
@@ -295,17 +295,17 @@ export default function CoachingSystemAdmin() {
             <Wallet className="w-4 h-4 mr-2" />
             Solana Config
           </TabsTrigger>
+          <TabsTrigger value="subscriptions">
+            <Zap className="w-4 h-4 mr-2" />
+            Plans
+          </TabsTrigger>
           <TabsTrigger value="transactions">
             <TrendingUp className="w-4 h-4 mr-2" />
             Transactions ({transactions.length})
           </TabsTrigger>
-          <TabsTrigger value="subscriptions">
-            <CreditCard className="w-4 h-4 mr-2" />
-            Subscriptions
-          </TabsTrigger>
           <TabsTrigger value="marketing">
             <Zap className="w-4 h-4 mr-2" />
-            Marketing Bot
+            Marketing
           </TabsTrigger>
           <TabsTrigger value="logs">Audit Logs</TabsTrigger>
         </TabsList>
@@ -581,6 +581,10 @@ export default function CoachingSystemAdmin() {
           )}
         </TabsContent>
 
+        <TabsContent value="subscriptions">
+          <SubscriptionPlanManager />
+        </TabsContent>
+
         <TabsContent value="transactions">
           <Card>
             <CardHeader>
@@ -631,10 +635,6 @@ export default function CoachingSystemAdmin() {
               )}
             </CardContent>
           </Card>
-        </TabsContent>
-
-        <TabsContent value="subscriptions">
-          <SubscriptionTierManager />
         </TabsContent>
 
         <TabsContent value="marketing">

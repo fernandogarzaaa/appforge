@@ -55,6 +55,7 @@ import APIKeyManager from './pages/APIKeyManager';
 import APIKeys from './pages/APIKeys';
 import Account from './pages/Account';
 import AdminAPIKeys from './pages/AdminAPIKeys';
+import AdminCoaching from './pages/AdminCoaching';
 import AdminDashboard from './pages/AdminDashboard';
 import AdminMonitoring from './pages/AdminMonitoring';
 import AdminSecrets from './pages/AdminSecrets';
@@ -79,6 +80,7 @@ import ContentStudio from './pages/ContentStudio';
 import ContractBuilder from './pages/ContractBuilder';
 import CryptoExchange from './pages/CryptoExchange';
 import CryptoGambling from './pages/CryptoGambling';
+import CustomAgentStudio from './pages/CustomAgentStudio';
 import DAOGovernance from './pages/DAOGovernance';
 import Dashboard from './pages/Dashboard';
 import DataAnalytics from './pages/DataAnalytics';
@@ -91,6 +93,7 @@ import EmailAssistant from './pages/EmailAssistant';
 import EmailCampaigns from './pages/EmailCampaigns';
 import EnterpriseIntelligence from './pages/EnterpriseIntelligence';
 import EnterpriseSecurity from './pages/EnterpriseSecurity';
+import EnterpriseValuation from './pages/EnterpriseValuation';
 import EntityDesigner from './pages/EntityDesigner';
 import EnvironmentVariables from './pages/EnvironmentVariables';
 import ExternalBotIntegrations from './pages/ExternalBotIntegrations';
@@ -163,9 +166,7 @@ import VisualizationStudio from './pages/VisualizationStudio';
 import Web3Dashboard from './pages/Web3Dashboard';
 import WebhookMonitor from './pages/WebhookMonitor';
 import WorkflowBuilder from './pages/WorkflowBuilder';
-import EnterpriseValuation from './pages/EnterpriseValuation';
-import CustomAgentStudio from './pages/CustomAgentStudio';
-import AdminCoaching from './pages/AdminCoaching';
+import Subscriptions from './pages/Subscriptions';
 import __Layout from './Layout.jsx';
 
 
@@ -178,6 +179,7 @@ export const PAGES = {
     "APIKeys": APIKeys,
     "Account": Account,
     "AdminAPIKeys": AdminAPIKeys,
+    "AdminCoaching": AdminCoaching,
     "AdminDashboard": AdminDashboard,
     "AdminMonitoring": AdminMonitoring,
     "AdminSecrets": AdminSecrets,
@@ -202,6 +204,7 @@ export const PAGES = {
     "ContractBuilder": ContractBuilder,
     "CryptoExchange": CryptoExchange,
     "CryptoGambling": CryptoGambling,
+    "CustomAgentStudio": CustomAgentStudio,
     "DAOGovernance": DAOGovernance,
     "Dashboard": Dashboard,
     "DataAnalytics": DataAnalytics,
@@ -214,6 +217,7 @@ export const PAGES = {
     "EmailCampaigns": EmailCampaigns,
     "EnterpriseIntelligence": EnterpriseIntelligence,
     "EnterpriseSecurity": EnterpriseSecurity,
+    "EnterpriseValuation": EnterpriseValuation,
     "EntityDesigner": EntityDesigner,
     "EnvironmentVariables": EnvironmentVariables,
     "ExternalBotIntegrations": ExternalBotIntegrations,
@@ -286,9 +290,7 @@ export const PAGES = {
     "Web3Dashboard": Web3Dashboard,
     "WebhookMonitor": WebhookMonitor,
     "WorkflowBuilder": WorkflowBuilder,
-    "EnterpriseValuation": EnterpriseValuation,
-    "CustomAgentStudio": CustomAgentStudio,
-    "AdminCoaching": AdminCoaching,
+    "Subscriptions": Subscriptions,
 }
 
 export const pagesConfig = {
