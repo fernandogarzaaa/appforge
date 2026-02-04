@@ -8,7 +8,13 @@
   "author": "Fernando Garza",
   "repository": "https://github.com/fernandogarzaaa/appforge",
   
-  // Base44 deployment settings
+  // Base44 backend functions directory
+  "functions": {
+    "directory": "functions",
+    "runtime": "typescript"
+  },
+  
+  // Base44 static site deployment
   "site": {
     "buildCommand": "npm run build",
     "outputDirectory": "dist",
@@ -17,6 +23,6 @@
   
   // Environment configuration
   "env": {
-    "production": true
+    "NODE_ENV": "production"
   }
 }

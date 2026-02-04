@@ -9,6 +9,7 @@ jobs:
   deploy-base44:
     name: Deploy to Base44
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
     
     steps:
@@ -36,10 +37,23 @@ jobs:
           # Authenticate with Base44
           export BASE44_API_KEY="${{ secrets.BASE44_API_KEY }}"
           
+          # Check if project needs linking (first-time setup)
+          echo "📦 Deploying appforge to Base44..."
+          echo "Functions: $(ls -1 functions/*.ts | wc -l) TypeScript functions"
+          echo "Site: React app (dist/)"
+          
           # Deploy the project (entities, functions, and site files)
-          base44 deploy
+          # Note: First deployment may require manual 'base44 link' setup
+          base44 deploy --verbose || {
+            echo "⚠️  Deployment failed. If this is the first deployment:"
+            echo "   1. Run 'base44 link' locally to connect project"
+            echo "   2. Ensure BASE44_API_KEY has proper permissions"
+            echo "   3. Check that .app.jsonc configuration is correct"
+            exit 1
+          }
         env:
           BASE44_API_KEY: ${{ secrets.BASE44_API_KEY }}
+        timeout-minutes: 5
       
       - name: Deployment Success
         if: success()
