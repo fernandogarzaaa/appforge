@@ -1,7 +1,10 @@
 import React, { useState, useCallback } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { Plus, Trash2, RotateCcw } from 'lucide-react'
+import { Badge } from '@/components/ui/badge'
+import { Plus, Trash2, RotateCcw, Download, Share2, Zap, Sparkles } from 'lucide-react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { toast } from 'sonner'
 
 /**
  * QuantumCircuitVisualizer - Interactive quantum circuit visualization
@@ -13,16 +16,21 @@ export function QuantumCircuitVisualizer({ initialQubits = 3, onCircuitChange: _
   const [selectedGate, setSelectedGate] = useState(null)
   const [circuitSteps, setCircuitSteps] = useState(0)
 
-  // Quantum gate definitions
+  // Enhanced quantum gate definitions with more gates
   const gateTypes = [
-    { name: 'H', label: 'Hadamard', color: '#3B82F6', description: 'Superposition' },
-    { name: 'X', label: 'Pauli-X', color: '#EF4444', description: 'Bit Flip' },
-    { name: 'Y', label: 'Pauli-Y', color: '#F59E0B', description: 'Rotation' },
-    { name: 'Z', label: 'Pauli-Z', color: '#10B981', description: 'Phase' },
-    { name: 'S', label: 'S Gate', color: '#8B5CF6', description: 'Phase-90' },
-    { name: 'T', label: 'T Gate', color: '#EC4899', description: 'Phase-45' },
-    { name: 'CNOT', label: 'CNOT', color: '#06B6D4', description: 'Entangle', span: 2 },
-    { name: 'SWAP', label: 'SWAP', color: '#14B8A6', description: 'Exchange', span: 2 },
+    { name: 'H', label: 'Hadamard', color: '#3B82F6', description: 'Superposition', category: 'single' },
+    { name: 'X', label: 'Pauli-X', color: '#EF4444', description: 'Bit Flip', category: 'single' },
+    { name: 'Y', label: 'Pauli-Y', color: '#F59E0B', description: 'Rotation', category: 'single' },
+    { name: 'Z', label: 'Pauli-Z', color: '#10B981', description: 'Phase', category: 'single' },
+    { name: 'S', label: 'S Gate', color: '#8B5CF6', description: 'Phase-90', category: 'single' },
+    { name: 'T', label: 'T Gate', color: '#EC4899', description: 'Phase-45', category: 'single' },
+    { name: 'RX', label: 'RX', color: '#F97316', description: 'X-Rotation', category: 'single' },
+    { name: 'RY', label: 'RY', color: '#84CC16', description: 'Y-Rotation', category: 'single' },
+    { name: 'RZ', label: 'RZ', color: '#22D3EE', description: 'Z-Rotation', category: 'single' },
+    { name: 'CNOT', label: 'CNOT', color: '#06B6D4', description: 'Entangle', span: 2, category: 'multi' },
+    { name: 'SWAP', label: 'SWAP', color: '#14B8A6', description: 'Exchange', span: 2, category: 'multi' },
+    { name: 'CZ', label: 'CZ', color: '#A855F7', description: 'Control-Z', span: 2, category: 'multi' },
+    { name: 'Toffoli', label: 'Toffoli', color: '#F43F5E', description: 'AND Gate', span: 3, category: 'multi' },
   ]
 
   const addGate = useCallback((gateName) => {
@@ -60,6 +68,54 @@ export function QuantumCircuitVisualizer({ initialQubits = 3, onCircuitChange: _
     setSelectedGate(null)
   }, [])
 
+  const exportCircuit = useCallback(() => {
+    const qasm = `OPENQASM 2.0;\ninclude "qelib1.inc";\nqreg q[${qubits}];\ncreg c[${qubits}];\n\n${gates.map(g => `${g.name.toLowerCase()} q[${g.qubit}];`).join('\n')}\n\nmeasure q -> c;`
+    navigator.clipboard.writeText(qasm)
+    toast.success('QASM code copied to clipboard!')
+  }, [qubits, gates])
+
+  const shareCircuit = useCallback(() => {
+    const circuitData = { qubits, gates: gates.map(g => ({ name: g.name, qubit: g.qubit, position: g.position })) }
+    const encoded = btoa(JSON.stringify(circuitData))
+    navigator.clipboard.writeText(`${window.location.origin}/quantum?circuit=${encoded}`)
+    toast.success('Shareable link copied!')
+  }, [qubits, gates])
+
+  const loadPreset = useCallback((preset) => {
+    switch (preset) {
+      case 'bell':
+        setQubits(2)
+        setGates([
+          { id: 'h-1', name: 'H', qubit: 0, position: 0, color: '#3B82F6', label: 'Hadamard' },
+          { id: 'cnot-1', name: 'CNOT', qubit: 0, position: 1, color: '#06B6D4', label: 'CNOT' }
+        ])
+        setCircuitSteps(2)
+        toast.success('Loaded Bell State circuit')
+        break
+      case 'ghz':
+        setQubits(3)
+        setGates([
+          { id: 'h-1', name: 'H', qubit: 0, position: 0, color: '#3B82F6', label: 'Hadamard' },
+          { id: 'cnot-1', name: 'CNOT', qubit: 0, position: 1, color: '#06B6D4', label: 'CNOT' },
+          { id: 'cnot-2', name: 'CNOT', qubit: 1, position: 2, color: '#06B6D4', label: 'CNOT' }
+        ])
+        setCircuitSteps(3)
+        toast.success('Loaded GHZ State circuit')
+        break
+      case 'teleport':
+        setQubits(3)
+        setGates([
+          { id: 'h-1', name: 'H', qubit: 1, position: 0, color: '#3B82F6', label: 'Hadamard' },
+          { id: 'cnot-1', name: 'CNOT', qubit: 1, position: 1, color: '#06B6D4', label: 'CNOT' },
+          { id: 'cnot-2', name: 'CNOT', qubit: 0, position: 2, color: '#06B6D4', label: 'CNOT' },
+          { id: 'h-2', name: 'H', qubit: 0, position: 3, color: '#3B82F6', label: 'Hadamard' }
+        ])
+        setCircuitSteps(4)
+        toast.success('Loaded Quantum Teleportation circuit')
+        break
+    }
+  }, [])
+
   const addQubit = useCallback(() => {
     setQubits(qubits + 1)
   }, [qubits])
@@ -87,6 +143,24 @@ export function QuantumCircuitVisualizer({ initialQubits = 3, onCircuitChange: _
               <CardDescription>Build and visualize quantum circuits interactively</CardDescription>
             </div>
             <div className="flex gap-2">
+              <Button 
+                variant="outline" 
+                size="sm"
+                onClick={exportCircuit}
+                disabled={gates.length === 0}
+              >
+                <Download className="h-4 w-4 mr-2" />
+                Export
+              </Button>
+              <Button 
+                variant="outline" 
+                size="sm"
+                onClick={shareCircuit}
+                disabled={gates.length === 0}
+              >
+                <Share2 className="h-4 w-4 mr-2" />
+                Share
+              </Button>
               <Button 
                 variant="outline" 
                 size="sm"
@@ -171,24 +245,66 @@ export function QuantumCircuitVisualizer({ initialQubits = 3, onCircuitChange: _
             </div>
           </div>
 
+          {/* Preset Circuits */}
+          <div className="space-y-2">
+            <h4 className="text-sm font-semibold flex items-center gap-2">
+              <Sparkles className="h-4 w-4 text-purple-500" />
+              Famous Quantum Circuits
+            </h4>
+            <div className="grid grid-cols-3 gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => loadPreset('bell')}
+                className="flex flex-col items-center gap-1 h-auto py-3"
+              >
+                <Badge className="bg-cyan-500 text-white">Bell</Badge>
+                <span className="text-xs text-muted-foreground">Entanglement</span>
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => loadPreset('ghz')}
+                className="flex flex-col items-center gap-1 h-auto py-3"
+              >
+                <Badge className="bg-purple-500 text-white">GHZ</Badge>
+                <span className="text-xs text-muted-foreground">3-Qubit</span>
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => loadPreset('teleport')}
+                className="flex flex-col items-center gap-1 h-auto py-3"
+              >
+                <Badge className="bg-pink-500 text-white">Teleport</Badge>
+                <span className="text-xs text-muted-foreground">Quantum</span>
+              </Button>
+            </div>
+          </div>
+
           {/* Gate Palette */}
           <div className="space-y-2">
-            <h4 className="text-sm font-semibold">Quantum Gates</h4>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+            <h4 className="text-sm font-semibold flex items-center gap-2">
+              <Zap className="h-4 w-4 text-yellow-500" />
+              Quantum Gates
+            </h4>
+            <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
               {gateTypes.map(gate => (
                 <Button
                   key={gate.name}
                   variant="outline"
                   size="sm"
                   onClick={() => addGate(gate.name)}
-                  className="flex flex-col items-center gap-1 h-auto py-2"
+                  className="flex flex-col items-center gap-1 h-auto py-2 hover:scale-105 transition-transform"
                 >
-                  <span
-                    className="w-8 h-8 rounded flex items-center justify-center text-white text-xs font-bold"
+                  <motion.span
+                    whileHover={{ rotate: 360 }}
+                    transition={{ duration: 0.5 }}
+                    className="w-8 h-8 rounded flex items-center justify-center text-white text-xs font-bold shadow-lg"
                     style={{ backgroundColor: gate.color }}
                   >
                     {gate.name}
-                  </span>
+                  </motion.span>
                   <span className="text-xs">{gate.label}</span>
                   <span className="text-xs text-muted-foreground">{gate.description}</span>
                 </Button>

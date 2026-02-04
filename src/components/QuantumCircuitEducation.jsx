@@ -1,8 +1,10 @@
 import React, { useState } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
+import { Badge } from '@/components/ui/badge'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { BookOpen, Code2 } from 'lucide-react'
+import { BookOpen, Code2, Lightbulb, Atom, Cpu, Network } from 'lucide-react'
+import { motion } from 'framer-motion'
 
 /**
  * QuantumCircuitEducation - Interactive quantum computing education
@@ -65,33 +67,52 @@ export function QuantumCircuitEducation() {
     {
       title: 'Qubits',
       description: 'Quantum bits that exist in superposition of 0 and 1',
-      icon: '⚛️',
+      icon: Atom,
+      color: 'cyan',
+      detail: 'Unlike classical bits, qubits can represent both 0 and 1 simultaneously, exponentially increasing computational power.'
     },
     {
       title: 'Superposition',
       description: 'Quantum state that is both 0 and 1 simultaneously',
-      icon: '🌀',
+      icon: Cpu,
+      color: 'purple',
+      detail: 'A qubit in superposition explores multiple possibilities at once, collapsed to a single state upon measurement.'
     },
     {
       title: 'Entanglement',
       description: 'Correlation between qubits such that measuring one affects others',
-      icon: '🔗',
+      icon: Network,
+      color: 'pink',
+      detail: 'Entangled qubits share quantum states, enabling instant correlation regardless of distance - Einstein called it "spooky action".'
     },
     {
       title: 'Interference',
       description: 'Quantum amplitudes add and cancel to compute results',
-      icon: '〰️',
+      icon: Activity,
+      color: 'blue',
+      detail: 'Constructive and destructive interference amplifies correct answers while canceling wrong ones in quantum algorithms.'
     },
     {
       title: 'Measurement',
       description: 'Observing a qubit collapses it to 0 or 1',
-      icon: '📊',
+      icon: BookOpen,
+      color: 'green',
+      detail: 'Measurement destroys superposition, yielding classical bits. Quantum algorithms carefully delay measurement for advantage.'
     },
     {
-      title: 'Phase',
-      description: 'Complex number describing quantum state evolution',
-      icon: '📐',
+      title: 'Decoherence',
+      description: 'Loss of quantum information due to environmental noise',
+      icon: AlertCircle,
+      color: 'orange',
+      detail: 'Qubits are fragile - they lose quantum properties from vibrations, temperature, and electromagnetic fields.'
     },
+  ]
+
+  const algorithms = [
+    { name: 'Shor\'s Algorithm', description: 'Factor large numbers exponentially faster', complexity: 'O(log³N)', application: 'Cryptography Breaking' },
+    { name: 'Grover\'s Algorithm', description: 'Search unsorted databases quadratically faster', complexity: 'O(√N)', application: 'Database Search' },
+    { name: 'Quantum Fourier Transform', description: 'Transform quantum states into frequency domain', complexity: 'O(n²)', application: 'Period Finding' },
+    { name: 'VQE', description: 'Find ground state energy of molecules', complexity: 'Hybrid', application: 'Drug Discovery' },
   ]
 
   const gate = gateLibrary[selectedGate]
@@ -108,10 +129,11 @@ export function QuantumCircuitEducation() {
 
       <CardContent>
         <Tabs defaultValue="gates" className="space-y-4">
-          <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="gates">Quantum Gates</TabsTrigger>
+          <TabsList className="grid w-full grid-cols-4">
+            <TabsTrigger value="gates">Gates</TabsTrigger>
             <TabsTrigger value="concepts">Concepts</TabsTrigger>
-            <TabsTrigger value="code">Code Example</TabsTrigger>
+            <TabsTrigger value="algorithms">Algorithms</TabsTrigger>
+            <TabsTrigger value="code">Code</TabsTrigger>
           </TabsList>
 
           {/* Quantum Gates Tab */}
@@ -169,16 +191,64 @@ export function QuantumCircuitEducation() {
           {/* Concepts Tab */}
           <TabsContent value="concepts" className="space-y-4">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              {concepts.map((concept, i) => (
-                <div
+              {concepts.map((concept, i) => {
+                const Icon = concept.icon
+                return (
+                  <motion.div
+                    key={i}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: i * 0.1 }}
+                    className={`bg-gradient-to-br from-${concept.color}-50 to-white dark:from-${concept.color}-950/20 dark:to-slate-900 rounded-lg p-4 border-2 border-${concept.color}-200 dark:border-${concept.color}-800/50 hover:shadow-lg transition-all cursor-pointer group`}
+                  >
+                    <div className="flex items-start gap-3">
+                      <div className={`w-10 h-10 rounded-lg bg-${concept.color}-100 dark:bg-${concept.color}-900/50 flex items-center justify-center group-hover:scale-110 transition-transform`}>
+                        <Icon className={`h-5 w-5 text-${concept.color}-600 dark:text-${concept.color}-400`} />
+                      </div>
+                      <div className="flex-1">
+                        <h4 className="font-semibold text-sm mb-1">{concept.title}</h4>
+                        <p className="text-xs text-muted-foreground mb-2">{concept.description}</p>
+                        <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">{concept.detail}</p>
+                      </div>
+                    </div>
+                  </motion.div>
+                )
+              })}
+            </div>
+          </TabsContent>
+
+          {/* Algorithms Tab */}
+          <TabsContent value="algorithms" className="space-y-4">
+            <div className="space-y-3">
+              {algorithms.map((algo, i) => (
+                <motion.div
                   key={i}
-                  className="bg-slate-50 dark:bg-slate-900 rounded-lg p-3 border border-slate-200 dark:border-slate-700"
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: i * 0.1 }}
+                  className="bg-slate-50 dark:bg-slate-900 rounded-lg p-4 border border-slate-200 dark:border-slate-700 hover:border-indigo-300 dark:hover:border-indigo-700 transition-all"
                 >
-                  <div className="text-2xl mb-2">{concept.icon}</div>
-                  <h4 className="font-semibold text-sm">{concept.title}</h4>
-                  <p className="text-xs text-muted-foreground mt-1">{concept.description}</p>
-                </div>
+                  <div className="flex items-start justify-between mb-2">
+                    <h4 className="font-semibold text-base">{algo.name}</h4>
+                    <Badge variant="outline" className="bg-indigo-50 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300">
+                      {algo.complexity}
+                    </Badge>
+                  </div>
+                  <p className="text-sm text-muted-foreground mb-3">{algo.description}</p>
+                  <div className="flex items-center gap-2">
+                    <Lightbulb className="h-4 w-4 text-yellow-500" />
+                    <span className="text-xs font-medium text-slate-700 dark:text-slate-300">
+                      Use Case: {algo.application}
+                    </span>
+                  </div>
+                </motion.div>
               ))}
+            </div>
+            
+            <div className="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-950/20 dark:to-purple-950/20 border border-blue-200 dark:border-blue-700/50 rounded-lg p-4">
+              <p className="text-sm text-blue-900 dark:text-blue-100">
+                <strong>💡 Did you know?</strong> A 300-qubit quantum computer could perform more calculations simultaneously than there are atoms in the universe (≈10⁸⁰).
+              </p>
             </div>
           </TabsContent>
 

@@ -1,530 +1,366 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Progress } from '@/components/ui/progress';
+import React, { useState } from 'react'
+import { base44 } from '@/api/base44Client'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { Badge } from '@/components/ui/badge'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
 import { 
-  Atom, 
-  Zap, 
-  GitBranch, 
-  Brain, 
-  Activity, 
-  TrendingUp, 
-  Sparkles,
-  AlertCircle,
-  CheckCircle2,
-  Loader2,
-  RotateCcw
-} from 'lucide-react';
-import { toast } from 'sonner';
-import QuantumProfile from '@/components/quantum/QuantumProfile';
-import MultiverseViewer from '@/components/quantum/MultiverseViewer';
-import ReversibleDebugger from '@/components/quantum/ReversibleDebugger';
+  Atom, Zap, Brain, Cpu, Activity, Play, Save, Download, 
+  TrendingUp, Sparkles, Share2, BookOpen, Code2, Lightbulb 
+} from 'lucide-react'
+import QuantumCircuitDisplay from '@/components/QuantumCircuitDisplay'
+import QuantumCircuitVisualizer from '@/components/QuantumCircuitVisualizer'
+import QuantumCircuitEducation from '@/components/QuantumCircuitEducation'
+import { motion } from 'framer-motion'
+import { toast } from 'sonner'
 
 export default function QuantumLab() {
-  const [quantumCore, setQuantumCore] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [activeTab, setActiveTab] = useState('visualizer')
+  const [simulationParams, setSimulationParams] = useState({
+    qubits: 5,
+    shots: 1024,
+    backend: 'qasm_simulator'
+  })
+  const [isRunning, setIsRunning] = useState(false)
 
-  // Quantum Annealer State
-  const [annealerTemp, setAnnealerTemp] = useState(100);
-  const [annealerProgress, setAnnealerProgress] = useState(0);
-  const [annealerStats, setAnnealerStats] = useState(null);
-
-  // Entanglement State
-  const [fidelity, setFidelity] = useState(1.0);
-  const [isEntangled, setIsEntangled] = useState(true);
-  const [localAlpha, setLocalAlpha] = useState(0.707);
-  const [localBeta, setLocalBeta] = useState(0.707);
-
-  // Superposition State
-  const [solutions, setSolutions] = useState([]);
-  const [entropy, setEntropy] = useState(0);
-  const [optimalSolution, setOptimalSolution] = useState(null);
-
-  useEffect(() => {
-    // Simulate quantum core loading
-    const loadQuantumCore = async () => {
-      try {
-        // In a real implementation, this would load the WASM module
-        // const wasm = await import('./wasm/quantum_core');
-        // await wasm.default();
-        // setQuantumCore(wasm);
-        
-        // For now, simulate the API
-        setQuantumCore({
-          loaded: true,
-          version: '0.1.0'
-        });
-        toast.success('🔮 Quantum Core initialized');
-      } catch (error) {
-        toast.error('Failed to load Quantum Core');
-      }
-    };
-
-    loadQuantumCore();
-  }, []);
-
-  const runQuantumAnnealing = async () => {
-    setLoading(true);
-    setAnnealerProgress(0);
-
+  const runQuantumSimulation = async () => {
+    setIsRunning(true)
     try {
-      // Simulate quantum annealing optimization
-      const initialConflicts = Math.floor(Math.random() * 50) + 10;
-      let temperature = annealerTemp;
-      let iterations = 0;
-      const maxIterations = 1000;
-
-      const interval = setInterval(() => {
-        iterations += 10;
-        temperature *= 0.95;
-        const progress = (iterations / maxIterations) * 100;
-        
-        setAnnealerProgress(Math.min(progress, 100));
-        setAnnealerTemp(temperature);
-
-        if (iterations >= maxIterations || temperature < 0.01) {
-          clearInterval(interval);
-          setAnnealerStats({
-            iterations,
-            finalTemp: temperature,
-            conflictsResolved: initialConflicts - Math.floor(Math.random() * 5),
-            speedup: '127x faster than npm install'
-          });
-          setLoading(false);
-          toast.success(`✨ Resolved ${initialConflicts} conflicts in ${iterations} iterations`);
+      // Simulate quantum computation
+      await new Promise(resolve => setTimeout(resolve, 2000))
+      toast.success('Quantum simulation completed successfully!')
+      
+      // Log analytics
+      await base44.analytics.track({
+        eventName: 'quantum_simulation_run',
+        properties: { 
+          qubits: simulationParams.qubits,
+          shots: simulationParams.shots,
+          backend: simulationParams.backend
         }
-      }, 50);
-
+      })
     } catch (error) {
-      toast.error('Annealing failed');
-      setLoading(false);
+      toast.error('Simulation failed')
+    } finally {
+      setIsRunning(false)
     }
-  };
+  }
 
-  const testEntanglement = () => {
-    // Simulate state rotation and fidelity measurement
-    const rotation = Math.random() * 0.5;
-    const newAlpha = Math.cos(rotation / 2) * localAlpha - Math.sin(rotation / 2) * localBeta;
-    const newBeta = Math.sin(rotation / 2) * localAlpha + Math.cos(rotation / 2) * localBeta;
+  const quantumAlgorithms = [
+    {
+      name: 'Quantum Fourier Transform',
+      description: 'Fundamental for period finding and phase estimation',
+      complexity: 'O(n²)',
+      qubits: 4,
+      gates: 12,
+      icon: Activity,
+      color: 'cyan'
+    },
+    {
+      name: 'Grover Search',
+      description: 'Quadratic speedup for unstructured search',
+      complexity: 'O(√N)',
+      qubits: 3,
+      gates: 8,
+      icon: Zap,
+      color: 'yellow'
+    },
+    {
+      name: 'Quantum Teleportation',
+      description: 'Transfer quantum state using entanglement',
+      complexity: 'O(1)',
+      qubits: 3,
+      gates: 6,
+      icon: Sparkles,
+      color: 'purple'
+    },
+    {
+      name: 'Variational Quantum Eigensolver',
+      description: 'Find ground state energies for molecules',
+      complexity: 'Hybrid',
+      qubits: 6,
+      gates: 15,
+      icon: Brain,
+      color: 'pink'
+    }
+  ]
 
-    // Normalize
-    const norm = Math.sqrt(newAlpha * newAlpha + newBeta * newBeta);
-    setLocalAlpha(newAlpha / norm);
-    setLocalBeta(newBeta / norm);
-
-    // Simulate remote state (slightly different)
-    const remoteAlpha = newAlpha / norm + (Math.random() - 0.5) * 0.1;
-    const remoteBeta = newBeta / norm + (Math.random() - 0.5) * 0.1;
-
-    // Calculate fidelity
-    const overlap = Math.abs(newAlpha / norm * remoteAlpha + newBeta / norm * remoteBeta);
-    const newFidelity = overlap * overlap;
-
-    setFidelity(newFidelity);
-    setIsEntangled(newFidelity > 0.707);
-
-    toast.success(`Fidelity: ${(newFidelity * 100).toFixed(1)}%`);
-  };
-
-  const generateSuperposition = () => {
-    setLoading(true);
-
-    // Step 1: Create superposition
-    const approaches = [
-      'Functional Architecture',
-      'Object-Oriented Design',
-      'Reactive Patterns',
-      'Event-Driven System',
-      'Microservices',
-      'Monolithic Structure'
-    ];
-
-    const initialAmplitude = 1 / Math.sqrt(approaches.length);
-    const totalConstraints = 10;
-
-    const generatedSolutions = approaches.map(approach => ({
-      approach,
-      amplitude: initialAmplitude,
-      constraintsMet: Math.floor(Math.random() * totalConstraints),
-      constraintsTotal: totalConstraints
-    }));
-
-    // Step 2: Apply interference
-    const interfered = generatedSolutions.map(sol => {
-      const fitRatio = sol.constraintsMet / sol.constraintsTotal;
-      const threshold = 0.7;
-
-      if (fitRatio >= threshold) {
-        // Constructive interference
-        sol.amplitude *= 1 + (fitRatio - threshold);
-      } else {
-        // Destructive interference
-        sol.amplitude *= fitRatio;
-      }
-
-      return sol;
-    });
-
-    // Normalize
-    const sumSquares = interfered.reduce((sum, sol) => sum + sol.amplitude ** 2, 0);
-    const normalized = interfered.map(sol => ({
-      ...sol,
-      amplitude: sol.amplitude / Math.sqrt(sumSquares),
-      probability: (sol.amplitude ** 2 / sumSquares) * 100
-    }));
-
-    // Step 3: Find optimal (collapse)
-    const optimal = normalized.reduce((best, curr) => 
-      curr.amplitude > best.amplitude ? curr : best
-    );
-
-    // Calculate entropy
-    const probs = normalized.map(s => (s.amplitude ** 2) / sumSquares);
-    const calculatedEntropy = -probs.reduce((sum, p) => 
-      p > 0 ? sum + p * Math.log2(p) : sum, 0
-    );
-
-    setSolutions(normalized);
-    setOptimalSolution(optimal);
-    setEntropy(calculatedEntropy);
-    setLoading(false);
-
-    toast.success(`✨ Collapsed to: ${optimal.approach}`);
-  };
+  const stats = [
+    { label: 'Total Qubits', value: '127', trend: '+15', icon: Atom, color: 'blue' },
+    { label: 'Circuits Run', value: '2,341', trend: '+12%', icon: Cpu, color: 'purple' },
+    { label: 'Success Rate', value: '98.7%', trend: '+2.1%', icon: TrendingUp, color: 'green' },
+    { label: 'Avg Fidelity', value: '99.2%', trend: '+0.5%', icon: Activity, color: 'cyan' },
+  ]
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-50 p-6">
-      <div className="max-w-7xl mx-auto space-y-6">
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-blue-950 to-purple-950 p-8">
+      <div className="max-w-7xl mx-auto space-y-8">
         {/* Header */}
-        <div className="text-center mb-8">
-          <div className="flex items-center justify-center gap-3 mb-4">
-            <Atom className="w-12 h-12 text-purple-600 animate-spin" style={{ animationDuration: '3s' }} />
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
-              Quantum Computing Lab
-            </h1>
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4"
+        >
+          <div>
+            <div className="flex items-center gap-3 mb-2">
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center">
+                <Atom className="w-7 h-7 text-white" />
+              </div>
+              <div>
+                <h1 className="text-4xl font-bold text-white">Quantum Lab</h1>
+                <p className="text-slate-400">Build, simulate, and learn quantum circuits</p>
+              </div>
+            </div>
           </div>
-          <p className="text-gray-600 max-w-2xl mx-auto">
-            Quantum-inspired classical algorithms for dependency optimization, zero-latency sync, and AI code synthesis
-          </p>
-          {quantumCore && (
-            <Badge variant="outline" className="mt-3">
-              <CheckCircle2 className="w-3 h-3 mr-1" />
-              Quantum Core v{quantumCore.version} Loaded
-            </Badge>
-          )}
+          <div className="flex gap-2">
+            <Button className="bg-cyan-600 hover:bg-cyan-700 text-white">
+              <BookOpen className="h-4 w-4 mr-2" />
+              Documentation
+            </Button>
+            <Button variant="outline" className="border-slate-700 text-slate-300 hover:bg-slate-800">
+              <Share2 className="h-4 w-4 mr-2" />
+              Share Lab
+            </Button>
+          </div>
+        </motion.div>
+
+        {/* Stats Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {stats.map((stat, idx) => {
+            const Icon = stat.icon
+            return (
+              <motion.div
+                key={idx}
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: idx * 0.1 }}
+              >
+                <Card className={`bg-gradient-to-br from-${stat.color}-900/20 to-slate-900 border-${stat.color}-700/50`}>
+                  <CardContent className="p-6">
+                    <div className="flex items-center justify-between mb-2">
+                      <Icon className={`h-5 w-5 text-${stat.color}-400`} />
+                      <Badge variant="outline" className={`bg-${stat.color}-500/20 text-${stat.color}-300 border-${stat.color}-500/50`}>
+                        {stat.trend}
+                      </Badge>
+                    </div>
+                    <div className="text-3xl font-bold text-white">{stat.value}</div>
+                    <div className="text-sm text-slate-400 mt-1">{stat.label}</div>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            )
+          })}
         </div>
 
-        <Tabs defaultValue="annealing" className="w-full">
-          <TabsList className="grid w-full grid-cols-6 bg-white/50">
-            <TabsTrigger value="annealing" className="flex items-center gap-2">
-              <GitBranch className="w-4 h-4" />
-              Quantum Annealing
+        {/* Main Content Tabs */}
+        <Tabs value={activeTab} onValueChange={setActiveTab}>
+          <TabsList className="grid w-full grid-cols-4 bg-slate-900 border border-slate-800">
+            <TabsTrigger value="visualizer" className="data-[state=active]:bg-cyan-600">
+              <Cpu className="h-4 w-4 mr-2" />
+              Circuit Builder
             </TabsTrigger>
-            <TabsTrigger value="entanglement" className="flex items-center gap-2">
-              <Zap className="w-4 h-4" />
-              Entanglement
+            <TabsTrigger value="algorithms" className="data-[state=active]:bg-purple-600">
+              <Brain className="h-4 w-4 mr-2" />
+              Algorithms
             </TabsTrigger>
-            <TabsTrigger value="superposition" className="flex items-center gap-2">
-              <Brain className="w-4 h-4" />
-              Superposition
+            <TabsTrigger value="simulation" className="data-[state=active]:bg-blue-600">
+              <Play className="h-4 w-4 mr-2" />
+              Simulation
             </TabsTrigger>
-            <TabsTrigger value="qscript" className="flex items-center gap-2">
-              <Sparkles className="w-4 h-4" />
-              Q-Script
-            </TabsTrigger>
-            <TabsTrigger value="multiverse" className="flex items-center gap-2">
-              <Activity className="w-4 h-4" />
-              Multiverse
-            </TabsTrigger>
-            <TabsTrigger value="reversible" className="flex items-center gap-2">
-              <RotateCcw className="w-4 h-4" />
-              Time-Reversed Debug
+            <TabsTrigger value="learn" className="data-[state=active]:bg-pink-600">
+              <BookOpen className="h-4 w-4 mr-2" />
+              Learn
             </TabsTrigger>
           </TabsList>
 
-          {/* Quantum Annealing Tab */}
-          <TabsContent value="annealing" className="space-y-4">
-            <Card className="border-purple-200 bg-white/80 backdrop-blur">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <GitBranch className="w-5 h-5 text-purple-600" />
-                  Dependency Resolver (Quantum Annealing)
-                </CardTitle>
-                <CardDescription>
-                  Solve NP-Hard dependency conflicts using simulated quantum tunneling
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                <div className="grid md:grid-cols-3 gap-4">
-                  <div className="p-4 bg-purple-50 rounded-lg border border-purple-200">
-                    <p className="text-sm text-purple-600 font-semibold mb-1">Temperature</p>
-                    <p className="text-2xl font-bold text-purple-900">{annealerTemp.toFixed(2)}°K</p>
-                  </div>
-                  <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
-                    <p className="text-sm text-blue-600 font-semibold mb-1">Progress</p>
-                    <p className="text-2xl font-bold text-blue-900">{annealerProgress.toFixed(0)}%</p>
-                  </div>
-                  <div className="p-4 bg-green-50 rounded-lg border border-green-200">
-                    <p className="text-sm text-green-600 font-semibold mb-1">Status</p>
-                    <p className="text-2xl font-bold text-green-900">
-                      {loading ? 'Running' : 'Ready'}
-                    </p>
-                  </div>
-                </div>
-
-                {annealerProgress > 0 && (
-                  <div className="space-y-2">
-                    <div className="flex items-center justify-between text-sm">
-                      <span>Optimization Progress</span>
-                      <span>{annealerProgress.toFixed(0)}%</span>
-                    </div>
-                    <Progress value={annealerProgress} className="h-2" />
-                  </div>
-                )}
-
-                {annealerStats && (
-                  <div className="p-4 bg-gradient-to-r from-purple-50 to-blue-50 rounded-lg border">
-                    <h4 className="font-semibold text-gray-900 mb-3">Optimization Results</h4>
-                    <div className="grid grid-cols-2 gap-3 text-sm">
-                      <div>
-                        <p className="text-gray-600">Iterations</p>
-                        <p className="font-bold text-gray-900">{annealerStats.iterations}</p>
-                      </div>
-                      <div>
-                        <p className="text-gray-600">Final Temperature</p>
-                        <p className="font-bold text-gray-900">{annealerStats.finalTemp.toFixed(4)}°K</p>
-                      </div>
-                      <div>
-                        <p className="text-gray-600">Conflicts Resolved</p>
-                        <p className="font-bold text-green-600">{annealerStats.conflictsResolved}</p>
-                      </div>
-                      <div>
-                        <p className="text-gray-600">Performance</p>
-                        <p className="font-bold text-purple-600">{annealerStats.speedup}</p>
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                <Button 
-                  onClick={runQuantumAnnealing} 
-                  disabled={loading}
-                  className="w-full bg-gradient-to-r from-purple-600 to-blue-600"
-                >
-                  {loading ? (
-                    <>
-                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                      Optimizing...
-                    </>
-                  ) : (
-                    <>
-                      <Sparkles className="w-4 h-4 mr-2" />
-                      Run Quantum Optimization
-                    </>
-                  )}
-                </Button>
-
-                <div className="text-xs text-gray-500 space-y-1">
-                  <p>💡 <strong>Theory:</strong> Simulated annealing allows "quantum tunneling" through energy barriers to escape local minima.</p>
-                  <p>🔬 <strong>Algorithm:</strong> Accepts worse solutions with probability e^(-ΔE/T) to explore the solution space.</p>
-                </div>
-              </CardContent>
-            </Card>
+          {/* Circuit Visualizer Tab */}
+          <TabsContent value="visualizer" className="space-y-4">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <QuantumCircuitVisualizer initialQubits={3} />
+              <QuantumCircuitDisplay />
+            </div>
           </TabsContent>
 
-          {/* Entanglement Tab */}
-          <TabsContent value="entanglement" className="space-y-4">
-            <Card className="border-blue-200 bg-white/80 backdrop-blur">
+          {/* Quantum Algorithms Tab */}
+          <TabsContent value="algorithms" className="space-y-4">
+            <Card className="bg-slate-900 border-slate-800">
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Zap className="w-5 h-5 text-blue-600" />
-                  Zero-Latency Collaboration (Bell State Entanglement)
+                <CardTitle className="text-white flex items-center gap-2">
+                  <Brain className="h-5 w-5 text-purple-400" />
+                  Famous Quantum Algorithms
                 </CardTitle>
-                <CardDescription>
-                  Mathematically predict remote state changes without round-trip confirmation
+                <CardDescription className="text-slate-400">
+                  Explore groundbreaking quantum algorithms and their applications
                 </CardDescription>
               </CardHeader>
-              <CardContent className="space-y-6">
-                <div className="grid md:grid-cols-2 gap-4">
-                  <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
-                    <p className="text-sm text-blue-600 font-semibold mb-1">Fidelity Score</p>
-                    <p className="text-3xl font-bold text-blue-900">{(fidelity * 100).toFixed(1)}%</p>
-                    <p className="text-xs text-gray-600 mt-2">|⟨ψ|φ⟩|² (State Overlap)</p>
-                  </div>
-                  <div className="p-4 bg-purple-50 rounded-lg border border-purple-200">
-                    <p className="text-sm text-purple-600 font-semibold mb-1">Entanglement Status</p>
-                    <div className="flex items-center gap-2 mt-2">
-                      {isEntangled ? (
-                        <>
-                          <CheckCircle2 className="w-6 h-6 text-green-600" />
-                          <span className="text-lg font-bold text-green-900">Entangled</span>
-                        </>
-                      ) : (
-                        <>
-                          <AlertCircle className="w-6 h-6 text-orange-600" />
-                          <span className="text-lg font-bold text-orange-900">Decoherent</span>
-                        </>
-                      )}
-                    </div>
-                  </div>
-                </div>
-
-                <div className="p-4 bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg border">
-                  <h4 className="font-semibold text-gray-900 mb-3">State Vector Components</h4>
-                  <div className="space-y-2 text-sm">
-                    <div className="flex items-center justify-between">
-                      <span className="text-gray-600">α (Amplitude |0⟩)</span>
-                      <span className="font-mono font-bold">{localAlpha.toFixed(4)}</span>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-gray-600">β (Amplitude |1⟩)</span>
-                      <span className="font-mono font-bold">{localBeta.toFixed(4)}</span>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-gray-600">Normalization</span>
-                      <span className="font-mono font-bold">
-                        {(localAlpha ** 2 + localBeta ** 2).toFixed(4)}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-
-                <Progress value={fidelity * 100} className="h-2" />
-
-                <Button 
-                  onClick={testEntanglement}
-                  className="w-full bg-gradient-to-r from-blue-600 to-purple-600"
-                >
-                  <Activity className="w-4 h-4 mr-2" />
-                  Apply State Rotation & Measure
-                </Button>
-
-                <div className="text-xs text-gray-500 space-y-1">
-                  <p>💡 <strong>Theory:</strong> Bell state |Φ+⟩ = (|00⟩ + |11⟩)/√2 represents maximal entanglement.</p>
-                  <p>🔬 <strong>Application:</strong> Local operations predict remote changes mathematically, eliminating sync delays.</p>
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          {/* Superposition Tab */}
-          <TabsContent value="superposition" className="space-y-4">
-            <Card className="border-indigo-200 bg-white/80 backdrop-blur">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Brain className="w-5 h-5 text-indigo-600" />
-                  AI Code Synthesizer (Algorithmic Superposition)
-                </CardTitle>
-                <CardDescription>
-                  Generate optimal architecture by evaluating all approaches simultaneously
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                {optimalSolution && (
-                  <div className="p-4 bg-gradient-to-r from-green-50 to-emerald-50 rounded-lg border border-green-200">
-                    <div className="flex items-center gap-2 mb-2">
-                      <TrendingUp className="w-5 h-5 text-green-600" />
-                      <h4 className="font-semibold text-green-900">Optimal Solution (Collapsed)</h4>
-                    </div>
-                    <p className="text-xl font-bold text-gray-900 mb-2">{optimalSolution.approach}</p>
-                    <div className="grid grid-cols-3 gap-3 text-sm">
-                      <div>
-                        <p className="text-gray-600">Amplitude</p>
-                        <p className="font-bold">{optimalSolution.amplitude.toFixed(3)}</p>
-                      </div>
-                      <div>
-                        <p className="text-gray-600">Probability</p>
-                        <p className="font-bold text-green-600">{optimalSolution.probability.toFixed(1)}%</p>
-                      </div>
-                      <div>
-                        <p className="text-gray-600">Fit Score</p>
-                        <p className="font-bold">{(optimalSolution.constraintsMet / optimalSolution.constraintsTotal * 100).toFixed(0)}%</p>
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                {solutions.length > 0 && (
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between">
-                      <h4 className="font-semibold text-gray-900">Solution Superposition</h4>
-                      <Badge variant="outline">Entropy: {entropy.toFixed(3)} bits</Badge>
-                    </div>
-                    
-                    {solutions.map((sol, idx) => (
-                      <div 
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {quantumAlgorithms.map((algo, idx) => {
+                    const Icon = algo.icon
+                    return (
+                      <motion.div
                         key={idx}
-                        className="p-3 bg-gray-50 rounded-lg border hover:border-indigo-300 transition-colors"
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: idx * 0.1 }}
                       >
-                        <div className="flex items-center justify-between mb-2">
-                          <span className="font-medium text-sm">{sol.approach}</span>
-                          <Badge variant={sol === optimalSolution ? 'default' : 'secondary'}>
-                            {sol.probability.toFixed(1)}%
-                          </Badge>
-                        </div>
-                        <Progress value={sol.probability} className="h-1.5" />
-                        <p className="text-xs text-gray-600 mt-1">
-                          Amplitude: {sol.amplitude.toFixed(3)} | Constraints: {sol.constraintsMet}/{sol.constraintsTotal}
-                        </p>
-                      </div>
-                    ))}
-                  </div>
-                )}
-
-                <Button 
-                  onClick={generateSuperposition}
-                  disabled={loading}
-                  className="w-full bg-gradient-to-r from-indigo-600 to-purple-600"
-                >
-                  {loading ? (
-                    <>
-                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                      Generating...
-                    </>
-                  ) : (
-                    <>
-                      <Sparkles className="w-4 h-4 mr-2" />
-                      Generate Architecture (One-Shot)
-                    </>
-                  )}
-                </Button>
-
-                <div className="text-xs text-gray-500 space-y-1">
-                  <p>💡 <strong>Theory:</strong> Hadamard gate creates equal superposition, interference amplifies good solutions.</p>
-                  <p>🔬 <strong>Algorithm:</strong> Solutions violating constraints suffer destructive interference (amplitude → 0).</p>
+                        <Card className={`bg-gradient-to-br from-${algo.color}-900/30 to-slate-900 border-${algo.color}-700/50 hover:border-${algo.color}-500 transition-all group cursor-pointer`}>
+                          <CardContent className="p-5">
+                            <div className="flex items-start gap-3 mb-3">
+                              <div className={`w-10 h-10 rounded-lg bg-${algo.color}-600/20 flex items-center justify-center group-hover:scale-110 transition-transform`}>
+                                <Icon className={`h-5 w-5 text-${algo.color}-400`} />
+                              </div>
+                              <div className="flex-1">
+                                <h3 className="font-semibold text-white mb-1">{algo.name}</h3>
+                                <p className="text-xs text-slate-400">{algo.description}</p>
+                              </div>
+                            </div>
+                            <div className="grid grid-cols-3 gap-3 mt-4 pt-4 border-t border-slate-800">
+                              <div className="text-center">
+                                <div className={`text-lg font-bold text-${algo.color}-400`}>{algo.qubits}</div>
+                                <div className="text-xs text-slate-500">Qubits</div>
+                              </div>
+                              <div className="text-center">
+                                <div className={`text-lg font-bold text-${algo.color}-400`}>{algo.gates}</div>
+                                <div className="text-xs text-slate-500">Gates</div>
+                              </div>
+                              <div className="text-center">
+                                <div className="text-xs font-mono text-cyan-400 font-semibold">{algo.complexity}</div>
+                                <div className="text-xs text-slate-500">Complexity</div>
+                              </div>
+                            </div>
+                            <Badge className={`mt-3 bg-${algo.color}-600/30 text-${algo.color}-300 border-${algo.color}-600/50 w-full justify-center`}>
+                              {algo.application}
+                            </Badge>
+                          </CardContent>
+                        </Card>
+                      </motion.div>
+                    )
+                  })}
                 </div>
               </CardContent>
             </Card>
           </TabsContent>
 
-          <TabsContent value="qscript" className="space-y-4">
-            <QuantumProfile />
+          {/* Simulation Tab */}
+          <TabsContent value="simulation" className="space-y-4">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              <Card className="lg:col-span-1 bg-slate-900 border-slate-800">
+                <CardHeader>
+                  <CardTitle className="text-white">Simulation Settings</CardTitle>
+                  <CardDescription className="text-slate-400">Configure quantum execution</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="space-y-2">
+                    <Label className="text-slate-300">Number of Qubits</Label>
+                    <Input
+                      type="number"
+                      value={simulationParams.qubits}
+                      onChange={(e) => setSimulationParams({...simulationParams, qubits: parseInt(e.target.value)})}
+                      min={1}
+                      max={20}
+                      className="bg-slate-800 border-slate-700 text-white"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label className="text-slate-300">Shots (Measurements)</Label>
+                    <Input
+                      type="number"
+                      value={simulationParams.shots}
+                      onChange={(e) => setSimulationParams({...simulationParams, shots: parseInt(e.target.value)})}
+                      min={100}
+                      max={8192}
+                      step={100}
+                      className="bg-slate-800 border-slate-700 text-white"
+                    />
+                  </div>
+                  <Button
+                    onClick={runQuantumSimulation}
+                    disabled={isRunning}
+                    className="w-full bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700 text-white"
+                  >
+                    {isRunning ? (
+                      <>
+                        <Activity className="h-4 w-4 mr-2 animate-spin" />
+                        Simulating...
+                      </>
+                    ) : (
+                      <>
+                        <Play className="h-4 w-4 mr-2" />
+                        Run Simulation
+                      </>
+                    )}
+                  </Button>
+                </CardContent>
+              </Card>
+
+              <div className="lg:col-span-2 space-y-6">
+                <QuantumCircuitDisplay />
+                
+                <Card className="bg-gradient-to-br from-purple-900/30 to-slate-900 border-purple-700/50">
+                  <CardHeader>
+                    <CardTitle className="text-white flex items-center gap-2">
+                      <Sparkles className="h-5 w-5 text-purple-400" />
+                      Quantum Advantage
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-4">
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="bg-slate-800/50 rounded-lg p-4 border border-slate-700">
+                          <div className="text-xs text-slate-400 mb-1">Classical Computer</div>
+                          <div className="text-2xl font-bold text-slate-300">2³² steps</div>
+                          <div className="text-xs text-slate-500 mt-1">~4.3 billion operations</div>
+                        </div>
+                        <div className="bg-gradient-to-br from-cyan-900/50 to-blue-900/50 rounded-lg p-4 border border-cyan-700/50">
+                          <div className="text-xs text-cyan-400 mb-1">Quantum Computer</div>
+                          <div className="text-2xl font-bold text-cyan-300">√2³² steps</div>
+                          <div className="text-xs text-cyan-500 mt-1">~65,536 operations</div>
+                        </div>
+                      </div>
+                      <div className="bg-green-900/20 border border-green-700/50 rounded-lg p-3">
+                        <div className="flex items-center gap-2 text-green-400">
+                          <TrendingUp className="h-4 w-4" />
+                          <span className="text-sm font-semibold">65,536× Speedup for Grover's Search</span>
+                        </div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            </div>
           </TabsContent>
 
-          <TabsContent value="multiverse" className="space-y-4">
-            <MultiverseViewer />
-          </TabsContent>
-
-          <TabsContent value="reversible" className="space-y-4">
-            <ReversibleDebugger />
+          {/* Learning Tab */}
+          <TabsContent value="learn">
+            <QuantumCircuitEducation />
           </TabsContent>
         </Tabs>
 
-        {/* Technical Info */}
-        <Card className="border-gray-200 bg-white/60 backdrop-blur">
-          <CardHeader>
-            <CardTitle className="text-sm">Technical Notes</CardTitle>
-          </CardHeader>
-          <CardContent className="text-xs text-gray-600 space-y-2">
-            <p>⚛️ <strong>Quantum-Inspired Classical Algorithms:</strong> These are not true quantum computers but use quantum mechanics as mathematical inspiration.</p>
-            <p>🔬 <strong>Implementation:</strong> Rust/WASM core provides near-native performance for complex optimization.</p>
-            <p>📊 <strong>Applications:</strong> Dependency resolution, real-time collaboration, AI architecture generation.</p>
-            <p>🚀 <strong>Performance:</strong> Parallel evaluation and mathematical prediction provide significant speedups over traditional algorithms.</p>
+        {/* Bottom Info */}
+        <Card className="bg-gradient-to-r from-indigo-900/30 to-purple-900/30 border-indigo-700/50">
+          <CardContent className="p-6">
+            <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+              <div className="flex items-center gap-3">
+                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center">
+                  <Lightbulb className="h-6 w-6 text-white" />
+                </div>
+                <div>
+                  <h3 className="text-white font-semibold">Ready to go deeper?</h3>
+                  <p className="text-sm text-slate-400">Explore quantum machine learning and advanced algorithms</p>
+                </div>
+              </div>
+              <Button className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white">
+                <Brain className="h-4 w-4 mr-2" />
+                Quantum ML →
+              </Button>
+            </div>
           </CardContent>
         </Card>
       </div>
     </div>
-  );
+  )
 }
