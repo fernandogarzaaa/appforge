@@ -8,7 +8,7 @@ import { Switch } from '@/components/ui/switch';
 import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import { Settings, Activity, Lock, Wallet, TrendingUp, Users, Zap } from 'lucide-react';
+import { Settings, Activity, Lock, Wallet, TrendingUp, Users, Zap, RefreshCw, Copy, Download } from 'lucide-react';
 
 export default function CoachingSystemAdmin() {
   const [user, setUser] = useState(null);
@@ -19,6 +19,9 @@ export default function CoachingSystemAdmin() {
   const [isSaving, setIsSaving] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   const [activeTab, setActiveTab] = useState('overview');
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const [logFilter, setLogFilter] = useState('');
+  const [copied, setCopied] = useState(null);
 
   useEffect(() => {
     verifyAdmin();
@@ -146,6 +149,35 @@ export default function CoachingSystemAdmin() {
     }
   };
 
+  const refreshAll = async () => {
+    setIsRefreshing(true);
+    await Promise.all([loadConfig(), loadSolanaConfig(), loadMetrics(), loadLogs()]);
+    setIsRefreshing(false);
+  };
+
+  const copyToClipboard = (text, key) => {
+    navigator.clipboard.writeText(text);
+    setCopied(key);
+    setTimeout(() => setCopied(null), 2000);
+  };
+
+  const exportLogs = () => {
+    const csv = 'Action Type,User,Agent,Status,Timestamp,Error\n' +
+      logs.map(l => `"${l.action_type}","${l.user_id}","${l.agent_id || ''}","${l.success ? 'Success' : 'Failed'}","${l.timestamp}","${l.error_message || ''}"`).join('\n');
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `audit-logs-${new Date().toISOString().split('T')[0]}.csv`;
+    a.click();
+  };
+
+  const filteredLogs = logs.filter(log => 
+    log.action_type.includes(logFilter.toLowerCase()) || 
+    (log.user_id && log.user_id.includes(logFilter)) ||
+    (log.agent_id && log.agent_id.includes(logFilter))
+  );
+
   if (!isAdmin) {
     return (
       <div className="p-6 text-center">
@@ -172,7 +204,21 @@ export default function CoachingSystemAdmin() {
           <Settings className="w-6 h-6" />
           Admin Dashboard
         </h1>
-        <Badge className="bg-green-600">Active</Badge>
+        <div className="flex items-center gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={refreshAll}
+            disabled={isRefreshing}
+            className="gap-1"
+          >
+            <RefreshCw className={`w-4 h-4 ${isRefreshing ? 'animate-spin' : ''}`} />
+            Refresh
+          </Button>
+          <Badge className={config?.system_status === 'active' ? 'bg-green-600' : config?.system_status === 'maintenance' ? 'bg-yellow-600' : 'bg-red-600'}>
+            {config?.system_status || 'Active'}
+          </Badge>
+        </div>
       </div>
 
       {/* System Health Metrics */}
@@ -394,18 +440,30 @@ export default function CoachingSystemAdmin() {
               <CardContent className="space-y-4">
                 {/* Wallet Address */}
                 <div>
-                  <label className="text-sm font-semibold">Wallet Address</label>
-                  <Input
-                    value={solanaConfig.wallet_address}
-                    onChange={(e) =>
-                      setSolanaConfig({ ...solanaConfig, wallet_address: e.target.value })
-                    }
-                    placeholder="Enter your Solana wallet address"
-                    className="mt-2"
-                  />
-                  <p className="text-xs text-gray-500 mt-1">
-                    Public key where payments will be received
-                  </p>
+                 <label className="text-sm font-semibold">Wallet Address</label>
+                 <div className="flex gap-2 mt-2">
+                   <Input
+                     value={solanaConfig.wallet_address}
+                     onChange={(e) =>
+                       setSolanaConfig({ ...solanaConfig, wallet_address: e.target.value })
+                     }
+                     placeholder="Enter your Solana wallet address"
+                   />
+                   {solanaConfig.wallet_address && (
+                     <Button
+                       variant="outline"
+                       size="sm"
+                       onClick={() => copyToClipboard(solanaConfig.wallet_address, 'wallet')}
+                       className="gap-1"
+                     >
+                       <Copy className="w-4 h-4" />
+                       {copied === 'wallet' ? 'Copied!' : 'Copy'}
+                     </Button>
+                   )}
+                 </div>
+                 <p className="text-xs text-gray-500 mt-1">
+                   Public key where payments will be received
+                 </p>
                 </div>
 
                 {/* Network Selection */}
@@ -498,11 +556,32 @@ export default function CoachingSystemAdmin() {
         <TabsContent value="logs">
           <Card>
             <CardHeader>
-              <CardTitle className="text-sm">Recent Audit Logs (Last 20)</CardTitle>
+              <div className="flex items-center justify-between">
+                <CardTitle className="text-sm">Recent Audit Logs ({filteredLogs.length})</CardTitle>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={exportLogs}
+                  className="gap-1"
+                  disabled={logs.length === 0}
+                >
+                  <Download className="w-4 h-4" />
+                  Export CSV
+                </Button>
+              </div>
+              <Input
+                placeholder="Filter by action, user, or agent..."
+                value={logFilter}
+                onChange={(e) => setLogFilter(e.target.value)}
+                className="mt-4"
+              />
             </CardHeader>
             <CardContent>
               <div className="space-y-2 max-h-96 overflow-y-auto">
-                {logs.slice(0, 20).map((log) => (
+                {filteredLogs.length === 0 ? (
+                  <p className="text-xs text-gray-500 py-4 text-center">No logs match filter</p>
+                ) : (
+                filteredLogs.slice(0, 20).map((log) => (
                   <div
                     key={log.id}
                     className={`p-2 border rounded text-xs ${
@@ -521,7 +600,8 @@ export default function CoachingSystemAdmin() {
                       <p className="text-red-600">Error: {log.error_message}</p>
                     )}
                   </div>
-                ))}
+                ))
+                )}
               </div>
             </CardContent>
           </Card>
