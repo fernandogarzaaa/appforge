@@ -88,7 +88,7 @@ export function QuantumCircuitEducation() {
     {
       title: 'Interference',
       description: 'Quantum amplitudes add and cancel to compute results',
-      icon: Activity,
+      icon: Lightbulb,
       color: 'blue',
       detail: 'Constructive and destructive interference amplifies correct answers while canceling wrong ones in quantum algorithms.'
     },
