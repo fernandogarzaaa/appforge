@@ -269,34 +269,32 @@ export default function Dashboard() {
       className="space-y-6"
     >
       <div>
-        <h2 className="text-2xl font-bold text-gray-900">Capability Discovery</h2>
-        <p className="text-sm text-gray-600">Explore everything AppForge can do — from AI to observability</p>
+        <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Explore Capabilities</h2>
+        <p className="text-sm text-gray-600 dark:text-gray-300">AI, Workflows, Security, and more</p>
       </div>
-      <Card className="border-2 shadow-xl">
-        <CardContent className="p-6">
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-            {capabilities.map((cap, idx) => (
-              <Link key={cap.label} to={cap.href}>
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.2, delay: 0.3 + idx * 0.05 }}
-                  className="group"
-                >
-                  <div className="flex flex-col items-center gap-3 p-4 rounded-xl hover:bg-gray-50 transition-all cursor-pointer">
-                    <div className={`w-12 h-12 rounded-xl ${cap.color} flex items-center justify-center group-hover:scale-110 transition-transform`}>
-                      <cap.icon className="w-6 h-6" />
-                    </div>
-                    <span className="text-sm font-medium text-gray-700 text-center group-hover:text-gray-900">
-                      {cap.label}
-                    </span>
+      <div className="backdrop-blur-md bg-white/40 dark:bg-slate-900/40 border border-white/30 dark:border-white/10 rounded-2xl p-6 shadow-xl shadow-blue-500/5">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+          {capabilities.map((cap, idx) => (
+            <Link key={cap.label} to={cap.href}>
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.2, delay: 0.3 + idx * 0.05 }}
+                className="group"
+              >
+                <div className="flex flex-col items-center gap-3 p-4 rounded-xl hover:bg-white/20 dark:hover:bg-slate-800/30 transition-all cursor-pointer backdrop-blur-sm">
+                  <div className={`w-12 h-12 rounded-xl ${cap.color} flex items-center justify-center group-hover:scale-110 transition-transform`}>
+                    <cap.icon className="w-6 h-6" />
                   </div>
-                </motion.div>
-              </Link>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
+                  <span className="text-sm font-medium text-gray-700 dark:text-gray-300 text-center group-hover:text-gray-900 dark:group-hover:text-white transition-colors">
+                    {cap.label}
+                  </span>
+                </div>
+              </motion.div>
+            </Link>
+          ))}
+        </div>
+      </div>
     </motion.div>
   );
 
