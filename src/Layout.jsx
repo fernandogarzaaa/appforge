@@ -64,6 +64,7 @@ export default function Layout({ children, currentPageName: _currentPageName, on
   const [user, setUser] = useState(null);
   const [currentProject, setCurrentProject] = useState(null);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const { isDark, toggleTheme } = useThemeManager();
   const { selectProject, clearProject } = useNavigation();
 
   useEffect(() => {
