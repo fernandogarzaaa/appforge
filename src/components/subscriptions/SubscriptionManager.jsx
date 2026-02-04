@@ -5,6 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import SubscriptionPlansCard from './SubscriptionPlansCard';
+import SolanaPaymentModal from '@/components/payments/SolanaPaymentModal';
 import { Loader2, Calendar, CreditCard } from 'lucide-react';
 
 export default function SubscriptionManager() {
