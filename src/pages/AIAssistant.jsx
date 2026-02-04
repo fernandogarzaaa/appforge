@@ -40,6 +40,9 @@ import ProactiveBugDetection from '@/components/ai/ProactiveBugDetection';
 import CodeReviewPanel from '@/components/ai/CodeReviewPanel';
 import ResourceMonitoringPanel from '@/components/ai/ResourceMonitoringPanel';
 import ProjectWizard from '@/components/ProjectWizard';
+import AIComponentGenerator from '@/components/ai/AIComponentGenerator';
+import AITestingDebugger from '@/components/ai/AITestingDebugger';
+import AIUXSuggestions from '@/components/ai/AIUXSuggestions';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import ReactMarkdown from 'react-markdown';
@@ -51,9 +54,10 @@ const quickActions = [
   { label: 'Generate Project', icon: Rocket, prompt: 'WIZARD_MODE', isWizard: true },
   { label: 'Create Entity', icon: Database, prompt: 'Create a new entity called ' },
   { label: 'Build Page', icon: FileCode, prompt: 'Build a page that displays ' },
-  { label: 'Generate Component', icon: Code, prompt: 'Generate a React component for ' },
+  { label: 'Generate Component', icon: Code, prompt: 'component', panel: 'component_generator' },
   { label: 'Find API', icon: Globe, prompt: 'Find a free API for ' },
-  { label: 'Predict Data', icon: Brain, prompt: 'Analyze and predict trends for ' },
+  { label: 'Test & Debug', icon: Code, panel: 'testing_debugger' },
+  { label: 'UX Suggestions', icon: Brain, panel: 'ux_suggestions' },
 ];
 
 export default function AIAssistant() {
@@ -868,7 +872,15 @@ Provide helpful, actionable responses with code examples when relevant. Be conci
               {quickActions.map((action) => (
                 <button
                   key={action.label}
-                  onClick={() => action.isWizard ? setShowProjectWizard(true) : setInput(action.prompt)}
+                  onClick={() => {
+                    if (action.isWizard) {
+                      setShowProjectWizard(true);
+                    } else if (action.panel) {
+                      setActivePanel(action.panel);
+                    } else {
+                      setInput(action.prompt);
+                    }
+                  }}
                   aria-label={action.label}
                   className={cn(
                     "p-6 bg-white dark:bg-gray-800 rounded-xl border-2 transition-all group",
@@ -950,6 +962,9 @@ Provide helpful, actionable responses with code examples when relevant. Be conci
               {activePanel === 'diagnostics' && 'System Diagnostics'}
               {activePanel === 'snippets' && 'Code Snippet Library'}
               {activePanel === 'deployment' && 'Deployment Readiness'}
+              {activePanel === 'component_generator' && 'Component Generator'}
+              {activePanel === 'testing_debugger' && 'Testing & Debugging'}
+              {activePanel === 'ux_suggestions' && 'UX Suggestions'}
             </h2>
             <Button variant="ghost" size="sm" onClick={() => setActivePanel(null)}>
               <ArrowLeft className="w-4 h-4 mr-2" />
@@ -1092,6 +1107,30 @@ Provide helpful, actionable responses with code examples when relevant. Be conci
           <div className="flex-1 p-6 overflow-auto">
             <div className="max-w-4xl mx-auto">
               <DeploymentChecklist />
+            </div>
+          </div>
+        )}
+
+        {activePanel === 'component_generator' && (
+          <div className="flex-1 p-6 overflow-auto">
+            <div className="max-w-4xl mx-auto">
+              <AIComponentGenerator projectId={projectId} />
+            </div>
+          </div>
+        )}
+
+        {activePanel === 'testing_debugger' && (
+          <div className="flex-1 p-6 overflow-auto">
+            <div className="max-w-4xl mx-auto">
+              <AITestingDebugger projectId={projectId} />
+            </div>
+          </div>
+        )}
+
+        {activePanel === 'ux_suggestions' && (
+          <div className="flex-1 p-6 overflow-auto">
+            <div className="max-w-4xl mx-auto">
+              <AIUXSuggestions projectId={projectId} projectDescription={selectedProject?.description || ''} />
             </div>
           </div>
         )}
