@@ -15,6 +15,7 @@ export default function SubscriptionManager() {
   const [showPlans, setShowPlans] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState(null);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
 
   useEffect(() => {
     loadSubscription();
