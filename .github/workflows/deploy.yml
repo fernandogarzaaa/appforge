@@ -35,7 +35,7 @@ jobs:
         run: cargo install wasm-pack
       
       - name: Install dependencies
-        run: npm ci
+        run: npm install
 
       - name: Build quantum WASM
         run: npm run build:quantum
@@ -68,7 +68,7 @@ jobs:
         run: cargo install wasm-pack
       
       - name: Install dependencies
-        run: npm ci
+        run: npm install
 
       - name: Build quantum WASM
         run: npm run build:quantum
