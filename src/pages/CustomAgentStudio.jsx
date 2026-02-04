@@ -6,13 +6,16 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import CustomAgentBuilder from '@/components/ai/CustomAgentBuilder';
 import CustomAgentTrainer from '@/components/ai/CustomAgentTrainer';
-import { Sparkles, Plus } from 'lucide-react';
+import AgentVersionHistory from '@/components/versioning/AgentVersionHistory';
+import { Sparkles, Plus, Save } from 'lucide-react';
 
 export default function CustomAgentStudio() {
   const [user, setUser] = useState(null);
   const [agents, setAgents] = useState([]);
   const [selectedAgent, setSelectedAgent] = useState(null);
   const [showBuilder, setShowBuilder] = useState(false);
+  const [saveMessage, setSaveMessage] = useState('');
+  const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
     loadUser();
@@ -54,6 +57,29 @@ export default function CustomAgentStudio() {
       loadAgents();
     } catch (error) {
       console.error('Failed to update agent:', error);
+    }
+  };
+
+  const saveAgentVersion = async (agentId) => {
+    if (!saveMessage.trim()) {
+      alert('Enter a change description');
+      return;
+    }
+
+    setIsSaving(true);
+    try {
+      await base44.functions.invoke('saveAgentVersion', {
+        agentId,
+        changeMessage: saveMessage
+      });
+      setSaveMessage('');
+      loadAgents();
+      alert('Version saved successfully!');
+    } catch (error) {
+      console.error('Save error:', error);
+      alert('Failed to save version');
+    } finally {
+      setIsSaving(false);
     }
   };
 
@@ -170,12 +196,12 @@ export default function CustomAgentStudio() {
           </TabsContent>
         </Tabs>
 
-        {/* Training Interface */}
+        {/* Training & Versioning Interface */}
         {selectedAgent && (
-          <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-            <Card className="w-full max-w-2xl">
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50 overflow-y-auto">
+            <Card className="w-full max-w-2xl my-4">
               <CardHeader className="flex flex-row items-center justify-between">
-                <CardTitle>Train Custom Agent</CardTitle>
+                <CardTitle>Agent Management</CardTitle>
                 <Button
                   variant="ghost"
                   size="sm"
@@ -185,12 +211,50 @@ export default function CustomAgentStudio() {
                 </Button>
               </CardHeader>
               <CardContent>
-                <CustomAgentTrainer
-                  agentId={selectedAgent}
-                  onTrainingComplete={() => {
-                    loadAgents();
-                  }}
-                />
+                <Tabs defaultValue="train" className="space-y-4">
+                  <TabsList className="grid w-full grid-cols-3">
+                    <TabsTrigger value="train">Train</TabsTrigger>
+                    <TabsTrigger value="versions">Versions</TabsTrigger>
+                    <TabsTrigger value="save">Save Version</TabsTrigger>
+                  </TabsList>
+
+                  <TabsContent value="train">
+                    <CustomAgentTrainer
+                      agentId={selectedAgent}
+                      onTrainingComplete={() => {
+                        loadAgents();
+                      }}
+                    />
+                  </TabsContent>
+
+                  <TabsContent value="versions">
+                    <AgentVersionHistory
+                      agentId={selectedAgent}
+                      onRevert={() => loadAgents()}
+                      onDeploy={() => loadAgents()}
+                    />
+                  </TabsContent>
+
+                  <TabsContent value="save" className="space-y-3">
+                    <div>
+                      <label className="text-xs font-semibold block mb-1">What changed?</label>
+                      <textarea
+                        placeholder="Describe the changes made to this agent..."
+                        value={saveMessage}
+                        onChange={(e) => setSaveMessage(e.target.value)}
+                        className="w-full px-2 py-1.5 text-xs border rounded-lg h-20"
+                      />
+                    </div>
+                    <Button
+                      onClick={() => saveAgentVersion(selectedAgent)}
+                      disabled={isSaving}
+                      className="w-full bg-gradient-to-r from-green-600 to-emerald-600"
+                    >
+                      <Save className="w-3 h-3 mr-1" />
+                      {isSaving ? 'Saving...' : 'Save as Version'}
+                    </Button>
+                  </TabsContent>
+                </Tabs>
               </CardContent>
             </Card>
           </div>
