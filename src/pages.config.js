@@ -165,6 +165,7 @@ import WebhookMonitor from './pages/WebhookMonitor';
 import WorkflowBuilder from './pages/WorkflowBuilder';
 import EnterpriseValuation from './pages/EnterpriseValuation';
 import CustomAgentStudio from './pages/CustomAgentStudio';
+import AdminCoaching from './pages/AdminCoaching';
 import __Layout from './Layout.jsx';
 
 
@@ -287,6 +288,7 @@ export const PAGES = {
     "WorkflowBuilder": WorkflowBuilder,
     "EnterpriseValuation": EnterpriseValuation,
     "CustomAgentStudio": CustomAgentStudio,
+    "AdminCoaching": AdminCoaching,
 }
 
 export const pagesConfig = {

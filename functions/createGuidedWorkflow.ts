@@ -11,6 +11,14 @@ Deno.serve(async (req) => {
 
     const { agentId, sourceType, sourceReferenceId } = await req.json();
 
+    // Validate input
+    if (!agentId || typeof agentId !== 'string' || agentId.length < 5) {
+      return Response.json({ error: 'Invalid agentId' }, { status: 400 });
+    }
+    if (!['successful_collaboration', 'high_performing_agent'].includes(sourceType)) {
+      return Response.json({ error: 'Invalid sourceType' }, { status: 400 });
+    }
+
     // Fetch agent
     const agents = await base44.asServiceRole.entities.CustomAgent.filter({ id: agentId });
     if (agents.length === 0) {
@@ -126,6 +134,16 @@ Deno.serve(async (req) => {
       ...workflow
     });
 
+    // Log action
+    await base44.asServiceRole.entities.CoachingAuditLog.create({
+      user_id: user.email,
+      action_type: 'start_workflow',
+      agent_id: agentId,
+      details: { source_type: sourceType, workflow_id: created.id },
+      success: true,
+      timestamp: new Date().toISOString()
+    });
+
     return Response.json({
       success: true,
       workflowId: created.id,
@@ -137,6 +155,14 @@ Deno.serve(async (req) => {
 
   } catch (error) {
     console.error('Workflow creation error:', error);
+    await base44.asServiceRole.entities.CoachingAuditLog.create({
+      user_id: user?.email || 'unknown',
+      action_type: 'start_workflow',
+      agent_id: agentId,
+      success: false,
+      error_message: error.message,
+      timestamp: new Date().toISOString()
+    }).catch(() => {});
     return Response.json({ error: error.message }, { status: 500 });
   }
 });

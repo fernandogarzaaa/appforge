@@ -1,5 +1,24 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.6';
 
+// Rate limit map (simple in-memory for Deno Deploy)
+const rateLimitMap = new Map();
+
+async function checkRateLimit(userId) {
+  const now = Date.now();
+  const key = `${userId}:coaching`;
+  const record = rateLimitMap.get(key) || { count: 0, resetTime: now + 3600000 };
+  
+  if (now > record.resetTime) {
+    record.count = 0;
+    record.resetTime = now + 3600000;
+  }
+  
+  if (record.count >= 10) return false;
+  record.count++;
+  rateLimitMap.set(key, record);
+  return true;
+}
+
 Deno.serve(async (req) => {
   try {
     const base44 = createClientFromRequest(req);
@@ -9,7 +28,17 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
+    // Check rate limit
+    if (!await checkRateLimit(user.email)) {
+      return Response.json({ error: 'Rate limit exceeded' }, { status: 429 });
+    }
+
     const { agentId } = await req.json();
+    
+    // Validate input
+    if (!agentId || typeof agentId !== 'string' || agentId.length < 5) {
+      return Response.json({ error: 'Invalid agentId' }, { status: 400 });
+    }
 
     // Fetch agent
     const agents = await base44.asServiceRole.entities.CustomAgent.filter({ id: agentId });
@@ -130,6 +159,16 @@ Deno.serve(async (req) => {
       storedRecs.push(stored);
     }
 
+    // Log action
+    await base44.asServiceRole.entities.CoachingAuditLog.create({
+      user_id: user.email,
+      action_type: 'analyze_agent',
+      agent_id: agentId,
+      details: { recommendation_count: storedRecs.length },
+      success: true,
+      timestamp: new Date().toISOString()
+    });
+
     return Response.json({
       success: true,
       agentId,
@@ -144,6 +183,14 @@ Deno.serve(async (req) => {
 
   } catch (error) {
     console.error('Coaching analysis error:', error);
+    await base44.asServiceRole.entities.CoachingAuditLog.create({
+      user_id: user?.email || 'unknown',
+      action_type: 'analyze_agent',
+      agent_id: agentId,
+      success: false,
+      error_message: error.message,
+      timestamp: new Date().toISOString()
+    }).catch(() => {});
     return Response.json({ error: error.message }, { status: 500 });
   }
 });
