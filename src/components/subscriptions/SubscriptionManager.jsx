@@ -153,32 +153,25 @@ export default function SubscriptionManager() {
           <DialogHeader>
             <DialogTitle>Select Your Plan</DialogTitle>
           </DialogHeader>
-          <SubscriptionPlansCard onSelectPlan={handleSelectPlan} />
-
-          {selectedPlan && (
-            <div className="mt-6 p-4 bg-purple-50 rounded border border-purple-200">
-              <p className="text-sm text-gray-700 mb-3">
-                Upgrade to <span className="font-bold">{selectedPlan.tier}</span> for{' '}
-                <span className="font-bold text-purple-600">{selectedPlan.price_per_month_sol} SOL/month</span>
-              </p>
-              <Button
-                onClick={handlePayment}
-                disabled={isProcessing}
-                className="w-full bg-gradient-to-r from-purple-600 to-pink-600"
-              >
-                {isProcessing ? (
-                  <>
-                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                    Processing...
-                  </>
-                ) : (
-                  'Pay with Phantom'
-                )}
-              </Button>
-            </div>
-          )}
+          <SubscriptionPlansCard onSelectPlan={handleSelectPlanAndPay} />
         </DialogContent>
       </Dialog>
+
+      {/* Payment Modal */}
+      {selectedPlan && (
+        <SolanaPaymentModal
+          isOpen={showPaymentModal}
+          onClose={() => {
+            setShowPaymentModal(false);
+            setSelectedPlan(null);
+          }}
+          paymentType="subscription_upgrade"
+          amount={selectedPlan.price_per_month_sol}
+          referenceId={selectedPlan.id}
+          onPaymentSuccess={handlePaymentSuccess}
+          itemName={`${selectedPlan.name} Plan`}
+        />
+      )}
     </div>
   );
 }
