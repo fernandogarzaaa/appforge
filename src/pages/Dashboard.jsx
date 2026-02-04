@@ -97,7 +97,7 @@ export default function Dashboard() {
     { icon: Brain, label: 'AI/ML', href: createPageUrl('MLIntegration'), color: 'text-pink-600 bg-pink-50' },
     { icon: Globe, label: 'DeFi Hub', href: createPageUrl('DeFiHub'), color: 'text-green-600 bg-green-50' },
     { icon: ShieldCheck, label: 'Security', href: createPageUrl('Security'), color: 'text-red-600 bg-red-50' },
-    { icon: Activity, label: 'Observability', href: createPageUrl('Observability'), color: 'text-orange-600 bg-orange-50' },
+    { icon: Code, label: 'Observability', href: createPageUrl('Observability'), color: 'text-orange-600 bg-orange-50' },
   ];
 
   const onboardingSteps = [
