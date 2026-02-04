@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import init, { MultiverseEngine } from '@/quantum-core/pkg/quantum_core';
+import init, { MultiverseEngine } from '../quantum-core/pkg/quantum_core';
 
 export const useQuantumMultiverse = () => {
   const engineRef = useRef(null);

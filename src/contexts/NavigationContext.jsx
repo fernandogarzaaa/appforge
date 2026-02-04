@@ -1,7 +1,17 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 
-const NavigationContext = createContext();
+const NavigationContext = createContext({
+  currentProject: null,
+  selectProject: () => {},
+  clearProject: () => {},
+  breadcrumbs: [],
+  isSearchOpen: false,
+  searchQuery: '',
+  setSearchQuery: (query) => {},
+  openSearch: () => {},
+  closeSearch: () => {},
+});
 
 /**
  * Navigation Context - Manages navigation state, breadcrumbs, and project context

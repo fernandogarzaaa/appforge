@@ -50,7 +50,7 @@ export const initReversibleComputing = async () => {
 
   try {
     // @ts-ignore - WASM module will be available after build
-    const wasm = await import('@/quantum-core/pkg/quantum_core');
+    const wasm = await import('../quantum-core/pkg/quantum_core');
     wasmModule = wasm;
     return wasm;
   } catch (error) {

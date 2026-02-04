@@ -30,7 +30,7 @@ export function ReversibleDebugger() {
     currentState,
     snapshots,
     currentIndex,
-    recordCurrentSnapshot,
+    recordCurrentSnapshot: _recordCurrentSnapshot,
     jumpToSnapshot,
     clearAllSnapshots,
     playbackState,
@@ -193,7 +193,7 @@ export function ReversibleDebugger() {
           </Card>
         </ResizablePanel>
 
-        <ResizableHandle withHandle />
+        <ResizableHandle withHandle className="" />
 
         {/* State viewer panel */}
         <ResizablePanel defaultSize={70}>

@@ -1,4 +1,4 @@
-import init, { QuantumState } from '@/quantum-core/pkg/quantum_core';
+import init, { QuantumState } from '../../quantum-core/pkg/quantum_core';
 
 export type QuantumModelResponse = {
   text: string;

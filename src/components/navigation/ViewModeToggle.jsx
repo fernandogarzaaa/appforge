@@ -57,6 +57,7 @@ export function ViewModeToggle() {
             </Button>
           </motion.div>
         </TooltipTrigger>
+        {/* @ts-ignore */}
         <TooltipContent side="right" className="max-w-xs dark:bg-slate-900 dark:border-slate-800 dark:text-white">
           <p className="font-semibold mb-1">
             {isBeginnerMode ? '🎯 Switch to Advanced Mode' : '🧘 Switch to Basic View'}

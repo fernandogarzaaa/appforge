@@ -1,4 +1,4 @@
-import init, { QuantumVar } from '@/quantum-core/pkg/quantum_core';
+import init, { QuantumVar } from '../quantum-core/pkg/quantum_core';
 
 let isReady = false;
 let initPromise: Promise<void> | null = null;

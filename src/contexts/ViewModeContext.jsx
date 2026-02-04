@@ -1,6 +1,15 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 
-const ViewModeContext = createContext();
+const ViewModeContext = createContext({
+  viewMode: 'beginner',
+  isBeginnerMode: true,
+  isAdvancedMode: false,
+  toggleViewMode: () => {},
+  setMode: () => {},
+  unlockedFeatures: [],
+  unlockFeature: () => {},
+  isFeatureUnlocked: () => false,
+});
 
 /**
  * View Mode Provider - Manages beginner/advanced mode switching
