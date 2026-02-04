@@ -1,5 +1,6 @@
 import { useState, useCallback, useRef } from 'react';
-import { createApi } from '@reduxjs/toolkit/query/react';
+// Redux RTK Query - optional integration
+// import { createApi } from '@reduxjs/toolkit/query/react';
 import fetch from 'node-fetch';
 
 /**

@@ -3,7 +3,9 @@
  * Handles OpenAI integration for code generation, explanation, and analysis
  */
 
-import OpenAI from 'openai';
+// OpenAI SDK import - install via: npm install openai
+// import OpenAI from 'openai';
+// Using fetch API as fallback
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,

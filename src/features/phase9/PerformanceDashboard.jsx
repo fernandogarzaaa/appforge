@@ -24,10 +24,10 @@ export const PerformanceDashboard = () => {
       if (performance.memory) {
         setMetrics(prev => ({
           ...prev,
-          bundleSize: (performance.memory.totalJSHeapSize / 1024 / 1024).toFixed(2),
-          memoryUsage: ((performance.memory.usedJSHeapSize / performance.memory.jsHeapSizeLimit) * 100).toFixed(2),
-          loadTime: splitStats.averageLoadTime.toFixed(2),
-          cpuUsage: (Math.random() * 30 + 20).toFixed(2), // Mock CPU
+          bundleSize: Number((performance.memory.totalJSHeapSize / 1024 / 1024).toFixed(2)),
+          memoryUsage: Number(((performance.memory.usedJSHeapSize / performance.memory.jsHeapSizeLimit) * 100).toFixed(2)),
+          loadTime: Number(splitStats.averageLoadTime.toFixed(2)),
+          cpuUsage: Number((Math.random() * 30 + 20).toFixed(2)), // Mock CPU
         }));
       }
     };

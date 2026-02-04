@@ -28,7 +28,7 @@ export const useMarketplace = () => {
       const params = new URLSearchParams();
       if (filterOptions.category) params.append('category', filterOptions.category);
       if (filterOptions.language) params.append('language', filterOptions.language);
-      if (filterOptions.minRating) params.append('minRating', filterOptions.minRating);
+      if (filterOptions.minRating) params.append('minRating', String(filterOptions.minRating));
       params.append('sort', filterOptions.sort);
 
       const response = await axios.get(`/api/marketplace/templates?${params}`, {

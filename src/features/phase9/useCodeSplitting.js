@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import React from 'react';
 
 /**
  * Hook for managing code splitting and dynamic imports

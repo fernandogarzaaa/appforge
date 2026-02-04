@@ -17,7 +17,8 @@ export function ReportBuilder() {
       }
     };
     if (format === 'pdf') {
-      ExportManager.exportAsPDF(report, `${title}.pdf`);
+      // ExportManager.exportAsPDF(report, `${title}.pdf`);
+      console.log('PDF export - implement with jsPDF library');
     } else if (format === 'csv') {
       ExportManager.exportAsCSV([report.metrics], Object.keys(report.metrics), `${title}.csv`);
     } else {

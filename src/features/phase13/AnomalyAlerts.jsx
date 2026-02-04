@@ -24,7 +24,7 @@ export function AnomalyAlerts() {
         </div>
         <button
           type="button"
-          onClick={clearAlerts}
+          onClick={() => clearAlerts()}
           className="rounded-md border border-slate-200 px-3 py-1 text-xs text-slate-600 hover:bg-slate-50 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800"
         >
           Clear feed
