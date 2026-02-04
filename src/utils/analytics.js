@@ -128,7 +128,26 @@ export const flushAnalytics = async () => {
   }
 
   try {
-    const response = await fetch(analyticsConfig.endpoint, {
+    // Only attempt to send in browser environment
+    if (typeof window === 'undefined' || typeof fetch === 'undefined') {
+      // Server-side or test environment - skip network call
+      console.debug('Analytics flush skipped in non-browser environment');
+      return;
+    }
+
+    // Build absolute URL if endpoint is relative
+    let url = analyticsConfig.endpoint;
+    if (url.startsWith('/')) {
+      if (typeof window !== 'undefined' && window.location) {
+        url = `${window.location.origin}${url}`;
+      } else {
+        // Can't construct absolute URL without window
+        console.debug('Cannot determine absolute URL for analytics endpoint');
+        return;
+      }
+    }
+
+    const response = await fetch(url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
