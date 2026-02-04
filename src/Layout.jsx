@@ -8,11 +8,11 @@ import { useNavigation } from '@/contexts/NavigationContext';
 import { createPageUrl } from '@/utils';
 import GlobalTopNav from '@/components/navigation/GlobalTopNav';
 import ContextualNav from '@/components/navigation/ContextualNav';
-import HelpSidebar from '@/components/help/HelpSidebar';
 import MobileDrawerSidebar from '@/components/sidebar/MobileDrawerSidebar';
 
-// Lazy load the sidebar component for code splitting
+// Lazy load heavy components for better code splitting
 const ConsolidatedAISidebar = lazy(() => import('@/components/sidebar/ConsolidatedAISidebar'));
+const HelpSidebar = lazy(() => import('@/components/help/HelpSidebar'));
 
 // Theme management hook
 function useThemeManager() {
@@ -135,6 +135,11 @@ export default function Layout({ children, currentPageName: _currentPageName, on
         </Suspense>
       </div>
 
+      {/* Hidden until needed */}
+      <Suspense fallback={null}>
+        <HelpSidebar />
+      </Suspense>
+
       <div className="flex-1 flex flex-col overflow-hidden">
         <GlobalTopNav 
           user={user} 
@@ -159,7 +164,6 @@ export default function Layout({ children, currentPageName: _currentPageName, on
           {children}
         </main>
       </div>
-      <HelpSidebar />
     </div>
   );
 }
