@@ -383,20 +383,20 @@ export default function AdminDashboard() {
                 </CardHeader>
                 <CardContent>
                   <div className="grid md:grid-cols-3 gap-4">
-                    <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
-                      <h3 className="font-semibold text-blue-900 mb-2">Total Records</h3>
-                      <p className="text-3xl font-bold text-blue-600">1,247,583</p>
-                      <p className="text-xs text-blue-600 mt-2">Across all tables</p>
+                    <div className="p-4 bg-blue-50 dark:bg-blue-950/30 rounded-lg border border-blue-200 dark:border-blue-900/50">
+                      <h3 className="font-semibold text-blue-900 dark:text-blue-200 mb-2">Total Records</h3>
+                      <p className="text-3xl font-bold text-blue-600 dark:text-blue-400">1,247,583</p>
+                      <p className="text-xs text-blue-600 dark:text-blue-400 mt-2">Across all tables</p>
                     </div>
-                    <div className="p-4 bg-green-50 rounded-lg border border-green-200">
-                      <h3 className="font-semibold text-green-900 mb-2">Storage Used</h3>
-                      <p className="text-3xl font-bold text-green-600">847 GB</p>
-                      <p className="text-xs text-green-600 mt-2">72% of quota</p>
+                    <div className="p-4 bg-green-50 dark:bg-green-950/30 rounded-lg border border-green-200 dark:border-green-900/50">
+                      <h3 className="font-semibold text-green-900 dark:text-green-200 mb-2">Storage Used</h3>
+                      <p className="text-3xl font-bold text-green-600 dark:text-green-400">847 GB</p>
+                      <p className="text-xs text-green-600 dark:text-green-400 mt-2">72% of quota</p>
                     </div>
-                    <div className="p-4 bg-purple-50 rounded-lg border border-purple-200">
-                      <h3 className="font-semibold text-purple-900 mb-2">Active Connections</h3>
-                      <p className="text-3xl font-bold text-purple-600">23</p>
-                      <p className="text-xs text-purple-600 mt-2">Max: 100</p>
+                    <div className="p-4 bg-purple-50 dark:bg-purple-950/30 rounded-lg border border-purple-200 dark:border-purple-900/50">
+                      <h3 className="font-semibold text-purple-900 dark:text-purple-200 mb-2">Active Connections</h3>
+                      <p className="text-3xl font-bold text-purple-600 dark:text-purple-400">23</p>
+                      <p className="text-xs text-purple-600 dark:text-purple-400 mt-2">Max: 100</p>
                     </div>
                   </div>
 
