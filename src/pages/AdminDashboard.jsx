@@ -226,24 +226,24 @@ export default function AdminDashboard() {
                   {recentActivity.map((activity) => (
                     <div 
                       key={activity.id} 
-                      className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+                      className="flex items-center justify-between p-3 bg-gray-50 dark:bg-slate-800/50 dark:border dark:border-slate-700 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700/50 transition-colors"
                     >
                       <div className="flex items-center gap-3">
                         <div className={`p-2 rounded-lg ${getActivityColor(activity.status)}`}>
                           {getActivityIcon(activity.type)}
                         </div>
                         <div>
-                          <p className="font-medium text-sm text-gray-900">
+                          <p className="font-medium text-sm text-gray-900 dark:text-white">
                             {activity.type.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')}
                           </p>
-                          <p className="text-xs text-gray-600">{activity.user}</p>
+                          <p className="text-xs text-gray-600 dark:text-gray-400">{activity.user}</p>
                         </div>
                       </div>
                       <div className="text-right">
                         <Badge variant={activity.status === 'error' ? 'destructive' : 'secondary'} className="text-xs">
                           {activity.status}
                         </Badge>
-                        <p className="text-xs text-gray-500 mt-1">
+                        <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                           {new Date(activity.timestamp).toLocaleTimeString()}
                         </p>
                       </div>
