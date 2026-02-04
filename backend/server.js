@@ -28,6 +28,8 @@ import subscriptionRoutes from './routes/subscriptions.js';
 import webhookRoutes from './routes/webhooks.js';
 import aiRoutes from './routes/ai.js';
 import analyticsRoutes from './routes/analytics.js';
+import monitoringRoutes from './routes/monitoring.js';
+import securityRoutes from './routes/security.js';
 
 // Load environment variables
 dotenv.config();
@@ -128,7 +130,9 @@ app.get('/api', (req, res) => {
       subscriptions: '/api/v1/subscriptions',
       webhooks: '/api/v1/webhooks',
       ai: '/api/v1/ai',
-      analytics: '/api/v1/analytics'
+      analytics: '/api/v1/analytics',
+      monitoring: '/api/v1/monitoring',
+      security: '/api/v1/security'
     },
     websocket: {
       url: `ws://localhost:${process.env.WEBSOCKET_PORT || 5001}`,
@@ -150,6 +154,8 @@ app.use(`/api/${apiVersion}/subscriptions`, subscriptionRoutes);
 app.use(`/api/${apiVersion}/webhooks`, webhookRoutes);
 app.use(`/api/${apiVersion}/ai`, aiRoutes);
 app.use(`/api/${apiVersion}/analytics`, analyticsRoutes);
+app.use(`/api/${apiVersion}/monitoring`, monitoringRoutes);
+app.use(`/api/${apiVersion}/security`, securityRoutes);
 
 // Setup WebSocket handlers
 setupWebSocket(io);

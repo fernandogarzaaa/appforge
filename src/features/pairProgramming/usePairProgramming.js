@@ -1,8 +1,9 @@
 import { useState, useCallback, useEffect, useRef } from 'react';
+import { getWebSocketManager } from '@/lib/WebSocketManager';
 
 /**
- * Pair Programming Hook
- * Real-time collaborative code editing with cursor tracking
+ * Pair Programming Hook - Real-time Code Collaboration
+ * Enables cursor sync, code editing, and session recording
  */
 export function usePairProgramming() {
   const [sessions, setSessions] = useState(() => {
@@ -16,7 +17,15 @@ export function usePairProgramming() {
   const [sharedCode, setSharedCode] = useState('');
   const [sessionStatus, setSessionStatus] = useState('idle'); // idle, connecting, active, ended
   const [messages, setMessages] = useState([]);
+  const [isRecording, setIsRecording] = useState(false);
+  const [error, setError] = useState(null);
+  
   const wsRef = useRef(null);
+  const recordingRef = useRef(null);
+
+  useEffect(() => {
+    wsRef.current = getWebSocketManager();
+  }, []);
 
   useEffect(() => {
     localStorage.setItem('appforge_pair_sessions', JSON.stringify(sessions));

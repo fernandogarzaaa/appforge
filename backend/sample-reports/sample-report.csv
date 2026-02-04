@@ -1,0 +1,7 @@
+section,key,value
+summary,range,"30d"
+summary,generatedBy,"sample-user"
+metrics,usage,"{\"totalRequests\":120340,\"errorRate\":0.0123,\"avgLatencyMs\":185.4}"
+metrics,quality,"{\"direction\":\"up\",\"delta\":12.5}"
+metrics,features,"{\"activeUsers\":320,\"topFeatures\":[{\"featureKey\":\"deploy\",\"usageCount\":4100,\"uniqueUsers\":230,\"adoptionRate\":0.72}]}"
+predictions,usage,"{\"next7Days\":[1200,1300,1280,1400,1500,1600,1700]}"
