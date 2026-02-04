@@ -414,7 +414,7 @@ print(qc)`}
                 </pre>
               </div>
 
-              <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-700/50 rounded-lg p-3">
+              <div className="bg-blue-500/20 dark:bg-blue-900/30 backdrop-blur-sm border border-blue-300/50 dark:border-blue-700/50 rounded-lg p-3">
                 <p className="text-sm text-blue-900 dark:text-blue-100">
                   💡 <strong>Tip:</strong> Use the Quantum Circuit Designer above to visualize these concepts in real-time!
                 </p>
