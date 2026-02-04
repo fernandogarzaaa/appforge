@@ -50,6 +50,7 @@ const QuantumQueryAnalyzer = React.lazy(() => import('@/components/ai/QuantumQue
 const ProactiveQuantumSuggestions = React.lazy(() => import('@/components/ai/ProactiveQuantumSuggestions'));
 const QuantumReportGenerator = React.lazy(() => import('@/components/ai/QuantumReportGenerator'));
 const QuantumLearningEngine = React.lazy(() => import('@/components/ai/QuantumLearningEngine'));
+const AutoAgentDeployer = React.lazy(() => import('@/components/ai/AutoAgentDeployer'));
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import ReactMarkdown from 'react-markdown';
@@ -674,10 +675,13 @@ Provide helpful, actionable responses with code examples when relevant. Be conci
             user_id: user.email,
             prompt: currentInput,
             response: responseText,
-            feedback_score: 0.7, // Default, user can rate later
+            feedback_score: 0.7,
             category,
             extracted_patterns: extractUserPatterns(currentInput),
           });
+
+          // Auto-deploy agents for this interaction
+          autoDeployAgents(currentInput);
         } catch (learningError) {
           console.log('Learning capture skipped:', learningError);
         }
@@ -733,6 +737,23 @@ Provide helpful, actionable responses with code examples when relevant. Be conci
     const keywords = input.match(/\b[a-z]{4,}\b/gi) || [];
     const uniqueKeywords = [...new Set(keywords)].slice(0, 5);
     return uniqueKeywords.map((kw) => kw.toLowerCase());
+  };
+
+  // Auto-deploy agents based on prompt
+  const autoDeployAgents = async (input) => {
+    try {
+      const response = await base44.functions.invoke('autoDeployAgents', {
+        prompt: input,
+        category: detectCategory(input),
+        context: { projectId, selectedProject },
+      });
+
+      if (response.data?.deployedCount > 0) {
+        setSuggestedTools((prev) => [...prev, 'agents']);
+      }
+    } catch (error) {
+      console.log('Auto-deploy skipped:', error);
+    }
   };
 
   // AI Assistant can now work with or without a project
@@ -1410,6 +1431,14 @@ Provide helpful, actionable responses with code examples when relevant. Be conci
             </div>
             {messages.length > 0 && !activePanel && (
               <div className="mt-3 space-y-3">
+                <React.Suspense fallback={null}>
+                  <AutoAgentDeployer 
+                    userEmail={user?.email}
+                    onAgentsDeployed={(agents) => {
+                      setUserActivity(prev => ({ ...prev, lastAgentDeploy: agents }));
+                    }}
+                  />
+                </React.Suspense>
                 <React.Suspense fallback={null}>
                   <QuantumLearningEngine 
                     userEmail={user?.email}
