@@ -1,0 +1,22 @@
+{
+  // Base44 Backend Project Configuration
+  "name": "appforge",
+  "version": "1.0.0",
+  "description": "AI-powered development workspace with quantum computing capabilities",
+  
+  // Project metadata
+  "author": "Fernando Garza",
+  "repository": "https://github.com/fernandogarzaaa/appforge",
+  
+  // Base44 deployment settings
+  "site": {
+    "buildCommand": "npm run build",
+    "outputDirectory": "dist",
+    "framework": "react"
+  },
+  
+  // Environment configuration
+  "env": {
+    "production": true
+  }
+}
