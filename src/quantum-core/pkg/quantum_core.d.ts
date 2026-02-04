@@ -166,6 +166,29 @@ export class HolographicConsensus {
     superpose_models(flattened_embeddings: Float64Array, num_models: number): Float64Array;
 }
 
+export class MultiverseEngine {
+    free(): void;
+    [Symbol.dispose](): void;
+    /**
+     * Returns JSON representation of all parallel universes for UI visualization.
+     */
+    get_multiverse_state(): string;
+    constructor();
+    /**
+     * Resets the multiverse engine (clears all realities).
+     */
+    reset(): void;
+    /**
+     * Simulates time passing in all universes to see which one survives.
+     * Returns the ID of the best universe.
+     */
+    simulate_evolution(cycles: number): string;
+    /**
+     * Spawns a new parallel reality based on a decision branch.
+     */
+    spawn_universe(id: string, name: string, code_quality: number): void;
+}
+
 /**
  * Quantum Annealer for AI Model Selection
  *
@@ -258,6 +281,33 @@ export class QuantumState {
      * Initialize a state based on an AI model confidence score.
      */
     constructor(confidence_score: number);
+}
+
+export class QuantumVar {
+    free(): void;
+    [Symbol.dispose](): void;
+    /**
+     * Add a potential value this variable could have.
+     * Values are stored as JSON strings for interop with JS.
+     */
+    add_state(value: string, probability: number): void;
+    /**
+     * Merge another QuantumVar into this one (interference).
+     */
+    entangle(other: QuantumVar): void;
+    constructor();
+    /**
+     * Observe the variable and collapse the superposition into a single value.
+     */
+    observe(): string;
+    /**
+     * Return the most likely value without collapsing the state.
+     */
+    peek_most_likely(): string;
+    /**
+     * Shannon entropy: 0.0 = certainty, higher = uncertainty.
+     */
+    uncertainty_index(): number;
 }
 
 /**
@@ -362,6 +412,57 @@ export class RenormalizationEngine {
      * - 0.9+ = Critical phase transition imminent
      */
     predict_criticality(metrics: Float64Array): number;
+}
+
+/**
+ * Represents a quantum state that can be evolved reversibly using Toffoli gates
+ */
+export class ReversibleState {
+    free(): void;
+    [Symbol.dispose](): void;
+    /**
+     * Apply Toffoli gate (controlled-controlled-NOT) operation
+     * control1, control2: indices of control qubits
+     * target: index of target qubit to flip
+     */
+    apply_toffoli(control1: number, control2: number, target: number): boolean;
+    constructor(size: number);
+    /**
+     * Reversible increment operation: x' = x + 1 (without destroying old value)
+     */
+    reversible_increment(index: number): boolean;
+    /**
+     * Get current state as JSON
+     */
+    to_json(): string;
+    readonly iteration: bigint;
+    readonly phase: number;
+}
+
+/**
+ * Manages timeline of reversible state snapshots with differential encoding
+ */
+export class StateHistory {
+    free(): void;
+    [Symbol.dispose](): void;
+    /**
+     * Clear all history
+     */
+    clear(): void;
+    /**
+     * Get timeline as JSON array
+     */
+    get_timeline(): string;
+    constructor(max_snapshots: number, snapshot_interval: bigint);
+    /**
+     * Record a new state snapshot
+     */
+    record_snapshot(state: ReversibleState, description: string): boolean;
+    /**
+     * Rollback to a specific iteration
+     */
+    rollback_to(target_iteration: bigint): string | undefined;
+    readonly snapshot_count: number;
 }
 
 export class SuperpositionSynthesizer {
@@ -599,9 +700,13 @@ export interface InitOutput {
     readonly __wbg_collaborationsync_free: (a: number, b: number) => void;
     readonly __wbg_entangledstate_free: (a: number, b: number) => void;
     readonly __wbg_holographicconsensus_free: (a: number, b: number) => void;
+    readonly __wbg_multiverseengine_free: (a: number, b: number) => void;
     readonly __wbg_quantumcodegenerator_free: (a: number, b: number) => void;
     readonly __wbg_quantumstate_free: (a: number, b: number) => void;
+    readonly __wbg_quantumvar_free: (a: number, b: number) => void;
     readonly __wbg_renormalizationengine_free: (a: number, b: number) => void;
+    readonly __wbg_reversiblestate_free: (a: number, b: number) => void;
+    readonly __wbg_statehistory_free: (a: number, b: number) => void;
     readonly __wbg_superpositionsynthesizer_free: (a: number, b: number) => void;
     readonly __wbg_zenostabilizer_free: (a: number, b: number) => void;
     readonly collaborationsync_get_fidelity: (a: number, b: number, c: number) => number;
@@ -625,6 +730,11 @@ export interface InitOutput {
     readonly holographicconsensus_measure_entropy: (a: number, b: number, c: number) => number;
     readonly holographicconsensus_new: (a: number, b: number) => number;
     readonly holographicconsensus_superpose_models: (a: number, b: number, c: number, d: number) => [number, number];
+    readonly multiverseengine_get_multiverse_state: (a: number) => [number, number];
+    readonly multiverseengine_new: () => number;
+    readonly multiverseengine_reset: (a: number) => void;
+    readonly multiverseengine_simulate_evolution: (a: number, b: number) => [number, number];
+    readonly multiverseengine_spawn_universe: (a: number, b: number, c: number, d: number, e: number, f: number) => void;
     readonly quantumannealer_is_frozen: (a: number) => number;
     readonly quantumannealer_new: (a: number, b: number) => number;
     readonly quantumannealer_optimize_selection: (a: number, b: number, c: number) => number;
@@ -636,6 +746,12 @@ export interface InitOutput {
     readonly quantumstate_apply_interference: (a: number, b: number, c: number) => void;
     readonly quantumstate_measure_probability: (a: number) => number;
     readonly quantumstate_new: (a: number) => number;
+    readonly quantumvar_add_state: (a: number, b: number, c: number, d: number) => void;
+    readonly quantumvar_entangle: (a: number, b: number) => void;
+    readonly quantumvar_new: () => number;
+    readonly quantumvar_observe: (a: number) => [number, number];
+    readonly quantumvar_peek_most_likely: (a: number) => [number, number];
+    readonly quantumvar_uncertainty_index: (a: number) => number;
     readonly renormalizationengine_coarse_grain: (a: number, b: number, c: number) => [number, number];
     readonly renormalizationengine_estimate_time_to_criticality: (a: number, b: number, c: number, d: number) => number;
     readonly renormalizationengine_find_critical_scale: (a: number, b: number, c: number, d: number) => number;
@@ -644,6 +760,18 @@ export interface InitOutput {
     readonly renormalizationengine_get_system_health: (a: number, b: number, c: number) => [number, number];
     readonly renormalizationengine_new: (a: number) => number;
     readonly renormalizationengine_predict_criticality: (a: number, b: number, c: number) => number;
+    readonly reversiblestate_apply_toffoli: (a: number, b: number, c: number, d: number) => number;
+    readonly reversiblestate_iteration: (a: number) => bigint;
+    readonly reversiblestate_new: (a: number) => number;
+    readonly reversiblestate_phase: (a: number) => number;
+    readonly reversiblestate_reversible_increment: (a: number, b: number) => number;
+    readonly reversiblestate_to_json: (a: number) => [number, number];
+    readonly statehistory_clear: (a: number) => void;
+    readonly statehistory_get_timeline: (a: number) => [number, number];
+    readonly statehistory_new: (a: number, b: bigint) => number;
+    readonly statehistory_record_snapshot: (a: number, b: number, c: number, d: number) => number;
+    readonly statehistory_rollback_to: (a: number, b: bigint) => [number, number];
+    readonly statehistory_snapshot_count: (a: number) => number;
     readonly superpositionsynthesizer_apply_interference: (a: number) => void;
     readonly superpositionsynthesizer_calculate_entropy: (a: number) => number;
     readonly superpositionsynthesizer_collapse_to_optimal: (a: number) => number;
@@ -668,8 +796,8 @@ export interface InitOutput {
     readonly zenostabilizer_required_observation_frequency: (a: number, b: number, c: number) => number;
     readonly entangledstate_new: () => number;
     readonly superpositionsynthesizer_new: () => number;
-    readonly __wbg_tunnelingscanner_free: (a: number, b: number) => void;
     readonly __wbg_quantumannealer_free: (a: number, b: number) => void;
+    readonly __wbg_tunnelingscanner_free: (a: number, b: number) => void;
     readonly tunnelingscanner_get_barrier_width: (a: number) => number;
     readonly quantumannealer_get_temperature: (a: number) => number;
     readonly __wbindgen_exn_store: (a: number) => void;
@@ -677,6 +805,7 @@ export interface InitOutput {
     readonly __wbindgen_externrefs: WebAssembly.Table;
     readonly __wbindgen_malloc: (a: number, b: number) => number;
     readonly __wbindgen_free: (a: number, b: number, c: number) => void;
+    readonly __wbindgen_realloc: (a: number, b: number, c: number, d: number) => number;
     readonly __wbindgen_start: () => void;
 }
 

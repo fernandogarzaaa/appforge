@@ -14,9 +14,13 @@ import {
   Sparkles,
   AlertCircle,
   CheckCircle2,
-  Loader2
+  Loader2,
+  RotateCcw
 } from 'lucide-react';
 import { toast } from 'sonner';
+import QuantumProfile from '@/components/quantum/QuantumProfile';
+import MultiverseViewer from '@/components/quantum/MultiverseViewer';
+import ReversibleDebugger from '@/components/quantum/ReversibleDebugger';
 
 export default function QuantumLab() {
   const [quantumCore, setQuantumCore] = useState(null);
@@ -213,7 +217,7 @@ export default function QuantumLab() {
         </div>
 
         <Tabs defaultValue="annealing" className="w-full">
-          <TabsList className="grid w-full grid-cols-3 bg-white/50">
+          <TabsList className="grid w-full grid-cols-6 bg-white/50">
             <TabsTrigger value="annealing" className="flex items-center gap-2">
               <GitBranch className="w-4 h-4" />
               Quantum Annealing
@@ -225,6 +229,18 @@ export default function QuantumLab() {
             <TabsTrigger value="superposition" className="flex items-center gap-2">
               <Brain className="w-4 h-4" />
               Superposition
+            </TabsTrigger>
+            <TabsTrigger value="qscript" className="flex items-center gap-2">
+              <Sparkles className="w-4 h-4" />
+              Q-Script
+            </TabsTrigger>
+            <TabsTrigger value="multiverse" className="flex items-center gap-2">
+              <Activity className="w-4 h-4" />
+              Multiverse
+            </TabsTrigger>
+            <TabsTrigger value="reversible" className="flex items-center gap-2">
+              <RotateCcw className="w-4 h-4" />
+              Time-Reversed Debug
             </TabsTrigger>
           </TabsList>
 
@@ -481,6 +497,18 @@ export default function QuantumLab() {
                 </div>
               </CardContent>
             </Card>
+          </TabsContent>
+
+          <TabsContent value="qscript" className="space-y-4">
+            <QuantumProfile />
+          </TabsContent>
+
+          <TabsContent value="multiverse" className="space-y-4">
+            <MultiverseViewer />
+          </TabsContent>
+
+          <TabsContent value="reversible" className="space-y-4">
+            <ReversibleDebugger />
           </TabsContent>
         </Tabs>
 

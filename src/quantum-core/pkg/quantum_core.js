@@ -329,6 +329,79 @@ export class HolographicConsensus {
 }
 if (Symbol.dispose) HolographicConsensus.prototype[Symbol.dispose] = HolographicConsensus.prototype.free;
 
+export class MultiverseEngine {
+    __destroy_into_raw() {
+        const ptr = this.__wbg_ptr;
+        this.__wbg_ptr = 0;
+        MultiverseEngineFinalization.unregister(this);
+        return ptr;
+    }
+    free() {
+        const ptr = this.__destroy_into_raw();
+        wasm.__wbg_multiverseengine_free(ptr, 0);
+    }
+    /**
+     * Returns JSON representation of all parallel universes for UI visualization.
+     * @returns {string}
+     */
+    get_multiverse_state() {
+        let deferred1_0;
+        let deferred1_1;
+        try {
+            const ret = wasm.multiverseengine_get_multiverse_state(this.__wbg_ptr);
+            deferred1_0 = ret[0];
+            deferred1_1 = ret[1];
+            return getStringFromWasm0(ret[0], ret[1]);
+        } finally {
+            wasm.__wbindgen_free(deferred1_0, deferred1_1, 1);
+        }
+    }
+    constructor() {
+        const ret = wasm.multiverseengine_new();
+        this.__wbg_ptr = ret >>> 0;
+        MultiverseEngineFinalization.register(this, this.__wbg_ptr, this);
+        return this;
+    }
+    /**
+     * Resets the multiverse engine (clears all realities).
+     */
+    reset() {
+        wasm.multiverseengine_reset(this.__wbg_ptr);
+    }
+    /**
+     * Simulates time passing in all universes to see which one survives.
+     * Returns the ID of the best universe.
+     * @param {number} cycles
+     * @returns {string}
+     */
+    simulate_evolution(cycles) {
+        let deferred1_0;
+        let deferred1_1;
+        try {
+            const ret = wasm.multiverseengine_simulate_evolution(this.__wbg_ptr, cycles);
+            deferred1_0 = ret[0];
+            deferred1_1 = ret[1];
+            return getStringFromWasm0(ret[0], ret[1]);
+        } finally {
+            wasm.__wbindgen_free(deferred1_0, deferred1_1, 1);
+        }
+    }
+    /**
+     * Spawns a new parallel reality based on a decision branch.
+     * @param {string} id
+     * @param {string} name
+     * @param {number} code_quality
+     */
+    spawn_universe(id, name, code_quality) {
+        const ptr0 = passStringToWasm0(id, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+        const len0 = WASM_VECTOR_LEN;
+        const ptr1 = passStringToWasm0(name, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+        const len1 = WASM_VECTOR_LEN;
+        wasm.multiverseengine_spawn_universe(this.__wbg_ptr, ptr0, len0, ptr1, len1, code_quality);
+    }
+}
+if (Symbol.dispose) MultiverseEngine.prototype[Symbol.dispose] = MultiverseEngine.prototype.free;
+
 /**
  * Quantum Annealer for AI Model Selection
  *
@@ -530,6 +603,85 @@ export class QuantumState {
 }
 if (Symbol.dispose) QuantumState.prototype[Symbol.dispose] = QuantumState.prototype.free;
 
+export class QuantumVar {
+    __destroy_into_raw() {
+        const ptr = this.__wbg_ptr;
+        this.__wbg_ptr = 0;
+        QuantumVarFinalization.unregister(this);
+        return ptr;
+    }
+    free() {
+        const ptr = this.__destroy_into_raw();
+        wasm.__wbg_quantumvar_free(ptr, 0);
+    }
+    /**
+     * Add a potential value this variable could have.
+     * Values are stored as JSON strings for interop with JS.
+     * @param {string} value
+     * @param {number} probability
+     */
+    add_state(value, probability) {
+        const ptr0 = passStringToWasm0(value, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+        const len0 = WASM_VECTOR_LEN;
+        wasm.quantumvar_add_state(this.__wbg_ptr, ptr0, len0, probability);
+    }
+    /**
+     * Merge another QuantumVar into this one (interference).
+     * @param {QuantumVar} other
+     */
+    entangle(other) {
+        _assertClass(other, QuantumVar);
+        wasm.quantumvar_entangle(this.__wbg_ptr, other.__wbg_ptr);
+    }
+    constructor() {
+        const ret = wasm.quantumvar_new();
+        this.__wbg_ptr = ret >>> 0;
+        QuantumVarFinalization.register(this, this.__wbg_ptr, this);
+        return this;
+    }
+    /**
+     * Observe the variable and collapse the superposition into a single value.
+     * @returns {string}
+     */
+    observe() {
+        let deferred1_0;
+        let deferred1_1;
+        try {
+            const ret = wasm.quantumvar_observe(this.__wbg_ptr);
+            deferred1_0 = ret[0];
+            deferred1_1 = ret[1];
+            return getStringFromWasm0(ret[0], ret[1]);
+        } finally {
+            wasm.__wbindgen_free(deferred1_0, deferred1_1, 1);
+        }
+    }
+    /**
+     * Return the most likely value without collapsing the state.
+     * @returns {string}
+     */
+    peek_most_likely() {
+        let deferred1_0;
+        let deferred1_1;
+        try {
+            const ret = wasm.quantumvar_peek_most_likely(this.__wbg_ptr);
+            deferred1_0 = ret[0];
+            deferred1_1 = ret[1];
+            return getStringFromWasm0(ret[0], ret[1]);
+        } finally {
+            wasm.__wbindgen_free(deferred1_0, deferred1_1, 1);
+        }
+    }
+    /**
+     * Shannon entropy: 0.0 = certainty, higher = uncertainty.
+     * @returns {number}
+     */
+    uncertainty_index() {
+        const ret = wasm.quantumvar_uncertainty_index(this.__wbg_ptr);
+        return ret;
+    }
+}
+if (Symbol.dispose) QuantumVar.prototype[Symbol.dispose] = QuantumVar.prototype.free;
+
 /**
  * Renormalization Group (RG) Flow Engine
  *
@@ -711,6 +863,167 @@ export class RenormalizationEngine {
     }
 }
 if (Symbol.dispose) RenormalizationEngine.prototype[Symbol.dispose] = RenormalizationEngine.prototype.free;
+
+/**
+ * Represents a quantum state that can be evolved reversibly using Toffoli gates
+ */
+export class ReversibleState {
+    __destroy_into_raw() {
+        const ptr = this.__wbg_ptr;
+        this.__wbg_ptr = 0;
+        ReversibleStateFinalization.unregister(this);
+        return ptr;
+    }
+    free() {
+        const ptr = this.__destroy_into_raw();
+        wasm.__wbg_reversiblestate_free(ptr, 0);
+    }
+    /**
+     * Apply Toffoli gate (controlled-controlled-NOT) operation
+     * control1, control2: indices of control qubits
+     * target: index of target qubit to flip
+     * @param {number} control1
+     * @param {number} control2
+     * @param {number} target
+     * @returns {boolean}
+     */
+    apply_toffoli(control1, control2, target) {
+        const ret = wasm.reversiblestate_apply_toffoli(this.__wbg_ptr, control1, control2, target);
+        return ret !== 0;
+    }
+    /**
+     * @returns {bigint}
+     */
+    get iteration() {
+        const ret = wasm.reversiblestate_iteration(this.__wbg_ptr);
+        return BigInt.asUintN(64, ret);
+    }
+    /**
+     * @param {number} size
+     */
+    constructor(size) {
+        const ret = wasm.reversiblestate_new(size);
+        this.__wbg_ptr = ret >>> 0;
+        ReversibleStateFinalization.register(this, this.__wbg_ptr, this);
+        return this;
+    }
+    /**
+     * @returns {number}
+     */
+    get phase() {
+        const ret = wasm.reversiblestate_phase(this.__wbg_ptr);
+        return ret;
+    }
+    /**
+     * Reversible increment operation: x' = x + 1 (without destroying old value)
+     * @param {number} index
+     * @returns {boolean}
+     */
+    reversible_increment(index) {
+        const ret = wasm.reversiblestate_reversible_increment(this.__wbg_ptr, index);
+        return ret !== 0;
+    }
+    /**
+     * Get current state as JSON
+     * @returns {string}
+     */
+    to_json() {
+        let deferred1_0;
+        let deferred1_1;
+        try {
+            const ret = wasm.reversiblestate_to_json(this.__wbg_ptr);
+            deferred1_0 = ret[0];
+            deferred1_1 = ret[1];
+            return getStringFromWasm0(ret[0], ret[1]);
+        } finally {
+            wasm.__wbindgen_free(deferred1_0, deferred1_1, 1);
+        }
+    }
+}
+if (Symbol.dispose) ReversibleState.prototype[Symbol.dispose] = ReversibleState.prototype.free;
+
+/**
+ * Manages timeline of reversible state snapshots with differential encoding
+ */
+export class StateHistory {
+    __destroy_into_raw() {
+        const ptr = this.__wbg_ptr;
+        this.__wbg_ptr = 0;
+        StateHistoryFinalization.unregister(this);
+        return ptr;
+    }
+    free() {
+        const ptr = this.__destroy_into_raw();
+        wasm.__wbg_statehistory_free(ptr, 0);
+    }
+    /**
+     * Clear all history
+     */
+    clear() {
+        wasm.statehistory_clear(this.__wbg_ptr);
+    }
+    /**
+     * Get timeline as JSON array
+     * @returns {string}
+     */
+    get_timeline() {
+        let deferred1_0;
+        let deferred1_1;
+        try {
+            const ret = wasm.statehistory_get_timeline(this.__wbg_ptr);
+            deferred1_0 = ret[0];
+            deferred1_1 = ret[1];
+            return getStringFromWasm0(ret[0], ret[1]);
+        } finally {
+            wasm.__wbindgen_free(deferred1_0, deferred1_1, 1);
+        }
+    }
+    /**
+     * @param {number} max_snapshots
+     * @param {bigint} snapshot_interval
+     */
+    constructor(max_snapshots, snapshot_interval) {
+        const ret = wasm.statehistory_new(max_snapshots, snapshot_interval);
+        this.__wbg_ptr = ret >>> 0;
+        StateHistoryFinalization.register(this, this.__wbg_ptr, this);
+        return this;
+    }
+    /**
+     * Record a new state snapshot
+     * @param {ReversibleState} state
+     * @param {string} description
+     * @returns {boolean}
+     */
+    record_snapshot(state, description) {
+        _assertClass(state, ReversibleState);
+        const ptr0 = passStringToWasm0(description, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+        const len0 = WASM_VECTOR_LEN;
+        const ret = wasm.statehistory_record_snapshot(this.__wbg_ptr, state.__wbg_ptr, ptr0, len0);
+        return ret !== 0;
+    }
+    /**
+     * Rollback to a specific iteration
+     * @param {bigint} target_iteration
+     * @returns {string | undefined}
+     */
+    rollback_to(target_iteration) {
+        const ret = wasm.statehistory_rollback_to(this.__wbg_ptr, target_iteration);
+        let v1;
+        if (ret[0] !== 0) {
+            v1 = getStringFromWasm0(ret[0], ret[1]).slice();
+            wasm.__wbindgen_free(ret[0], ret[1] * 1, 1);
+        }
+        return v1;
+    }
+    /**
+     * @returns {number}
+     */
+    get snapshot_count() {
+        const ret = wasm.statehistory_snapshot_count(this.__wbg_ptr);
+        return ret >>> 0;
+    }
+}
+if (Symbol.dispose) StateHistory.prototype[Symbol.dispose] = StateHistory.prototype.free;
 
 export class SuperpositionSynthesizer {
     __destroy_into_raw() {
@@ -1174,6 +1487,10 @@ function __wbg_get_imports() {
             const ret = arg0.node;
             return ret;
         },
+        __wbg_now_a3af9a2f4bbaa4d1: function() {
+            const ret = Date.now();
+            return ret;
+        },
         __wbg_process_3975fd6c72f520aa: function(arg0) {
             const ret = arg0.process;
             return ret;
@@ -1247,6 +1564,9 @@ const EntangledStateFinalization = (typeof FinalizationRegistry === 'undefined')
 const HolographicConsensusFinalization = (typeof FinalizationRegistry === 'undefined')
     ? { register: () => {}, unregister: () => {} }
     : new FinalizationRegistry(ptr => wasm.__wbg_holographicconsensus_free(ptr >>> 0, 1));
+const MultiverseEngineFinalization = (typeof FinalizationRegistry === 'undefined')
+    ? { register: () => {}, unregister: () => {} }
+    : new FinalizationRegistry(ptr => wasm.__wbg_multiverseengine_free(ptr >>> 0, 1));
 const QuantumAnnealerFinalization = (typeof FinalizationRegistry === 'undefined')
     ? { register: () => {}, unregister: () => {} }
     : new FinalizationRegistry(ptr => wasm.__wbg_quantumannealer_free(ptr >>> 0, 1));
@@ -1256,9 +1576,18 @@ const QuantumCodeGeneratorFinalization = (typeof FinalizationRegistry === 'undef
 const QuantumStateFinalization = (typeof FinalizationRegistry === 'undefined')
     ? { register: () => {}, unregister: () => {} }
     : new FinalizationRegistry(ptr => wasm.__wbg_quantumstate_free(ptr >>> 0, 1));
+const QuantumVarFinalization = (typeof FinalizationRegistry === 'undefined')
+    ? { register: () => {}, unregister: () => {} }
+    : new FinalizationRegistry(ptr => wasm.__wbg_quantumvar_free(ptr >>> 0, 1));
 const RenormalizationEngineFinalization = (typeof FinalizationRegistry === 'undefined')
     ? { register: () => {}, unregister: () => {} }
     : new FinalizationRegistry(ptr => wasm.__wbg_renormalizationengine_free(ptr >>> 0, 1));
+const ReversibleStateFinalization = (typeof FinalizationRegistry === 'undefined')
+    ? { register: () => {}, unregister: () => {} }
+    : new FinalizationRegistry(ptr => wasm.__wbg_reversiblestate_free(ptr >>> 0, 1));
+const StateHistoryFinalization = (typeof FinalizationRegistry === 'undefined')
+    ? { register: () => {}, unregister: () => {} }
+    : new FinalizationRegistry(ptr => wasm.__wbg_statehistory_free(ptr >>> 0, 1));
 const SuperpositionSynthesizerFinalization = (typeof FinalizationRegistry === 'undefined')
     ? { register: () => {}, unregister: () => {} }
     : new FinalizationRegistry(ptr => wasm.__wbg_superpositionsynthesizer_free(ptr >>> 0, 1));
@@ -1273,6 +1602,12 @@ function addToExternrefTable0(obj) {
     const idx = wasm.__externref_table_alloc();
     wasm.__wbindgen_externrefs.set(idx, obj);
     return idx;
+}
+
+function _assertClass(instance, klass) {
+    if (!(instance instanceof klass)) {
+        throw new Error(`expected instance of ${klass.name}`);
+    }
 }
 
 function getArrayF64FromWasm0(ptr, len) {
@@ -1326,6 +1661,43 @@ function passArrayF64ToWasm0(arg, malloc) {
     return ptr;
 }
 
+function passStringToWasm0(arg, malloc, realloc) {
+    if (realloc === undefined) {
+        const buf = cachedTextEncoder.encode(arg);
+        const ptr = malloc(buf.length, 1) >>> 0;
+        getUint8ArrayMemory0().subarray(ptr, ptr + buf.length).set(buf);
+        WASM_VECTOR_LEN = buf.length;
+        return ptr;
+    }
+
+    let len = arg.length;
+    let ptr = malloc(len, 1) >>> 0;
+
+    const mem = getUint8ArrayMemory0();
+
+    let offset = 0;
+
+    for (; offset < len; offset++) {
+        const code = arg.charCodeAt(offset);
+        if (code > 0x7F) break;
+        mem[ptr + offset] = code;
+    }
+    if (offset !== len) {
+        if (offset !== 0) {
+            arg = arg.slice(offset);
+        }
+        ptr = realloc(ptr, len, len = offset + arg.length * 3, 1) >>> 0;
+        const view = getUint8ArrayMemory0().subarray(ptr + offset, ptr + len);
+        const ret = cachedTextEncoder.encodeInto(arg, view);
+
+        offset += ret.written;
+        ptr = realloc(ptr, len, offset, 1) >>> 0;
+    }
+
+    WASM_VECTOR_LEN = offset;
+    return ptr;
+}
+
 let cachedTextDecoder = new TextDecoder('utf-8', { ignoreBOM: true, fatal: true });
 cachedTextDecoder.decode();
 const MAX_SAFARI_DECODE_BYTES = 2146435072;
@@ -1338,6 +1710,19 @@ function decodeText(ptr, len) {
         numBytesDecoded = len;
     }
     return cachedTextDecoder.decode(getUint8ArrayMemory0().subarray(ptr, ptr + len));
+}
+
+const cachedTextEncoder = new TextEncoder();
+
+if (!('encodeInto' in cachedTextEncoder)) {
+    cachedTextEncoder.encodeInto = function (arg, view) {
+        const buf = cachedTextEncoder.encode(arg);
+        view.set(buf);
+        return {
+            read: arg.length,
+            written: buf.length
+        };
+    };
 }
 
 let WASM_VECTOR_LEN = 0;

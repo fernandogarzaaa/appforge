@@ -30,6 +30,18 @@ pub use entanglement::{EntangledState, CollaborationSync};
 pub mod superposition;
 pub use superposition::{SuperpositionSynthesizer, QuantumCodeGenerator};
 
+// Expose probabilistic types for Q-Script
+pub mod probabilistic_types;
+pub use probabilistic_types::QuantumVar;
+
+// Expose multiverse engine for time-branching simulations
+pub mod multiverse;
+pub use multiverse::MultiverseEngine;
+
+// Expose reversible computing for time-reversed debugging
+pub mod reversible_computing;
+pub use reversible_computing::{ReversibleState, StateHistory};
+
 /// QuantumState represents a semantic confidence state.
 #[wasm_bindgen]
 pub struct QuantumState {
