@@ -401,26 +401,26 @@ export default function AdminDashboard() {
                   </div>
 
                   <div className="mt-6 space-y-3">
-                    <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                    <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-slate-800/50 dark:border dark:border-slate-700 rounded-lg">
                       <div>
-                        <p className="font-medium text-gray-900">Users Table</p>
-                        <p className="text-sm text-gray-600">234,567 records</p>
+                        <p className="font-medium text-gray-900 dark:text-white">Users Table</p>
+                        <p className="text-sm text-gray-600 dark:text-gray-400">234,567 records</p>
                       </div>
-                      <Button variant="outline" size="sm">Manage</Button>
+                      <Button variant="outline" size="sm" className="dark:hover:bg-slate-700">Manage</Button>
                     </div>
-                    <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                    <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-slate-800/50 dark:border dark:border-slate-700 rounded-lg">
                       <div>
-                        <p className="font-medium text-gray-900">Projects Table</p>
-                        <p className="text-sm text-gray-600">89,234 records</p>
+                        <p className="font-medium text-gray-900 dark:text-white">Projects Table</p>
+                        <p className="text-sm text-gray-600 dark:text-gray-400">89,234 records</p>
                       </div>
-                      <Button variant="outline" size="sm">Manage</Button>
+                      <Button variant="outline" size="sm" className="dark:hover:bg-slate-700">Manage</Button>
                     </div>
-                    <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                    <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-slate-800/50 dark:border dark:border-slate-700 rounded-lg">
                       <div>
-                        <p className="font-medium text-gray-900">Automations Table</p>
-                        <p className="text-sm text-gray-600">45,123 records</p>
+                        <p className="font-medium text-gray-900 dark:text-white">Automations Table</p>
+                        <p className="text-sm text-gray-600 dark:text-gray-400">45,123 records</p>
                       </div>
-                      <Button variant="outline" size="sm">Manage</Button>
+                      <Button variant="outline" size="sm" className="dark:hover:bg-slate-700">Manage</Button>
                     </div>
                   </div>
 
