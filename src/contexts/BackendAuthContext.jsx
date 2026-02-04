@@ -1,12 +1,12 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
-import { authService } from '@/api/appforge';
+import { base44 } from '@/api/base44Client';
 
 export const BackendAuthContext = createContext(null);
 
 /**
- * Authentication context for backend (Express) API
- * Separate from base44 AuthContext for platform authentication
- * Uses HTTP-only cookies for token storage (secure, no JS access)
+ * Authentication context - wrapper around Base44's built-in auth
+ * Provides a consistent interface for components that use useBackendAuth()
+ * All authentication is handled by the Base44 platform
  */
 export const BackendAuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
@@ -14,22 +14,18 @@ export const BackendAuthProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Check if user is authenticated on mount
+  // Check if user is authenticated on mount using Base44
   useEffect(() => {
     checkAuth();
   }, []);
 
   const checkAuth = async () => {
     try {
-      // Call /auth/me endpoint to verify session
-      // Server sends JWT via HTTP-only cookie, no JS token access needed
-      const userData = await authService.me();
-      
-      // userData should be the user object from the API response
+      const userData = await base44.auth.me();
       setUser(userData);
       setIsAuthenticated(true);
     } catch (err) {
-      console.error('Auth check failed:', err.message);
+      // User not authenticated - this is normal, not an error
       setIsAuthenticated(false);
       setUser(null);
     } finally {
@@ -37,53 +33,19 @@ export const BackendAuthProvider = ({ children }) => {
     }
   };
 
-  const login = async (email, password) => {
-    setError(null);
-    try {
-      const response = await authService.login({ email, password });
-      
-      // Response should contain user data from API
-      // Token is handled via HTTP-only cookie by server
-      if (response?.user) {
-        setUser(response.user);
-        setIsAuthenticated(true);
-      }
-      
-      return response;
-    } catch (err) {
-      const errorMsg = err.response?.data?.message || err.message || 'Login failed';
-      setError(errorMsg);
-      throw err;
-    }
+  const login = async () => {
+    // Redirect to Base44's login page
+    base44.auth.redirectToLogin(window.location.href);
   };
 
-  const register = async (username, email, password) => {
-    setError(null);
-    try {
-      const response = await authService.register({ 
-        username, 
-        email, 
-        password,
-        name: username 
-      });
-      
-      // Response should contain user data from API
-      if (response?.user) {
-        setUser(response.user);
-        setIsAuthenticated(true);
-      }
-      
-      return response;
-    } catch (err) {
-      const errorMsg = err.response?.data?.message || err.message || 'Registration failed';
-      setError(errorMsg);
-      throw err;
-    }
+  const register = async () => {
+    // Redirect to Base44's registration/login page
+    base44.auth.redirectToLogin(window.location.href);
   };
 
   const logout = async () => {
     try {
-      await authService.logout();
+      base44.auth.logout();
     } catch (err) {
       console.error('Logout error:', err);
     } finally {
@@ -94,21 +56,15 @@ export const BackendAuthProvider = ({ children }) => {
   };
 
   const refreshAuth = async () => {
-    try {
-      // For HTTP-only cookie auth, refresh is handled by the server
-      // Call checkAuth to verify the session is still valid
-      await checkAuth();
-      return { success: isAuthenticated };
-    } catch (err) {
-      logout();
-      throw err;
-    }
+    await checkAuth();
+    return { success: isAuthenticated };
   };
 
   const value = {
     user,
     isAuthenticated,
     isLoading,
+    loading: isLoading, // alias for compatibility
     error,
     login,
     register,
@@ -127,7 +83,20 @@ export const BackendAuthProvider = ({ children }) => {
 export const useBackendAuth = () => {
   const context = useContext(BackendAuthContext);
   if (!context) {
-    throw new Error('useBackendAuth must be used within BackendAuthProvider');
+    // Return a safe default instead of throwing - allows components to work
+    // outside the provider during initial render
+    return {
+      user: null,
+      isAuthenticated: false,
+      isLoading: true,
+      loading: true,
+      error: null,
+      login: () => base44.auth.redirectToLogin(window.location.href),
+      register: () => base44.auth.redirectToLogin(window.location.href),
+      logout: () => base44.auth.logout(),
+      refreshAuth: async () => ({ success: false }),
+      checkAuth: async () => {}
+    };
   }
   return context;
 };

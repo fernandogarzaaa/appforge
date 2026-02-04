@@ -1,67 +1,41 @@
-import client, { setAuthToken, clearAuthToken } from '../appforgeClient';
+import { base44 } from '../base44Client';
 
+/**
+ * Auth Service - wraps Base44's authentication
+ * Provides a consistent API for components that use authService
+ */
 const authService = {
-  async register(payload) {
-    const { data: response } = await client.post('/auth/register', payload);
-    
-    // API returns: { success, message, data: { user, token }, timestamp }
-    // Extract the nested data object
-    const result = response.data || response;
-    
-    if (result?.token) {
-      setAuthToken(result.token);
-    }
-    
-    return result;
+  async register() {
+    // Base44 handles registration through its login flow
+    base44.auth.redirectToLogin(window.location.href);
+    return null;
   },
 
-  async login(payload) {
-    const { data: response } = await client.post('/auth/login', payload);
-    
-    // API returns: { success, message, data: { user, token }, timestamp }
-    // Extract the nested data object
-    const result = response.data || response;
-    
-    if (result?.token) {
-      setAuthToken(result.token);
-    }
-    
-    return result;
+  async login() {
+    // Base44 handles login through its own flow
+    base44.auth.redirectToLogin(window.location.href);
+    return null;
   },
 
-  async refresh(token) {
-    const { data: response } = await client.post('/auth/refresh', { token });
-    
-    // API returns: { success, message, data: { token }, timestamp }
-    const result = response.data || response;
-    
-    if (result?.token) {
-      setAuthToken(result.token);
-    }
-    
-    return result;
+  async refresh() {
+    // Base44 handles token refresh automatically
+    const user = await base44.auth.me();
+    return { user };
   },
 
   async me() {
-    const { data: response } = await client.get('/auth/me');
-    
-    // API returns: { success, message, data: { user }, timestamp }
-    // Return the user directly
-    const result = response.data || response;
-    
-    return result?.user || result;
+    // Get current user from Base44
+    try {
+      const user = await base44.auth.me();
+      return user;
+    } catch (error) {
+      return null;
+    }
   },
 
   async logout() {
-    try {
-      const { data: response } = await client.post('/auth/logout');
-      clearAuthToken();
-      return response.data || response;
-    } catch (error) {
-      // Clear token even if request fails
-      clearAuthToken();
-      throw error;
-    }
+    base44.auth.logout();
+    return { success: true };
   }
 };
 
