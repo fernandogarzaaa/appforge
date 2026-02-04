@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { base44 } from '@/api/base44Client';
 import { userService } from '@/api/appforge';
 import { useBackendAuth } from '@/contexts/BackendAuthContext';
@@ -21,7 +21,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import ProjectCard from '@/components/dashboard/ProjectCard';
+// Lazy load ProjectCard for better initial load
+const ProjectCard = lazy(() => import('@/components/dashboard/ProjectCard'));
 import EmptyState from '@/components/common/EmptyState';
 import { AnimatePresence } from 'framer-motion';
 import { useToast } from '@/components/ui/use-toast';
@@ -358,21 +359,23 @@ export default function Projects() {
             ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'
             : 'flex flex-col gap-3'
           }>
-            <AnimatePresence mode="popLayout">
-              {paginatedProjects.map((project, index) => (
-                <ProjectCard
-                  key={project.id}
-                  project={project}
-                  index={index}
-                  onDelete={(p) => deleteMutation.mutate(p.id)}
-                  onDuplicate={() => {}}
-                  onClone={() => {}}
-                  isSelectionMode={isSelectionMode}
-                  isSelected={selectedProjects.has(project.id)}
-                  onToggleSelect={() => toggleProjectSelection(project.id)}
-                />
-              ))}
-            </AnimatePresence>
+            <Suspense fallback={<div className="text-center py-8">Loading projects...</div>}>
+              <AnimatePresence mode="popLayout">
+                {paginatedProjects.map((project, index) => (
+                  <ProjectCard
+                    key={project.id}
+                    project={project}
+                    index={index}
+                    onDelete={(p) => deleteMutation.mutate(p.id)}
+                    onDuplicate={() => {}}
+                    onClone={() => {}}
+                    isSelectionMode={isSelectionMode}
+                    isSelected={selectedProjects.has(project.id)}
+                    onToggleSelect={() => toggleProjectSelection(project.id)}
+                  />
+                ))}
+              </AnimatePresence>
+            </Suspense>
           </div>
           {totalPages > 1 && (
             <div className="flex items-center justify-center gap-2 mt-8">
