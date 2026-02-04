@@ -400,7 +400,7 @@ print(qc)`}
                   <Code2 className="h-4 w-4" />
                   Creating Superposition
                 </h4>
-                <pre className="bg-slate-900 text-slate-50 p-4 rounded-lg text-xs overflow-x-auto">
+                <pre className="bg-black/50 dark:bg-black/70 text-slate-50 p-4 rounded-lg text-xs overflow-x-auto backdrop-blur-sm border border-white/10">
 {`from qiskit import QuantumCircuit
 
 # Create single qubit circuit
