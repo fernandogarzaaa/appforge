@@ -64,7 +64,7 @@ export default function GlobalTopNav({ user, onLogout, mobileMenu, title = 'AppF
             </DropdownMenuTrigger>
             <MenuContent
               align="end"
-              className="w-56 dark:bg-slate-900 dark:border-slate-800"
+              className="w-56 bg-white/90 dark:bg-slate-900/90 dark:border-slate-800/50 backdrop-blur-md border border-white/20 dark:border-slate-700/50"
             >
               <MenuItem className="text-xs text-gray-500 dark:text-gray-400 py-2">
                 <User className="w-4 h-4 mr-2 shrink-0" />
