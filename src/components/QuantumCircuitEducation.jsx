@@ -342,15 +342,15 @@ def qaoa_circuit(graph, beta, gamma):
                      </div>
                   </div>
 
-                  <div className="p-4 bg-slate-900 dark:bg-slate-950 border-t border-slate-700">
-                    <p className="text-xs font-semibold text-slate-300 mb-2">Code Example</p>
-                    <pre className="text-xs text-slate-100 overflow-x-auto whitespace-pre-wrap break-words">
+                  <div className="p-4 bg-black/40 dark:bg-black/60 backdrop-blur-md border-t border-white/10 dark:border-slate-700/20">
+                    <p className="text-xs font-semibold text-slate-100 mb-2">Code Example</p>
+                    <pre className="text-xs text-slate-100 overflow-x-auto whitespace-pre-wrap break-words font-mono">
                       <code>{study.code}</code>
                     </pre>
                   </div>
 
-                  <div className="px-4 py-3 bg-slate-100 dark:bg-slate-800 border-t border-slate-200 dark:border-slate-700">
-                    <p className="text-xs text-slate-700 dark:text-slate-400">
+                  <div className="px-4 py-3 bg-white/40 dark:bg-slate-800/40 backdrop-blur-sm border-t border-white/10 dark:border-slate-700/20">
+                    <p className="text-xs text-slate-700 dark:text-slate-300">
                       <strong>Organizations:</strong> {study.companies}
                     </p>
                   </div>
