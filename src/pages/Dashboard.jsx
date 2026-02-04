@@ -466,7 +466,8 @@ export default function Dashboard() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.5 }}>
 
-            <Card className="border-2 shadow-xl overflow-hidden">
+            {/* Quantum Circuits Section */}
+            <Card className="border-2 shadow-xl overflow-hidden mb-6">
               <div className="bg-gradient-to-r from-cyan-600 to-blue-600 p-6 text-white">
                 <div className="flex items-center gap-3 mb-2">
                   <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm">
@@ -480,16 +481,14 @@ export default function Dashboard() {
                   </div>
                 </div>
               </div>
-              <CardContent className="p-6 space-y-6">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                  {/* Quantum Circuits Display */}
+              <CardContent className="p-6">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
                   <React.Suspense fallback={<Skeletons.ProjectCard />}>
                     <QuantumCircuitDisplay
                       data={quantumCircuits && quantumCircuits[0]}
                       loading={isLoadingCircuits} />
                   </React.Suspense>
 
-                  {/* Quantum Circuit Visualizer */}
                   <React.Suspense fallback={<Skeletons.ProjectCard />}>
                     <QuantumCircuitVisualizer
                       initialQubits={3}
@@ -499,17 +498,16 @@ export default function Dashboard() {
                   </React.Suspense>
                 </div>
 
-                {/* Quantum Education Section */}
                 <React.Suspense fallback={<div className="h-64 bg-gray-100 animate-pulse rounded-lg" />}>
                   <QuantumCircuitEducation />
                 </React.Suspense>
-
-                {/* Multiverse Viewer */}
-                <React.Suspense fallback={<div className="h-96 bg-gray-100 animate-pulse rounded-lg" />}>
-                  <MultiverseViewer initialQubits={3} />
-                </React.Suspense>
               </CardContent>
             </Card>
+
+            {/* Multiverse Engine Section */}
+            <React.Suspense fallback={<div className="h-96 bg-gray-100 animate-pulse rounded-lg" />}>
+              <MultiverseViewer />
+            </React.Suspense>
           </motion.div>
         }
       </div>
