@@ -1,0 +1,54 @@
+name: Deploy to Base44
+
+on:
+  push:
+    branches: [main, develop]
+  workflow_dispatch:
+
+jobs:
+  deploy-base44:
+    name: Deploy to Base44
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.x
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Build for production
+        run: npm run build
+        env:
+          CI: true
+      
+      - name: Deploy to Base44
+        run: |
+          # Install Base44 CLI if needed
+          npm install -g @base44/cli || echo "Base44 CLI already installed"
+          
+          # Authenticate with Base44
+          export BASE44_API_KEY="${{ secrets.BASE44_API_KEY }}"
+          
+          # Deploy the built app
+          base44 deploy --workspace appforge --dir dist
+        env:
+          BASE44_API_KEY: ${{ secrets.BASE44_API_KEY }}
+      
+      - name: Deployment Status
+        if: success()
+        run: |
+          echo "✅ Successfully deployed to Base44!"
+          echo "App URL: https://appforge.fun"
+      
+      - name: Deployment Failed
+        if: failure()
+        run: |
+          echo "❌ Deployment to Base44 failed"
+          echo "Check logs above for details"
