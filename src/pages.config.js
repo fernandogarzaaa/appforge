@@ -47,27 +47,28 @@
  *
  * The mainPage value must match a key in the PAGES object exactly.
  */
-
+import AIAssistant from './pages/AIAssistant';
+import AIMonitoring from './pages/AIMonitoring';
+import APIExplorer from './pages/APIExplorer';
+import APIKeyManager from './pages/APIKeyManager';
+import APIKeys from './pages/APIKeys';
 import Account from './pages/Account';
 import AdminDashboard from './pages/AdminDashboard';
 import AdminSubscriptions from './pages/AdminSubscriptions';
 import AdvancedAnomalyDetection from './pages/AdvancedAnomalyDetection';
 import AdvancedSearch from './pages/AdvancedSearch';
-import AIAssistant from './pages/AIAssistant';
-import AIMonitoring from './pages/AIMonitoring';
 import Analytics from './pages/Analytics';
 import AnalyticsPage from './pages/AnalyticsPage';
-import APIExplorer from './pages/APIExplorer';
-import APIKeyManager from './pages/APIKeyManager';
-import APIKeys from './pages/APIKeys';
 import AuditLog from './pages/AuditLog';
 import BotBuilder from './pages/BotBuilder';
 import CentralAnalytics from './pages/CentralAnalytics';
 import ChatbotManager from './pages/ChatbotManager';
+import CodeGenerator from './pages/CodeGenerator';
 import CodePlayground from './pages/CodePlayground';
 import CodeRefactoring from './pages/CodeRefactoring';
-import CodeGenerator from './pages/CodeGenerator';
+import collaborationOld from './pages/Collaboration-old';
 import Collaboration from './pages/Collaboration';
+import CollaborationHub from './pages/CollaborationHub';
 import Components from './pages/Components';
 import ContentStudio from './pages/ContentStudio';
 import ContractBuilder from './pages/ContractBuilder';
@@ -76,12 +77,15 @@ import CryptoGambling from './pages/CryptoGambling';
 import DAOGovernance from './pages/DAOGovernance';
 import Dashboard from './pages/Dashboard';
 import DataAnalytics from './pages/DataAnalytics';
+import DataPipeline from './pages/DataPipeline';
 import DataPrivacy from './pages/DataPrivacy';
 import DeFiHub from './pages/DeFiHub';
 import Deployments from './pages/Deployments';
+import DeveloperExperience from './pages/DeveloperExperience';
 import EmailAssistant from './pages/EmailAssistant';
 import EmailCampaigns from './pages/EmailCampaigns';
 import EnterpriseIntelligence from './pages/EnterpriseIntelligence';
+import EnterpriseSecurity from './pages/EnterpriseSecurity';
 import EntityDesigner from './pages/EntityDesigner';
 import EnvironmentVariables from './pages/EnvironmentVariables';
 import ExternalBotIntegrations from './pages/ExternalBotIntegrations';
@@ -92,53 +96,48 @@ import GamingPlatform from './pages/GamingPlatform';
 import GitHubConnect from './pages/GitHubConnect';
 import GovernmentTools from './pages/GovernmentTools';
 import Guide from './pages/Guide';
-import IntegrationAnalytics from './pages/IntegrationAnalytics';
-import IntegrationHub from './pages/IntegrationHub';
-import Integrations from './pages/Integrations';
-import IntegrationTemplates from './pages/IntegrationTemplates';
 import IncidentIntelligence from './pages/IncidentIntelligence';
-import Landing from './pages/Landing';
+import IntegrationAnalytics from './pages/IntegrationAnalytics';
+import IntegrationEcosystem from './pages/IntegrationEcosystem';
+import IntegrationHub from './pages/IntegrationHub';
+import IntegrationTemplates from './pages/IntegrationTemplates';
+import Integrations from './pages/Integrations';
+import IntelligentAutomation from './pages/IntelligentAutomation';
+import IntelligentInterface from './pages/IntelligentInterface';
 import LLMSettings from './pages/LLMSettings';
+import Landing from './pages/Landing';
 import Login from './pages/Login';
+import MLIntegration from './pages/MLIntegration';
 import Marketplace from './pages/Marketplace';
+import MarketplaceExtensions from './pages/MarketplaceExtensions';
 import MediaStudio from './pages/MediaStudio';
 import MedicalAI from './pages/MedicalAI';
-import MLIntegration from './pages/MLIntegration';
 import MobileStudio from './pages/MobileStudio';
-import Monitoring from './pages/Monitoring';
-import DeveloperExperience from './pages/DeveloperExperience';
-import VisualizationStudio from './pages/VisualizationStudio';
-import IntegrationEcosystem from './pages/IntegrationEcosystem';
-import CollaborationHub from './pages/CollaborationHub';
-import RbacTenancy from './pages/RbacTenancy';
-import PerformanceScalability from './pages/PerformanceScalability';
-import DataPipeline from './pages/DataPipeline';
-import IntelligentInterface from './pages/IntelligentInterface';
-import ReportingAnalytics from './pages/ReportingAnalytics';
 import Monetization from './pages/Monetization';
-import MarketplaceExtensions from './pages/MarketplaceExtensions';
-import EnterpriseSecurity from './pages/EnterpriseSecurity';
-import ProductAnalytics from './pages/ProductAnalytics';
-import IntelligentAutomation from './pages/IntelligentAutomation';
-import RealtimeCollaboration from './pages/RealtimeCollaboration';
+import Monitoring from './pages/Monitoring';
 import NFTMarketplace from './pages/NFTMarketplace';
 import NFTStudio from './pages/NFTStudio';
 import Notifications from './pages/Notifications';
 import Observability from './pages/Observability';
 import PageEditor from './pages/PageEditor';
+import PerformanceScalability from './pages/PerformanceScalability';
 import PredictiveAnalytics from './pages/PredictiveAnalytics';
 import Pricing from './pages/Pricing';
+import ProductAnalytics from './pages/ProductAnalytics';
 import Profile from './pages/Profile';
 import ProjectDiagnostics from './pages/ProjectDiagnostics';
 import ProjectExport from './pages/ProjectExport';
-import Projects from './pages/Projects';
 import ProjectSettings from './pages/ProjectSettings';
 import ProjectTasks from './pages/ProjectTasks';
 import ProjectViewer from './pages/ProjectViewer';
+import Projects from './pages/Projects';
 import QuantumLab from './pages/QuantumLab';
 import RateLimits from './pages/RateLimits';
+import RbacTenancy from './pages/RbacTenancy';
+import RealtimeCollaboration from './pages/RealtimeCollaboration';
 import ReferralProgram from './pages/ReferralProgram';
 import Register from './pages/Register';
+import ReportingAnalytics from './pages/ReportingAnalytics';
 import Roadmap from './pages/Roadmap';
 import RoleManagement from './pages/RoleManagement';
 import SearchAnalytics from './pages/SearchAnalytics';
@@ -155,125 +154,137 @@ import TemplateMarketplace from './pages/TemplateMarketplace';
 import TokenCreator from './pages/TokenCreator';
 import TwoFactorAuth from './pages/TwoFactorAuth';
 import VSCodeIntegration from './pages/VSCodeIntegration';
+import VisualizationStudio from './pages/VisualizationStudio';
 import Web3Dashboard from './pages/Web3Dashboard';
 import WebhookMonitor from './pages/WebhookMonitor';
 import WorkflowBuilder from './pages/WorkflowBuilder';
+import AdminAPIKeys from './pages/AdminAPIKeys';
+import AdminMonitoring from './pages/AdminMonitoring';
+import AdminSecrets from './pages/AdminSecrets';
+import AdminSystemConfig from './pages/AdminSystemConfig';
+import __Layout from './Layout.jsx';
+
 
 export const PAGES = {
-  Account,
-  AdminDashboard,
-  AdminSubscriptions,
-  AdvancedAnomalyDetection,
-  AdvancedSearch,
-  AIAssistant,
-  AIMonitoring,
-  Analytics,
-  AnalyticsPage,
-  APIExplorer,
-  APIKeyManager,
-  APIKeys,
-  AuditLog,
-  BotBuilder,
-  CentralAnalytics,
-  ChatbotManager,
-  CodePlayground,
-  CodeRefactoring,
-  CodeGenerator,
-  Collaboration,
-  Components,
-  ContentStudio,
-  ContractBuilder,
-  CryptoExchange,
-  CryptoGambling,
-  DAOGovernance,
-  Dashboard,
-  DataAnalytics,
-  DataPrivacy,
-  DeFiHub,
-  Deployments,
-  EmailAssistant,
-  EmailCampaigns,
-  EnterpriseIntelligence,
-  EntityDesigner,
-  EnvironmentVariables,
-  ExternalBotIntegrations,
-  FeatureFlags,
-  FeedbackAnalytics,
-  FunctionValidator,
-  GamingPlatform,
-  GitHubConnect,
-  GovernmentTools,
-  Guide,
-  IntegrationAnalytics,
-  IntegrationHub,
-  Integrations,
-  IntegrationTemplates,
-  IncidentIntelligence,
-  Landing,
-  LLMSettings,
-  Login,
-  Marketplace,
-  MediaStudio,
-  MedicalAI,
-  MLIntegration,
-  MobileStudio,
-  Monitoring,
-  DeveloperExperience,
-  VisualizationStudio,
-  IntegrationEcosystem,
-  CollaborationHub,
-  RbacTenancy,
-  PerformanceScalability,
-  DataPipeline,
-  IntelligentInterface,
-  ReportingAnalytics,
-  Monetization,
-  MarketplaceExtensions,
-  EnterpriseSecurity,
-  ProductAnalytics,
-  IntelligentAutomation,
-  RealtimeCollaboration,
-  NFTMarketplace,
-  NFTStudio,
-  Notifications,
-  Observability,
-  PageEditor,
-  PredictiveAnalytics,
-  Pricing,
-  Profile,
-  ProjectDiagnostics,
-  ProjectExport,
-  Projects,
-  ProjectSettings,
-  ProjectTasks,
-  ProjectViewer,
-  QuantumLab,
-  RateLimits,
-  ReferralProgram,
-  Register,
-  Roadmap,
-  RoleManagement,
-  SearchAnalytics,
-  Security,
-  SecurityFeatures,
-  SocialMediaHub,
-  SubscriptionSuccess,
-  Support,
-  SystemHealth,
-  SystemStatus,
-  TeamCollaboration,
-  TeamManagement,
-  TemplateMarketplace,
-  TokenCreator,
-  TwoFactorAuth,
-  VSCodeIntegration,
-  Web3Dashboard,
-  WebhookMonitor,
-  WorkflowBuilder,
-};
+    "AIAssistant": AIAssistant,
+    "AIMonitoring": AIMonitoring,
+    "APIExplorer": APIExplorer,
+    "APIKeyManager": APIKeyManager,
+    "APIKeys": APIKeys,
+    "Account": Account,
+    "AdminDashboard": AdminDashboard,
+    "AdminSubscriptions": AdminSubscriptions,
+    "AdvancedAnomalyDetection": AdvancedAnomalyDetection,
+    "AdvancedSearch": AdvancedSearch,
+    "Analytics": Analytics,
+    "AnalyticsPage": AnalyticsPage,
+    "AuditLog": AuditLog,
+    "BotBuilder": BotBuilder,
+    "CentralAnalytics": CentralAnalytics,
+    "ChatbotManager": ChatbotManager,
+    "CodeGenerator": CodeGenerator,
+    "CodePlayground": CodePlayground,
+    "CodeRefactoring": CodeRefactoring,
+    "Collaboration-old": collaborationOld,
+    "Collaboration": Collaboration,
+    "CollaborationHub": CollaborationHub,
+    "Components": Components,
+    "ContentStudio": ContentStudio,
+    "ContractBuilder": ContractBuilder,
+    "CryptoExchange": CryptoExchange,
+    "CryptoGambling": CryptoGambling,
+    "DAOGovernance": DAOGovernance,
+    "Dashboard": Dashboard,
+    "DataAnalytics": DataAnalytics,
+    "DataPipeline": DataPipeline,
+    "DataPrivacy": DataPrivacy,
+    "DeFiHub": DeFiHub,
+    "Deployments": Deployments,
+    "DeveloperExperience": DeveloperExperience,
+    "EmailAssistant": EmailAssistant,
+    "EmailCampaigns": EmailCampaigns,
+    "EnterpriseIntelligence": EnterpriseIntelligence,
+    "EnterpriseSecurity": EnterpriseSecurity,
+    "EntityDesigner": EntityDesigner,
+    "EnvironmentVariables": EnvironmentVariables,
+    "ExternalBotIntegrations": ExternalBotIntegrations,
+    "FeatureFlags": FeatureFlags,
+    "FeedbackAnalytics": FeedbackAnalytics,
+    "FunctionValidator": FunctionValidator,
+    "GamingPlatform": GamingPlatform,
+    "GitHubConnect": GitHubConnect,
+    "GovernmentTools": GovernmentTools,
+    "Guide": Guide,
+    "IncidentIntelligence": IncidentIntelligence,
+    "IntegrationAnalytics": IntegrationAnalytics,
+    "IntegrationEcosystem": IntegrationEcosystem,
+    "IntegrationHub": IntegrationHub,
+    "IntegrationTemplates": IntegrationTemplates,
+    "Integrations": Integrations,
+    "IntelligentAutomation": IntelligentAutomation,
+    "IntelligentInterface": IntelligentInterface,
+    "LLMSettings": LLMSettings,
+    "Landing": Landing,
+    "Login": Login,
+    "MLIntegration": MLIntegration,
+    "Marketplace": Marketplace,
+    "MarketplaceExtensions": MarketplaceExtensions,
+    "MediaStudio": MediaStudio,
+    "MedicalAI": MedicalAI,
+    "MobileStudio": MobileStudio,
+    "Monetization": Monetization,
+    "Monitoring": Monitoring,
+    "NFTMarketplace": NFTMarketplace,
+    "NFTStudio": NFTStudio,
+    "Notifications": Notifications,
+    "Observability": Observability,
+    "PageEditor": PageEditor,
+    "PerformanceScalability": PerformanceScalability,
+    "PredictiveAnalytics": PredictiveAnalytics,
+    "Pricing": Pricing,
+    "ProductAnalytics": ProductAnalytics,
+    "Profile": Profile,
+    "ProjectDiagnostics": ProjectDiagnostics,
+    "ProjectExport": ProjectExport,
+    "ProjectSettings": ProjectSettings,
+    "ProjectTasks": ProjectTasks,
+    "ProjectViewer": ProjectViewer,
+    "Projects": Projects,
+    "QuantumLab": QuantumLab,
+    "RateLimits": RateLimits,
+    "RbacTenancy": RbacTenancy,
+    "RealtimeCollaboration": RealtimeCollaboration,
+    "ReferralProgram": ReferralProgram,
+    "Register": Register,
+    "ReportingAnalytics": ReportingAnalytics,
+    "Roadmap": Roadmap,
+    "RoleManagement": RoleManagement,
+    "SearchAnalytics": SearchAnalytics,
+    "Security": Security,
+    "SecurityFeatures": SecurityFeatures,
+    "SocialMediaHub": SocialMediaHub,
+    "SubscriptionSuccess": SubscriptionSuccess,
+    "Support": Support,
+    "SystemHealth": SystemHealth,
+    "SystemStatus": SystemStatus,
+    "TeamCollaboration": TeamCollaboration,
+    "TeamManagement": TeamManagement,
+    "TemplateMarketplace": TemplateMarketplace,
+    "TokenCreator": TokenCreator,
+    "TwoFactorAuth": TwoFactorAuth,
+    "VSCodeIntegration": VSCodeIntegration,
+    "VisualizationStudio": VisualizationStudio,
+    "Web3Dashboard": Web3Dashboard,
+    "WebhookMonitor": WebhookMonitor,
+    "WorkflowBuilder": WorkflowBuilder,
+    "AdminAPIKeys": AdminAPIKeys,
+    "AdminMonitoring": AdminMonitoring,
+    "AdminSecrets": AdminSecrets,
+    "AdminSystemConfig": AdminSystemConfig,
+}
 
 export const pagesConfig = {
-  mainPage: 'Dashboard',
-  Pages: PAGES,
+    mainPage: "Dashboard",
+    Pages: PAGES,
+    Layout: __Layout,
 };
-

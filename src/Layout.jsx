@@ -43,7 +43,6 @@ export default function Layout({ children, currentPageName: _currentPageName, on
   const [user, setUser] = useState(null);
   const [currentProject, setCurrentProject] = useState(null);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
-  const { logout: backendLogout, user: backendUser } = useBackendAuth();
   const { selectProject, clearProject } = useNavigation();
 
   useEffect(() => {
@@ -77,7 +76,6 @@ export default function Layout({ children, currentPageName: _currentPageName, on
 
   const handleLogout = () => {
     base44.auth.logout();
-    backendLogout(); // Also logout from backend
   };
 
   const contextualItems = currentProject
