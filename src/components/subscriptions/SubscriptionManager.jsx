@@ -46,21 +46,26 @@ export default function SubscriptionManager() {
     setSelectedPlan(plan);
   };
 
-  const handlePayment = async () => {
-    if (!selectedPlan) return;
+  const handleSelectPlanAndPay = (plan) => {
+    setSelectedPlan(plan);
+    setShowPaymentModal(true);
+  };
 
+  const handlePaymentSuccess = async (txSignature) => {
     try {
       setIsProcessing(true);
-
-      // Initiate payment via backend
+      
+      // Process subscription upgrade with payment confirmation
       const response = await base44.functions.invoke('upgradeSubscription', {
         plan_id: selectedPlan.id,
-        payment_method: 'solana_wallet'
+        payment_method: 'solana_wallet',
+        transaction_signature: txSignature
       });
 
       if (response.data.success) {
         await loadSubscription();
         setShowPlans(false);
+        setShowPaymentModal(false);
         setSelectedPlan(null);
       } else {
         throw new Error(response.data.error || 'Upgrade failed');
