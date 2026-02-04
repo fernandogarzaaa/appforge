@@ -8,6 +8,8 @@ import { Progress } from '@/components/ui/progress';
 import { Zap, Send, CheckCircle2 } from 'lucide-react';
 import HyperparameterTuningPanel from './HyperparameterTuningPanel';
 import AgentFeedbackCollector from './AgentFeedbackCollector';
+import AgentCoachingPanel from './AgentCoachingPanel';
+import GuidedWorkflowPlayer from './GuidedWorkflowPlayer';
 
 export default function CustomAgentTrainer({ agentId, onTrainingComplete }) {
   const [agent, setAgent] = useState(null);
@@ -85,6 +87,12 @@ export default function CustomAgentTrainer({ agentId, onTrainingComplete }) {
         </div>
       </CardHeader>
       <CardContent className="space-y-4">
+        {/* Agent Coaching */}
+        <AgentCoachingPanel agentId={agentId} agentName={agent.agent_name} />
+
+        {/* Guided Workflows */}
+        <GuidedWorkflowPlayer agentId={agentId} />
+
         {/* Feedback Collection */}
         <AgentFeedbackCollector agentId={agentId} agentName={agent.agent_name} />
 
