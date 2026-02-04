@@ -2,9 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsTrigger } from '@/components/ui/tabs';
-import { Loader2, AlertCircle, CheckCircle2, CreditCard } from 'lucide-react';
+import { Loader2, AlertCircle, CheckCircle2 } from 'lucide-react';
 
 export default function SolanaPaymentModal({
   isOpen,
@@ -15,7 +13,6 @@ export default function SolanaPaymentModal({
   onPaymentSuccess,
   itemName
 }) {
-  const [paymentMethod, setPaymentMethod] = useState('wallet'); // wallet or card
   const [status, setStatus] = useState('ready'); // ready, connecting, confirming, success, error
   const [errorMsg, setErrorMsg] = useState('');
   const [txSignature, setTxSignature] = useState('');
