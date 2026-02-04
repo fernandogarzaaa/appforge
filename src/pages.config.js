@@ -162,7 +162,6 @@ import Components from './pages/Components';
 import Projects from './pages/Projects';
 import Login from './pages/Login';
 import Register from './pages/Register';
-import AdminAPIKeys from './pages/AdminAPIKeys';
 import AdminMonitoring from './pages/AdminMonitoring';
 import AdminSecrets from './pages/AdminSecrets';
 import AdminSystemConfig from './pages/AdminSystemConfig';
