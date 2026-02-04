@@ -414,13 +414,13 @@ export default function Dashboard() {
         <CapabilityDiscovery />
 
         {/* Recent Projects */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.4 }}
-          className="mb-12"
-        >
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">Recent Projects</h2>
+         <motion.div
+           initial={{ opacity: 0, y: 20 }}
+           animate={{ opacity: 1, y: 0 }}
+           transition={{ duration: 0.5, delay: 0.4 }}
+           className="mb-12"
+         >
+           <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Recent Projects</h2>
           {isLoading ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {[1, 2, 3].map((i) => (
