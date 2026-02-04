@@ -326,20 +326,20 @@ def qaoa_circuit(graph, beta, gamma):
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-3">
-                      <div className="bg-white dark:bg-slate-800 rounded p-3">
-                        <p className="text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">Quantum Advantage</p>
-                        <p className="text-sm font-medium text-green-700 dark:text-green-400">{study.advantage}</p>
-                      </div>
-                      <div className="bg-white dark:bg-slate-800 rounded p-3">
-                        <p className="text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">Key Challenge</p>
-                        <p className="text-sm font-medium text-orange-700 dark:text-orange-400">{study.challenge}</p>
-                      </div>
-                    </div>
+                       <div className="bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm rounded p-3 border border-white/20 dark:border-slate-700/20">
+                         <p className="text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">Quantum Advantage</p>
+                         <p className="text-sm font-medium text-green-700 dark:text-green-400">{study.advantage}</p>
+                       </div>
+                       <div className="bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm rounded p-3 border border-white/20 dark:border-slate-700/20">
+                         <p className="text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">Key Challenge</p>
+                         <p className="text-sm font-medium text-orange-700 dark:text-orange-400">{study.challenge}</p>
+                       </div>
+                     </div>
 
-                    <div className="bg-blue-50 dark:bg-blue-900/20 rounded p-3 mt-3">
-                      <p className="text-xs font-semibold text-blue-900 dark:text-blue-300 mb-1">Real-World Impact</p>
-                      <p className="text-sm text-blue-800 dark:text-blue-200">{study.realWorldImpact}</p>
-                    </div>
+                     <div className="bg-blue-500/10 dark:bg-blue-900/20 rounded p-3 mt-3 backdrop-blur-sm border border-blue-200/30 dark:border-blue-700/30">
+                       <p className="text-xs font-semibold text-blue-900 dark:text-blue-300 mb-1">Real-World Impact</p>
+                       <p className="text-sm text-blue-800 dark:text-blue-200">{study.realWorldImpact}</p>
+                     </div>
                   </div>
 
                   <div className="p-4 bg-slate-900 dark:bg-slate-950 border-t border-slate-700">
