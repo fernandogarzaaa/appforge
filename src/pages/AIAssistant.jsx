@@ -45,6 +45,10 @@ const ProjectWizard = React.lazy(() => import('@/components/ProjectWizard'));
 const AIComponentGenerator = React.lazy(() => import('@/components/ai/AIComponentGenerator'));
 const AITestingDebugger = React.lazy(() => import('@/components/ai/AITestingDebugger'));
 const AIUXSuggestions = React.lazy(() => import('@/components/ai/AIUXSuggestions'));
+// Quantum AI enhancements
+const QuantumQueryAnalyzer = React.lazy(() => import('@/components/ai/QuantumQueryAnalyzer'));
+const ProactiveQuantumSuggestions = React.lazy(() => import('@/components/ai/ProactiveQuantumSuggestions'));
+const QuantumReportGenerator = React.lazy(() => import('@/components/ai/QuantumReportGenerator'));
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import ReactMarkdown from 'react-markdown';
@@ -54,6 +58,7 @@ import { toast } from 'sonner';
 
 const quickActions = [
   { label: 'Generate Project', icon: Rocket, prompt: 'WIZARD_MODE', isWizard: true },
+  { label: 'Quantum Queries', icon: Zap, panel: 'quantum_analyzer', desc: 'NLP-powered quantum simulations' },
   { label: 'Create Entity', icon: Database, prompt: 'Create a new entity called ' },
   { label: 'Build Page', icon: FileCode, prompt: 'Build a page that displays ' },
   { label: 'Generate Component', icon: Code, prompt: 'component', panel: 'component_generator' },
@@ -80,6 +85,9 @@ export default function AIAssistant() {
   const [availableProjects, setAvailableProjects] = useState([]);
   const [showProjectSelector, setShowProjectSelector] = useState(false);
   const [showProjectWizard, setShowProjectWizard] = useState(false);
+  const [quantumAnalysis, setQuantumAnalysis] = useState(null);
+  const [userActivity, setUserActivity] = useState({});
+  const [simulationData, setSimulationData] = useState({});
   const messagesEndRef = useRef(null);
   const navigate = useNavigate();
   
@@ -877,43 +885,44 @@ Provide helpful, actionable responses with code examples when relevant. Be conci
             {/* Quick Actions Grid */}
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4 max-w-4xl w-full mb-12">
               {quickActions.map((action) => (
-                <button
-                  key={action.label}
-                  onClick={() => {
-                    if (action.isWizard) {
-                      setShowProjectWizard(true);
-                    } else if (action.panel) {
-                      setActivePanel(action.panel);
-                    } else {
-                      setInput(action.prompt);
-                    }
-                  }}
-                  aria-label={action.label}
-                  className={cn(
-                    "p-6 bg-white dark:bg-gray-800 rounded-xl border-2 transition-all group",
-                    action.isWizard 
-                      ? "border-indigo-200 dark:border-indigo-800 hover:border-indigo-500 dark:hover:border-indigo-500 hover:shadow-xl bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-900/20 dark:to-purple-900/20 md:col-span-3"
-                      : "border-gray-100 dark:border-gray-700 hover:border-indigo-500 dark:hover:border-indigo-600 hover:shadow-lg"
-                  )}
-                >
-                  {action.isWizard ? (
-                    <div className="flex items-center justify-center gap-4">
-                      <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
-                        <Rocket className="w-7 h-7 text-white" />
-                      </div>
-                      <div className="text-left">
-                        <div className="font-bold text-lg text-gray-900 dark:text-white">Generate Full Project</div>
-                        <div className="text-sm text-gray-500 dark:text-gray-400">Create entities, workflows, and pages from a description</div>
-                      </div>
-                      <Wand2 className="w-6 h-6 text-indigo-500 ml-4" />
-                    </div>
-                  ) : (
-                    <>
-                      <action.icon className="w-8 h-8 mb-3 text-gray-400 group-hover:text-indigo-600 transition-colors mx-auto" />
-                      <div className="font-medium text-sm text-gray-700 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white">{action.label}</div>
-                    </>
-                  )}
-                </button>
+              <button
+              key={action.label}
+              onClick={() => {
+                if (action.isWizard) {
+                  setShowProjectWizard(true);
+                } else if (action.panel) {
+                  setActivePanel(action.panel);
+                } else {
+                  setInput(action.prompt);
+                }
+              }}
+              aria-label={action.label}
+              className={cn(
+                "p-6 bg-white dark:bg-gray-800 rounded-xl border-2 transition-all group",
+                action.isWizard 
+                  ? "border-indigo-200 dark:border-indigo-800 hover:border-indigo-500 dark:hover:border-indigo-500 hover:shadow-xl bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-900/20 dark:to-purple-900/20 md:col-span-3"
+                  : "border-gray-100 dark:border-gray-700 hover:border-indigo-500 dark:hover:border-indigo-600 hover:shadow-lg"
+              )}
+              >
+              {action.isWizard ? (
+                <div className="flex items-center justify-center gap-4">
+                  <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
+                    <Rocket className="w-7 h-7 text-white" />
+                  </div>
+                  <div className="text-left">
+                    <div className="font-bold text-lg text-gray-900 dark:text-white">Generate Full Project</div>
+                    <div className="text-sm text-gray-500 dark:text-gray-400">Create entities, workflows, and pages from a description</div>
+                  </div>
+                  <Wand2 className="w-6 h-6 text-indigo-500 ml-4" />
+                </div>
+              ) : (
+                <>
+                  <action.icon className="w-8 h-8 mb-3 text-gray-400 group-hover:text-indigo-600 transition-colors mx-auto" />
+                  <div className="font-medium text-sm text-gray-700 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white">{action.label}</div>
+                  {action.desc && <div className="text-xs text-gray-500 mt-1">{action.desc}</div>}
+                </>
+              )}
+              </button>
               ))}
             </div>
 
@@ -972,6 +981,7 @@ Provide helpful, actionable responses with code examples when relevant. Be conci
               {activePanel === 'component_generator' && 'Component Generator'}
               {activePanel === 'testing_debugger' && 'Testing & Debugging'}
               {activePanel === 'ux_suggestions' && 'UX Suggestions'}
+              {activePanel === 'quantum_analyzer' && 'Quantum AI Assistant'}
             </h2>
             <Button variant="ghost" size="sm" onClick={() => setActivePanel(null)}>
               <ArrowLeft className="w-4 h-4 mr-2" />
@@ -1140,6 +1150,33 @@ Provide helpful, actionable responses with code examples when relevant. Be conci
           <div className="flex-1 p-6 overflow-auto">
             <div className="max-w-4xl mx-auto">
               <AIUXSuggestions projectId={projectId} projectDescription={selectedProject?.description || ''} />
+            </div>
+          </div>
+        )}
+
+        {activePanel === 'quantum_analyzer' && (
+          <div className="flex-1 p-6 overflow-auto">
+            <div className="max-w-4xl mx-auto space-y-6">
+              <React.Suspense fallback={<div className="text-center py-8">Loading...</div>}>
+                <QuantumQueryAnalyzer 
+                  onAnalysisComplete={(analysis) => {
+                    setQuantumAnalysis(analysis);
+                    setUserActivity(prev => ({ ...prev, lastQuery: analysis }));
+                  }} 
+                />
+              </React.Suspense>
+
+              {quantumAnalysis && (
+                <>
+                  <React.Suspense fallback={<div className="text-center py-8">Loading...</div>}>
+                    <ProactiveQuantumSuggestions userActivity={userActivity} />
+                  </React.Suspense>
+
+                  <React.Suspense fallback={<div className="text-center py-8">Loading...</div>}>
+                    <QuantumReportGenerator simulationData={{ ...quantumAnalysis, ...simulationData }} />
+                  </React.Suspense>
+                </>
+              )}
             </div>
           </div>
         )}
