@@ -3,9 +3,9 @@
  * Run with: npm test
  */
 
-const { describe, it, before, after  } = require('node:test');
-const assert = require('node:assert');
-const mongoose = require('mongoose');
+import { describe, it, before, after } from 'node:test';
+import assert from 'node:assert';
+import mongoose from 'mongoose';
 
 const API_URL = process.env.API_URL || 'http://localhost:5000';
 let authToken = '';

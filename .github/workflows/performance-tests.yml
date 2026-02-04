@@ -38,34 +38,10 @@ jobs:
             exit 1
           fi
 
-      - name: Start dev server (logged)
-        run: |
-          nohup npm run dev -- --host 0.0.0.0 --port 5173 > dev-server.log 2>&1 &
-          echo $! > dev-server.pid
-
-      - name: Wait for dev server to be ready
-        run: |
-          echo "Waiting for dev server at http://localhost:5173 (max 30s)..."
-          for i in {1..30}; do
-            if curl -fsS http://localhost:5173 > /dev/null; then
-              echo "Dev server is ready."
-              exit 0
-            fi
-            sleep 1
-          done
-          echo "Dev server did not become ready in time. Showing logs:"
-          if [ -f dev-server.log ]; then
-            tail -n 200 dev-server.log
-          else
-            echo "No dev server log file found."
-          fi
-          exit 1
-      
       - name: Run Lighthouse CI
         uses: treosh/lighthouse-ci-action@v10
         with:
-          urls: |
-            http://localhost:5173
+          staticDistDir: dist
           uploadArtifacts: true
           temporaryPublicStorage: true
 
@@ -162,6 +138,7 @@ jobs:
       
       - name: Analyze bundle size
         uses: andresz1/size-limit-action@v1
+        if: github.event_name == 'pull_request'
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           skip_step: install
