@@ -248,7 +248,7 @@ def qaoa_circuit(graph, beta, gamma):
 
                 <div>
                   <h4 className="font-semibold text-sm mb-2">Quantum Effect</h4>
-                  <p className="text-sm font-mono bg-slate-100 dark:bg-slate-800 p-3 rounded">
+                  <p className="text-sm font-mono bg-black/10 dark:bg-black/20 p-3 rounded backdrop-blur-sm">
                     {gate.effect}
                   </p>
                 </div>
