@@ -14,6 +14,28 @@ import MobileDrawerSidebar from '@/components/sidebar/MobileDrawerSidebar';
 // Lazy load the sidebar component for code splitting
 const ConsolidatedAISidebar = lazy(() => import('@/components/sidebar/ConsolidatedAISidebar'));
 
+// Theme management hook
+function useThemeManager() {
+  const [isDark, setIsDark] = useState(() => {
+    const saved = localStorage.getItem('theme-mode');
+    if (saved) return saved === 'dark';
+    return window.matchMedia('(prefers-color-scheme: dark)').matches;
+  });
+
+  useEffect(() => {
+    const html = document.documentElement;
+    if (isDark) {
+      html.classList.add('dark');
+      localStorage.setItem('theme-mode', 'dark');
+    } else {
+      html.classList.remove('dark');
+      localStorage.setItem('theme-mode', 'light');
+    }
+  }, [isDark]);
+
+  return { isDark, toggleTheme: () => setIsDark(!isDark) };
+}
+
 // Fallback loading skeleton for sidebar
 function SidebarFallback() {
   return (
