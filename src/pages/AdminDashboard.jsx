@@ -71,10 +71,10 @@ export default function AdminDashboard() {
 
   const getActivityColor = (status) => {
     switch (status) {
-      case 'success': return 'text-green-600 bg-green-50';
-      case 'warning': return 'text-yellow-600 bg-yellow-50';
-      case 'error': return 'text-red-600 bg-red-50';
-      default: return 'text-gray-600 bg-gray-50';
+      case 'success': return 'text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-950/30';
+      case 'warning': return 'text-yellow-600 dark:text-yellow-400 bg-yellow-50 dark:bg-yellow-950/30';
+      case 'error': return 'text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-950/30';
+      default: return 'text-gray-600 dark:text-gray-400 bg-gray-50 dark:bg-slate-800/50';
     }
   };
 
