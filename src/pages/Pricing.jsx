@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
-import { base44 } from '@/api/base44Client';
-import { Button } from '@/components/ui/button';
-import { Check, Loader2 } from 'lucide-react';
+import PhantomWalletConnect from '@/components/payments/PhantomWalletConnect';
+import SolanaPaymentProcessor from '@/components/payments/SolanaPaymentProcessor';
+import { Check } from 'lucide-react';
 
 const plans = [
   {
     name: 'Basic',
     price: 20,
+    priceId: 'phantom_basic_plan',
     description: 'Perfect for getting started',
-    priceId: 'paymongo_basic_plan',
     features: [
       'Up to 10 workflows',
       'Basic automation',
@@ -20,8 +20,8 @@ const plans = [
   {
     name: 'Pro',
     price: 30,
+    priceId: 'phantom_pro_plan',
     description: 'For growing teams',
-    priceId: 'paymongo_pro_plan',
     popular: true,
     features: [
       'Unlimited workflows',
@@ -35,8 +35,8 @@ const plans = [
   {
     name: 'Premium',
     price: 99,
+    priceId: 'phantom_premium_plan',
     description: 'For enterprise needs',
-    priceId: 'paymongo_premium_plan',
     features: [
       'Everything in Pro',
       'Dedicated support',
@@ -50,39 +50,12 @@ const plans = [
 ];
 
 export default function PricingPage() {
-  const [loading, setLoading] = useState(false);
+  const [walletConnected, setWalletConnected] = useState(false);
+  const [walletAddress, setWalletAddress] = useState('');
   const [selectedPlan, setSelectedPlan] = useState(null);
 
-  const handleCheckout = async (priceId) => {
-    setLoading(true);
-    setSelectedPlan(priceId);
-    
-    try {
-      // Check if running in iframe
-      if (window.self !== window.top) {
-        alert('Checkout is only available when accessing the app directly. Please open the app in a new window to complete your purchase.');
-        setLoading(false);
-        setSelectedPlan(null);
-        return;
-      }
-
-      const response = await base44.functions.invoke('createCheckoutSession', {
-        priceId: priceId
-      });
-
-      if (response.data.url) {
-        window.location.href = response.data.url;
-      } else {
-        alert('Failed to create checkout session. Please try again.');
-        setLoading(false);
-        setSelectedPlan(null);
-      }
-    } catch (error) {
-      console.error('Checkout error:', error);
-      alert('An error occurred. Please try again.');
-      setLoading(false);
-      setSelectedPlan(null);
-    }
+  const handlePlanSelect = (plan) => {
+    setSelectedPlan(plan);
   };
 
   return (
@@ -94,86 +67,97 @@ export default function PricingPage() {
             Simple, Transparent Pricing
           </h1>
           <p className="text-xl text-slate-600">
-            Choose the perfect plan for your needs
+            Choose the perfect plan and pay with Solana
+          </p>
+          <p className="text-sm text-slate-500 mt-2">
+            ⚡ Fast • Secure • Low Fees
           </p>
         </div>
 
-        {/* Pricing Cards */}
-        <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-          {plans.map((plan) => (
-            <div
-              key={plan.name}
-              className={`rounded-lg overflow-hidden transition-all duration-300 ${
-                plan.popular
-                  ? 'ring-2 ring-blue-500 shadow-xl scale-105'
-                  : 'shadow-lg hover:shadow-xl'
-              } bg-white`}
-            >
-              {/* Popular Badge */}
-              {plan.popular && (
-                <div className="bg-blue-500 text-white text-center py-2 text-sm font-semibold">
-                  Most Popular
-                </div>
-              )}
-
-              {/* Plan Content */}
-              <div className="p-8">
-                <h3 className="text-2xl font-bold text-slate-900 mb-2">
-                  {plan.name}
-                </h3>
-                <p className="text-slate-600 text-sm mb-6">
-                  {plan.description}
-                </p>
-
-                {/* Price */}
-                <div className="mb-6">
-                  <span className="text-5xl font-bold text-slate-900">
-                    ${plan.price}
-                  </span>
+        {/* Main Content Grid */}
+        <div className="grid lg:grid-cols-4 gap-8 max-w-7xl mx-auto">
+          {/* Pricing Cards */}
+          <div className="lg:col-span-2 space-y-4">
+            <h2 className="text-lg font-semibold text-slate-900 mb-4">Select Your Plan</h2>
+            {plans.map((plan) => (
+              <div
+                key={plan.name}
+                onClick={() => handlePlanSelect(plan)}
+                className={`rounded-lg cursor-pointer transition-all duration-300 p-6 border-2 ${
+                  selectedPlan?.name === plan.name
+                    ? 'ring-2 ring-purple-500 border-purple-500 shadow-lg bg-purple-50'
+                    : 'border-slate-200 hover:border-slate-300 bg-white'
+                }`}
+              >
+                {plan.popular && (
+                  <div className="text-xs font-semibold text-purple-600 mb-2">★ MOST POPULAR</div>
+                )}
+                <h3 className="text-xl font-bold text-slate-900 mb-2">{plan.name}</h3>
+                <p className="text-slate-600 text-sm mb-3">{plan.description}</p>
+                <div className="mb-4">
+                  <span className="text-3xl font-bold text-slate-900">${plan.price}</span>
                   <span className="text-slate-600 ml-2">/month</span>
+                  <p className="text-xs text-slate-500 mt-1">{plan.price.toFixed(2)} USDC</p>
                 </div>
-
-                {/* CTA Button */}
-                <Button
-                  onClick={() => handleCheckout(plan.priceId)}
-                  disabled={loading && selectedPlan === plan.priceId}
-                  className={`w-full mb-8 ${
-                    plan.popular
-                      ? 'bg-blue-500 hover:bg-blue-600'
-                      : 'bg-slate-900 hover:bg-slate-800'
-                  }`}
-                >
-                  {loading && selectedPlan === plan.priceId ? (
-                    <>
-                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                      Processing...
-                    </>
-                  ) : (
-                    'Get Started'
-                  )}
-                </Button>
-
-                {/* Features */}
-                <div className="space-y-4">
-                  {plan.features.map((feature, idx) => (
-                    <div key={idx} className="flex items-start gap-3">
-                      <Check className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-                      <span className="text-slate-700">{feature}</span>
+                <div className="space-y-2">
+                  {plan.features.slice(0, 3).map((feature, idx) => (
+                    <div key={idx} className="flex items-start gap-2 text-sm text-slate-700">
+                      <Check className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" />
+                      <span>{feature}</span>
                     </div>
                   ))}
+                  {plan.features.length > 3 && (
+                    <p className="text-xs text-slate-500 mt-2">+ {plan.features.length - 3} more features</p>
+                  )}
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
+
+          {/* Payment Section */}
+          <div className="lg:col-span-2 space-y-4">
+            <h2 className="text-lg font-semibold text-slate-900 mb-4">Payment</h2>
+            
+            {!selectedPlan ? (
+              <div className="bg-slate-50 border-2 border-dashed border-slate-300 rounded-lg p-8 text-center">
+                <p className="text-slate-600">Select a plan above to continue</p>
+              </div>
+            ) : (
+              <div className="space-y-4 sticky top-4">
+                <PhantomWalletConnect
+                  onWalletConnected={(address) => {
+                    setWalletAddress(address);
+                    setWalletConnected(true);
+                  }}
+                  onError={() => setWalletConnected(false)}
+                />
+
+                {walletConnected && (
+                  <SolanaPaymentProcessor
+                    planId={selectedPlan.priceId}
+                    planName={selectedPlan.name}
+                    amount={selectedPlan.price}
+                    walletAddress={walletAddress}
+                    onPaymentSuccess={() => {
+                      alert('Subscription activated! Welcome to ' + selectedPlan.name);
+                      setSelectedPlan(null);
+                      setWalletConnected(false);
+                    }}
+                    onPaymentError={() => {}}
+                  />
+                )}
+              </div>
+            )}
+          </div>
         </div>
 
-        {/* Test Mode Notice */}
-        <div className="mt-12 max-w-2xl mx-auto bg-amber-50 border border-amber-200 rounded-lg p-6 text-center">
-          <p className="text-sm text-amber-900">
-            💳 <strong>Test Mode:</strong> Use card <code className="bg-amber-100 px-2 py-1 rounded">4242 4242 4242 4242</code> with any future expiry and CVC to test payments.
+        {/* Solana Info */}
+        <div className="mt-12 max-w-2xl mx-auto bg-purple-50 border border-purple-200 rounded-lg p-6 text-center">
+          <p className="text-sm text-purple-900 mb-2">
+            🔐 <strong>Solana Payments:</strong> Powered by Phantom Wallet for secure, instant transactions.
           </p>
-          <p className="text-xs text-amber-700 mt-2">
-            To accept real payments, connect your PayMongo account in Dashboard &gt; Integrations.
+          <p className="text-xs text-purple-700">
+            All payments processed on Solana mainnet with USDC. No KYC required.
           </p>
         </div>
       </div>
