@@ -162,6 +162,8 @@ import AdminAPIKeys from './pages/AdminAPIKeys';
 import AdminMonitoring from './pages/AdminMonitoring';
 import AdminSecrets from './pages/AdminSecrets';
 import AdminSystemConfig from './pages/AdminSystemConfig';
+import AdminSecrets from './pages/AdminSecrets';
+import AdminSystemConfig from './pages/AdminSystemConfig';
 import __Layout from './Layout.jsx';
 
 
@@ -279,6 +281,8 @@ export const PAGES = {
     "WorkflowBuilder": WorkflowBuilder,
     "AdminAPIKeys": AdminAPIKeys,
     "AdminMonitoring": AdminMonitoring,
+    "AdminSecrets": AdminSecrets,
+    "AdminSystemConfig": AdminSystemConfig,
     "AdminSecrets": AdminSecrets,
     "AdminSystemConfig": AdminSystemConfig,
 }
