@@ -334,30 +334,30 @@ export default function AdminDashboard() {
                   <div className="space-y-2">
                     {recentActivity.map((activity) => (
                       <div 
-                        key={activity.id} 
-                        className="flex items-center justify-between p-4 bg-white border rounded-lg hover:shadow-md transition-all"
-                      >
-                        <div className="flex items-center gap-4">
-                          <div className={`p-3 rounded-lg ${getActivityColor(activity.status)}`}>
-                            {getActivityIcon(activity.type)}
+                          key={activity.id} 
+                          className="flex items-center justify-between p-4 bg-white dark:bg-slate-800/50 dark:border-slate-700 border rounded-lg hover:shadow-md dark:hover:shadow-lg transition-all"
+                        >
+                          <div className="flex items-center gap-4">
+                            <div className={`p-3 rounded-lg ${getActivityColor(activity.status)}`}>
+                              {getActivityIcon(activity.type)}
+                            </div>
+                            <div>
+                              <p className="font-semibold text-gray-900 dark:text-white">
+                                {activity.type.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')}
+                              </p>
+                              <p className="text-sm text-gray-600 dark:text-gray-400">{activity.user}</p>
+                              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                                {activity.timestamp.toLocaleString()}
+                              </p>
+                            </div>
                           </div>
-                          <div>
-                            <p className="font-semibold text-gray-900">
-                              {activity.type.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')}
-                            </p>
-                            <p className="text-sm text-gray-600">{activity.user}</p>
-                            <p className="text-xs text-gray-500 mt-1">
-                              {activity.timestamp.toLocaleString()}
-                            </p>
+                          <div className="flex items-center gap-3">
+                            <Badge variant={activity.status === 'error' ? 'destructive' : 'secondary'}>
+                              {activity.status}
+                            </Badge>
+                            <Button variant="ghost" size="sm" className="dark:hover:bg-slate-700">View Details</Button>
                           </div>
                         </div>
-                        <div className="flex items-center gap-3">
-                          <Badge variant={activity.status === 'error' ? 'destructive' : 'secondary'}>
-                            {activity.status}
-                          </Badge>
-                          <Button variant="ghost" size="sm">View Details</Button>
-                        </div>
-                      </div>
                     ))}
                   </div>
 
