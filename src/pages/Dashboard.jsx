@@ -428,23 +428,21 @@ export default function Dashboard() {
               ))}
             </div>
           ) : projects.length === 0 ? (
-            <Card className="border-2 border-dashed border-gray-300 shadow-none">
-              <CardContent className="p-12 text-center">
-                <div className="w-16 h-16 bg-gradient-to-br from-indigo-100 to-purple-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                  <FolderKanban className="w-8 h-8 text-indigo-600" />
-                </div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">No projects yet</h3>
-                <p className="text-gray-600 mb-6 max-w-md mx-auto">
-                  Get started by creating your first project with our powerful no-code builder
-                </p>
-                <Link to={createPageUrl('Projects') + '?new=true'}>
-                  <Button className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white shadow-lg shadow-indigo-500/30">
-                    <Plus className="w-4 h-4 mr-2" />
-                    Create Your First Project
-                  </Button>
-                </Link>
-              </CardContent>
-            </Card>
+            <div className="backdrop-blur-md bg-white/40 dark:bg-slate-900/40 border-2 border-dashed border-white/40 dark:border-white/10 rounded-2xl p-12 text-center">
+              <div className="w-16 h-16 bg-gradient-to-br from-cyan-500/30 to-blue-500/30 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <FolderKanban className="w-8 h-8 text-cyan-600 dark:text-cyan-400" />
+              </div>
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">No projects yet</h3>
+              <p className="text-gray-600 dark:text-gray-300 mb-6 max-w-md mx-auto">
+                Create your first project with our powerful AI builder
+              </p>
+              <Link to={createPageUrl('Projects') + '?new=true'}>
+                <Button className="bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700 text-white shadow-lg shadow-cyan-500/30 rounded-xl px-6 h-11">
+                  <Plus className="w-4 h-4 mr-2" />
+                  Create Your First Project
+                </Button>
+              </Link>
+            </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {projects.map((project, index) => (
