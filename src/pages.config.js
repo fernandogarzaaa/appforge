@@ -47,6 +47,7 @@
  *
  * The mainPage value must match a key in the PAGES object exactly.
  */
+import AIAssistant from './pages/AIAssistant';
 import AIMonitoring from './pages/AIMonitoring';
 import APIExplorer from './pages/APIExplorer';
 import APIKeyManager from './pages/APIKeyManager';
@@ -72,6 +73,7 @@ import CodeRefactoring from './pages/CodeRefactoring';
 import collaborationOld from './pages/Collaboration-old';
 import Collaboration from './pages/Collaboration';
 import CollaborationHub from './pages/CollaborationHub';
+import Components from './pages/Components';
 import ContentStudio from './pages/ContentStudio';
 import ContractBuilder from './pages/ContractBuilder';
 import CryptoExchange from './pages/CryptoExchange';
@@ -108,6 +110,7 @@ import IntelligentAutomation from './pages/IntelligentAutomation';
 import IntelligentInterface from './pages/IntelligentInterface';
 import LLMSettings from './pages/LLMSettings';
 import Landing from './pages/Landing';
+import Login from './pages/Login';
 import MLIntegration from './pages/MLIntegration';
 import Marketplace from './pages/Marketplace';
 import MarketplaceExtensions from './pages/MarketplaceExtensions';
@@ -131,11 +134,13 @@ import ProjectExport from './pages/ProjectExport';
 import ProjectSettings from './pages/ProjectSettings';
 import ProjectTasks from './pages/ProjectTasks';
 import ProjectViewer from './pages/ProjectViewer';
+import Projects from './pages/Projects';
 import QuantumLab from './pages/QuantumLab';
 import RateLimits from './pages/RateLimits';
 import RbacTenancy from './pages/RbacTenancy';
 import RealtimeCollaboration from './pages/RealtimeCollaboration';
 import ReferralProgram from './pages/ReferralProgram';
+import Register from './pages/Register';
 import ReportingAnalytics from './pages/ReportingAnalytics';
 import Roadmap from './pages/Roadmap';
 import RoleManagement from './pages/RoleManagement';
@@ -157,19 +162,11 @@ import VisualizationStudio from './pages/VisualizationStudio';
 import Web3Dashboard from './pages/Web3Dashboard';
 import WebhookMonitor from './pages/WebhookMonitor';
 import WorkflowBuilder from './pages/WorkflowBuilder';
-import AIAssistant from './pages/AIAssistant';
-import Components from './pages/Components';
-import Projects from './pages/Projects';
-import Login from './pages/Login';
-import Register from './pages/Register';
-import AdminAPIKeys from './pages/AdminAPIKeys';
-import AdminMonitoring from './pages/AdminMonitoring';
-import AdminSecrets from './pages/AdminSecrets';
-import AdminSystemConfig from './pages/AdminSystemConfig';
 import __Layout from './Layout.jsx';
 
 
 export const PAGES = {
+    "AIAssistant": AIAssistant,
     "AIMonitoring": AIMonitoring,
     "APIExplorer": APIExplorer,
     "APIKeyManager": APIKeyManager,
@@ -195,6 +192,7 @@ export const PAGES = {
     "Collaboration-old": collaborationOld,
     "Collaboration": Collaboration,
     "CollaborationHub": CollaborationHub,
+    "Components": Components,
     "ContentStudio": ContentStudio,
     "ContractBuilder": ContractBuilder,
     "CryptoExchange": CryptoExchange,
@@ -231,6 +229,7 @@ export const PAGES = {
     "IntelligentInterface": IntelligentInterface,
     "LLMSettings": LLMSettings,
     "Landing": Landing,
+    "Login": Login,
     "MLIntegration": MLIntegration,
     "Marketplace": Marketplace,
     "MarketplaceExtensions": MarketplaceExtensions,
@@ -254,11 +253,13 @@ export const PAGES = {
     "ProjectSettings": ProjectSettings,
     "ProjectTasks": ProjectTasks,
     "ProjectViewer": ProjectViewer,
+    "Projects": Projects,
     "QuantumLab": QuantumLab,
     "RateLimits": RateLimits,
     "RbacTenancy": RbacTenancy,
     "RealtimeCollaboration": RealtimeCollaboration,
     "ReferralProgram": ReferralProgram,
+    "Register": Register,
     "ReportingAnalytics": ReportingAnalytics,
     "Roadmap": Roadmap,
     "RoleManagement": RoleManagement,
@@ -280,15 +281,6 @@ export const PAGES = {
     "Web3Dashboard": Web3Dashboard,
     "WebhookMonitor": WebhookMonitor,
     "WorkflowBuilder": WorkflowBuilder,
-    "AIAssistant": AIAssistant,
-    "Components": Components,
-    "Projects": Projects,
-    "Login": Login,
-    "Register": Register,
-    "AdminAPIKeys": AdminAPIKeys,
-    "AdminMonitoring": AdminMonitoring,
-    "AdminSecrets": AdminSecrets,
-    "AdminSystemConfig": AdminSystemConfig,
 }
 
 export const pagesConfig = {
