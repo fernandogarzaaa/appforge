@@ -107,12 +107,12 @@ export default function SubscriptionManager() {
               </div>
               <div>
                 <p className="text-xs text-gray-500 flex items-center gap-1">
-                  <Calendar className="w-3 h-3" />
-                  Expires
-                </p>
-                <p className="text-sm font-semibold">
-                  {new Date(subscription.expires_at).toLocaleDateString()}
-                </p>
+                    <Calendar className="w-3 h-3" />
+                    Renews
+                  </p>
+                  <p className="text-sm font-semibold">
+                    {new Date(subscription.renews_at).toLocaleDateString()}
+                  </p>
               </div>
             </div>
 
