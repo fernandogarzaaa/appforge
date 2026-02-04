@@ -10,14 +10,12 @@ import { pagesConfig } from './pages.config.jsx'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import PageNotFound from './lib/PageNotFound';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
-import { AdminProvider } from '@/lib/AdminContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 import { ThemeProvider } from '@/context/ThemeContext';
 import { LLMProvider } from '@/contexts/LLMContext';
 import { BackendAuthProvider } from '@/contexts/BackendAuthContext';
 import { ActivityProvider } from '@/contexts/ActivityContext';
 import { CollaborationProvider } from '@/contexts/CollaborationContext';
-import { NavigationProvider } from '@/contexts/NavigationContext';
 import { PrivateRoute } from '@/components/PrivateRoute';
 import { OfflineIndicator } from '@/hooks/useOfflineDetection';
 import { SearchModal } from '@/components/SearchModal';
@@ -143,28 +141,22 @@ function App() {
       <ThemeProvider>
         <LLMProvider>
           <AuthProvider>
-            <AdminProvider>
-              <BackendAuthProvider>
-                <ActivityProvider>
-                  <CollaborationProvider>
-                    <NavigationProvider>
-                      <QueryClientProvider client={queryClientInstance}>
-                      <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
-                        <NavigationTracker />
-                        {/* Phase 1 Features */}
-                        <CommandPalette />
-                        <ContextMenu />
-                        <AuthenticatedApp onSearchOpen={() => setSearchOpen(true)} />
-                        <SearchModal isOpen={searchOpen} onClose={() => setSearchOpen(false)} />
-                        <OfflineIndicator />
-                      </Router>
-                      <Toaster />
-                    </QueryClientProvider>
-                    </NavigationProvider>
-                  </CollaborationProvider>
-                </ActivityProvider>
-              </BackendAuthProvider>
-            </AdminProvider>
+            <BackendAuthProvider>
+              <ActivityProvider>
+                <CollaborationProvider>
+                  <QueryClientProvider client={queryClientInstance}>
+                  <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+                    <NavigationTracker />
+                    {/* Phase 1 Features */}
+                    <CommandPalette />
+                    <ContextMenu />
+                    <AuthenticatedApp onSearchOpen={() => setSearchOpen(true)} />
+                    <SearchModal isOpen={searchOpen} onClose={() => setSearchOpen(false)} />
+                    <OfflineIndicator />
+                  </Router>
+                  <Toaster />
+                </QueryClientProvider>                </CollaborationProvider>              </ActivityProvider>
+            </BackendAuthProvider>
           </AuthProvider>
         </LLMProvider>
       </ThemeProvider>

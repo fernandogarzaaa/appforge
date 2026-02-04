@@ -8,9 +8,7 @@ import {
   clearHistory,
   getSnapshotCount,
   getReversibleStateData,
-  computeStateDiff,
-  type TimelineEntry,
-  type ReversibleStateData,
+  computeStateDiff
 } from '@/lib/ReversibleComputing';
 
 export interface Snapshot {
