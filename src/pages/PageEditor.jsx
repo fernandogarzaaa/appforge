@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, lazy, Suspense } from 'react';
 import { base44 } from '@/api/base44Client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { 
@@ -143,6 +143,7 @@ export default function ${newPage.name.replace(/\s+/g, '') || 'NewPage'}() {
                 {searchQuery ? 'No pages found' : 'No pages yet'}
               </div>
             ) : (
+              <Suspense fallback={<div className="space-y-2 p-2">{[1, 2, 3].map(i => <div key={i} className="h-14 bg-gray-100 rounded-xl animate-pulse" />)}</div>}>
               <AnimatePresence>
                 {filteredPages.map((page) => (
                   <motion.button
@@ -176,6 +177,7 @@ export default function ${newPage.name.replace(/\s+/g, '') || 'NewPage'}() {
                   </motion.button>
                 ))}
               </AnimatePresence>
+            </Suspense>
             )}
           </div>
         </ScrollArea>
