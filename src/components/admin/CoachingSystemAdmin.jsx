@@ -287,7 +287,7 @@ export default function CoachingSystemAdmin() {
 
       {/* Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="grid w-full grid-cols-4">
+        <TabsList className="grid w-full grid-cols-5">
           <TabsTrigger value="overview">System Config</TabsTrigger>
           <TabsTrigger value="payments">
             <Wallet className="w-4 h-4 mr-2" />
@@ -296,6 +296,10 @@ export default function CoachingSystemAdmin() {
           <TabsTrigger value="transactions">
             <TrendingUp className="w-4 h-4 mr-2" />
             Transactions ({transactions.length})
+          </TabsTrigger>
+          <TabsTrigger value="marketing">
+            <Zap className="w-4 h-4 mr-2" />
+            Marketing Bot
           </TabsTrigger>
           <TabsTrigger value="logs">Audit Logs</TabsTrigger>
         </TabsList>
@@ -621,6 +625,10 @@ export default function CoachingSystemAdmin() {
               )}
             </CardContent>
           </Card>
+        </TabsContent>
+
+        <TabsContent value="marketing">
+          <MarketingBotPanel />
         </TabsContent>
 
         <TabsContent value="logs">
