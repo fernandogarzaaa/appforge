@@ -39,43 +39,27 @@ jobs:
           fi
 
       - name: Start static file server
+        run: npx serve dist -l 8080 > /dev/null 2>&1 &
+      
+      - name: Wait for server
         run: |
-          npx serve dist -l 8080 &
-          echo $! > /tmp/server.pid
-          
-          # Wait for server to be ready with health check
-          echo "Waiting for server to start on port 8080..."
           RETRY_COUNT=0
-          MAX_RETRIES=30
-          
-          while [ $RETRY_COUNT -lt $MAX_RETRIES ]; do
+          while [ $RETRY_COUNT -lt 30 ]; do
             if curl -f http://localhost:8080 > /dev/null 2>&1; then
-              echo "✓ Server is ready and responding!"
-              break
+              exit 0
             fi
-            echo "Attempt $((RETRY_COUNT + 1))/$MAX_RETRIES: Server not ready yet, waiting..."
             sleep 1
             RETRY_COUNT=$((RETRY_COUNT + 1))
           done
-          
-          if [ $RETRY_COUNT -ge $MAX_RETRIES ]; then
-            echo "✗ Server failed to start after 30 seconds"
-            kill $(cat /tmp/server.pid) 2>/dev/null || true
-            exit 1
-          fi
+          exit 1
 
       - name: Run Lighthouse CI
         uses: treosh/lighthouse-ci-action@v10
-        timeout-minutes: 15
         with:
           urls: |
             http://localhost:8080
           uploadArtifacts: true
           temporaryPublicStorage: true
-      
-      - name: Stop static file server
-        if: always()
-        run: kill $(cat /tmp/server.pid) 2>/dev/null || true
 
   load-testing:
     name: API Load Testing
