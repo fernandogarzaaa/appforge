@@ -48,10 +48,10 @@ export default function GlobalTopNav({ user, onLogout, mobileMenu, title = 'AppF
         {user && (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button
-                variant="ghost"
-                className="flex items-center gap-2 h-11 px-2 sm:px-3 hover:bg-gray-100 dark:hover:bg-slate-800"
-              >
+                <Button
+                  variant="ghost"
+                  className="flex items-center gap-2 h-9 px-2 sm:px-3 hover:bg-white/50 dark:hover:bg-slate-800/50 rounded-lg"
+                >
                 <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-gradient-to-br from-indigo-600 to-indigo-700 dark:from-indigo-500 dark:to-indigo-600 flex items-center justify-center shrink-0">
                   <span className="text-white text-xs sm:text-sm font-bold">
                     {user.full_name?.charAt(0).toUpperCase()}
