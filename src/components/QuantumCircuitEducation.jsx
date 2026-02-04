@@ -306,36 +306,67 @@ def qaoa_circuit(graph, beta, gamma):
 
           {/* Algorithms Tab */}
           <TabsContent value="algorithms" className="space-y-4">
-            <div className="space-y-3">
-              {algorithms.map((algo, i) => (
+            <div className="space-y-4">
+              {caseStudies.map((study, i) => (
                 <motion.div
                   key={i}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: i * 0.1 }}
-                  className="bg-slate-50 dark:bg-slate-900 rounded-lg p-4 border border-slate-200 dark:border-slate-700 hover:border-indigo-300 dark:hover:border-indigo-700 transition-all"
+                  className="bg-slate-50 dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-700 overflow-hidden hover:border-indigo-300 dark:hover:border-indigo-700 transition-all"
                 >
-                  <div className="flex items-start justify-between mb-2">
-                    <h4 className="font-semibold text-base">{algo.name}</h4>
-                    <Badge variant="outline" className="bg-indigo-50 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300">
-                      {algo.complexity}
-                    </Badge>
+                  <div className="p-4 border-b border-slate-200 dark:border-slate-700">
+                    <div className="flex items-start justify-between gap-3 mb-3">
+                      <div>
+                        <h3 className="font-bold text-base mb-1">{study.title}</h3>
+                        <Badge className="bg-indigo-100 dark:bg-indigo-900/50 text-indigo-700 dark:text-indigo-300">
+                          {study.algorithm}
+                        </Badge>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-3">
+                      <div className="bg-white dark:bg-slate-800 rounded p-3">
+                        <p className="text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">Quantum Advantage</p>
+                        <p className="text-sm font-medium text-green-700 dark:text-green-400">{study.advantage}</p>
+                      </div>
+                      <div className="bg-white dark:bg-slate-800 rounded p-3">
+                        <p className="text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">Key Challenge</p>
+                        <p className="text-sm font-medium text-orange-700 dark:text-orange-400">{study.challenge}</p>
+                      </div>
+                    </div>
+
+                    <div className="bg-blue-50 dark:bg-blue-900/20 rounded p-3 mt-3">
+                      <p className="text-xs font-semibold text-blue-900 dark:text-blue-300 mb-1">Real-World Impact</p>
+                      <p className="text-sm text-blue-800 dark:text-blue-200">{study.realWorldImpact}</p>
+                    </div>
                   </div>
-                  <p className="text-sm text-muted-foreground mb-3">{algo.description}</p>
-                  <div className="flex items-center gap-2">
-                    <Lightbulb className="h-4 w-4 text-yellow-500" />
-                    <span className="text-xs font-medium text-slate-700 dark:text-slate-300">
-                      Use Case: {algo.application}
-                    </span>
+
+                  <div className="p-4 bg-slate-900 dark:bg-slate-950 border-t border-slate-700">
+                    <p className="text-xs font-semibold text-slate-300 mb-2">Code Example</p>
+                    <pre className="text-xs text-slate-100 overflow-x-auto whitespace-pre-wrap break-words">
+                      <code>{study.code}</code>
+                    </pre>
+                  </div>
+
+                  <div className="px-4 py-3 bg-slate-100 dark:bg-slate-800 border-t border-slate-200 dark:border-slate-700">
+                    <p className="text-xs text-slate-700 dark:text-slate-400">
+                      <strong>Organizations:</strong> {study.companies}
+                    </p>
                   </div>
                 </motion.div>
               ))}
             </div>
-            
+
             <div className="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-950/20 dark:to-purple-950/20 border border-blue-200 dark:border-blue-700/50 rounded-lg p-4">
-              <p className="text-sm text-blue-900 dark:text-blue-100">
-                <strong>💡 Did you know?</strong> A 300-qubit quantum computer could perform more calculations simultaneously than there are atoms in the universe (≈10⁸⁰).
+              <p className="text-sm text-blue-900 dark:text-blue-100 mb-2">
+                <strong>💡 Quantum Advantage Timeline:</strong>
               </p>
+              <ul className="text-xs text-blue-800 dark:text-blue-200 space-y-1">
+                <li>• <strong>2024-2025:</strong> NISQ advantage emerging in optimization & simulation</li>
+                <li>• <strong>2025-2030:</strong> Fault-tolerant quantum computers with 1000+ logical qubits</li>
+                <li>• <strong>2030+:</strong> Practical quantum advantage in finance, drug discovery, materials science</li>
+              </ul>
             </div>
           </TabsContent>
 
