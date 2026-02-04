@@ -22,6 +22,7 @@ export default function CoachingSystemAdmin() {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [logFilter, setLogFilter] = useState('');
   const [copied, setCopied] = useState(null);
+  const [transactions, setTransactions] = useState([]);
 
   useEffect(() => {
     verifyAdmin();
@@ -37,6 +38,7 @@ export default function CoachingSystemAdmin() {
         loadSolanaConfig();
         loadMetrics();
         loadLogs();
+        loadTransactions();
       }
     } catch (error) {
       console.error('Admin verification error:', error);
@@ -100,6 +102,18 @@ export default function CoachingSystemAdmin() {
     }
   };
 
+  const loadTransactions = async () => {
+    try {
+      const txns = await base44.entities.SolanaTransaction.list(
+        '-updated_date',
+        20
+      );
+      setTransactions(txns || []);
+    } catch (error) {
+      console.error('Transactions load error:', error);
+    }
+  };
+
   const loadLogs = async () => {
     try {
       const logEntries = await base44.entities.CoachingAuditLog.list(
@@ -151,7 +165,7 @@ export default function CoachingSystemAdmin() {
 
   const refreshAll = async () => {
     setIsRefreshing(true);
-    await Promise.all([loadConfig(), loadSolanaConfig(), loadMetrics(), loadLogs()]);
+    await Promise.all([loadConfig(), loadSolanaConfig(), loadMetrics(), loadLogs(), loadTransactions()]);
     setIsRefreshing(false);
   };
 
@@ -273,11 +287,15 @@ export default function CoachingSystemAdmin() {
 
       {/* Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="grid w-full grid-cols-3">
+        <TabsList className="grid w-full grid-cols-4">
           <TabsTrigger value="overview">System Config</TabsTrigger>
           <TabsTrigger value="payments">
             <Wallet className="w-4 h-4 mr-2" />
-            Solana Payments
+            Solana Config
+          </TabsTrigger>
+          <TabsTrigger value="transactions">
+            <TrendingUp className="w-4 h-4 mr-2" />
+            Transactions ({transactions.length})
           </TabsTrigger>
           <TabsTrigger value="logs">Audit Logs</TabsTrigger>
         </TabsList>
@@ -551,6 +569,58 @@ export default function CoachingSystemAdmin() {
               </CardContent>
             </Card>
           )}
+        </TabsContent>
+
+        <TabsContent value="transactions">
+          <Card>
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <div>
+                  <CardTitle className="text-sm">Solana Transactions</CardTitle>
+                  <p className="text-xs text-gray-500 mt-1">Real-time payment tracking</p>
+                </div>
+                {transactions.length > 0 && (
+                  <div className="text-right">
+                    <p className="text-xs text-gray-500">Total Revenue</p>
+                    <p className="text-2xl font-bold text-purple-600">
+                      {transactions.reduce((sum, t) => sum + (t.amount_sol || 0), 0).toFixed(2)} SOL
+                    </p>
+                  </div>
+                )}
+              </div>
+            </CardHeader>
+            <CardContent>
+              {transactions.length === 0 ? (
+                <p className="text-center text-sm text-gray-500 py-8">No transactions yet</p>
+              ) : (
+                <div className="space-y-2 max-h-96 overflow-y-auto">
+                  {transactions.map((tx) => (
+                    <div
+                      key={tx.id}
+                      className="p-3 border rounded bg-gradient-to-r from-purple-50 to-pink-50"
+                    >
+                      <div className="flex items-center justify-between mb-1">
+                        <div className="flex items-center gap-2">
+                          <Badge className={tx.status === 'confirmed' ? 'bg-green-600' : 'bg-yellow-600'}>
+                            {tx.status}
+                          </Badge>
+                          <span className="text-sm font-semibold">{tx.amount_sol} SOL</span>
+                        </div>
+                        <span className="text-xs text-gray-500">
+                          {new Date(tx.timestamp).toLocaleDateString()}
+                        </span>
+                      </div>
+                      <p className="text-xs text-gray-600">User: {tx.user_id}</p>
+                      <p className="text-xs text-gray-600">Type: {tx.payment_type}</p>
+                      <p className="text-xs text-gray-500 mt-1 break-all font-mono">
+                        {tx.transaction_signature}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </CardContent>
+          </Card>
         </TabsContent>
 
         <TabsContent value="logs">
