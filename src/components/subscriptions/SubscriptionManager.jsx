@@ -50,47 +50,18 @@ export default function SubscriptionManager() {
     try {
       setIsProcessing(true);
 
-      // Create subscription record (pending)
+      // Initiate payment via backend
       const response = await base44.functions.invoke('upgradeSubscription', {
-        subscription_id: selectedPlan.id
+        plan_id: selectedPlan.id,
+        payment_method: 'solana_wallet'
       });
 
-      // Check if user has Phantom wallet
-      if (window.solana && window.solana.isPhantom) {
-        // Direct wallet payment
-        const connection = new (await import('npm:@solana/web3.js')).Connection(
-          'https://api.mainnet-beta.solana.com'
-        );
-
-        const transaction = new (await import('npm:@solana/web3.js')).Transaction().add(
-          new (await import('npm:@solana/web3.js')).SystemProgram.transfer({
-            fromPubkey: window.solana.publicKey,
-            toPubkey: new (await import('npm:@solana/web3.js')).PublicKey(
-              'YOUR_WALLET_ADDRESS' // This would come from config
-            ),
-            lamports: selectedPlan.price_sol * 1e9
-          })
-        );
-
-        const { blockhash } = await connection.getLatestBlockhash();
-        transaction.recentBlockhash = blockhash;
-        transaction.feePayer = window.solana.publicKey;
-
-        const signed = await window.solana.signTransaction(transaction);
-        const signature = await connection.sendRawTransaction(signed.serialize());
-
-        // Confirm payment
-        await base44.functions.invoke('confirmSubscriptionPayment', {
-          user_email: user.email,
-          subscription_id: selectedPlan.id,
-          transaction_signature: signature
-        });
-
+      if (response.data.success) {
         await loadSubscription();
         setShowPlans(false);
         setSelectedPlan(null);
       } else {
-        alert('Phantom wallet not found. Please install Phantom wallet.');
+        throw new Error(response.data.error || 'Upgrade failed');
       }
     } catch (error) {
       console.error('Payment error:', error);
