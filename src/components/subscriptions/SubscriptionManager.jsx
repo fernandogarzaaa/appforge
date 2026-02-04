@@ -151,8 +151,8 @@ export default function SubscriptionManager() {
           {selectedPlan && (
             <div className="mt-6 p-4 bg-purple-50 rounded border border-purple-200">
               <p className="text-sm text-gray-700 mb-3">
-                Upgrade to <span className="font-bold">{selectedPlan.tier_name}</span> for{' '}
-                <span className="font-bold text-purple-600">{selectedPlan.price_sol} SOL/month</span>
+                Upgrade to <span className="font-bold">{selectedPlan.tier}</span> for{' '}
+                <span className="font-bold text-purple-600">{selectedPlan.price_per_month_sol} SOL/month</span>
               </p>
               <Button
                 onClick={handlePayment}
