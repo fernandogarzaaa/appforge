@@ -3,7 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { BookOpen, Code2, Lightbulb, Atom, Cpu, Network } from 'lucide-react'
+import { BookOpen, Code2, Lightbulb, Atom, Cpu, Network, AlertCircle } from 'lucide-react'
 import { motion } from 'framer-motion'
 
 /**
