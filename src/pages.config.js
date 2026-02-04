@@ -162,10 +162,6 @@ import AdminSecrets from './pages/AdminSecrets';
 import AdminSystemConfig from './pages/AdminSystemConfig';
 import AdminAPIKeys from './pages/AdminAPIKeys';
 import AdminMonitoring from './pages/AdminMonitoring';
-import AdminSecrets from './pages/AdminSecrets';
-import AdminSystemConfig from './pages/AdminSystemConfig';
-import AdminAPIKeys from './pages/AdminAPIKeys';
-import AdminMonitoring from './pages/AdminMonitoring';
 import __Layout from './Layout.jsx';
 
 
