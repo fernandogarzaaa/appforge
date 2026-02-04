@@ -27,13 +27,13 @@ import AdminSecrets from '@/pages/admin/AdminSecrets';
 import AdminSystemConfig from '@/pages/admin/AdminSystemConfig';
 import AdminMonitoring from '@/pages/admin/AdminMonitoring';
 import AdminDashboard from '@/pages/AdminDashboard';
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { validateEnv } from '@/utils/env';
 import errorTracker, { setUser, clearUser } from '@/utils/errorTracking';
 import { startHealthMonitoring } from '@/utils/healthCheck';
 import { useToast } from '@/components/ui/use-toast';
 import { ViewModeProvider } from '@/contexts/ViewModeContext';
-import { NavigationProvider } from '@/contexts/NavigationContext';
+import { NavigationProvider, useNavigation } from '@/contexts/NavigationContext';
 import { ViewModeToggle } from '@/components/navigation/ViewModeToggle';
 // Phase 1 Feature Imports
 import { CommandPalette } from '@/features/commandPalette/CommandPalette';
@@ -157,10 +157,25 @@ const AuthenticatedApp = ({ onSearchOpen }) => {
   );
 };
 
+const AppShell = () => {
+  const { isSearchOpen, openSearch, closeSearch } = useNavigation();
+
+  return (
+    <>
+      <NavigationTracker />
+      {/* Phase 1 Features */}
+      <CommandPalette />
+      <ContextMenu />
+      <AuthenticatedApp onSearchOpen={openSearch} />
+      <SearchModal isOpen={isSearchOpen} onClose={closeSearch} />
+      <ViewModeToggle />
+      <OfflineIndicator />
+    </>
+  );
+};
+
 
 function App() {
-  const [searchOpen, setSearchOpen] = useState(false);
-
   useEffect(() => {
     // Validate environment configuration
     const envValidation = validateEnv();
@@ -186,20 +201,13 @@ function App() {
               <ActivityProvider>
                 <CollaborationProvider>
                   <QueryClientProvider client={queryClientInstance}>
-                    <NavigationProvider>
-                      <ViewModeProvider>
-                        <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
-                          <NavigationTracker />
-                          {/* Phase 1 Features */}
-                          <CommandPalette />
-                          <ContextMenu />
-                          <AuthenticatedApp onSearchOpen={() => setSearchOpen(true)} />
-                          <SearchModal isOpen={searchOpen} onClose={() => setSearchOpen(false)} />
-                          <ViewModeToggle />
-                          <OfflineIndicator />
-                        </Router>
-                      </ViewModeProvider>
-                    </NavigationProvider>
+                    <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+                      <NavigationProvider>
+                        <ViewModeProvider>
+                          <AppShell />
+                        </ViewModeProvider>
+                      </NavigationProvider>
+                    </Router>
                     <Toaster />
                   </QueryClientProvider>
                 </CollaborationProvider>

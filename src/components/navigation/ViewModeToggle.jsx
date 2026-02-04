@@ -15,7 +15,7 @@ import {
  * Fixed position bottom-left corner
  */
 export function ViewModeToggle() {
-  const { viewMode, toggleViewMode, isBeginnerMode, isAdvancedMode } = useViewMode();
+  const { toggleViewMode, isBeginnerMode, isAdvancedMode } = useViewMode();
 
   return (
     <TooltipProvider>
@@ -32,10 +32,10 @@ export function ViewModeToggle() {
               variant={isAdvancedMode ? 'default' : 'outline'}
               size="lg"
               className={`
-                rounded-full shadow-lg transition-all duration-200
+                rounded-full shadow-lg transition-all duration-200 min-h-11 px-4
                 ${isAdvancedMode 
-                  ? 'spectrum-gradient-primary text-white hover:shadow-xl' 
-                  : 'bg-white dark:bg-gray-900 hover:bg-gray-50 dark:hover:bg-gray-800'
+                  ? 'spectrum-gradient-primary text-white hover:shadow-xl dark:shadow-indigo-900/50' 
+                  : 'bg-white dark:bg-slate-900 dark:border-slate-700 text-gray-900 dark:text-white hover:bg-gray-50 dark:hover:bg-slate-800'
                 }
               `}
             >
@@ -51,17 +51,17 @@ export function ViewModeToggle() {
                   <ZapOff className="h-5 w-5" />
                 )}
               </motion.div>
-              <span className="font-medium">
-                {isBeginnerMode ? 'Basic View' : 'Advanced Mode'}
+              <span className="font-medium text-sm">
+                {isBeginnerMode ? 'Basic View' : 'Advanced'}
               </span>
             </Button>
           </motion.div>
         </TooltipTrigger>
-        <TooltipContent side="right" className="max-w-xs">
+        <TooltipContent side="right" className="max-w-xs dark:bg-slate-900 dark:border-slate-800 dark:text-white">
           <p className="font-semibold mb-1">
             {isBeginnerMode ? '🎯 Switch to Advanced Mode' : '🧘 Switch to Basic View'}
           </p>
-          <p className="text-sm text-muted-foreground">
+          <p className="text-sm text-muted-foreground dark:text-gray-400">
             {isBeginnerMode
               ? 'Access all features, compact layouts, and power user shortcuts'
               : 'Simplified UI with educational hints and larger controls'

@@ -5,7 +5,10 @@
 import React, { useState, useEffect, Suspense, lazy } from 'react';
 import { base44 } from '@/api/base44Client';
 import { useBackendAuth } from '@/contexts/BackendAuthContext';
-import Header from '@/components/layout/Header';
+import { useNavigation } from '@/contexts/NavigationContext';
+import { createPageUrl } from '@/utils';
+import GlobalTopNav from '@/components/navigation/GlobalTopNav';
+import ContextualNav from '@/components/navigation/ContextualNav';
 import HelpSidebar from '@/components/help/HelpSidebar';
 import MobileDrawerSidebar from '@/components/sidebar/MobileDrawerSidebar';
 
@@ -41,6 +44,7 @@ export default function Layout({ children, currentPageName: _currentPageName, on
   const [currentProject, setCurrentProject] = useState(null);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const { logout: backendLogout, user: backendUser } = useBackendAuth();
+  const { selectProject, clearProject } = useNavigation();
 
   useEffect(() => {
     loadUser();
@@ -63,10 +67,39 @@ export default function Layout({ children, currentPageName: _currentPageName, on
     }
   };
 
+  useEffect(() => {
+    if (currentProject) {
+      selectProject(currentProject);
+    } else {
+      clearProject();
+    }
+  }, [currentProject, selectProject, clearProject]);
+
   const handleLogout = () => {
     base44.auth.logout();
     backendLogout(); // Also logout from backend
   };
+
+  const contextualItems = currentProject
+    ? [
+        {
+          label: 'Build',
+          href: `${createPageUrl('PageEditor')}?projectId=${currentProject.id}`,
+        },
+        {
+          label: 'Deploy',
+          href: `${createPageUrl('Deployments')}?projectId=${currentProject.id}`,
+        },
+        {
+          label: 'Collaborate',
+          href: `${createPageUrl('Collaboration')}?projectId=${currentProject.id}`,
+        },
+        {
+          label: 'Settings',
+          href: `${createPageUrl('ProjectSettings')}?projectId=${currentProject.id}`,
+        },
+      ]
+    : [];
 
   return (
     <div className="flex h-screen bg-[#fafbfc] dark:bg-gray-950">
@@ -83,10 +116,9 @@ export default function Layout({ children, currentPageName: _currentPageName, on
       </div>
 
       <div className="flex-1 flex flex-col overflow-hidden">
-        <Header 
+        <GlobalTopNav 
           user={user} 
           onLogout={handleLogout}
-          onSearchOpen={onSearchOpen}
           mobileMenu={
             <MobileDrawerSidebar 
               currentProject={currentProject}
@@ -94,6 +126,12 @@ export default function Layout({ children, currentPageName: _currentPageName, on
               onClose={() => {}}
             />
           }
+        />
+        <ContextualNav
+          items={contextualItems.map((item) => ({
+            ...item,
+            isActive: window.location.href.includes(item.href),
+          }))}
         />
         <main className="flex-1 overflow-auto bg-[#fafbfc] dark:bg-gray-950">
           {children}

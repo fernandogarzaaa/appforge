@@ -39,7 +39,6 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Switch } from '@/components/ui/switch';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 const STATUS_STYLES = {
@@ -361,93 +360,155 @@ export default function AdminMonitoring() {
   }
 
   return (
-    <div className="p-6 space-y-6">
-      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-        <div>
-          <h1 className="text-3xl font-bold text-slate-900">Admin Monitoring</h1>
-          <p className="text-sm text-slate-500">Real-time infrastructure metrics, error streaming, and alerts</p>
-        </div>
-        <div className="flex items-center gap-3">
-          <Badge variant="outline" className="flex items-center gap-2">
-            <Activity className="w-3 h-3 animate-pulse" />
-            Live updates every 5s
-          </Badge>
-          <div className="flex items-center gap-2">
-            <Label htmlFor="mode-switch" className="text-sm text-slate-600">Beginner</Label>
-            <Switch
-              id="mode-switch"
-              checked={mode === 'advanced'}
-              onCheckedChange={(checked) => setMode(checked ? 'advanced' : 'beginner')}
-            />
-            <Label htmlFor="mode-switch" className="text-sm text-slate-600">Advanced</Label>
+    <div className="w-full min-h-screen bg-gradient-to-br from-white via-gray-50 to-gray-100 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+      <div className="max-w-7xl mx-auto space-y-6">
+        {/* Header */}
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div>
+            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
+              Admin Monitoring
+            </h1>
+            <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
+              Real-time infrastructure metrics, error streaming, and alerts
+            </p>
           </div>
-          <Button variant="outline" size="sm" onClick={fetchAll}>
-            <RefreshCw className="w-4 h-4 mr-2" />
-            Refresh
-          </Button>
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
+            <Badge
+              variant="outline"
+              className="flex items-center gap-2 dark:border-slate-700 dark:text-gray-300 dark:bg-slate-800/50"
+            >
+              <Activity className="w-3 h-3 animate-pulse text-green-500" />
+              Live updates
+            </Badge>
+            <div className="flex items-center gap-2 p-2 rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900">
+              <Label className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">
+                Basic
+              </Label>
+              <label className="relative inline-flex items-center cursor-pointer">
+                <input
+                  type="checkbox"
+                  className="sr-only peer"
+                  checked={mode === 'advanced'}
+                  onChange={(e) => setMode(e.target.checked ? 'advanced' : 'beginner')}
+                />
+                <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+              </label>
+              <Label className="text-xs sm:text-sm text-gray-900 dark:text-white">
+                Advanced
+              </Label>
+            </div>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={fetchAll}
+              className="dark:border-slate-700 dark:hover:bg-slate-800 min-h-10 w-full sm:w-auto"
+            >
+              <RefreshCw className="w-4 h-4 mr-2" />
+              Refresh
+            </Button>
+          </div>
         </div>
-      </div>
 
-      {/* System Health Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-4">
-        {[
-          { key: 'database', label: 'Database', icon: Database },
-          { key: 'redis', label: 'Redis', icon: Layers },
-          { key: 'wasm', label: 'WASM Modules', icon: Zap },
-          { key: 'api', label: 'API Endpoints', icon: Network },
-          { key: 'integrations', label: 'Integrations', icon: Server },
-        ].map((item) => {
-          const status = healthStatus[item.key];
-          const Icon = item.icon;
-          return (
-            <Card key={item.key} className="border">
-              <CardContent className="pt-6 space-y-3">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2 text-sm font-medium text-slate-700">
-                    <Icon className="w-4 h-4 text-slate-500" />
-                    {item.label}
+        {/* System Health Cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 sm:gap-4">
+          {[
+            { key: 'database', label: 'Database', icon: Database },
+            { key: 'redis', label: 'Redis', icon: Layers },
+            { key: 'wasm', label: 'WASM Modules', icon: Zap },
+            { key: 'api', label: 'API Endpoints', icon: Network },
+            { key: 'integrations', label: 'Integrations', icon: Server }
+          ].map((item) => {
+            const status = healthStatus[item.key];
+            const Icon = item.icon;
+            return (
+              <Card
+                key={item.key}
+                className="border border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-900"
+              >
+                <CardContent className="pt-6 space-y-3">
+                  <div className="flex items-center justify-between gap-2">
+                    <div className="flex items-center gap-2 text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300 min-w-0">
+                      <Icon className="w-4 h-4 text-gray-500 dark:text-gray-600 shrink-0" />
+                      <span className="truncate">{item.label}</span>
+                    </div>
+                    <Badge
+                      variant="outline"
+                      className={`shrink-0 text-xs ${
+                        status === 'healthy'
+                          ? 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-400 border-green-200 dark:border-green-800'
+                          : status === 'warning'
+                            ? 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-400 border-yellow-200 dark:border-yellow-800'
+                            : 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-400 border-red-200 dark:border-red-800'
+                      }`}
+                    >
+                      {status}
+                    </Badge>
                   </div>
-                  <Badge variant="outline" className={STATUS_STYLES[status]}>
-                    {status}
-                  </Badge>
-                </div>
-                <p className="text-xs text-slate-500">
-                  {health?.[item.key]?.message || health?.[item.key]?.details || 'Status monitored in real-time.'}
-                </p>
-              </CardContent>
-            </Card>
-          );
-        })}
-      </div>
+                  <p className="text-xs text-gray-600 dark:text-gray-500">
+                    {health?.[item.key]?.message || health?.[item.key]?.details || 'Monitored in real-time'}
+                  </p>
+                </CardContent>
+              </Card>
+            );
+          })}
+        </div>
 
-      {mode === 'advanced' && (
-        <div className="space-y-6">
-          {/* Real-time Metrics */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-            <Card className="lg:col-span-2">
-              <CardHeader>
-                <CardTitle className="text-sm font-medium flex items-center gap-2">
-                  <Gauge className="w-4 h-4" />
-                  CPU Usage (Last 1h)
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="h-64">
-                <ResponsiveContainer width="100%" height="100%">
-                  <AreaChart data={series.cpu}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="time" />
-                    <YAxis domain={[0, 100]} />
-                    <Tooltip />
-                    <Area type="monotone" dataKey="value" stroke="#06b6d4" fill="#cffafe" />
-                  </AreaChart>
-                </ResponsiveContainer>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-sm font-medium">Current Metrics</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
+        {mode === 'advanced' && (
+          <div className="space-y-6">
+            {/* Real-time Metrics */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              {/* CPU Usage Chart */}
+              <Card className="lg:col-span-2 bg-white dark:bg-slate-900 dark:border-slate-800">
+                <CardHeader className="border-b border-gray-200 dark:border-slate-800">
+                  <CardTitle className="text-sm font-medium flex items-center gap-2 dark:text-white">
+                    <Gauge className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+                    CPU Usage (Last 1h)
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="pt-6">
+                  <div className="h-64 w-full">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <AreaChart data={series.cpu}>
+                        <CartesianGrid strokeDasharray="3 3" stroke="rgba(100,100,100,0.1)" />
+                        <XAxis
+                          dataKey="time"
+                          stroke="rgba(100,100,100,0.5)"
+                          style={{ fontSize: '12px' }}
+                        />
+                        <YAxis
+                          domain={[0, 100]}
+                          stroke="rgba(100,100,100,0.5)"
+                          style={{ fontSize: '12px' }}
+                        />
+                        <Tooltip
+                          contentStyle={{
+                            backgroundColor: 'rgba(15, 23, 42, 0.9)',
+                            border: '1px solid rgba(100, 100, 100, 0.3)',
+                            borderRadius: '8px',
+                            color: '#e5e7eb'
+                          }}
+                        />
+                        <Area
+                          type="monotone"
+                          dataKey="value"
+                          stroke="#06b6d4"
+                          fill="#cffafe"
+                          fillOpacity={0.3}
+                        />
+                      </AreaChart>
+                    </ResponsiveContainer>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Current Metrics Sidebar */}
+              <Card className="bg-white dark:bg-slate-900 dark:border-slate-800">
+                <CardHeader className="border-b border-gray-200 dark:border-slate-800">
+                  <CardTitle className="text-sm font-medium dark:text-white">
+                    Current Metrics
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="pt-6 space-y-4">
                 <div>
                   <p className="text-xs text-slate-500">CPU Usage</p>
                   <p className="text-lg font-semibold">{formatPercent(metrics?.cpu?.usage ?? metrics?.cpuUsage ?? 0)}</p>
@@ -868,20 +929,30 @@ export default function AdminMonitoring() {
                             <p className="text-sm font-medium">Email notifications</p>
                             <p className="text-xs text-slate-500">alerts@appforge.dev</p>
                           </div>
-                          <Switch
-                            checked={alertConfig.email}
-                            onCheckedChange={(checked) => handleAlertConfigChange('email', checked)}
-                          />
+                          <label className="relative inline-flex items-center cursor-pointer">
+                            <input
+                              type="checkbox"
+                              className="sr-only peer"
+                              checked={alertConfig.email}
+                              onChange={(e) => handleAlertConfigChange('email', e.target.checked)}
+                            />
+                            <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                          </label>
                         </div>
                         <div className="flex items-center justify-between">
                           <div>
                             <p className="text-sm font-medium">Slack notifications</p>
                             <p className="text-xs text-slate-500">#ops-alerts</p>
                           </div>
-                          <Switch
-                            checked={alertConfig.slack}
-                            onCheckedChange={(checked) => handleAlertConfigChange('slack', checked)}
-                          />
+                          <label className="relative inline-flex items-center cursor-pointer">
+                            <input
+                              type="checkbox"
+                              className="sr-only peer"
+                              checked={alertConfig.slack}
+                              onChange={(e) => handleAlertConfigChange('slack', e.target.checked)}
+                            />
+                            <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                          </label>
                         </div>
                       </CardContent>
                     </Card>
@@ -1028,6 +1099,7 @@ export default function AdminMonitoring() {
           </CardContent>
         </Card>
       )}
+      </div>
     </div>
   );
 }

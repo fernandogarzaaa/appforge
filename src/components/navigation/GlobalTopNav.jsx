@@ -1,0 +1,86 @@
+import React from 'react';
+import { LogOut, User, Search } from 'lucide-react';
+import { DarkModeToggle } from '@/components/DarkModeToggle';
+import { NotificationBell } from '@/components/NotificationBell';
+import SearchBar from '@/components/navigation/SearchBar';
+import Breadcrumbs from '@/components/navigation/Breadcrumbs';
+import { Button } from '@/components/ui/button';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { useNavigation } from '@/contexts/NavigationContext';
+
+export default function GlobalTopNav({ user, onLogout, mobileMenu, title = 'AppForge' }) {
+  const { openSearch } = useNavigation();
+  const MenuContent = /** @type {any} */ (DropdownMenuContent);
+  const MenuItem = /** @type {any} */ (DropdownMenuItem);
+
+  return (
+    <header className="bg-white/80 dark:bg-slate-950/80 dark:border-slate-800 border-b border-gray-200 px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between backdrop-blur-sm sticky top-0 z-40">
+      <div className="flex items-center gap-2 sm:gap-4 flex-1 min-w-0">
+        {mobileMenu}
+        <div className="min-w-0 flex-1">
+          <h2 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white truncate">
+            {title}
+          </h2>
+          <div className="hidden sm:block">
+            <Breadcrumbs />
+          </div>
+        </div>
+      </div>
+
+      <div className="flex items-center gap-1 sm:gap-3 shrink-0 min-h-11">
+        <div className="hidden sm:block">
+          <SearchBar onOpen={openSearch} placeholder="Search..." />
+        </div>
+        <button
+          onClick={openSearch}
+          className="sm:hidden p-2.5 hover:bg-gray-100 dark:hover:bg-slate-800 rounded-lg transition-colors min-w-11 min-h-11 flex items-center justify-center"
+          aria-label="Search"
+        >
+          <Search className="w-5 h-5 text-gray-600 dark:text-gray-300" />
+        </button>
+        <DarkModeToggle />
+        <NotificationBell />
+        {user && (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant="ghost"
+                className="flex items-center gap-2 h-11 px-2 sm:px-3 hover:bg-gray-100 dark:hover:bg-slate-800"
+              >
+                <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-gradient-to-br from-indigo-600 to-indigo-700 dark:from-indigo-500 dark:to-indigo-600 flex items-center justify-center shrink-0">
+                  <span className="text-white text-xs sm:text-sm font-bold">
+                    {user.full_name?.charAt(0).toUpperCase()}
+                  </span>
+                </div>
+                <span className="text-sm font-medium text-gray-700 dark:text-gray-300 hidden md:inline truncate max-w-[120px]">
+                  {user.full_name}
+                </span>
+              </Button>
+            </DropdownMenuTrigger>
+            <MenuContent
+              align="end"
+              className="w-56 dark:bg-slate-900 dark:border-slate-800"
+            >
+              <MenuItem className="text-xs text-gray-500 dark:text-gray-400 py-2">
+                <User className="w-4 h-4 mr-2 shrink-0" />
+                <span className="truncate">{user.email}</span>
+              </MenuItem>
+              <MenuItem
+                onClick={onLogout}
+                className="text-red-600 dark:text-red-400 dark:hover:bg-slate-800 py-2"
+              >
+                <LogOut className="w-4 h-4 mr-2 shrink-0" />
+                Logout
+              </MenuItem>
+            </MenuContent>
+          </DropdownMenu>
+        )}
+      </div>
+    </header>
+  );
+}

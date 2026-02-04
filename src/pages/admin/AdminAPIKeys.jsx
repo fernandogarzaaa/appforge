@@ -4,17 +4,16 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from '@/components/ui/dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Checkbox } from '@/components/ui/checkbox';
-import HelpTooltip from '@/components/help/HelpTooltip';
 import { 
   Key, Plus, Copy, Trash2, RefreshCw, Eye, EyeOff, Search, 
-  Download, TrendingUp, AlertCircle, CheckCircle, 
-  BarChart3, Activity, Clock, Shield, ArrowUpDown, X
+  Download, TrendingUp, AlertCircle, CheckCircle, Check,
+  BarChart3, Activity, Clock, Shield, ArrowUpDown
 } from 'lucide-react';
 import { LineChart, Line, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+
+// const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api/v1';
 
 export default function AdminAPIKeys() {
   const [apiKeys, setApiKeys] = useState([
@@ -109,7 +108,7 @@ export default function AdminAPIKeys() {
   });
 
   // Mock usage stats data
-  const [usageStats, setUsageStats] = useState({
+  const [usageStats] = useState({
     last30Days: Array.from({ length: 30 }, (_, i) => ({
       date: new Date(Date.now() - (29 - i) * 24 * 60 * 60 * 1000).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
       requests: Math.floor(Math.random() * 500) + 100,
@@ -198,6 +197,7 @@ export default function AdminAPIKeys() {
       name: '',
       rateLimit: 1000,
       rateLimitUnit: 'hour',
+      expiresAt: '',
       scopes: ['read']
     });
 
@@ -286,12 +286,12 @@ export default function AdminAPIKeys() {
 
   const getStatusBadge = (status) => {
     const variants = {
-      active: 'bg-green-100 text-green-800 border-green-200',
-      inactive: 'bg-gray-100 text-gray-800 border-gray-200',
-      expired: 'bg-red-100 text-red-800 border-red-200',
-      rotating: 'bg-yellow-100 text-yellow-800 border-yellow-200'
+      active: 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-400 border-green-200 dark:border-green-800',
+      inactive: 'bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-300 border-gray-200 dark:border-gray-700',
+      expired: 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-400 border-red-200 dark:border-red-800',
+      rotating: 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-400 border-yellow-200 dark:border-yellow-800'
     };
-    
+
     const icons = {
       active: <CheckCircle className="w-3 h-3 mr-1" />,
       inactive: <Clock className="w-3 h-3 mr-1" />,
@@ -309,12 +309,12 @@ export default function AdminAPIKeys() {
 
   const getScopeBadges = (scopes) => {
     const colors = {
-      read: 'bg-blue-100 text-blue-800 border-blue-200',
-      write: 'bg-purple-100 text-purple-800 border-purple-200',
-      admin: 'bg-red-100 text-red-800 border-red-200'
+      read: 'bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-400 border-blue-200 dark:border-blue-800',
+      write: 'bg-purple-100 dark:bg-purple-900/30 text-purple-800 dark:text-purple-400 border-purple-200 dark:border-purple-800',
+      admin: 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-400 border-red-200 dark:border-red-800'
     };
 
-    return scopes.map(scope => (
+    return scopes.map((scope) => (
       <Badge key={scope} variant="outline" className={`${colors[scope]} text-xs`}>
         {scope}
       </Badge>
@@ -325,7 +325,7 @@ export default function AdminAPIKeys() {
     if (!dateString) return 'Never';
     const date = new Date(dateString);
     const now = new Date();
-    const diffMs = now - date;
+    const diffMs = now.getTime() - date.getTime();
     const diffMins = Math.floor(diffMs / 60000);
     const diffHours = Math.floor(diffMs / 3600000);
     const diffDays = Math.floor(diffMs / 86400000);
@@ -346,124 +346,227 @@ export default function AdminAPIKeys() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-purple-50/30 to-indigo-50/30">
-      <div className="max-w-7xl mx-auto px-6 py-8 space-y-6">
+    <div className="w-full min-h-screen bg-gradient-to-br from-white via-gray-50 to-gray-100 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+      <div className="max-w-7xl mx-auto space-y-6">
         {/* Header */}
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-3">
+            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white flex items-center gap-3">
               <div className="p-2 bg-gradient-to-br from-purple-500 to-indigo-600 rounded-lg">
                 <Key className="w-6 h-6 text-white" />
               </div>
-              API Keys Management
+              API Keys
             </h1>
-            <p className="text-sm text-gray-600 mt-2">Create, manage, and monitor API keys and access tokens</p>
+            <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">Create, manage, and monitor API keys</p>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
             <Button
               variant="outline"
               size="sm"
               onClick={() => setAdvancedMode(!advancedMode)}
-              className="border-purple-200 hover:bg-purple-50"
+              className="dark:border-slate-700 dark:hover:bg-slate-800 min-h-10"
             >
               <Shield className="w-4 h-4 mr-2" />
               {advancedMode ? 'Beginner' : 'Advanced'} Mode
             </Button>
-            <HelpTooltip 
-              content="Manage API keys, set rate limits, monitor usage, and control access permissions. Keys can be rotated, revoked, or scoped to specific permissions."
-              title="API Keys Management"
-            />
+            <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
+              <DialogTrigger asChild>
+                <Button size="sm" className="min-h-10 bg-indigo-600 dark:bg-indigo-600 hover:bg-indigo-700 dark:hover:bg-indigo-700 text-white">
+                  <Plus className="w-4 h-4 mr-2" />
+                  New Key
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="dark:bg-slate-900 dark:border-slate-800 max-w-md">
+                <DialogHeader>
+                  <DialogTitle className="dark:text-white">Create New API Key</DialogTitle>
+                  <DialogDescription className="dark:text-gray-400">
+                    Generate a new API key with specific scopes and rate limits
+                  </DialogDescription>
+                </DialogHeader>
+                <div className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="keyName" className="text-sm">
+                      Key Name
+                    </Label>
+                    <Input
+                      id="keyName"
+                      value={newKey.name}
+                      onChange={(e) => setNewKey({ ...newKey, name: e.target.value })}
+                      placeholder="My API Key"
+                      className="dark:bg-slate-800 dark:border-slate-700 dark:text-white"
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label className="text-sm">Scopes</Label>
+                    <div className="space-y-2 p-3 bg-gray-50 dark:bg-slate-800 rounded-lg">
+                      {['read', 'write', 'admin'].map((scope) => (
+                        <div key={scope} className="flex items-center gap-2">
+                          <input 
+                            type="checkbox"
+                            defaultChecked={newKey.scopes.includes(scope)}
+                            onChange={() => toggleScopeSelection(scope)}
+                            id={`scope-${scope}`}
+                            className="w-4 h-4 rounded border-gray-300 dark:border-slate-600 dark:bg-slate-800 cursor-pointer"
+                          />
+                          <label
+                            htmlFor={`scope-${scope}`}
+                            className="text-sm capitalize cursor-pointer dark:text-gray-300"
+                          >
+                            {scope} Access
+                          </label>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="space-y-2">
+                      <Label htmlFor="rateLimit" className="text-sm">
+                        Rate Limit
+                      </Label>
+                      <Input
+                        id="rateLimit"
+                        type="number"
+                        value={newKey.rateLimit}
+                        onChange={(e) =>
+                          setNewKey({ ...newKey, rateLimit: Number(e.target.value) })
+                        }
+                        className="dark:bg-slate-800 dark:border-slate-700 dark:text-white"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="rateLimitUnit" className="text-sm">
+                        Per
+                      </Label>
+                      <Select
+                        value={newKey.rateLimitUnit}
+                        onValueChange={(value) =>
+                          setNewKey({ ...newKey, rateLimitUnit: value })
+                        }
+                      >
+                        <SelectTrigger className="dark:bg-slate-800 dark:border-slate-700 dark:text-white">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent className="dark:bg-slate-800 dark:border-slate-700">
+                          <SelectItem value="minute">Minute</SelectItem>
+                          <SelectItem value="hour">Hour</SelectItem>
+                          <SelectItem value="day">Day</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="expiresAt" className="text-sm">
+                      Expires At (Optional)
+                    </Label>
+                    <Input
+                      id="expiresAt"
+                      type="date"
+                      value={newKey.expiresAt}
+                      onChange={(e) =>
+                        setNewKey({ ...newKey, expiresAt: e.target.value })
+                      }
+                      className="dark:bg-slate-800 dark:border-slate-700 dark:text-white"
+                    />
+                  </div>
+                </div>
+
+                <DialogFooter>
+                  <Button
+                    variant="outline"
+                    onClick={() => setIsCreateDialogOpen(false)}
+                    className="dark:border-slate-700 dark:hover:bg-slate-800"
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    onClick={handleCreateKey}
+                    className="bg-indigo-600 dark:bg-indigo-600 hover:bg-indigo-700 dark:hover:bg-indigo-700 text-white"
+                  >
+                    Create Key
+                  </Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
           </div>
         </div>
 
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <Card className="border-l-4 border-l-purple-500">
-            <CardContent className="pt-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-gray-600 font-medium">Total Keys</p>
-                  <p className="text-3xl font-bold text-gray-900 mt-1">{stats.total}</p>
-                </div>
-                <Key className="w-8 h-8 text-purple-500 opacity-50" />
-              </div>
-            </CardContent>
-          </Card>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {[
+            { label: 'Total Keys', value: stats.total, icon: Key, color: 'purple' },
+            { label: 'Active Keys', value: stats.active, icon: CheckCircle, color: 'green' },
+            { label: 'Total Requests', value: stats.totalRequests.toLocaleString(), icon: Activity, color: 'indigo' },
+            { label: 'Avg Rate Limit', value: `${stats.avgRateLimit}/h`, icon: TrendingUp, color: 'cyan' }
+          ].map((stat, idx) => {
+            const Icon = stat.icon;
+            const colorClass = {
+              purple: 'border-l-purple-500 dark:border-l-purple-400',
+              green: 'border-l-green-500 dark:border-l-green-400',
+              indigo: 'border-l-indigo-500 dark:border-l-indigo-400',
+              cyan: 'border-l-cyan-500 dark:border-l-cyan-400'
+            }[stat.color];
 
-          <Card className="border-l-4 border-l-green-500">
-            <CardContent className="pt-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-gray-600 font-medium">Active Keys</p>
-                  <p className="text-3xl font-bold text-gray-900 mt-1">{stats.active}</p>
-                </div>
-                <CheckCircle className="w-8 h-8 text-green-500 opacity-50" />
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="border-l-4 border-l-indigo-500">
-            <CardContent className="pt-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-gray-600 font-medium">Total Requests</p>
-                  <p className="text-3xl font-bold text-gray-900 mt-1">
-                    {stats.totalRequests.toLocaleString()}
-                  </p>
-                </div>
-                <Activity className="w-8 h-8 text-indigo-500 opacity-50" />
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="border-l-4 border-l-cyan-500">
-            <CardContent className="pt-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-gray-600 font-medium">Avg Rate Limit</p>
-                  <p className="text-3xl font-bold text-gray-900 mt-1">
-                    {stats.avgRateLimit}<span className="text-sm text-gray-500">/h</span>
-                  </p>
-                </div>
-                <TrendingUp className="w-8 h-8 text-cyan-500 opacity-50" />
-              </div>
-            </CardContent>
-          </Card>
+            return (
+              <Card
+                key={idx}
+                className={`border-l-4 ${colorClass} bg-white dark:bg-slate-900 dark:border-slate-800`}
+              >
+                <CardContent className="pt-6">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm text-gray-600 dark:text-gray-400 font-medium">
+                        {stat.label}
+                      </p>
+                      <p className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mt-1">
+                        {stat.value}
+                      </p>
+                    </div>
+                    <Icon className={`w-8 h-8 opacity-50 text-${stat.color}-500`} />
+                  </div>
+                </CardContent>
+              </Card>
+            );
+          })}
         </div>
 
-        {/* Filters and Actions */}
-        <Card>
+        {/* Filters and Search */}
+        <Card className="bg-white dark:bg-slate-900 dark:border-slate-800">
           <CardContent className="pt-6">
-            <div className="flex flex-col md:flex-row gap-4">
+            <div className="flex flex-col md:flex-row gap-3">
               <div className="flex-1 relative">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
                 <Input
                   placeholder="Search by name, key, or user..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10"
+                  className="pl-10 dark:bg-slate-800 dark:border-slate-700 dark:text-white text-sm"
                 />
               </div>
 
               {advancedMode && (
                 <>
                   <Select value={filterUser} onValueChange={setFilterUser}>
-                    <SelectTrigger className="w-[200px]">
-                      <SelectValue placeholder="Filter by user" />
+                    <SelectTrigger className="w-full md:w-[160px] dark:bg-slate-800 dark:border-slate-700 dark:text-white text-sm">
+                      <SelectValue placeholder="User" />
                     </SelectTrigger>
-                    <SelectContent>
+                    <SelectContent className="dark:bg-slate-800 dark:border-slate-700">
                       <SelectItem value="all">All Users</SelectItem>
-                      {uniqueUsers.map(user => (
-                        <SelectItem key={user} value={user}>{user}</SelectItem>
+                      {uniqueUsers.map((user) => (
+                        <SelectItem key={user} value={user}>
+                          {user}
+                        </SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
 
                   <Select value={filterStatus} onValueChange={setFilterStatus}>
-                    <SelectTrigger className="w-[150px]">
+                    <SelectTrigger className="w-full md:w-[160px] dark:bg-slate-800 dark:border-slate-700 dark:text-white text-sm">
                       <SelectValue placeholder="Status" />
                     </SelectTrigger>
-                    <SelectContent>
+                    <SelectContent className="dark:bg-slate-800 dark:border-slate-700">
                       <SelectItem value="all">All Status</SelectItem>
                       <SelectItem value="active">Active</SelectItem>
                       <SelectItem value="inactive">Inactive</SelectItem>
@@ -472,10 +575,10 @@ export default function AdminAPIKeys() {
                   </Select>
 
                   <Select value={filterScope} onValueChange={setFilterScope}>
-                    <SelectTrigger className="w-[150px]">
+                    <SelectTrigger className="w-full md:w-[160px] dark:bg-slate-800 dark:border-slate-700 dark:text-white text-sm">
                       <SelectValue placeholder="Scope" />
                     </SelectTrigger>
-                    <SelectContent>
+                    <SelectContent className="dark:bg-slate-800 dark:border-slate-700">
                       <SelectItem value="all">All Scopes</SelectItem>
                       <SelectItem value="read">Read</SelectItem>
                       <SelectItem value="write">Write</SelectItem>
@@ -485,309 +588,323 @@ export default function AdminAPIKeys() {
                 </>
               )}
 
-              <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
-                <DialogTrigger asChild>
-                  <Button className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700">
-                    <Plus className="w-4 h-4 mr-2" />
-                    Create Key
-                  </Button>
-                </DialogTrigger>
-                <DialogContent className="max-w-md">
-                  <DialogHeader>
-                    <DialogTitle>Create New API Key</DialogTitle>
-                    <DialogDescription>
-                      Generate a new API key with custom rate limits and permissions
-                    </DialogDescription>
-                  </DialogHeader>
-                  
-                  <div className="space-y-4 py-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="keyName">Key Name *</Label>
-                      <Input
-                        id="keyName"
-                        placeholder="e.g., Production API Key"
-                        value={newKey.name}
-                        onChange={(e) => setNewKey({ ...newKey, name: e.target.value })}
-                      />
-                    </div>
+              {selectedKeys.length > 0 && (
+                <Button
+                  variant="destructive"
+                  size="sm"
+                  onClick={handleBulkDelete}
+                  className="min-h-10"
+                >
+                  Delete ({selectedKeys.length})
+                </Button>
+              )}
 
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <Label htmlFor="rateLimit">Rate Limit *</Label>
-                        <Input
-                          id="rateLimit"
-                          type="number"
-                          placeholder="1000"
-                          value={newKey.rateLimit}
-                          onChange={(e) => setNewKey({ ...newKey, rateLimit: parseInt(e.target.value) })}
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="rateLimitUnit">Per</Label>
-                        <Select value={newKey.rateLimitUnit} onValueChange={(value) => setNewKey({ ...newKey, rateLimitUnit: value })}>
-                          <SelectTrigger>
-                            <SelectValue />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="minute">Minute</SelectItem>
-                            <SelectItem value="hour">Hour</SelectItem>
-                            <SelectItem value="day">Day</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="expiresAt">Expiration Date (Optional)</Label>
-                      <Input
-                        id="expiresAt"
-                        type="date"
-                        value={newKey.expiresAt}
-                        onChange={(e) => setNewKey({ ...newKey, expiresAt: e.target.value })}
-                        min={new Date().toISOString().split('T')[0]}
-                      />
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label>Permissions / Scopes *</Label>
-                      <div className="space-y-2">
-                        <div className="flex items-center space-x-2">
-                          <Checkbox
-                            id="scope-read"
-                            checked={newKey.scopes.includes('read')}
-                            onCheckedChange={() => toggleScopeSelection('read')}
-                          />
-                          <label htmlFor="scope-read" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                            Read - View data and resources
-                          </label>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <Checkbox
-                            id="scope-write"
-                            checked={newKey.scopes.includes('write')}
-                            onCheckedChange={() => toggleScopeSelection('write')}
-                          />
-                          <label htmlFor="scope-write" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                            Write - Create and modify resources
-                          </label>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <Checkbox
-                            id="scope-admin"
-                            checked={newKey.scopes.includes('admin')}
-                            onCheckedChange={() => toggleScopeSelection('admin')}
-                          />
-                          <label htmlFor="scope-admin" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                            Admin - Full administrative access
-                          </label>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <DialogFooter>
-                    <Button variant="outline" onClick={() => setIsCreateDialogOpen(false)}>
-                      Cancel
-                    </Button>
-                    <Button 
-                      onClick={handleCreateKey}
-                      disabled={!newKey.name || newKey.scopes.length === 0}
-                      className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700"
-                    >
-                      <Key className="w-4 h-4 mr-2" />
-                      Generate Key
-                    </Button>
-                  </DialogFooter>
-                </DialogContent>
-              </Dialog>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleExportKeys}
+                className="dark:border-slate-700 dark:hover:bg-slate-800 min-h-10"
+              >
+                <Download className="w-4 h-4 mr-2" />
+                Export
+              </Button>
             </div>
-
-            {selectedKeys.length > 0 && (
-              <div className="mt-4 flex items-center justify-between p-3 bg-purple-50 border border-purple-200 rounded-lg">
-                <span className="text-sm font-medium text-purple-900">
-                  {selectedKeys.length} key{selectedKeys.length > 1 ? 's' : ''} selected
-                </span>
-                <div className="flex gap-2">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => setSelectedKeys([])}
-                    className="border-purple-300"
-                  >
-                    <X className="w-4 h-4 mr-1" />
-                    Clear
-                  </Button>
-                  <Button
-                    variant="destructive"
-                    size="sm"
-                    onClick={handleBulkDelete}
-                  >
-                    <Trash2 className="w-4 h-4 mr-1" />
-                    Delete Selected
-                  </Button>
-                </div>
-              </div>
-            )}
           </CardContent>
         </Card>
 
         {/* API Keys Table */}
-        <Card>
-          <CardHeader>
-            <div className="flex items-center justify-between">
+        <Card className="bg-white dark:bg-slate-900 dark:border-slate-800">
+          <CardHeader className="border-b border-gray-200 dark:border-slate-800">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
               <div>
-                <CardTitle>API Keys</CardTitle>
-                <CardDescription>
+                <CardTitle className="dark:text-white text-lg sm:text-xl">API Keys</CardTitle>
+                <CardDescription className="dark:text-gray-400">
                   {filteredKeys.length} key{filteredKeys.length !== 1 ? 's' : ''} found
                 </CardDescription>
               </div>
               {advancedMode && (
-                <Button variant="outline" size="sm" onClick={handleExportKeys}>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleExportKeys}
+                  className="dark:border-slate-700 dark:hover:bg-slate-800 min-h-10"
+                >
                   <Download className="w-4 h-4 mr-2" />
                   Export CSV
                 </Button>
               )}
             </div>
           </CardHeader>
-          <CardContent>
-            <div className="overflow-x-auto">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead className="w-[50px]">
-                      <Checkbox
-                        checked={selectedKeys.length === filteredKeys.length && filteredKeys.length > 0}
-                        onCheckedChange={toggleSelectAll}
+          <CardContent className="p-0">
+            {/* Mobile View */}
+            <div className="block md:hidden divide-y divide-gray-200 dark:divide-slate-800">
+              {filteredKeys.length === 0 ? (
+                <div className="p-6 text-center">
+                  <Key className="w-12 h-12 mx-auto text-gray-400 dark:text-gray-600 mb-3" />
+                  <p className="text-gray-600 dark:text-gray-400 text-sm">No API keys found</p>
+                </div>
+              ) : (
+                filteredKeys.map((key) => (
+                  <div
+                    key={key.id}
+                    className="p-4 space-y-3 hover:bg-gray-50 dark:hover:bg-slate-800/50 transition-colors"
+                  >
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 mb-1">
+                          <input
+                            type="checkbox"
+                            defaultChecked={selectedKeys.includes(key.id)}
+                            onChange={() =>
+                              setSelectedKeys(
+                                selectedKeys.includes(key.id)
+                                  ? selectedKeys.filter((id) => id !== key.id)
+                                  : [...selectedKeys, key.id]
+                              )
+                            }
+                            id={`key-${key.id}`}
+                            className="w-4 h-4 rounded border-gray-300 dark:border-slate-600 dark:bg-slate-800 cursor-pointer"
+                          />
+                          <h3 className="font-semibold text-gray-900 dark:text-white text-sm truncate">
+                            {key.name}
+                          </h3>
+                        </div>
+                        <p className="text-xs text-gray-500 dark:text-gray-500 mb-2 truncate">
+                          {key.maskedKey}
+                        </p>
+                        <div className="flex flex-wrap gap-1 mb-2">
+                          {getScopeBadges(key.scopes)}
+                        </div>
+                      </div>
+                      {getStatusBadge(key.status)}
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-2 text-xs">
+                      <div>
+                        <p className="text-gray-500 dark:text-gray-500">Created</p>
+                        <p className="text-gray-900 dark:text-gray-300 font-medium">
+                          {formatDate(key.created)}
+                        </p>
+                      </div>
+                      <div>
+                        <p className="text-gray-500 dark:text-gray-500">Last Used</p>
+                        <p className="text-gray-900 dark:text-gray-300 font-medium">
+                          {formatDate(key.lastUsed)}
+                        </p>
+                      </div>
+                      <div>
+                        <p className="text-gray-500 dark:text-gray-500">Usage</p>
+                        <p className="text-gray-900 dark:text-gray-300 font-medium">
+                          {key.usageCount.toLocaleString()}
+                        </p>
+                      </div>
+                      <div>
+                        <p className="text-gray-500 dark:text-gray-500">Rate Limit</p>
+                        <p className="text-gray-900 dark:text-gray-300 font-medium">
+                          {key.rateLimit}/{key.rateLimitUnit}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="flex gap-1.5 pt-2">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => handleCopyKey(key)}
+                        className="flex-1 dark:hover:bg-slate-800 min-h-9 text-xs"
+                      >
+                        {copiedKey === key.id ? (
+                          <>
+                            <Check className="w-3 h-3 mr-1 text-green-500" />
+                            Copied
+                          </>
+                        ) : (
+                          <>
+                            <Copy className="w-3 h-3 mr-1" />
+                            Copy
+                          </>
+                        )}
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => handleRotateKey(key.id)}
+                        className="flex-1 dark:hover:bg-slate-800 min-h-9 text-xs"
+                      >
+                        <RefreshCw className="w-3 h-3 mr-1" />
+                        Rotate
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => {
+                          setKeyToDelete(key.id);
+                          setIsDeleteDialogOpen(true);
+                        }}
+                        className="flex-1 dark:hover:bg-slate-800 dark:hover:text-red-400 min-h-9 text-xs text-red-600 hover:text-red-700"
+                      >
+                        <Trash2 className="w-3 h-3 mr-1" />
+                        Delete
+                      </Button>
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
+
+            {/* Desktop Table View */}
+            <div className="hidden md:block overflow-x-auto">
+              <table className="w-full border-collapse">
+                <thead>
+                  <tr className="border-b border-gray-200 dark:border-slate-800 bg-gray-50 dark:bg-slate-800/50">
+                    <th className="w-12 dark:text-gray-300 px-4 py-2 text-left">
+                      <input
+                        type="checkbox"
+                        defaultChecked={selectedKeys.length === filteredKeys.length && filteredKeys.length > 0}
+                        onChange={toggleSelectAll}
+                        className="w-4 h-4 rounded border-gray-300 dark:border-slate-600 dark:bg-slate-800 cursor-pointer"
                       />
-                    </TableHead>
-                    <TableHead>
+                    </th>
+                    <th className="dark:text-gray-300 px-4 py-2 text-left">
                       <button
                         onClick={() => handleSort('name')}
-                        className="flex items-center gap-1 hover:text-purple-600"
+                        className="flex items-center gap-1 hover:text-indigo-600 dark:hover:text-indigo-400 text-sm"
                       >
                         Name
                         <ArrowUpDown className="w-3 h-3" />
                       </button>
-                    </TableHead>
-                    <TableHead>API Key</TableHead>
-                    <TableHead>
+                    </th>
+                    <th className="dark:text-gray-300 px-4 py-2 text-left">API Key</th>
+                    <th className="dark:text-gray-300 px-4 py-2 text-left">
                       <button
                         onClick={() => handleSort('created')}
-                        className="flex items-center gap-1 hover:text-purple-600"
+                        className="flex items-center gap-1 hover:text-indigo-600 dark:hover:text-indigo-400 text-sm"
                       >
                         Created
                         <ArrowUpDown className="w-3 h-3" />
                       </button>
-                    </TableHead>
-                    <TableHead>
+                    </th>
+                    <th className="dark:text-gray-300 px-4 py-2 text-left">
                       <button
                         onClick={() => handleSort('lastUsed')}
-                        className="flex items-center gap-1 hover:text-purple-600"
+                        className="flex items-center gap-1 hover:text-indigo-600 dark:hover:text-indigo-400 text-sm"
                       >
                         Last Used
                         <ArrowUpDown className="w-3 h-3" />
                       </button>
-                    </TableHead>
-                    <TableHead>
+                    </th>
+                    <th className="dark:text-gray-300 px-4 py-2 text-left">
                       <button
                         onClick={() => handleSort('usageCount')}
-                        className="flex items-center gap-1 hover:text-purple-600"
+                        className="flex items-center gap-1 hover:text-indigo-600 dark:hover:text-indigo-400 text-sm"
                       >
                         Usage
                         <ArrowUpDown className="w-3 h-3" />
                       </button>
-                    </TableHead>
-                    <TableHead>Rate Limit</TableHead>
-                    {advancedMode && <TableHead>User</TableHead>}
-                    <TableHead>Scopes</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead className="text-right">Actions</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
+                    </th>
+                    <th className="dark:text-gray-300 px-4 py-2 text-left">Rate Limit</th>
+                    {advancedMode && <th className="dark:text-gray-300 px-4 py-2 text-left">User</th>}
+                    <th className="dark:text-gray-300 px-4 py-2 text-left">Scopes</th>
+                    <th className="dark:text-gray-300 px-4 py-2 text-left">Status</th>
+                    <th className="text-right dark:text-gray-300 px-4 py-2">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
                   {filteredKeys.map((key) => (
-                    <TableRow key={key.id} className="hover:bg-purple-50/30">
-                      <TableCell>
-                        <Checkbox
-                          checked={selectedKeys.includes(key.id)}
-                          onCheckedChange={(checked) => {
+                    <tr
+                      key={key.id}
+                      className="border-b border-gray-200 dark:border-slate-800 hover:bg-gray-50 dark:hover:bg-slate-800/50 transition-colors"
+                    >
+                      <td className="dark:text-gray-300 px-4 py-2">
+                        <input
+                          type="checkbox"
+                          defaultChecked={selectedKeys.includes(key.id)}
+                          onChange={(e) => {
+                            const checked = e.target.checked;
                             setSelectedKeys(
                               checked
                                 ? [...selectedKeys, key.id]
-                                : selectedKeys.filter(id => id !== key.id)
+                                : selectedKeys.filter((id) => id !== key.id)
                             );
                           }}
+                          className="w-4 h-4 rounded border-gray-300 dark:border-slate-600 dark:bg-slate-800 cursor-pointer"
                         />
-                      </TableCell>
-                      <TableCell className="font-medium">{key.name}</TableCell>
-                      <TableCell>
+                      </td>
+                      <td className="font-medium dark:text-white text-sm px-4 py-2">
+                        {key.name}
+                      </td>
+                      <td className="dark:text-gray-300 px-4 py-2">
                         <div className="flex items-center gap-2">
-                          <code className="text-xs bg-gray-100 px-2 py-1 rounded font-mono">
+                          <code className="text-xs bg-gray-100 dark:bg-slate-800 px-2 py-1 rounded font-mono dark:text-gray-300">
                             {visibleKeys[key.id] ? key.key : key.maskedKey}
                           </code>
                           <Button
                             variant="ghost"
                             size="sm"
                             onClick={() => toggleKeyVisibility(key.id)}
-                            className="h-6 w-6 p-0"
+                            className="h-8 w-8 p-0 dark:hover:bg-slate-700 min-h-8"
                           >
                             {visibleKeys[key.id] ? (
-                              <EyeOff className="w-3 h-3" />
+                              <EyeOff className="w-4 h-4 text-gray-600 dark:text-gray-400" />
                             ) : (
-                              <Eye className="w-3 h-3" />
+                              <Eye className="w-4 h-4 text-gray-600 dark:text-gray-400" />
                             )}
                           </Button>
                         </div>
-                      </TableCell>
-                      <TableCell className="text-sm text-gray-600">
+                      </td>
+                      <td className="text-sm text-gray-600 dark:text-gray-400 px-4 py-2">
                         {formatDate(key.created)}
-                      </TableCell>
-                      <TableCell className="text-sm text-gray-600">
+                      </td>
+                      <td className="text-sm text-gray-600 dark:text-gray-400 px-4 py-2">
                         {formatDate(key.lastUsed)}
-                      </TableCell>
-                      <TableCell>
+                      </td>
+                      <td className="dark:text-gray-300 px-4 py-2">
                         <button
                           onClick={() => setSelectedKeyStats(key)}
-                          className="text-purple-600 hover:text-purple-800 font-medium"
+                          className="text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 font-medium text-sm"
                         >
                           {key.usageCount.toLocaleString()}
                         </button>
-                      </TableCell>
-                      <TableCell className="text-sm">
+                      </td>
+                      <td className="text-sm text-gray-600 dark:text-gray-400 px-4 py-2">
                         {key.rateLimit.toLocaleString()}/{key.rateLimitUnit}
-                      </TableCell>
+                      </td>
                       {advancedMode && (
-                        <TableCell className="text-sm text-gray-600">{key.user}</TableCell>
+                        <td className="text-sm text-gray-600 dark:text-gray-400 px-4 py-2">
+                          {key.user}
+                        </td>
                       )}
-                      <TableCell>
-                        <div className="flex gap-1">
+                      <td className="dark:text-gray-300 px-4 py-2">
+                        <div className="flex gap-1 flex-wrap">
                           {getScopeBadges(key.scopes)}
                         </div>
-                      </TableCell>
-                      <TableCell>
+                      </td>
+                      <td className="dark:text-gray-300 px-4 py-2">
                         {getStatusBadge(key.status)}
-                      </TableCell>
-                      <TableCell>
+                      </td>
+                      <td className="text-right dark:text-gray-300 px-4 py-2">
                         <div className="flex items-center justify-end gap-1">
                           <Button
                             variant="ghost"
                             size="sm"
                             onClick={() => handleCopyKey(key)}
-                            className="h-8 w-8 p-0"
+                            className="h-9 w-9 p-0 dark:hover:bg-slate-700 min-h-9"
+                            title="Copy API key"
                           >
                             {copiedKey === key.id ? (
-                              <CheckCircle className="w-4 h-4 text-green-600" />
+                              <Check className="w-4 h-4 text-green-600 dark:text-green-400" />
                             ) : (
-                              <Copy className="w-4 h-4" />
+                              <Copy className="w-4 h-4 text-gray-600 dark:text-gray-400" />
                             )}
                           </Button>
                           <Button
                             variant="ghost"
                             size="sm"
                             onClick={() => handleRotateKey(key.id)}
-                            className="h-8 w-8 p-0"
+                            className="h-9 w-9 p-0 dark:hover:bg-slate-700 min-h-9"
+                            title="Rotate API key"
                           >
-                            <RefreshCw className="w-4 h-4" />
+                            <RefreshCw className="w-4 h-4 text-gray-600 dark:text-gray-400" />
                           </Button>
                           <Button
                             variant="ghost"
@@ -796,22 +913,25 @@ export default function AdminAPIKeys() {
                               setKeyToDelete(key.id);
                               setIsDeleteDialogOpen(true);
                             }}
-                            className="h-8 w-8 p-0 hover:text-red-600"
+                            className="h-9 w-9 p-0 dark:hover:bg-slate-700 dark:hover:text-red-400 min-h-9 text-red-600 hover:text-red-700"
+                            title="Delete API key"
                           >
                             <Trash2 className="w-4 h-4" />
                           </Button>
                         </div>
-                      </TableCell>
-                    </TableRow>
+                      </td>
+                    </tr>
                   ))}
-                </TableBody>
-              </Table>
+                </tbody>
+              </table>
 
               {filteredKeys.length === 0 && (
                 <div className="text-center py-12">
-                  <Key className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                  <h3 className="text-lg font-medium text-gray-900 mb-2">No API keys found</h3>
-                  <p className="text-sm text-gray-600 mb-4">
+                  <Key className="w-12 h-12 text-gray-400 dark:text-gray-600 mx-auto mb-4" />
+                  <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
+                    No API keys found
+                  </h3>
+                  <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
                     {searchTerm || filterUser !== 'all' || filterStatus !== 'all' || filterScope !== 'all'
                       ? 'Try adjusting your filters'
                       : 'Create your first API key to get started'}
@@ -825,9 +945,9 @@ export default function AdminAPIKeys() {
         {/* Usage Statistics */}
         {advancedMode && (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <Card>
+            <Card className="bg-white dark:bg-slate-900 dark:border-slate-800">
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
+                <CardTitle className="flex items-center gap-2 dark:text-white">
                   <BarChart3 className="w-5 h-5 text-purple-600" />
                   API Requests (Last 30 Days)
                 </CardTitle>
@@ -845,15 +965,16 @@ export default function AdminAPIKeys() {
                         <stop offset="95%" stopColor="#ef4444" stopOpacity={0}/>
                       </linearGradient>
                     </defs>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                    <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
                     <XAxis dataKey="date" stroke="#6b7280" style={{ fontSize: '12px' }} />
                     <YAxis stroke="#6b7280" style={{ fontSize: '12px' }} />
                     <Tooltip 
                       contentStyle={{ 
-                        backgroundColor: 'white',
-                        border: '1px solid #e5e7eb',
+                        backgroundColor: '#1e293b',
+                        border: '1px solid #475569',
                         borderRadius: '8px',
-                        boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)'
+                        boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)',
+                        color: '#e2e8f0'
                       }}
                     />
                     <Area 
@@ -877,9 +998,9 @@ export default function AdminAPIKeys() {
               </CardContent>
             </Card>
 
-            <Card>
+            <Card className="bg-white dark:bg-slate-900 dark:border-slate-800">
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
+                <CardTitle className="flex items-center gap-2 dark:text-white">
                   <Activity className="w-5 h-5 text-indigo-600" />
                   Top API Endpoints
                 </CardTitle>
@@ -889,17 +1010,17 @@ export default function AdminAPIKeys() {
                   {usageStats.topEndpoints.map((endpoint, index) => (
                     <div key={index} className="space-y-2">
                       <div className="flex items-center justify-between">
-                        <code className="text-xs font-mono bg-gray-100 px-2 py-1 rounded">
+                        <code className="text-xs font-mono bg-gray-100 dark:bg-slate-800 dark:text-gray-300 px-2 py-1 rounded">
                           {endpoint.endpoint}
                         </code>
                         <div className="flex items-center gap-3">
-                          <span className="text-xs text-gray-500">{endpoint.avgTime}</span>
-                          <span className="text-sm font-medium text-gray-900">
+                          <span className="text-xs text-gray-500 dark:text-gray-400">{endpoint.avgTime}</span>
+                          <span className="text-sm font-medium text-gray-900 dark:text-white">
                             {endpoint.calls.toLocaleString()}
                           </span>
                         </div>
                       </div>
-                      <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
+                      <div className="h-2 bg-gray-100 dark:bg-slate-800 rounded-full overflow-hidden">
                         <div 
                           className="h-full bg-gradient-to-r from-purple-500 to-indigo-600 rounded-full"
                           style={{ 
@@ -917,10 +1038,10 @@ export default function AdminAPIKeys() {
 
         {/* Key Usage Stats Dialog */}
         <Dialog open={!!selectedKeyStats} onOpenChange={() => setSelectedKeyStats(null)}>
-          <DialogContent className="max-w-2xl">
+          <DialogContent className="max-w-2xl dark:bg-slate-900 dark:border-slate-800">
             <DialogHeader>
-              <DialogTitle>Usage Statistics - {selectedKeyStats?.name}</DialogTitle>
-              <DialogDescription>
+              <DialogTitle className="dark:text-white">Usage Statistics - {selectedKeyStats?.name}</DialogTitle>
+              <DialogDescription className="dark:text-gray-400">
                 Detailed usage metrics for this API key
               </DialogDescription>
             </DialogHeader>
@@ -928,38 +1049,39 @@ export default function AdminAPIKeys() {
             {selectedKeyStats && (
               <div className="space-y-6 py-4">
                 <div className="grid grid-cols-3 gap-4">
-                  <div className="text-center p-4 bg-purple-50 rounded-lg border border-purple-200">
-                    <p className="text-2xl font-bold text-purple-900">
+                  <div className="text-center p-4 bg-purple-50 dark:bg-purple-900/20 rounded-lg border border-purple-200 dark:border-purple-800">
+                    <p className="text-2xl font-bold text-purple-900 dark:text-purple-400">
                       {selectedKeyStats.usageCount.toLocaleString()}
                     </p>
-                    <p className="text-xs text-purple-600 mt-1">Total Requests</p>
+                    <p className="text-xs text-purple-600 dark:text-purple-400 mt-1">Total Requests</p>
                   </div>
-                  <div className="text-center p-4 bg-indigo-50 rounded-lg border border-indigo-200">
-                    <p className="text-2xl font-bold text-indigo-900">
+                  <div className="text-center p-4 bg-indigo-50 dark:bg-indigo-900/20 rounded-lg border border-indigo-200 dark:border-indigo-800">
+                    <p className="text-2xl font-bold text-indigo-900 dark:text-indigo-400">
                       {selectedKeyStats.rateLimit}
                     </p>
-                    <p className="text-xs text-indigo-600 mt-1">Rate Limit / {selectedKeyStats.rateLimitUnit}</p>
+                    <p className="text-xs text-indigo-600 dark:text-indigo-400 mt-1">Rate Limit / {selectedKeyStats.rateLimitUnit}</p>
                   </div>
-                  <div className="text-center p-4 bg-cyan-50 rounded-lg border border-cyan-200">
-                    <p className="text-2xl font-bold text-cyan-900">
+                  <div className="text-center p-4 bg-cyan-50 dark:bg-cyan-900/20 rounded-lg border border-cyan-200 dark:border-cyan-800">
+                    <p className="text-2xl font-bold text-cyan-900 dark:text-cyan-400">
                       {Math.floor(Math.random() * 100)}%
                     </p>
-                    <p className="text-xs text-cyan-600 mt-1">Success Rate</p>
+                    <p className="text-xs text-cyan-600 dark:text-cyan-400 mt-1">Success Rate</p>
                   </div>
                 </div>
 
                 <div>
-                  <h4 className="font-semibold mb-3 text-gray-900">Request History (7 Days)</h4>
+                  <h4 className="font-semibold mb-3 text-gray-900 dark:text-white">Request History (7 Days)</h4>
                   <ResponsiveContainer width="100%" height={200}>
                     <LineChart data={usageStats.last30Days.slice(-7)}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                      <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
                       <XAxis dataKey="date" stroke="#6b7280" style={{ fontSize: '12px' }} />
                       <YAxis stroke="#6b7280" style={{ fontSize: '12px' }} />
                       <Tooltip 
                         contentStyle={{ 
-                          backgroundColor: 'white',
-                          border: '1px solid #e5e7eb',
-                          borderRadius: '8px'
+                          backgroundColor: '#1e293b',
+                          border: '1px solid #475569',
+                          borderRadius: '8px',
+                          color: '#e2e8f0'
                         }}
                       />
                       <Line 
@@ -974,25 +1096,25 @@ export default function AdminAPIKeys() {
                 </div>
 
                 <div className="space-y-2">
-                  <h4 className="font-semibold text-gray-900">Key Information</h4>
+                  <h4 className="font-semibold text-gray-900 dark:text-white">Key Information</h4>
                   <div className="grid grid-cols-2 gap-3 text-sm">
                     <div>
-                      <span className="text-gray-600">User:</span>
-                      <span className="ml-2 font-medium">{selectedKeyStats.user}</span>
+                      <span className="text-gray-600 dark:text-gray-400">User:</span>
+                      <span className="ml-2 font-medium dark:text-gray-300">{selectedKeyStats.user}</span>
                     </div>
                     <div>
-                      <span className="text-gray-600">Application:</span>
-                      <span className="ml-2 font-medium">{selectedKeyStats.application}</span>
+                      <span className="text-gray-600 dark:text-gray-400">Application:</span>
+                      <span className="ml-2 font-medium dark:text-gray-300">{selectedKeyStats.application}</span>
                     </div>
                     <div>
-                      <span className="text-gray-600">Created:</span>
-                      <span className="ml-2 font-medium">
+                      <span className="text-gray-600 dark:text-gray-400">Created:</span>
+                      <span className="ml-2 font-medium dark:text-gray-300">
                         {new Date(selectedKeyStats.created).toLocaleDateString()}
                       </span>
                     </div>
                     <div>
-                      <span className="text-gray-600">Expires:</span>
-                      <span className="ml-2 font-medium">
+                      <span className="text-gray-600 dark:text-gray-400">Expires:</span>
+                      <span className="ml-2 font-medium dark:text-gray-300">
                         {selectedKeyStats.expiresAt 
                           ? new Date(selectedKeyStats.expiresAt).toLocaleDateString()
                           : 'Never'}
@@ -1013,13 +1135,13 @@ export default function AdminAPIKeys() {
 
         {/* Delete Confirmation Dialog */}
         <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
-          <DialogContent>
+          <DialogContent className="dark:bg-slate-900 dark:border-slate-800">
             <DialogHeader>
-              <DialogTitle className="flex items-center gap-2 text-red-600">
+              <DialogTitle className="flex items-center gap-2 text-red-600 dark:text-red-400">
                 <AlertCircle className="w-5 h-5" />
                 Delete API Key
               </DialogTitle>
-              <DialogDescription>
+              <DialogDescription className="dark:text-gray-400">
                 Are you sure you want to delete this API key? This action cannot be undone and will immediately revoke access.
               </DialogDescription>
             </DialogHeader>
