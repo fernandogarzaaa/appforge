@@ -19,7 +19,7 @@ export default function GlobalTopNav({ user, onLogout, mobileMenu, title = 'AppF
   const MenuItem = /** @type {any} */ (DropdownMenuItem);
 
   return (
-    <header className="bg-white/80 dark:bg-slate-950/80 dark:border-slate-800 border-b border-gray-200 px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between backdrop-blur-sm sticky top-0 z-40">
+    <header className="bg-white/40 dark:bg-slate-950/40 dark:border-slate-800/30 border-b border-gray-200/40 dark:border-slate-700/30 px-3 sm:px-6 py-2.5 sm:py-3 flex items-center justify-between backdrop-blur-xl sticky top-0 z-40 shadow-sm dark:shadow-slate-950/20">
       <div className="flex items-center gap-2 sm:gap-4 flex-1 min-w-0">
         {mobileMenu}
         <div className="min-w-0 flex-1">
