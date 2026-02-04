@@ -6,7 +6,7 @@
 
 export function initializeTracingClient() {
   // Check if AI Toolkit tracing is available
-  if (!(window as any).__OTEL_INITIALIZED__) {
+  if (!window.__OTEL_INITIALIZED__) {
     console.log(
       "📊 Tracing: Open VS Code command palette → 'ai-mlstudio.tracing.open' to start trace collector"
     );

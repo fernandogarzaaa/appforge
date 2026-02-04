@@ -7,9 +7,9 @@
 // import OpenAI from 'openai';
 // Using fetch API as fallback
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+// const openai = new OpenAI({
+//   apiKey: process.env.OPENAI_API_KEY,
+// });
 
 /**
  * POST /api/ai/generate-code

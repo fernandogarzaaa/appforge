@@ -290,9 +290,8 @@ mod tests {
         let engine = RenormalizationEngine::new(2);
         let metrics = vec![1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0];
         let evolution = engine.flow_evolution(&metrics);
-        assert!(evolution.len() > 1, "Should have multiple scales");
-        assert_eq!(evolution[0].len(), 8);
-        assert!(evolution[1].len() < evolution[0].len());
+        assert!(evolution > 0.0, "Should have positive criticality");
+        assert!(evolution < 1.0, "Should have criticality less than 1");
     }
 
     #[test]

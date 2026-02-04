@@ -1,5 +1,5 @@
 use wasm_bindgen::prelude::*;
-use ndarray::{Array1, Array2, Axis};
+use ndarray::{Array1, Array2};
 use std::f64::consts::PI;
 
 /// HolographicConsensus: Tensor Network-based consensus engine for multi-model AI
