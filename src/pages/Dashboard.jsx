@@ -18,7 +18,6 @@ import ProjectCard from '@/components/dashboard/ProjectCard';
 import { motion } from 'framer-motion';
 import Skeletons from '@/components/common/Skeletons';
 import { useToast } from '@/components/ui/use-toast';
-import { useBackendAuth } from '@/contexts/BackendAuthContext';
 import QuantumCircuitDisplay from '@/components/QuantumCircuitDisplay';
 import QuantumCircuitVisualizer from '@/components/QuantumCircuitVisualizer';
 import QuantumCircuitEducation from '@/components/QuantumCircuitEducation';
@@ -27,7 +26,11 @@ export default function Dashboard() {
   const [ideaInput, setIdeaInput] = useState('');
   const [isCreating, setIsCreating] = useState(false);
   const { toast } = useToast();
-  const { isAuthenticated } = useBackendAuth();
+  const [isAuthenticated, setIsAuthenticated] = React.useState(false);
+
+  React.useEffect(() => {
+    base44.auth.isAuthenticated().then(setIsAuthenticated);
+  }, []);
 
   const { data: projects = [], isLoading } = useQuery({
     queryKey: ['projects'],
