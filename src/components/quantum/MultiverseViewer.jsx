@@ -1,245 +1,271 @@
 import React, { useState, useEffect } from 'react';
-import { useQuantumMultiverse } from '@/hooks/useQuantumMultiverse';
+import { useQuantumMultiverse } from './useQuantumMultiverse';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Zap, GitBranch, Eye, Play, Pause, RotateCcw, Layers } from 'lucide-react';
+import { 
+  Zap, GitBranch, Maximize2, AlertCircle, 
+  GitMerge, Waves, Eye, Play, Pause
+} from 'lucide-react';
+import { motion } from 'framer-motion';
 
-export default function MultiverseViewer() {
-  const { 
-    universes, 
-    activeUniverseId, 
-    isSimulating, 
-    timeline,
-    createUniverse, 
-    switchUniverse, 
-    toggleSimulation, 
-    resetSimulation,
-    observeTimeline 
-  } = useQuantumMultiverse();
+export default function MultiverseViewer({ initialQubits = 3 }) {
+  const {
+    universes,
+    activeUniverseId,
+    setActiveUniverseId,
+    timelineHistory,
+    entanglementMap,
+    branchUniverse,
+    collapseWavefunction,
+    calculateInterference,
+    entangleUniverses,
+    applyHadamard,
+    applyPauliX,
+    getActiveUniverse,
+  } = useQuantumMultiverse(initialQubits);
 
-  const [selectedUniverse, setSelectedUniverse] = useState(null);
+  const [isAnimating, setIsAnimating] = useState(false);
+  const [selectedPair, setSelectedPair] = useState(null);
+  const [interference, setInterference] = useState({});
 
   useEffect(() => {
-    if (activeUniverseId && universes.length > 0) {
-      const universe = universes.find(u => u.id === activeUniverseId);
-      setSelectedUniverse(universe);
-    }
-  }, [activeUniverseId, universes]);
+    const newInterference = calculateInterference();
+    setInterference(newInterference);
+  }, [universes, calculateInterference]);
 
-  const handleCreateUniverse = async () => {
-    const newUniverse = await createUniverse({
-      name: `Universe ${universes.length + 1}`,
-      parameters: {
-        quantumEntanglement: Math.random() * 100,
-        coherenceLevel: Math.random() * 100,
-        decoherenceRate: Math.random() * 0.1,
-      }
-    });
-    if (newUniverse) {
-      switchUniverse(newUniverse.id);
-    }
+  const activeUniverse = getActiveUniverse();
+
+  const handleBranch = () => {
+    setIsAnimating(true);
+    branchUniverse();
+    setTimeout(() => setIsAnimating(false), 600);
+  };
+
+  const handleEntangle = (id1, id2) => {
+    entangleUniverses(id1, id2);
+    setSelectedPair([id1, id2]);
   };
 
   return (
     <div className="space-y-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-lg bg-cyan-100 dark:bg-cyan-900/30 flex items-center justify-center">
-            <Layers className="w-5 h-5 text-cyan-600 dark:text-cyan-400" />
-          </div>
-          <div>
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Multiverse Engine</h2>
-            <p className="text-sm text-gray-500 dark:text-gray-400">Parallel Universe Simulation</p>
-          </div>
-        </div>
-        <div className="flex gap-2">
-          <Button
-            variant={isSimulating ? "default" : "outline"}
-            size="sm"
-            onClick={toggleSimulation}
-            className="gap-2"
-          >
-            {isSimulating ? (
-              <>
-                <Pause className="w-4 h-4" />
-                Pause
-              </>
-            ) : (
-              <>
-                <Play className="w-4 h-4" />
-                Start
-              </>
-            )}
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={resetSimulation}
-            className="gap-2"
-          >
-            <RotateCcw className="w-4 h-4" />
-            Reset
-          </Button>
-        </div>
-      </div>
-
-      {/* Timeline View */}
-      {timeline && (
-        <Card className="bg-gradient-to-r from-cyan-50 to-blue-50 dark:from-cyan-950/20 dark:to-blue-950/20 border-cyan-200 dark:border-cyan-800">
-          <CardHeader>
-            <CardTitle className="text-lg flex items-center gap-2">
-              <Zap className="w-5 h-5 text-cyan-600" />
-              Current Timeline State
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <div className="p-3 bg-white/50 dark:bg-gray-800/50 rounded-lg">
-                <p className="text-xs text-gray-600 dark:text-gray-400 mb-1">Iteration</p>
-                <p className="text-2xl font-bold text-gray-900 dark:text-white">{timeline.iteration}</p>
-              </div>
-              <div className="p-3 bg-white/50 dark:bg-gray-800/50 rounded-lg">
-                <p className="text-xs text-gray-600 dark:text-gray-400 mb-1">Entanglement</p>
-                <p className="text-2xl font-bold text-cyan-600 dark:text-cyan-400">{timeline.entanglement.toFixed(1)}%</p>
-              </div>
-              <div className="p-3 bg-white/50 dark:bg-gray-800/50 rounded-lg">
-                <p className="text-xs text-gray-600 dark:text-gray-400 mb-1">Coherence</p>
-                <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">{timeline.coherence.toFixed(1)}%</p>
-              </div>
-              <div className="p-3 bg-white/50 dark:bg-gray-800/50 rounded-lg">
-                <p className="text-xs text-gray-600 dark:text-gray-400 mb-1">Active Branches</p>
-                <p className="text-2xl font-bold text-purple-600 dark:text-purple-400">{timeline.branches}</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      )}
-
-      {/* Universes Grid */}
-      <div>
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
-            <GitBranch className="w-5 h-5" />
-            Parallel Universes ({universes.length})
-          </h3>
-          <Button onClick={handleCreateUniverse} size="sm" className="gap-2">
-            <Zap className="w-4 h-4" />
-            New Universe
-          </Button>
-        </div>
-
-        {universes.length === 0 ? (
-          <Card className="bg-gray-50 dark:bg-gray-800/50">
-            <CardContent className="flex flex-col items-center justify-center py-12">
-              <GitBranch className="w-12 h-12 text-gray-300 dark:text-gray-600 mb-3" />
-              <p className="text-gray-600 dark:text-gray-400 mb-4">No universes created yet</p>
-              <Button onClick={handleCreateUniverse} variant="outline">
-                Create First Universe
-              </Button>
-            </CardContent>
-          </Card>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            <AnimatePresence mode="popLayout">
-              {universes.map((universe) => (
-                <motion.div
+      {/* Multiverse Timeline Visualization */}
+      <Card className="border-2 border-purple-500/30 dark:border-purple-500/50">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2 text-purple-600 dark:text-purple-400">
+            <Maximize2 className="w-5 h-5" />
+            Multiverse Timeline
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-4">
+            {/* Universes Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
+              {universes.map((universe, idx) => (
+                <motion.button
                   key={universe.id}
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.9 }}
-                  onClick={() => switchUniverse(universe.id)}
-                  className={`cursor-pointer transition-all ${
+                  transition={{ delay: idx * 0.1 }}
+                  onClick={() => setActiveUniverseId(universe.id)}
+                  className={`p-4 rounded-xl border-2 transition-all ${
                     activeUniverseId === universe.id
-                      ? 'ring-2 ring-cyan-500 ring-offset-2 dark:ring-offset-gray-950'
-                      : ''
+                      ? 'border-purple-500 bg-purple-50 dark:bg-purple-950/30'
+                      : 'border-gray-200 dark:border-gray-700 hover:border-purple-300'
                   }`}
                 >
-                  <Card
-                    className={`${
-                      activeUniverseId === universe.id
-                        ? 'border-cyan-500 bg-cyan-50/50 dark:bg-cyan-950/20'
-                        : 'hover:shadow-lg'
-                    }`}
-                  >
-                    <CardHeader className="pb-3">
-                      <div className="flex items-start justify-between">
-                        <div>
-                          <CardTitle className="text-base">{universe.name}</CardTitle>
-                          <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                            ID: {universe.id.slice(0, 8)}...
-                          </p>
-                        </div>
-                        {activeUniverseId === universe.id && (
-                          <Eye className="w-4 h-4 text-cyan-600 dark:text-cyan-400" />
-                        )}
-                      </div>
-                    </CardHeader>
-                    <CardContent className="space-y-3">
-                      <div>
-                        <p className="text-xs text-gray-600 dark:text-gray-400 mb-1">Quantum Entanglement</p>
-                        <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
-                          <div
-                            className="bg-cyan-500 h-2 rounded-full"
-                            style={{ width: `${Math.min(universe.parameters.quantumEntanglement, 100)}%` }}
-                          />
-                        </div>
-                      </div>
-                      <div>
-                        <p className="text-xs text-gray-600 dark:text-gray-400 mb-1">Coherence Level</p>
-                        <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
-                          <div
-                            className="bg-blue-500 h-2 rounded-full"
-                            style={{ width: `${Math.min(universe.parameters.coherenceLevel, 100)}%` }}
-                          />
-                        </div>
-                      </div>
-                      <div className="flex gap-2 pt-2">
-                        <Badge variant="outline" className="text-xs">
-                          Decoherence: {(universe.parameters.decoherenceRate * 100).toFixed(1)}%
+                  <div className="text-left space-y-2">
+                    <div className="flex items-center gap-2 justify-between">
+                      <span className="font-semibold text-sm dark:text-white">
+                        {universe.name}
+                      </span>
+                      {universe.collapsed && (
+                        <Badge variant="secondary" className="text-xs">
+                          Collapsed
                         </Badge>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </motion.div>
-              ))}
-            </AnimatePresence>
-          </div>
-        )}
-      </div>
+                      )}
+                    </div>
 
-      {/* Quantum Metrics */}
-      {selectedUniverse && (
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-lg">Quantum Metrics - {selectedUniverse.name}</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                <div className="p-3 bg-gray-50 dark:bg-gray-800/50 rounded-lg">
-                  <p className="text-xs text-gray-600 dark:text-gray-400">State Vector Dimension</p>
-                  <p className="text-lg font-semibold text-gray-900 dark:text-white mt-1">2^{Math.ceil(Math.log2(universes.length + 1))}</p>
-                </div>
-                <div className="p-3 bg-gray-50 dark:bg-gray-800/50 rounded-lg">
-                  <p className="text-xs text-gray-600 dark:text-gray-400">Fidelity</p>
-                  <p className="text-lg font-semibold text-purple-600 dark:text-purple-400 mt-1">
-                    {(Math.random() * 0.15 + 0.85 * 100).toFixed(2)}%
-                  </p>
-                </div>
-                <div className="p-3 bg-gray-50 dark:bg-gray-800/50 rounded-lg">
-                  <p className="text-xs text-gray-600 dark:text-gray-400">T1 Relaxation</p>
-                  <p className="text-lg font-semibold text-indigo-600 dark:text-indigo-400 mt-1">
-                    {(Math.random() * 100 + 50).toFixed(0)} μs
-                  </p>
+                    {/* Amplitude visualization */}
+                    <div className="w-full bg-gray-200 dark:bg-gray-700 rounded h-2">
+                      <div
+                        className="bg-purple-500 h-full rounded transition-all"
+                        style={{ width: `${Math.abs(universe.amplitude) * 100}%` }}
+                      />
+                    </div>
+
+                    {/* Qubit count */}
+                    <div className="text-xs text-gray-600 dark:text-gray-400">
+                      {universe.qubits.length} qubits
+                    </div>
+
+                    {/* Entanglement indicator */}
+                    {entanglementMap[universe.id] && (
+                      <div className="text-xs text-purple-600 dark:text-purple-400 flex items-center gap-1">
+                        <Waves className="w-3 h-3" />
+                        Entangled
+                      </div>
+                    )}
+                  </div>
+                </motion.button>
+              ))}
+            </div>
+
+            {/* Timeline History */}
+            {timelineHistory.length > 0 && (
+              <div className="border-t dark:border-gray-700 pt-4">
+                <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Timeline Events
+                </h4>
+                <div className="space-y-1 max-h-40 overflow-y-auto">
+                  {timelineHistory.slice(-5).reverse().map((event, idx) => (
+                    <div key={idx} className="text-xs text-gray-600 dark:text-gray-400 p-2 bg-gray-50 dark:bg-gray-800/50 rounded">
+                      <span className="font-medium capitalize">{event.type}</span>
+                      {' '} - {event.details}
+                    </div>
+                  ))}
                 </div>
               </div>
+            )}
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Quantum Controls */}
+      <Card className="border-2 border-indigo-500/30 dark:border-indigo-500/50">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2 text-indigo-600 dark:text-indigo-400">
+            <Zap className="w-5 h-5" />
+            Quantum Operations
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+            <Button
+              onClick={applyHadamard}
+              variant="outline"
+              size="sm"
+              className="h-10 rounded-lg dark:border-indigo-700 dark:hover:bg-indigo-950/30"
+            >
+              <Waves className="w-4 h-4 mr-2" />
+              Hadamard
+            </Button>
+            <Button
+              onClick={applyPauliX}
+              variant="outline"
+              size="sm"
+              className="h-10 rounded-lg dark:border-indigo-700 dark:hover:bg-indigo-950/30"
+            >
+              <Zap className="w-4 h-4 mr-2" />
+              Pauli-X
+            </Button>
+            <Button
+              onClick={handleBranch}
+              variant="outline"
+              size="sm"
+              className="h-10 rounded-lg dark:border-purple-700 dark:hover:bg-purple-950/30"
+            >
+              <GitBranch className="w-4 h-4 mr-2" />
+              Branch
+            </Button>
+            <Button
+              onClick={collapseWavefunction}
+              variant="outline"
+              size="sm"
+              className="h-10 rounded-lg dark:border-red-700 dark:hover:bg-red-950/30"
+            >
+              <Eye className="w-4 h-4 mr-2" />
+              Measure
+            </Button>
+          </div>
+
+          {/* Active Universe Details */}
+          {activeUniverse && (
+            <div className="border-t dark:border-gray-700 pt-4">
+              <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
+                Active Universe: {activeUniverse.name}
+              </h4>
+              <div className="space-y-2">
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-gray-600 dark:text-gray-400">State:</span>
+                  <span className="font-mono text-xs bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded">
+                    {activeUniverse.collapsed ? '|collapsed⟩' : '|superposition⟩'}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-gray-600 dark:text-gray-400">Amplitude:</span>
+                  <span className="font-mono text-xs">{activeUniverse.amplitude.toFixed(3)}</span>
+                </div>
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-gray-600 dark:text-gray-400">Probability:</span>
+                  <span className="font-mono text-xs">
+                    {(Math.abs(activeUniverse.amplitude) ** 2 * 100).toFixed(1)}%
+                  </span>
+                </div>
+              </div>
+            </div>
+          )}
+        </CardContent>
+      </Card>
+
+      {/* Quantum Interference */}
+      {Object.keys(interference).length > 0 && (
+        <Card className="border-2 border-cyan-500/30 dark:border-cyan-500/50">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-cyan-600 dark:text-cyan-400">
+              <Waves className="w-5 h-5" />
+              Quantum Interference
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-2 max-h-48 overflow-y-auto">
+              {Object.entries(interference)
+                .sort(([, a], [, b]) => b - a)
+                .slice(0, 6)
+                .map(([pair, value]) => (
+                  <div key={pair} className="flex items-center justify-between p-2 bg-gray-50 dark:bg-gray-800/50 rounded">
+                    <span className="text-xs font-mono text-gray-600 dark:text-gray-400">
+                      {pair.split('-').map(id => id.substring(9)).join(' ↔ ')}
+                    </span>
+                    <div className="flex items-center gap-2">
+                      <div className="w-24 bg-gray-200 dark:bg-gray-700 rounded h-1">
+                        <div
+                          className="bg-cyan-500 h-full rounded transition-all"
+                          style={{ width: `${Math.min(value * 100, 100)}%` }}
+                        />
+                      </div>
+                      <span className="text-xs font-mono text-cyan-600 dark:text-cyan-400">
+                        {(value * 100).toFixed(1)}%
+                      </span>
+                    </div>
+                  </div>
+                ))}
             </div>
           </CardContent>
         </Card>
       )}
+
+      {/* System Status */}
+      <div className="grid grid-cols-3 gap-3 text-center">
+        <div className="p-3 bg-blue-50 dark:bg-blue-950/30 rounded-lg border border-blue-200 dark:border-blue-800">
+          <div className="text-lg font-bold text-blue-600 dark:text-blue-400">
+            {universes.length}
+          </div>
+          <div className="text-xs text-blue-600 dark:text-blue-400">Universes</div>
+        </div>
+        <div className="p-3 bg-purple-50 dark:bg-purple-950/30 rounded-lg border border-purple-200 dark:border-purple-800">
+          <div className="text-lg font-bold text-purple-600 dark:text-purple-400">
+            {timelineHistory.length}
+          </div>
+          <div className="text-xs text-purple-600 dark:text-purple-400">Events</div>
+        </div>
+        <div className="p-3 bg-cyan-50 dark:bg-cyan-950/30 rounded-lg border border-cyan-200 dark:border-cyan-800">
+          <div className="text-lg font-bold text-cyan-600 dark:text-cyan-400">
+            {Object.keys(entanglementMap).length}
+          </div>
+          <div className="text-xs text-cyan-600 dark:text-cyan-400">Entangled</div>
+        </div>
+      </div>
     </div>
   );
 }
