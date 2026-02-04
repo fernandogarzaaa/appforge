@@ -289,8 +289,8 @@ def qaoa_circuit(graph, beta, gamma):
                     className={`bg-white/60 dark:bg-slate-800/60 backdrop-blur-md rounded-lg p-4 border border-white/20 dark:border-slate-700/30 hover:shadow-lg transition-all cursor-pointer group hover:bg-white/80 dark:hover:bg-slate-800/80`}
                   >
                     <div className="flex items-start gap-3">
-                      <div className={`w-10 h-10 rounded-lg bg-${concept.color}-100 dark:bg-${concept.color}-900/50 flex items-center justify-center group-hover:scale-110 transition-transform`}>
-                        <Icon className={`h-5 w-5 text-${concept.color}-600 dark:text-${concept.color}-400`} />
+                      <div className={`w-10 h-10 rounded-lg bg-indigo-100 dark:bg-indigo-900/50 flex items-center justify-center group-hover:scale-110 transition-transform`}>
+                         <Icon className={`h-5 w-5 text-indigo-600 dark:text-indigo-400`} />
                       </div>
                       <div className="flex-1">
                         <h4 className="font-semibold text-sm mb-1">{concept.title}</h4>
