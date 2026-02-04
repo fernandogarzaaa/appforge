@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { base44 } from '@/api/base44Client';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { 
-  Brain, Zap, Globe, MessageSquare, Settings, Play, Sparkles,
-  Plus, Check, Loader2, ExternalLink, Code, Database, Workflow
+  Brain, Zap, Globe, MessageSquare, Settings, Sparkles,
+  Plus, Check, Loader2, Database, Workflow
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';

@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import { base44 } from '@/api/base44Client'
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
@@ -8,8 +7,7 @@ import { Badge } from '@/components/ui/badge'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { 
-  Atom, Zap, Brain, Cpu, Activity, Play, Save, Download, 
-  TrendingUp, Sparkles, Share2, BookOpen, Code2, Lightbulb 
+  Atom, Zap, Brain, Cpu, Activity, TrendingUp, Sparkles, Share2, BookOpen, Lightbulb 
 } from 'lucide-react'
 import QuantumCircuitDisplay from '@/components/QuantumCircuitDisplay'
 import QuantumCircuitVisualizer from '@/components/QuantumCircuitVisualizer'
