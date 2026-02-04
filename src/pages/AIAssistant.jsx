@@ -112,8 +112,13 @@ export default function AIAssistant() {
       startAIAgentConversation(initialIdea);
     }
 
-    // Command Palette keyboard shortcut
+    // Command Palette keyboard shortcut - only trigger on Cmd+K or Ctrl+K
     const handleKeyDown = (e) => {
+      // Don't intercept if user is typing in an input
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
+        return;
+      }
+      
       if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
         e.preventDefault();
         setShowCommandPalette(true);
