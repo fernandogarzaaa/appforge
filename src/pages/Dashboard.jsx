@@ -491,12 +491,12 @@ export default function Dashboard() {
                 </div>
 
                 {/* Quantum Education Section */}
-                <QuantumCircuitEducation />
-              </CardContent>
-            </Card>
-          </motion.div>
-        )}
-      </div>
-    </div>
-  );
-}
+                 <QuantumCircuitEducation />
+                </div>
+                </div>
+                </motion.div>
+                )}
+                </div>
+                </div>
+                );
+                }
