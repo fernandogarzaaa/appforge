@@ -218,11 +218,11 @@ export default function Dashboard() {
     >
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900">Smart Recommendations</h2>
-          <p className="text-sm text-gray-600">Personalized paths to launch your next build faster</p>
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Quick Start Paths</h2>
+          <p className="text-sm text-gray-600 dark:text-gray-300">Launch your next project in minutes</p>
         </div>
-        <Badge className="bg-gradient-to-r from-indigo-500 to-purple-500 text-white border-0">
-          Powered by Spectrum
+        <Badge className="bg-gradient-to-r from-cyan-500 to-blue-500 text-white border-0 backdrop-blur-sm">
+          AI-Powered
         </Badge>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
