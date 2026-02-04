@@ -335,8 +335,8 @@ export default function Dashboard() {
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-indigo-50/30">
-      <div className="p-8 max-w-[1600px] mx-auto space-y-12">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 dark:from-slate-950 via-white dark:via-slate-900 to-cyan-50/30 dark:to-cyan-950/10">
+      <div className="p-6 md:p-8 max-w-[1600px] mx-auto space-y-12">
         <HeroSection />
         <SmartRecommendations />
         <OnboardingTour />
@@ -349,9 +349,9 @@ export default function Dashboard() {
           className="mb-12"
         >
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-bold text-gray-900">Your Workspace</h2>
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Your Workspace</h2>
             <Link to={createPageUrl('Projects') + '?new=true'}>
-              <Button className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white shadow-lg shadow-indigo-500/30">
+              <Button className="bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700 text-white shadow-lg shadow-cyan-500/30 rounded-xl px-6 h-11">
                 <Plus className="w-4 h-4 mr-2" />
                 New Project
               </Button>
