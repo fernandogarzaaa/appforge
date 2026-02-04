@@ -223,7 +223,7 @@ export default function AdminSecrets() {
       category: 'integrations',
       key: 'STRIPE_SECRET_KEY',
       label: 'Stripe Secret Key',
-      value: 'sk_live_51234567890abcdefghijklmnop',
+      value: 'sk_live_PLACEHOLDER',
       type: 'secret',
       encrypted: true,
       modified: '2026-02-03T16:20:00Z',
