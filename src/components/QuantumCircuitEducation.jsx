@@ -286,7 +286,7 @@ def qaoa_circuit(graph, beta, gamma):
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: i * 0.1 }}
-                    className={`bg-gradient-to-br from-${concept.color}-50 to-white dark:from-${concept.color}-950/20 dark:to-slate-900 rounded-lg p-4 border-2 border-${concept.color}-200 dark:border-${concept.color}-800/50 hover:shadow-lg transition-all cursor-pointer group`}
+                    className={`bg-white/60 dark:bg-slate-800/60 backdrop-blur-md rounded-lg p-4 border border-white/20 dark:border-slate-700/30 hover:shadow-lg transition-all cursor-pointer group hover:bg-white/80 dark:hover:bg-slate-800/80`}
                   >
                     <div className="flex items-start gap-3">
                       <div className={`w-10 h-10 rounded-lg bg-${concept.color}-100 dark:bg-${concept.color}-900/50 flex items-center justify-center group-hover:scale-110 transition-transform`}>
