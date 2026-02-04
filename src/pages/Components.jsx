@@ -130,10 +130,10 @@ export default function ${newComponent.name.replace(/\s+/g, '') || 'NewComponent
   return (
     <div className="flex h-[calc(100vh-4rem)]">
       {/* Components Sidebar */}
-      <div className="w-72 bg-white border-r border-gray-100 flex flex-col">
-        <div className="p-4 border-b border-gray-50">
+      <div className="w-72 bg-white dark:bg-gray-900 border-r border-gray-100 dark:border-gray-800/50 flex flex-col">
+        <div className="p-4 border-b border-gray-50 dark:border-gray-800/50">
           <div className="flex items-center justify-between mb-3">
-            <h2 className="font-semibold text-gray-900">Components</h2>
+            <h2 className="font-semibold text-gray-900 dark:text-white">Components</h2>
             <Button
               size="icon"
               variant="ghost"
@@ -150,12 +150,12 @@ export default function ${newComponent.name.replace(/\s+/g, '') || 'NewComponent
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search components..."
-                className="pl-9 h-9 rounded-lg bg-gray-50 border-0"
+                className="pl-9 h-9 rounded-lg bg-gray-50 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:placeholder-gray-400 border-0"
               />
             </div>
             <Select value={categoryFilter} onValueChange={setCategoryFilter}>
-              <SelectTrigger className="h-9 rounded-lg bg-gray-50 border-0">
-                <Layers className="w-4 h-4 mr-2 text-gray-400" />
+              <SelectTrigger className="h-9 rounded-lg bg-gray-50 dark:bg-gray-800 dark:border-gray-700 dark:text-white border-0">
+                <Layers className="w-4 h-4 mr-2 text-gray-400 dark:text-gray-500" />
                 <SelectValue placeholder="All categories" />
               </SelectTrigger>
               <SelectContent>
@@ -178,11 +178,11 @@ export default function ${newComponent.name.replace(/\s+/g, '') || 'NewComponent
             {isLoading ? (
               <div className="space-y-2">
                 {[1, 2, 3].map((i) => (
-                  <div key={i} className="h-16 bg-gray-100 rounded-xl animate-pulse" />
+                  <div key={i} className="h-16 bg-gray-100 dark:bg-gray-800 rounded-xl animate-pulse" />
                 ))}
               </div>
             ) : filteredComponents.length === 0 ? (
-              <div className="text-center py-8 text-gray-500 text-sm">
+              <div className="text-center py-8 text-gray-500 dark:text-gray-400 text-sm">
                 {searchQuery || categoryFilter !== 'all' ? 'No components found' : 'No components yet'}
               </div>
             ) : (
@@ -196,15 +196,15 @@ export default function ${newComponent.name.replace(/\s+/g, '') || 'NewComponent
                     className={cn(
                       "w-full flex items-center gap-3 p-3 rounded-xl text-left transition-all mb-1",
                       selectedComponent?.id === component.id
-                        ? "bg-indigo-50 border border-indigo-200"
-                        : "hover:bg-gray-50"
+                        ? "bg-indigo-50 dark:bg-indigo-900/30 border border-indigo-200 dark:border-indigo-800"
+                        : "hover:bg-gray-50 dark:hover:bg-gray-800"
                     )}
                   >
                     <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white text-sm font-medium">
                       {component.name.charAt(0).toUpperCase()}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="font-medium text-gray-900 truncate">{component.name}</p>
+                      <p className="font-medium text-gray-900 dark:text-white truncate">{component.name}</p>
                       <Badge className={cn("text-xs mt-1", categoryColors[component.category])}>
                         {component.category}
                       </Badge>
@@ -222,11 +222,11 @@ export default function ${newComponent.name.replace(/\s+/g, '') || 'NewComponent
       </div>
 
       {/* Component Editor */}
-      <div className="flex-1 bg-gray-50/50 flex flex-col">
+      <div className="flex-1 bg-gray-50/50 dark:bg-gray-950/50 flex flex-col">
         {selectedComponent ? (
           <>
             {/* Component Header */}
-            <div className="bg-white border-b border-gray-100 p-4">
+            <div className="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700/50 p-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
                   <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white text-lg font-semibold">

@@ -1,7 +1,22 @@
 import axios from 'axios';
 import env from '@/utils/env';
 
-const baseURL = import.meta.env.VITE_API_URL || env?.backend?.apiUrl || 'http://localhost:5000/api';
+// Storage key for auth token
+const TOKEN_STORAGE_KEY = 'appforge_auth_token';
+
+// Determine the correct API URL based on environment
+// Priority: 1. VITE_API_URL env var, 2. Backend config, 3. Runtime detection
+let baseURL = import.meta.env.VITE_API_URL || env?.backend?.apiUrl;
+
+// If not configured, detect based on current window location
+if (!baseURL && typeof window !== 'undefined') {
+  const protocol = window.location.protocol;
+  const host = window.location.host;
+  baseURL = `${protocol}//${host}/api`;
+} else if (!baseURL) {
+  // Fallback for non-browser environments
+  baseURL = 'http://localhost:5000/api';
+}
 
 const appforgeClient = axios.create({
   baseURL,
@@ -12,17 +27,24 @@ const appforgeClient = axios.create({
   }
 });
 
-// Token management now uses HTTP-only cookies (set by server)
+// Token management - store in localStorage for persistence
 export const getAuthToken = () => {
-  // Tokens are in HTTP-only cookies, not accessible to JS
-  // Server handles auth via cookie headers
-  return null; // Return null since tokens are server-managed
+  if (typeof window !== 'undefined') {
+    return localStorage.getItem(TOKEN_STORAGE_KEY);
+  }
+  return null;
 };
+
 export const setAuthToken = (token) => {
-  // Deprecated - server sets token in HTTP-only cookie
+  if (typeof window !== 'undefined' && token) {
+    localStorage.setItem(TOKEN_STORAGE_KEY, token);
+  }
 };
+
 export const clearAuthToken = () => {
-  // Deprecated - server clears token on logout
+  if (typeof window !== 'undefined') {
+    localStorage.removeItem(TOKEN_STORAGE_KEY);
+  }
 };
 
 appforgeClient.interceptors.request.use((config) => {

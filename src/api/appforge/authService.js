@@ -3,40 +3,65 @@ import client, { setAuthToken, clearAuthToken } from '../appforgeClient';
 const authService = {
   async register(payload) {
     const { data: response } = await client.post('/auth/register', payload);
-    if (response?.data?.token) {
-      setAuthToken(response.data.token);
+    
+    // API returns: { success, message, data: { user, token }, timestamp }
+    // Extract the nested data object
+    const result = response.data || response;
+    
+    if (result?.token) {
+      setAuthToken(result.token);
     }
-    // Return the nested data object
-    return response.data || response;
+    
+    return result;
   },
 
   async login(payload) {
     const { data: response } = await client.post('/auth/login', payload);
-    if (response?.data?.token) {
-      setAuthToken(response.data.token);
+    
+    // API returns: { success, message, data: { user, token }, timestamp }
+    // Extract the nested data object
+    const result = response.data || response;
+    
+    if (result?.token) {
+      setAuthToken(result.token);
     }
-    // Return the nested data object with user and token
-    return response.data || response;
+    
+    return result;
   },
 
   async refresh(token) {
     const { data: response } = await client.post('/auth/refresh', { token });
-    if (response?.data?.token) {
-      setAuthToken(response.data.token);
+    
+    // API returns: { success, message, data: { token }, timestamp }
+    const result = response.data || response;
+    
+    if (result?.token) {
+      setAuthToken(result.token);
     }
-    return response.data || response;
+    
+    return result;
   },
 
   async me() {
     const { data: response } = await client.get('/auth/me');
-    // Return the data property which contains the user
-    return response.data || response;
+    
+    // API returns: { success, message, data: { user }, timestamp }
+    // Return the user directly
+    const result = response.data || response;
+    
+    return result?.user || result;
   },
 
   async logout() {
-    const { data: response } = await client.post('/auth/logout');
-    clearAuthToken();
-    return response.data || response;
+    try {
+      const { data: response } = await client.post('/auth/logout');
+      clearAuthToken();
+      return response.data || response;
+    } catch (error) {
+      // Clear token even if request fails
+      clearAuthToken();
+      throw error;
+    }
   }
 };
 

@@ -11,23 +11,23 @@ export default function HelpSidebar() {
 
   return (
     <>
-      <div className={`fixed right-0 top-0 h-full bg-white border-l border-slate-200 z-40 transition-all duration-300 ${
+      <div className={`fixed right-0 top-0 h-full bg-white dark:bg-slate-900 border-l border-slate-200 dark:border-slate-800 z-40 transition-all duration-300 ${
         isOpen ? 'w-96 shadow-lg' : 'w-0'
       }`}>
         <div className="h-full flex flex-col">
-          <div className="p-4 border-b border-slate-200 flex justify-between items-center">
-            <h2 className="font-semibold">Help & Support</h2>
+          <div className="p-4 border-b border-slate-200 dark:border-slate-800/50 flex justify-between items-center">
+            <h2 className="font-semibold text-gray-900 dark:text-white">Help & Support</h2>
             <Button
               variant="ghost"
               size="icon"
               onClick={() => setIsOpen(false)}
-              className="h-8 w-8"
+              className="h-8 w-8 dark:hover:bg-slate-800"
             >
               <ChevronRight className="w-4 h-4" />
             </Button>
           </div>
 
-          <div className="flex gap-2 p-4 border-b border-slate-200">
+          <div className="flex gap-2 p-4 border-b border-slate-200 dark:border-slate-800/50">
             <Button
               variant={activeTab === 'kb' ? 'default' : 'outline'}
               size="sm"

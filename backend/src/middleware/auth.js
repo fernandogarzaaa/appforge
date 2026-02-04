@@ -1,9 +1,10 @@
 /**
  * JWT Authentication Middleware
- * Verifies JWT tokens in Authorization header
+ * Verifies JWT tokens in Authorization header or cookies
  */
 
 import jwt from 'jsonwebtoken';
+import { getJWTConfig } from '../config/index.js';
 
 export const authenticate = (req, res, next) => {
   try {
@@ -24,19 +25,30 @@ export const authenticate = (req, res, next) => {
 
     if (!token) {
       return res.status(401).json({
+        success: false,
         error: 'Unauthorized',
         message: 'No token provided',
         timestamp: new Date().toISOString()
       });
     }
 
-    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'dev-secret-key');
+    const jwtConfig = getJWTConfig();
+    const decoded = jwt.verify(token, jwtConfig.secret);
     req.user = decoded;
     next();
   } catch (err) {
+    // Handle specific JWT errors
+    let message = 'Invalid or expired token';
+    if (err.name === 'TokenExpiredError') {
+      message = 'Token has expired';
+    } else if (err.name === 'JsonWebTokenError') {
+      message = 'Invalid token';
+    }
+    
     return res.status(401).json({
+      success: false,
       error: 'Unauthorized',
-      message: 'Invalid or expired token',
+      message,
       timestamp: new Date().toISOString()
     });
   }
@@ -48,13 +60,29 @@ export const authenticate = (req, res, next) => {
  */
 export const optionalAuth = (req, res, next) => {
   try {
-    const token = req.headers.authorization?.split(' ')[1];
+    // Try to get token from Authorization header first
+    let token = req.headers.authorization?.split(' ')[1];
+    
+    // If not in header, try to parse from cookies manually
+    if (!token && req.headers.cookie) {
+      const cookies = req.headers.cookie.split(';');
+      for (const cookie of cookies) {
+        const [name, value] = cookie.trim().split('=');
+        if (name === 'token') {
+          token = decodeURIComponent(value);
+          break;
+        }
+      }
+    }
+    
     if (token) {
-      const decoded = jwt.verify(token, process.env.JWT_SECRET || 'dev-secret-key');
+      const jwtConfig = getJWTConfig();
+      const decoded = jwt.verify(token, jwtConfig.secret);
       req.user = decoded;
     }
   } catch (err) {
     // Silently fail - user not authenticated but request continues
+    req.user = null;
   }
   next();
 };
@@ -67,6 +95,7 @@ export const authorize = (...roles) => {
   return (req, res, next) => {
     if (!req.user) {
       return res.status(401).json({
+        success: false,
         error: 'Unauthorized',
         message: 'Authentication required',
         timestamp: new Date().toISOString()
@@ -75,6 +104,7 @@ export const authorize = (...roles) => {
 
     if (!roles.includes(req.user.role)) {
       return res.status(403).json({
+        success: false,
         error: 'Forbidden',
         message: `User role '${req.user.role}' is not authorized for this action`,
         timestamp: new Date().toISOString()

@@ -281,14 +281,24 @@ export const PAGES = {
     "AdminSystemConfig": AdminSystemConfig,
     "AdminAPIKeys": AdminAPIKeys,
     "AdminMonitoring": AdminMonitoring,
-    "AdminSecrets": AdminSecrets,
-    "AdminSystemConfig": AdminSystemConfig,
-    "AdminAPIKeys": AdminAPIKeys,
-    "AdminMonitoring": AdminMonitoring,
 }
+
+// Pages that don't require authentication
+export const publicPages = [
+    "Login",
+    "Register",
+    "ForgotPassword",
+    "ResetPassword",
+    "Landing",
+    "Pricing",
+    "Privacy",
+    "Terms",
+    "About"
+];
 
 export const pagesConfig = {
     mainPage: "Dashboard",
     Pages: PAGES,
     Layout: __Layout,
+    publicPages,
 };

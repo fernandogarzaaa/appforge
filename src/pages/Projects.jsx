@@ -288,17 +288,17 @@ export default function Projects() {
       {/* Filters */}
       <div className="flex flex-col sm:flex-row gap-4 mb-6">
         <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-500" />
           <Input
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search projects..."
-            className="pl-10 bg-white border-gray-200 rounded-xl h-11"
+            className="pl-10 bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 rounded-xl h-11 dark:text-white dark:placeholder-gray-400"
           />
         </div>
         <div className="flex gap-2">
           <Select value={statusFilter} onValueChange={(val) => { setStatusFilter(val); handleFilterChange(); }}>
-            <SelectTrigger className="w-40 h-11 rounded-xl border-gray-200">
+            <SelectTrigger className="w-40 h-11 rounded-xl border-gray-200 dark:border-gray-700 dark:bg-gray-800 dark:text-white">
               <Filter className="w-4 h-4 mr-2 text-gray-400" />
               <SelectValue placeholder="Status" />
             </SelectTrigger>

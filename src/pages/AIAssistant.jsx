@@ -679,13 +679,13 @@ Provide helpful, actionable responses with code examples when relevant. Be conci
   return (
     <div className="flex h-[calc(100vh-4rem)]">
       {/* Conversations Sidebar */}
-      <div className="w-72 bg-white border-r border-gray-100 flex flex-col">
-        <div className="p-4 border-b border-gray-50 space-y-3">
+      <div className="w-72 bg-white dark:bg-gray-900 border-r border-gray-100 dark:border-gray-800/50 flex flex-col">
+        <div className="p-4 border-b border-gray-50 dark:border-gray-800/50 space-y-3">
           {/* Project Selector */}
           <div className="relative">
             <button
               onClick={() => setShowProjectSelector(!showProjectSelector)}
-              className="w-full flex items-center justify-between px-3 py-2 rounded-lg bg-gray-50 hover:bg-gray-100 border border-gray-200 text-sm"
+              className="w-full flex items-center justify-between px-3 py-2 rounded-lg bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 border border-gray-200 dark:border-gray-700 text-sm dark:text-gray-300"
             >
               <div className="flex items-center gap-2 flex-1 text-left">
                 <Database className="w-4 h-4 text-gray-600" />
@@ -698,7 +698,7 @@ Provide helpful, actionable responses with code examples when relevant. Be conci
 
             {/* Project Dropdown */}
             {showProjectSelector && (
-              <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-50 max-h-48 overflow-y-auto">
+              <div className="absolute top-full left-0 right-0 mt-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-50 max-h-48 overflow-y-auto">
                 {/* General Workspace Option */}
                 <button
                   onClick={() => {
@@ -812,15 +812,15 @@ Provide helpful, actionable responses with code examples when relevant. Be conci
       </div>
 
       {/* Main Area */}
-      <div className="flex-1 flex flex-col bg-gradient-to-br from-gray-50 to-blue-50/30">
+      <div className="flex-1 flex flex-col bg-gradient-to-br from-gray-50 dark:from-gray-950 to-blue-50/30 dark:to-gray-900/50">
         {/* Hero Section */}
         {!activePanel && messages.length === 0 && (
           <div className="flex-1 flex flex-col items-center justify-center p-8">
             <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center mb-6 shadow-lg">
               <Sparkles className="w-10 h-10 text-white" />
             </div>
-            <h1 className="text-4xl font-bold text-gray-900 mb-3">What do you want to build?</h1>
-            <p className="text-lg text-gray-600 max-w-2xl text-center mb-8">
+            <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-3">What do you want to build?</h1>
+            <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl text-center mb-8">
               Describe your idea and I'll help you create it with AI-powered tools
             </p>
             
@@ -837,7 +837,7 @@ Provide helpful, actionable responses with code examples when relevant. Be conci
                     }
                   }}
                   placeholder="Type your idea here... (e.g., 'Create a task management app' or 'Build a weather dashboard')"
-                  className="min-h-[120px] rounded-2xl text-base px-6 py-4 pr-20 bg-white border-2 border-gray-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 resize-none shadow-sm"
+                  className="min-h-[120px] rounded-2xl text-base px-6 py-4 pr-20 bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 dark:focus:ring-indigo-900/50 resize-none shadow-sm dark:text-white dark:placeholder-gray-400"
                   rows={4}
                 />
                 <Button
@@ -864,7 +864,7 @@ Provide helpful, actionable responses with code examples when relevant. Be conci
                   key={action.label}
                   onClick={() => setInput(action.prompt)}
                   aria-label={action.label}
-                  className="p-6 bg-white rounded-xl border-2 border-gray-100 hover:border-indigo-500 hover:shadow-lg transition-all group"
+                  className="p-6 bg-white dark:bg-gray-800 rounded-xl border-2 border-gray-100 dark:border-gray-700 hover:border-indigo-500 dark:hover:border-indigo-600 hover:shadow-lg transition-all group"
                 >
                   <action.icon className="w-8 h-8 mb-3 text-gray-400 group-hover:text-indigo-600 transition-colors mx-auto" />
                   <div className="font-medium text-sm text-gray-700 group-hover:text-gray-900">{action.label}</div>
@@ -873,8 +873,8 @@ Provide helpful, actionable responses with code examples when relevant. Be conci
             </div>
 
             {/* Features Overview */}
-            <div className="bg-white rounded-xl border border-gray-200 p-6 max-w-4xl w-full">
-              <h3 className="font-semibold mb-4 text-gray-900">Quick Tools</h3>
+            <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6 max-w-4xl w-full">
+              <h3 className="font-semibold mb-4 text-gray-900 dark:text-white">Quick Tools</h3>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-3 text-sm">
                 <button onClick={() => setActivePanel('diagnostics')} className="flex items-center gap-2 text-gray-600 hover:text-purple-600">
                   <Zap className="w-4 h-4 text-purple-600" />
@@ -904,8 +904,8 @@ Provide helpful, actionable responses with code examples when relevant. Be conci
 
         {/* Active Tool Panel Header */}
         {activePanel && (
-          <div className="bg-white border-b border-gray-100 px-6 py-4 flex items-center justify-between">
-            <h2 className="text-lg font-semibold text-gray-900">
+          <div className="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700/50 px-6 py-4 flex items-center justify-between">
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
               {activePanel === 'api' && 'API Discovery'}
               {activePanel === 'models' && 'Predictive Models'}
               {activePanel === 'functions' && 'AI Functions'}
