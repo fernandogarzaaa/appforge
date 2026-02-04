@@ -32,17 +32,17 @@ export default function GlobalTopNav({ user, onLogout, mobileMenu, title = 'AppF
          </div>
        </div>
 
-      <div className="flex items-center gap-1 sm:gap-3 shrink-0 min-h-11">
-        <div className="hidden sm:block">
-          <SearchBar onOpen={openSearch} placeholder="Search..." />
-        </div>
-        <button
-          onClick={openSearch}
-          className="sm:hidden p-2.5 hover:bg-gray-100 dark:hover:bg-slate-800 rounded-lg transition-colors min-w-11 min-h-11 flex items-center justify-center"
-          aria-label="Search"
-        >
-          <Search className="w-5 h-5 text-gray-600 dark:text-gray-300" />
-        </button>
+      <div className="flex items-center gap-1 sm:gap-2 shrink-0 min-h-10">
+         <div className="hidden sm:block">
+           <SearchBar onOpen={openSearch} placeholder="Search..." />
+         </div>
+         <button
+           onClick={openSearch}
+           className="sm:hidden p-2 hover:bg-white/50 dark:hover:bg-slate-800/50 rounded-lg transition-colors min-w-9 min-h-9 flex items-center justify-center"
+           aria-label="Search"
+         >
+           <Search className="w-4 h-4 text-gray-600 dark:text-gray-300" />
+         </button>
         <DarkModeToggle />
         <NotificationBell />
         {user && (
