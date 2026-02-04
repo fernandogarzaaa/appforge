@@ -53,6 +53,7 @@ const QuantumLearningEngine = React.lazy(() => import('@/components/ai/QuantumLe
 const AutoAgentDeployer = React.lazy(() => import('@/components/ai/AutoAgentDeployer'));
 const SuperIntelligenceDashboard = React.lazy(() => import('@/components/ai/SuperIntelligenceDashboard'));
 const ProactiveAnticipationEngine = React.lazy(() => import('@/components/ai/ProactiveAnticipationEngine'));
+const CustomAgentBuilder = React.lazy(() => import('@/components/ai/CustomAgentBuilder'));
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import ReactMarkdown from 'react-markdown';
@@ -1433,6 +1434,14 @@ Provide helpful, actionable responses with code examples when relevant. Be conci
             </div>
             {messages.length > 0 && !activePanel && (
               <div className="mt-3 space-y-3">
+                <React.Suspense fallback={null}>
+                  <CustomAgentBuilder 
+                    userEmail={user?.email}
+                    onAgentCreated={() => {
+                      setInput('Custom agent created! You can now train it with examples.');
+                    }}
+                  />
+                </React.Suspense>
                 <React.Suspense fallback={null}>
                   <ProactiveAnticipationEngine 
                     userEmail={user?.email}
