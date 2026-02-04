@@ -1002,10 +1002,12 @@ Provide helpful, actionable responses with code examples when relevant. Be conci
 
         {/* Tool Panels */}
         {activePanel === 'api' && (
-          <div className="flex-1 p-6 overflow-auto">
-            <APIDiscoveryPanel onIntegrate={(api) => setIntegratedAPIs([...integratedAPIs, api])} />
-          </div>
-        )}
+           <div className="flex-1 p-6 overflow-auto">
+             <React.Suspense fallback={<div className="text-center py-8">Loading...</div>}>
+               <APIDiscoveryPanel onIntegrate={(api) => setIntegratedAPIs([...integratedAPIs, api])} />
+             </React.Suspense>
+           </div>
+         )}
 
         {activePanel === 'models' && (
           <div className="flex-1 p-6 overflow-auto">
@@ -1357,7 +1359,9 @@ Provide helpful, actionable responses with code examples when relevant. Be conci
               </Button>
             </div>
             <div className="p-4">
-              <AIUsagePanel showHistory />
+              <React.Suspense fallback={<div className="text-center py-8">Loading...</div>}>
+                <AIUsagePanel showHistory />
+              </React.Suspense>
             </div>
           </div>
         </div>
@@ -1392,26 +1396,30 @@ Provide helpful, actionable responses with code examples when relevant. Be conci
                 Close
               </Button>
             </div>
-            <ProjectWizard 
-              onComplete={(result) => {
-                setShowProjectWizard(false);
-                toast.success(`Project "${result.project.name}" created successfully!`);
-                // Navigate to the new project
-                navigate(`/projects/${result.project.id}`);
-              }}
-              onCancel={() => setShowProjectWizard(false)}
-              initialDescription={input}
-            />
+            <React.Suspense fallback={<div className="text-center py-8">Loading...</div>}>
+              <ProjectWizard 
+                onComplete={(result) => {
+                  setShowProjectWizard(false);
+                  toast.success(`Project "${result.project.name}" created successfully!`);
+                  // Navigate to the new project
+                  navigate(`/projects/${result.project.id}`);
+                }}
+                onCancel={() => setShowProjectWizard(false)}
+                initialDescription={input}
+              />
+            </React.Suspense>
           </motion.div>
         </div>
       )}
 
       {/* Command Palette */}
-      <CommandPalette
-        isOpen={showCommandPalette}
-        onClose={() => setShowCommandPalette(false)}
-        onSelectPanel={(panel) => setActivePanel(panel)}
-      />
+      <React.Suspense fallback={null}>
+        <CommandPalette
+          isOpen={showCommandPalette}
+          onClose={() => setShowCommandPalette(false)}
+          onSelectPanel={(panel) => setActivePanel(panel)}
+        />
+      </React.Suspense>
     </div>
   );
 }
