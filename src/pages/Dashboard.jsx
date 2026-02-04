@@ -7,7 +7,7 @@ import { createPageUrl } from '@/utils';
 import { 
   FolderKanban, Database, FileCode, Component, Sparkles, Plus, Zap, 
   ShieldCheck, Rocket, Users, Globe, Smartphone, Brain, LayoutTemplate,
-  Code, Activity
+  Code
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';

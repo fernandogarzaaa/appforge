@@ -47,6 +47,8 @@
  *
  * The mainPage value must match a key in the PAGES object exactly.
  */
+import AGIStudio from './pages/AGIStudio';
+import AIAssistant from './pages/AIAssistant';
 import AIMonitoring from './pages/AIMonitoring';
 import APIExplorer from './pages/APIExplorer';
 import APIKeyManager from './pages/APIKeyManager';
@@ -161,12 +163,12 @@ import VisualizationStudio from './pages/VisualizationStudio';
 import Web3Dashboard from './pages/Web3Dashboard';
 import WebhookMonitor from './pages/WebhookMonitor';
 import WorkflowBuilder from './pages/WorkflowBuilder';
-import AGIStudio from './pages/AGIStudio';
-import AIAssistant from './pages/AIAssistant';
 import __Layout from './Layout.jsx';
 
 
 export const PAGES = {
+    "AGIStudio": AGIStudio,
+    "AIAssistant": AIAssistant,
     "AIMonitoring": AIMonitoring,
     "APIExplorer": APIExplorer,
     "APIKeyManager": APIKeyManager,
@@ -281,8 +283,6 @@ export const PAGES = {
     "Web3Dashboard": Web3Dashboard,
     "WebhookMonitor": WebhookMonitor,
     "WorkflowBuilder": WorkflowBuilder,
-    "AGIStudio": AGIStudio,
-    "AIAssistant": AIAssistant,
 }
 
 export const pagesConfig = {
