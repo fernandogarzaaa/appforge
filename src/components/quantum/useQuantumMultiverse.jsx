@@ -1,185 +1,157 @@
 import { useState, useCallback, useEffect } from 'react';
+import { base44 } from '@/api/base44Client';
 
-/**
- * Quantum Multiverse Hook - Simulates parallel universes and timeline branching
- * Manages quantum states across multiple parallel timelines
- */
-export function useQuantumMultiverse(initialQubits = 3) {
+export function useQuantumMultiverse() {
   const [universes, setUniverses] = useState([]);
   const [activeUniverseId, setActiveUniverseId] = useState(null);
-  const [timelineHistory, setTimelineHistory] = useState([]);
-  const [entanglementMap, setEntanglementMap] = useState({});
+  const [isSimulating, setIsSimulating] = useState(false);
+  const [timeline, setTimeline] = useState(null);
 
-  // Initialize multiverses
+  // Initialize with one universe
   useEffect(() => {
-    const initialUniverses = Array.from({ length: 4 }, (_, i) => ({
-      id: `universe_${i}`,
-      name: `Universe ${String.fromCharCode(65 + i)}`,
-      qubits: generateQubits(initialQubits),
-      amplitude: 1 / Math.sqrt(4),
-      timestamp: Date.now(),
-      collapsed: false,
-      interference: 0,
-    }));
-    setUniverses(initialUniverses);
-    setActiveUniverseId(initialUniverses[0].id);
-  }, [initialQubits]);
-
-  const generateQubits = useCallback((count) => {
-    return Array.from({ length: count }, (_, i) => ({
-      id: i,
-      real: Math.cos(Math.random() * Math.PI / 2),
-      imag: Math.sin(Math.random() * Math.PI / 2),
-      phase: Math.random() * 2 * Math.PI,
-    }));
+    initializeMultiverse();
   }, []);
 
-  // Apply quantum gate to all universes (superposition)
-  const applyGateToAll = useCallback((gateName) => {
-    setUniverses(prev => prev.map(universe => ({
-      ...universe,
-      qubits: applyQuantumGate(universe.qubits, gateName),
-    })));
-    recordTimelineEvent('gate', gateName);
+  // Simulation loop
+  useEffect(() => {
+    if (!isSimulating || universes.length === 0) return;
+
+    const interval = setInterval(() => {
+      updateTimeline();
+    }, 500);
+
+    return () => clearInterval(interval);
+  }, [isSimulating, universes]);
+
+  const initializeMultiverse = async () => {
+    try {
+      const initialUniverse = {
+        id: `universe_${Date.now()}`,
+        name: 'Primary Universe',
+        parameters: {
+          quantumEntanglement: Math.random() * 100,
+          coherenceLevel: 95,
+          decoherenceRate: 0.02,
+        },
+        createdAt: new Date(),
+      };
+
+      setUniverses([initialUniverse]);
+      setActiveUniverseId(initialUniverse.id);
+
+      // Initialize timeline
+      setTimeline({
+        iteration: 0,
+        entanglement: 50,
+        coherence: 95,
+        branches: 1,
+        timestamp: Date.now(),
+      });
+    } catch (error) {
+      console.error('Failed to initialize multiverse:', error);
+    }
+  };
+
+  const createUniverse = useCallback(async (config) => {
+    try {
+      // Call backend function to create universe
+      const response = await base44.functions.invoke('createQuantumUniverse', {
+        name: config.name,
+        parameters: config.parameters,
+      });
+
+      const newUniverse = {
+        id: response.data?.id || `universe_${Date.now()}`,
+        name: config.name,
+        parameters: config.parameters,
+        createdAt: new Date(),
+      };
+
+      setUniverses(prev => [...prev, newUniverse]);
+      return newUniverse;
+    } catch (error) {
+      console.error('Failed to create universe:', error);
+      
+      // Fallback: create universe locally
+      const newUniverse = {
+        id: `universe_${Date.now()}`,
+        name: config.name,
+        parameters: config.parameters,
+        createdAt: new Date(),
+      };
+      
+      setUniverses(prev => [...prev, newUniverse]);
+      return newUniverse;
+    }
   }, []);
 
-  // Branch current universe into new timeline
-  const branchUniverse = useCallback(() => {
-    const activeUniverse = universes.find(u => u.id === activeUniverseId);
-    if (!activeUniverse) return;
+  const switchUniverse = useCallback((universeId) => {
+    setActiveUniverseId(universeId);
+  }, []);
 
-    const newUniverse = {
-      id: `universe_branch_${Date.now()}`,
-      name: `${activeUniverse.name} (Branch)`,
-      qubits: JSON.parse(JSON.stringify(activeUniverse.qubits)),
-      amplitude: activeUniverse.amplitude * 0.7,
+  const toggleSimulation = useCallback(() => {
+    setIsSimulating(prev => !prev);
+  }, []);
+
+  const resetSimulation = useCallback(() => {
+    setIsSimulating(false);
+    setTimeline({
+      iteration: 0,
+      entanglement: 50,
+      coherence: 95,
+      branches: 1,
       timestamp: Date.now(),
-      collapsed: false,
-      interference: 0,
-      parentId: activeUniverseId,
-    };
+    });
+  }, []);
 
-    setUniverses(prev => [...prev, newUniverse]);
-    setEntanglementMap(prev => ({
-      ...prev,
-      [newUniverse.id]: activeUniverseId,
-    }));
-    recordTimelineEvent('branch', activeUniverse.name);
+  const updateTimeline = useCallback(() => {
+    setTimeline(prev => {
+      if (!prev) return null;
+
+      const newIteration = prev.iteration + 1;
+      
+      // Simulate quantum decoherence
+      const activeUniverse = universes.find(u => u.id === activeUniverseId);
+      const decoherenceRate = activeUniverse?.parameters.decoherenceRate || 0.01;
+      
+      // Calculate new coherence with decoherence
+      const newCoherence = Math.max(0, prev.coherence - (decoherenceRate * 5));
+      
+      // Entanglement fluctuates based on universe count
+      const entanglementNoise = (Math.random() - 0.5) * 3;
+      const newEntanglement = Math.max(0, Math.min(100, prev.entanglement + entanglementNoise));
+      
+      // Branch count increases with complexity
+      const newBranches = Math.floor(Math.log2(newIteration + 1)) + 1;
+
+      return {
+        iteration: newIteration,
+        entanglement: newEntanglement,
+        coherence: newCoherence,
+        branches: newBranches,
+        timestamp: Date.now(),
+      };
+    });
   }, [universes, activeUniverseId]);
 
-  // Measure/collapse wavefunction in active universe
-  const collapseWavefunction = useCallback(() => {
-    setUniverses(prev => prev.map(universe => 
-      universe.id === activeUniverseId
-        ? {
-            ...universe,
-            collapsed: true,
-            qubits: universe.qubits.map(q => ({
-              ...q,
-              real: Math.round(q.real),
-              imag: 0,
-            })),
-          }
-        : universe
-    ));
-    recordTimelineEvent('collapse', activeUniverseId);
-  }, [activeUniverseId]);
-
-  // Calculate quantum interference between universes
-  const calculateInterference = useCallback(() => {
-    const interferenceMap = {};
-    
-    for (let i = 0; i < universes.length; i++) {
-      for (let j = i + 1; j < universes.length; j++) {
-        const u1 = universes[i];
-        const u2 = universes[j];
-        
-        let interference = 0;
-        for (let k = 0; k < Math.min(u1.qubits.length, u2.qubits.length); k++) {
-          const q1 = u1.qubits[k];
-          const q2 = u2.qubits[k];
-          interference += Math.abs(
-            (q1.real * q2.real + q1.imag * q2.imag) * 
-            (u1.amplitude * u2.amplitude)
-          );
-        }
-        interferenceMap[`${u1.id}-${u2.id}`] = interference;
-      }
-    }
-    return interferenceMap;
-  }, [universes]);
-
-  // Entangle two universes
-  const entangleUniverses = useCallback((id1, id2) => {
-    setEntanglementMap(prev => ({
-      ...prev,
-      [id1]: id2,
-      [id2]: id1,
-    }));
-    recordTimelineEvent('entangle', `${id1} <-> ${id2}`);
+  const observeTimeline = useCallback((timestamp) => {
+    // Collapse wave function at specific timestamp
+    return {
+      observedState: Math.random() > 0.5 ? '|0⟩' : '|1⟩',
+      probability: Math.random(),
+      timestamp,
+    };
   }, []);
-
-  // Record timeline event
-  const recordTimelineEvent = useCallback((eventType, details) => {
-    setTimelineHistory(prev => [...prev, {
-      timestamp: Date.now(),
-      type: eventType,
-      details,
-      universeCount: universes.length,
-    }]);
-  }, [universes.length]);
-
-  // Apply Hadamard gate (creates superposition)
-  const applyHadamard = useCallback(() => applyGateToAll('hadamard'), [applyGateToAll]);
-
-  // Apply Pauli-X gate (bit flip)
-  const applyPauliX = useCallback(() => applyGateToAll('pauliX'), [applyGateToAll]);
-
-  // Get active universe
-  const getActiveUniverse = useCallback(() => 
-    universes.find(u => u.id === activeUniverseId), 
-    [universes, activeUniverseId]
-  );
 
   return {
     universes,
     activeUniverseId,
-    setActiveUniverseId,
-    timelineHistory,
-    entanglementMap,
-    branchUniverse,
-    collapseWavefunction,
-    calculateInterference,
-    entangleUniverses,
-    applyHadamard,
-    applyPauliX,
-    getActiveUniverse,
+    isSimulating,
+    timeline,
+    createUniverse,
+    switchUniverse,
+    toggleSimulation,
+    resetSimulation,
+    observeTimeline,
   };
-}
-
-// Quantum gate implementations
-function applyQuantumGate(qubits, gateName) {
-  return qubits.map(q => {
-    switch (gateName) {
-      case 'hadamard':
-        return {
-          ...q,
-          real: (q.real + q.imag) / Math.sqrt(2),
-          imag: (q.real - q.imag) / Math.sqrt(2),
-        };
-      case 'pauliX':
-        return {
-          ...q,
-          real: -q.real,
-          imag: q.imag,
-        };
-      case 'pauliZ':
-        return {
-          ...q,
-          phase: q.phase + Math.PI,
-        };
-      default:
-        return q;
-    }
-  });
 }
