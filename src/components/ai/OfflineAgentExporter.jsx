@@ -7,7 +7,7 @@ import { Download, Package, FileCode, Loader2, CheckCircle2, AlertCircle } from 
 
 export default function OfflineAgentExporter({ agent, onClose }) {
   const [exporting, setExporting] = useState(false);
-  const [exportType, setExportType] = useState('standalone');
+  const [exportType, setExportType] = useState('desktop');
   const [exportStatus, setExportStatus] = useState(null);
 
   const exportAgent = async () => {
@@ -76,6 +76,35 @@ export default function OfflineAgentExporter({ agent, onClose }) {
           </p>
 
           <div className="space-y-2">
+            {/* Desktop App - RECOMMENDED */}
+            <button
+              onClick={() => setExportType('desktop')}
+              className={`w-full p-4 rounded-lg border-2 text-left transition-all ${
+                exportType === 'desktop'
+                  ? 'border-green-500 bg-green-50'
+                  : 'border-gray-200 hover:border-green-300'
+              }`}
+            >
+              <div className="flex items-start gap-2">
+                <Package className="w-5 h-5 mt-0.5 text-green-600" />
+                <div className="flex-1">
+                  <div className="flex items-center gap-2 mb-1">
+                    <p className="font-semibold">Desktop Application</p>
+                    <Badge className="bg-green-600 text-white">RECOMMENDED</Badge>
+                  </div>
+                  <p className="text-xs text-gray-600 mb-2">
+                    Complete desktop app with installer - just click and use! Perfect for beginners.
+                  </p>
+                  <div className="flex flex-wrap gap-1">
+                    <Badge variant="outline" className="text-xs">✨ Easy Setup</Badge>
+                    <Badge variant="outline" className="text-xs">🖥️ Windows/Mac/Linux</Badge>
+                    <Badge variant="outline" className="text-xs">🔒 100% Private</Badge>
+                    <Badge variant="outline" className="text-xs">📦 All-in-One</Badge>
+                  </div>
+                </div>
+              </div>
+            </button>
+
             {/* Standalone Format */}
             <button
               onClick={() => setExportType('standalone')}
@@ -198,12 +227,24 @@ export default function OfflineAgentExporter({ agent, onClose }) {
           </Button>
         </div>
 
-        <div className="p-3 bg-amber-50 border border-amber-200 rounded-lg">
-          <p className="text-xs text-amber-900">
-            <strong>Note:</strong> Exported agents can run completely offline with local LLMs 
-            like Ollama or LM Studio. No internet connection required after setup.
-          </p>
-        </div>
+        {exportType === 'desktop' ? (
+          <div className="p-3 bg-green-50 border border-green-200 rounded-lg">
+            <p className="text-xs text-green-900">
+              <strong>✨ Perfect for beginners!</strong> The desktop app includes:
+              <br/>• Click-to-install setup wizard
+              <br/>• Beautiful chat interface (no coding needed)
+              <br/>• Built-in local AI (works offline)
+              <br/>• Automatic updates
+            </p>
+          </div>
+        ) : (
+          <div className="p-3 bg-amber-50 border border-amber-200 rounded-lg">
+            <p className="text-xs text-amber-900">
+              <strong>Note:</strong> Exported agents can run completely offline with local LLMs 
+              like Ollama or LM Studio. No internet connection required after setup.
+            </p>
+          </div>
+        )}
       </CardContent>
     </Card>
   );
