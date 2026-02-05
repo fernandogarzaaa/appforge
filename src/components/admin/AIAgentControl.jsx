@@ -6,11 +6,13 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Switch } from '@/components/ui/switch';
 import { Input } from '@/components/ui/input';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { 
   Bot, Play, Pause, Settings, Mail, Clock, CheckCircle2, 
-  AlertTriangle, Zap, Activity, Shield, TrendingUp, RefreshCw
+  AlertTriangle, Zap, Activity, Shield, TrendingUp, RefreshCw, Github
 } from 'lucide-react';
 import { toast } from 'sonner';
+import GitHubIntegrationSetup from './GitHubIntegrationSetup';
 
 export default function AIAgentControl() {
   const [user, setUser] = useState(null);
@@ -78,9 +80,16 @@ export default function AIAgentControl() {
     : 0;
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <Card className="bg-gradient-to-r from-purple-500 to-indigo-600">
+    <Tabs defaultValue="dashboard" className="space-y-6">
+      <TabsList className="grid w-full grid-cols-3 max-w-md">
+        <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
+        <TabsTrigger value="config">Configuration</TabsTrigger>
+        <TabsTrigger value="github">GitHub</TabsTrigger>
+      </TabsList>
+
+      <TabsContent value="dashboard" className="space-y-6">
+        {/* Header */}
+        <Card className="bg-gradient-to-r from-purple-500 to-indigo-600">
         <CardContent className="p-6 text-white">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
@@ -160,101 +169,7 @@ export default function AIAgentControl() {
         </Card>
       </div>
 
-      {/* Configuration */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Settings className="w-5 h-5" />
-            Agent Configuration
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-6">
-          {/* Autonomous Mode */}
-          <div className="flex items-center justify-between p-4 bg-gradient-to-r from-purple-50 to-indigo-50 rounded-lg">
-            <div>
-              <div className="font-semibold text-gray-900">Autonomous Fixes</div>
-              <p className="text-sm text-gray-600">Allow AI to automatically fix detected issues</p>
-            </div>
-            <Switch
-              checked={config?.autonomous_fixes_enabled ?? true}
-              onCheckedChange={(checked) => {
-                configMutation.mutate({ autonomous_fixes_enabled: checked });
-              }}
-            />
-          </div>
 
-          {/* Email Configuration */}
-          <div className="space-y-3">
-            <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
-              <Mail className="w-4 h-4" />
-              Notification Email
-            </label>
-            <Input
-              type="email"
-              placeholder="admin@example.com"
-              value={config?.notification_email || ''}
-              onChange={(e) => {
-                configMutation.mutate({ notification_email: e.target.value });
-              }}
-            />
-          </div>
-
-          {/* Auto-fix Categories */}
-          <div className="space-y-3">
-            <label className="text-sm font-medium text-gray-700">Auto-Fix Categories</label>
-            <div className="grid grid-cols-2 gap-3">
-              {['validation', 'indexing', 'security', 'performance', 'best_practices'].map((cat) => (
-                <div key={cat} className="flex items-center gap-2">
-                  <Switch
-                    checked={config?.auto_fix_categories?.includes(cat) ?? false}
-                    onCheckedChange={(checked) => {
-                      const current = config?.auto_fix_categories || [];
-                      const updated = checked
-                        ? [...current, cat]
-                        : current.filter((c) => c !== cat);
-                      configMutation.mutate({ auto_fix_categories: updated });
-                    }}
-                  />
-                  <span className="text-sm text-gray-700 capitalize">{cat.replace('_', ' ')}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Critical Approval */}
-          <div className="flex items-center justify-between p-4 bg-yellow-50 rounded-lg">
-            <div>
-              <div className="font-semibold text-gray-900">Require Approval for Critical</div>
-              <p className="text-sm text-gray-600">Manual approval needed for critical changes</p>
-            </div>
-            <Switch
-              checked={config?.require_approval_for_critical ?? false}
-              onCheckedChange={(checked) => {
-                configMutation.mutate({ require_approval_for_critical: checked });
-              }}
-            />
-          </div>
-
-          {/* Test Run */}
-          <Button
-            onClick={() => testRunMutation.mutate()}
-            disabled={testRunMutation.isPending}
-            className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700"
-          >
-            {testRunMutation.isPending ? (
-              <>
-                <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
-                Running Scan...
-              </>
-            ) : (
-              <>
-                <Play className="w-4 h-4 mr-2" />
-                Run Manual Scan
-              </>
-            )}
-          </Button>
-        </CardContent>
-      </Card>
 
       {/* Recent Reports */}
       <Card>
@@ -317,6 +232,109 @@ export default function AIAgentControl() {
           </div>
         </CardContent>
       </Card>
-    </div>
+      </TabsContent>
+
+      <TabsContent value="config">
+        {/* Configuration */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Settings className="w-5 h-5" />
+              Agent Configuration
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            {/* Autonomous Mode */}
+            <div className="flex items-center justify-between p-4 bg-gradient-to-r from-purple-50 to-indigo-50 rounded-lg">
+              <div>
+                <div className="font-semibold text-gray-900">Autonomous Fixes</div>
+                <p className="text-sm text-gray-600">Allow AI to automatically fix detected issues</p>
+              </div>
+              <Switch
+                checked={config?.autonomous_fixes_enabled ?? true}
+                onCheckedChange={(checked) => {
+                  configMutation.mutate({ autonomous_fixes_enabled: checked });
+                }}
+              />
+            </div>
+
+            {/* Email Configuration */}
+            <div className="space-y-3">
+              <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
+                <Mail className="w-4 h-4" />
+                Notification Email
+              </label>
+              <Input
+                type="email"
+                placeholder="admin@example.com"
+                value={config?.notification_email || ''}
+                onChange={(e) => {
+                  configMutation.mutate({ notification_email: e.target.value });
+                }}
+              />
+            </div>
+
+            {/* Auto-fix Categories */}
+            <div className="space-y-3">
+              <label className="text-sm font-medium text-gray-700">Auto-Fix Categories</label>
+              <div className="grid grid-cols-2 gap-3">
+                {['validation', 'indexing', 'security', 'performance', 'best_practices', 'code_quality'].map((cat) => (
+                  <div key={cat} className="flex items-center gap-2">
+                    <Switch
+                      checked={config?.auto_fix_categories?.includes(cat) ?? false}
+                      onCheckedChange={(checked) => {
+                        const current = config?.auto_fix_categories || [];
+                        const updated = checked
+                          ? [...current, cat]
+                          : current.filter((c) => c !== cat);
+                        configMutation.mutate({ auto_fix_categories: updated });
+                      }}
+                    />
+                    <span className="text-sm text-gray-700 capitalize">{cat.replace('_', ' ')}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Critical Approval */}
+            <div className="flex items-center justify-between p-4 bg-yellow-50 rounded-lg">
+              <div>
+                <div className="font-semibold text-gray-900">Require Approval for Critical</div>
+                <p className="text-sm text-gray-600">Manual approval needed for critical changes</p>
+              </div>
+              <Switch
+                checked={config?.require_approval_for_critical ?? false}
+                onCheckedChange={(checked) => {
+                  configMutation.mutate({ require_approval_for_critical: checked });
+                }}
+              />
+            </div>
+
+            {/* Test Run */}
+            <Button
+              onClick={() => testRunMutation.mutate()}
+              disabled={testRunMutation.isPending}
+              className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700"
+            >
+              {testRunMutation.isPending ? (
+                <>
+                  <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
+                  Running Scan...
+                </>
+              ) : (
+                <>
+                  <Play className="w-4 h-4 mr-2" />
+                  Run Manual Scan
+                </>
+              )}
+            </Button>
+          </CardContent>
+        </Card>
+      </TabsContent>
+
+      <TabsContent value="github">
+        <GitHubIntegrationSetup />
+      </TabsContent>
+    </Tabs>
   );
 }

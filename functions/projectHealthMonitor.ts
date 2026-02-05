@@ -25,6 +25,12 @@ Deno.serve(async (req) => {
       const actionsTaken = [];
       const issuesFound = [];
 
+      // Check if GitHub integration exists
+      const githubIntegrations = await base44.asServiceRole.entities.ProjectGitHubIntegration
+        .filter({ project_id: project.id, is_active: true })
+        .catch(() => []);
+      const githubIntegration = githubIntegrations[0];
+
       // Fetch project structure
       const [entities, pages, components] = await Promise.all([
         base44.asServiceRole.entities.Entity.filter({ project_id: project.id }).catch(() => []),
@@ -32,8 +38,8 @@ Deno.serve(async (req) => {
         base44.asServiceRole.entities.Component.filter({ project_id: project.id }).catch(() => [])
       ]);
 
-      // AI Analysis with autonomous fix suggestions
-      const analysisPrompt = `Analyze this project and provide actionable fixes:
+      // AI Analysis with code generation
+      const analysisPrompt = `Analyze this project and provide actionable fixes with code:
 
 **Project:** ${project.name}
 **Entities:** ${entities.length} (${entities.map(e => e.name).join(', ')})
@@ -46,19 +52,24 @@ ${e.name}:
 ${JSON.stringify(e.schema?.properties || {}, null, 2).substring(0, 300)}
 `).join('\n')}
 
+**Page Sample:**
+${pages[0] ? `${pages[0].name}: ${pages[0].code?.substring(0, 200)}` : 'No pages'}
+
 For each issue, provide:
 1. Issue description
 2. Severity (critical/high/medium/low)
-3. Category (validation/indexing/security/performance/best_practices)
-4. Autonomous fix (exact JSON schema changes or code modifications)
-5. Whether it's safe to auto-apply
+3. Category (validation/indexing/security/performance/best_practices/code_quality)
+4. For CODE issues: provide the FULL corrected code file
+5. For ENTITY issues: provide JSON schema changes
+6. File path where fix should be applied
+7. Whether it's safe to auto-apply
 
 Focus on:
-- Missing field validations
-- Missing indexes for frequently queried fields
+- Missing validations
 - Security vulnerabilities
-- Performance bottlenecks
-- Code quality issues`;
+- Performance issues
+- Code quality (unused imports, console.logs, etc)
+- Best practices`;
 
       const analysis = await base44.asServiceRole.integrations.Core.InvokeLLM({
         prompt: analysisPrompt,
@@ -74,12 +85,15 @@ Focus on:
                   severity: { type: "string" },
                   category: { type: "string" },
                   description: { type: "string" },
-                  entity_name: { type: "string" },
+                  target_type: { type: "string" },
+                  target_name: { type: "string" },
+                  file_path: { type: "string" },
                   safe_to_auto_fix: { type: "boolean" },
                   fix_action: {
                     type: "object",
                     properties: {
                       type: { type: "string" },
+                      code: { type: "string" },
                       changes: { type: "object" }
                     }
                   }
@@ -101,18 +115,16 @@ Focus on:
             auto_fixed: false
           });
 
-          // Check if this category is enabled for auto-fix
           const canAutoFix = config.auto_fix_categories.includes(issue.category);
           const isCritical = issue.severity === 'critical';
           const requiresApproval = isCritical && config.require_approval_for_critical;
 
           if (canAutoFix && issue.safe_to_auto_fix && !requiresApproval && issue.fix_action) {
             try {
-              // Apply the fix based on action type
-              if (issue.fix_action.type === 'update_entity_schema' && issue.entity_name) {
-                const entity = entities.find(e => e.name === issue.entity_name);
+              // Database fixes (entities)
+              if (issue.fix_action.type === 'update_entity_schema' && issue.target_name) {
+                const entity = entities.find(e => e.name === issue.target_name);
                 if (entity) {
-                  // Merge changes into existing schema
                   const updatedSchema = {
                     ...entity.schema,
                     properties: {
@@ -129,13 +141,47 @@ Focus on:
                     action_type: 'entity_schema_update',
                     target: entity.name,
                     description: `Fixed: ${issue.description}`,
-                    success: true
+                    success: true,
+                    committed_to_github: false
                   });
 
                   issuesFound[issuesFound.length - 1].auto_fixed = true;
                 }
-              } else if (issue.fix_action.type === 'add_index' && issue.entity_name) {
-                const entity = entities.find(e => e.name === issue.entity_name);
+              }
+
+              // Code fixes (pages/components) - Commit to GitHub
+              if ((issue.fix_action.type === 'update_code' || issue.fix_action.type === 'fix_code') && 
+                  issue.fix_action.code && 
+                  issue.file_path &&
+                  githubIntegration?.auto_commit_enabled) {
+                
+                // Commit to GitHub
+                const commitResult = await base44.asServiceRole.functions.invoke('githubCommit', {
+                  repo_owner: githubIntegration.repo_owner,
+                  repo_name: githubIntegration.repo_name,
+                  branch: githubIntegration.branch || 'main',
+                  file_path: issue.file_path,
+                  content: issue.fix_action.code,
+                  message: `${githubIntegration.commit_prefix || '[AI-Bot]'} ${issue.description}`
+                });
+
+                if (commitResult.data.success) {
+                  actionsTaken.push({
+                    action_type: 'code_fix_committed',
+                    target: issue.file_path,
+                    description: `Fixed: ${issue.description}`,
+                    success: true,
+                    committed_to_github: true,
+                    commit_url: commitResult.data.commit_url
+                  });
+
+                  issuesFound[issuesFound.length - 1].auto_fixed = true;
+                }
+              }
+
+              // Add index
+              if (issue.fix_action.type === 'add_index' && issue.target_name) {
+                const entity = entities.find(e => e.name === issue.target_name);
                 if (entity) {
                   const currentIndexes = entity.metadata?.indexes || [];
                   const newIndex = issue.fix_action.changes.index;
@@ -151,8 +197,9 @@ Focus on:
                     actionsTaken.push({
                       action_type: 'index_added',
                       target: `${entity.name}.${newIndex.field}`,
-                      description: `Added index for performance: ${issue.description}`,
-                      success: true
+                      description: `Added index: ${issue.description}`,
+                      success: true,
+                      committed_to_github: false
                     });
 
                     issuesFound[issuesFound.length - 1].auto_fixed = true;
@@ -162,9 +209,10 @@ Focus on:
             } catch (fixError) {
               actionsTaken.push({
                 action_type: 'fix_failed',
-                target: issue.entity_name || 'unknown',
-                description: `Failed to fix: ${issue.description} - ${fixError.message}`,
-                success: false
+                target: issue.target_name || issue.file_path || 'unknown',
+                description: `Failed: ${issue.description} - ${fixError.message}`,
+                success: false,
+                committed_to_github: false
               });
             }
           }
@@ -183,6 +231,7 @@ Focus on:
 
       const totalIssues = issuesFound.length;
       const fixedIssues = issuesFound.filter(i => i.auto_fixed).length;
+      const githubCommits = actionsTaken.filter(a => a.committed_to_github).length;
 
       // Send email report if there are issues or actions taken
       if (totalIssues > 0 || actionsTaken.length > 0) {
@@ -201,14 +250,22 @@ Focus on:
       <div style="color: #6b7280; font-size: 14px;">Health Score</div>
     </div>
 
+    ${githubCommits > 0 ? `
+    <div style="background: #dbeafe; padding: 16px; border-radius: 8px; border-left: 4px solid #3b82f6; margin-bottom: 16px;">
+      <h3 style="color: #1e40af; font-size: 16px; margin: 0 0 8px 0;">📝 GitHub Commits</h3>
+      <p style="margin: 0; color: #1e3a8a; font-weight: 600;">${githubCommits} code fix${githubCommits > 1 ? 'es' : ''} committed to ${githubIntegration.repo_owner}/${githubIntegration.repo_name}</p>
+    </div>
+    ` : ''}
+
     ${actionsTaken.length > 0 ? `
     <div style="background: #ecfdf5; padding: 16px; border-radius: 8px; border-left: 4px solid #10b981; margin-bottom: 24px;">
-      <h2 style="color: #065f46; font-size: 18px; margin: 0 0 12px 0;">✅ Autonomous Actions Taken (${actionsTaken.length})</h2>
+      <h2 style="color: #065f46; font-size: 18px; margin: 0 0 12px 0;">✅ Actions Taken (${actionsTaken.length})</h2>
       <ul style="margin: 0; padding-left: 20px; color: #374151;">
         ${actionsTaken.map(action => `
           <li style="margin-bottom: 8px;">
             <strong>${action.action_type}:</strong> ${action.description}
             ${action.success ? '<span style="color: #10b981;">✓</span>' : '<span style="color: #ef4444;">✗</span>'}
+            ${action.commit_url ? `<br/><a href="${action.commit_url}" style="color: #3b82f6; font-size: 12px;">View commit</a>` : ''}
           </li>
         `).join('')}
       </ul>
@@ -225,9 +282,9 @@ Focus on:
 
     ${issuesFound.length > 0 ? `
     <div style="margin-bottom: 24px;">
-      <h2 style="color: #374151; font-size: 18px; margin: 0 0 12px 0;">📊 Issues Detected (${totalIssues})</h2>
+      <h2 style="color: #374151; font-size: 18px; margin: 0 0 12px 0;">📊 Issues (${totalIssues})</h2>
       <ul style="margin: 0; padding-left: 20px; color: #374151;">
-        ${issuesFound.map(issue => `
+        ${issuesFound.slice(0, 10).map(issue => `
           <li style="margin-bottom: 8px;">
             <span style="background: ${
               issue.severity === 'critical' ? '#fecaca' : 
@@ -244,18 +301,9 @@ Focus on:
     </div>
     ` : ''}
 
-    ${analysis.recommendations?.length > 0 ? `
-    <div style="background: #f3f4f6; padding: 16px; border-radius: 8px; margin-top: 24px;">
-      <h2 style="color: #4b5563; font-size: 16px; margin: 0 0 12px 0;">💡 Recommendations</h2>
-      <ul style="margin: 0; padding-left: 20px; color: #6b7280; font-size: 14px;">
-        ${analysis.recommendations.slice(0, 5).map(rec => `<li style="margin-bottom: 8px;">${rec}</li>`).join('')}
-      </ul>
-    </div>
-    ` : ''}
-
     <div style="margin-top: 24px; padding-top: 24px; border-top: 1px solid #e5e7eb; color: #9ca3af; font-size: 12px;">
-      <p style="margin: 0;">Mode: ${config.autonomous_fixes_enabled ? '🤖 Autonomous' : '👀 Monitor Only'}</p>
-      <p style="margin: 8px 0 0 0;">Scanned: ${entities.length} entities, ${pages.length} pages, ${components.length} components</p>
+      <p style="margin: 0;">Mode: ${config.autonomous_fixes_enabled ? '🤖 Autonomous' : '👀 Monitor'}</p>
+      ${githubIntegration ? `<p style="margin: 8px 0 0 0;">GitHub: ${githubIntegration.repo_owner}/${githubIntegration.repo_name} (${githubIntegration.branch})</p>` : ''}
       <p style="margin: 8px 0 0 0;">Generated: ${new Date().toLocaleString()}</p>
     </div>
   </div>
@@ -267,21 +315,9 @@ Focus on:
         if (recipientEmail) {
           await base44.asServiceRole.integrations.Core.SendEmail({
             to: recipientEmail,
-            subject: `🤖 AI Agent: ${actionsTaken.length > 0 ? `Fixed ${fixedIssues} issues in` : 'Monitoring'} ${project.name}`,
+            subject: `🤖 AI Bot: ${githubCommits > 0 ? `${githubCommits} commits pushed to` : 'Monitoring'} ${project.name}`,
             body: emailBody
           });
-
-          // Update report to mark email sent
-          const savedReports = await base44.asServiceRole.entities.ProjectHealthReport.filter(
-            { project_id: project.id }, 
-            '-scan_timestamp', 
-            1
-          );
-          if (savedReports[0]) {
-            await base44.asServiceRole.entities.ProjectHealthReport.update(savedReports[0].id, {
-              email_sent: true
-            });
-          }
         }
       }
 
@@ -290,6 +326,7 @@ Focus on:
         health_score: analysis.health_score,
         issues_found: totalIssues,
         auto_fixed: fixedIssues,
+        github_commits: githubCommits,
         actions_taken: actionsTaken.length
       });
     }
