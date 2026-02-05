@@ -45,6 +45,9 @@ const ProjectWizard = React.lazy(() => import('@/components/ProjectWizard'));
 const AIComponentGenerator = React.lazy(() => import('@/components/ai/AIComponentGenerator'));
 const AITestingDebugger = React.lazy(() => import('@/components/ai/AITestingDebugger'));
 const AIUXSuggestions = React.lazy(() => import('@/components/ai/AIUXSuggestions'));
+const DocumentationGenerator = React.lazy(() => import('@/components/ai/DocumentationGenerator'));
+const CodeReviewSuggestions = React.lazy(() => import('@/components/ai/CodeReviewSuggestions'));
+const OptimizationSuggestions = React.lazy(() => import('@/components/ai/OptimizationSuggestions'));
 // Quantum AI enhancements
 const QuantumQueryAnalyzer = React.lazy(() => import('@/components/ai/QuantumQueryAnalyzer'));
 const ProactiveQuantumSuggestions = React.lazy(() => import('@/components/ai/ProactiveQuantumSuggestions'));
@@ -72,6 +75,9 @@ const quickActions = [
   { label: 'Find API', icon: Globe, prompt: 'Find a free API for ' },
   { label: 'Test & Debug', icon: Code, panel: 'testing_debugger' },
   { label: 'UX Suggestions', icon: Brain, panel: 'ux_suggestions' },
+  { label: 'Generate Docs', icon: FileCode, panel: 'documentation', desc: 'Auto-generate documentation' },
+  { label: 'Code Review', icon: Code, panel: 'code_review_ai', desc: 'AI-powered code suggestions' },
+  { label: 'Optimize App', icon: Zap, panel: 'optimizations', desc: 'Performance & architecture tips' },
 ];
 
 export default function AIAssistant() {
@@ -1044,6 +1050,9 @@ Provide helpful, actionable responses with code examples when relevant. Be conci
               {activePanel === 'testing_debugger' && 'Testing & Debugging'}
               {activePanel === 'ux_suggestions' && 'UX Suggestions'}
               {activePanel === 'quantum_analyzer' && 'Quantum AI Assistant'}
+              {activePanel === 'documentation' && 'Documentation Generator'}
+              {activePanel === 'code_review_ai' && 'AI Code Review'}
+              {activePanel === 'optimizations' && 'Optimization Suggestions'}
             </h2>
             <Button variant="ghost" size="sm" onClick={() => setActivePanel(null)}>
               <ArrowLeft className="w-4 h-4 mr-2" />
@@ -1239,6 +1248,36 @@ Provide helpful, actionable responses with code examples when relevant. Be conci
                   </React.Suspense>
                 </>
               )}
+            </div>
+          </div>
+        )}
+
+        {activePanel === 'documentation' && (
+          <div className="flex-1 p-6 overflow-auto">
+            <div className="max-w-4xl mx-auto">
+              <React.Suspense fallback={<div className="text-center py-8">Loading...</div>}>
+                <DocumentationGenerator projectId={projectId} />
+              </React.Suspense>
+            </div>
+          </div>
+        )}
+
+        {activePanel === 'code_review_ai' && (
+          <div className="flex-1 p-6 overflow-auto">
+            <div className="max-w-4xl mx-auto">
+              <React.Suspense fallback={<div className="text-center py-8">Loading...</div>}>
+                <CodeReviewSuggestions projectId={projectId} />
+              </React.Suspense>
+            </div>
+          </div>
+        )}
+
+        {activePanel === 'optimizations' && (
+          <div className="flex-1 p-6 overflow-auto">
+            <div className="max-w-4xl mx-auto">
+              <React.Suspense fallback={<div className="text-center py-8">Loading...</div>}>
+                <OptimizationSuggestions projectId={projectId} />
+              </React.Suspense>
             </div>
           </div>
         )}
