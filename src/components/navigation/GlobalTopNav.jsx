@@ -4,6 +4,7 @@ import { createPageUrl } from '@/utils';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Moon, Sun, Settings, LogOut } from 'lucide-react';
+import CommandPalette from '@/components/CommandPalette';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -21,11 +22,11 @@ export default function GlobalTopNav({ user, onLogout, isDark, onThemeToggle, mo
           {mobileMenu}
         </div>
 
-        {/* Spacer */}
-        <div className="flex-1" />
+        {/* Search Command Palette */}
+        <CommandPalette />
 
         {/* Right Side Actions */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 ml-4">
           {/* Theme Toggle */}
           <Button
             variant="ghost"

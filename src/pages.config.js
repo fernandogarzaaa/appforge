@@ -187,6 +187,7 @@ import Web3Dashboard from './pages/Web3Dashboard';
 import WebhookMonitor from './pages/WebhookMonitor';
 import WorkflowBuilder from './pages/WorkflowBuilder';
 import APIManagement from './pages/APIManagement';
+import DesignSystem from './pages/DesignSystem';
 import __Layout from './Layout.jsx';
 
 
@@ -331,6 +332,7 @@ export const PAGES = {
     "WebhookMonitor": WebhookMonitor,
     "WorkflowBuilder": WorkflowBuilder,
     "APIManagement": APIManagement,
+    "DesignSystem": DesignSystem,
 }
 
 export const pagesConfig = {
