@@ -4,6 +4,8 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Zap, TrendingUp, Cpu, AlertCircle, Play, Sparkles, Activity } from 'lucide-react'
 import { motion } from 'framer-motion'
+import QuantumCircuitDebugger from '@/components/quantum/QuantumCircuitDebugger'
+import QuantumHardwareConnect from '@/components/quantum/QuantumHardwareConnect'
 
 /**
  * QuantumCircuitDisplay - Shows real quantum circuit metrics and information
@@ -212,8 +214,14 @@ export function QuantumCircuitDisplay({ data = null, loading = false }) {
           </div>
         </div>
 
+        {/* Quantum Debugger */}
+        <QuantumCircuitDebugger circuit={null} />
+
+        {/* Hardware Connection */}
+        <QuantumHardwareConnect />
+
         {/* Simulation Result */}
-        {simulationResult && (
+         {simulationResult && (
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
