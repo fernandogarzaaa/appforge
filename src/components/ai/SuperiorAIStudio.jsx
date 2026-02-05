@@ -34,27 +34,28 @@ export default function SuperiorAIStudio() {
   };
 
   const handleGenerate = async () => {
-    if (!description.trim()) {
-      toast.error('Please describe the component you want');
-      return;
-    }
+   if (!description.trim()) {
+     toast.error('Please describe the component you want');
+     return;
+   }
 
-    setGenerating(true);
-    try {
-      const response = await base44.functions.invoke('generateUIComponent', {
-        description,
-        component_type: componentType,
-        wireframe_url: wireframeUrl || undefined
-      });
+   setGenerating(true);
+   try {
+     const response = await base44.functions.invoke('generateUIComponent', {
+       description,
+       component_type: componentType,
+       wireframe_url: wireframeUrl || undefined
+     });
 
-      setComponent(response.data.component);
-      toast.success('Component generated successfully!');
-    } catch (error) {
-      console.error('Generation failed:', error);
-      toast.error('Failed to generate component: ' + error.message);
-    } finally {
-      setGenerating(false);
-    }
+     const componentData = response.data?.component || response.data;
+     setComponent(componentData);
+     toast.success('Component generated successfully!');
+   } catch (error) {
+     console.error('Generation failed:', error);
+     toast.error('Failed to generate component: ' + error.message);
+   } finally {
+     setGenerating(false);
+   }
   };
 
   const copyCode = () => {
