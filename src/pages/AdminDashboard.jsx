@@ -3,12 +3,11 @@ import { base44 } from '@/api/base44Client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import {
   Users, Activity, Rocket, Brain, Code, Shield, Layout, 
-  TrendingUp, AlertCircle, CheckCircle, DollarSign, Zap
+  TrendingUp, AlertCircle, CheckCircle, Zap
 } from 'lucide-react';
 
 export default function AdminDashboard() {
