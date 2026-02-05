@@ -47,6 +47,10 @@ export default function AdminSystemConfig() {
           </TabsTrigger>
         </TabsList>
 
+        <TabsContent value="solana">
+          <SolanaWalletManager />
+        </TabsContent>
+
         <TabsContent value="quantum">
           <QuantumLLMSettings />
         </TabsContent>

@@ -46,29 +46,29 @@ export default function SubscriptionsPage() {
   };
 
   const handleSelectPlan = (plan) => {
-    if (userSubscription?.plan_id === plan.id) {
-      return; // Already subscribed
-    }
-    setSelectedPlan(plan);
-    setShowPayment(true);
+   if (userSubscription?.plan_id === plan.id) {
+     return; // Already subscribed
+   }
+   setSelectedPlan(plan);
+   setShowPayment(true);
   };
 
   const handlePaymentSuccess = async () => {
-    if (!paymentMethod || !selectedPlan) return;
+   if (!selectedPlan) return;
 
-    try {
-      await base44.functions.invoke('createSubscription', {
-        plan_id: selectedPlan.id,
-        payment_method: paymentMethod
-      });
+   try {
+     await base44.functions.invoke('createSubscription', {
+       plan_id: selectedPlan.id,
+       payment_method: 'solana'
+     });
 
-      setShowPayment(false);
-      setSelectedPlan(null);
-      setPaymentMethod(null);
-      await loadData();
-    } catch (error) {
-      console.error('Error creating subscription:', error);
-    }
+     setShowPayment(false);
+     setSelectedPlan(null);
+     setPaymentMethod(null);
+     await loadData();
+   } catch (error) {
+     console.error('Error creating subscription:', error);
+   }
   };
 
   if (isLoading) {
@@ -152,11 +152,10 @@ export default function SubscriptionsPage() {
               setPaymentMethod(null);
             }}
             amount={selectedPlan.price_per_month_sol}
-            description={`Subscribe to ${selectedPlan.name} Plan`}
-            reference_id={selectedPlan.id}
-            payment_type="subscription"
-            onSuccess={() => handlePaymentSuccess()}
-            onPaymentMethodSelected={setPaymentMethod}
+            itemName={`${selectedPlan.name} Plan`}
+            paymentType="subscription"
+            referenceId={selectedPlan.id}
+            onPaymentSuccess={() => handlePaymentSuccess()}
           />
         )}
       </div>
