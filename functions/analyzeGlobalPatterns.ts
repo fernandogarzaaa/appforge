@@ -50,8 +50,8 @@ Deno.serve(async (req) => {
       stats.entity_patterns[entity.name] = propCount;
     });
 
-    // Use QuantumAI to analyze patterns
-    const result = await base44.functions.invoke('quantumLLM', {
+    // Use AI router (respects user quantum preference)
+    const result = await base44.functions.invoke('invokeAI', {
       prompt: `Analyze these cross-project patterns and provide strategic insights:
 
 **Platform Statistics:**

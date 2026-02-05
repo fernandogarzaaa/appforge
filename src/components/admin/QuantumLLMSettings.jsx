@@ -94,8 +94,8 @@ export default function QuantumLLMSettings() {
           {/* Enable/Disable */}
           <div className="flex items-center justify-between p-4 bg-gradient-to-r from-purple-50 to-indigo-50 rounded-lg">
             <div>
-              <div className="font-semibold text-gray-900">Enable QuantumAI</div>
-              <p className="text-sm text-gray-600">Use quantum enhancement for all AI requests</p>
+              <div className="font-semibold text-gray-900">Enable QuantumAI by Default</div>
+              <p className="text-sm text-gray-600">Default setting for all users (users can override in their settings)</p>
             </div>
             <Switch
               checked={config?.enabled ?? true}
@@ -253,6 +253,7 @@ export default function QuantumLLMSettings() {
             <li>Evaluates confidence, risk, and quality for each timeline</li>
             <li>Converges to the optimal response balancing all perspectives</li>
             <li>No infrastructure needed - quantum-enhanced wrapper around base LLM</li>
+            <li><strong>Admin Control:</strong> Set default for all users; users can toggle in Settings</li>
           </ul>
         </CardContent>
       </Card>

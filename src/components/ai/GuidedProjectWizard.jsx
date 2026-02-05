@@ -29,7 +29,7 @@ export default function GuidedProjectWizard() {
 
     setLoading(true);
     try {
-      const result = await base44.functions.invoke('quantumLLM', {
+      const result = await base44.functions.invoke('invokeAI', {
         prompt: `User said: "${userInput}"
 
 Generate a comprehensive, detailed project description based on this initial idea. Then, ask 3 essential clarifying questions to refine the vision.

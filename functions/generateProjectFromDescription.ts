@@ -19,8 +19,8 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Description and project name required' }, { status: 400 });
     }
 
-    // Use QuantumAI to analyze description and generate structure
-    const result = await base44.functions.invoke('quantumLLM', {
+    // Use AI router (respects user quantum preference)
+    const result = await base44.functions.invoke('invokeAI', {
       prompt: `Generate a complete project structure for: "${description}"
 
 Analyze this app idea across multiple dimensions:
