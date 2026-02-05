@@ -9,6 +9,7 @@ import {
   Users, Activity, Rocket, Brain, Code, Shield, Layout, 
   TrendingUp, AlertCircle, CheckCircle, Zap
 } from 'lucide-react';
+import GlobalInsightsPanel from '@/components/admin/GlobalInsightsPanel';
 
 export default function AdminDashboard() {
   const [user, setUser] = useState(null);
@@ -268,6 +269,9 @@ export default function AdminDashboard() {
             </CardContent>
           </Card>
         </div>
+
+        {/* Global Insights */}
+        <GlobalInsightsPanel />
       </div>
     </div>
   );

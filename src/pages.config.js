@@ -48,6 +48,7 @@
  * The mainPage value must match a key in the PAGES object exactly.
  */
 import AGIStudio from './pages/AGIStudio';
+import AIAgentControl from './pages/AIAgentControl';
 import AIAssistant from './pages/AIAssistant';
 import AIDeployment from './pages/AIDeployment';
 import AIMonitoring from './pages/AIMonitoring';
@@ -182,12 +183,12 @@ import VisualizationStudio from './pages/VisualizationStudio';
 import Web3Dashboard from './pages/Web3Dashboard';
 import WebhookMonitor from './pages/WebhookMonitor';
 import WorkflowBuilder from './pages/WorkflowBuilder';
-import AIAgentControl from './pages/AIAgentControl';
 import __Layout from './Layout.jsx';
 
 
 export const PAGES = {
     "AGIStudio": AGIStudio,
+    "AIAgentControl": AIAgentControl,
     "AIAssistant": AIAssistant,
     "AIDeployment": AIDeployment,
     "AIMonitoring": AIMonitoring,
@@ -322,7 +323,6 @@ export const PAGES = {
     "Web3Dashboard": Web3Dashboard,
     "WebhookMonitor": WebhookMonitor,
     "WorkflowBuilder": WorkflowBuilder,
-    "AIAgentControl": AIAgentControl,
 }
 
 export const pagesConfig = {
