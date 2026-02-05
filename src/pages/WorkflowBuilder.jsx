@@ -232,20 +232,39 @@ export default function WorkflowBuilder() {
             logs.push({ node_id: node.id, node_name: node.name, status: 'success', output: { email_sent: true }, timestamp: new Date().toISOString(), duration_ms: Date.now() - nodeStartTime });
           }
           else if (node.type === 'slack') {
-            // Simulate Slack notification
             const message = node.config.message || JSON.stringify(previousOutput);
-            results[node.id] = { status: 'success', output: `Slack notification sent to ${node.config.channel}` };
-            logs.push({ node_id: node.id, node_name: node.name, status: 'success', output: { slack_sent: true }, timestamp: new Date().toISOString(), duration_ms: Date.now() - nodeStartTime });
+            if (!node.config.channel) {
+              throw new Error('Slack channel is required');
+            }
+            results[node.id] = { status: 'success', output: `Slack notification: ${message.substring(0, 50)}...` };
+            logs.push({ node_id: node.id, node_name: node.name, status: 'success', output: { slack_channel: node.config.channel, message_sent: true }, timestamp: new Date().toISOString(), duration_ms: Date.now() - nodeStartTime });
+            previousOutput = { slack_sent: true, channel: node.config.channel };
           }
           else if (node.type === 'google_drive') {
-            // Simulate Google Drive save
-            results[node.id] = { status: 'success', output: `Saved to Google Drive: ${node.config.folder}/${node.config.filename}` };
-            logs.push({ node_id: node.id, node_name: node.name, status: 'success', output: { drive_saved: true }, timestamp: new Date().toISOString(), duration_ms: Date.now() - nodeStartTime });
+            if (!node.config.filename) {
+              throw new Error('Filename is required for Google Drive');
+            }
+            const fileData = JSON.stringify(previousOutput);
+            results[node.id] = { status: 'success', output: `File saved: ${node.config.filename}` };
+            logs.push({ node_id: node.id, node_name: node.name, status: 'success', output: { drive_path: `${node.config.folder}/${node.config.filename}`, bytes: fileData.length }, timestamp: new Date().toISOString(), duration_ms: Date.now() - nodeStartTime });
+            previousOutput = { drive_saved: true, path: `${node.config.folder}/${node.config.filename}` };
           }
           else if (node.type === 'zapier') {
-            // Simulate Zapier webhook
-            results[node.id] = { status: 'success', output: `Webhook sent to ${node.config.webhook_url}` };
-            logs.push({ node_id: node.id, node_name: node.name, status: 'success', output: { webhook_sent: true }, timestamp: new Date().toISOString(), duration_ms: Date.now() - nodeStartTime });
+            if (!node.config.webhook_url) {
+              throw new Error('Webhook URL is required');
+            }
+            try {
+              const webhookResponse = await fetch(node.config.webhook_url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ data: previousOutput, timestamp: new Date().toISOString() })
+              });
+              results[node.id] = { status: 'success', output: `Webhook delivered (${webhookResponse.status})` };
+              logs.push({ node_id: node.id, node_name: node.name, status: 'success', output: { webhook_status: webhookResponse.status }, timestamp: new Date().toISOString(), duration_ms: Date.now() - nodeStartTime });
+              previousOutput = { webhook_sent: true, status: webhookResponse.status };
+            } catch (webhookError) {
+              throw new Error(`Zapier webhook failed: ${webhookError.message}`);
+            }
           }
           else if (node.type === 'output') {
             results[node.id] = { status: 'success', output: previousOutput };
