@@ -188,7 +188,7 @@ export default function Dashboard() {
             value={ideaInput}
             onChange={(e) => setIdeaInput(e.target.value)}
             placeholder="e.g., 'Build a CRM for real estate with lead tracking and email automation' or 'Create a fitness tracking app with workout plans'"
-            className="min-h-[120px] rounded-xl text-base px-5 py-4 pr-32 border-2 border-indigo-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 resize-none shadow-sm"
+            className="min-h-[120px] rounded-xl text-base px-5 py-4 pr-32 border-2 border-indigo-200 dark:border-indigo-700 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 dark:focus:ring-indigo-900/50 resize-none shadow-sm dark:bg-gray-900 dark:text-white"
             rows={4} />
 
             <Button
