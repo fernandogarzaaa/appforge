@@ -31,11 +31,6 @@ export default function Dashboard() {
   React.useEffect(() => {
     base44.auth.isAuthenticated().then(setIsAuthenticated);
   }, []);
-  
-  // Memoize handler to prevent re-renders from causing state loss
-  const handleIdeaChange = React.useCallback((e) => {
-    setIdeaInput(e.target.value);
-  }, []);
 
   const { data: projects = [], isLoading } = useQuery({
     queryKey: ['projects'],
@@ -191,7 +186,7 @@ export default function Dashboard() {
           <div className="relative">
             <Textarea
             value={ideaInput}
-            onChange={handleIdeaChange}
+            onChange={(e) => setIdeaInput(e.target.value)}
             placeholder="e.g., 'Build a CRM for real estate with lead tracking and email automation' or 'Create a fitness tracking app with workout plans'"
             className="min-h-[120px] rounded-xl text-base px-5 py-4 pr-32 border-2 border-indigo-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 resize-none shadow-sm"
             rows={4} />
@@ -199,7 +194,7 @@ export default function Dashboard() {
             <Button
             onClick={() => {
               if (ideaInput.trim()) {
-                window.location.href = createPageUrl('AIAssistant') + '?auto_start=true&idea=' + encodeURIComponent(ideaInput);
+                window.open(createPageUrl('AIAssistant') + '?auto_start=true&idea=' + encodeURIComponent(ideaInput), '_blank');
               }
             }}
             disabled={!ideaInput.trim()}
