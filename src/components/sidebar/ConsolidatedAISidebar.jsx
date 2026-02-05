@@ -123,6 +123,7 @@ function ConsolidatedAISidebar({ currentProject, collapsed, onToggle, user }) {
   const buildItems = [
     { label: 'Component Builder', icon: Component, href: createPageUrl('ComponentBuilder') },
     { label: 'Function Builder', icon: Code, href: createPageUrl('FunctionBuilder') },
+    { label: 'Smart Deployment', icon: Rocket, href: createPageUrl('SmartDeployment') },
     { label: 'Bot Builder', icon: Code, href: createPageUrl('BotBuilder') },
     { label: 'Workflows', icon: Rocket, href: createPageUrl('WorkflowBuilder') },
     { label: 'Mobile Studio', icon: Smartphone, href: createPageUrl('MobileStudio') },
