@@ -8,7 +8,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Switch } from '@/components/ui/switch';
 import { 
   Sparkles, Loader2, CheckCircle, ArrowRight, ArrowLeft, 
-  Server, Settings, Rocket, Shield, Database, Globe 
+  Server, Settings, Rocket, Shield
 } from 'lucide-react';
 import { toast } from 'sonner';
 

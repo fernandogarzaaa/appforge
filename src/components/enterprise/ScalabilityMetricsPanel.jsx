@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { TrendingUp, Activity, Users, Globe } from 'lucide-react';
+import { TrendingUp, Users, Globe } from 'lucide-react';
 
 export default function ScalabilityMetricsPanel() {
   const [metrics, setMetrics] = useState(null);
