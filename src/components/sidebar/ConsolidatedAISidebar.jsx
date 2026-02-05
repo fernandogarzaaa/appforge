@@ -22,6 +22,7 @@ import {
   Activity,
   Sparkles,
   Zap,
+  Component,
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
@@ -120,6 +121,8 @@ function ConsolidatedAISidebar({ currentProject, collapsed, onToggle, user }) {
   ];
 
   const buildItems = [
+    { label: 'Component Builder', icon: Component, href: createPageUrl('ComponentBuilder') },
+    { label: 'Function Builder', icon: Code, href: createPageUrl('FunctionBuilder') },
     { label: 'Bot Builder', icon: Code, href: createPageUrl('BotBuilder') },
     { label: 'Workflows', icon: Rocket, href: createPageUrl('WorkflowBuilder') },
     { label: 'Mobile Studio', icon: Smartphone, href: createPageUrl('MobileStudio') },

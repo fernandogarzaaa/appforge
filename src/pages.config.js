@@ -178,6 +178,8 @@ import AITemplates from './pages/AITemplates';
 import AdminTemplates from './pages/AdminTemplates';
 import AdminUserManagement from './pages/AdminUserManagement';
 import AdminAnalytics from './pages/AdminAnalytics';
+import ComponentBuilder from './pages/ComponentBuilder';
+import FunctionBuilder from './pages/FunctionBuilder';
 import __Layout from './Layout.jsx';
 
 
@@ -313,6 +315,8 @@ export const PAGES = {
     "AdminTemplates": AdminTemplates,
     "AdminUserManagement": AdminUserManagement,
     "AdminAnalytics": AdminAnalytics,
+    "ComponentBuilder": ComponentBuilder,
+    "FunctionBuilder": FunctionBuilder,
 }
 
 export const pagesConfig = {
