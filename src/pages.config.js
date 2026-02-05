@@ -188,6 +188,7 @@ import WebhookMonitor from './pages/WebhookMonitor';
 import WorkflowBuilder from './pages/WorkflowBuilder';
 import APIManagement from './pages/APIManagement';
 import DesignSystem from './pages/DesignSystem';
+import AdminQuantumBackends from './pages/AdminQuantumBackends';
 import __Layout from './Layout.jsx';
 
 
@@ -333,6 +334,7 @@ export const PAGES = {
     "WorkflowBuilder": WorkflowBuilder,
     "APIManagement": APIManagement,
     "DesignSystem": DesignSystem,
+    "AdminQuantumBackends": AdminQuantumBackends,
 }
 
 export const pagesConfig = {

@@ -496,8 +496,11 @@ export default function Dashboard() {
 
                 </div>
 
+                {/* Quantum Hardware Job Manager */}
+                 <QuantumHardwareJobManager />
+
                 {/* Quantum Education Section */}
-                <QuantumCircuitEducation />
+                 <QuantumCircuitEducation />
               </CardContent>
             </Card>
           </motion.div>
