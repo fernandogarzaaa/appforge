@@ -7,7 +7,7 @@ import { createPageUrl } from '@/utils';
 import {
   FolderKanban, Database, FileCode, Component, Sparkles, Plus, Zap,
   ShieldCheck, Rocket, Users, Globe, Smartphone, Brain, LayoutTemplate,
-  Code } from
+  Code, Activity } from
 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
@@ -91,13 +91,28 @@ export default function Dashboard() {
   }];
 
 
+  const [user, setUser] = React.useState(null);
+
+  React.useEffect(() => {
+    base44.auth.me().then(setUser).catch(() => setUser(null));
+  }, []);
+
   const capabilities = [
-  { icon: Code, label: 'Bot Builder', href: createPageUrl('BotBuilder'), color: 'text-blue-600 bg-blue-50' },
-  { icon: Rocket, label: 'Workflows', href: createPageUrl('WorkflowBuilder'), color: 'text-purple-600 bg-purple-50' },
-  { icon: Brain, label: 'AI/ML', href: createPageUrl('MLIntegration'), color: 'text-pink-600 bg-pink-50' },
-  { icon: Globe, label: 'DeFi Hub', href: createPageUrl('DeFiHub'), color: 'text-green-600 bg-green-50' },
-  { icon: ShieldCheck, label: 'Security', href: createPageUrl('Security'), color: 'text-red-600 bg-red-50' },
+  { icon: Sparkles, label: 'AI Templates', href: createPageUrl('AITemplates'), color: 'text-purple-600 bg-purple-50' },
+  { icon: Brain, label: 'Superior AI', href: createPageUrl('SuperiorAIStudio'), color: 'text-pink-600 bg-pink-50' },
+  { icon: ShieldCheck, label: 'Code Review', href: createPageUrl('CodeReview'), color: 'text-cyan-600 bg-cyan-50' },
+  { icon: Rocket, label: 'AI Deploy', href: createPageUrl('AIDeployment'), color: 'text-green-600 bg-green-50' },
+  { icon: Brain, label: 'AI Agents', href: createPageUrl('CustomAgentStudio'), color: 'text-indigo-600 bg-indigo-50' },
   { icon: Code, label: 'Observability', href: createPageUrl('Observability'), color: 'text-orange-600 bg-orange-50' }];
+
+  const adminCapabilities = user?.role === 'admin' ? [
+    { icon: ShieldCheck, label: 'Admin Dashboard', href: createPageUrl('AdminDashboard'), color: 'text-red-600 bg-red-50' },
+    { icon: Users, label: 'User Management', href: createPageUrl('AdminUserManagement'), color: 'text-blue-600 bg-blue-50' },
+    { icon: Brain, label: 'AI Control', href: createPageUrl('AdminAIControl'), color: 'text-purple-600 bg-purple-50' },
+    { icon: Rocket, label: 'Deployments', href: createPageUrl('AdminDeployments'), color: 'text-green-600 bg-green-50' },
+    { icon: LayoutTemplate, label: 'Templates', href: createPageUrl('AdminTemplates'), color: 'text-indigo-600 bg-indigo-50' },
+    { icon: Activity, label: 'Analytics', href: createPageUrl('AdminAnalytics'), color: 'text-orange-600 bg-orange-50' }
+  ] : [];
 
 
   const onboardingSteps = [
@@ -429,7 +444,7 @@ export default function Dashboard() {
             </div>
             <Card className="border-2 border-red-200 bg-gradient-to-br from-red-50 to-orange-50">
               <CardContent className="p-6">
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
                   {adminCapabilities.map((cap, idx) => (
                     <Link key={cap.label} to={cap.href}>
                       <motion.div

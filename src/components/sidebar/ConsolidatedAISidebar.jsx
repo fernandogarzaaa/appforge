@@ -110,6 +110,11 @@ function ConsolidatedAISidebar({ currentProject, collapsed, onToggle, user }) {
 
   const aiItems = [
     { label: 'AI Assistant', icon: Zap, href: createPageUrl('AIAssistant') },
+    { label: 'AI Templates', icon: Sparkles, href: createPageUrl('AITemplates') },
+    { label: 'Superior AI Studio', icon: Brain, href: createPageUrl('SuperiorAIStudio') },
+    { label: 'Code Review', icon: ShieldCheck, href: createPageUrl('CodeReview') },
+    { label: 'AI Deployment', icon: Rocket, href: createPageUrl('AIDeployment') },
+    { label: 'Custom Agents', icon: Brain, href: createPageUrl('CustomAgentStudio') },
     { label: 'Code Refactoring', icon: Wrench, href: createPageUrl('CodeRefactoring') },
     { label: 'ML Integration', icon: Brain, href: createPageUrl('MLIntegration') },
   ];
