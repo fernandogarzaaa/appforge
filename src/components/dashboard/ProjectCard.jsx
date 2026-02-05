@@ -4,7 +4,6 @@ import { createPageUrl } from '@/utils';
 import { MoreHorizontal, Database, FileCode, Component, ExternalLink, Copy, CheckCircle2, Circle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { FavoriteButton } from '@/components/FavoriteButton';
 import {
   DropdownMenu,
   DropdownMenuContent,

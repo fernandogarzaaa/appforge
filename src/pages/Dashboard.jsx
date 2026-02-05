@@ -38,13 +38,18 @@ export default function Dashboard() {
 
   // Fetch quantum circuits from backend if authenticated
   const { data: quantumCircuits = [], isLoading: isLoadingCircuits } = useQuery({
-    queryKey: ['quantumCircuits'],
-    queryFn: () => quantumService.listCircuits(),
-    enabled: isAuthenticated, // Only fetch if authenticated with backend
-    retry: 1,
-    onError: (error) => {
-      console.error('Failed to load quantum circuits:', error);
-    }
+    queryKey: ['quantumCircuits', user?.email],
+    queryFn: async () => {
+      try {
+        const jobs = await base44.entities.QuantumJob.filter({ user_id: user.email }, '-submitted_at', 5);
+        return jobs || [];
+      } catch (error) {
+        console.error('Failed to load quantum circuits:', error);
+        return [];
+      }
+    },
+    enabled: !!user?.email,
+    retry: 1
   });
 
   const totalStats = projects.reduce(
