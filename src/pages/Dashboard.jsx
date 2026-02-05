@@ -2,16 +2,13 @@ import React, { useState } from 'react';
 import { base44 } from '@/api/base44Client';
 import { quantumService } from '@/api/appforge';
 import { useQuery } from '@tanstack/react-query';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import {
   FolderKanban, Database, FileCode, Component, Sparkles, Plus, Zap,
   ShieldCheck, Rocket, Users, Globe, Smartphone, Brain, LayoutTemplate,
-  Code
-} from 'lucide-react';
-import GuidedProjectWizard from '@/components/ai/GuidedProjectWizard';
-import AIOnboardingWizard from '@/components/onboarding/AIOnboardingWizard';
-import QuantumAIBadge from '@/components/admin/QuantumAIBadge';
+  Code } from
+'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent } from '@/components/ui/card';
@@ -26,22 +23,18 @@ import QuantumCircuitVisualizer from '@/components/QuantumCircuitVisualizer';
 import QuantumCircuitEducation from '@/components/QuantumCircuitEducation';
 
 export default function Dashboard() {
-  const navigate = useNavigate();
   const [ideaInput, setIdeaInput] = useState('');
   const [isCreating, setIsCreating] = useState(false);
   const { toast } = useToast();
   const [isAuthenticated, setIsAuthenticated] = React.useState(false);
-  const [projectIdeaContext, setProjectIdeaContext] = useState(null);
 
   React.useEffect(() => {
     base44.auth.isAuthenticated().then(setIsAuthenticated);
-
-    // Check for project idea context from wizard
-    const idea = sessionStorage.getItem('project_idea_context');
-    if (idea) {
-      setProjectIdeaContext(idea);
-      sessionStorage.removeItem('project_idea_context');
-    }
+  }, []);
+  
+  // Memoize handler to prevent re-renders from causing state loss
+  const handleIdeaChange = React.useCallback((e) => {
+    setIdeaInput(e.target.value);
   }, []);
 
   const { data: projects = [], isLoading } = useQuery({
@@ -191,30 +184,27 @@ export default function Dashboard() {
               <Zap className="w-5 h-5 text-white" />
             </div>
             <div className="flex-1">
-              <div className="flex items-center gap-2 mb-1">
-                <h3 className="text-lg font-semibold text-gray-900">Describe your idea</h3>
-                <QuantumAIBadge />
-              </div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-1">Describe your idea</h3>
               <p className="text-sm text-gray-600">AI will help you build it in minutes</p>
             </div>
           </div>
           <div className="relative">
             <Textarea
             value={ideaInput}
-            onChange={(e) => setIdeaInput(e.target.value)}
+            onChange={handleIdeaChange}
             placeholder="e.g., 'Build a CRM for real estate with lead tracking and email automation' or 'Create a fitness tracking app with workout plans'"
             className="min-h-[120px] rounded-xl text-base px-5 py-4 pr-32 border-2 border-indigo-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 resize-none shadow-sm"
             rows={4} />
 
             <Button
-              onClick={() => {
-                if (!ideaInput.trim()) return;
-                navigate(
-                  `${createPageUrl('AIAssistant')}?auto_start=true&idea=${encodeURIComponent(ideaInput)}`
-                );
-              }}
-              disabled={!ideaInput.trim()}
-              className="absolute right-3 bottom-3 h-12 px-6 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white rounded-xl shadow-lg shadow-indigo-500/30 disabled:opacity-50 font-medium">
+            onClick={() => {
+              if (ideaInput.trim()) {
+                window.location.href = createPageUrl('AIAssistant') + '?auto_start=true&idea=' + encodeURIComponent(ideaInput);
+              }
+            }}
+            disabled={!ideaInput.trim()}
+            className="absolute right-3 bottom-3 h-12 px-6 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white rounded-xl shadow-lg shadow-indigo-500/30 disabled:opacity-50 font-medium">
+
               <Sparkles className="w-5 h-5 mr-2" />
               Generate App
             </Button>
@@ -500,6 +490,7 @@ export default function Dashboard() {
                   data={quantumCircuits && quantumCircuits[0]}
                   loading={isLoadingCircuits} />
 
+                  
                   {/* Quantum Circuit Visualizer */}
                   <QuantumCircuitVisualizer
                   initialQubits={3}
@@ -515,13 +506,7 @@ export default function Dashboard() {
             </Card>
           </motion.div>
         }
-
-        {/* AI Onboarding Wizard */}
-        <AIOnboardingWizard
-          projectIdea={projectIdeaContext}
-          onComplete={() => setProjectIdeaContext(null)}
-        />
       </div>
-    </div>
-  );
+    </div>);
+
 }
