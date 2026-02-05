@@ -5,12 +5,14 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
-import { Webhook, CheckCircle2, AlertCircle, Clock, TrendingUp, Eye } from 'lucide-react';
+import { Webhook, CheckCircle2, AlertCircle, Clock, TrendingUp, Plus } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { format } from 'date-fns';
+import WebhookCreate from '@/components/webhook/WebhookCreate';
 
 export default function WebhookMonitor() {
   const [selectedWebhook, setSelectedWebhook] = useState(null);
+  const [openCreate, setOpenCreate] = useState(false);
 
   const { data: webhooks = [] } = useQuery({
     queryKey: ['webhooks'],
@@ -45,10 +47,17 @@ export default function WebhookMonitor() {
 
   return (
     <div className="p-6 max-w-6xl mx-auto space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold mb-2">Webhook Monitor</h1>
-        <p className="text-gray-600">Track webhook deliveries, retries, and logs in real-time</p>
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold mb-2">Webhook Monitor</h1>
+          <p className="text-gray-600">Track webhook deliveries, retries, and logs in real-time</p>
+        </div>
+        <Button onClick={() => setOpenCreate(true)} className="bg-blue-600 hover:bg-blue-700">
+          <Plus className="w-4 h-4 mr-2" /> Create Webhook
+        </Button>
       </div>
+
+      <WebhookCreate open={openCreate} onOpenChange={setOpenCreate} />
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <Card>

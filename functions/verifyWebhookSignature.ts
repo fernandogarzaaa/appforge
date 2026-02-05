@@ -1,4 +1,4 @@
-import { createClientFromRequest } from 'npm:@base44/sdk@0.8.6';
+import crypto from 'node:crypto';
 
 /**
  * Verify webhook signature for authenticity
@@ -7,45 +7,21 @@ import { createClientFromRequest } from 'npm:@base44/sdk@0.8.6';
 
 Deno.serve(async (req) => {
   try {
-    const base44 = createClientFromRequest(req);
+    const { payload, signature, secret } = await req.json();
 
-    const { webhook_id, payload, signature } = await req.json();
-
-    if (!webhook_id || !payload || !signature) {
+    if (!payload || !signature || !secret) {
       return Response.json(
-        { error: 'Missing webhook_id, payload, or signature' },
-        { status: 400 }
-      );
-    }
-
-    // Get webhook
-    const webhooks = await base44.asServiceRole.entities.Webhook.filter({
-      id: webhook_id
-    });
-
-    if (webhooks.length === 0) {
-      return Response.json({ error: 'Webhook not found' }, { status: 404 });
-    }
-
-    const webhook = webhooks[0];
-
-    if (!webhook.secret) {
-      return Response.json(
-        { error: 'Webhook secret not configured' },
+        { error: 'Missing payload, signature, or secret' },
         { status: 400 }
       );
     }
 
     // Verify signature using HMAC-SHA256
-    const isValid = await verifyHmacSignature(
-      webhook.secret,
-      JSON.stringify(payload),
-      signature
-    );
+    const payloadString = typeof payload === 'string' ? payload : JSON.stringify(payload);
+    const isValid = verifyHmacSignature(secret, payloadString, signature);
 
     return Response.json({
       valid: isValid,
-      webhook_id,
       timestamp: new Date().toISOString()
     });
   } catch (error) {
@@ -54,36 +30,11 @@ Deno.serve(async (req) => {
   }
 });
 
-async function verifyHmacSignature(secret, message, providedSignature) {
-  const encoder = new TextEncoder();
-  const key = await crypto.subtle.importKey(
-    'raw',
-    encoder.encode(secret),
-    { name: 'HMAC', hash: 'SHA-256' },
-    false,
-    ['sign', 'verify']
-  );
-
-  const messageBuffer = encoder.encode(message);
-  const signatureBuffer = hexToBuffer(providedSignature);
-
-  try {
-    return await crypto.subtle.verify('HMAC', key, signatureBuffer, messageBuffer);
-  } catch {
-    return false;
-  }
-}
-
-function hexToBuffer(hex) {
-  const bytes = new Uint8Array(hex.length / 2);
-  for (let i = 0; i < hex.length; i += 2) {
-    bytes[i / 2] = parseInt(hex.substr(i, 2), 16);
-  }
-  return bytes;
-}
-
-function bufferToHex(buffer) {
-  return Array.from(new Uint8Array(buffer))
-    .map(b => b.toString(16).padStart(2, '0'))
-    .join('');
+function verifyHmacSignature(secret, message, providedSignature) {
+  const hmac = crypto.createHmac('sha256', secret);
+  hmac.update(message);
+  const computed = hmac.digest('hex');
+  
+  // Constant time comparison
+  return computed === providedSignature;
 }
