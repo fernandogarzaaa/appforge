@@ -235,7 +235,9 @@ export default function ${newPage.name.replace(/\s+/g, '') || 'NewPage'}() {
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end" className="rounded-xl">
-                      <DropdownMenuItem className="rounded-lg cursor-pointer">
+                      <DropdownMenuItem 
+                        onClick={() => window.open(`/preview/${projectId}/${selectedPage.path || selectedPage.name}`, '_blank')}
+                        className="rounded-lg cursor-pointer">
                         <Eye className="w-4 h-4 mr-2" />
                         Preview
                       </DropdownMenuItem>
