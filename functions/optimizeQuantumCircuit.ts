@@ -99,7 +99,8 @@ Respond with JSON:
       circuit: response.optimized_circuit,
       optimizations: response.optimizations_applied,
       metrics: response.metrics,
-      hardware_notes: response.hardware_notes
+      hardware_notes: response.hardware_notes,
+      timestamp: new Date().toISOString()
     });
   } catch (error) {
     console.error('Circuit optimization error:', error);
