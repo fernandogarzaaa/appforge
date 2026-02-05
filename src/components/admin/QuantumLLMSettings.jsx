@@ -49,12 +49,12 @@ export default function QuantumLLMSettings() {
 
     setTesting(true);
     try {
-      const response = await base44.integrations.Core.InvokeLLM({
+      const response = await base44.functions.invoke('quantumLLM', {
         prompt: testPrompt,
         add_context_from_internet: config?.auto_research_enabled
       });
 
-      setTestResult({ result: response, model: 'QuantumAI-v1' });
+      setTestResult(response.data);
       toast.success('QuantumAI responded!');
     } catch (error) {
       toast.error('Test failed: ' + error.message);
