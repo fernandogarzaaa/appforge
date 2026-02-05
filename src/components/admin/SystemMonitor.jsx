@@ -20,17 +20,18 @@ export default function SystemMonitor() {
 
   const loadStats = async () => {
     try {
-      const [errors, audit, notifs] = await Promise.all([
+      const [errors, audit] = await Promise.all([
         base44.asServiceRole.entities.ErrorLog.filter({ resolved: false }),
-        base44.asServiceRole.entities.AuditLog.list('-timestamp', 1),
-        base44.asServiceRole.entities.Notification.filter({ is_read: false })
+        base44.asServiceRole.entities.AuditLog.list('-timestamp', 1)
       ]);
+
+      const notifs = await base44.asServiceRole.entities.Notification.filter({ is_read: false }).catch(() => []);
 
       setStats({
         errorLogs: errors.length,
         criticalErrors: errors.filter(e => e.severity === 'critical').length,
         auditLogs: audit.length,
-        notifications: notifs.length
+        notifications: notifs?.length || 0
       });
     } catch (error) {
       console.error('Stats load error:', error);
