@@ -9,7 +9,7 @@ import { Badge } from '@/components/ui/badge';
 import { Switch } from '@/components/ui/switch';
 import { 
   Github, Plus, Trash2, ExternalLink, CheckCircle, AlertCircle, 
-  GitBranch, Code, Settings 
+  GitBranch, Settings 
 } from 'lucide-react';
 import { toast } from 'sonner';
 

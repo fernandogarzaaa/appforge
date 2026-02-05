@@ -7,7 +7,7 @@ import { Slider } from '@/components/ui/slider';
 import { Switch } from '@/components/ui/switch';
 import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from 'recharts';
 import { Settings, Activity, Lock, Wallet, TrendingUp, Users, Zap, RefreshCw, Copy, Download } from 'lucide-react';
 import MarketingBotPanel from './MarketingBotPanel';
 import SubscriptionPlanManager from './SubscriptionPlanManager';
@@ -447,7 +447,6 @@ export default function CoachingSystemAdmin() {
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="name" angle={-45} textAnchor="end" height={80} />
                 <YAxis />
-                <Tooltip />
                 <Bar dataKey="count" fill="#8b5cf6" />
               </BarChart>
             </ResponsiveContainer>

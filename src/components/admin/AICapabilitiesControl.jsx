@@ -7,7 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { Slider } from '@/components/ui/slider';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { 
-  Brain, Sparkles, AlertCircle, TrendingUp, Activity, 
+  Brain, Sparkles, AlertCircle, Activity, 
   Shield, Zap, Code, Layout, Users 
 } from 'lucide-react';
 import { toast } from 'sonner';

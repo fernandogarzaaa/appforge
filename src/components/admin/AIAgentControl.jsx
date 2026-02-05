@@ -8,8 +8,8 @@ import { Switch } from '@/components/ui/switch';
 import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { 
-  Bot, Play, Settings, Mail, Clock, CheckCircle2, 
-  Activity, Shield, TrendingUp, RefreshCw
+  Bot, Settings, Mail, Clock, CheckCircle2, 
+  Activity, TrendingUp, RefreshCw
 } from 'lucide-react';
 import { toast } from 'sonner';
 import GitHubIntegrationSetup from './GitHubIntegrationSetup';
@@ -330,7 +330,7 @@ export default function AIAgentControl() {
                 </>
               ) : (
                 <>
-                  <Play className="w-4 h-4 mr-2" />
+                  <RefreshCw className="w-4 h-4 mr-2" />
                   Run Manual Scan
                 </>
               )}
