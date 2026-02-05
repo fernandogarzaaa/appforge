@@ -6,7 +6,8 @@ import ProactiveAIAdmin from '@/components/admin/ProactiveAIAdmin';
 import AdminAuditViewer from '@/components/admin/AdminAuditViewer';
 import SystemMonitor from '@/components/admin/SystemMonitor';
 import GitHubAutomationMonitor from '@/components/admin/GitHubAutomationMonitor';
-import { Settings, Brain, Sparkles, Lightbulb, FileText, Activity } from 'lucide-react';
+import SolanaWalletManager from '@/components/admin/SolanaWalletManager';
+import { Settings, Brain, Sparkles, Lightbulb, FileText, Activity, Wallet } from 'lucide-react';
 
 export default function AdminSystemConfig() {
   return (
@@ -23,8 +24,12 @@ export default function AdminSystemConfig() {
         <SystemMonitor />
       </div>
 
-      <Tabs defaultValue="quantum" className="space-y-6">
+      <Tabs defaultValue="solana" className="space-y-6">
         <TabsList>
+          <TabsTrigger value="solana" className="gap-2">
+            <Wallet className="w-4 h-4" />
+            Solana Payments
+          </TabsTrigger>
           <TabsTrigger value="quantum" className="gap-2">
             <Brain className="w-4 h-4" />
             QuantumAI
