@@ -7,8 +7,11 @@ import { createPageUrl } from '@/utils';
 import {
   FolderKanban, Database, FileCode, Component, Sparkles, Plus, Zap,
   ShieldCheck, Rocket, Users, Globe, Smartphone, Brain, LayoutTemplate,
-  Code } from
-'lucide-react';
+  Code 
+} from 'lucide-react';
+import GuidedProjectWizard from '@/components/ai/GuidedProjectWizard';
+import AIOnboardingWizard from '@/components/onboarding/AIOnboardingWizard';
+import QuantumAIBadge from '@/components/admin/QuantumAIBadge';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent } from '@/components/ui/card';
@@ -21,16 +24,23 @@ import { useToast } from '@/components/ui/use-toast';
 import QuantumCircuitDisplay from '@/components/QuantumCircuitDisplay';
 import QuantumCircuitVisualizer from '@/components/QuantumCircuitVisualizer';
 import QuantumCircuitEducation from '@/components/QuantumCircuitEducation';
-import GuidedProjectWizard from '@/components/ai/GuidedProjectWizard';
 
 export default function Dashboard() {
   const [ideaInput, setIdeaInput] = useState('');
   const [isCreating, setIsCreating] = useState(false);
   const { toast } = useToast();
   const [isAuthenticated, setIsAuthenticated] = React.useState(false);
+  const [projectIdeaContext, setProjectIdeaContext] = useState(null);
 
   React.useEffect(() => {
     base44.auth.isAuthenticated().then(setIsAuthenticated);
+    
+    // Check for project idea context from wizard
+    const idea = sessionStorage.getItem('project_idea_context');
+    if (idea) {
+      setProjectIdeaContext(idea);
+      sessionStorage.removeItem('project_idea_context');
+    }
   }, []);
 
   const { data: projects = [], isLoading } = useQuery({
@@ -173,7 +183,43 @@ export default function Dashboard() {
         </div>
       </div>
 
-      <GuidedProjectWizard />
+      <Card className="border-2 border-indigo-200/50 shadow-xl shadow-indigo-500/10 bg-gradient-to-br from-white to-indigo-50/30">
+        <CardContent className="p-6">
+          <div className="flex items-start gap-3 mb-4">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center flex-shrink-0">
+              <Zap className="w-5 h-5 text-white" />
+            </div>
+            <div className="flex-1">
+              <div className="flex items-center gap-2 mb-1">
+                <h3 className="text-lg font-semibold text-gray-900">Describe your idea</h3>
+                <QuantumAIBadge />
+              </div>
+              <p className="text-sm text-gray-600">AI will help you build it in minutes</p>
+            </div>
+          </div>
+          <div className="relative">
+            <Textarea
+            value={ideaInput}
+            onChange={(e) => setIdeaInput(e.target.value)}
+            placeholder="e.g., 'Build a CRM for real estate with lead tracking and email automation' or 'Create a fitness tracking app with workout plans'"
+            className="min-h-[120px] rounded-xl text-base px-5 py-4 pr-32 border-2 border-indigo-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 resize-none shadow-sm"
+            rows={4} />
+
+            <Button
+            onClick={() => {
+              if (ideaInput.trim()) {
+                window.location.href = createPageUrl('AIAssistant') + '?auto_start=true&idea=' + encodeURIComponent(ideaInput);
+              }
+            }}
+            disabled={!ideaInput.trim()}
+            className="absolute right-3 bottom-3 h-12 px-6 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white rounded-xl shadow-lg shadow-indigo-500/30 disabled:opacity-50 font-medium">
+
+              <Sparkles className="w-5 h-5 mr-2" />
+              Generate App
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
     </motion.div>;
 
 
@@ -469,7 +515,13 @@ export default function Dashboard() {
             </Card>
           </motion.div>
         }
-      </div>
-    </div>);
 
+        {/* AI Onboarding Wizard */}
+        <AIOnboardingWizard 
+          projectIdea={projectIdeaContext}
+          onComplete={() => setProjectIdeaContext(null)}
+        />
+      </div>
+    </div>
+  );
 }

@@ -103,6 +103,9 @@ ${clarifyingQuestions.map((q, i) => `${q.question} ${answers[i] || 'Not specifie
       setProjectData(result.data);
       setStep('done');
       toast.success('Project created! Let me guide you through the setup.');
+      
+      // Trigger onboarding
+      sessionStorage.setItem('project_idea_context', finalDescription);
     } catch (error) {
       toast.error('Failed to create project');
     } finally {
