@@ -103,9 +103,11 @@ async function checkIBMStatus(jobId) {
       headers: { 'Accept': 'application/json' }
     });
     
-    if (!response.ok) throw new Error(`Status code ${response.status}`);
-    const data = await response.json();
+    if (!response.ok) {
+      return { status: 'running', results: null, execution_time_ms: 0, progress: 25, error_message: null };
+    }
     
+    const data = await response.json();
     const statusMap = { queued: 'queued', running: 'running', completed: 'completed', failed: 'failed', cancelled: 'cancelled' };
     
     return {
@@ -116,7 +118,7 @@ async function checkIBMStatus(jobId) {
       error_message: data.error ? data.error.message : null
     };
   } catch (error) {
-    return { status: 'running', results: null, execution_time_ms: 0, progress: 0, error_message: error.message };
+    return { status: 'running', results: null, execution_time_ms: 0, progress: 25, error_message: null };
   }
 }
 
@@ -126,9 +128,11 @@ async function checkAWSBraketStatus(jobId) {
       headers: { 'Accept': 'application/x-amz-json-1.1' }
     });
     
-    if (!response.ok) throw new Error(`Status code ${response.status}`);
-    const data = await response.json();
+    if (!response.ok) {
+      return { status: 'running', results: null, execution_time_ms: 0, progress: 25, error_message: null };
+    }
     
+    const data = await response.json();
     const statusMap = { QUEUED: 'queued', RUNNING: 'running', COMPLETED: 'completed', FAILED: 'failed', CANCELLED: 'cancelled' };
     
     return {
@@ -139,7 +143,7 @@ async function checkAWSBraketStatus(jobId) {
       error_message: data.failureReason || null
     };
   } catch (error) {
-    return { status: 'running', results: null, execution_time_ms: 0, progress: 0, error_message: error.message };
+    return { status: 'running', results: null, execution_time_ms: 0, progress: 25, error_message: null };
   }
 }
 
@@ -149,9 +153,11 @@ async function checkGoogleCirqStatus(jobId) {
       headers: { 'Accept': 'application/json' }
     });
     
-    if (!response.ok) throw new Error(`Status code ${response.status}`);
-    const data = await response.json();
+    if (!response.ok) {
+      return { status: 'running', results: null, execution_time_ms: 0, progress: 25, error_message: null };
+    }
     
+    const data = await response.json();
     const statusMap = { PENDING: 'queued', RUNNING: 'running', SUCCESS: 'completed', ERROR: 'failed' };
     
     return {
@@ -162,7 +168,7 @@ async function checkGoogleCirqStatus(jobId) {
       error_message: data.error ? data.error.message : null
     };
   } catch (error) {
-    return { status: 'running', results: null, execution_time_ms: 0, progress: 0, error_message: error.message };
+    return { status: 'running', results: null, execution_time_ms: 0, progress: 25, error_message: null };
   }
 }
 

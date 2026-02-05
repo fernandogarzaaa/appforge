@@ -20,18 +20,20 @@ export default function SystemMonitor() {
 
   const loadStats = async () => {
     try {
-      const [errors, audit] = await Promise.all([
-        base44.asServiceRole.entities.ErrorLog.filter({ resolved: false }),
-        base44.asServiceRole.entities.AuditLog.list('-timestamp', 1)
-      ]);
+      const user = await base44.auth.me();
+      if (!user || user.role !== 'admin') return;
 
-      const notifs = await base44.asServiceRole.entities.Notification.filter({ is_read: false }).catch(() => []);
+      const [errors, audit, notifs] = await Promise.all([
+        base44.asServiceRole.entities.ErrorLog.filter({ resolved: false }).catch(() => []),
+        base44.asServiceRole.entities.AuditLog.list('-timestamp', 10).catch(() => []),
+        base44.asServiceRole.entities.Notification.filter({ is_read: false }).catch(() => [])
+      ]);
 
       setStats({
         errorLogs: errors.length,
         criticalErrors: errors.filter(e => e.severity === 'critical').length,
         auditLogs: audit.length,
-        notifications: notifs?.length || 0
+        notifications: notifs.length
       });
     } catch (error) {
       console.error('Stats load error:', error);
@@ -84,16 +86,20 @@ export default function SystemMonitor() {
       </Card>
 
       <Card>
-        <CardContent className="pt-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-gray-600">System Status</p>
-              <p className="text-2xl font-bold">Operational</p>
-            </div>
-            <CheckCircle className="w-8 h-8 text-green-600" />
-          </div>
-        </CardContent>
-      </Card>
+         <CardContent className="pt-6">
+           <div className="flex items-center justify-between">
+             <div>
+               <p className="text-sm text-gray-600">System Status</p>
+               <p className="text-2xl font-bold">{stats.criticalErrors > 0 ? 'Degraded' : 'Operational'}</p>
+             </div>
+             {stats.criticalErrors > 0 ? (
+               <AlertCircle className="w-8 h-8 text-red-600" />
+             ) : (
+               <CheckCircle className="w-8 h-8 text-green-600" />
+             )}
+           </div>
+         </CardContent>
+       </Card>
     </div>
   );
 }

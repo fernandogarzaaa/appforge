@@ -121,10 +121,15 @@ export default function ProjectCard({
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end" className="rounded-lg p-1">
-                    <DropdownMenuItem className="rounded-md cursor-pointer text-[13px]">
-                      <ExternalLink className="w-3.5 h-3.5 mr-2" />
-                      Open Preview
-                    </DropdownMenuItem>
+                    <DropdownMenuItem 
+                      onClick={(e) => { 
+                        e.preventDefault(); 
+                        window.open(`${createPageUrl('PageEditor')}?projectId=${project.id}`, '_blank');
+                      }}
+                      className="rounded-md cursor-pointer text-[13px]">
+                       <ExternalLink className="w-3.5 h-3.5 mr-2" />
+                       Open Preview
+                     </DropdownMenuItem>
                     <DropdownMenuItem onClick={(e) => { e.preventDefault(); onClone?.(project); }} className="rounded-md cursor-pointer text-[13px]">
                       <Copy className="w-3.5 h-3.5 mr-2" />
                       Clone
