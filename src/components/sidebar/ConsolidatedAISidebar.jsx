@@ -544,10 +544,10 @@ function ConsolidatedAISidebar({ currentProject, collapsed, onToggle, user }) {
           <RadixTooltip>
             <TooltipTrigger asChild>
               <Link
-                to={createPageUrl('LLMSettings')}
+                to={createPageUrl('Settings')}
                 className={cn(
                   'flex items-center gap-3 px-3 py-2.5 rounded-md text-sm transition-all duration-200',
-                  isActive(createPageUrl('LLMSettings'))
+                  isActive(createPageUrl('Settings'))
                     ? 'bg-indigo-50 dark:bg-indigo-900/20 text-indigo-700 dark:text-indigo-300'
                     : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800/30 hover:text-gray-700 dark:hover:text-gray-300'
                 )}
@@ -556,7 +556,7 @@ function ConsolidatedAISidebar({ currentProject, collapsed, onToggle, user }) {
                 <span>Settings</span>
               </Link>
             </TooltipTrigger>
-            <TooltipContent>LLM Settings & Configuration</TooltipContent>
+            <TooltipContent>User Settings & AI Preferences</TooltipContent>
           </RadixTooltip>
         </TooltipProvider>
       </div>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
 import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -18,7 +18,26 @@ export default function GuidedProjectWizard() {
   const [answers, setAnswers] = useState({});
   const [projectData, setProjectData] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [quantumEnabled, setQuantumEnabled] = useState(true);
   const navigate = useNavigate();
+
+  // Check if quantum is enabled
+  useEffect(() => {
+    const checkQuantum = async () => {
+      try {
+        const user = await base44.auth.me();
+        if (user) {
+          const prefs = await base44.entities.UserPreference.filter({ user_id: user.email });
+          if (prefs.length > 0) {
+            setQuantumEnabled(prefs[0].use_quantum_ai ?? true);
+          }
+        }
+      } catch (err) {
+        console.log('Could not check quantum preference');
+      }
+    };
+    checkQuantum();
+  }, []);
 
   // Step 1: Initial vague idea → AI generates enhanced prompt
   const generatePrompt = async () => {
@@ -114,6 +133,11 @@ ${clarifyingQuestions.map((q, i) => `${q.question} ${answers[i] || 'Not specifie
           <div className="flex items-center gap-2 text-xs text-purple-700">
             <Badge variant="outline" className="text-purple-700 border-purple-300">💡 Pro Tip</Badge>
             <span>Be as vague or specific as you want - I'll help clarify</span>
+            {quantumEnabled && (
+              <Badge className="bg-gradient-to-r from-purple-500 to-indigo-500 text-white border-0 text-xs">
+                🔮 Quantum
+              </Badge>
+            )}
           </div>
           <Button
             onClick={generatePrompt}

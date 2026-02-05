@@ -1,86 +1,77 @@
 import React from 'react';
-import { LogOut, User, Search } from 'lucide-react';
-import { DarkModeToggle } from '@/components/DarkModeToggle';
-import { NotificationBell } from '@/components/NotificationBell';
-import SearchBar from '@/components/navigation/SearchBar';
-import Breadcrumbs from '@/components/navigation/Breadcrumbs';
+import { Link } from 'react-router-dom';
+import { createPageUrl } from '@/utils';
 import { Button } from '@/components/ui/button';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { Moon, Sun, Settings, LogOut, Menu } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { useNavigation } from '@/contexts/NavigationContext';
 
-export default function GlobalTopNav({ user, onLogout, mobileMenu, title = 'AppForge' }) {
-  const { openSearch } = useNavigation();
-  const MenuContent = /** @type {any} */ (DropdownMenuContent);
-  const MenuItem = /** @type {any} */ (DropdownMenuItem);
-
+export default function GlobalTopNav({ user, onLogout, isDark, onThemeToggle, mobileMenu }) {
   return (
-    <header className="bg-white/80 dark:bg-slate-950/80 dark:border-slate-800 border-b border-gray-200 px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between backdrop-blur-sm sticky top-0 z-40">
-      <div className="flex items-center gap-2 sm:gap-4 flex-1 min-w-0">
-        {mobileMenu}
-        <div className="min-w-0 flex-1">
-          <h2 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white truncate">
-            {title}
-          </h2>
-          <div className="hidden sm:block">
-            <Breadcrumbs />
-          </div>
+    <div className="border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900">
+      <div className="px-4 sm:px-6 h-14 flex items-center justify-between">
+        {/* Mobile Menu Button */}
+        <div className="md:hidden">
+          {mobileMenu}
         </div>
-      </div>
 
-      <div className="flex items-center gap-1 sm:gap-3 shrink-0 min-h-11">
-        <div className="hidden sm:block">
-          <SearchBar onOpen={openSearch} placeholder="Search..." />
-        </div>
-        <button
-          onClick={openSearch}
-          className="sm:hidden p-2.5 hover:bg-gray-100 dark:hover:bg-slate-800 rounded-lg transition-colors min-w-11 min-h-11 flex items-center justify-center"
-          aria-label="Search"
-        >
-          <Search className="w-5 h-5 text-gray-600 dark:text-gray-300" />
-        </button>
-        <DarkModeToggle />
-        <NotificationBell />
-        {user && (
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button
-                variant="ghost"
-                className="flex items-center gap-2 h-11 px-2 sm:px-3 hover:bg-gray-100 dark:hover:bg-slate-800"
-              >
-                <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-gradient-to-br from-indigo-600 to-indigo-700 dark:from-indigo-500 dark:to-indigo-600 flex items-center justify-center shrink-0">
-                  <span className="text-white text-xs sm:text-sm font-bold">
-                    {user.full_name?.charAt(0).toUpperCase()}
-                  </span>
+        {/* Spacer */}
+        <div className="flex-1" />
+
+        {/* Right Side Actions */}
+        <div className="flex items-center gap-2">
+          {/* Theme Toggle */}
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={onThemeToggle}
+            className="w-9 h-9"
+          >
+            {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+          </Button>
+
+          {/* User Menu */}
+          {user && (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" className="relative h-9 w-9 rounded-full">
+                  <Avatar className="h-9 w-9">
+                    <AvatarFallback className="bg-gradient-to-br from-purple-500 to-indigo-600 text-white text-sm">
+                      {user.full_name?.charAt(0) || user.email?.charAt(0) || 'U'}
+                    </AvatarFallback>
+                  </Avatar>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56">
+                <div className="flex items-center justify-start gap-2 p-2">
+                  <div className="flex flex-col space-y-1">
+                    <p className="text-sm font-medium">{user.full_name || 'User'}</p>
+                    <p className="text-xs text-gray-500">{user.email}</p>
+                  </div>
                 </div>
-                <span className="text-sm font-medium text-gray-700 dark:text-gray-300 hidden md:inline truncate max-w-[120px]">
-                  {user.full_name}
-                </span>
-              </Button>
-            </DropdownMenuTrigger>
-            <MenuContent
-              align="end"
-              className="w-56 dark:bg-slate-900 dark:border-slate-800"
-            >
-              <MenuItem className="text-xs text-gray-500 dark:text-gray-400 py-2">
-                <User className="w-4 h-4 mr-2 shrink-0" />
-                <span className="truncate">{user.email}</span>
-              </MenuItem>
-              <MenuItem
-                onClick={onLogout}
-                className="text-red-600 dark:text-red-400 dark:hover:bg-slate-800 py-2"
-              >
-                <LogOut className="w-4 h-4 mr-2 shrink-0" />
-                Logout
-              </MenuItem>
-            </MenuContent>
-          </DropdownMenu>
-        )}
+                <DropdownMenuSeparator />
+                <Link to={createPageUrl('Settings')}>
+                  <DropdownMenuItem className="cursor-pointer">
+                    <Settings className="mr-2 h-4 w-4" />
+                    Settings
+                  </DropdownMenuItem>
+                </Link>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={onLogout} className="cursor-pointer text-red-600">
+                  <LogOut className="mr-2 h-4 w-4" />
+                  Logout
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          )}
+        </div>
       </div>
-    </header>
+    </div>
   );
 }

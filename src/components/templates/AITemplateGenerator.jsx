@@ -33,15 +33,16 @@ export default function AITemplateGenerator() {
 
     setGenerating(true);
     try {
-      const result = await base44.functions.invoke('generateProjectFromDescription', {
+      const response = await base44.functions.invoke('generateProjectFromDescription', {
         description: description.trim(),
         project_name: projectName.trim()
       });
 
-      setResult(result.data);
+      setResult(response.data);
       toast.success('Project generated successfully!');
     } catch (error) {
       toast.error('Generation failed: ' + error.message);
+      console.error('Generation error:', error);
     } finally {
       setGenerating(false);
     }
