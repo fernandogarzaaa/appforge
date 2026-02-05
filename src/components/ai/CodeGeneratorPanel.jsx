@@ -7,8 +7,6 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Sparkles, Copy, Check, Code2, Database, FileCode, Zap, AlertCircle, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { atomDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
 export default function CodeGeneratorPanel({ isOpen, onClose, entity, page }) {
   const [selectedCodeType, setSelectedCodeType] = useState('crud_component');
@@ -175,9 +173,9 @@ export default function CodeGeneratorPanel({ isOpen, onClose, entity, page }) {
                     </Button>
                   </div>
                   <div className="bg-gray-900 rounded-lg overflow-hidden max-h-96 overflow-y-auto">
-                    <SyntaxHighlighter language="javascript" style={atomDark} customStyle={{ margin: 0 }}>
-                      {generatedCode.code}
-                    </SyntaxHighlighter>
+                    <pre className="p-4 text-sm text-gray-100 font-mono whitespace-pre-wrap break-words">
+                      <code>{generatedCode.code}</code>
+                    </pre>
                   </div>
                 </TabsContent>
 
