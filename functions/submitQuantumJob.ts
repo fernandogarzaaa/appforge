@@ -143,12 +143,8 @@ async function submitToIBM(circuitData, shots, apiKey) {
       cost: 0
     };
   } catch (error) {
-    console.error('IBM submission error:', error);
-    return {
-      job_id: `ibm_${Date.now()}`,
-      cost: 0
-    };
-  }
+     throw error;
+   }
 }
 
 async function submitToAWSBraket(circuitData, shots, apiKey) {
@@ -176,12 +172,8 @@ async function submitToAWSBraket(circuitData, shots, apiKey) {
       cost: 0.3
     };
   } catch (error) {
-    console.error('AWS submission error:', error);
-    return {
-      job_id: `braket_${Date.now()}`,
-      cost: 0.3
-    };
-  }
+     throw error;
+   }
 }
 
 async function submitToGoogleCirq(circuitData, shots, apiKey) {
@@ -207,12 +199,8 @@ async function submitToGoogleCirq(circuitData, shots, apiKey) {
       cost: 0
     };
   } catch (error) {
-    console.error('Google submission error:', error);
-    return {
-      job_id: `cirq_${Date.now()}`,
-      cost: 0
-    };
-  }
+     throw error;
+   }
 }
 
 function convertCircuitToQASM(circuitData) {

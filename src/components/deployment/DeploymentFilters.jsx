@@ -10,7 +10,19 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { X } from 'lucide-react';
-import { DEPLOYMENT_STATUS, DEPLOYMENT_ENVIRONMENTS } from '@/lib/deploymentHistory';
+const DEPLOYMENT_STATUS = {
+  DEPLOYING: 'deploying',
+  BUILDING: 'building',
+  PENDING: 'pending',
+  ACTIVE: 'active',
+  FAILED: 'failed'
+};
+
+const DEPLOYMENT_ENVIRONMENTS = {
+  DEV: 'development',
+  STAGING: 'staging',
+  PROD: 'production'
+};
 
 export const DeploymentFilters = ({
   filters,
