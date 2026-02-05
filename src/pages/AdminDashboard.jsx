@@ -258,23 +258,31 @@ export default function AdminDashboard() {
               <CardTitle>Quick Actions</CardTitle>
             </CardHeader>
             <CardContent className="space-y-2">
-              <Button variant="outline" className="w-full justify-start">
-                <Users className="w-4 h-4 mr-2" />
-                View All Users
-              </Button>
-              <Button variant="outline" className="w-full justify-start">
-                <Activity className="w-4 h-4 mr-2" />
-                System Logs
-              </Button>
-              <Button variant="outline" className="w-full justify-start">
-                <Shield className="w-4 h-4 mr-2" />
-                Security Settings
-              </Button>
-              <Button variant="outline" className="w-full justify-start">
-                <TrendingUp className="w-4 h-4 mr-2" />
-                View Analytics
-              </Button>
-            </CardContent>
+               <Link to={createPageUrl('AdminUserManagement')}>
+                 <Button variant="outline" className="w-full justify-start">
+                   <Users className="w-4 h-4 mr-2" />
+                   View All Users
+                 </Button>
+               </Link>
+               <Link to={createPageUrl('AuditLog')}>
+                 <Button variant="outline" className="w-full justify-start">
+                   <Activity className="w-4 h-4 mr-2" />
+                   System Logs
+                 </Button>
+               </Link>
+               <Link to={createPageUrl('Security')}>
+                 <Button variant="outline" className="w-full justify-start">
+                   <Shield className="w-4 h-4 mr-2" />
+                   Security Settings
+                 </Button>
+               </Link>
+               <Link to={createPageUrl('AdminAnalytics')}>
+                 <Button variant="outline" className="w-full justify-start">
+                   <TrendingUp className="w-4 h-4 mr-2" />
+                   View Analytics
+                 </Button>
+               </Link>
+             </CardContent>
           </Card>
         </div>
 

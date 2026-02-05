@@ -39,13 +39,21 @@ export default function TemplateMarketplace() {
 
   const downloadMutation = useMutation({
     mutationFn: async (templateId) => {
-      const template = await base44.entities.BotTemplate.get(templateId);
+      const templates = await base44.entities.BotTemplate.filter({ id: templateId });
+      if (templates.length === 0) {
+        throw new Error('Template not found');
+      }
+      const template = templates[0];
+      
+      if (!user) {
+        throw new Error('You must be logged in to download templates');
+      }
       
       // Check if premium and handle payment
       if (template.is_premium && template.price > 0) {
         const purchases = await base44.entities.TemplatePurchase.filter({
           template_id: templateId,
-          buyer_email: user?.email
+          buyer_email: user.email
         });
         
         if (purchases.length === 0) {
@@ -63,7 +71,7 @@ export default function TemplateMarketplace() {
       if (!template.is_premium || template.price === 0) {
         await base44.entities.TemplatePurchase.create({
           template_id: templateId,
-          buyer_email: user?.email,
+          buyer_email: user.email,
           price_paid: 0,
           payment_method: 'free',
           status: 'completed',
@@ -79,6 +87,9 @@ export default function TemplateMarketplace() {
         queryClient.invalidateQueries(['botTemplates']);
         toast.success('Template downloaded successfully!');
       }
+    },
+    onError: (error) => {
+      toast.error(error.message || 'Download failed');
     }
   });
 
