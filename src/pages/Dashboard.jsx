@@ -6,8 +6,8 @@ import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import {
   FolderKanban, Database, FileCode, Component, Sparkles, Plus, Zap,
-  ShieldCheck, Rocket, Users, Globe, Smartphone, Brain, LayoutTemplate,
-  Code } from
+  ShieldCheck, Rocket, Users, Smartphone, Brain, LayoutTemplate,
+  Code, Activity } from
 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
@@ -91,13 +91,29 @@ export default function Dashboard() {
   }];
 
 
+  const [user, setUser] = React.useState(null);
+
+  React.useEffect(() => {
+    base44.auth.me().then(setUser).catch(() => setUser(null));
+  }, []);
+
   const capabilities = [
-  { icon: Code, label: 'Bot Builder', href: createPageUrl('BotBuilder'), color: 'text-blue-600 bg-blue-50' },
-  { icon: Rocket, label: 'Workflows', href: createPageUrl('WorkflowBuilder'), color: 'text-purple-600 bg-purple-50' },
-  { icon: Brain, label: 'AI/ML', href: createPageUrl('MLIntegration'), color: 'text-pink-600 bg-pink-50' },
-  { icon: Globe, label: 'DeFi Hub', href: createPageUrl('DeFiHub'), color: 'text-green-600 bg-green-50' },
-  { icon: ShieldCheck, label: 'Security', href: createPageUrl('Security'), color: 'text-red-600 bg-red-50' },
-  { icon: Code, label: 'Observability', href: createPageUrl('Observability'), color: 'text-orange-600 bg-orange-50' }];
+  { icon: Sparkles, label: 'AI Templates', href: createPageUrl('AITemplates'), color: 'text-purple-600 bg-purple-50 dark:text-purple-400 dark:bg-purple-950/50' },
+  { icon: Brain, label: 'Superior AI', href: createPageUrl('SuperiorAIStudio'), color: 'text-pink-600 bg-pink-50 dark:text-pink-400 dark:bg-pink-950/50' },
+  { icon: ShieldCheck, label: 'Code Review', href: createPageUrl('CodeReview'), color: 'text-cyan-600 bg-cyan-50 dark:text-cyan-400 dark:bg-cyan-950/50' },
+  { icon: Rocket, label: 'AI Deploy', href: createPageUrl('AIDeployment'), color: 'text-green-600 bg-green-50 dark:text-green-400 dark:bg-green-950/50' },
+  { icon: Brain, label: 'AI Agents', href: createPageUrl('CustomAgentStudio'), color: 'text-indigo-600 bg-indigo-50 dark:text-indigo-400 dark:bg-indigo-950/50' },
+  { icon: Code, label: 'Observability', href: createPageUrl('Observability'), color: 'text-orange-600 bg-orange-50 dark:text-orange-400 dark:bg-orange-950/50' }];
+
+  const adminCapabilities = user?.role === 'admin' ? [
+    { icon: ShieldCheck, label: 'Admin Dashboard', href: createPageUrl('AdminDashboard'), color: 'text-red-600 bg-red-50 dark:text-red-400 dark:bg-red-950/50' },
+    { icon: ShieldCheck, label: 'Security Center', href: createPageUrl('SecurityCenter'), color: 'text-red-700 bg-red-100 dark:text-red-300 dark:bg-red-900/50' },
+    { icon: Users, label: 'User Management', href: createPageUrl('AdminUserManagement'), color: 'text-blue-600 bg-blue-50 dark:text-blue-400 dark:bg-blue-950/50' },
+    { icon: Brain, label: 'AI Control', href: createPageUrl('AdminAIControl'), color: 'text-purple-600 bg-purple-50 dark:text-purple-400 dark:bg-purple-950/50' },
+    { icon: Rocket, label: 'Deployments', href: createPageUrl('AdminDeployments'), color: 'text-green-600 bg-green-50 dark:text-green-400 dark:bg-green-950/50' },
+    { icon: LayoutTemplate, label: 'Templates', href: createPageUrl('AdminTemplates'), color: 'text-indigo-600 bg-indigo-50 dark:text-indigo-400 dark:bg-indigo-950/50' },
+    { icon: Activity, label: 'Analytics', href: createPageUrl('AdminAnalytics'), color: 'text-orange-600 bg-orange-50 dark:text-orange-400 dark:bg-orange-950/50' }
+  ] : [];
 
 
   const onboardingSteps = [
@@ -415,6 +431,44 @@ export default function Dashboard() {
         </motion.div>
 
         <CapabilityDiscovery />
+
+        {/* Admin Controls */}
+        {user?.role === 'admin' && adminCapabilities.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.35 }}
+            className="space-y-6">
+            <div>
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Admin Controls</h2>
+              <p className="text-sm text-gray-600 dark:text-gray-400">System administration and management</p>
+            </div>
+            <Card className="border-2 border-red-200 dark:border-red-800 bg-gradient-to-br from-red-50 to-orange-50 dark:from-red-950/20 dark:to-orange-950/20 dark:bg-slate-900/50">
+              <CardContent className="p-6">
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+                  {adminCapabilities.map((cap, idx) => (
+                    <Link key={cap.label} to={cap.href}>
+                      <motion.div
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ duration: 0.2, delay: 0.35 + idx * 0.05 }}
+                        className="group">
+                        <div className="flex flex-col items-center gap-3 p-4 rounded-xl hover:bg-white dark:hover:bg-slate-800 transition-all cursor-pointer border-2 border-transparent hover:border-red-200 dark:hover:border-red-700">
+                          <div className={`w-12 h-12 rounded-xl ${cap.color} flex items-center justify-center group-hover:scale-110 transition-transform`}>
+                            <cap.icon className="w-6 h-6" />
+                          </div>
+                          <span className="text-sm font-medium text-gray-700 dark:text-gray-300 text-center group-hover:text-gray-900 dark:group-hover:text-gray-100">
+                            {cap.label}
+                          </span>
+                        </div>
+                      </motion.div>
+                    </Link>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </motion.div>
+        )}
 
         {/* Recent Projects */}
         <motion.div
