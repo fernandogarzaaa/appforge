@@ -62,6 +62,7 @@ Deno.serve(async (req) => {
         // Built-in UI templates
         ui_templates: {
           chat_interface: generateChatUI(agent),
+          file_browser: isCodingAssistant ? generateFileBrowserUI(agent) : null,
           settings_page: generateSettingsUI(agent),
           onboarding: generateOnboardingUI(agent)
         },
@@ -513,23 +514,100 @@ function generateSettingsUI(agent) {
 }
 
 function generateOnboardingUI(agent) {
+  const isCodingAssistant = agent.agent_type === 'coding_assistant';
+  
+  const baseSteps = [
+    {
+      title: "Welcome to " + agent.agent_name,
+      description: "Your personal AI assistant is ready to help!",
+      icon: "🎉"
+    },
+    {
+      title: "Downloading AI Brain",
+      description: "First time setup - downloading the AI model...",
+      icon: "🧠"
+    }
+  ];
+
+  if (isCodingAssistant) {
+    baseSteps.push({
+      title: "File Access Permission",
+      description: "Allow access to your project files? You can change this anytime in settings.",
+      icon: "📁"
+    });
+  }
+
+  baseSteps.push({
+    title: "All Set!",
+    description: isCodingAssistant 
+      ? "Ready to help with your code! Drag files or folders to chat with them."
+      : "You're ready to start chatting. Everything runs privately on your device.",
+    icon: "✅"
+  });
+
+  return { steps: baseSteps };
+}
+
+function generateFileBrowserUI(agent) {
   return {
-    steps: [
-      {
-        title: "Welcome to " + agent.agent_name,
-        description: "Your personal AI assistant is ready to help!",
-        icon: "🎉"
-      },
-      {
-        title: "Downloading AI Brain",
-        description: "First time setup - downloading the AI model...",
-        icon: "🧠"
-      },
-      {
-        title: "All Set!",
-        description: "You're ready to start chatting. Everything runs privately on your device.",
-        icon: "✅"
-      }
+    html: `
+<!DOCTYPE html>
+<html>
+<head>
+  <title>${agent.agent_name} - File Browser</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Segoe UI', Arial, sans-serif; display: flex; height: 100vh; }
+    .sidebar { width: 250px; background: #2c2c2c; color: #fff; padding: 10px; overflow-y: auto; }
+    .file-tree { list-style: none; }
+    .file-item { padding: 5px; cursor: pointer; border-radius: 3px; }
+    .file-item:hover { background: #3c3c3c; }
+    .main-content { flex: 1; display: flex; flex-direction: column; }
+    .toolbar { padding: 10px; background: #f5f5f5; border-bottom: 1px solid #ddd; display: flex; gap: 10px; }
+    .toolbar button { padding: 8px 16px; background: #667eea; color: white; border: none; border-radius: 4px; cursor: pointer; }
+    .editor-chat-container { flex: 1; display: flex; }
+    .editor { flex: 1; padding: 20px; overflow-y: auto; }
+    .chat-panel { width: 400px; border-left: 1px solid #ddd; display: flex; flex-direction: column; }
+    .drop-zone { border: 2px dashed #667eea; border-radius: 8px; padding: 40px; text-align: center; margin: 20px; color: #667eea; }
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <h3 style="padding: 10px 5px;">📁 Files</h3>
+    <ul class="file-tree" id="fileTree">
+      <li class="file-item">📄 index.js</li>
+      <li class="file-item">📄 app.py</li>
+      <li class="file-item">📁 src/</li>
+    </ul>
+  </div>
+  <div class="main-content">
+    <div class="toolbar">
+      <button onclick="openFile()">Open File</button>
+      <button onclick="openFolder()">Open Folder</button>
+      <button onclick="newFile()">New File</button>
+    </div>
+    <div class="editor-chat-container">
+      <div class="editor">
+        <div class="drop-zone">
+          <p style="font-size: 18px; margin-bottom: 10px;">Drop files here</p>
+          <p style="font-size: 14px; opacity: 0.7;">or click Open File/Folder above</p>
+        </div>
+      </div>
+      <div class="chat-panel">
+        <!-- Chat interface integrated here -->
+      </div>
+    </div>
+  </div>
+</body>
+</html>
+    `,
+    features: [
+      'File tree navigation',
+      'Drag and drop files',
+      'Real-time code editing',
+      'AI chat sidebar',
+      'Syntax highlighting',
+      'Multi-file support'
     ]
   };
 }

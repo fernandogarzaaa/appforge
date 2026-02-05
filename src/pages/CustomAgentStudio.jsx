@@ -8,7 +8,8 @@ import CustomAgentBuilder from '@/components/ai/CustomAgentBuilder';
 import CustomAgentTrainer from '@/components/ai/CustomAgentTrainer';
 import AgentVersionHistory from '@/components/versioning/AgentVersionHistory';
 import OfflineAgentExporter from '@/components/ai/OfflineAgentExporter';
-import { Sparkles, Plus, Save, Download } from 'lucide-react';
+import ClawdBotBuilder from '@/components/ai/ClawdBotBuilder';
+import { Sparkles, Plus, Save, Download, Code } from 'lucide-react';
 
 export default function CustomAgentStudio() {
   const [user, setUser] = useState(null);
@@ -100,9 +101,10 @@ export default function CustomAgentStudio() {
         </div>
 
         <Tabs defaultValue="manage" className="space-y-4">
-          <TabsList className="grid w-full grid-cols-2">
+          <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="manage">My Agents</TabsTrigger>
-            <TabsTrigger value="create">Create New</TabsTrigger>
+            <TabsTrigger value="coding">Coding Assistant</TabsTrigger>
+            <TabsTrigger value="create">Custom Agent</TabsTrigger>
           </TabsList>
 
           {/* Manage Agents */}
@@ -193,6 +195,16 @@ export default function CustomAgentStudio() {
                 ))}
               </div>
             )}
+          </TabsContent>
+
+          {/* Coding Assistant */}
+          <TabsContent value="coding">
+            <ClawdBotBuilder
+              userEmail={user?.email}
+              onAgentCreated={() => {
+                loadAgents();
+              }}
+            />
           </TabsContent>
 
           {/* Create New */}
