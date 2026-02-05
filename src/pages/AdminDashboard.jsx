@@ -139,6 +139,14 @@ export default function AdminDashboard() {
       href: createPageUrl('AdminAnalytics'),
       color: 'from-yellow-500 to-orange-600',
       stat: '↑ 24%'
+    },
+    {
+      title: 'Agents & Permissions',
+      description: 'Control AI agents and admin access',
+      icon: Zap,
+      href: createPageUrl('AdminAgents'),
+      color: 'from-indigo-500 to-blue-600',
+      stat: '8 Active'
     }
   ];
 
