@@ -352,7 +352,7 @@ export default function Dashboard() {
           className="mb-12">
 
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-bold text-gray-900">Your Workspace</h2>
+            <h2 className="text-2xl font-bold text-gray-900 mb-6">Your Workspace</h2>
             <Link to={createPageUrl('Projects') + '?new=true'}>
               <Button className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white shadow-lg shadow-indigo-500/30">
                 <Plus className="w-4 h-4 mr-2" />
