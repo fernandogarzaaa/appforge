@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
-import { Sparkles, Zap, Copy, Play } from 'lucide-react';
+import { Sparkles, Copy } from 'lucide-react';
 import { toast } from 'sonner';
 import { motion } from 'framer-motion';
 

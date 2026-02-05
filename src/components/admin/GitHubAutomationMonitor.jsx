@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Github, RefreshCw, CheckCircle, AlertCircle, Clock, TrendingUp } from 'lucide-react';
+import { Github, RefreshCw, CheckCircle, AlertCircle, Clock } from 'lucide-react';
 import { format } from 'date-fns';
 
 export default function GitHubAutomationMonitor() {

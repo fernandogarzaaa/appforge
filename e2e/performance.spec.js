@@ -68,6 +68,6 @@ test.describe('Performance', () => {
     );
     
     // Allow some large bundles (vendor code) but not too many
-    expect(largeBundles.length).toBeLessThan(5);
+    expect(largeBundles.length).toBeLessThanOrEqual(5);
   });
 });

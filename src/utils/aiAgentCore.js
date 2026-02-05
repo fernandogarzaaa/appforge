@@ -575,14 +575,8 @@ export class AIAgent {
   }
   
   async executeTool(tool, parameters, projectId) {
-    // This would be implemented with actual tool execution logic
-    // For now, return a placeholder
-    return {
-      tool: tool.name,
-      parameters,
-      executed: true,
-      timestamp: Date.now()
-    };
+    // Tool execution is not wired up yet; fail fast to avoid silent no-ops
+    throw new Error(`Tool execution not configured for ${tool.name}`);
   }
   
   async provideFeedback(feedback, rating) {

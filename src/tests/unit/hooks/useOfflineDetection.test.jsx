@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
-import { renderHook, waitFor } from '@testing-library/react'
+import { renderHook, waitFor, act } from '@testing-library/react'
 import { useOfflineDetection } from '@/hooks/useOfflineDetection'
 
 describe('useOfflineDetection', () => {
@@ -30,8 +30,10 @@ describe('useOfflineDetection', () => {
       value: false,
     })
     
-    // Trigger offline event
-    window.dispatchEvent(new Event('offline'))
+    // Trigger offline event within act to flush updates
+    act(() => {
+      window.dispatchEvent(new Event('offline'))
+    })
     
     // Wait for state update
     await waitFor(() => {
@@ -47,7 +49,9 @@ describe('useOfflineDetection', () => {
       writable: true,
       value: false,
     })
-    window.dispatchEvent(new Event('offline'))
+    act(() => {
+      window.dispatchEvent(new Event('offline'))
+    })
     
     await waitFor(() => {
       expect(result.current).toBe(false)
@@ -58,7 +62,9 @@ describe('useOfflineDetection', () => {
       writable: true,
       value: true,
     })
-    window.dispatchEvent(new Event('online'))
+    act(() => {
+      window.dispatchEvent(new Event('online'))
+    })
     
     await waitFor(() => {
       expect(result.current).toBe(true)

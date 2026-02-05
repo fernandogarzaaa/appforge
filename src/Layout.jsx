@@ -66,11 +66,18 @@ export default function Layout({ children, currentPageName: _currentPageName, on
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const { isDark, toggleTheme } = useThemeManager();
   const { selectProject, clearProject } = useNavigation();
+  const isE2EAuthBypass = import.meta.env.VITE_E2E_AUTH_BYPASS === 'true';
 
   useEffect(() => {
+    if (isE2EAuthBypass) {
+      setUser({ id: 'e2e-user', name: 'E2E User' });
+      setCurrentProject(null);
+      return;
+    }
+
     loadUser();
     loadCurrentProject();
-  }, []);
+  }, [isE2EAuthBypass]);
 
   const loadUser = async () => {
     const userData = await base44.auth.me();

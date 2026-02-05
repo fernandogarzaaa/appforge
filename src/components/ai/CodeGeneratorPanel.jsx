@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { base44 } from '@/api/base44Client';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Sparkles, Copy, Check, Code2, Database, FileCode, Zap, AlertCircle, Loader2 } from 'lucide-react';
+import { Sparkles, Copy, Check, Code2, Database, FileCode, AlertCircle, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 
 export default function CodeGeneratorPanel({ isOpen, onClose, entity, page }) {

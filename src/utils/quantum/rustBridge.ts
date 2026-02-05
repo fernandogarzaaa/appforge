@@ -46,7 +46,7 @@ export const validateWithRust = async (modelResponses: QuantumModelResponse[]) =
   return qState.measure_probability();
 };
 
-// Simple text similarity placeholder (Jaccard-style token overlap)
+// Lightweight token-overlap similarity used when WASM is available
 const calculateSimilarity = (textA: string, textB: string): number => {
   const aTokens = tokenize(textA);
   const bTokens = tokenize(textB);

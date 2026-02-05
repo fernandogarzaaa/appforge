@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { DollarSign, Zap, Users } from 'lucide-react';
+import { Zap } from 'lucide-react';
 
 export default function SubscriptionPlanManager() {
   const plans = [

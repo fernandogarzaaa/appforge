@@ -68,10 +68,14 @@ export default function SocialMediaHub() {
 
   const queryClient = useQueryClient();
 
+  const enableMocks = import.meta.env.VITE_ENABLE_SOCIAL_MOCKS === 'true';
+
   const { data: posts = [], isLoading } = useQuery({
     queryKey: ['social-posts', projectId],
     queryFn: async () => {
-      // Mock data for demo
+      if (!enableMocks) {
+        return [];
+      }
       return [
         { id: 1, content: 'Check out our new feature!', platforms: ['twitter', 'linkedin'], scheduled_time: new Date().toISOString(), status: 'scheduled', engagement: { likes: 45, shares: 12, views: 230 } },
         { id: 2, content: 'Behind the scenes at our office', platforms: ['instagram', 'facebook'], scheduled_time: null, status: 'published', engagement: { likes: 128, shares: 34, views: 890 } }
@@ -82,12 +86,17 @@ export default function SocialMediaHub() {
 
   const { data: analytics = {} } = useQuery({
     queryKey: ['social-analytics', projectId],
-    queryFn: async () => ({
-      total_posts: 47,
-      total_engagement: 2340,
-      total_reach: 15600,
-      engagement_rate: 15.2
-    }),
+    queryFn: async () => {
+      if (!enableMocks) {
+        return { total_posts: 0, total_engagement: 0, total_reach: 0, engagement_rate: 0 };
+      }
+      return {
+        total_posts: 47,
+        total_engagement: 2340,
+        total_reach: 15600,
+        engagement_rate: 15.2
+      };
+    },
     enabled: !!projectId
   });
 

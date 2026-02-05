@@ -12,3 +12,15 @@ export const base44 = createClient({
   requiresAuth: false,
   appBaseUrl
 });
+
+// In test environments, silence outbound analytics calls to avoid jsdom network errors
+if (typeof process !== 'undefined' && process.env?.NODE_ENV === 'test') {
+  const noop = async () => ({ skipped: true });
+  if (base44.analytics) {
+    base44.analytics.capture = noop;
+    base44.analytics.flush = noop;
+  }
+  if (base44.log) {
+    base44.log = () => {};
+  }
+}

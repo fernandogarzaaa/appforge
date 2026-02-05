@@ -11,7 +11,7 @@ import OfflineAgentExporter from '@/components/ai/OfflineAgentExporter';
 import ClawdBotBuilder from '@/components/ai/ClawdBotBuilder';
 import CodeReviewPanel from '@/components/ai/CodeReviewPanel';
 import SuperiorAIStudio from '@/components/ai/SuperiorAIStudio';
-import { Sparkles, Plus, Save, Download, Code } from 'lucide-react';
+import { Sparkles, Plus, Save, Download } from 'lucide-react';
 
 export default function CustomAgentStudio() {
   const [user, setUser] = useState(null);

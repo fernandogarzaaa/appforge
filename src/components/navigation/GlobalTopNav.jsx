@@ -15,11 +15,18 @@ import {
 
 export default function GlobalTopNav({ user, onLogout, isDark, onThemeToggle, mobileMenu }) {
   return (
-    <div className="border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900">
+    <nav role="navigation" aria-label="Primary Navigation" className="border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900">
       <div className="px-4 sm:px-6 h-14 flex items-center justify-between">
-        {/* Mobile Menu Button */}
-        <div className="md:hidden">
-          {mobileMenu}
+        <div className="flex items-center gap-3">
+          {/* Mobile Menu Button */}
+          <div className="md:hidden">
+            {mobileMenu}
+          </div>
+
+          {/* Brand / heading for accessibility and E2E checks */}
+          <h1 className="text-sm font-semibold text-gray-900 dark:text-gray-100 whitespace-nowrap">
+            AppForge
+          </h1>
         </div>
 
         {/* Search Command Palette */}
@@ -73,6 +80,6 @@ export default function GlobalTopNav({ user, onLogout, isDark, onThemeToggle, mo
           )}
         </div>
       </div>
-    </div>
+    </nav>
   );
 }

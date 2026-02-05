@@ -12,9 +12,7 @@ import {
   Clock,
   CheckCircle2,
   AlertCircle,
-  TrendingUp,
   RefreshCw,
-  Trash2,
   Download
 } from 'lucide-react';
 import { toast } from 'sonner';

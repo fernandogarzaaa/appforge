@@ -12,14 +12,17 @@ export function initializeSentry() {
   const isDevelopment = import.meta.env.DEV;
   const isProduction = import.meta.env.PROD;
   
-  // Get DSN from environment, with fallback for free tier
-  const dsn = import.meta.env.VITE_SENTRY_DSN || 
-    process.env.VITE_SENTRY_DSN || 
-    'https://examplePublicKey@o0.ingest.sentry.io/0'; // Free tier placeholder
+  // Get DSN from environment; do not fall back to placeholder
+  const dsn = import.meta.env.VITE_SENTRY_DSN || process.env.VITE_SENTRY_DSN;
 
   // Only initialize in production or if explicitly enabled
   if (!isProduction && !import.meta.env.VITE_SENTRY_ENABLED) {
     console.log('[Sentry] Disabled in development (set VITE_SENTRY_ENABLED=true to enable)');
+    return null;
+  }
+
+  if (!dsn) {
+    console.warn('[Sentry] DSN not configured; skipping initialization');
     return null;
   }
 

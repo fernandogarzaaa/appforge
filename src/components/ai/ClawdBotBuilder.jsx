@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
 import { Switch } from '@/components/ui/switch';
-import { Code, FileText, Terminal, Folder, Download, Sparkles } from 'lucide-react';
+import { Code, Terminal, Folder, Sparkles } from 'lucide-react';
 
 export default function ClawdBotBuilder({ userEmail, onAgentCreated }) {
   const [formData, setFormData] = useState({

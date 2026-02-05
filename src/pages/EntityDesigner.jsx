@@ -2,8 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { base44 } from '@/api/base44Client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { 
-  Database, Plus, Save, Trash2, Copy, Search,
-  Table, MoreHorizontal, ChevronRight, ChevronLeft
+  Database, Plus, Save, Trash2, Copy, Search, MoreHorizontal, ChevronRight, ChevronLeft
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -26,7 +25,6 @@ import {
 } from '@/components/ui/dropdown-menu';
 import FieldEditor from '@/components/entity/FieldEditor';
 import EmptyState from '@/components/common/EmptyState';
-import PaginationControls from '@/components/common/PaginationControls';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';

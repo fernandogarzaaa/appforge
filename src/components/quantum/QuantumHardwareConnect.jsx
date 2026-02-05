@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Zap, Cloud, Server, AlertCircle, CheckCircle2 } from 'lucide-react';
+import { Zap, Cloud, Server } from 'lucide-react';
 import { toast } from 'sonner';
 
 export default function QuantumHardwareConnect() {

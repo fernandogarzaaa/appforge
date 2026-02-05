@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, useEffect } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -10,7 +10,7 @@ import { toast } from 'sonner'
  * QuantumCircuitVisualizer - Interactive quantum circuit visualization
  * Allows users to build and visualize quantum circuits with drag-and-drop gates
  */
-export function QuantumCircuitVisualizer({ initialQubits = 3, onCircuitChange: _onCircuitChange }) {
+export function QuantumCircuitVisualizer({ initialQubits = 3, onCircuitChange }) {
   const [qubits, setQubits] = useState(initialQubits)
   const [gates, setGates] = useState([])
   const [selectedGate, setSelectedGate] = useState(null)
@@ -136,11 +136,18 @@ export function QuantumCircuitVisualizer({ initialQubits = 3, onCircuitChange: _
     }
   }, [qubits, gates])
 
-  // Calculate total gates and circuit depth
+  // Calculate circuit metrics for downstream consumers and callback
   const totalGates = gates.length
   const circuitDepth = gates.length > 0 ? Math.max(...gates.map(g => g.position)) + 1 : 0
   const entanglementCount = gates.filter(g => g.name === 'CNOT' || g.name === 'SWAP').length
 
+  useEffect(() => {
+    if (typeof onCircuitChange === 'function') {
+      onCircuitChange({ qubits, gates, depth: circuitDepth, entanglementCount })
+    }
+  }, [qubits, gates, circuitDepth, entanglementCount, onCircuitChange])
+
+  // Calculate total gates and circuit depth
   return (
     <div className="space-y-4">
       <Card>

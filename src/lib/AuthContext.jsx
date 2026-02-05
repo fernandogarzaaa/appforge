@@ -12,10 +12,29 @@ export const AuthProvider = ({ children }) => {
   const [isLoadingPublicSettings, setIsLoadingPublicSettings] = useState(true);
   const [authError, setAuthError] = useState(null);
   const [appPublicSettings, setAppPublicSettings] = useState(null); // Contains only { id, public_settings }
+  const isE2EAuthBypass = import.meta.env.VITE_E2E_AUTH_BYPASS === 'true';
 
   useEffect(() => {
+    if (isE2EAuthBypass) {
+      // Short-circuit auth for E2E and local smoke runs
+      const mockUser = {
+        id: 'e2e-user',
+        email: 'e2e@example.com',
+        name: 'E2E User',
+        roles: ['admin']
+      };
+
+      setUser(mockUser);
+      setIsAuthenticated(true);
+      setIsLoadingAuth(false);
+      setIsLoadingPublicSettings(false);
+      setAuthError(null);
+      setAppPublicSettings({ id: 'e2e-app', public_settings: {} });
+      return;
+    }
+
     checkAppState();
-  }, []);
+  }, [isE2EAuthBypass]);
 
   const checkAppState = async () => {
     console.log('[AuthContext] Starting app state check...');

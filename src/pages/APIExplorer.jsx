@@ -18,8 +18,9 @@ const popularAPIs = [
   { name: 'News API', category: 'News', description: 'News articles and headlines', url: 'https://newsapi.org', free: true },
   { name: 'GitHub', category: 'Dev Tools', description: 'Repository and user data', url: 'https://docs.github.com/en/rest', free: true },
   { name: 'Unsplash', category: 'Media', description: 'Free stock photos', url: 'https://unsplash.com/developers', free: true },
-  { name: 'JSONPlaceholder', category: 'Testing', description: 'Fake REST API for testing', url: 'https://jsonplaceholder.typicode.com', free: true },
-  { name: 'Cat Facts', category: 'Fun', description: 'Random cat facts', url: 'https://catfact.ninja', free: true }
+  { name: 'Cat Facts', category: 'Fun', description: 'Random cat facts', url: 'https://catfact.ninja', free: true },
+  { name: 'Open Meteo', category: 'Weather', description: 'Free weather forecast API', url: 'https://open-meteo.com/en/docs', free: true },
+  { name: 'Hacker News', category: 'News', description: 'Public Hacker News data API', url: 'https://github.com/HackerNews/API', free: true }
 ];
 
 export default function APIExplorer() {

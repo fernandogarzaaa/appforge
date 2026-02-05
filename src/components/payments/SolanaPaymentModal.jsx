@@ -21,7 +21,15 @@ export default function SolanaPaymentModal({
   useEffect(() => {
     const phantom = window.solana?.isPhantom;
     setIsPhantom(!!phantom);
-  }, []);
+  }, [isOpen]);
+
+  useEffect(() => {
+    if (!isOpen) {
+      setStatus('ready');
+      setErrorMsg('');
+      setTxSignature('');
+    }
+  }, [isOpen]);
 
   const handlePayment = async () => {
     try {
@@ -46,10 +54,10 @@ export default function SolanaPaymentModal({
       }
 
       const adminWallet = configs[0].wallet_address;
-      const network = configs[0].network;
+      const network = configs[0].network || 'devnet';
 
       // Create transaction
-      const { Connection, PublicKey, SystemProgram, Transaction } = await import('npm:@solana/web3.js@1.92.0');
+      const { Connection, PublicKey, SystemProgram, Transaction } = await import('@solana/web3.js');
       
       const rpcUrl = network === 'mainnet-beta' 
         ? 'https://api.mainnet-beta.solana.com'
@@ -63,7 +71,7 @@ export default function SolanaPaymentModal({
       
       const lamports = Math.round(amount * 1000000000);
 
-      const { blockhash } = await connection.getLatestBlockhash();
+      const { blockhash } = await connection.getLatestBlockhash('confirmed');
       const transaction = new Transaction({
         recentBlockhash: blockhash,
         feePayer: fromPubkey,
