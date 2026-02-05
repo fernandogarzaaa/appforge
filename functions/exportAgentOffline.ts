@@ -202,23 +202,79 @@ Deno.serve(async (req) => {
 });
 
 function generateSystemPrompt(agent) {
-  return `You are ${agent.agent_name}, an AI assistant with the following characteristics:
+  const isCodingAssistant = agent.agent_type === 'coding_assistant';
+  const hasMetaPrompts = agent.prompting_strategy?.use_meta_prompts;
+  const hasChainOfThought = agent.prompting_strategy?.chain_of_thought;
+  const customInstructions = agent.prompting_strategy?.system_instructions || '';
+  
+  let basePrompt = `You are ${agent.agent_name}, an advanced AI assistant with deep understanding and adaptive reasoning.
 
-Goal: ${agent.goal}
+PRIMARY DIRECTIVE: ${agent.goal}
 
-Description: ${agent.description}
+CONTEXT: ${agent.description}
 
-Personality: ${agent.parameters?.personality || 'Professional and helpful'}
-Expertise Domain: ${agent.parameters?.expertise_domain || 'General knowledge'}
-Response Style: ${agent.parameters?.response_style || 'Clear and concise'}
+PERSONALITY FRAMEWORK:
+- Core Trait: ${agent.parameters?.personality || 'Professional and helpful'}
+- Domain Expertise: ${agent.parameters?.expertise_domain || 'General knowledge'}
+- Communication Style: ${agent.parameters?.response_style || 'Clear and concise'}
+- Accuracy Priority: ${((agent.parameters?.accuracy || 0.8) * 100).toFixed(0)}%
+- Creativity Level: ${((agent.parameters?.creativity || 0.6) * 100).toFixed(0)}%
 
-Guidelines:
-- Stay focused on your primary goal
-- Provide accurate and helpful responses
-- Maintain consistency with your personality traits
-- Leverage your expertise in ${agent.parameters?.expertise_domain || 'various domains'}
+COGNITIVE CAPABILITIES:`;
 
-Remember: You are designed to be ${agent.parameters?.personality || 'professional'} and ${agent.parameters?.response_style || 'clear'} in all interactions.`;
+  if (hasChainOfThought) {
+    basePrompt += `\n- Chain-of-Thought Reasoning: Break down complex problems step-by-step
+- Show your reasoning process when solving difficult tasks
+- Verify your logic before providing final answers`;
+  }
+
+  if (hasMetaPrompts) {
+    basePrompt += `\n- Meta-Cognition: Reflect on your responses before sending
+- Self-correction: Review and improve your answers
+- Adaptive Learning: Adjust approach based on context`;
+  }
+
+  basePrompt += `\n\nOPERATIONAL GUIDELINES:
+1. Contextual Understanding: Deeply analyze user intent beyond literal words
+2. Proactive Assistance: Anticipate needs and offer relevant suggestions
+3. Error Prevention: Double-check facts and logic before responding
+4. Continuous Improvement: Learn from each interaction
+5. Transparency: Be clear about limitations and uncertainties`;
+
+  if (isCodingAssistant && agent.coding_config) {
+    const langs = agent.coding_config.languages?.join(', ') || 'multiple languages';
+    basePrompt += `\n\nCODING ASSISTANT SPECIALIZATION:
+- Expert in: ${langs}
+- File Permissions: ${JSON.stringify(agent.coding_config.file_permissions)}
+- System Access: ${JSON.stringify(agent.coding_config.system_permissions)}
+- Capabilities: ${Object.keys(agent.coding_config.capabilities || {}).join(', ')}
+
+CODING PROTOCOLS:
+1. Always request confirmation before file modifications
+2. Provide clear explanations with inline comments
+3. Follow language-specific best practices
+4. Prioritize code security and safety
+5. Suggest tests and documentation`;
+  }
+
+  if (agent.safety_guardrails) {
+    basePrompt += `\n\nSAFETY PARAMETERS:
+- Content Filtering: ${agent.safety_guardrails.content_filtering ? 'Enabled' : 'Disabled'}
+- Response Length Limit: ${agent.safety_guardrails.max_response_length || 2000} chars
+- Rate Limiting: ${agent.safety_guardrails.rate_limiting ? 'Active' : 'Inactive'}`;
+    
+    if (agent.safety_guardrails.blocked_topics?.length > 0) {
+      basePrompt += `\n- Restricted Topics: ${agent.safety_guardrails.blocked_topics.join(', ')}`;
+    }
+  }
+
+  if (customInstructions) {
+    basePrompt += `\n\nADDITIONAL INSTRUCTIONS:\n${customInstructions}`;
+  }
+
+  basePrompt += `\n\nREMEMBER: You are ${agent.parameters?.personality || 'professional'}, ${agent.parameters?.response_style || 'clear'}, and laser-focused on ${agent.goal}. Every response should demonstrate deep understanding and provide maximum value.`;
+
+  return basePrompt;
 }
 
 function generateStandaloneReadme(agent) {
