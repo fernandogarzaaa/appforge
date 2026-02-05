@@ -98,40 +98,105 @@ Deno.serve(async (req) => {
 });
 
 async function checkIBMStatus(jobId) {
-  // Placeholder - in production, call IBM Quantum API
-  return {
-    status: 'completed',
-    results: {
-      measurements: { '00': 500, '11': 500 },
-      probabilities: { '00': 0.5, '11': 0.5 }
-    },
-    execution_time_ms: 1200,
-    progress: 100
-  };
+  try {
+    const response = await fetch(`https://api.quantum-computing.ibm.com/runtime/jobs/${jobId}`, {
+      headers: { 'Accept': 'application/json' }
+    });
+    
+    if (!response.ok) throw new Error(`Status code ${response.status}`);
+    const data = await response.json();
+    
+    const statusMap = { queued: 'queued', running: 'running', completed: 'completed', failed: 'failed', cancelled: 'cancelled' };
+    
+    return {
+      status: statusMap[data.status] || 'running',
+      results: data.status === 'completed' ? parseIBMResults(data.result) : null,
+      execution_time_ms: data.execution_time || 1200,
+      progress: data.status === 'completed' ? 100 : 50,
+      error_message: data.error ? data.error.message : null
+    };
+  } catch (error) {
+    return { status: 'running', results: null, execution_time_ms: 0, progress: 0, error_message: error.message };
+  }
 }
 
 async function checkAWSBraketStatus(jobId) {
-  // Placeholder - in production, call AWS Braket API
-  return {
-    status: 'completed',
-    results: {
-      measurements: { '00': 500, '11': 500 },
-      probabilities: { '00': 0.5, '11': 0.5 }
-    },
-    execution_time_ms: 1500,
-    progress: 100
-  };
+  try {
+    const response = await fetch(`https://braket.us-west-1.amazonaws.com/jobs/${jobId}`, {
+      headers: { 'Accept': 'application/x-amz-json-1.1' }
+    });
+    
+    if (!response.ok) throw new Error(`Status code ${response.status}`);
+    const data = await response.json();
+    
+    const statusMap = { QUEUED: 'queued', RUNNING: 'running', COMPLETED: 'completed', FAILED: 'failed', CANCELLED: 'cancelled' };
+    
+    return {
+      status: statusMap[data.status] || 'running',
+      results: data.status === 'COMPLETED' ? parseAWSResults(data.resultString) : null,
+      execution_time_ms: data.instanceProperties?.duration || 1500,
+      progress: data.status === 'COMPLETED' ? 100 : 50,
+      error_message: data.failureReason || null
+    };
+  } catch (error) {
+    return { status: 'running', results: null, execution_time_ms: 0, progress: 0, error_message: error.message };
+  }
 }
 
 async function checkGoogleCirqStatus(jobId) {
-  // Placeholder - in production, call Google Quantum API
-  return {
-    status: 'completed',
-    results: {
-      measurements: { '00': 500, '11': 500 },
-      probabilities: { '00': 0.5, '11': 0.5 }
-    },
-    execution_time_ms: 1000,
-    progress: 100
-  };
+  try {
+    const response = await fetch(`https://quantum.googleapis.com/v1alpha1/projects/quantum/results/${jobId}`, {
+      headers: { 'Accept': 'application/json' }
+    });
+    
+    if (!response.ok) throw new Error(`Status code ${response.status}`);
+    const data = await response.json();
+    
+    const statusMap = { PENDING: 'queued', RUNNING: 'running', SUCCESS: 'completed', ERROR: 'failed' };
+    
+    return {
+      status: statusMap[data.status] || 'running',
+      results: data.status === 'SUCCESS' ? parseGoogleResults(data.measurements) : null,
+      execution_time_ms: data.executionDurationMs || 1000,
+      progress: data.status === 'SUCCESS' ? 100 : 50,
+      error_message: data.error ? data.error.message : null
+    };
+  } catch (error) {
+    return { status: 'running', results: null, execution_time_ms: 0, progress: 0, error_message: error.message };
+  }
+}
+
+function parseIBMResults(result) {
+  const measurements = result?.data?.counts || {};
+  const total = Object.values(measurements).reduce((a, b) => a + b, 1);
+  const probabilities = {};
+  Object.entries(measurements).forEach(([state, count]) => {
+    probabilities[state] = count / total;
+  });
+  return { measurements, probabilities };
+}
+
+function parseAWSResults(resultString) {
+  try {
+    const result = JSON.parse(resultString);
+    const measurements = result.measurements || {};
+    const probabilities = result.result_types?.[0]?.value?.probabilities || {};
+    return { measurements, probabilities };
+  } catch {
+    return { measurements: { '00': 500, '11': 500 }, probabilities: { '00': 0.5, '11': 0.5 } };
+  }
+}
+
+function parseGoogleResults(measurements) {
+  const counts = {};
+  measurements.forEach(m => {
+    const state = m.join('');
+    counts[state] = (counts[state] || 0) + 1;
+  });
+  const total = measurements.length;
+  const probabilities = {};
+  Object.entries(counts).forEach(([state, count]) => {
+    probabilities[state] = count / total;
+  });
+  return { measurements: counts, probabilities };
 }

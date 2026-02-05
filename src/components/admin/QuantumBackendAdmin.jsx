@@ -54,6 +54,33 @@ export default function QuantumBackendAdmin() {
     onError: (err) => toast.error(err.message)
   });
 
+  const testMutation = useMutation({
+    mutationFn: async (config) => {
+      const testCircuit = { qubits: 2, gates: [{ type: 'H', targets: [0] }, { type: 'CNOT', targets: [0, 1] }] };
+      const response = await base44.functions.invoke('submitQuantumJob', {
+        circuit_data: testCircuit,
+        backend: config.backend_name,
+        shots: 100
+      });
+      return response.data;
+    },
+    onSuccess: (data, config) => {
+      queryClient.invalidateQueries({ queryKey: ['quantum_backend_configs'] });
+      updateMutation.mutate({
+        id: config.id,
+        data: { test_status: 'success', last_tested: new Date().toISOString() }
+      });
+      toast.success('Backend test passed');
+    },
+    onError: (err, config) => {
+      updateMutation.mutate({
+        id: config.id,
+        data: { test_status: 'failed', last_tested: new Date().toISOString() }
+      });
+      toast.error(`Backend test failed: ${err.message}`);
+    }
+  });
+
   const backendOptions = [
     { name: 'ibm_quantum', label: 'IBM Quantum', qubits: 127 },
     { name: 'aws_braket', label: 'AWS Braket', qubits: 30 },
@@ -217,9 +244,10 @@ export default function QuantumBackendAdmin() {
                         size="sm"
                         variant="outline"
                         className="text-xs"
-                        disabled={!config.is_configured}
+                        disabled={!config.is_configured || testMutation.isPending}
+                        onClick={() => testMutation.mutate(config)}
                       >
-                        <TestTube className="w-3 h-3" /> Test
+                        <TestTube className="w-3 h-3" /> {testMutation.isPending ? 'Testing...' : 'Test'}
                       </Button>
                       <Button
                         size="sm"
