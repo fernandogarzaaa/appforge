@@ -208,10 +208,10 @@ export default function Dashboard() {
           </div>
         </CardContent>
       </Card>
-    </motion.div>;
+    </motion.div>, [ideaInput]);
 
 
-  const SmartRecommendations = () =>
+  const SmartRecommendations = React.useMemo(() =>
   <motion.div
     initial={{ opacity: 0, y: 20 }}
     animate={{ opacity: 1, y: 0 }}
@@ -263,7 +263,7 @@ export default function Dashboard() {
     </motion.div>;
 
 
-  const CapabilityDiscovery = () =>
+  const CapabilityDiscovery = React.useMemo(() =>
   <motion.div
     initial={{ opacity: 0, y: 20 }}
     animate={{ opacity: 1, y: 0 }}
@@ -299,10 +299,10 @@ export default function Dashboard() {
           </div>
         </CardContent>
       </Card>
-    </motion.div>;
+    </motion.div>, []);
 
 
-  const OnboardingTour = () =>
+  const OnboardingTour = React.useMemo(() =>
   <motion.div
     initial={{ opacity: 0, y: 20 }}
     animate={{ opacity: 1, y: 0 }}
@@ -336,7 +336,7 @@ export default function Dashboard() {
           </Link>
       )}
       </div>
-    </motion.div>;
+    </motion.div>, []);
 
 
   return (
