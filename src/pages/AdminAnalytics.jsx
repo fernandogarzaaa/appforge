@@ -56,11 +56,11 @@ export default function AdminAnalytics() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-purple-50 p-6">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-purple-50 dark:from-slate-950 dark:to-purple-950/20 p-6">
       <div className="max-w-7xl mx-auto space-y-6">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Platform Analytics</h1>
-          <p className="text-gray-600 mt-1">Usage metrics and insights</p>
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">Platform Analytics</h1>
+          <p className="text-gray-600 dark:text-gray-400 mt-1">Usage metrics and insights</p>
         </div>
 
         {/* KPIs */}
