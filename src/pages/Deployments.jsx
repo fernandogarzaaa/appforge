@@ -1,4 +1,5 @@
 import React from 'react';
+import { base44 } from '@/api/base44Client';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
@@ -8,37 +9,87 @@ import { DeploymentFilters } from '@/components/deployment/DeploymentFilters';
 import { Activity, TrendingUp, CheckCircle2, AlertCircle } from 'lucide-react';
 
 export default function DeploymentsPage({ projectId = 'proj_default' }) {
-  const {
-    deployments,
-    allDeployments,
-    isLoading,
-    error,
-    filters,
-    updateFilter,
-    clearFilters,
-    rollback,
-    cancel,
-    getDeploymentLogs
-  } = useDeployments(projectId);
+  const queryClient = useQueryClient();
 
-  const stats = calculateDeploymentStats(allDeployments);
+  const { data: deployments = [], isLoading, error } = useQuery({
+    queryKey: ['deployments'],
+    queryFn: async () => {
+      try {
+        const result = await base44.entities.AgentDeployment.list('-deployed_at');
+        return result || [];
+      } catch (err) {
+        console.error('Failed to fetch deployments:', err);
+        return [];
+      }
+    },
+    refetchInterval: 10000
+  });
 
-  const handleRollback = async (deploymentId, previousVersion) => {
+  const rollbackMutation = useMutation({
+    mutationFn: async ({ deploymentId, previousVersion }) => {
+      return base44.entities.AgentDeployment.update(deploymentId, {
+        status: 'inactive',
+        rollback_to: previousVersion
+      });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['deployments'] });
+      toast.success('Rollback initiated');
+    },
+    onError: (error) => {
+      toast.error('Rollback failed: ' + error.message);
+    }
+  });
+
+  const cancelMutation = useMutation({
+    mutationFn: async (deploymentId) => {
+      return base44.entities.AgentDeployment.update(deploymentId, {
+        status: 'failed',
+        deployment_logs: 'Deployment cancelled by user'
+      });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['deployments'] });
+      toast.success('Deployment cancelled');
+    },
+    onError: (error) => {
+      toast.error('Cancel failed: ' + error.message);
+    }
+  });
+
+  const getDeploymentLogs = async (deploymentId) => {
     try {
-      await rollback(deploymentId, previousVersion);
-      toast.success(`Rolled back to ${previousVersion}`);
-    } catch (err) {
-      toast.error('Failed to rollback: ' + err.message);
+      const deps = await base44.entities.AgentDeployment.filter({ id: deploymentId });
+      if (deps.length > 0) {
+        const logs = deps[0].deployment_logs || 'No logs available';
+        return logs.split('\n');
+      }
+      return ['No logs available'];
+    } catch (error) {
+      console.error('Failed to fetch logs:', error);
+      return ['Failed to load logs'];
     }
   };
 
+  const stats = {
+    total: deployments.length,
+    successful: deployments.filter(d => d.status === 'active' || d.status === 'completed').length,
+    failed: deployments.filter(d => d.status === 'failed').length,
+    successRate: deployments.length > 0 
+      ? Math.round((deployments.filter(d => d.status === 'active' || d.status === 'completed').length / deployments.length) * 100) 
+      : 0
+  };
+
+  const [filters, setFilters] = React.useState({ status: 'all', environment: 'all', branch: 'all' });
+  const updateFilter = (key, value) => setFilters({ ...filters, [key]: value });
+  const clearFilters = () => setFilters({ status: 'all', environment: 'all', branch: 'all' });
+
+  const handleRollback = async (deploymentId, previousVersion) => {
+    rollbackMutation.mutate({ deploymentId, previousVersion });
+  };
+
   const handleCancel = async (deploymentId) => {
-    try {
-      await cancel(deploymentId);
-      toast.success('Deployment cancelled');
-    } catch (err) {
-      toast.error('Failed to cancel: ' + err.message);
-    }
+    cancelMutation.mutate(deploymentId);
   };
 
   return (
