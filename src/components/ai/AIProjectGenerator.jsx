@@ -57,14 +57,19 @@ export default function AIProjectGenerator({ isOpen, onClose, onProjectCreated }
   const handleCreateProject = async () => {
     try {
       setIsLoading(true);
-      // Project already created during generation, just redirect
-      setStep('success');
-      setTimeout(() => {
-        onProjectCreated?.(generatedData.project);
-        onClose();
-      }, 2000);
+      // Project structure has been generated, save it
+      if (generatedData && generatedData.success) {
+        setStep('success');
+        setTimeout(() => {
+          onProjectCreated?.(generatedData);
+          onClose();
+        }, 2000);
+      } else {
+        throw new Error('Invalid project data');
+      }
     } catch (err) {
-      toast.error('Error finalizing project');
+      toast.error(`Error finalizing project: ${err.message}`);
+      setStep('review');
     } finally {
       setIsLoading(false);
     }

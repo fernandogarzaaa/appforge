@@ -378,8 +378,8 @@ export default function Projects() {
                     project={project}
                     index={index}
                     onDelete={(p) => deleteMutation.mutate(p.id)}
-                    onDuplicate={() => {}}
-                    onClone={() => {}}
+                    onDuplicate={() => batchDuplicateMutation.mutate([project.id])}
+                    onClone={() => batchDuplicateMutation.mutate([project.id])}
                     isSelectionMode={isSelectionMode}
                     isSelected={selectedProjects.has(project.id)}
                     onToggleSelect={() => toggleProjectSelection(project.id)}

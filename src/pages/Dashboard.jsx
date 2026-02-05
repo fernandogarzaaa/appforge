@@ -21,7 +21,6 @@ import { useToast } from '@/components/ui/use-toast';
 import QuantumCircuitDisplay from '@/components/QuantumCircuitDisplay';
 import QuantumCircuitVisualizer from '@/components/QuantumCircuitVisualizer';
 import QuantumCircuitEducation from '@/components/QuantumCircuitEducation';
-import QuantumCircuitGenerator from '@/components/quantum/QuantumCircuitGenerator';
 
 export default function Dashboard() {
   const [ideaInput, setIdeaInput] = useState('');
@@ -41,12 +40,17 @@ export default function Dashboard() {
   // Fetch quantum circuits from backend if authenticated
   const { data: quantumCircuits = [], isLoading: isLoadingCircuits } = useQuery({
     queryKey: ['quantumCircuits'],
-    queryFn: () => quantumService.listCircuits(),
-    enabled: isAuthenticated, // Only fetch if authenticated with backend
-    retry: 1,
-    onError: (error) => {
-      console.error('Failed to load quantum circuits:', error);
-    }
+    queryFn: async () => {
+      try {
+        const jobs = await base44.entities.QuantumJob.filter({ user_id: user?.email }, '-submitted_at', 5);
+        return jobs || [];
+      } catch (error) {
+        console.error('Failed to load quantum circuits:', error);
+        return [];
+      }
+    },
+    enabled: isAuthenticated && !!user?.email,
+    retry: 1
   });
 
   const totalStats = projects.reduce(
@@ -491,16 +495,13 @@ export default function Dashboard() {
                   <QuantumCircuitVisualizer
                   initialQubits={3}
                   onCircuitChange={(circuit) => {
-                    console.log('Circuit updated:', circuit);
+                    // Circuit changes are managed internally
                   }} />
 
                 </div>
 
-                {/* AI Circuit Generator */}
-                 <QuantumCircuitGenerator />
-
                 {/* Quantum Education Section */}
-                 <QuantumCircuitEducation />
+                <QuantumCircuitEducation />
               </CardContent>
             </Card>
           </motion.div>

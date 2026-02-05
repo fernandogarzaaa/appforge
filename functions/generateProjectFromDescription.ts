@@ -19,8 +19,8 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Description and project name required' }, { status: 400 });
     }
 
-    // Use AI router (respects user quantum preference)
-    const result = await base44.functions.invoke('invokeAI', {
+    // Use InvokeLLM directly for project generation
+    const projectData = await base44.integrations.Core.InvokeLLM({
       prompt: `Generate a complete project structure for: "${description}"
 
 Analyze this app idea across multiple dimensions:
@@ -91,8 +91,6 @@ Be comprehensive but practical. Focus on MVP features.`,
         }
       }
     });
-
-    const projectData = result.data.result;
 
     // Create the project
     const project = await base44.entities.Project.create({

@@ -296,14 +296,15 @@ export default function EntityDesigner() {
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end" className="rounded-xl">
-                      <DropdownMenuItem className="rounded-lg cursor-pointer">
-                        <Copy className="w-4 h-4 mr-2" />
-                        Duplicate
-                      </DropdownMenuItem>
-                      <DropdownMenuItem className="rounded-lg cursor-pointer">
-                        <Table className="w-4 h-4 mr-2" />
-                        View Data
-                      </DropdownMenuItem>
+                      <DropdownMenuItem 
+                        onClick={() => {
+                          const duplicate = { ...selectedEntity, id: undefined, name: `${selectedEntity.name} (Copy)` };
+                          createMutation.mutate(duplicate);
+                        }}
+                        className="rounded-lg cursor-pointer">
+                         <Copy className="w-4 h-4 mr-2" />
+                         Duplicate
+                       </DropdownMenuItem>
                       <DropdownMenuSeparator />
                       <DropdownMenuItem
                         onClick={() => deleteMutation.mutate(selectedEntity.id)}
