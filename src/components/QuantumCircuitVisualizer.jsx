@@ -69,9 +69,17 @@ export function QuantumCircuitVisualizer({ initialQubits = 3, onCircuitChange: _
   }, [])
 
   const exportCircuit = useCallback(() => {
-    const qasm = `OPENQASM 2.0;\ninclude "qelib1.inc";\nqreg q[${qubits}];\ncreg c[${qubits}];\n\n${gates.map(g => `${g.name.toLowerCase()} q[${g.qubit}];`).join('\n')}\n\nmeasure q -> c;`
-    navigator.clipboard.writeText(qasm)
-    toast.success('QASM code copied to clipboard!')
+    const qasmGates = gates.map(g => {
+      const gateName = g.name.toLowerCase();
+      if (g.name === 'CNOT') return `cx q[${g.qubit}],q[${g.qubit + 1}];`;
+      if (g.name === 'SWAP') return `swap q[${g.qubit}],q[${g.qubit + 1}];`;
+      if (g.name === 'CZ') return `cz q[${g.qubit}],q[${g.qubit + 1}];`;
+      return `${gateName} q[${g.qubit}];`;
+    }).join('\n');
+    
+    const qasm = `OPENQASM 2.0;\ninclude "qelib1.inc";\nqreg q[${qubits}];\ncreg c[${qubits}];\n\n${qasmGates}\n\nmeasure q -> c;`;
+    navigator.clipboard.writeText(qasm);
+    toast.success('QASM code copied to clipboard!');
   }, [qubits, gates])
 
   const shareCircuit = useCallback(() => {

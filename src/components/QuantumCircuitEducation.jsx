@@ -286,11 +286,32 @@ def qaoa_circuit(graph, beta, gamma):
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: i * 0.1 }}
-                    className={`bg-gradient-to-br from-${concept.color}-50 to-white dark:from-${concept.color}-950/20 dark:to-slate-900 rounded-lg p-4 border-2 border-${concept.color}-200 dark:border-${concept.color}-800/50 hover:shadow-lg transition-all cursor-pointer group`}
+                    className={`bg-gradient-to-br rounded-lg p-4 border-2 hover:shadow-lg transition-all cursor-pointer group ${
+                      concept.color === 'cyan' ? 'from-cyan-50 to-white dark:from-cyan-950/20 border-cyan-200 dark:border-cyan-800/50' :
+                      concept.color === 'purple' ? 'from-purple-50 to-white dark:from-purple-950/20 border-purple-200 dark:border-purple-800/50' :
+                      concept.color === 'pink' ? 'from-pink-50 to-white dark:from-pink-950/20 border-pink-200 dark:border-pink-800/50' :
+                      concept.color === 'blue' ? 'from-blue-50 to-white dark:from-blue-950/20 border-blue-200 dark:border-blue-800/50' :
+                      concept.color === 'green' ? 'from-green-50 to-white dark:from-green-950/20 border-green-200 dark:border-green-800/50' :
+                      'from-orange-50 to-white dark:from-orange-950/20 border-orange-200 dark:border-orange-800/50'
+                    }`}
                   >
                     <div className="flex items-start gap-3">
-                      <div className={`w-10 h-10 rounded-lg bg-${concept.color}-100 dark:bg-${concept.color}-900/50 flex items-center justify-center group-hover:scale-110 transition-transform`}>
-                        <Icon className={`h-5 w-5 text-${concept.color}-600 dark:text-${concept.color}-400`} />
+                      <div className={`w-10 h-10 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform ${
+                        concept.color === 'cyan' ? 'bg-cyan-100 dark:bg-cyan-900/50' :
+                        concept.color === 'purple' ? 'bg-purple-100 dark:bg-purple-900/50' :
+                        concept.color === 'pink' ? 'bg-pink-100 dark:bg-pink-900/50' :
+                        concept.color === 'blue' ? 'bg-blue-100 dark:bg-blue-900/50' :
+                        concept.color === 'green' ? 'bg-green-100 dark:bg-green-900/50' :
+                        'bg-orange-100 dark:bg-orange-900/50'
+                      }`}>
+                        <Icon className={`h-5 w-5 ${
+                          concept.color === 'cyan' ? 'text-cyan-600 dark:text-cyan-400' :
+                          concept.color === 'purple' ? 'text-purple-600 dark:text-purple-400' :
+                          concept.color === 'pink' ? 'text-pink-600 dark:text-pink-400' :
+                          concept.color === 'blue' ? 'text-blue-600 dark:text-blue-400' :
+                          concept.color === 'green' ? 'text-green-600 dark:text-green-400' :
+                          'text-orange-600 dark:text-orange-400'
+                        }`} />
                       </div>
                       <div className="flex-1">
                         <h4 className="font-semibold text-sm mb-1">{concept.title}</h4>

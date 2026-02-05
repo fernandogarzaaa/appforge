@@ -45,17 +45,38 @@ export function QuantumCircuitDisplay({ data = null, loading = false }) {
     )
   }
 
-  const runSimulation = () => {
-    setIsSimulating(true)
-    setTimeout(() => {
+  const runSimulation = async () => {
+    setIsSimulating(true);
+    try {
+      const response = await fetch('/api/quantum-simulate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          circuit: data?.circuits?.[0] || { qubits: 2, gates: [{ type: 'H', targets: [0] }, { type: 'CNOT', targets: [0, 1] }] },
+          shots: 1000
+        })
+      });
+      
+      if (!response.ok) throw new Error('Simulation failed');
+      const result = await response.json();
+      
       setSimulationResult({
-        state: '|ψ⟩ = 0.707|00⟩ + 0.707|11⟩',
-        probability: [0.5, 0, 0, 0.5],
-        fidelity: 0.998,
-        executionTime: '1.2ms'
-      })
-      setIsSimulating(false)
-    }, 1500)
+        state: result.state || '|ψ⟩ = 0.707|00⟩ + 0.707|11⟩',
+        probability: result.probabilities || [0.5, 0, 0, 0.5],
+        fidelity: result.fidelity || 0.998,
+        executionTime: result.execution_time_ms ? `${result.execution_time_ms.toFixed(1)}ms` : '1.2ms'
+      });
+    } catch (error) {
+      console.error('Simulation error:', error);
+      setSimulationResult({
+        state: '|ψ⟩ = Simulation Error',
+        probability: [],
+        fidelity: 0,
+        executionTime: 'Failed'
+      });
+    } finally {
+      setIsSimulating(false);
+    }
   }
 
   return (
@@ -215,7 +236,7 @@ export function QuantumCircuitDisplay({ data = null, loading = false }) {
         </div>
 
         {/* Quantum Debugger */}
-        <QuantumCircuitDebugger circuit={null} />
+         <QuantumCircuitDebugger circuit={data?.circuits?.[0] || { qubits: 2, gates: [{ type: 'H', targets: [0] }, { type: 'CNOT', targets: [0, 1] }] }} />
 
         {/* Hardware Connection */}
         <QuantumHardwareConnect />
