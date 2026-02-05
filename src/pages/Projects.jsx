@@ -3,7 +3,7 @@ import { base44 } from '@/api/base44Client';
 import { userService } from '@/api/appforge';
 import { useBackendAuth } from '@/contexts/BackendAuthContext';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { Search, Plus, Grid3X3, List, Filter, FolderKanban, Trash2, Copy, CheckSquare, Square } from 'lucide-react';
+import { Search, Plus, Grid3X3, List, Filter, FolderKanban, Trash2, Copy, CheckSquare, Square, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -23,6 +23,7 @@ import {
 } from '@/components/ui/select';
 // Lazy load ProjectCard for better initial load
 const ProjectCard = lazy(() => import('@/components/dashboard/ProjectCard'));
+const AIProjectGenerator = lazy(() => import('@/components/ai/AIProjectGenerator'));
 import EmptyState from '@/components/common/EmptyState';
 import { AnimatePresence } from 'framer-motion';
 import { useToast } from '@/components/ui/use-toast';
@@ -32,6 +33,7 @@ const projectColors = ['#6366f1', '#8b5cf6', '#ec4899', '#f43f5e', '#f97316', '#
 
 export default function Projects() {
   const [showNewDialog, setShowNewDialog] = useState(false);
+  const [showAIGenerator, setShowAIGenerator] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const [viewMode, setViewMode] = useState('grid');
@@ -212,36 +214,45 @@ export default function Projects() {
           <p className="text-gray-500">Manage and organize all your applications</p>
         </div>
         <div className="flex gap-2">
-          {filteredProjects.length > 0 && (
-            <Button
-              variant={isSelectionMode ? "default" : "outline"}
-              onClick={() => {
-                setIsSelectionMode(!isSelectionMode);
-                setSelectedProjects(new Set());
-              }}
-              className={isSelectionMode ? "bg-gray-900 hover:bg-gray-800 text-white rounded-xl h-11 px-4" : "rounded-xl h-11 px-4"}
-            >
-              {isSelectionMode ? (
-                <>
-                  <CheckSquare className="w-4 h-4 mr-2" />
-                  Exit Selection
-                </>
-              ) : (
-                <>
-                  <Square className="w-4 h-4 mr-2" />
-                  Select
-                </>
-              )}
-            </Button>
-          )}
-          <Button
-            onClick={() => setShowNewDialog(true)}
-            className="bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white rounded-xl h-11 px-6 shadow-lg shadow-indigo-500/25"
-          >
-            <Plus className="w-4 h-4 mr-2" />
-            New Project
-          </Button>
-        </div>
+           {filteredProjects.length > 0 && (
+             <Button
+               variant={isSelectionMode ? "default" : "outline"}
+               onClick={() => {
+                 setIsSelectionMode(!isSelectionMode);
+                 setSelectedProjects(new Set());
+               }}
+               className={isSelectionMode ? "bg-gray-900 hover:bg-gray-800 text-white rounded-xl h-11 px-4" : "rounded-xl h-11 px-4"}
+             >
+               {isSelectionMode ? (
+                 <>
+                   <CheckSquare className="w-4 h-4 mr-2" />
+                   Exit Selection
+                 </>
+               ) : (
+                 <>
+                   <Square className="w-4 h-4 mr-2" />
+                   Select
+                 </>
+               )}
+             </Button>
+           )}
+           <Suspense fallback={null}>
+             <Button
+               onClick={() => setShowAIGenerator(true)}
+               className="bg-gradient-to-r from-purple-500 to-pink-600 hover:from-purple-600 hover:to-pink-700 text-white rounded-xl h-11 px-6 shadow-lg shadow-purple-500/25"
+             >
+               <Sparkles className="w-4 h-4 mr-2" />
+               AI Generate
+             </Button>
+           </Suspense>
+           <Button
+             onClick={() => setShowNewDialog(true)}
+             className="bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white rounded-xl h-11 px-6 shadow-lg shadow-indigo-500/25"
+           >
+             <Plus className="w-4 h-4 mr-2" />
+             New Project
+           </Button>
+         </div>
       </div>
 
       {/* Bulk Actions Toolbar */}
@@ -400,6 +411,17 @@ export default function Projects() {
           )}
         </div>
       )}
+
+      {/* AI Generator Modal */}
+      <Suspense fallback={null}>
+        <AIProjectGenerator
+          isOpen={showAIGenerator}
+          onClose={() => setShowAIGenerator(false)}
+          onProjectCreated={() => {
+            queryClient.invalidateQueries({ queryKey: ['projects'] });
+          }}
+        />
+      </Suspense>
 
       {/* New Project Dialog */}
       <Dialog open={showNewDialog} onOpenChange={setShowNewDialog}>

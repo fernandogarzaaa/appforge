@@ -60,6 +60,7 @@ import Account from './pages/Account';
 import AdminAIControl from './pages/AdminAIControl';
 import AdminAPIKeys from './pages/AdminAPIKeys';
 import AdminAgentControl from './pages/AdminAgentControl';
+import AdminAgents from './pages/AdminAgents';
 import AdminAnalytics from './pages/AdminAnalytics';
 import AdminCoaching from './pages/AdminCoaching';
 import AdminDashboard from './pages/AdminDashboard';
@@ -170,6 +171,7 @@ import SmartDeployment from './pages/SmartDeployment';
 import SocialMediaHub from './pages/SocialMediaHub';
 import SubscriptionSuccess from './pages/SubscriptionSuccess';
 import Subscriptions from './pages/Subscriptions';
+import SuperIntelligenceDashboard from './pages/SuperIntelligenceDashboard';
 import SuperiorAIStudio from './pages/SuperiorAIStudio';
 import Support from './pages/Support';
 import SystemHealth from './pages/SystemHealth';
@@ -184,8 +186,6 @@ import VisualizationStudio from './pages/VisualizationStudio';
 import Web3Dashboard from './pages/Web3Dashboard';
 import WebhookMonitor from './pages/WebhookMonitor';
 import WorkflowBuilder from './pages/WorkflowBuilder';
-import AdminAgents from './pages/AdminAgents';
-import SuperIntelligenceDashboard from './pages/SuperIntelligenceDashboard';
 import __Layout from './Layout.jsx';
 
 
@@ -203,6 +203,7 @@ export const PAGES = {
     "AdminAIControl": AdminAIControl,
     "AdminAPIKeys": AdminAPIKeys,
     "AdminAgentControl": AdminAgentControl,
+    "AdminAgents": AdminAgents,
     "AdminAnalytics": AdminAnalytics,
     "AdminCoaching": AdminCoaching,
     "AdminDashboard": AdminDashboard,
@@ -313,6 +314,7 @@ export const PAGES = {
     "SocialMediaHub": SocialMediaHub,
     "SubscriptionSuccess": SubscriptionSuccess,
     "Subscriptions": Subscriptions,
+    "SuperIntelligenceDashboard": SuperIntelligenceDashboard,
     "SuperiorAIStudio": SuperiorAIStudio,
     "Support": Support,
     "SystemHealth": SystemHealth,
@@ -327,8 +329,6 @@ export const PAGES = {
     "Web3Dashboard": Web3Dashboard,
     "WebhookMonitor": WebhookMonitor,
     "WorkflowBuilder": WorkflowBuilder,
-    "AdminAgents": AdminAgents,
-    "SuperIntelligenceDashboard": SuperIntelligenceDashboard,
 }
 
 export const pagesConfig = {
