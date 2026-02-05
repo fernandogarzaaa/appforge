@@ -8,8 +8,8 @@ import { Switch } from '@/components/ui/switch';
 import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { 
-  Bot, Play, Pause, Settings, Mail, Clock, CheckCircle2, 
-  AlertTriangle, Zap, Activity, Shield, TrendingUp, RefreshCw, Github
+  Bot, Play, Settings, Mail, Clock, CheckCircle2, 
+  Activity, Shield, TrendingUp, RefreshCw
 } from 'lucide-react';
 import { toast } from 'sonner';
 import GitHubIntegrationSetup from './GitHubIntegrationSetup';

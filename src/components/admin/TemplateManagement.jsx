@@ -6,7 +6,6 @@ import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { AlertCircle, Plus, Edit, Trash, ShoppingCart, FileText, Users } from 'lucide-react';
-import { toast } from 'sonner';
 
 export default function TemplateManagement() {
   const [user, setUser] = useState(null);

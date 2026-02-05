@@ -7,7 +7,7 @@ import { Slider } from '@/components/ui/slider';
 import { Switch } from '@/components/ui/switch';
 import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { Settings, Activity, Lock, Wallet, TrendingUp, Users, Zap, RefreshCw, Copy, Download } from 'lucide-react';
 import MarketingBotPanel from './MarketingBotPanel';
 import SubscriptionPlanManager from './SubscriptionPlanManager';
