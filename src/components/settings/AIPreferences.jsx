@@ -4,7 +4,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Switch } from '@/components/ui/switch';
 import { Badge } from '@/components/ui/badge';
-import { Brain, Zap } from 'lucide-react';
+import { Brain } from 'lucide-react';
 import { toast } from 'sonner';
 
 export default function AIPreferences() {
