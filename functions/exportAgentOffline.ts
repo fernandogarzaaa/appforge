@@ -45,6 +45,9 @@ Deno.serve(async (req) => {
           version: agent.version
         },
         training_data: agent.training_data || [],
+        custom_tools: agent.custom_tools || [],
+        safety_guardrails: agent.safety_guardrails || {},
+        prompting_strategy: agent.prompting_strategy || {},
         system_prompt: generateSystemPrompt(agent),
         
         // Electron app configuration

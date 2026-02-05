@@ -8,7 +8,7 @@ import { Badge } from '@/components/ui/badge';
 import { Sparkles, Plus, Save } from 'lucide-react';
 
 export default function CustomAgentBuilder({ userEmail, onAgentCreated }) {
-  const [step, setStep] = useState('setup'); // setup, configure, review
+  const [step, setStep] = useState('setup'); // setup, configure, advanced, review
   const [formData, setFormData] = useState({
     agent_name: '',
     goal: '',
@@ -19,6 +19,19 @@ export default function CustomAgentBuilder({ userEmail, onAgentCreated }) {
     temperature: 0.7,
     creativity: 0.6,
     accuracy: 0.8,
+    custom_tools: [],
+    safety_guardrails: {
+      content_filtering: true,
+      rate_limiting: false,
+      max_response_length: 2000,
+      blocked_topics: []
+    },
+    prompting_strategy: {
+      use_meta_prompts: false,
+      chain_of_thought: false,
+      few_shot_examples: [],
+      system_instructions: ''
+    }
   });
   const [isCreating, setIsCreating] = useState(false);
 
@@ -47,6 +60,9 @@ export default function CustomAgentBuilder({ userEmail, onAgentCreated }) {
           creativity: Number(formData.creativity),
           accuracy: Number(formData.accuracy),
         },
+        custom_tools: formData.custom_tools,
+        safety_guardrails: formData.safety_guardrails,
+        prompting_strategy: formData.prompting_strategy,
         training_data: [],
         performance_metrics: {
           accuracy: 0,
@@ -66,6 +82,19 @@ export default function CustomAgentBuilder({ userEmail, onAgentCreated }) {
         temperature: 0.7,
         creativity: 0.6,
         accuracy: 0.8,
+        custom_tools: [],
+        safety_guardrails: {
+          content_filtering: true,
+          rate_limiting: false,
+          max_response_length: 2000,
+          blocked_topics: []
+        },
+        prompting_strategy: {
+          use_meta_prompts: false,
+          chain_of_thought: false,
+          few_shot_examples: [],
+          system_instructions: ''
+        }
       });
       setStep('setup');
     } catch (error) {
@@ -121,7 +150,7 @@ export default function CustomAgentBuilder({ userEmail, onAgentCreated }) {
               onClick={() => setStep('configure')}
               className="w-full bg-gradient-to-r from-purple-600 to-pink-600"
             >
-              Configure Parameters
+              Configure Parameters →
             </Button>
           </div>
         )}
@@ -196,13 +225,175 @@ export default function CustomAgentBuilder({ userEmail, onAgentCreated }) {
                 onClick={() => setStep('setup')}
                 className="flex-1"
               >
-                Back
+                ← Back
+              </Button>
+              <Button
+                onClick={() => setStep('advanced')}
+                className="flex-1 bg-gradient-to-r from-purple-600 to-pink-600"
+              >
+                Advanced →
+              </Button>
+            </div>
+          </div>
+        )}
+
+        {step === 'advanced' && (
+          <div className="space-y-4">
+            {/* Custom Tools */}
+            <div className="p-3 bg-white rounded-lg border">
+              <label className="text-xs font-semibold text-gray-700 mb-2 block">Custom Tools</label>
+              
+              {formData.custom_tools.map((tool, idx) => (
+                <div key={idx} className="mb-2 p-2 bg-gray-50 rounded flex items-center justify-between">
+                  <div className="text-xs">
+                    <span className="font-semibold">{tool.name}</span> - {tool.type}
+                  </div>
+                  <button
+                    onClick={() => handleInputChange('custom_tools', formData.custom_tools.filter((_, i) => i !== idx))}
+                    className="text-red-500 text-xs"
+                  >
+                    Remove
+                  </button>
+                </div>
+              ))}
+              
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => {
+                  const toolName = prompt('Tool Name:');
+                  const toolType = prompt('Type (api_call, database, webhook):');
+                  const toolEndpoint = prompt('Endpoint/Connection String:');
+                  if (toolName && toolType) {
+                    handleInputChange('custom_tools', [...formData.custom_tools, {
+                      name: toolName,
+                      type: toolType,
+                      endpoint: toolEndpoint,
+                      enabled: true
+                    }]);
+                  }
+                }}
+                className="w-full mt-2"
+              >
+                <Plus className="w-3 h-3 mr-1" />
+                Add Tool
+              </Button>
+            </div>
+
+            {/* Safety Guardrails */}
+            <div className="p-3 bg-white rounded-lg border">
+              <label className="text-xs font-semibold text-gray-700 mb-2 block">Safety Guardrails</label>
+              
+              <div className="space-y-2">
+                <label className="flex items-center gap-2 text-xs">
+                  <input
+                    type="checkbox"
+                    checked={formData.safety_guardrails.content_filtering}
+                    onChange={(e) => handleInputChange('safety_guardrails', {
+                      ...formData.safety_guardrails,
+                      content_filtering: e.target.checked
+                    })}
+                  />
+                  Content Filtering
+                </label>
+                
+                <label className="flex items-center gap-2 text-xs">
+                  <input
+                    type="checkbox"
+                    checked={formData.safety_guardrails.rate_limiting}
+                    onChange={(e) => handleInputChange('safety_guardrails', {
+                      ...formData.safety_guardrails,
+                      rate_limiting: e.target.checked
+                    })}
+                  />
+                  Rate Limiting
+                </label>
+                
+                <div>
+                  <label className="text-xs text-gray-600">Max Response Length</label>
+                  <Input
+                    type="number"
+                    value={formData.safety_guardrails.max_response_length}
+                    onChange={(e) => handleInputChange('safety_guardrails', {
+                      ...formData.safety_guardrails,
+                      max_response_length: parseInt(e.target.value)
+                    })}
+                    className="mt-1"
+                  />
+                </div>
+                
+                <div>
+                  <label className="text-xs text-gray-600">Blocked Topics (comma-separated)</label>
+                  <Input
+                    placeholder="e.g., politics, gambling"
+                    value={formData.safety_guardrails.blocked_topics.join(', ')}
+                    onChange={(e) => handleInputChange('safety_guardrails', {
+                      ...formData.safety_guardrails,
+                      blocked_topics: e.target.value.split(',').map(t => t.trim()).filter(Boolean)
+                    })}
+                    className="mt-1"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Prompting Strategy */}
+            <div className="p-3 bg-white rounded-lg border">
+              <label className="text-xs font-semibold text-gray-700 mb-2 block">Prompting Strategy</label>
+              
+              <div className="space-y-2">
+                <label className="flex items-center gap-2 text-xs">
+                  <input
+                    type="checkbox"
+                    checked={formData.prompting_strategy.use_meta_prompts}
+                    onChange={(e) => handleInputChange('prompting_strategy', {
+                      ...formData.prompting_strategy,
+                      use_meta_prompts: e.target.checked
+                    })}
+                  />
+                  Use Meta-Prompts (Self-reflection)
+                </label>
+                
+                <label className="flex items-center gap-2 text-xs">
+                  <input
+                    type="checkbox"
+                    checked={formData.prompting_strategy.chain_of_thought}
+                    onChange={(e) => handleInputChange('prompting_strategy', {
+                      ...formData.prompting_strategy,
+                      chain_of_thought: e.target.checked
+                    })}
+                  />
+                  Chain-of-Thought Reasoning
+                </label>
+                
+                <div>
+                  <label className="text-xs text-gray-600">System Instructions (Optional)</label>
+                  <Textarea
+                    placeholder="Additional system-level instructions..."
+                    value={formData.prompting_strategy.system_instructions}
+                    onChange={(e) => handleInputChange('prompting_strategy', {
+                      ...formData.prompting_strategy,
+                      system_instructions: e.target.value
+                    })}
+                    className="mt-1 h-20"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="flex gap-2">
+              <Button
+                variant="outline"
+                onClick={() => setStep('configure')}
+                className="flex-1"
+              >
+                ← Back
               </Button>
               <Button
                 onClick={() => setStep('review')}
                 className="flex-1 bg-gradient-to-r from-purple-600 to-pink-600"
               >
-                Review
+                Review →
               </Button>
             </div>
           </div>
@@ -221,17 +412,20 @@ export default function CustomAgentBuilder({ userEmail, onAgentCreated }) {
               </div>
               <div className="flex flex-wrap gap-1 pt-2">
                 <Badge variant="outline">{formData.response_style}</Badge>
-                <Badge variant="outline">{formData.expertise_domain}</Badge>
+                {formData.expertise_domain && <Badge variant="outline">{formData.expertise_domain}</Badge>}
+                {formData.custom_tools.length > 0 && <Badge className="bg-blue-600">{formData.custom_tools.length} Tools</Badge>}
+                {formData.safety_guardrails.content_filtering && <Badge className="bg-green-600">Safe</Badge>}
+                {formData.prompting_strategy.chain_of_thought && <Badge className="bg-purple-600">CoT</Badge>}
               </div>
             </div>
 
             <div className="flex gap-2">
               <Button
                 variant="outline"
-                onClick={() => setStep('configure')}
+                onClick={() => setStep('advanced')}
                 className="flex-1"
               >
-                Edit
+                ← Edit
               </Button>
               <Button
                 onClick={createAgent}
