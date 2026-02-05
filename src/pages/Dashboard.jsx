@@ -6,8 +6,8 @@ import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import {
   FolderKanban, Database, FileCode, Component, Sparkles, Plus, Zap,
-  ShieldCheck, Rocket, Users, Smartphone, Brain, LayoutTemplate,
-  Code, Activity } from
+  ShieldCheck, Rocket, Users, Globe, Smartphone, Brain, LayoutTemplate,
+  Code } from
 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
@@ -22,110 +22,7 @@ import QuantumCircuitDisplay from '@/components/QuantumCircuitDisplay';
 import QuantumCircuitVisualizer from '@/components/QuantumCircuitVisualizer';
 import QuantumCircuitEducation from '@/components/QuantumCircuitEducation';
 
-export default function Dashboard() {
-  const [ideaInput, setIdeaInput] = useState('');
-  const [isCreating, setIsCreating] = useState(false);
-  const { toast } = useToast();
-  const [isAuthenticated, setIsAuthenticated] = React.useState(false);
-  const [user, setUser] = React.useState(null);
-
-  React.useEffect(() => {
-    base44.auth.isAuthenticated().then(setIsAuthenticated);
-    base44.auth.me().then(setUser).catch(() => setUser(null));
-  }, []);
-
-  const { data: projects = [], isLoading } = useQuery({
-    queryKey: ['projects'],
-    queryFn: () => base44.entities.Project.list('-updated_date', 6)
-  });
-
-  // Fetch quantum circuits from backend if authenticated
-  const { data: quantumCircuits = [], isLoading: isLoadingCircuits } = useQuery({
-    queryKey: ['quantumCircuits'],
-    queryFn: () => quantumService.listCircuits(),
-    enabled: isAuthenticated, // Only fetch if authenticated with backend
-    retry: 1,
-    onError: (error) => {
-      console.error('Failed to load quantum circuits:', error);
-    }
-  });
-
-  const totalStats = projects.reduce(
-    (acc, p) => ({
-      entities: acc.entities + (p.stats?.entities_count || 0),
-      pages: acc.pages + (p.stats?.pages_count || 0),
-      components: acc.components + (p.stats?.components_count || 0)
-    }),
-    { entities: 0, pages: 0, components: 0 }
-  );
-
-  const quickActions = [
-  {
-    title: 'Start from Template',
-    description: 'Browse 100+ ready-to-use templates',
-    icon: LayoutTemplate,
-    href: createPageUrl('TemplateMarketplace'),
-    gradient: 'from-blue-500 to-cyan-500',
-    badge: 'Popular'
-  },
-  {
-    title: 'Build with AI',
-    description: 'Let AI create your app from description',
-    icon: Sparkles,
-    href: createPageUrl('AIAssistant'),
-    gradient: 'from-purple-500 to-pink-500',
-    badge: 'New'
-  },
-  {
-    title: 'AGI Studio',
-    description: 'Create autonomous AI assistants',
-    icon: Brain,
-    href: createPageUrl('AGIStudio'),
-    gradient: 'from-purple-600 to-pink-600',
-    badge: 'AGI'
-  },
-  {
-    title: 'Mobile App Studio',
-    description: 'Create iOS & Android apps',
-    icon: Smartphone,
-    href: createPageUrl('MobileStudio'),
-    gradient: 'from-green-500 to-emerald-500'
-  }];
-
-
-  const capabilities = [
-  { icon: Code, label: 'Bot Builder', href: createPageUrl('BotBuilder'), color: 'text-blue-600 bg-blue-50' },
-  { icon: Rocket, label: 'Workflows', href: createPageUrl('WorkflowBuilder'), color: 'text-purple-600 bg-purple-50' },
-  { icon: Brain, label: 'AI/ML', href: createPageUrl('MLIntegration'), color: 'text-pink-600 bg-pink-50' },
-  { icon: ShieldCheck, label: 'Security', href: createPageUrl('Security'), color: 'text-red-600 bg-red-50' },
-  { icon: Code, label: 'Observability', href: createPageUrl('Observability'), color: 'text-orange-600 bg-orange-50' },
-  ...(user?.role === 'admin' ? [
-    { icon: ShieldCheck, label: 'Admin', href: createPageUrl('AdminDashboard'), color: 'text-red-700 bg-red-100' }
-  ] : [])];
-
-
-  const onboardingSteps = [
-  {
-    title: 'Start with a prompt',
-    description: 'Describe your app and let AI draft the architecture.',
-    icon: Sparkles,
-    href: createPageUrl('AIAssistant')
-  },
-  {
-    title: 'Connect your data',
-    description: 'Model entities, permissions, and workflows in minutes.',
-    icon: Database,
-    href: createPageUrl('EntityDesigner')
-  },
-  {
-    title: 'Ship and monitor',
-    description: 'Deploy with confidence and watch performance live.',
-    icon: Rocket,
-    href: createPageUrl('Deployments')
-  }];
-
-
-  const HeroSection = () =>
+const HeroSection = ({ ideaInput, setIdeaInput }) => (
   <motion.div
     initial={{ opacity: 0, y: 20 }}
     animate={{ opacity: 1, y: 0 }}
@@ -210,10 +107,10 @@ export default function Dashboard() {
           </div>
         </CardContent>
       </Card>
-    </motion.div>;
+    </motion.div>
+);
 
-
-  const SmartRecommendations = () =>
+const SmartRecommendations = ({ quickActions }) => (
   <motion.div
     initial={{ opacity: 0, y: 20 }}
     animate={{ opacity: 1, y: 0 }}
@@ -262,10 +159,10 @@ export default function Dashboard() {
           </motion.div>
       )}
       </div>
-    </motion.div>;
+    </motion.div>
+);
 
-
-  const CapabilityDiscovery = () =>
+const CapabilityDiscovery = ({ capabilities }) => (
   <motion.div
     initial={{ opacity: 0, y: 20 }}
     animate={{ opacity: 1, y: 0 }}
@@ -301,10 +198,10 @@ export default function Dashboard() {
           </div>
         </CardContent>
       </Card>
-    </motion.div>;
+    </motion.div>
+);
 
-
-  const OnboardingTour = () =>
+const OnboardingTour = ({ onboardingSteps }) => (
   <motion.div
     initial={{ opacity: 0, y: 20 }}
     animate={{ opacity: 1, y: 0 }}
@@ -338,15 +235,117 @@ export default function Dashboard() {
           </Link>
       )}
       </div>
-    </motion.div>;
+    </motion.div>
+);
+
+export default function Dashboard() {
+  const [ideaInput, setIdeaInput] = useState('');
+  const [isCreating, setIsCreating] = useState(false);
+  const { toast } = useToast();
+  const [isAuthenticated, setIsAuthenticated] = React.useState(false);
+
+  React.useEffect(() => {
+    base44.auth.isAuthenticated().then(setIsAuthenticated);
+  }, []);
+
+  const { data: projects = [], isLoading } = useQuery({
+    queryKey: ['projects'],
+    queryFn: () => base44.entities.Project.list('-updated_date', 6)
+  });
+
+  // Fetch quantum circuits from backend if authenticated
+  const { data: quantumCircuits = [], isLoading: isLoadingCircuits } = useQuery({
+    queryKey: ['quantumCircuits'],
+    queryFn: () => quantumService.listCircuits(),
+    enabled: isAuthenticated, // Only fetch if authenticated with backend
+    retry: 1,
+    onError: (error) => {
+      console.error('Failed to load quantum circuits:', error);
+    }
+  });
+
+  const totalStats = projects.reduce(
+    (acc, p) => ({
+      entities: acc.entities + (p.stats?.entities_count || 0),
+      pages: acc.pages + (p.stats?.pages_count || 0),
+      components: acc.components + (p.stats?.components_count || 0)
+    }),
+    { entities: 0, pages: 0, components: 0 }
+  );
+
+  const quickActions = [
+  {
+    title: 'Start from Template',
+    description: 'Browse 100+ ready-to-use templates',
+    icon: LayoutTemplate,
+    href: createPageUrl('TemplateMarketplace'),
+    gradient: 'from-blue-500 to-cyan-500',
+    badge: 'Popular'
+  },
+  {
+    title: 'Build with AI',
+    description: 'Let AI create your app from description',
+    icon: Sparkles,
+    href: createPageUrl('AIAssistant'),
+    gradient: 'from-purple-500 to-pink-500',
+    badge: 'New'
+  },
+  {
+    title: 'AGI Studio',
+    description: 'Create autonomous AI assistants',
+    icon: Brain,
+    href: createPageUrl('AGIStudio'),
+    gradient: 'from-purple-600 to-pink-600',
+    badge: 'AGI'
+  },
+  {
+    title: 'Mobile App Studio',
+    description: 'Create iOS & Android apps',
+    icon: Smartphone,
+    href: createPageUrl('MobileStudio'),
+    gradient: 'from-green-500 to-emerald-500'
+  }];
+
+
+  const capabilities = [
+  { icon: Code, label: 'Bot Builder', href: createPageUrl('BotBuilder'), color: 'text-blue-600 bg-blue-50' },
+  { icon: Rocket, label: 'Workflows', href: createPageUrl('WorkflowBuilder'), color: 'text-purple-600 bg-purple-50' },
+  { icon: Brain, label: 'AI/ML', href: createPageUrl('MLIntegration'), color: 'text-pink-600 bg-pink-50' },
+  { icon: Globe, label: 'DeFi Hub', href: createPageUrl('DeFiHub'), color: 'text-green-600 bg-green-50' },
+  { icon: ShieldCheck, label: 'Security', href: createPageUrl('Security'), color: 'text-red-600 bg-red-50' },
+  { icon: Code, label: 'Observability', href: createPageUrl('Observability'), color: 'text-orange-600 bg-orange-50' }];
+
+
+  const onboardingSteps = [
+  {
+    title: 'Start with a prompt',
+    description: 'Describe your app and let AI draft the architecture.',
+    icon: Sparkles,
+    href: createPageUrl('AIAssistant')
+  },
+  {
+    title: 'Connect your data',
+    description: 'Model entities, permissions, and workflows in minutes.',
+    icon: Database,
+    href: createPageUrl('EntityDesigner')
+  },
+  {
+    title: 'Ship and monitor',
+    description: 'Deploy with confidence and watch performance live.',
+    icon: Rocket,
+    href: createPageUrl('Deployments')
+  }];
+
+
+
 
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-indigo-50/30">
       <div className="bg-slate-900 mx-auto p-8 max-w-[1600px] space-y-12">
-        <HeroSection />
-        <SmartRecommendations />
-        <OnboardingTour />
+        <HeroSection ideaInput={ideaInput} setIdeaInput={setIdeaInput} />
+        <SmartRecommendations quickActions={quickActions} />
+        <OnboardingTour onboardingSteps={onboardingSteps} />
 
         {/* Stats Overview */}
         <motion.div
@@ -418,7 +417,7 @@ export default function Dashboard() {
           </div>
         </motion.div>
 
-        <CapabilityDiscovery />
+        <CapabilityDiscovery capabilities={capabilities} />
 
         {/* Recent Projects */}
         <motion.div
