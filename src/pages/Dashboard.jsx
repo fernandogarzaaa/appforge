@@ -194,7 +194,7 @@ export default function Dashboard() {
             <Button
             onClick={() => {
               if (ideaInput.trim()) {
-                window.open(createPageUrl('AIAssistant') + '?auto_start=true&idea=' + encodeURIComponent(ideaInput), '_blank');
+                window.location.href = createPageUrl('AIAssistant') + '?auto_start=true&idea=' + encodeURIComponent(ideaInput);
               }
             }}
             disabled={!ideaInput.trim()}
@@ -339,7 +339,7 @@ export default function Dashboard() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-indigo-50/30">
-      <div className="bg-slate-900 mx-auto p-8 max-w-[1600px] space-y-12">
+      <div className="mx-auto p-8 max-w-[1600px] space-y-12">
         <HeroSection />
         <SmartRecommendations />
         <OnboardingTour />
