@@ -27,21 +27,25 @@ export default function QuantumLab() {
   const runQuantumSimulation = async () => {
     setIsRunning(true)
     try {
-      // Simulate quantum computation
-      await new Promise(resolve => setTimeout(resolve, 2000))
-      toast.success('Quantum simulation completed successfully!')
+      const response = await base44.functions.invoke('quantumLLM', {
+        prompt: `Execute quantum simulation with ${simulationParams.qubits} qubits and ${simulationParams.shots} shots on ${simulationParams.backend}. Return simulation results with circuit execution times and output probability distribution.`,
+        add_context_from_internet: false
+      })
       
-      // Log analytics
+      toast.success('Quantum simulation completed successfully!')
+      console.log('Quantum results:', response.data)
+      
       await base44.analytics.track({
         eventName: 'quantum_simulation_run',
         properties: { 
           qubits: simulationParams.qubits,
           shots: simulationParams.shots,
-          backend: simulationParams.backend
+          backend: simulationParams.backend,
+          quantum_enhanced: true
         }
       })
     } catch (error) {
-      toast.error('Simulation failed')
+      toast.error('Simulation failed: ' + error.message)
     } finally {
       setIsRunning(false)
     }

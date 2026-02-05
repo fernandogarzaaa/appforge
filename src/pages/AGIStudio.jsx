@@ -42,7 +42,13 @@ export default function AGIStudio() {
 
   const createBotMutation = useMutation({
     mutationFn: async (data) => {
-      const result = await base44.functions.invoke('createAGIBot', data);
+      const result = await base44.functions.invoke('createAGIBot', {
+        name: data.name,
+        purpose: data.purpose,
+        integrations: data.integrations,
+        autonomyLevel: data.autonomyLevel,
+        offlineMode: data.offlineMode
+      });
       return result.data;
     },
     onSuccess: (data) => {
