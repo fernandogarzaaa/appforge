@@ -97,14 +97,14 @@ export default function AIAgentControl() {
                 <Bot className="w-6 h-6" />
               </div>
               <div>
-                <h2 className="text-2xl font-bold">AI Agent Control Center</h2>
+                <h2 className="text-2xl font-bold">🔮 Quantum AI Agent</h2>
                 <p className="text-purple-100 text-sm">
-                  Autonomous 24/7 project monitoring & optimization
+                  Autonomous quantum-enhanced monitoring across parallel timelines
                 </p>
               </div>
             </div>
             <Badge className={`${config?.autonomous_fixes_enabled ? 'bg-green-500' : 'bg-yellow-500'} text-white border-0 text-sm px-3 py-1`}>
-              {config?.autonomous_fixes_enabled ? '🤖 Autonomous' : '👀 Monitoring'}
+              {config?.autonomous_fixes_enabled ? '🔮 Quantum Active' : '👀 Monitor'}
             </Badge>
           </div>
         </CardContent>
@@ -200,7 +200,12 @@ export default function AIAgentControl() {
                     <div className="space-y-1">
                       {report.actions_taken?.length > 0 && (
                         <div className="text-sm text-green-700">
-                          ✅ {report.actions_taken.filter(a => a.success).length} actions taken
+                          {report.actions_taken.filter(a => a.quantum_validated).length > 0 ? '🔮' : '✅'} {report.actions_taken.filter(a => a.success).length} actions taken
+                          {report.actions_taken.filter(a => a.quantum_validated).length > 0 && (
+                            <span className="text-purple-600 ml-2">
+                              ({report.actions_taken.filter(a => a.quantum_validated).length} quantum-validated)
+                            </span>
+                          )}
                         </div>
                       )}
                       {report.issues_found?.length > 0 && (
