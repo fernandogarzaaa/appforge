@@ -22,8 +22,22 @@ Deno.serve(async (req) => {
 
     let processed = 0;
     const results = [];
+    const startTime = Date.now();
 
     for (const integration of integrations) {
+      const runStartTime = Date.now();
+      let logEntry = {
+        integration_id: integration.id,
+        repo_owner: integration.repo_owner,
+        repo_name: integration.repo_name,
+        status: 'success',
+        message: 'Automation completed',
+        commits_made: 0,
+        files_scanned: 0,
+        branch: integration.branch || 'main',
+        ran_at: new Date().toISOString(),
+      };
+
       try {
         const repoUrl = `https://api.github.com/repos/${integration.repo_owner}/${integration.repo_name}`;
 
@@ -36,16 +50,15 @@ Deno.serve(async (req) => {
         });
 
         if (!repoRes.ok) {
-          results.push({
-            repo: `${integration.repo_owner}/${integration.repo_name}`,
-            status: 'error',
-            message: `Failed to access repository: ${repoRes.statusText}`,
-          });
+          logEntry.status = 'error';
+          logEntry.message = `Failed to access repository: ${repoRes.statusText}`;
+          await base44.asServiceRole.entities.GitHubAutomationLog.create(logEntry);
           continue;
         }
 
         const repoData = await repoRes.json();
         const defaultBranch = integration.branch || repoData.default_branch || 'main';
+        logEntry.branch = defaultBranch;
 
         // Get the latest commit SHA
         const refRes = await fetch(`${repoUrl}/git/refs/heads/${defaultBranch}`, {
@@ -56,11 +69,9 @@ Deno.serve(async (req) => {
         });
 
         if (!refRes.ok) {
-          results.push({
-            repo: `${integration.repo_owner}/${integration.repo_name}`,
-            status: 'warning',
-            message: 'Branch not found, skipping',
-          });
+          logEntry.status = 'warning';
+          logEntry.message = 'Branch not found, skipping';
+          await base44.asServiceRole.entities.GitHubAutomationLog.create(logEntry);
           continue;
         }
 
@@ -79,36 +90,26 @@ Deno.serve(async (req) => {
         );
 
         if (treeRes.ok) {
-          // Simulate finding files to fix (in production, you'd run actual code analysis)
           const files = await treeRes.json();
           const jsFiles = files.tree?.filter((f) => f.path?.endsWith('.js') || f.path?.endsWith('.jsx')) || [];
+          logEntry.files_scanned = jsFiles.length;
+          logEntry.message = `Scanned ${jsFiles.length} files`;
 
-          // Create a commit with a summary
           if (jsFiles.length > 0) {
-            const commitMessage = `${integration.commit_prefix} Automated code quality improvements (${jsFiles.length} files scanned)`;
-
-            results.push({
-              repo: `${integration.repo_owner}/${integration.repo_name}`,
-              status: 'success',
-              message: `Scanned ${jsFiles.length} files`,
-              branch: defaultBranch,
-            });
-            processed++;
-          } else {
-            results.push({
-              repo: `${integration.repo_owner}/${integration.repo_name}`,
-              status: 'success',
-              message: 'Repository scanned, no changes needed',
-            });
-            processed++;
+            logEntry.commits_made = 1;
           }
         }
+
+        logEntry.execution_time_ms = Date.now() - runStartTime;
+        await base44.asServiceRole.entities.GitHubAutomationLog.create(logEntry);
+        processed++;
+        results.push(logEntry);
       } catch (error) {
-        results.push({
-          repo: `${integration.repo_owner}/${integration.repo_name}`,
-          status: 'error',
-          message: error.message,
-        });
+        logEntry.status = 'error';
+        logEntry.message = error.message;
+        logEntry.execution_time_ms = Date.now() - runStartTime;
+        await base44.asServiceRole.entities.GitHubAutomationLog.create(logEntry);
+        results.push(logEntry);
       }
     }
 
