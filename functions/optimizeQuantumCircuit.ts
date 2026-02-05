@@ -70,7 +70,10 @@ Respond with JSON:
             type: 'object',
             properties: {
               qubits: { type: 'number' },
-              gates: { type: 'array' }
+              gates: {
+                type: 'array',
+                items: { type: 'object' }
+              }
             }
           },
           optimizations_applied: { type: 'array', items: { type: 'string' } },

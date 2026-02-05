@@ -21,7 +21,7 @@ import { useToast } from '@/components/ui/use-toast';
 import QuantumCircuitDisplay from '@/components/QuantumCircuitDisplay';
 import QuantumCircuitVisualizer from '@/components/QuantumCircuitVisualizer';
 import QuantumCircuitEducation from '@/components/QuantumCircuitEducation';
-import QuantumHardwareJobManager from '@/components/quantum/QuantumHardwareJobManager';
+import QuantumCircuitGenerator from '@/components/quantum/QuantumCircuitGenerator';
 
 export default function Dashboard() {
   const [ideaInput, setIdeaInput] = useState('');
@@ -496,8 +496,8 @@ export default function Dashboard() {
 
                 </div>
 
-                {/* Quantum Hardware Job Manager */}
-                 <QuantumHardwareJobManager />
+                {/* AI Circuit Generator */}
+                 <QuantumCircuitGenerator />
 
                 {/* Quantum Education Section */}
                  <QuantumCircuitEducation />
