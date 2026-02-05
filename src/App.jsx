@@ -22,12 +22,8 @@ import { SearchModal } from '@/components/SearchModal';
 import ErrorBoundary from '@/components/ErrorBoundary';
 import AuthGuard from '@/components/auth/AuthGuard';
 import AdminLayout from '@/components/admin/AdminLayout';
-import AdminAPIKeys from '@/pages/AdminAPIKeys';
-import AdminSecrets from '@/pages/AdminSecrets';
-import AdminSystemConfig from '@/pages/AdminSystemConfig';
-import AdminMonitoring from '@/pages/AdminMonitoring';
-import AdminDashboard from '@/pages/AdminDashboard';
-import { useEffect } from 'react';
+import { useEffect, lazy, Suspense } from 'react';
+import PageLoader from './components/common/PageLoader';
 import { validateEnv } from '@/utils/env';
 import errorTracker, { setUser, clearUser } from '@/utils/errorTracking';
 import { startHealthMonitoring } from '@/utils/healthCheck';
@@ -39,6 +35,12 @@ import { ViewModeToggle } from '@/components/navigation/ViewModeToggle';
 import { CommandPalette } from '@/features/commandPalette/CommandPalette';
 import { ContextMenu } from '@/features/quickActions/ContextMenu';
 import { ThemeManager } from '@/features/themes/ThemeManager';
+
+const AdminDashboard = lazy(() => import('@/pages/AdminDashboard'));
+const AdminAPIKeys = lazy(() => import('@/pages/AdminAPIKeys'));
+const AdminSecrets = lazy(() => import('@/pages/AdminSecrets'));
+const AdminSystemConfig = lazy(() => import('@/pages/AdminSystemConfig'));
+const AdminMonitoring = lazy(() => import('@/pages/AdminMonitoring'));
 
 const { Pages, Layout, mainPage, publicPages = [] } = pagesConfig;
 const mainPageKey = mainPage ?? Object.keys(Pages)[0];
@@ -52,6 +54,12 @@ const AdminRoute = ({ children }) => (
   <AuthGuard requireAdmin>
     <AdminLayout>{children}</AdminLayout>
   </AuthGuard>
+);
+
+const renderAdmin = (Component) => (
+  <Suspense fallback={<PageLoader />}>
+    <Component />
+  </Suspense>
 );
 
 const AuthenticatedApp = ({ onSearchOpen }) => {
@@ -105,27 +113,27 @@ const AuthenticatedApp = ({ onSearchOpen }) => {
     <Routes>
       <Route path="/admin" element={
         <AdminRoute>
-          <AdminDashboard />
+          {renderAdmin(AdminDashboard)}
         </AdminRoute>
       } />
       <Route path="/admin/api-keys" element={
         <AdminRoute>
-          <AdminAPIKeys />
+          {renderAdmin(AdminAPIKeys)}
         </AdminRoute>
       } />
       <Route path="/admin/secrets" element={
         <AdminRoute>
-          <AdminSecrets />
+          {renderAdmin(AdminSecrets)}
         </AdminRoute>
       } />
       <Route path="/admin/system-config" element={
         <AdminRoute>
-          <AdminSystemConfig />
+          {renderAdmin(AdminSystemConfig)}
         </AdminRoute>
       } />
       <Route path="/admin/monitoring" element={
         <AdminRoute>
-          <AdminMonitoring />
+          {renderAdmin(AdminMonitoring)}
         </AdminRoute>
       } />
       <Route path="/" element={
