@@ -49,18 +49,26 @@
  */
 import AGIStudio from './pages/AGIStudio';
 import AIAssistant from './pages/AIAssistant';
+import AIDeployment from './pages/AIDeployment';
 import AIMonitoring from './pages/AIMonitoring';
+import AITemplates from './pages/AITemplates';
 import APIExplorer from './pages/APIExplorer';
 import APIKeyManager from './pages/APIKeyManager';
 import APIKeys from './pages/APIKeys';
 import Account from './pages/Account';
+import AdminAIControl from './pages/AdminAIControl';
 import AdminAPIKeys from './pages/AdminAPIKeys';
+import AdminAgentControl from './pages/AdminAgentControl';
+import AdminAnalytics from './pages/AdminAnalytics';
 import AdminCoaching from './pages/AdminCoaching';
 import AdminDashboard from './pages/AdminDashboard';
+import AdminDeployments from './pages/AdminDeployments';
 import AdminMonitoring from './pages/AdminMonitoring';
 import AdminSecrets from './pages/AdminSecrets';
 import AdminSubscriptions from './pages/AdminSubscriptions';
 import AdminSystemConfig from './pages/AdminSystemConfig';
+import AdminTemplates from './pages/AdminTemplates';
+import AdminUserManagement from './pages/AdminUserManagement';
 import AdvancedAnomalyDetection from './pages/AdvancedAnomalyDetection';
 import AdvancedSearch from './pages/AdvancedSearch';
 import Analytics from './pages/Analytics';
@@ -72,9 +80,11 @@ import ChatbotManager from './pages/ChatbotManager';
 import CodeGenerator from './pages/CodeGenerator';
 import CodePlayground from './pages/CodePlayground';
 import CodeRefactoring from './pages/CodeRefactoring';
+import CodeReview from './pages/CodeReview';
 import collaborationOld from './pages/Collaboration-old';
 import Collaboration from './pages/Collaboration';
 import CollaborationHub from './pages/CollaborationHub';
+import ComponentBuilder from './pages/ComponentBuilder';
 import Components from './pages/Components';
 import ContentStudio from './pages/ContentStudio';
 import ContractBuilder from './pages/ContractBuilder';
@@ -99,6 +109,7 @@ import EnvironmentVariables from './pages/EnvironmentVariables';
 import ExternalBotIntegrations from './pages/ExternalBotIntegrations';
 import FeatureFlags from './pages/FeatureFlags';
 import FeedbackAnalytics from './pages/FeedbackAnalytics';
+import FunctionBuilder from './pages/FunctionBuilder';
 import FunctionValidator from './pages/FunctionValidator';
 import GamingPlatform from './pages/GamingPlatform';
 import GitHubConnect from './pages/GitHubConnect';
@@ -135,6 +146,7 @@ import ProductAnalytics from './pages/ProductAnalytics';
 import Profile from './pages/Profile';
 import ProjectDiagnostics from './pages/ProjectDiagnostics';
 import ProjectExport from './pages/ProjectExport';
+import ProjectScaffolder from './pages/ProjectScaffolder';
 import ProjectSettings from './pages/ProjectSettings';
 import ProjectTasks from './pages/ProjectTasks';
 import ProjectViewer from './pages/ProjectViewer';
@@ -151,9 +163,11 @@ import RoleManagement from './pages/RoleManagement';
 import SearchAnalytics from './pages/SearchAnalytics';
 import Security from './pages/Security';
 import SecurityFeatures from './pages/SecurityFeatures';
+import SmartDeployment from './pages/SmartDeployment';
 import SocialMediaHub from './pages/SocialMediaHub';
 import SubscriptionSuccess from './pages/SubscriptionSuccess';
 import Subscriptions from './pages/Subscriptions';
+import SuperiorAIStudio from './pages/SuperiorAIStudio';
 import Support from './pages/Support';
 import SystemHealth from './pages/SystemHealth';
 import SystemStatus from './pages/SystemStatus';
@@ -167,20 +181,6 @@ import VisualizationStudio from './pages/VisualizationStudio';
 import Web3Dashboard from './pages/Web3Dashboard';
 import WebhookMonitor from './pages/WebhookMonitor';
 import WorkflowBuilder from './pages/WorkflowBuilder';
-import CodeReview from './pages/CodeReview';
-import AdminAgentControl from './pages/AdminAgentControl';
-import ProjectScaffolder from './pages/ProjectScaffolder';
-import AIDeployment from './pages/AIDeployment';
-import AdminDeployments from './pages/AdminDeployments';
-import SuperiorAIStudio from './pages/SuperiorAIStudio';
-import AdminAIControl from './pages/AdminAIControl';
-import AITemplates from './pages/AITemplates';
-import AdminTemplates from './pages/AdminTemplates';
-import AdminUserManagement from './pages/AdminUserManagement';
-import AdminAnalytics from './pages/AdminAnalytics';
-import ComponentBuilder from './pages/ComponentBuilder';
-import FunctionBuilder from './pages/FunctionBuilder';
-import SmartDeployment from './pages/SmartDeployment';
 import SecurityCenter from './pages/SecurityCenter';
 import __Layout from './Layout.jsx';
 
@@ -188,18 +188,26 @@ import __Layout from './Layout.jsx';
 export const PAGES = {
     "AGIStudio": AGIStudio,
     "AIAssistant": AIAssistant,
+    "AIDeployment": AIDeployment,
     "AIMonitoring": AIMonitoring,
+    "AITemplates": AITemplates,
     "APIExplorer": APIExplorer,
     "APIKeyManager": APIKeyManager,
     "APIKeys": APIKeys,
     "Account": Account,
+    "AdminAIControl": AdminAIControl,
     "AdminAPIKeys": AdminAPIKeys,
+    "AdminAgentControl": AdminAgentControl,
+    "AdminAnalytics": AdminAnalytics,
     "AdminCoaching": AdminCoaching,
     "AdminDashboard": AdminDashboard,
+    "AdminDeployments": AdminDeployments,
     "AdminMonitoring": AdminMonitoring,
     "AdminSecrets": AdminSecrets,
     "AdminSubscriptions": AdminSubscriptions,
     "AdminSystemConfig": AdminSystemConfig,
+    "AdminTemplates": AdminTemplates,
+    "AdminUserManagement": AdminUserManagement,
     "AdvancedAnomalyDetection": AdvancedAnomalyDetection,
     "AdvancedSearch": AdvancedSearch,
     "Analytics": Analytics,
@@ -211,9 +219,11 @@ export const PAGES = {
     "CodeGenerator": CodeGenerator,
     "CodePlayground": CodePlayground,
     "CodeRefactoring": CodeRefactoring,
+    "CodeReview": CodeReview,
     "Collaboration-old": collaborationOld,
     "Collaboration": Collaboration,
     "CollaborationHub": CollaborationHub,
+    "ComponentBuilder": ComponentBuilder,
     "Components": Components,
     "ContentStudio": ContentStudio,
     "ContractBuilder": ContractBuilder,
@@ -238,6 +248,7 @@ export const PAGES = {
     "ExternalBotIntegrations": ExternalBotIntegrations,
     "FeatureFlags": FeatureFlags,
     "FeedbackAnalytics": FeedbackAnalytics,
+    "FunctionBuilder": FunctionBuilder,
     "FunctionValidator": FunctionValidator,
     "GamingPlatform": GamingPlatform,
     "GitHubConnect": GitHubConnect,
@@ -274,6 +285,7 @@ export const PAGES = {
     "Profile": Profile,
     "ProjectDiagnostics": ProjectDiagnostics,
     "ProjectExport": ProjectExport,
+    "ProjectScaffolder": ProjectScaffolder,
     "ProjectSettings": ProjectSettings,
     "ProjectTasks": ProjectTasks,
     "ProjectViewer": ProjectViewer,
@@ -290,9 +302,11 @@ export const PAGES = {
     "SearchAnalytics": SearchAnalytics,
     "Security": Security,
     "SecurityFeatures": SecurityFeatures,
+    "SmartDeployment": SmartDeployment,
     "SocialMediaHub": SocialMediaHub,
     "SubscriptionSuccess": SubscriptionSuccess,
     "Subscriptions": Subscriptions,
+    "SuperiorAIStudio": SuperiorAIStudio,
     "Support": Support,
     "SystemHealth": SystemHealth,
     "SystemStatus": SystemStatus,
@@ -306,20 +320,6 @@ export const PAGES = {
     "Web3Dashboard": Web3Dashboard,
     "WebhookMonitor": WebhookMonitor,
     "WorkflowBuilder": WorkflowBuilder,
-    "CodeReview": CodeReview,
-    "AdminAgentControl": AdminAgentControl,
-    "ProjectScaffolder": ProjectScaffolder,
-    "AIDeployment": AIDeployment,
-    "AdminDeployments": AdminDeployments,
-    "SuperiorAIStudio": SuperiorAIStudio,
-    "AdminAIControl": AdminAIControl,
-    "AITemplates": AITemplates,
-    "AdminTemplates": AdminTemplates,
-    "AdminUserManagement": AdminUserManagement,
-    "AdminAnalytics": AdminAnalytics,
-    "ComponentBuilder": ComponentBuilder,
-    "FunctionBuilder": FunctionBuilder,
-    "SmartDeployment": SmartDeployment,
     "SecurityCenter": SecurityCenter,
 }
 
