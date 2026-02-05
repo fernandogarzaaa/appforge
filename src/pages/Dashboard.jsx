@@ -302,7 +302,7 @@ export default function Dashboard() {
           </div>
         </CardContent>
       </Card>
-    </motion.div>, []);
+    </motion.div>, [capabilities]);
 
 
   const OnboardingTour = React.useMemo(() =>
@@ -339,7 +339,7 @@ export default function Dashboard() {
           </Link>
       )}
       </div>
-    </motion.div>, []);
+    </motion.div>, [onboardingSteps]);
 
 
   return (
