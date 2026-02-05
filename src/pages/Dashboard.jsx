@@ -18,11 +18,9 @@ import ProjectCard from '@/components/dashboard/ProjectCard';
 import { motion } from 'framer-motion';
 import Skeletons from '@/components/common/Skeletons';
 import { useToast } from '@/components/ui/use-toast';
-// Lazy load heavy quantum components for code splitting
-const QuantumCircuitDisplay = React.lazy(() => import('@/components/QuantumCircuitDisplay'));
-const QuantumCircuitVisualizer = React.lazy(() => import('@/components/QuantumCircuitVisualizer'));
-const QuantumCircuitEducation = React.lazy(() => import('@/components/QuantumCircuitEducation'));
-const MultiverseViewer = React.lazy(() => import('@/components/quantum/MultiverseViewer'));
+import QuantumCircuitDisplay from '@/components/QuantumCircuitDisplay';
+import QuantumCircuitVisualizer from '@/components/QuantumCircuitVisualizer';
+import QuantumCircuitEducation from '@/components/QuantumCircuitEducation';
 
 export default function Dashboard() {
   const [ideaInput, setIdeaInput] = useState('');
@@ -93,6 +91,12 @@ export default function Dashboard() {
   }];
 
 
+  const [user, setUser] = React.useState(null);
+
+  React.useEffect(() => {
+    base44.auth.me().then(setUser).catch(() => setUser(null));
+  }, []);
+
   const capabilities = [
   { icon: Code, label: 'Bot Builder', href: createPageUrl('BotBuilder'), color: 'text-blue-600 bg-blue-50' },
   { icon: Rocket, label: 'Workflows', href: createPageUrl('WorkflowBuilder'), color: 'text-purple-600 bg-purple-50' },
@@ -100,6 +104,10 @@ export default function Dashboard() {
   { icon: Globe, label: 'DeFi Hub', href: createPageUrl('DeFiHub'), color: 'text-green-600 bg-green-50' },
   { icon: ShieldCheck, label: 'Security', href: createPageUrl('Security'), color: 'text-red-600 bg-red-50' },
   { icon: Code, label: 'Observability', href: createPageUrl('Observability'), color: 'text-orange-600 bg-orange-50' }];
+
+  const adminCapabilities = [
+    { icon: ShieldCheck, label: 'Agent Admin', href: createPageUrl('AdminAgentControl'), color: 'text-red-600 bg-red-50' }
+  ];
 
 
   const onboardingSteps = [
@@ -299,6 +307,38 @@ export default function Dashboard() {
           </div>
         </CardContent>
       </Card>
+      
+      {user?.role === 'admin' && (
+        <Card className="border-2 border-red-200 shadow-xl bg-gradient-to-br from-red-50 to-orange-50">
+          <CardContent className="p-6">
+            <div className="flex items-center gap-2 mb-4">
+              <ShieldCheck className="w-5 h-5 text-red-600" />
+              <h3 className="font-semibold text-red-900">Admin Controls</h3>
+            </div>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+              {adminCapabilities.map((cap, idx) =>
+            <Link key={cap.label} to={cap.href}>
+                  <motion.div
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.2, delay: 0.3 + idx * 0.05 }}
+                className="group">
+
+                    <div className="flex flex-col items-center gap-3 p-4 rounded-xl hover:bg-red-100 transition-all cursor-pointer">
+                      <div className={`w-12 h-12 rounded-xl ${cap.color} flex items-center justify-center group-hover:scale-110 transition-transform`}>
+                        <cap.icon className="w-6 h-6" />
+                      </div>
+                      <span className="text-sm font-medium text-gray-700 text-center group-hover:text-gray-900">
+                        {cap.label}
+                      </span>
+                    </div>
+                  </motion.div>
+                </Link>
+            )}
+            </div>
+          </CardContent>
+        </Card>
+      )}
     </motion.div>;
 
 
@@ -466,8 +506,7 @@ export default function Dashboard() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.5 }}>
 
-            {/* Quantum Circuits Section */}
-            <Card className="border-2 shadow-xl overflow-hidden mb-6">
+            <Card className="border-2 shadow-xl overflow-hidden">
               <div className="bg-gradient-to-r from-cyan-600 to-blue-600 p-6 text-white">
                 <div className="flex items-center gap-3 mb-2">
                   <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm">
@@ -483,31 +522,25 @@ export default function Dashboard() {
               </div>
               <CardContent className="p-6">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
-                  <React.Suspense fallback={<Skeletons.ProjectCard />}>
-                    <QuantumCircuitDisplay
-                      data={quantumCircuits && quantumCircuits[0]}
-                      loading={isLoadingCircuits} />
-                  </React.Suspense>
+                  {/* Quantum Circuits Display */}
+                  <QuantumCircuitDisplay
+                  data={quantumCircuits && quantumCircuits[0]}
+                  loading={isLoadingCircuits} />
 
-                  <React.Suspense fallback={<Skeletons.ProjectCard />}>
-                    <QuantumCircuitVisualizer
-                      initialQubits={3}
-                      onCircuitChange={(circuit) => {
-                        console.log('Circuit updated:', circuit);
-                      }} />
-                  </React.Suspense>
+                  
+                  {/* Quantum Circuit Visualizer */}
+                  <QuantumCircuitVisualizer
+                  initialQubits={3}
+                  onCircuitChange={(circuit) => {
+                    console.log('Circuit updated:', circuit);
+                  }} />
+
                 </div>
 
-                <React.Suspense fallback={<div className="h-64 bg-gray-100 animate-pulse rounded-lg" />}>
-                  <QuantumCircuitEducation />
-                </React.Suspense>
+                {/* Quantum Education Section */}
+                <QuantumCircuitEducation />
               </CardContent>
             </Card>
-
-            {/* Multiverse Engine Section */}
-            <React.Suspense fallback={<div className="h-96 bg-gray-100 animate-pulse rounded-lg" />}>
-              <MultiverseViewer />
-            </React.Suspense>
           </motion.div>
         }
       </div>
