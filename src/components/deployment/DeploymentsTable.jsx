@@ -3,7 +3,40 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
-import { getStatusColor, getStatusIcon, canRollback, formatDuration, DEPLOYMENT_STATUS } from '@/lib/deploymentHistory';
+const getStatusColor = (status) => {
+  const colors = {
+    active: 'bg-green-100 text-green-800',
+    inactive: 'bg-gray-100 text-gray-800',
+    failed: 'bg-red-100 text-red-800',
+    pending: 'bg-yellow-100 text-yellow-800'
+  };
+  return colors[status] || 'bg-gray-100 text-gray-800';
+};
+
+const getStatusIcon = (status) => {
+  const icons = {
+    active: '✅',
+    inactive: '⏸️',
+    failed: '❌',
+    pending: '⏳'
+  };
+  return icons[status] || '•';
+};
+
+const canRollback = (deployment) => deployment.status === 'active';
+
+const formatDuration = (duration) => {
+  if (!duration) return '-';
+  const mins = Math.floor(duration / 60);
+  const secs = duration % 60;
+  return `${mins}m ${secs}s`;
+};
+
+const DEPLOYMENT_STATUS = {
+  DEPLOYING: 'deploying',
+  BUILDING: 'building',
+  PENDING: 'pending'
+};
 import { ChevronDown, RotateCcw, X, ChevronUp } from 'lucide-react';
 import { motion } from 'framer-motion';
 

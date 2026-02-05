@@ -102,37 +102,13 @@ Be comprehensive but practical. Focus on MVP features.`,
       ai_generated: true
     });
 
-    // Create entities
-    const createdEntities = [];
-    for (const entity of projectData.entities || []) {
-      try {
-        const created = await base44.entities.Entity.create({
-          project_id: project.id,
-          name: entity.name,
-          description: entity.description,
-          schema: entity.schema
-        });
-        createdEntities.push(created);
-      } catch (e) {
-        console.error(`Failed to create entity ${entity.name}:`, e);
-      }
-    }
+    // Skip entity creation - entities are defined in entities/ directory manually
+     // Just return the entity schemas for the user to implement
+     const createdEntities = projectData.entities || [];
 
-    // Create page placeholders
-    const createdPages = [];
-    for (const page of projectData.pages || []) {
-      try {
-        const created = await base44.entities.Page.create({
-          project_id: project.id,
-          name: page.name,
-          description: page.description,
-          code: `// ${page.name}\n// Features: ${page.features?.join(', ')}\n\nexport default function ${page.name}() {\n  return <div>Coming soon...</div>;\n}`
-        });
-        createdPages.push(created);
-      } catch (e) {
-        console.error(`Failed to create page ${page.name}:`, e);
-      }
-    }
+    // Skip page creation - pages are created in pages/ directory manually
+     // Just return page structure recommendations for the user
+     const createdPages = projectData.pages || [];
 
     return Response.json({
       success: true,

@@ -98,79 +98,97 @@ Deno.serve(async (req) => {
 });
 
 async function checkIBMStatus(jobId) {
-  try {
-    const response = await fetch(`https://api.quantum-computing.ibm.com/runtime/jobs/${jobId}`, {
-      headers: { 'Accept': 'application/json' }
-    });
-    
-    if (!response.ok) {
-      return { status: 'running', results: null, execution_time_ms: 0, progress: 25, error_message: null };
-    }
-    
-    const data = await response.json();
-    const statusMap = { queued: 'queued', running: 'running', completed: 'completed', failed: 'failed', cancelled: 'cancelled' };
-    
-    return {
-      status: statusMap[data.status] || 'running',
-      results: data.status === 'completed' ? parseIBMResults(data.result) : null,
-      execution_time_ms: data.execution_time || 1200,
-      progress: data.status === 'completed' ? 100 : 50,
-      error_message: data.error ? data.error.message : null
-    };
-  } catch (error) {
-    return { status: 'running', results: null, execution_time_ms: 0, progress: 25, error_message: null };
-  }
-}
+   try {
+     const token = Deno.env.get('IBM_QUANTUM_TOKEN');
+     if (!token) throw new Error('IBM_QUANTUM_TOKEN not configured');
+
+     const response = await fetch(`https://api.quantum-computing.ibm.com/runtime/jobs/${jobId}`, {
+       headers: { 
+         'Accept': 'application/json',
+         'Authorization': `Bearer ${token}`
+       }
+     });
+
+     if (!response.ok) {
+       throw new Error(`IBM API error: ${response.status}`);
+     }
+
+     const data = await response.json();
+     const statusMap = { queued: 'queued', running: 'running', completed: 'completed', failed: 'failed', cancelled: 'cancelled' };
+
+     return {
+       status: statusMap[data.status] || 'running',
+       results: data.status === 'completed' ? parseIBMResults(data.result) : null,
+       execution_time_ms: data.execution_time || 1200,
+       progress: data.status === 'completed' ? 100 : 50,
+       error_message: data.error ? data.error.message : null
+     };
+   } catch (error) {
+     throw error;
+   }
+ }
 
 async function checkAWSBraketStatus(jobId) {
-  try {
-    const response = await fetch(`https://braket.us-west-1.amazonaws.com/jobs/${jobId}`, {
-      headers: { 'Accept': 'application/x-amz-json-1.1' }
-    });
-    
-    if (!response.ok) {
-      return { status: 'running', results: null, execution_time_ms: 0, progress: 25, error_message: null };
-    }
-    
-    const data = await response.json();
-    const statusMap = { QUEUED: 'queued', RUNNING: 'running', COMPLETED: 'completed', FAILED: 'failed', CANCELLED: 'cancelled' };
-    
-    return {
-      status: statusMap[data.status] || 'running',
-      results: data.status === 'COMPLETED' ? parseAWSResults(data.resultString) : null,
-      execution_time_ms: data.instanceProperties?.duration || 1500,
-      progress: data.status === 'COMPLETED' ? 100 : 50,
-      error_message: data.failureReason || null
-    };
-  } catch (error) {
-    return { status: 'running', results: null, execution_time_ms: 0, progress: 25, error_message: null };
-  }
-}
+   try {
+     const token = Deno.env.get('AWS_BRAKET_TOKEN');
+     if (!token) throw new Error('AWS_BRAKET_TOKEN not configured');
+
+     const response = await fetch(`https://braket.us-west-1.amazonaws.com/jobs/${jobId}`, {
+       headers: { 
+         'Accept': 'application/x-amz-json-1.1',
+         'Authorization': `Bearer ${token}`
+       }
+     });
+
+     if (!response.ok) {
+       throw new Error(`AWS Braket API error: ${response.status}`);
+     }
+
+     const data = await response.json();
+     const statusMap = { QUEUED: 'queued', RUNNING: 'running', COMPLETED: 'completed', FAILED: 'failed', CANCELLED: 'cancelled' };
+
+     return {
+       status: statusMap[data.status] || 'running',
+       results: data.status === 'COMPLETED' ? parseAWSResults(data.resultString) : null,
+       execution_time_ms: data.instanceProperties?.duration || 1500,
+       progress: data.status === 'COMPLETED' ? 100 : 50,
+       error_message: data.failureReason || null
+     };
+   } catch (error) {
+     throw error;
+   }
+ }
 
 async function checkGoogleCirqStatus(jobId) {
-  try {
-    const response = await fetch(`https://quantum.googleapis.com/v1alpha1/projects/quantum/results/${jobId}`, {
-      headers: { 'Accept': 'application/json' }
-    });
-    
-    if (!response.ok) {
-      return { status: 'running', results: null, execution_time_ms: 0, progress: 25, error_message: null };
-    }
-    
-    const data = await response.json();
-    const statusMap = { PENDING: 'queued', RUNNING: 'running', SUCCESS: 'completed', ERROR: 'failed' };
-    
-    return {
-      status: statusMap[data.status] || 'running',
-      results: data.status === 'SUCCESS' ? parseGoogleResults(data.measurements) : null,
-      execution_time_ms: data.executionDurationMs || 1000,
-      progress: data.status === 'SUCCESS' ? 100 : 50,
-      error_message: data.error ? data.error.message : null
-    };
-  } catch (error) {
-    return { status: 'running', results: null, execution_time_ms: 0, progress: 25, error_message: null };
-  }
-}
+   try {
+     const token = Deno.env.get('GOOGLE_CIRQ_TOKEN');
+     if (!token) throw new Error('GOOGLE_CIRQ_TOKEN not configured');
+
+     const response = await fetch(`https://quantum.googleapis.com/v1alpha1/projects/quantum/results/${jobId}`, {
+       headers: { 
+         'Accept': 'application/json',
+         'Authorization': `Bearer ${token}`
+       }
+     });
+
+     if (!response.ok) {
+       throw new Error(`Google Cirq API error: ${response.status}`);
+     }
+
+     const data = await response.json();
+     const statusMap = { PENDING: 'queued', RUNNING: 'running', SUCCESS: 'completed', ERROR: 'failed' };
+
+     return {
+       status: statusMap[data.status] || 'running',
+       results: data.status === 'SUCCESS' ? parseGoogleResults(data.measurements) : null,
+       execution_time_ms: data.executionDurationMs || 1000,
+       progress: data.status === 'SUCCESS' ? 100 : 50,
+       error_message: data.error ? data.error.message : null
+     };
+   } catch (error) {
+     throw error;
+   }
+ }
 
 function parseIBMResults(result) {
   const measurements = result?.data?.counts || {};
