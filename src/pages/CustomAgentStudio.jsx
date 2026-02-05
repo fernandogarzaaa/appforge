@@ -7,7 +7,8 @@ import { Badge } from '@/components/ui/badge';
 import CustomAgentBuilder from '@/components/ai/CustomAgentBuilder';
 import CustomAgentTrainer from '@/components/ai/CustomAgentTrainer';
 import AgentVersionHistory from '@/components/versioning/AgentVersionHistory';
-import { Sparkles, Plus, Save } from 'lucide-react';
+import OfflineAgentExporter from '@/components/ai/OfflineAgentExporter';
+import { Sparkles, Plus, Save, Download } from 'lucide-react';
 
 export default function CustomAgentStudio() {
   const [user, setUser] = useState(null);
@@ -16,6 +17,7 @@ export default function CustomAgentStudio() {
   const [showBuilder, setShowBuilder] = useState(false);
   const [saveMessage, setSaveMessage] = useState('');
   const [isSaving, setIsSaving] = useState(false);
+  const [exportingAgent, setExportingAgent] = useState(null);
 
   useEffect(() => {
     loadUser();
@@ -171,6 +173,15 @@ export default function CustomAgentStudio() {
                         <Button
                           size="sm"
                           variant="outline"
+                          onClick={() => setExportingAgent(agent)}
+                          className="flex-1"
+                        >
+                          <Download className="w-3 h-3 mr-1" />
+                          Export
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="outline"
                           onClick={() => toggleAgentStatus(agent.id, agent.is_active)}
                           className="flex-1"
                         >
@@ -195,6 +206,18 @@ export default function CustomAgentStudio() {
             />
           </TabsContent>
         </Tabs>
+
+        {/* Offline Export Modal */}
+        {exportingAgent && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+            <div className="w-full max-w-lg">
+              <OfflineAgentExporter
+                agent={exportingAgent}
+                onClose={() => setExportingAgent(null)}
+              />
+            </div>
+          </div>
+        )}
 
         {/* Training & Versioning Interface */}
         {selectedAgent && (
