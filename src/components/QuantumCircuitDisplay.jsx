@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react'
+import { base44 } from '@/api/base44Client'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Zap, TrendingUp, Cpu, AlertCircle, Play, Sparkles, Activity } from 'lucide-react'
 import { motion } from 'framer-motion'
+import { toast } from 'sonner'
 import QuantumCircuitDebugger from '@/components/quantum/QuantumCircuitDebugger'
 import QuantumHardwareConnect from '@/components/quantum/QuantumHardwareConnect'
 
@@ -48,32 +50,32 @@ export function QuantumCircuitDisplay({ data = null, loading = false }) {
   const runSimulation = async () => {
     setIsSimulating(true);
     try {
-      const response = await fetch('/api/quantum-simulate', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          circuit: data?.circuits?.[0] || { qubits: 2, gates: [{ type: 'H', targets: [0] }, { type: 'CNOT', targets: [0, 1] }] },
-          shots: 1000
-        })
+      const response = await base44.functions.invoke('quantumSimulation', {
+        circuit: data?.circuits?.[0] || data || { qubits: 2, gates: [{ type: 'H', targets: [0] }, { type: 'CNOT', targets: [0, 1] }] },
+        num_shots: 1000
       });
       
-      if (!response.ok) throw new Error('Simulation failed');
-      const result = await response.json();
+      const result = response.data;
+      
+      if (!result.success) throw new Error('Simulation failed');
+      
+      const sim = result.simulation;
+      const stateVectorStr = sim.statevector 
+        ? `|ψ⟩ = ${sim.statevector.slice(0, 4).map((amp, i) => `${amp.toFixed(3)}|${i.toString(2).padStart(2, '0')}⟩`).join(' + ')}`
+        : '|ψ⟩ = 0.707|00⟩ + 0.707|11⟩';
       
       setSimulationResult({
-        state: result.state || '|ψ⟩ = 0.707|00⟩ + 0.707|11⟩',
-        probability: result.probabilities || [0.5, 0, 0, 0.5],
-        fidelity: result.fidelity || 0.998,
-        executionTime: result.execution_time_ms ? `${result.execution_time_ms.toFixed(1)}ms` : '1.2ms'
+        state: stateVectorStr,
+        probability: Object.values(sim.probabilities || {}),
+        fidelity: sim.fidelity || 0.998,
+        executionTime: result.shots ? `${result.shots} shots` : '1000 shots'
       });
+      
+      toast.success('Simulation completed');
     } catch (error) {
       console.error('Simulation error:', error);
-      setSimulationResult({
-        state: '|ψ⟩ = Simulation Error',
-        probability: [],
-        fidelity: 0,
-        executionTime: 'Failed'
-      });
+      toast.error('Simulation failed');
+      setSimulationResult(null);
     } finally {
       setIsSimulating(false);
     }
