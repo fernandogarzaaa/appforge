@@ -3,7 +3,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import QuantumLLMSettings from '@/components/admin/QuantumLLMSettings';
 import OnboardingSystemConfig from '@/components/admin/OnboardingSystemConfig';
 import ProactiveAIAdmin from '@/components/admin/ProactiveAIAdmin';
-import { Settings, Brain, Sparkles, Lightbulb } from 'lucide-react';
+import AdminAuditViewer from '@/components/admin/AdminAuditViewer';
+import SystemMonitor from '@/components/admin/SystemMonitor';
+import GitHubAutomationMonitor from '@/components/admin/GitHubAutomationMonitor';
+import { Settings, Brain, Sparkles, Lightbulb, FileText, Activity } from 'lucide-react';
 
 export default function AdminSystemConfig() {
   return (
@@ -14,6 +17,10 @@ export default function AdminSystemConfig() {
           <h1 className="text-3xl font-bold text-gray-900">System Configuration</h1>
         </div>
         <p className="text-gray-600">Configure platform-wide AI and onboarding settings</p>
+      </div>
+
+      <div className="mb-6">
+        <SystemMonitor />
       </div>
 
       <Tabs defaultValue="quantum" className="space-y-6">
@@ -30,6 +37,14 @@ export default function AdminSystemConfig() {
             <Lightbulb className="w-4 h-4" />
             Proactive AI
           </TabsTrigger>
+          <TabsTrigger value="audit" className="gap-2">
+            <FileText className="w-4 h-4" />
+            Audit
+          </TabsTrigger>
+          <TabsTrigger value="github" className="gap-2">
+            <Activity className="w-4 h-4" />
+            GitHub Automation
+          </TabsTrigger>
         </TabsList>
 
         <TabsContent value="quantum">
@@ -42,6 +57,14 @@ export default function AdminSystemConfig() {
 
         <TabsContent value="proactive">
           <ProactiveAIAdmin />
+        </TabsContent>
+
+        <TabsContent value="audit">
+          <AdminAuditViewer />
+        </TabsContent>
+
+        <TabsContent value="github">
+          <GitHubAutomationMonitor />
         </TabsContent>
       </Tabs>
     </div>
