@@ -181,6 +181,7 @@ import AdminAnalytics from './pages/AdminAnalytics';
 import ComponentBuilder from './pages/ComponentBuilder';
 import FunctionBuilder from './pages/FunctionBuilder';
 import SmartDeployment from './pages/SmartDeployment';
+import SecurityCenter from './pages/SecurityCenter';
 import __Layout from './Layout.jsx';
 
 
@@ -319,6 +320,7 @@ export const PAGES = {
     "ComponentBuilder": ComponentBuilder,
     "FunctionBuilder": FunctionBuilder,
     "SmartDeployment": SmartDeployment,
+    "SecurityCenter": SecurityCenter,
 }
 
 export const pagesConfig = {

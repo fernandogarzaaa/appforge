@@ -130,6 +130,7 @@ function ConsolidatedAISidebar({ currentProject, collapsed, onToggle, user }) {
   ];
 
   const enterpriseItems = [
+    { label: 'Security Center', icon: ShieldCheck, href: createPageUrl('SecurityCenter') },
     { label: 'Data Privacy', icon: ShieldCheck, href: createPageUrl('DataPrivacy') },
     { label: 'Observability', icon: Activity, href: createPageUrl('Observability') },
     { label: 'Search Analytics', icon: BarChart3, href: createPageUrl('SearchAnalytics') },
