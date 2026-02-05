@@ -1,9 +1,5 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.6';
 
-/**
- * QuantumAI - Your custom quantum-enhanced LLM
- * Wraps base44 LLM with multiverse quantum analysis
- */
 Deno.serve(async (req) => {
   try {
     const base44 = createClientFromRequest(req);
@@ -13,7 +9,6 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Prompt is required' }, { status: 400 });
     }
 
-    // Quantum enhancement: Analyze prompt across parallel reasoning paths
     const quantumEnhancedPrompt = `🔮 QUANTUM AI PROCESSING
 
 **Original Query:** ${prompt}
@@ -38,7 +33,6 @@ ${response_json_schema ? '\n**Output Format:** Return ONLY valid JSON matching t
 
 ${add_context_from_internet ? '**Research Mode:** Use real-time internet data to validate and enhance the response.' : ''}`;
 
-    // Invoke base LLM with quantum enhancement
     const result = await base44.asServiceRole.integrations.Core.InvokeLLM({
       prompt: quantumEnhancedPrompt,
       response_json_schema,
@@ -46,7 +40,6 @@ ${add_context_from_internet ? '**Research Mode:** Use real-time internet data to
       file_urls
     });
 
-    // Add quantum metadata
     return Response.json({
       success: true,
       result,
