@@ -4,6 +4,14 @@ Deno.serve(async (req) => {
   try {
     const base44 = createClientFromRequest(req);
     
+    // Get AI agent configuration
+    const configs = await base44.asServiceRole.entities.AIAgentConfig.list();
+    const config = configs[0] || {
+      autonomous_fixes_enabled: true,
+      auto_fix_categories: ['validation', 'indexing', 'best_practices'],
+      require_approval_for_critical: false
+    };
+    
     // Get all projects
     const projects = await base44.asServiceRole.entities.Project.list();
     
@@ -14,6 +22,9 @@ Deno.serve(async (req) => {
     const reports = [];
 
     for (const project of projects) {
+      const actionsTaken = [];
+      const issuesFound = [];
+
       // Fetch project structure
       const [entities, pages, components] = await Promise.all([
         base44.asServiceRole.entities.Entity.filter({ project_id: project.id }).catch(() => []),
@@ -21,26 +32,33 @@ Deno.serve(async (req) => {
         base44.asServiceRole.entities.Component.filter({ project_id: project.id }).catch(() => [])
       ]);
 
-      // AI Analysis
-      const analysisPrompt = `Analyze this project and identify issues and improvements:
+      // AI Analysis with autonomous fix suggestions
+      const analysisPrompt = `Analyze this project and provide actionable fixes:
 
 **Project:** ${project.name}
-**Status:** ${project.status || 'unknown'}
 **Entities:** ${entities.length} (${entities.map(e => e.name).join(', ')})
 **Pages:** ${pages.length} (${pages.map(p => p.name).join(', ')})
 **Components:** ${components.length}
 
 **Entity Schemas:**
-${entities.slice(0, 3).map(e => `${e.name}: ${JSON.stringify(e.schema?.properties || {}).substring(0, 200)}`).join('\n')}
+${entities.map(e => `
+${e.name}:
+${JSON.stringify(e.schema?.properties || {}, null, 2).substring(0, 300)}
+`).join('\n')}
 
-Identify:
-1. **Critical Issues** - Security risks, broken relationships, missing required fields
-2. **Performance Issues** - Unindexed queries, large data fetches, inefficient patterns
-3. **Architecture Issues** - Poor structure, missing entities, code duplication
-4. **Quick Wins** - Easy improvements that add value
-5. **Best Practices** - Missing validations, error handling, testing
+For each issue, provide:
+1. Issue description
+2. Severity (critical/high/medium/low)
+3. Category (validation/indexing/security/performance/best_practices)
+4. Autonomous fix (exact JSON schema changes or code modifications)
+5. Whether it's safe to auto-apply
 
-Prioritize by impact and effort.`;
+Focus on:
+- Missing field validations
+- Missing indexes for frequently queried fields
+- Security vulnerabilities
+- Performance bottlenecks
+- Code quality issues`;
 
       const analysis = await base44.asServiceRole.integrations.Core.InvokeLLM({
         prompt: analysisPrompt,
@@ -48,28 +66,131 @@ Prioritize by impact and effort.`;
           type: "object",
           properties: {
             health_score: { type: "number" },
-            critical_issues: { type: "array", items: { type: "string" } },
-            performance_issues: { type: "array", items: { type: "string" } },
-            architecture_issues: { type: "array", items: { type: "string" } },
-            quick_wins: { type: "array", items: { type: "string" } },
+            issues: {
+              type: "array",
+              items: {
+                type: "object",
+                properties: {
+                  severity: { type: "string" },
+                  category: { type: "string" },
+                  description: { type: "string" },
+                  entity_name: { type: "string" },
+                  safe_to_auto_fix: { type: "boolean" },
+                  fix_action: {
+                    type: "object",
+                    properties: {
+                      type: { type: "string" },
+                      changes: { type: "object" }
+                    }
+                  }
+                }
+              }
+            },
             recommendations: { type: "array", items: { type: "string" } }
           }
         }
       });
 
-      const totalIssues = 
-        (analysis.critical_issues?.length || 0) + 
-        (analysis.performance_issues?.length || 0) + 
-        (analysis.architecture_issues?.length || 0);
+      // Process issues and apply autonomous fixes
+      if (analysis.issues && config.autonomous_fixes_enabled) {
+        for (const issue of analysis.issues) {
+          issuesFound.push({
+            severity: issue.severity,
+            category: issue.category,
+            description: issue.description,
+            auto_fixed: false
+          });
 
-      // Only send email if there are issues or the health score is below 80
-      if (totalIssues > 0 || (analysis.health_score && analysis.health_score < 80)) {
-        // Generate email report
+          // Check if this category is enabled for auto-fix
+          const canAutoFix = config.auto_fix_categories.includes(issue.category);
+          const isCritical = issue.severity === 'critical';
+          const requiresApproval = isCritical && config.require_approval_for_critical;
+
+          if (canAutoFix && issue.safe_to_auto_fix && !requiresApproval && issue.fix_action) {
+            try {
+              // Apply the fix based on action type
+              if (issue.fix_action.type === 'update_entity_schema' && issue.entity_name) {
+                const entity = entities.find(e => e.name === issue.entity_name);
+                if (entity) {
+                  // Merge changes into existing schema
+                  const updatedSchema = {
+                    ...entity.schema,
+                    properties: {
+                      ...entity.schema?.properties,
+                      ...issue.fix_action.changes.properties
+                    }
+                  };
+
+                  await base44.asServiceRole.entities.Entity.update(entity.id, {
+                    schema: updatedSchema
+                  });
+
+                  actionsTaken.push({
+                    action_type: 'entity_schema_update',
+                    target: entity.name,
+                    description: `Fixed: ${issue.description}`,
+                    success: true
+                  });
+
+                  issuesFound[issuesFound.length - 1].auto_fixed = true;
+                }
+              } else if (issue.fix_action.type === 'add_index' && issue.entity_name) {
+                const entity = entities.find(e => e.name === issue.entity_name);
+                if (entity) {
+                  const currentIndexes = entity.metadata?.indexes || [];
+                  const newIndex = issue.fix_action.changes.index;
+                  
+                  if (newIndex && !currentIndexes.some(idx => idx.field === newIndex.field)) {
+                    await base44.asServiceRole.entities.Entity.update(entity.id, {
+                      metadata: {
+                        ...entity.metadata,
+                        indexes: [...currentIndexes, newIndex]
+                      }
+                    });
+
+                    actionsTaken.push({
+                      action_type: 'index_added',
+                      target: `${entity.name}.${newIndex.field}`,
+                      description: `Added index for performance: ${issue.description}`,
+                      success: true
+                    });
+
+                    issuesFound[issuesFound.length - 1].auto_fixed = true;
+                  }
+                }
+              }
+            } catch (fixError) {
+              actionsTaken.push({
+                action_type: 'fix_failed',
+                target: issue.entity_name || 'unknown',
+                description: `Failed to fix: ${issue.description} - ${fixError.message}`,
+                success: false
+              });
+            }
+          }
+        }
+      }
+
+      // Save health report
+      await base44.asServiceRole.entities.ProjectHealthReport.create({
+        project_id: project.id,
+        health_score: analysis.health_score,
+        scan_timestamp: new Date().toISOString(),
+        issues_found: issuesFound,
+        actions_taken: actionsTaken,
+        email_sent: false
+      });
+
+      const totalIssues = issuesFound.length;
+      const fixedIssues = issuesFound.filter(i => i.auto_fixed).length;
+
+      // Send email report if there are issues or actions taken
+      if (totalIssues > 0 || actionsTaken.length > 0) {
         const emailBody = `
 <div style="font-family: system-ui, -apple-system, sans-serif; max-width: 600px; margin: 0 auto;">
   <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 30px; border-radius: 12px 12px 0 0;">
-    <h1 style="color: white; margin: 0; font-size: 24px;">🤖 Project Health Report</h1>
-    <p style="color: rgba(255,255,255,0.9); margin: 8px 0 0 0;">AI Agent Monitoring: ${project.name}</p>
+    <h1 style="color: white; margin: 0; font-size: 24px;">🤖 AI Agent Report</h1>
+    <p style="color: rgba(255,255,255,0.9); margin: 8px 0 0 0;">Autonomous Monitoring: ${project.name}</p>
   </div>
   
   <div style="background: white; padding: 30px; border: 1px solid #e5e7eb; border-radius: 0 0 12px 12px;">
@@ -77,41 +198,48 @@ Prioritize by impact and effort.`;
       <div style="font-size: 32px; font-weight: bold; color: ${analysis.health_score >= 80 ? '#065f46' : analysis.health_score >= 60 ? '#92400e' : '#991b1b'};">
         ${analysis.health_score}/100
       </div>
-      <div style="color: #6b7280; font-size: 14px;">Overall Health Score</div>
+      <div style="color: #6b7280; font-size: 14px;">Health Score</div>
     </div>
 
-    ${analysis.critical_issues?.length > 0 ? `
-    <div style="margin-bottom: 24px;">
-      <h2 style="color: #dc2626; font-size: 18px; margin: 0 0 12px 0;">🚨 Critical Issues</h2>
+    ${actionsTaken.length > 0 ? `
+    <div style="background: #ecfdf5; padding: 16px; border-radius: 8px; border-left: 4px solid #10b981; margin-bottom: 24px;">
+      <h2 style="color: #065f46; font-size: 18px; margin: 0 0 12px 0;">✅ Autonomous Actions Taken (${actionsTaken.length})</h2>
       <ul style="margin: 0; padding-left: 20px; color: #374151;">
-        ${analysis.critical_issues.map(issue => `<li style="margin-bottom: 8px;">${issue}</li>`).join('')}
+        ${actionsTaken.map(action => `
+          <li style="margin-bottom: 8px;">
+            <strong>${action.action_type}:</strong> ${action.description}
+            ${action.success ? '<span style="color: #10b981;">✓</span>' : '<span style="color: #ef4444;">✗</span>'}
+          </li>
+        `).join('')}
       </ul>
     </div>
     ` : ''}
 
-    ${analysis.performance_issues?.length > 0 ? `
-    <div style="margin-bottom: 24px;">
-      <h2 style="color: #f59e0b; font-size: 18px; margin: 0 0 12px 0;">⚡ Performance Issues</h2>
-      <ul style="margin: 0; padding-left: 20px; color: #374151;">
-        ${analysis.performance_issues.map(issue => `<li style="margin-bottom: 8px;">${issue}</li>`).join('')}
-      </ul>
+    ${fixedIssues > 0 ? `
+    <div style="background: #dbeafe; padding: 12px 16px; border-radius: 8px; margin-bottom: 16px;">
+      <p style="margin: 0; color: #1e40af; font-weight: 600;">
+        🔧 Auto-Fixed: ${fixedIssues} of ${totalIssues} issues
+      </p>
     </div>
     ` : ''}
 
-    ${analysis.architecture_issues?.length > 0 ? `
+    ${issuesFound.length > 0 ? `
     <div style="margin-bottom: 24px;">
-      <h2 style="color: #8b5cf6; font-size: 18px; margin: 0 0 12px 0;">🏗️ Architecture Issues</h2>
+      <h2 style="color: #374151; font-size: 18px; margin: 0 0 12px 0;">📊 Issues Detected (${totalIssues})</h2>
       <ul style="margin: 0; padding-left: 20px; color: #374151;">
-        ${analysis.architecture_issues.map(issue => `<li style="margin-bottom: 8px;">${issue}</li>`).join('')}
-      </ul>
-    </div>
-    ` : ''}
-
-    ${analysis.quick_wins?.length > 0 ? `
-    <div style="margin-bottom: 24px;">
-      <h2 style="color: #10b981; font-size: 18px; margin: 0 0 12px 0;">✨ Quick Wins</h2>
-      <ul style="margin: 0; padding-left: 20px; color: #374151;">
-        ${analysis.quick_wins.map(win => `<li style="margin-bottom: 8px;">${win}</li>`).join('')}
+        ${issuesFound.map(issue => `
+          <li style="margin-bottom: 8px;">
+            <span style="background: ${
+              issue.severity === 'critical' ? '#fecaca' : 
+              issue.severity === 'high' ? '#fed7aa' : 
+              issue.severity === 'medium' ? '#fef3c7' : '#dbeafe'
+            }; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600;">
+              ${issue.severity}
+            </span>
+            ${issue.description}
+            ${issue.auto_fixed ? ' <span style="color: #10b981;">✓ Fixed</span>' : ''}
+          </li>
+        `).join('')}
       </ul>
     </div>
     ` : ''}
@@ -126,49 +254,56 @@ Prioritize by impact and effort.`;
     ` : ''}
 
     <div style="margin-top: 24px; padding-top: 24px; border-top: 1px solid #e5e7eb; color: #9ca3af; font-size: 12px;">
-      <p style="margin: 0;">Scanned: ${entities.length} entities, ${pages.length} pages, ${components.length} components</p>
+      <p style="margin: 0;">Mode: ${config.autonomous_fixes_enabled ? '🤖 Autonomous' : '👀 Monitor Only'}</p>
+      <p style="margin: 8px 0 0 0;">Scanned: ${entities.length} entities, ${pages.length} pages, ${components.length} components</p>
       <p style="margin: 8px 0 0 0;">Generated: ${new Date().toLocaleString()}</p>
     </div>
   </div>
 </div>
 `;
 
-        // Send email to project owner or creator
-        const recipientEmail = project.created_by || project.owner_email;
+        const recipientEmail = config.notification_email || project.created_by || project.owner_email;
         
         if (recipientEmail) {
           await base44.asServiceRole.integrations.Core.SendEmail({
             to: recipientEmail,
-            subject: `🤖 Project Health Report: ${project.name} (Score: ${analysis.health_score}/100)`,
+            subject: `🤖 AI Agent: ${actionsTaken.length > 0 ? `Fixed ${fixedIssues} issues in` : 'Monitoring'} ${project.name}`,
             body: emailBody
           });
 
-          reports.push({
-            project: project.name,
-            health_score: analysis.health_score,
-            total_issues: totalIssues,
-            email_sent: true
-          });
+          // Update report to mark email sent
+          const savedReports = await base44.asServiceRole.entities.ProjectHealthReport.filter(
+            { project_id: project.id }, 
+            '-scan_timestamp', 
+            1
+          );
+          if (savedReports[0]) {
+            await base44.asServiceRole.entities.ProjectHealthReport.update(savedReports[0].id, {
+              email_sent: true
+            });
+          }
         }
-      } else {
-        reports.push({
-          project: project.name,
-          health_score: analysis.health_score,
-          status: 'healthy',
-          email_sent: false
-        });
       }
+
+      reports.push({
+        project: project.name,
+        health_score: analysis.health_score,
+        issues_found: totalIssues,
+        auto_fixed: fixedIssues,
+        actions_taken: actionsTaken.length
+      });
     }
 
     return Response.json({
       success: true,
       scanned: projects.length,
+      autonomous_mode: config.autonomous_fixes_enabled,
       reports: reports,
       timestamp: new Date().toISOString()
     });
 
   } catch (error) {
-    console.error('Project monitoring error:', error);
+    console.error('AI Agent error:', error);
     return Response.json({ 
       error: error.message,
       timestamp: new Date().toISOString()

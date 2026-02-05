@@ -162,6 +162,7 @@ import Roadmap from './pages/Roadmap';
 import RoleManagement from './pages/RoleManagement';
 import SearchAnalytics from './pages/SearchAnalytics';
 import Security from './pages/Security';
+import SecurityCenter from './pages/SecurityCenter';
 import SecurityFeatures from './pages/SecurityFeatures';
 import SmartDeployment from './pages/SmartDeployment';
 import SocialMediaHub from './pages/SocialMediaHub';
@@ -181,7 +182,7 @@ import VisualizationStudio from './pages/VisualizationStudio';
 import Web3Dashboard from './pages/Web3Dashboard';
 import WebhookMonitor from './pages/WebhookMonitor';
 import WorkflowBuilder from './pages/WorkflowBuilder';
-import SecurityCenter from './pages/SecurityCenter';
+import AIAgentControl from './pages/AIAgentControl';
 import __Layout from './Layout.jsx';
 
 
@@ -301,6 +302,7 @@ export const PAGES = {
     "RoleManagement": RoleManagement,
     "SearchAnalytics": SearchAnalytics,
     "Security": Security,
+    "SecurityCenter": SecurityCenter,
     "SecurityFeatures": SecurityFeatures,
     "SmartDeployment": SmartDeployment,
     "SocialMediaHub": SocialMediaHub,
@@ -320,7 +322,7 @@ export const PAGES = {
     "Web3Dashboard": Web3Dashboard,
     "WebhookMonitor": WebhookMonitor,
     "WorkflowBuilder": WorkflowBuilder,
-    "SecurityCenter": SecurityCenter,
+    "AIAgentControl": AIAgentControl,
 }
 
 export const pagesConfig = {
