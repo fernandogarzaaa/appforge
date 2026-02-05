@@ -52,11 +52,11 @@ export default function DeploymentMonitor() {
 
   return (
     <div className="space-y-6">
-      <div className="grid grid-cols-4 gap-4">
-        <Card>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <Card className="dark:bg-slate-900/50">
           <CardContent className="p-4">
-            <div className="text-2xl font-bold">{stats.total}</div>
-            <div className="text-xs text-gray-600">Total Deployments</div>
+            <div className="text-2xl font-bold dark:text-gray-100">{stats.total}</div>
+            <div className="text-xs text-gray-600 dark:text-gray-400">Total Deployments</div>
           </CardContent>
         </Card>
         <Card>

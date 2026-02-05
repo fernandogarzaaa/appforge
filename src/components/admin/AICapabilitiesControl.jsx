@@ -67,10 +67,10 @@ export default function AICapabilitiesControl() {
 
   return (
     <div className="space-y-6">
-      <Card>
+      <Card className="dark:bg-slate-900/50">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Brain className="w-5 h-5 text-purple-600" />
+          <CardTitle className="flex items-center gap-2 dark:text-gray-100">
+            <Brain className="w-5 h-5 text-purple-600 dark:text-purple-400" />
             AI Capabilities Status
           </CardTitle>
         </CardHeader>
