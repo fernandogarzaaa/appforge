@@ -2,7 +2,8 @@ import React from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import QuantumLLMSettings from '@/components/admin/QuantumLLMSettings';
 import OnboardingSystemConfig from '@/components/admin/OnboardingSystemConfig';
-import { Settings, Brain, Sparkles } from 'lucide-react';
+import ProactiveAIAdmin from '@/components/admin/ProactiveAIAdmin';
+import { Settings, Brain, Sparkles, Lightbulb } from 'lucide-react';
 
 export default function AdminSystemConfig() {
   return (
@@ -19,11 +20,15 @@ export default function AdminSystemConfig() {
         <TabsList>
           <TabsTrigger value="quantum" className="gap-2">
             <Brain className="w-4 h-4" />
-            QuantumAI Settings
+            QuantumAI
           </TabsTrigger>
           <TabsTrigger value="onboarding" className="gap-2">
             <Sparkles className="w-4 h-4" />
-            AI Onboarding
+            Onboarding
+          </TabsTrigger>
+          <TabsTrigger value="proactive" className="gap-2">
+            <Lightbulb className="w-4 h-4" />
+            Proactive AI
           </TabsTrigger>
         </TabsList>
 
@@ -33,6 +38,10 @@ export default function AdminSystemConfig() {
 
         <TabsContent value="onboarding">
           <OnboardingSystemConfig />
+        </TabsContent>
+
+        <TabsContent value="proactive">
+          <ProactiveAIAdmin />
         </TabsContent>
       </Tabs>
     </div>
