@@ -168,6 +168,7 @@ import Web3Dashboard from './pages/Web3Dashboard';
 import WebhookMonitor from './pages/WebhookMonitor';
 import WorkflowBuilder from './pages/WorkflowBuilder';
 import AdminAgentControl from './pages/AdminAgentControl';
+import ProjectScaffolder from './pages/ProjectScaffolder';
 import __Layout from './Layout.jsx';
 
 
@@ -293,6 +294,7 @@ export const PAGES = {
     "WebhookMonitor": WebhookMonitor,
     "WorkflowBuilder": WorkflowBuilder,
     "AdminAgentControl": AdminAgentControl,
+    "ProjectScaffolder": ProjectScaffolder,
 }
 
 export const pagesConfig = {

@@ -59,6 +59,14 @@ export default function Dashboard() {
 
   const quickActions = [
   {
+    title: 'AI Scaffolder',
+    description: 'Generate complete project structure from description',
+    icon: FolderKanban,
+    href: createPageUrl('ProjectScaffolder'),
+    gradient: 'from-indigo-500 to-purple-500',
+    badge: '🔥 Hot'
+  },
+  {
     title: 'Start from Template',
     description: 'Browse 100+ ready-to-use templates',
     icon: LayoutTemplate,
@@ -91,12 +99,6 @@ export default function Dashboard() {
   }];
 
 
-  const [user, setUser] = React.useState(null);
-
-  React.useEffect(() => {
-    base44.auth.me().then(setUser).catch(() => setUser(null));
-  }, []);
-
   const capabilities = [
   { icon: Code, label: 'Bot Builder', href: createPageUrl('BotBuilder'), color: 'text-blue-600 bg-blue-50' },
   { icon: Rocket, label: 'Workflows', href: createPageUrl('WorkflowBuilder'), color: 'text-purple-600 bg-purple-50' },
@@ -104,10 +106,6 @@ export default function Dashboard() {
   { icon: Globe, label: 'DeFi Hub', href: createPageUrl('DeFiHub'), color: 'text-green-600 bg-green-50' },
   { icon: ShieldCheck, label: 'Security', href: createPageUrl('Security'), color: 'text-red-600 bg-red-50' },
   { icon: Code, label: 'Observability', href: createPageUrl('Observability'), color: 'text-orange-600 bg-orange-50' }];
-
-  const adminCapabilities = [
-    { icon: ShieldCheck, label: 'Agent Admin', href: createPageUrl('AdminAgentControl'), color: 'text-red-600 bg-red-50' }
-  ];
 
 
   const onboardingSteps = [
@@ -235,7 +233,7 @@ export default function Dashboard() {
           Powered by Spectrum
         </Badge>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
         {quickActions.map((action, idx) =>
       <motion.div
         key={action.title}
@@ -307,38 +305,6 @@ export default function Dashboard() {
           </div>
         </CardContent>
       </Card>
-      
-      {user?.role === 'admin' && (
-        <Card className="border-2 border-red-200 shadow-xl bg-gradient-to-br from-red-50 to-orange-50">
-          <CardContent className="p-6">
-            <div className="flex items-center gap-2 mb-4">
-              <ShieldCheck className="w-5 h-5 text-red-600" />
-              <h3 className="font-semibold text-red-900">Admin Controls</h3>
-            </div>
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-              {adminCapabilities.map((cap, idx) =>
-            <Link key={cap.label} to={cap.href}>
-                  <motion.div
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.2, delay: 0.3 + idx * 0.05 }}
-                className="group">
-
-                    <div className="flex flex-col items-center gap-3 p-4 rounded-xl hover:bg-red-100 transition-all cursor-pointer">
-                      <div className={`w-12 h-12 rounded-xl ${cap.color} flex items-center justify-center group-hover:scale-110 transition-transform`}>
-                        <cap.icon className="w-6 h-6" />
-                      </div>
-                      <span className="text-sm font-medium text-gray-700 text-center group-hover:text-gray-900">
-                        {cap.label}
-                      </span>
-                    </div>
-                  </motion.div>
-                </Link>
-            )}
-            </div>
-          </CardContent>
-        </Card>
-      )}
     </motion.div>;
 
 
