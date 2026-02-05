@@ -34,6 +34,8 @@ Deno.serve(async (req) => {
 
     if (export_type === 'desktop') {
       // Desktop application with installer
+      const isCodingAssistant = agent.agent_type === 'coding_assistant';
+      
       exportPackage = {
         version: '1.0',
         type: 'desktop_app',
@@ -42,13 +44,27 @@ Deno.serve(async (req) => {
           description: agent.description,
           goal: agent.goal,
           parameters: agent.parameters,
-          version: agent.version
+          version: agent.version,
+          agent_type: agent.agent_type || 'general'
         },
         training_data: agent.training_data || [],
         custom_tools: agent.custom_tools || [],
         safety_guardrails: agent.safety_guardrails || {},
         prompting_strategy: agent.prompting_strategy || {},
         system_prompt: generateSystemPrompt(agent),
+        
+        // Coding assistant specific features
+        ...(isCodingAssistant && {
+          coding_config: agent.coding_config,
+          file_system_integration: {
+            enabled: true,
+            safe_mode: !agent.coding_config?.file_permissions?.delete_files
+          },
+          command_execution: {
+            enabled: agent.coding_config?.system_permissions?.execute_commands || false,
+            sandboxed: true
+          }
+        }),
         
         // Electron app configuration
         electron_config: {
