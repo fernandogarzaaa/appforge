@@ -500,7 +500,6 @@ export default function Dashboard() {
                   data={quantumCircuits && quantumCircuits[0]}
                   loading={isLoadingCircuits} />
 
-                  
                   {/* Quantum Circuit Visualizer */}
                   <QuantumCircuitVisualizer
                   initialQubits={3}
@@ -518,7 +517,7 @@ export default function Dashboard() {
         }
 
         {/* AI Onboarding Wizard */}
-        <AIOnboardingWizard 
+        <AIOnboardingWizard
           projectIdea={projectIdeaContext}
           onComplete={() => setProjectIdeaContext(null)}
         />
