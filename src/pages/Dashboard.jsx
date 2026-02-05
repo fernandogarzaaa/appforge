@@ -6,8 +6,8 @@ import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import {
   FolderKanban, Database, FileCode, Component, Sparkles, Plus, Zap,
-  ShieldCheck, Rocket, Users, Globe, Smartphone, Brain, LayoutTemplate,
-  Code } from
+  ShieldCheck, Rocket, Users, Smartphone, Brain, LayoutTemplate,
+  Code, Activity } from
 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
@@ -93,19 +93,18 @@ export default function Dashboard() {
   }];
 
 
-  const capabilities = React.useMemo(() => [
-  { icon: Code, label: 'Bot Builder', href: createPageUrl('BotBuilder'), color: 'text-blue-600 bg-blue-50 dark:text-blue-400 dark:bg-blue-950/50' },
-  { icon: Rocket, label: 'Workflows', href: createPageUrl('WorkflowBuilder'), color: 'text-purple-600 bg-purple-50 dark:text-purple-400 dark:bg-purple-950/50' },
-  { icon: Brain, label: 'AI/ML', href: createPageUrl('MLIntegration'), color: 'text-pink-600 bg-pink-50 dark:text-pink-400 dark:bg-pink-950/50' },
-  { icon: ShieldCheck, label: 'Security', href: createPageUrl('Security'), color: 'text-red-600 bg-red-50 dark:text-red-400 dark:bg-red-950/50' },
-  { icon: Code, label: 'Observability', href: createPageUrl('Observability'), color: 'text-orange-600 bg-orange-50 dark:text-orange-400 dark:bg-orange-950/50' },
+  const capabilities = [
+  { icon: Code, label: 'Bot Builder', href: createPageUrl('BotBuilder'), color: 'text-blue-600 bg-blue-50' },
+  { icon: Rocket, label: 'Workflows', href: createPageUrl('WorkflowBuilder'), color: 'text-purple-600 bg-purple-50' },
+  { icon: Brain, label: 'AI/ML', href: createPageUrl('MLIntegration'), color: 'text-pink-600 bg-pink-50' },
+  { icon: ShieldCheck, label: 'Security', href: createPageUrl('Security'), color: 'text-red-600 bg-red-50' },
+  { icon: Code, label: 'Observability', href: createPageUrl('Observability'), color: 'text-orange-600 bg-orange-50' },
   ...(user?.role === 'admin' ? [
-    { icon: ShieldCheck, label: 'Admin Dashboard', href: createPageUrl('AdminDashboard'), color: 'text-red-700 bg-red-100 dark:text-red-300 dark:bg-red-900/50' }
-  ] : [])
-  ], [user]);
+    { icon: ShieldCheck, label: 'Admin', href: createPageUrl('AdminDashboard'), color: 'text-red-700 bg-red-100' }
+  ] : [])];
 
-  const quickActionsFormatted = React.useMemo(() => quickActions, []);
-  const onboardingSteps = React.useMemo(() => [
+
+  const onboardingSteps = [
   {
     title: 'Start with a prompt',
     description: 'Describe your app and let AI draft the architecture.',
@@ -123,11 +122,11 @@ export default function Dashboard() {
     description: 'Deploy with confidence and watch performance live.',
     icon: Rocket,
     href: createPageUrl('Deployments')
-  }], []);
+  }];
 
 
-  const HeroSection = React.useMemo(() => (
-    <motion.div
+  const HeroSection = () =>
+  <motion.div
     initial={{ opacity: 0, y: 20 }}
     animate={{ opacity: 1, y: 0 }}
     transition={{ duration: 0.5 }}
@@ -211,12 +210,11 @@ export default function Dashboard() {
           </div>
         </CardContent>
       </Card>
-    </motion.div>
-  ), [ideaInput]);
+    </motion.div>;
 
 
-  const SmartRecommendations = React.useMemo(() => (
-    <motion.div
+  const SmartRecommendations = () =>
+  <motion.div
     initial={{ opacity: 0, y: 20 }}
     animate={{ opacity: 1, y: 0 }}
     transition={{ duration: 0.5, delay: 0.1 }}
@@ -232,7 +230,7 @@ export default function Dashboard() {
         </Badge>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        {quickActionsFormatted.map((action, idx) =>
+        {quickActions.map((action, idx) =>
       <motion.div
         key={action.title}
         initial={{ opacity: 0, y: 20 }}
@@ -264,12 +262,11 @@ export default function Dashboard() {
           </motion.div>
       )}
       </div>
-    </motion.div>
-  ), [quickActionsFormatted]);
+    </motion.div>;
 
 
-  const CapabilityDiscovery = React.useMemo(() => (
-    <motion.div
+  const CapabilityDiscovery = () =>
+  <motion.div
     initial={{ opacity: 0, y: 20 }}
     animate={{ opacity: 1, y: 0 }}
     transition={{ duration: 0.5, delay: 0.3 }}
@@ -304,12 +301,11 @@ export default function Dashboard() {
           </div>
         </CardContent>
       </Card>
-    </motion.div>
-  ), [capabilities]);
+    </motion.div>;
 
 
-  const OnboardingTour = React.useMemo(() => (
-    <motion.div
+  const OnboardingTour = () =>
+  <motion.div
     initial={{ opacity: 0, y: 20 }}
     animate={{ opacity: 1, y: 0 }}
     transition={{ duration: 0.5, delay: 0.2 }}
@@ -342,8 +338,7 @@ export default function Dashboard() {
           </Link>
       )}
       </div>
-    </motion.div>
-  ), [onboardingSteps]);
+    </motion.div>;
 
 
   return (
