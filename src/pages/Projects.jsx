@@ -1,7 +1,5 @@
 import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { base44 } from '@/api/base44Client';
-import { userService } from '@/api/appforge';
-import { useBackendAuth } from '@/contexts/BackendAuthContext';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Search, Plus, Grid3X3, List, Filter, FolderKanban, Trash2, Copy, CheckSquare, Square, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -51,7 +49,6 @@ export default function Projects() {
   const [isSelectionMode, setIsSelectionMode] = useState(false);
 
   const queryClient = useQueryClient();
-  const { isAuthenticated } = useBackendAuth();
   const { toast: _toast } = useToast();
 
   // Fetch base44 projects
@@ -71,14 +68,7 @@ export default function Projects() {
     retry: 1,
   });
 
-  // Fetch backend projects (optional - shows integration)
-  const { data: _backendProjects = [] } = useQuery({
-    queryKey: ['backendProjects'],
-    queryFn: () => userService.listProjects(),
-    enabled: isAuthenticated,
-    retry: 1,
-    // Silent fail - backend projects are optional
-  });
+
 
   /** @type {import('@tanstack/react-query').UseMutationResult<any, Error, {name: string; status?: string; color?: string; icon?: string; description?: string;}>} */
   const createMutation = useMutation({

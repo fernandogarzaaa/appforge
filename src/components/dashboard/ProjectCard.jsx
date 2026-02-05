@@ -5,7 +5,6 @@ import { MoreHorizontal, Database, FileCode, Component, ExternalLink, Copy, Chec
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { FavoriteButton } from '@/components/FavoriteButton';
-import { useFavorites } from '@/hooks/useFavorites';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -34,7 +33,6 @@ export default function ProjectCard({
   onToggleSelect
 }) {
   const stats = project.stats || { pages_count: 0, entities_count: 0, components_count: 0 };
-  const { isFavorite, toggleFavorite } = useFavorites();
 
   const handleCardClick = (e) => {
     if (isSelectionMode) {
@@ -108,13 +106,7 @@ export default function ProjectCard({
             
             {!isSelectionMode && (
               <div className="flex items-center gap-1">
-                <FavoriteButton 
-                  projectId={project.id}
-                  isFavorite={isFavorite(project.id)}
-                  onToggle={toggleFavorite}
-                  size="sm"
-                />
-                <DropdownMenu>
+                 <DropdownMenu>
                   <DropdownMenuTrigger asChild onClick={(e) => e.preventDefault()}>
                     <Button variant="ghost" size="icon" className="h-7 w-7 rounded-md opacity-0 group-hover:opacity-100 transition-opacity">
                       <MoreHorizontal className="w-3.5 h-3.5 text-gray-500 dark:text-gray-400" />

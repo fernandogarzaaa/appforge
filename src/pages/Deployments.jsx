@@ -1,7 +1,8 @@
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { useDeployments } from '@/hooks/useDeployments';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { toast } from 'sonner';
 import { DeploymentsTable } from '@/components/deployment/DeploymentsTable';
 import { DeploymentFilters } from '@/components/deployment/DeploymentFilters';
 import { calculateDeploymentStats } from '@/lib/deploymentHistory';

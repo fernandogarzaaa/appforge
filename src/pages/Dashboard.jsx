@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { base44 } from '@/api/base44Client';
-import { quantumService } from '@/api/appforge';
 import { useQuery } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
@@ -26,10 +25,10 @@ export default function Dashboard() {
   const [ideaInput, setIdeaInput] = useState('');
   const [isCreating, setIsCreating] = useState(false);
   const { toast } = useToast();
-  const [isAuthenticated, setIsAuthenticated] = React.useState(false);
+  const [user, setUser] = React.useState(null);
 
   React.useEffect(() => {
-    base44.auth.isAuthenticated().then(setIsAuthenticated);
+    base44.auth.me().then(setUser).catch(() => setUser(null));
   }, []);
 
   const { data: projects = [], isLoading } = useQuery({
@@ -40,17 +39,12 @@ export default function Dashboard() {
   // Fetch quantum circuits from backend if authenticated
   const { data: quantumCircuits = [], isLoading: isLoadingCircuits } = useQuery({
     queryKey: ['quantumCircuits'],
-    queryFn: async () => {
-      try {
-        const jobs = await base44.entities.QuantumJob.filter({ user_id: user?.email }, '-submitted_at', 5);
-        return jobs || [];
-      } catch (error) {
-        console.error('Failed to load quantum circuits:', error);
-        return [];
-      }
-    },
-    enabled: isAuthenticated && !!user?.email,
-    retry: 1
+    queryFn: () => quantumService.listCircuits(),
+    enabled: isAuthenticated, // Only fetch if authenticated with backend
+    retry: 1,
+    onError: (error) => {
+      console.error('Failed to load quantum circuits:', error);
+    }
   });
 
   const totalStats = projects.reduce(
@@ -398,7 +392,7 @@ export default function Dashboard() {
               change="+15%"
               changeType="increase" />
 
-            {isAuthenticated &&
+            {user &&
             <StatCard
               title="Quantum"
               value={isLoadingCircuits ? '...' : quantumCircuits.length}
@@ -463,7 +457,7 @@ export default function Dashboard() {
         </motion.div>
 
         {/* Quantum Computing - For Authenticated Users */}
-        {isAuthenticated &&
+        {user &&
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -495,7 +489,7 @@ export default function Dashboard() {
                   <QuantumCircuitVisualizer
                   initialQubits={3}
                   onCircuitChange={(circuit) => {
-                    // Circuit changes are managed internally
+                    console.log('Circuit updated:', circuit);
                   }} />
 
                 </div>
