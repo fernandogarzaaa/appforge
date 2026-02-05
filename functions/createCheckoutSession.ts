@@ -1,5 +1,5 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.6';
-import { createPaymentLink } from '../src/functions/utils/paymongoClient.ts';
+import { createPaymentLink } from './utils/paymongoClient.js';
 
 // PayMongo price mapping
 const planPrices = {

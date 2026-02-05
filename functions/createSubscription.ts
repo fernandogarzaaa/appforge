@@ -4,67 +4,82 @@ Deno.serve(async (req) => {
   try {
     const base44 = createClientFromRequest(req);
     const user = await base44.auth.me();
-    
+
     if (!user) {
       return Response.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { plan_id, payment_method } = await req.json();
+    const { plan_id, payment_method, stripe_subscription_id } = await req.json();
 
-    if (!plan_id || !payment_method) {
-      return Response.json({ error: 'Missing plan_id or payment_method' }, { status: 400 });
+    if (!plan_id) {
+      return Response.json({ error: 'Plan ID required' }, { status: 400 });
     }
 
-    // Cancel existing active subscriptions
-    const existing = await base44.asServiceRole.entities.UserSubscription.filter({
-      user_id: user.email,
-      status: 'active'
-    });
-
-    for (const sub of existing) {
-      await base44.asServiceRole.entities.UserSubscription.update(sub.id, {
-        status: 'cancelled',
-        cancelled_at: new Date().toISOString()
-      });
-    }
-
-    // Get plan details
-    const plans = await base44.asServiceRole.entities.SubscriptionPlan.filter({
-      id: plan_id
-    });
-
+    // Get the plan details
+    const plans = await base44.asServiceRole.entities.SubscriptionPlan.filter({ id: plan_id });
     if (plans.length === 0) {
       return Response.json({ error: 'Plan not found' }, { status: 404 });
     }
 
     const plan = plans[0];
-    const now = new Date();
-    const renewsAt = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000); // 30 days
+
+    // Cancel any existing active subscriptions
+    const existingSubs = await base44.entities.UserSubscription.filter({
+      user_id: user.email,
+      status: 'active'
+    });
+
+    for (const sub of existingSubs) {
+      await base44.entities.UserSubscription.update(sub.id, {
+        status: 'cancelled',
+        cancelled_at: new Date().toISOString()
+      });
+    }
 
     // Create new subscription
-    const subscription = await base44.asServiceRole.entities.UserSubscription.create({
+    const subscription = await base44.entities.UserSubscription.create({
       user_id: user.email,
       plan_id: plan_id,
       status: 'active',
-      started_at: now.toISOString(),
-      renews_at: renewsAt.toISOString(),
-      payment_method: payment_method,
-      auto_renew: true,
+      payment_method: payment_method || 'stripe',
+      stripe_subscription_id: stripe_subscription_id,
       current_usage: {
-        api_calls_used: 0,
+        agents_created: 0,
         recommendations_used: 0,
         workflows_used: 0,
-        agents_created: 0
+        api_calls_used: 0
       },
-      last_payment_date: now.toISOString(),
-      next_payment_amount: payment_method === 'solana_wallet' ? plan.price_per_month_sol : plan.price_per_month_usd
+      started_at: new Date().toISOString(),
+      renews_at: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString()
     });
+
+    // Log audit entry
+    await base44.asServiceRole.entities.CoachingAuditLog.create({
+      user_id: user.email,
+      action_type: 'subscription_created',
+      details: {
+        plan_id: plan_id,
+        plan_name: plan.name,
+        payment_method
+      },
+      success: true
+    });
+
+    // Send confirmation email if needed
+    try {
+      await base44.integrations.Core.SendEmail({
+        to: user.email,
+        subject: `Welcome to ${plan.name}`,
+        body: `You have successfully subscribed to the ${plan.name} plan.\n\nYour subscription is active and renews on ${new Date(subscription.renews_at).toLocaleDateString()}.`
+      });
+    } catch (e) {
+      console.log('Email notification failed, continuing...');
+    }
 
     return Response.json({
       success: true,
-      subscription: subscription,
-      plan: plan,
-      message: `Successfully subscribed to ${plan.name}!`
+      subscription,
+      message: `Successfully subscribed to ${plan.name}`
     });
   } catch (error) {
     console.error('Subscription creation error:', error);

@@ -41,7 +41,7 @@ Deno.serve(async (req) => {
         amount: planInfo.amount,
         decimals: planInfo.decimals,
         mint: USDC_MINT,
-        recipient: Deno.env.get('SOLANA_PAYMENT_WALLET') || 'SolanaPaymentWalletAddressHere',
+        recipient: adminConfig?.wallet_address || Deno.env.get('SOLANA_PAYMENT_WALLET'),
         label: `${planInfo.name} Plan Subscription`,
         memo: `AppForge ${planInfo.name} Plan`,
         message: `Subscribe to ${planInfo.name} plan for 30 days`
