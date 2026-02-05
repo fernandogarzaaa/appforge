@@ -96,7 +96,7 @@ export default function Dashboard() {
   { icon: Rocket, label: 'Workflows', href: createPageUrl('WorkflowBuilder'), color: 'text-purple-600 bg-purple-50' },
   { icon: Brain, label: 'AI/ML', href: createPageUrl('MLIntegration'), color: 'text-pink-600 bg-pink-50' },
   { icon: Globe, label: 'DeFi Hub', href: createPageUrl('DeFiHub'), color: 'text-green-600 bg-green-50' },
-  { icon: ShieldCheck, label: 'Code Review', href: createPageUrl('CodeReview'), color: 'text-cyan-600 bg-cyan-50' },
+  { icon: ShieldCheck, label: 'Security', href: createPageUrl('Security'), color: 'text-red-600 bg-red-50' },
   { icon: Code, label: 'Observability', href: createPageUrl('Observability'), color: 'text-orange-600 bg-orange-50' }];
 
 
@@ -415,6 +415,44 @@ export default function Dashboard() {
         </motion.div>
 
         <CapabilityDiscovery />
+
+        {/* Admin Controls */}
+        {user?.role === 'admin' && adminCapabilities.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.35 }}
+            className="space-y-6">
+            <div>
+              <h2 className="text-2xl font-bold text-gray-900">Admin Controls</h2>
+              <p className="text-sm text-gray-600">System administration and management</p>
+            </div>
+            <Card className="border-2 border-red-200 bg-gradient-to-br from-red-50 to-orange-50">
+              <CardContent className="p-6">
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                  {adminCapabilities.map((cap, idx) => (
+                    <Link key={cap.label} to={cap.href}>
+                      <motion.div
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ duration: 0.2, delay: 0.35 + idx * 0.05 }}
+                        className="group">
+                        <div className="flex flex-col items-center gap-3 p-4 rounded-xl hover:bg-white transition-all cursor-pointer border-2 border-transparent hover:border-red-200">
+                          <div className={`w-12 h-12 rounded-xl ${cap.color} flex items-center justify-center group-hover:scale-110 transition-transform`}>
+                            <cap.icon className="w-6 h-6" />
+                          </div>
+                          <span className="text-sm font-medium text-gray-700 text-center group-hover:text-gray-900">
+                            {cap.label}
+                          </span>
+                        </div>
+                      </motion.div>
+                    </Link>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </motion.div>
+        )}
 
         {/* Recent Projects */}
         <motion.div

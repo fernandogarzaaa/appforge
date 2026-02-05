@@ -176,6 +176,8 @@ import SuperiorAIStudio from './pages/SuperiorAIStudio';
 import AdminAIControl from './pages/AdminAIControl';
 import AITemplates from './pages/AITemplates';
 import AdminTemplates from './pages/AdminTemplates';
+import AdminUserManagement from './pages/AdminUserManagement';
+import AdminAnalytics from './pages/AdminAnalytics';
 import __Layout from './Layout.jsx';
 
 
@@ -309,6 +311,8 @@ export const PAGES = {
     "AdminAIControl": AdminAIControl,
     "AITemplates": AITemplates,
     "AdminTemplates": AdminTemplates,
+    "AdminUserManagement": AdminUserManagement,
+    "AdminAnalytics": AdminAnalytics,
 }
 
 export const pagesConfig = {
