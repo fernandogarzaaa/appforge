@@ -21,6 +21,7 @@ import { useToast } from '@/components/ui/use-toast';
 import QuantumCircuitDisplay from '@/components/QuantumCircuitDisplay';
 import QuantumCircuitVisualizer from '@/components/QuantumCircuitVisualizer';
 import QuantumCircuitEducation from '@/components/QuantumCircuitEducation';
+import QuantumHardwareJobManager from '@/components/quantum/QuantumHardwareJobManager';
 
 export default function Dashboard() {
   const [ideaInput, setIdeaInput] = useState('');
@@ -339,7 +340,7 @@ export default function Dashboard() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-indigo-50/30">
-      <div className="mx-auto p-8 max-w-[1600px] space-y-12">
+      <div className="bg-slate-900 mx-auto p-8 max-w-[1600px] space-y-12">
         <HeroSection />
         <SmartRecommendations />
         <OnboardingTour />
@@ -352,7 +353,7 @@ export default function Dashboard() {
           className="mb-12">
 
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">Your Workspace</h2>
+            <h2 className="text-2xl font-bold text-gray-900">Your Workspace</h2>
             <Link to={createPageUrl('Projects') + '?new=true'}>
               <Button className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white shadow-lg shadow-indigo-500/30">
                 <Plus className="w-4 h-4 mr-2" />
