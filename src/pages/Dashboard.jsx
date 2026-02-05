@@ -21,6 +21,7 @@ import { useToast } from '@/components/ui/use-toast';
 import QuantumCircuitDisplay from '@/components/QuantumCircuitDisplay';
 import QuantumCircuitVisualizer from '@/components/QuantumCircuitVisualizer';
 import QuantumCircuitEducation from '@/components/QuantumCircuitEducation';
+import GuidedProjectWizard from '@/components/ai/GuidedProjectWizard';
 
 export default function Dashboard() {
   const [ideaInput, setIdeaInput] = useState('');
@@ -57,95 +58,76 @@ export default function Dashboard() {
     { entities: 0, pages: 0, components: 0 }
   );
 
-  const [user, setUser] = useState(null);
-
-  React.useEffect(() => {
-    base44.auth.me().then(setUser).catch(() => {});
-  }, []);
-
-  const quickActions = useMemo(() => [
-    {
-      title: 'Start from Template',
-      description: 'Browse 100+ ready-to-use templates',
-      icon: LayoutTemplate,
-      href: createPageUrl('TemplateMarketplace'),
-      gradient: 'from-blue-500 to-cyan-500',
-      badge: 'Popular'
-    },
-    {
-      title: 'Build with AI',
-      description: 'Let AI create your app from description',
-      icon: Sparkles,
-      href: createPageUrl('AIAssistant'),
-      gradient: 'from-purple-500 to-pink-500',
-      badge: 'New'
-    },
-    {
-      title: 'AGI Studio',
-      description: 'Create autonomous AI assistants',
-      icon: Brain,
-      href: createPageUrl('AGIStudio'),
-      gradient: 'from-purple-600 to-pink-600',
-      badge: 'AGI'
-    },
-    {
-      title: 'Mobile App Studio',
-      description: 'Create iOS & Android apps',
-      icon: Smartphone,
-      href: createPageUrl('MobileStudio'),
-      gradient: 'from-green-500 to-emerald-500'
-    },
-    ...(user?.role === 'admin' ? [{
-      title: 'AI Agent Control',
-      description: '24/7 autonomous project monitoring',
-      icon: Settings,
-      href: createPageUrl('AIAgentControl'),
-      gradient: 'from-purple-500 to-indigo-500',
-      badge: '🤖 Live'
-    }] : [])
-  ], [user]);
+  const quickActions = [
+  {
+    title: 'Start from Template',
+    description: 'Browse 100+ ready-to-use templates',
+    icon: LayoutTemplate,
+    href: createPageUrl('TemplateMarketplace'),
+    gradient: 'from-blue-500 to-cyan-500',
+    badge: 'Popular'
+  },
+  {
+    title: 'Build with AI',
+    description: 'Let AI create your app from description',
+    icon: Sparkles,
+    href: createPageUrl('AIAssistant'),
+    gradient: 'from-purple-500 to-pink-500',
+    badge: 'New'
+  },
+  {
+    title: 'AGI Studio',
+    description: 'Create autonomous AI assistants',
+    icon: Brain,
+    href: createPageUrl('AGIStudio'),
+    gradient: 'from-purple-600 to-pink-600',
+    badge: 'AGI'
+  },
+  {
+    title: 'Mobile App Studio',
+    description: 'Create iOS & Android apps',
+    icon: Smartphone,
+    href: createPageUrl('MobileStudio'),
+    gradient: 'from-green-500 to-emerald-500'
+  }];
 
 
-  const capabilities = useMemo(() => [
-    { icon: Code, label: 'Bot Builder', href: createPageUrl('BotBuilder'), color: 'text-blue-600 bg-blue-50 dark:bg-blue-900/30 dark:text-blue-400' },
-    { icon: Rocket, label: 'Workflows', href: createPageUrl('WorkflowBuilder'), color: 'text-purple-600 bg-purple-50 dark:bg-purple-900/30 dark:text-purple-400' },
-    { icon: Brain, label: 'AI/ML', href: createPageUrl('MLIntegration'), color: 'text-pink-600 bg-pink-50 dark:bg-pink-900/30 dark:text-pink-400' },
-    { icon: ShieldCheck, label: 'Security', href: createPageUrl('Security'), color: 'text-red-600 bg-red-50 dark:bg-red-900/30 dark:text-red-400' },
-    { icon: Code, label: 'Observability', href: createPageUrl('Observability'), color: 'text-orange-600 bg-orange-50 dark:bg-orange-900/30 dark:text-orange-400' },
-    ...(user?.role === 'admin' ? [
-      { icon: Settings, label: 'AI Agent', href: createPageUrl('AIAgentControl'), color: 'text-purple-700 bg-purple-100 dark:bg-purple-900/50 dark:text-purple-300' }
-    ] : [])
-  ], [user]);
+  const capabilities = [
+  { icon: Code, label: 'Bot Builder', href: createPageUrl('BotBuilder'), color: 'text-blue-600 bg-blue-50' },
+  { icon: Rocket, label: 'Workflows', href: createPageUrl('WorkflowBuilder'), color: 'text-purple-600 bg-purple-50' },
+  { icon: Brain, label: 'AI/ML', href: createPageUrl('MLIntegration'), color: 'text-pink-600 bg-pink-50' },
+  { icon: Globe, label: 'DeFi Hub', href: createPageUrl('DeFiHub'), color: 'text-green-600 bg-green-50' },
+  { icon: ShieldCheck, label: 'Security', href: createPageUrl('Security'), color: 'text-red-600 bg-red-50' },
+  { icon: Code, label: 'Observability', href: createPageUrl('Observability'), color: 'text-orange-600 bg-orange-50' }];
 
 
-  const onboardingSteps = useMemo(() => [
-    {
-      title: 'Start with a prompt',
-      description: 'Describe your app and let AI draft the architecture.',
-      icon: Sparkles,
-      href: createPageUrl('AIAssistant')
-    },
-    {
-      title: 'Connect your data',
-      description: 'Model entities, permissions, and workflows in minutes.',
-      icon: Database,
-      href: createPageUrl('EntityDesigner')
-    },
-    {
-      title: 'Ship and monitor',
-      description: 'Deploy with confidence and watch performance live.',
-      icon: Rocket,
-      href: createPageUrl('Deployments')
-    }
-  ], []);
+  const onboardingSteps = [
+  {
+    title: 'Start with a prompt',
+    description: 'Describe your app and let AI draft the architecture.',
+    icon: Sparkles,
+    href: createPageUrl('AIAssistant')
+  },
+  {
+    title: 'Connect your data',
+    description: 'Model entities, permissions, and workflows in minutes.',
+    icon: Database,
+    href: createPageUrl('EntityDesigner')
+  },
+  {
+    title: 'Ship and monitor',
+    description: 'Deploy with confidence and watch performance live.',
+    icon: Rocket,
+    href: createPageUrl('Deployments')
+  }];
 
 
-  const HeroSection = React.memo(() =>
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-      className="space-y-6">
+  const HeroSection = () =>
+  <motion.div
+    initial={{ opacity: 0, y: 20 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.5 }}
+    className="space-y-6">
 
       <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
         <div className="space-y-3">
@@ -191,45 +173,12 @@ export default function Dashboard() {
         </div>
       </div>
 
-      <Card className="border-2 border-indigo-200/50 shadow-xl shadow-indigo-500/10 bg-gradient-to-br from-white to-indigo-50/30">
-        <CardContent className="p-6">
-          <div className="flex items-start gap-3 mb-4">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center flex-shrink-0">
-              <Zap className="w-5 h-5 text-white" />
-            </div>
-            <div className="flex-1">
-              <h3 className="text-lg font-semibold text-gray-900 mb-1">Describe your idea</h3>
-              <p className="text-sm text-gray-600">AI will help you build it in minutes</p>
-            </div>
-          </div>
-          <div className="relative">
-            <Textarea
-            value={ideaInput}
-            onChange={(e) => setIdeaInput(e.target.value)}
-            placeholder="e.g., 'Build a CRM for real estate with lead tracking and email automation' or 'Create a fitness tracking app with workout plans'"
-            className="min-h-[120px] rounded-xl text-base px-5 py-4 pr-32 border-2 border-indigo-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 resize-none shadow-sm"
-            rows={4} />
+      <GuidedProjectWizard />
+    </motion.div>;
 
-            <Button
-            onClick={() => {
-              if (ideaInput.trim()) {
-                window.location.href = createPageUrl('AIAssistant') + '?auto_start=true&idea=' + encodeURIComponent(ideaInput);
-              }
-            }}
-            disabled={!ideaInput.trim()}
-            className="absolute right-3 bottom-3 h-12 px-6 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white rounded-xl shadow-lg shadow-indigo-500/30 disabled:opacity-50 font-medium">
 
-              <Sparkles className="w-5 h-5 mr-2" />
-              Generate App
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
-    </motion.div>
-  );
-
-  const SmartRecommendations = React.memo(({ quickActions }) =>
-    <motion.div
+  const SmartRecommendations = () =>
+  <motion.div
     initial={{ opacity: 0, y: 20 }}
     animate={{ opacity: 1, y: 0 }}
     transition={{ duration: 0.5, delay: 0.1 }}
@@ -244,7 +193,7 @@ export default function Dashboard() {
           Powered by Spectrum
         </Badge>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {quickActions.map((action, idx) =>
       <motion.div
         key={action.title}
@@ -253,7 +202,7 @@ export default function Dashboard() {
         transition={{ duration: 0.3, delay: 0.1 + idx * 0.05 }}>
 
             <Link to={action.href}>
-              <Card className="h-full hover:shadow-2xl hover:scale-105 transition-all duration-300 cursor-pointer border-2 hover:border-indigo-300 dark:hover:border-indigo-600 group dark:bg-gray-800 dark:border-gray-700">
+              <Card className="h-full hover:shadow-2xl hover:scale-105 transition-all duration-300 cursor-pointer border-2 hover:border-indigo-300 group">
                 <CardContent className="p-6">
                   <div className="flex items-start justify-between mb-4">
                     <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${action.gradient} flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform`}>
@@ -265,10 +214,10 @@ export default function Dashboard() {
                       </Badge>
                 }
                   </div>
-                  <h3 className="font-semibold text-gray-900 dark:text-white mb-2 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
+                  <h3 className="font-semibold text-gray-900 mb-2 group-hover:text-indigo-600 transition-colors">
                     {action.title}
                   </h3>
-                  <p className="text-sm text-gray-600 dark:text-gray-300">
+                  <p className="text-sm text-gray-600">
                     {action.description}
                   </p>
                 </CardContent>
@@ -277,11 +226,11 @@ export default function Dashboard() {
           </motion.div>
       )}
       </div>
-    </motion.div>
-  );
+    </motion.div>;
 
-  const CapabilityDiscovery = React.memo(({ capabilities }) =>
-    <motion.div
+
+  const CapabilityDiscovery = () =>
+  <motion.div
     initial={{ opacity: 0, y: 20 }}
     animate={{ opacity: 1, y: 0 }}
     transition={{ duration: 0.5, delay: 0.3 }}
@@ -291,7 +240,7 @@ export default function Dashboard() {
         <h2 className="text-2xl font-bold text-gray-900">Capability Discovery</h2>
         <p className="text-sm text-gray-600">Explore everything AppForge can do — from AI to observability</p>
       </div>
-      <Card className="border-2 shadow-xl dark:bg-gray-800 dark:border-gray-700">
+      <Card className="border-2 shadow-xl">
         <CardContent className="p-6">
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
             {capabilities.map((cap, idx) =>
@@ -302,11 +251,11 @@ export default function Dashboard() {
               transition={{ duration: 0.2, delay: 0.3 + idx * 0.05 }}
               className="group">
 
-                  <div className="flex flex-col items-center gap-3 p-4 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-all cursor-pointer">
+                  <div className="flex flex-col items-center gap-3 p-4 rounded-xl hover:bg-gray-50 transition-all cursor-pointer">
                     <div className={`w-12 h-12 rounded-xl ${cap.color} flex items-center justify-center group-hover:scale-110 transition-transform`}>
                       <cap.icon className="w-6 h-6" />
                     </div>
-                    <span className="text-sm font-medium text-gray-700 dark:text-gray-200 text-center group-hover:text-gray-900 dark:group-hover:text-white">
+                    <span className="text-sm font-medium text-gray-700 text-center group-hover:text-gray-900">
                       {cap.label}
                     </span>
                   </div>
@@ -316,11 +265,11 @@ export default function Dashboard() {
           </div>
         </CardContent>
       </Card>
-    </motion.div>
-  );
+    </motion.div>;
 
-  const OnboardingTour = React.memo(({ onboardingSteps }) =>
-    <motion.div
+
+  const OnboardingTour = () =>
+  <motion.div
     initial={{ opacity: 0, y: 20 }}
     animate={{ opacity: 1, y: 0 }}
     transition={{ duration: 0.5, delay: 0.2 }}
@@ -336,15 +285,15 @@ export default function Dashboard() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {onboardingSteps.map((step, idx) =>
       <Link key={step.title} to={step.href}>
-          <Card className="h-full border border-slate-200 dark:border-gray-700 hover:border-indigo-300 dark:hover:border-indigo-600 hover:shadow-lg transition dark:bg-gray-800">
-            <CardContent className="p-6 space-y-3">
-              <div className="w-12 h-12 rounded-xl bg-indigo-50 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-400 flex items-center justify-center">
-                <step.icon className="w-6 h-6" />
-              </div>
-              <div>
-                <h3 className="font-semibold text-gray-900 dark:text-white">{step.title}</h3>
-                <p className="text-sm text-gray-600 dark:text-gray-300">{step.description}</p>
-              </div>
+            <Card className="h-full border border-slate-200 hover:border-indigo-300 hover:shadow-lg transition">
+              <CardContent className="p-6 space-y-3">
+                <div className="w-12 h-12 rounded-xl bg-indigo-50 text-indigo-700 flex items-center justify-center">
+                  <step.icon className="w-6 h-6" />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-gray-900">{step.title}</h3>
+                  <p className="text-sm text-gray-600">{step.description}</p>
+                </div>
                 <Button variant="ghost" className="px-0 text-indigo-600">
                   Start step {idx + 1}
                 </Button>
@@ -353,8 +302,8 @@ export default function Dashboard() {
           </Link>
       )}
       </div>
-    </motion.div>
-  );
+    </motion.div>;
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-indigo-50/30">
@@ -433,7 +382,7 @@ export default function Dashboard() {
           </div>
         </motion.div>
 
-        <CapabilityDiscovery capabilities={capabilities} />
+        <CapabilityDiscovery />
 
         {/* Recent Projects */}
         <motion.div
@@ -450,13 +399,13 @@ export default function Dashboard() {
             )}
             </div> :
           projects.length === 0 ?
-          <Card className="border-2 border-dashed border-gray-300 dark:border-gray-700 shadow-none dark:bg-gray-800/50">
+          <Card className="border-2 border-dashed border-gray-300 shadow-none">
               <CardContent className="p-12 text-center">
-                <div className="w-16 h-16 bg-gradient-to-br from-indigo-100 to-purple-100 dark:from-indigo-900/30 dark:to-purple-900/30 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                  <FolderKanban className="w-8 h-8 text-indigo-600 dark:text-indigo-400" />
+                <div className="w-16 h-16 bg-gradient-to-br from-indigo-100 to-purple-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                  <FolderKanban className="w-8 h-8 text-indigo-600" />
                 </div>
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">No projects yet</h3>
-                <p className="text-gray-600 dark:text-gray-300 mb-6 max-w-md mx-auto">
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">No projects yet</h3>
+                <p className="text-gray-600 mb-6 max-w-md mx-auto">
                   Get started by creating your first project with our powerful no-code builder
                 </p>
                 <Link to={createPageUrl('Projects') + '?new=true'}>
