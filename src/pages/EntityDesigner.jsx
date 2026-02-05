@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { base44 } from '@/api/base44Client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { 
   Database, Plus, Save, Trash2, Copy, Search,
-  Table, MoreHorizontal, ChevronRight
+  Table, MoreHorizontal, ChevronRight, ChevronLeft
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -26,6 +26,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import FieldEditor from '@/components/entity/FieldEditor';
 import EmptyState from '@/components/common/EmptyState';
+import PaginationControls from '@/components/common/PaginationControls';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
@@ -37,6 +38,8 @@ export default function EntityDesigner() {
   const [showNewDialog, setShowNewDialog] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [newEntity, setNewEntity] = useState({ name: '', description: '', icon: '📦' });
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
 
   const urlParams = new URLSearchParams(window.location.search);
   const projectId = urlParams.get('projectId');
@@ -76,6 +79,18 @@ export default function EntityDesigner() {
     e.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  const paginatedEntities = useMemo(() => {
+    const totalPages = Math.ceil(filteredEntities.length / itemsPerPage);
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    return {
+      items: filteredEntities.slice(startIndex, endIndex),
+      currentPage,
+      totalPages,
+      totalItems: filteredEntities.length,
+    };
+  }, [filteredEntities, currentPage]);
+
   const handleAddField = () => {
     const newField = {
       name: '',
@@ -112,6 +127,15 @@ export default function EntityDesigner() {
     updateMutation.mutate({ id: selectedEntity.id, data: selectedEntity });
   };
 
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
+  const handleSearch = (query) => {
+    setSearchQuery(query);
+    setCurrentPage(1);
+  };
+
   if (!projectId) {
     return (
       <div className="flex items-center justify-center h-full">
@@ -144,11 +168,16 @@ export default function EntityDesigner() {
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
             <Input
               value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              onChange={(e) => handleSearch(e.target.value)}
               placeholder="Search entities..."
               className="pl-9 h-9 rounded-lg bg-gray-50 border-0"
             />
           </div>
+          {paginatedEntities.totalItems > 0 && (
+            <div className="text-xs text-gray-500 text-center mt-2">
+              {paginatedEntities.totalItems} entities
+            </div>
+          )}
         </div>
 
         <ScrollArea className="flex-1">
@@ -159,13 +188,13 @@ export default function EntityDesigner() {
                   <div key={i} className="h-14 bg-gray-100 rounded-xl animate-pulse" />
                 ))}
               </div>
-            ) : filteredEntities.length === 0 ? (
+            ) : paginatedEntities.items.length === 0 ? (
               <div className="text-center py-8 text-gray-500 text-sm">
                 {searchQuery ? 'No entities found' : 'No entities yet'}
               </div>
             ) : (
               <AnimatePresence>
-                {filteredEntities.map((entity) => (
+                {paginatedEntities.items.map((entity) => (
                   <motion.button
                     key={entity.id}
                     initial={{ opacity: 0 }}
@@ -192,10 +221,38 @@ export default function EntityDesigner() {
                   </motion.button>
                 ))}
               </AnimatePresence>
-            )}
-          </div>
-        </ScrollArea>
-      </div>
+              )}
+              </div>
+              </ScrollArea>
+
+              {paginatedEntities.totalPages > 1 && (
+              <div className="p-3 border-t border-gray-100 bg-white">
+              <div className="flex items-center justify-between gap-2 text-xs">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => handlePageChange(currentPage - 1)}
+                disabled={currentPage === 1}
+                className="h-8"
+              >
+                <ChevronLeft className="w-3 h-3" />
+              </Button>
+              <span className="text-gray-500">
+                Page {currentPage} of {paginatedEntities.totalPages}
+              </span>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => handlePageChange(currentPage + 1)}
+                disabled={currentPage === paginatedEntities.totalPages}
+                className="h-8"
+              >
+                <ChevronRight className="w-3 h-3" />
+              </Button>
+              </div>
+              </div>
+              )}
+              </div>
 
       {/* Entity Editor */}
       <div className="flex-1 bg-gray-50/50">

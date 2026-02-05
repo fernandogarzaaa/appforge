@@ -165,6 +165,7 @@ import SearchAnalytics from './pages/SearchAnalytics';
 import Security from './pages/Security';
 import SecurityCenter from './pages/SecurityCenter';
 import SecurityFeatures from './pages/SecurityFeatures';
+import Settings from './pages/Settings';
 import SmartDeployment from './pages/SmartDeployment';
 import SocialMediaHub from './pages/SocialMediaHub';
 import SubscriptionSuccess from './pages/SubscriptionSuccess';
@@ -183,7 +184,6 @@ import VisualizationStudio from './pages/VisualizationStudio';
 import Web3Dashboard from './pages/Web3Dashboard';
 import WebhookMonitor from './pages/WebhookMonitor';
 import WorkflowBuilder from './pages/WorkflowBuilder';
-import Settings from './pages/Settings';
 import __Layout from './Layout.jsx';
 
 
@@ -306,6 +306,7 @@ export const PAGES = {
     "Security": Security,
     "SecurityCenter": SecurityCenter,
     "SecurityFeatures": SecurityFeatures,
+    "Settings": Settings,
     "SmartDeployment": SmartDeployment,
     "SocialMediaHub": SocialMediaHub,
     "SubscriptionSuccess": SubscriptionSuccess,
@@ -324,7 +325,6 @@ export const PAGES = {
     "Web3Dashboard": Web3Dashboard,
     "WebhookMonitor": WebhookMonitor,
     "WorkflowBuilder": WorkflowBuilder,
-    "Settings": Settings,
 }
 
 export const pagesConfig = {
