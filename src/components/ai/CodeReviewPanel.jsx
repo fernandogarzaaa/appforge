@@ -1,291 +1,335 @@
 import React, { useState } from 'react';
 import { base44 } from '@/api/base44Client';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
-import { AlertCircle, CheckCircle2, Lightbulb, Code, Loader2, Copy, Check } from 'lucide-react';
-import { cn } from '@/lib/utils';
-
-const LANGUAGES = [
-  'javascript', 'typescript', 'python', 'java', 'cpp', 'csharp', 'php', 'ruby',
-  'go', 'rust', 'kotlin', 'swift', 'sql', 'html', 'css', 'jsx', 'tsx'
-];
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { 
+  Loader2, Shield, AlertTriangle, CheckCircle2, Zap, Code, 
+  Bug, Lock, TrendingUp, FileCode, AlertCircle 
+} from 'lucide-react';
 
 export default function CodeReviewPanel() {
   const [code, setCode] = useState('');
   const [language, setLanguage] = useState('javascript');
-  const [filename, setFilename] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [fileName, setFileName] = useState('');
+  const [reviewing, setReviewing] = useState(false);
   const [review, setReview] = useState(null);
-  const [error, setError] = useState(null);
-  const [copiedId, setCopiedId] = useState(null);
 
-  const severityColors = {
-    critical: 'bg-red-100 text-red-800 border-red-300',
-    high: 'bg-orange-100 text-orange-800 border-orange-300',
-    medium: 'bg-yellow-100 text-yellow-800 border-yellow-300',
-    low: 'bg-blue-100 text-blue-800 border-blue-300'
-  };
-
-  const severityIcons = {
-    critical: <AlertCircle className="w-4 h-4" />,
-    high: <AlertCircle className="w-4 h-4" />,
-    medium: <Lightbulb className="w-4 h-4" />,
-    low: <Lightbulb className="w-4 h-4" />
-  };
-
-  const categoryEmoji = {
-    'best-practice': '📝',
-    'bug': '🐛',
-    'performance': '⚡',
-    'security': '🔒',
-    'quality': '✨'
-  };
-
-  const performReview = async () => {
+  const handleReview = async () => {
     if (!code.trim()) {
-      setError('Please paste or enter some code to review');
+      alert('Please enter code to review');
       return;
     }
 
-    setLoading(true);
-    setError(null);
+    setReviewing(true);
     try {
-      const response = await base44.functions.invoke('aiCodeReview', {
+      const response = await base44.functions.invoke('reviewCode', {
         code,
         language,
-        filename: filename || 'untitled'
+        file_name: fileName,
+        review_type: 'comprehensive'
       });
 
-      if (response.data.review) {
-        setReview(response.data.review);
-      }
-    } catch (err) {
-      setError(err.message || 'Failed to perform code review');
+      setReview(response.data.review);
+    } catch (error) {
+      console.error('Review failed:', error);
+      alert('Code review failed: ' + error.message);
     } finally {
-      setLoading(false);
+      setReviewing(false);
     }
   };
 
-  const copyToClipboard = (text, id) => {
-    navigator.clipboard.writeText(text);
-    setCopiedId(id);
-    setTimeout(() => setCopiedId(null), 2000);
+  const getSeverityColor = (severity) => {
+    const colors = {
+      critical: 'bg-red-600',
+      high: 'bg-orange-600',
+      medium: 'bg-yellow-600',
+      low: 'bg-blue-600'
+    };
+    return colors[severity] || 'bg-gray-600';
+  };
+
+  const getScoreColor = (score) => {
+    if (score >= 80) return 'text-green-600';
+    if (score >= 60) return 'text-yellow-600';
+    return 'text-red-600';
   };
 
   return (
     <div className="space-y-6">
-      {/* Input Card */}
-      <Card>
+      <Card className="border-2 border-blue-200 bg-gradient-to-br from-blue-50 to-cyan-50">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <Code className="w-5 h-5" />
-            Code Review
+            <Shield className="w-5 h-5 text-blue-600" />
+            AI Code Review
           </CardTitle>
-          <CardDescription>
-            Paste your code and get AI-powered feedback on best practices, bugs, performance, and security
-          </CardDescription>
+          <p className="text-sm text-gray-600">
+            Comprehensive code analysis with bug detection, security scanning, and best practices
+          </p>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium mb-2">Language</label>
-              <Select value={language} onValueChange={setLanguage}>
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {LANGUAGES.map(lang => (
-                    <SelectItem key={lang} value={lang}>
-                      {lang.charAt(0).toUpperCase() + lang.slice(1)}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <label className="text-sm font-semibold text-gray-700 mb-2 block">
+                Language
+              </label>
+              <select
+                value={language}
+                onChange={(e) => setLanguage(e.target.value)}
+                className="w-full px-3 py-2 border rounded-lg"
+              >
+                <option value="javascript">JavaScript</option>
+                <option value="typescript">TypeScript</option>
+                <option value="python">Python</option>
+                <option value="java">Java</option>
+                <option value="go">Go</option>
+                <option value="rust">Rust</option>
+                <option value="cpp">C++</option>
+              </select>
             </div>
             <div>
-              <label className="block text-sm font-medium mb-2">Filename (optional)</label>
-              <input
-                type="text"
+              <label className="text-sm font-semibold text-gray-700 mb-2 block">
+                File Name (Optional)
+              </label>
+              <Input
                 placeholder="e.g., app.js"
-                value={filename}
-                onChange={(e) => setFilename(e.target.value)}
-                className="w-full px-3 py-2 border rounded-md text-sm"
+                value={fileName}
+                onChange={(e) => setFileName(e.target.value)}
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-2">Code to Review</label>
+            <label className="text-sm font-semibold text-gray-700 mb-2 block">
+              Code to Review
+            </label>
             <Textarea
+              placeholder="Paste your code here..."
               value={code}
               onChange={(e) => setCode(e.target.value)}
-              placeholder="Paste your code here..."
-              className="font-mono text-sm h-48"
+              className="min-h-[300px] font-mono text-sm"
             />
           </div>
 
-          <Button 
-            onClick={performReview}
-            disabled={loading || !code.trim()}
-            className="w-full bg-blue-600 hover:bg-blue-700"
+          <Button
+            onClick={handleReview}
+            disabled={reviewing || !code.trim()}
+            className="w-full bg-gradient-to-r from-blue-600 to-cyan-600"
           >
-            {loading ? (
+            {reviewing ? (
               <>
                 <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                Reviewing...
+                Analyzing Code...
               </>
             ) : (
-              'Perform Code Review'
+              <>
+                <Shield className="w-4 h-4 mr-2" />
+                Run Code Review
+              </>
             )}
           </Button>
-
-          {error && (
-            <div className="p-3 bg-red-100 border border-red-300 text-red-800 rounded-lg text-sm">
-              {error}
-            </div>
-          )}
         </CardContent>
       </Card>
 
-      {/* Review Results */}
       {review && (
         <Card>
           <CardHeader>
-            <div className="flex items-start justify-between">
-              <div>
-                <CardTitle className="text-lg">Review Results</CardTitle>
-                <CardDescription>{filename || 'untitled'} • {language}</CardDescription>
-              </div>
-              <div className="text-right">
-                <div className="text-3xl font-bold text-gray-900">{review.overall_score}</div>
-                <p className="text-xs text-gray-500">Overall Score</p>
+            <div className="flex items-center justify-between">
+              <CardTitle>Review Results</CardTitle>
+              <div className="flex gap-2">
+                <Badge className={`${getSeverityColor('high')} text-white`}>
+                  {review.language_detected}
+                </Badge>
               </div>
             </div>
           </CardHeader>
           <CardContent className="space-y-6">
-            {/* Summary */}
-            {review.summary && (
-              <div className="p-4 bg-gradient-to-r from-blue-50 to-cyan-50 border border-blue-200 rounded-lg">
-                <h3 className="font-semibold text-gray-900 mb-2">Summary</h3>
-                <p className="text-gray-700 text-sm leading-relaxed">{review.summary}</p>
+            {/* Scores */}
+            <div className="grid grid-cols-3 gap-4">
+              <div className="text-center p-4 bg-gray-50 rounded-lg">
+                <div className={`text-3xl font-bold ${getScoreColor(review.overall_score)}`}>
+                  {review.overall_score}
+                </div>
+                <div className="text-sm text-gray-600">Overall Score</div>
               </div>
-            )}
-
-            {/* Score Progress */}
-            <div className="space-y-2">
-              <div className="flex justify-between text-sm">
-                <span className="font-medium">Code Quality</span>
-                <span className={cn(
-                  "font-medium",
-                  review.overall_score >= 80 ? 'text-green-600' : review.overall_score >= 60 ? 'text-yellow-600' : 'text-red-600'
-                )}>
-                  {review.overall_score}/100
-                </span>
+              <div className="text-center p-4 bg-gray-50 rounded-lg">
+                <div className={`text-3xl font-bold ${getScoreColor(review.complexity_score)}`}>
+                  {review.complexity_score}
+                </div>
+                <div className="text-sm text-gray-600">Complexity</div>
               </div>
-              <div className="w-full bg-gray-200 rounded-full h-2">
-                <div 
-                  className={cn(
-                    "h-2 rounded-full transition-all",
-                    review.overall_score >= 80 ? 'bg-green-500' : review.overall_score >= 60 ? 'bg-yellow-500' : 'bg-red-500'
-                  )}
-                  style={{ width: `${review.overall_score}%` }}
-                />
+              <div className="text-center p-4 bg-gray-50 rounded-lg">
+                <div className={`text-3xl font-bold ${getScoreColor(review.maintainability_score)}`}>
+                  {review.maintainability_score}
+                </div>
+                <div className="text-sm text-gray-600">Maintainability</div>
               </div>
             </div>
 
-            {/* Strengths */}
-            {review.strengths && review.strengths.length > 0 && (
-              <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
-                <h3 className="font-semibold text-green-900 mb-3 flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4" />
-                  Strengths
-                </h3>
-                <ul className="space-y-2">
-                  {review.strengths.map((strength, idx) => (
-                    <li key={idx} className="text-sm text-green-800 flex items-start gap-2">
-                      <span className="text-green-600 mt-1">✓</span>
-                      <span>{strength}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
+            {/* Summary */}
+            <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
+              <p className="text-sm text-gray-700">{review.summary}</p>
+            </div>
 
-            {/* Issues */}
-            {review.issues && review.issues.length > 0 && (
-              <div className="space-y-3">
-                <h3 className="font-semibold text-gray-900">Issues Found ({review.issues.length})</h3>
-                {review.issues.map((issue, idx) => (
-                  <div key={idx} className={cn(
-                    "p-4 rounded-lg border-2",
-                    severityColors[issue.severity] || severityColors.medium
-                  )}>
-                    <div className="flex items-start justify-between gap-3 mb-2">
-                      <div className="flex items-start gap-3 flex-1">
-                        {severityIcons[issue.severity]}
-                        <div>
-                          <p className="font-semibold">{categoryEmoji[issue.category]} {issue.title}</p>
-                          {issue.line && <p className="text-xs opacity-75">Line {issue.line}</p>}
-                        </div>
-                      </div>
-                      <Badge variant="outline" className="whitespace-nowrap capitalize text-xs">
-                        {issue.severity}
-                      </Badge>
-                    </div>
+            {/* Issues Tabs */}
+            <Tabs defaultValue="critical">
+              <TabsList className="grid grid-cols-5 w-full">
+                <TabsTrigger value="critical">
+                  Critical ({review.critical_issues?.length || 0})
+                </TabsTrigger>
+                <TabsTrigger value="security">
+                  Security ({review.security_issues?.length || 0})
+                </TabsTrigger>
+                <TabsTrigger value="performance">
+                  Performance ({review.performance_issues?.length || 0})
+                </TabsTrigger>
+                <TabsTrigger value="quality">
+                  Quality ({review.code_quality?.length || 0})
+                </TabsTrigger>
+                <TabsTrigger value="improvements">
+                  Improve ({review.improvements?.length || 0})
+                </TabsTrigger>
+              </TabsList>
 
-                    <p className="text-sm mb-3">{issue.description}</p>
-
-                    {issue.suggestion && (
-                      <div className="bg-white bg-opacity-50 p-3 rounded border-l-2 border-current mb-3">
-                        <p className="text-xs font-medium mb-1">Suggestion:</p>
-                        <p className="text-sm">{issue.suggestion}</p>
-                      </div>
-                    )}
-
-                    {issue.code_example && (
-                      <div className="bg-gray-900 text-gray-100 p-3 rounded font-mono text-xs overflow-x-auto mb-3 relative">
-                        <pre>{issue.code_example}</pre>
-                        <button
-                          onClick={() => copyToClipboard(issue.code_example, `code-${idx}`)}
-                          className="absolute top-2 right-2 p-2 bg-gray-700 hover:bg-gray-600 rounded transition-colors"
-                          title="Copy code"
-                        >
-                          {copiedId === `code-${idx}` ? (
-                            <Check className="w-4 h-4 text-green-400" />
-                          ) : (
-                            <Copy className="w-4 h-4" />
-                          )}
-                        </button>
-                      </div>
-                    )}
+              <TabsContent value="critical" className="space-y-3 mt-4">
+                {review.critical_issues?.length === 0 ? (
+                  <div className="text-center py-8 text-gray-500">
+                    <CheckCircle2 className="w-12 h-12 mx-auto mb-2 text-green-600" />
+                    No critical issues found!
                   </div>
-                ))}
-              </div>
-            )}
+                ) : (
+                  review.critical_issues?.map((issue, idx) => (
+                    <IssueCard key={idx} issue={issue} icon={Bug} />
+                  ))
+                )}
+              </TabsContent>
 
-            {/* Improvements */}
-            {review.improvements && review.improvements.length > 0 && (
-              <div className="p-4 bg-purple-50 border border-purple-200 rounded-lg">
-                <h3 className="font-semibold text-purple-900 mb-3 flex items-center gap-2">
-                  <Lightbulb className="w-4 h-4" />
-                  Recommended Improvements
-                </h3>
-                <ul className="space-y-2">
-                  {review.improvements.map((improvement, idx) => (
-                    <li key={idx} className="text-sm text-purple-800 flex items-start gap-2">
-                      <span className="text-purple-600 mt-1">→</span>
-                      <span>{improvement}</span>
-                    </li>
+              <TabsContent value="security" className="space-y-3 mt-4">
+                {review.security_issues?.length === 0 ? (
+                  <div className="text-center py-8 text-gray-500">
+                    <Shield className="w-12 h-12 mx-auto mb-2 text-green-600" />
+                    No security issues detected!
+                  </div>
+                ) : (
+                  review.security_issues?.map((issue, idx) => (
+                    <IssueCard key={idx} issue={issue} icon={Lock} />
+                  ))
+                )}
+              </TabsContent>
+
+              <TabsContent value="performance" className="space-y-3 mt-4">
+                {review.performance_issues?.length === 0 ? (
+                  <div className="text-center py-8 text-gray-500">
+                    <Zap className="w-12 h-12 mx-auto mb-2 text-green-600" />
+                    No performance issues found!
+                  </div>
+                ) : (
+                  review.performance_issues?.map((issue, idx) => (
+                    <IssueCard key={idx} issue={issue} icon={Zap} />
+                  ))
+                )}
+              </TabsContent>
+
+              <TabsContent value="quality" className="space-y-3 mt-4">
+                {review.code_quality?.length === 0 ? (
+                  <div className="text-center py-8 text-gray-500">
+                    <CheckCircle2 className="w-12 h-12 mx-auto mb-2 text-green-600" />
+                    Code quality looks great!
+                  </div>
+                ) : (
+                  review.code_quality?.map((issue, idx) => (
+                    <IssueCard key={idx} issue={issue} icon={Code} />
+                  ))
+                )}
+              </TabsContent>
+
+              <TabsContent value="improvements" className="space-y-3 mt-4">
+                {review.improvements?.length === 0 ? (
+                  <div className="text-center py-8 text-gray-500">
+                    No suggestions at this time
+                  </div>
+                ) : (
+                  review.improvements?.map((issue, idx) => (
+                    <IssueCard key={idx} issue={issue} icon={TrendingUp} />
+                  ))
+                )}
+              </TabsContent>
+            </Tabs>
+
+            {/* Best Practices */}
+            <div className="grid grid-cols-2 gap-4">
+              <div className="p-4 bg-green-50 rounded-lg border border-green-200">
+                <h4 className="font-semibold text-green-900 mb-2 flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4" />
+                  Followed Best Practices
+                </h4>
+                <ul className="space-y-1">
+                  {review.best_practices?.followed?.map((practice, idx) => (
+                    <li key={idx} className="text-sm text-green-800">• {practice}</li>
                   ))}
                 </ul>
               </div>
-            )}
+              <div className="p-4 bg-red-50 rounded-lg border border-red-200">
+                <h4 className="font-semibold text-red-900 mb-2 flex items-center gap-2">
+                  <AlertCircle className="w-4 h-4" />
+                  Violated Best Practices
+                </h4>
+                <ul className="space-y-1">
+                  {review.best_practices?.violated?.map((practice, idx) => (
+                    <li key={idx} className="text-sm text-red-800">• {practice}</li>
+                  ))}
+                </ul>
+              </div>
+            </div>
           </CardContent>
         </Card>
       )}
+    </div>
+  );
+}
+
+function IssueCard({ issue, icon: Icon }) {
+  const getSeverityColor = (severity) => {
+    const colors = {
+      critical: 'border-red-500 bg-red-50',
+      high: 'border-orange-500 bg-orange-50',
+      medium: 'border-yellow-500 bg-yellow-50',
+      low: 'border-blue-500 bg-blue-50'
+    };
+    return colors[severity] || 'border-gray-500 bg-gray-50';
+  };
+
+  return (
+    <div className={`p-4 rounded-lg border-l-4 ${getSeverityColor(issue.severity)}`}>
+      <div className="flex items-start gap-3">
+        <Icon className="w-5 h-5 mt-0.5 flex-shrink-0" />
+        <div className="flex-1">
+          <div className="flex items-start justify-between mb-2">
+            <h4 className="font-semibold text-gray-900">{issue.title}</h4>
+            <Badge variant="outline" className="text-xs">
+              {issue.severity}
+            </Badge>
+          </div>
+          {issue.line && (
+            <Badge variant="outline" className="text-xs mb-2">
+              Line {issue.line}
+            </Badge>
+          )}
+          <p className="text-sm text-gray-700 mb-2">{issue.description}</p>
+          <div className="mt-3 p-3 bg-white rounded border">
+            <p className="text-xs font-semibold text-gray-700 mb-1">💡 Fix:</p>
+            <p className="text-sm text-gray-800">{issue.fix}</p>
+            {issue.code_example && (
+              <pre className="mt-2 text-xs bg-gray-900 text-gray-100 p-2 rounded overflow-auto">
+                {issue.code_example}
+              </pre>
+            )}
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

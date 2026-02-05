@@ -9,6 +9,7 @@ import CustomAgentTrainer from '@/components/ai/CustomAgentTrainer';
 import AgentVersionHistory from '@/components/versioning/AgentVersionHistory';
 import OfflineAgentExporter from '@/components/ai/OfflineAgentExporter';
 import ClawdBotBuilder from '@/components/ai/ClawdBotBuilder';
+import CodeReviewPanel from '@/components/ai/CodeReviewPanel';
 import { Sparkles, Plus, Save, Download, Code } from 'lucide-react';
 
 export default function CustomAgentStudio() {
@@ -101,9 +102,10 @@ export default function CustomAgentStudio() {
         </div>
 
         <Tabs defaultValue="manage" className="space-y-4">
-          <TabsList className="grid w-full grid-cols-3">
+          <TabsList className="grid w-full grid-cols-4">
             <TabsTrigger value="manage">My Agents</TabsTrigger>
             <TabsTrigger value="coding">Coding Assistant</TabsTrigger>
+            <TabsTrigger value="review">Code Review</TabsTrigger>
             <TabsTrigger value="create">Custom Agent</TabsTrigger>
           </TabsList>
 
@@ -205,6 +207,11 @@ export default function CustomAgentStudio() {
                 loadAgents();
               }}
             />
+          </TabsContent>
+
+          {/* Code Review */}
+          <TabsContent value="review">
+            <CodeReviewPanel />
           </TabsContent>
 
           {/* Create New */}

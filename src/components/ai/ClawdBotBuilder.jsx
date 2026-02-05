@@ -32,7 +32,9 @@ export default function ClawdBotBuilder({ userEmail, onAgentCreated }) {
       debugging: true,
       refactoring: true,
       documentation: true,
-      testing: true
+      testing: true,
+      security_scan: true,
+      performance_analysis: true
     }
   });
   const [creating, setCreating] = useState(false);

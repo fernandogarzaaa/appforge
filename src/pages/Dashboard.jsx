@@ -59,14 +59,6 @@ export default function Dashboard() {
 
   const quickActions = [
   {
-    title: 'AI Scaffolder',
-    description: 'Generate complete project structure from description',
-    icon: FolderKanban,
-    href: createPageUrl('ProjectScaffolder'),
-    gradient: 'from-indigo-500 to-purple-500',
-    badge: '🔥 Hot'
-  },
-  {
     title: 'Start from Template',
     description: 'Browse 100+ ready-to-use templates',
     icon: LayoutTemplate,
@@ -104,7 +96,7 @@ export default function Dashboard() {
   { icon: Rocket, label: 'Workflows', href: createPageUrl('WorkflowBuilder'), color: 'text-purple-600 bg-purple-50' },
   { icon: Brain, label: 'AI/ML', href: createPageUrl('MLIntegration'), color: 'text-pink-600 bg-pink-50' },
   { icon: Globe, label: 'DeFi Hub', href: createPageUrl('DeFiHub'), color: 'text-green-600 bg-green-50' },
-  { icon: ShieldCheck, label: 'Security', href: createPageUrl('Security'), color: 'text-red-600 bg-red-50' },
+  { icon: ShieldCheck, label: 'Code Review', href: createPageUrl('CodeReview'), color: 'text-cyan-600 bg-cyan-50' },
   { icon: Code, label: 'Observability', href: createPageUrl('Observability'), color: 'text-orange-600 bg-orange-50' }];
 
 
@@ -233,7 +225,7 @@ export default function Dashboard() {
           Powered by Spectrum
         </Badge>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {quickActions.map((action, idx) =>
       <motion.div
         key={action.title}

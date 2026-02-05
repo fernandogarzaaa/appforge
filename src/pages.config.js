@@ -169,6 +169,7 @@ import WebhookMonitor from './pages/WebhookMonitor';
 import WorkflowBuilder from './pages/WorkflowBuilder';
 import AdminAgentControl from './pages/AdminAgentControl';
 import ProjectScaffolder from './pages/ProjectScaffolder';
+import CodeReview from './pages/CodeReview';
 import __Layout from './Layout.jsx';
 
 
@@ -295,6 +296,7 @@ export const PAGES = {
     "WorkflowBuilder": WorkflowBuilder,
     "AdminAgentControl": AdminAgentControl,
     "ProjectScaffolder": ProjectScaffolder,
+    "CodeReview": CodeReview,
 }
 
 export const pagesConfig = {
