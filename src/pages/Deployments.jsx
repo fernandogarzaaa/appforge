@@ -5,9 +5,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { DeploymentsTable } from '@/components/deployment/DeploymentsTable';
 import { DeploymentFilters } from '@/components/deployment/DeploymentFilters';
-import { calculateDeploymentStats } from '@/lib/deploymentHistory';
 import { Activity, TrendingUp, CheckCircle2, AlertCircle } from 'lucide-react';
-import toast from 'react-hot-toast';
 
 export default function DeploymentsPage({ projectId = 'proj_default' }) {
   const {
