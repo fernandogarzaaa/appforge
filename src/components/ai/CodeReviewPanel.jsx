@@ -7,8 +7,8 @@ import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { 
-  Loader2, Shield, AlertTriangle, CheckCircle2, Zap, Code, 
-  Bug, Lock, TrendingUp, FileCode, AlertCircle 
+  Loader2, Shield, CheckCircle2, Zap, Code, 
+  Bug, Lock, TrendingUp, AlertCircle 
 } from 'lucide-react';
 
 export default function CodeReviewPanel() {

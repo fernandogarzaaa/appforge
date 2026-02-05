@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { base44 } from '@/api/base44Client';
 import AgentCoachingPanel from './AgentCoachingPanel';
 import SolanaPaymentModal from '@/components/payments/SolanaPaymentModal';
-import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Zap } from 'lucide-react';
 
