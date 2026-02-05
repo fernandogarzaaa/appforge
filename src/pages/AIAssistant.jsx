@@ -129,12 +129,6 @@ export default function AIAssistant() {
       // Will be set once projects are loaded
     }
 
-    // Auto-start AI agent if coming from Dashboard
-    if (autoStart === 'true' && initialIdea && !messages.length) {
-      // Start AI agent conversation automatically
-      startAIAgentConversation(initialIdea);
-    }
-
     // Command Palette keyboard shortcut - only trigger on Cmd+K or Ctrl+K
     const handleKeyDown = (e) => {
       // Don't intercept if user is typing in an input
@@ -150,7 +144,17 @@ export default function AIAssistant() {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [autoStart, initialIdea]);
+  }, []);
+
+  // Separate effect for auto-start to avoid dependency issues
+  useEffect(() => {
+    if (autoStart === 'true' && initialIdea && messages.length === 0) {
+      const timer = setTimeout(() => {
+        startAIAgentConversation(initialIdea);
+      }, 300);
+      return () => clearTimeout(timer);
+    }
+  }, [autoStart, initialIdea, messages.length]);
 
   const loadProjects = async () => {
     try {
