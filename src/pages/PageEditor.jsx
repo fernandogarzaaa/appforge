@@ -1,6 +1,7 @@
 import React, { useState, Suspense } from 'react';
 import { base44 } from '@/api/base44Client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import ProactiveAIAssistant from '@/components/ai/ProactiveAIAssistant';
 import { 
   FileCode, Plus, Save, Trash2, Eye, Code, Layout,
   Search, MoreHorizontal, ChevronRight, Home, Settings2
@@ -413,6 +414,8 @@ export default function ${newPage.name.replace(/\s+/g, '') || 'NewPage'}() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      <ProactiveAIAssistant currentPage="PageEditor" projectId={projectId} />
     </div>
   );
 }

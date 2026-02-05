@@ -7,9 +7,8 @@ import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { 
   Shield, AlertTriangle, Activity, Lock, Zap, 
-  Eye, Ban, CheckCircle, XCircle, TrendingUp 
+  Ban, CheckCircle, XCircle
 } from 'lucide-react';
-import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
 export default function SecurityCenter() {
   const [user, setUser] = useState(null);
