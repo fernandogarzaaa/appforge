@@ -174,6 +174,8 @@ import AIDeployment from './pages/AIDeployment';
 import AdminDeployments from './pages/AdminDeployments';
 import SuperiorAIStudio from './pages/SuperiorAIStudio';
 import AdminAIControl from './pages/AdminAIControl';
+import AITemplates from './pages/AITemplates';
+import AdminTemplates from './pages/AdminTemplates';
 import __Layout from './Layout.jsx';
 
 
@@ -305,6 +307,8 @@ export const PAGES = {
     "AdminDeployments": AdminDeployments,
     "SuperiorAIStudio": SuperiorAIStudio,
     "AdminAIControl": AdminAIControl,
+    "AITemplates": AITemplates,
+    "AdminTemplates": AdminTemplates,
 }
 
 export const pagesConfig = {
