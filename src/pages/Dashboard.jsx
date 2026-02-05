@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import { base44 } from '@/api/base44Client';
 import { quantumService } from '@/api/appforge';
 import { useQuery } from '@tanstack/react-query';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import {
   FolderKanban, Database, FileCode, Component, Sparkles, Plus, Zap,
   ShieldCheck, Rocket, Users, Globe, Smartphone, Brain, LayoutTemplate,
-  Code 
+  Code
 } from 'lucide-react';
 import GuidedProjectWizard from '@/components/ai/GuidedProjectWizard';
 import AIOnboardingWizard from '@/components/onboarding/AIOnboardingWizard';
@@ -26,6 +26,7 @@ import QuantumCircuitVisualizer from '@/components/QuantumCircuitVisualizer';
 import QuantumCircuitEducation from '@/components/QuantumCircuitEducation';
 
 export default function Dashboard() {
+  const navigate = useNavigate();
   const [ideaInput, setIdeaInput] = useState('');
   const [isCreating, setIsCreating] = useState(false);
   const { toast } = useToast();
@@ -34,7 +35,7 @@ export default function Dashboard() {
 
   React.useEffect(() => {
     base44.auth.isAuthenticated().then(setIsAuthenticated);
-    
+
     // Check for project idea context from wizard
     const idea = sessionStorage.getItem('project_idea_context');
     if (idea) {
@@ -206,14 +207,14 @@ export default function Dashboard() {
             rows={4} />
 
             <Button
-            onClick={() => {
-              if (ideaInput.trim()) {
-                window.location.href = createPageUrl('AIAssistant') + '?auto_start=true&idea=' + encodeURIComponent(ideaInput);
-              }
-            }}
-            disabled={!ideaInput.trim()}
-            className="absolute right-3 bottom-3 h-12 px-6 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white rounded-xl shadow-lg shadow-indigo-500/30 disabled:opacity-50 font-medium">
-
+              onClick={() => {
+                if (!ideaInput.trim()) return;
+                navigate(
+                  `${createPageUrl('AIAssistant')}?auto_start=true&idea=${encodeURIComponent(ideaInput)}`
+                );
+              }}
+              disabled={!ideaInput.trim()}
+              className="absolute right-3 bottom-3 h-12 px-6 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white rounded-xl shadow-lg shadow-indigo-500/30 disabled:opacity-50 font-medium">
               <Sparkles className="w-5 h-5 mr-2" />
               Generate App
             </Button>
