@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Loader2, Zap, Brain, TrendingUp, Network } from 'lucide-react';
+import { Loader2, Zap, Brain, Network } from 'lucide-react';
 
 export default function SuperIntelligenceDashboard({ userEmail }) {
   const [intelligence, setIntelligence] = useState(null);

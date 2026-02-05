@@ -3,10 +3,9 @@ import { base44 } from '@/api/base44Client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
-import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Loader2, Sparkles, Layout, Download, Copy, CheckCircle, Upload } from 'lucide-react';
+import { Loader2, Sparkles, Download, Copy, CheckCircle, Upload } from 'lucide-react';
 import { toast } from 'sonner';
 
 export default function SuperiorAIStudio() {

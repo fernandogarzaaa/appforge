@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { 
   Zap, TrendingUp, Lightbulb, Loader2, Sparkles, 
-  Database, Code, Layers, Rocket, CheckCircle2 
+  Database, Layers, Rocket, CheckCircle2 
 } from 'lucide-react';
 import { toast } from 'sonner';
 
