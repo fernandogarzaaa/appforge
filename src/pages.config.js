@@ -172,6 +172,8 @@ import AdminAgentControl from './pages/AdminAgentControl';
 import ProjectScaffolder from './pages/ProjectScaffolder';
 import AIDeployment from './pages/AIDeployment';
 import AdminDeployments from './pages/AdminDeployments';
+import SuperiorAIStudio from './pages/SuperiorAIStudio';
+import AdminAIControl from './pages/AdminAIControl';
 import __Layout from './Layout.jsx';
 
 
@@ -301,6 +303,8 @@ export const PAGES = {
     "ProjectScaffolder": ProjectScaffolder,
     "AIDeployment": AIDeployment,
     "AdminDeployments": AdminDeployments,
+    "SuperiorAIStudio": SuperiorAIStudio,
+    "AdminAIControl": AdminAIControl,
 }
 
 export const pagesConfig = {
