@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { base44 } from '@/api/base44Client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -10,6 +11,7 @@ export default function QuantumHardwareConnect() {
   const [showConnect, setShowConnect] = useState(false);
   const [selectedBackend, setSelectedBackend] = useState(null);
   const [isConnecting, setIsConnecting] = useState(false);
+  const [apiToken, setApiToken] = useState('');
 
   const backends = [
     {
@@ -44,20 +46,49 @@ export default function QuantumHardwareConnect() {
     }
   ];
 
-  const handleConnect = async () => {
+  const handleConnect = async (apiToken) => {
     if (!selectedBackend) {
       toast.error('Please select a backend');
       return;
     }
 
+    if (!apiToken?.trim()) {
+      toast.error('API token is required');
+      return;
+    }
+
     setIsConnecting(true);
     try {
-      // Simulate connection
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      const configs = await base44.entities.QuantumBackendConfig.filter({
+        backend_name: selectedBackend.id
+      });
+
+      const existingConfig = configs[0];
+
+      if (existingConfig) {
+        await base44.entities.QuantumBackendConfig.update(existingConfig.id, {
+          api_key: apiToken,
+          is_configured: true,
+          last_tested: new Date().toISOString(),
+          test_status: 'never_tested'
+        });
+      } else {
+        await base44.entities.QuantumBackendConfig.create({
+          backend_name: selectedBackend.id,
+          api_key: apiToken,
+          is_configured: true,
+          is_active: true,
+          max_qubits: selectedBackend.qubits,
+          default_shots: 1000,
+          last_tested: new Date().toISOString(),
+          test_status: 'never_tested'
+        });
+      }
+
       toast.success(`Connected to ${selectedBackend.name}`);
       setShowConnect(false);
     } catch (err) {
-      toast.error('Connection failed');
+      toast.error(`Connection failed: ${err.message}`);
     } finally {
       setIsConnecting(false);
     }
@@ -129,13 +160,15 @@ export default function QuantumHardwareConnect() {
               <input
                 type="password"
                 placeholder="Enter your API token"
+                value={apiToken}
+                onChange={(e) => setApiToken(e.target.value)}
                 className="w-full px-3 py-2 border rounded-lg text-sm"
               />
             </div>
 
             <Button
-              onClick={handleConnect}
-              disabled={isConnecting || !selectedBackend}
+              onClick={() => handleConnect(apiToken)}
+              disabled={isConnecting || !selectedBackend || !apiToken.trim()}
               className="w-full bg-gradient-to-r from-blue-600 to-cyan-600"
             >
               {isConnecting ? 'Connecting...' : 'Connect'}
