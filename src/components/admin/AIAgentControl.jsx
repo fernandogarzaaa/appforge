@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import { toast } from 'sonner';
 import GitHubIntegrationSetup from './GitHubIntegrationSetup';
+import QuantumLLMSettings from './QuantumLLMSettings';
 
 export default function AIAgentControl() {
   const [user, setUser] = useState(null);
@@ -81,10 +82,11 @@ export default function AIAgentControl() {
 
   return (
     <Tabs defaultValue="dashboard" className="space-y-6">
-      <TabsList className="grid w-full grid-cols-3 max-w-md">
+      <TabsList className="grid w-full grid-cols-4 max-w-2xl">
         <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
         <TabsTrigger value="config">Configuration</TabsTrigger>
         <TabsTrigger value="github">GitHub</TabsTrigger>
+        <TabsTrigger value="llm">QuantumAI</TabsTrigger>
       </TabsList>
 
       <TabsContent value="dashboard" className="space-y-6">
@@ -339,6 +341,10 @@ export default function AIAgentControl() {
 
       <TabsContent value="github">
         <GitHubIntegrationSetup />
+      </TabsContent>
+
+      <TabsContent value="llm">
+        <QuantumLLMSettings />
       </TabsContent>
     </Tabs>
   );
