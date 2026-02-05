@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import {
   FolderKanban, Database, FileCode, Component, Sparkles, Plus, Zap,
-  ShieldCheck, Rocket, Users, Globe, Smartphone, Brain, LayoutTemplate,
+  ShieldCheck, Rocket, Users, Smartphone, Brain, LayoutTemplate,
   Code, Activity } from
 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -107,6 +107,7 @@ export default function Dashboard() {
 
   const adminCapabilities = user?.role === 'admin' ? [
     { icon: ShieldCheck, label: 'Admin Dashboard', href: createPageUrl('AdminDashboard'), color: 'text-red-600 bg-red-50' },
+    { icon: ShieldCheck, label: 'Security Center', href: createPageUrl('SecurityCenter'), color: 'text-red-700 bg-red-100' },
     { icon: Users, label: 'User Management', href: createPageUrl('AdminUserManagement'), color: 'text-blue-600 bg-blue-50' },
     { icon: Brain, label: 'AI Control', href: createPageUrl('AdminAIControl'), color: 'text-purple-600 bg-purple-50' },
     { icon: Rocket, label: 'Deployments', href: createPageUrl('AdminDeployments'), color: 'text-green-600 bg-green-50' },
