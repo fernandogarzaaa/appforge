@@ -126,8 +126,8 @@ export default function Dashboard() {
   }], []);
 
 
-  const HeroSection = React.useMemo(() =>
-  <motion.div
+  const HeroSection = React.useMemo(() => (
+    <motion.div
     initial={{ opacity: 0, y: 20 }}
     animate={{ opacity: 1, y: 0 }}
     transition={{ duration: 0.5 }}
@@ -211,11 +211,12 @@ export default function Dashboard() {
           </div>
         </CardContent>
       </Card>
-    </motion.div>, [ideaInput]);
+    </motion.div>
+  ), [ideaInput]);
 
 
-  const SmartRecommendations = React.useMemo(() =>
-  <motion.div
+  const SmartRecommendations = React.useMemo(() => (
+    <motion.div
     initial={{ opacity: 0, y: 20 }}
     animate={{ opacity: 1, y: 0 }}
     transition={{ duration: 0.5, delay: 0.1 }}
@@ -263,11 +264,12 @@ export default function Dashboard() {
           </motion.div>
       )}
       </div>
-    </motion.div>, [quickActionsFormatted]);
+    </motion.div>
+  ), [quickActionsFormatted]);
 
 
-  const CapabilityDiscovery = React.useMemo(() =>
-  <motion.div
+  const CapabilityDiscovery = React.useMemo(() => (
+    <motion.div
     initial={{ opacity: 0, y: 20 }}
     animate={{ opacity: 1, y: 0 }}
     transition={{ duration: 0.5, delay: 0.3 }}
@@ -302,11 +304,12 @@ export default function Dashboard() {
           </div>
         </CardContent>
       </Card>
-    </motion.div>, [capabilities]);
+    </motion.div>
+  ), [capabilities]);
 
 
-  const OnboardingTour = React.useMemo(() =>
-  <motion.div
+  const OnboardingTour = React.useMemo(() => (
+    <motion.div
     initial={{ opacity: 0, y: 20 }}
     animate={{ opacity: 1, y: 0 }}
     transition={{ duration: 0.5, delay: 0.2 }}
@@ -339,7 +342,8 @@ export default function Dashboard() {
           </Link>
       )}
       </div>
-    </motion.div>, [onboardingSteps]);
+    </motion.div>
+  ), [onboardingSteps]);
 
 
   return (
