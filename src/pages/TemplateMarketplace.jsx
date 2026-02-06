@@ -12,6 +12,7 @@ import { Search, Download, Star, Zap, Plus, DollarSign, Eye } from 'lucide-react
 import { toast } from 'sonner';
 import CreateTemplateModal from '@/components/templates/CreateTemplateModal';
 import TemplateReviews from '@/components/templates/TemplateReviews';
+import AITemplateGenerator from '@/components/templates/AITemplateGenerator';
 
 export default function TemplateMarketplace() {
   const [search, setSearch] = useState('');
