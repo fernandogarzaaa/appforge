@@ -36,7 +36,7 @@ import AIModelRouter from './AIModelRouter';
 function MobileDrawerSidebar({ currentProject, user, onClose }) {
   const location = useLocation();
   const { trackDrawerOpened, trackDrawerClosed, trackSectionCollapsed, trackSectionExpanded } = useAnalytics();
-  const isAdminUser = user?.email?.toLowerCase() === 'fernandogarzaaa@gmail.com';
+  const isAdminUser = user?.role === 'admin' || user?.is_admin === true;
   const [expandedGroups, setExpandedGroups] = useState(['ai', 'build', 'main']);
 
   const toggleGroup = (group) => {

@@ -14,6 +14,13 @@ class MultiLLMService {
     this.geminiKey = process.env.GEMINI_API_KEY;
     this.grokKey = process.env.GROK_API_KEY;
 
+    this.providerOrder = this.parseProviderOrder(
+      process.env.LLM_PROVIDER_ORDER || process.env.LLM_PROVIDERS
+    );
+    this.providerHealth = {};
+    this.failureCounts = {};
+    this.healthCooldownMs = Number(process.env.LLM_HEALTH_COOLDOWN_MS) || 120000;
+
     // API Endpoints
     this.endpoints = {
       openai: 'https://api.openai.com/v1/chat/completions',
@@ -43,12 +50,108 @@ class MultiLLMService {
     this.logConfigStatus();
   }
 
+  parseProviderOrder(raw) {
+    if (!raw) {
+      return ['openai', 'anthropic', 'gemini', 'grok'];
+    }
+
+    return raw
+      .split(',')
+      .map((provider) => provider.trim().toLowerCase())
+      .filter(Boolean);
+  }
+
   logConfigStatus() {
     logger.info('[MultiLLMService] Configuration Status:');
     logger.info(`  - OpenAI: ${this.openaiKey ? '✓ Configured' : '✗ Missing'}`);
     logger.info(`  - Anthropic (Claude): ${this.anthropicKey ? '✓ Configured' : '✗ Missing'}`);
     logger.info(`  - Google (Gemini): ${this.geminiKey ? '✓ Configured' : '✗ Missing'}`);
     logger.info(`  - X.AI (Grok): ${this.grokKey ? '✓ Configured' : '✗ Missing'}`);
+  }
+
+  isProviderEnabled(provider) {
+    switch (provider) {
+      case 'openai':
+        return Boolean(this.openaiKey);
+      case 'anthropic':
+        return Boolean(this.anthropicKey);
+      case 'gemini':
+        return Boolean(this.geminiKey);
+      case 'grok':
+        return Boolean(this.grokKey);
+      default:
+        return false;
+    }
+  }
+
+  isProviderHealthy(provider) {
+    const status = this.providerHealth[provider];
+    if (!status) {
+      return true;
+    }
+
+    if (status.healthy) {
+      return true;
+    }
+
+    return Date.now() - status.lastFailureAt > this.healthCooldownMs;
+  }
+
+  markProviderFailure(provider, error) {
+    const current = this.failureCounts[provider] || 0;
+    this.failureCounts[provider] = current + 1;
+    this.providerHealth[provider] = {
+      healthy: false,
+      lastFailureAt: Date.now(),
+      lastError: error?.message || String(error),
+    };
+  }
+
+  markProviderSuccess(provider) {
+    this.failureCounts[provider] = 0;
+    this.providerHealth[provider] = {
+      healthy: true,
+      lastFailureAt: null,
+      lastError: null,
+    };
+  }
+
+  getProviderDefaults(provider) {
+    switch (provider) {
+      case 'openai':
+        return { provider: 'openai', model: 'gpt-4' };
+      case 'anthropic':
+        return { provider: 'anthropic', model: 'claude-3-5-sonnet-20241022' };
+      case 'gemini':
+        return { provider: 'gemini', model: 'gemini-pro' };
+      case 'grok':
+        return { provider: 'grok', model: 'grok-beta' };
+      default:
+        return null;
+    }
+  }
+
+  resolveModel(modelId, options = {}) {
+    const mapping = this.modelMappings[modelId];
+    if (mapping && this.isProviderEnabled(mapping.provider) && this.isProviderHealthy(mapping.provider)) {
+      return mapping;
+    }
+
+    const fallbackProviders = (options.fallbackProviders || this.providerOrder)
+      .map((provider) => provider.toLowerCase());
+
+    for (const provider of fallbackProviders) {
+      if (!this.isProviderEnabled(provider) || !this.isProviderHealthy(provider)) {
+        continue;
+      }
+
+      const fallback = this.getProviderDefaults(provider);
+      if (fallback) {
+        return fallback;
+      }
+    }
+
+    return null;
   }
 
   /**
@@ -60,7 +163,12 @@ class MultiLLMService {
       throw createError(400, `Unknown model: ${modelId}`);
     }
 
-    const { provider, model } = mapping;
+    const resolved = this.resolveModel(modelId, options);
+    if (!resolved) {
+      throw createError(503, 'No LLM providers are configured or healthy');
+    }
+
+    const { provider, model } = resolved;
     logger.info(`[MultiLLMService] Routing ${modelId} → ${provider}/${model}`);
 
     try {
@@ -78,11 +186,14 @@ class MultiLLMService {
       }
     } catch (error) {
       logger.error(`[MultiLLMService] Error with ${provider}:`, error.message);
+      this.markProviderFailure(provider, error);
 
       // Fallback to OpenAI if available
       if (provider !== 'openai' && this.openaiKey) {
         logger.warn(`[MultiLLMService] Falling back to OpenAI GPT-3.5`);
-        return await this.callOpenAI('gpt-3.5-turbo', prompt, options);
+        const result = await this.callOpenAI('gpt-3.5-turbo', prompt, options);
+        this.markProviderSuccess('openai');
+        return result;
       }
 
       throw createError(500, `LLM call failed: ${error.message}`);
@@ -129,6 +240,8 @@ class MultiLLMService {
     }
 
     const data = await response.json();
+
+    this.markProviderSuccess('openai');
 
     return {
       provider: 'openai',
@@ -184,6 +297,8 @@ class MultiLLMService {
     }
 
     const data = await response.json();
+
+    this.markProviderSuccess('anthropic');
 
     return {
       provider: 'anthropic',
@@ -243,6 +358,8 @@ class MultiLLMService {
 
     const text = data.candidates[0].content.parts[0].text;
 
+    this.markProviderSuccess('gemini');
+
     return {
       provider: 'gemini',
       model,
@@ -296,6 +413,8 @@ class MultiLLMService {
     }
 
     const data = await response.json();
+
+    this.markProviderSuccess('grok');
 
     return {
       provider: 'grok',
@@ -377,6 +496,19 @@ class MultiLLMService {
     }
 
     return available;
+  }
+
+  getProviderHealth() {
+    const providers = ['openai', 'anthropic', 'gemini', 'grok'];
+    return providers.reduce((acc, provider) => {
+      acc[provider] = {
+        enabled: this.isProviderEnabled(provider),
+        healthy: this.isProviderHealthy(provider),
+        failures: this.failureCounts[provider] || 0,
+        lastError: this.providerHealth[provider]?.lastError || null,
+      };
+      return acc;
+    }, {});
   }
 }
 

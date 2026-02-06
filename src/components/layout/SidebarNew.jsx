@@ -40,7 +40,7 @@ export default function SidebarNew({ currentProject, collapsed, onToggle, user }
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const location = useLocation();
-  const isAdminUser = user?.email?.toLowerCase() === 'fernandogarzaaa@gmail.com';
+  const isAdminUser = user?.role === 'admin' || user?.is_admin === true;
 
   const toggleGroup = (group) => {
     setExpandedGroups(prev =>
@@ -139,6 +139,9 @@ export default function SidebarNew({ currentProject, collapsed, onToggle, user }
     // Growth
     { label: 'Monetization', icon: Coins, href: createPageUrl('Monetization'), category: 'Growth' },
     { label: 'Marketplace Extensions', icon: LayoutTemplate, href: createPageUrl('MarketplaceExtensions'), category: 'Growth' },
+    ...(isAdminUser
+      ? [{ label: 'Admin Dashboard', icon: ShieldCheck, href: createPageUrl('AdminDashboard'), category: 'Admin' }]
+      : []),
   ];
 
   const filteredFeatures = searchQuery
