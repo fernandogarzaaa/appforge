@@ -8,7 +8,7 @@ import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import { createServer } from 'http';
 import errorHandler from './middleware/errorHandler.js';
-import rateLimiter, { initializeRateLimiter } from './middleware/rateLimiter.js';
+import { initializeRateLimiter } from './middleware/rateLimiter.js';
 import authRoutes from './routes/authRoutes.js';
 import quantumRoutes from './routes/quantumRoutes.js';
 import collaborationRoutes from './routes/collaborationRoutes.js';
@@ -31,6 +31,7 @@ import { handleStripeWebhook } from './services/stripeService.js';
 import WebSocketServer from './websocket/index.js';
 import { setIO } from './websocket/emitter.js';
 import mongoose from 'mongoose';
+import { validateEnv } from './config/env.js';
 
 // Load environment variables
 dotenv.config();
@@ -53,6 +54,10 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 const NODE_ENV = process.env.NODE_ENV || 'development';
 const IS_TEST = NODE_ENV === 'test' || process.argv.includes('--test');
+
+if (!IS_TEST) {
+  validateEnv();
+}
 
 // Initialize Sentry error tracking
 if (!IS_TEST) {
@@ -78,8 +83,16 @@ if (!IS_TEST) {
   app.use(profilingMiddleware);
 }
 
+const allowedOrigins = (process.env.ALLOWED_ORIGINS
+  || process.env.CORS_ORIGIN
+  || process.env.FRONTEND_URL
+  || 'http://localhost:5173')
+  .split(',')
+  .map((origin) => origin.trim())
+  .filter(Boolean);
+
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:5173',
+  origin: allowedOrigins,
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
@@ -110,7 +123,15 @@ app.use(express.urlencoded({ limit: '50mb', extended: true }));
 app.use(sanitizeInput);
 
 // Rate limiting
-app.use('/api/', rateLimiter);
+const rateLimiterPromise = IS_TEST
+  ? Promise.resolve((req, res, next) => next())
+  : initializeRateLimiter();
+
+app.use('/api/', (req, res, next) => {
+  rateLimiterPromise
+    .then((rateLimiter) => rateLimiter(req, res, next))
+    .catch(next);
+});
 
 // Quantum failover middleware (graceful degradation)
 app.use('/api/quantum', quantumFailoverMiddleware);
@@ -243,7 +264,7 @@ export async function initializeDatabase() {
 if (!IS_TEST && httpServer && wsServer) {
   Promise.all([
     initializeDatabase(),
-    initializeRateLimiter()
+    rateLimiterPromise
   ])
     .catch(() => {
       // Initialization already logs its own warnings.
