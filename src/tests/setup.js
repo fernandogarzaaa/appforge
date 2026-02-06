@@ -1,15 +1,29 @@
-import { expect, afterEach, vi } from 'vitest';
+/**
+ * Vitest Test Setup & Configuration
+ * Consolidated setup file for all tests
+ * Runs before all tests
+ */
+
+import { expect, afterEach, beforeAll, afterAll, vi } from 'vitest';
 import { cleanup } from '@testing-library/react';
 import '@testing-library/jest-dom/vitest';
+
+// ============================================================================
+// CLEANUP
+// ============================================================================
 
 // Cleanup after each test
 afterEach(() => {
   cleanup();
 });
 
-// Quiet network-related noise by stubbing fetch/axios transport to return
-// harmless defaults; this keeps jsdom tests from throwing on relative URLs
-// and prevents Base44 SDK axios calls from emitting network errors.
+// ============================================================================
+// FETCH & NETWORK MOCKS
+// ============================================================================
+
+// Stub fetch/axios transport to return harmless defaults
+// This prevents jsdom tests from throwing on relative URLs
+// and prevents Base44 SDK axios calls from emitting network errors
 global.fetch = vi.fn().mockResolvedValue({
   ok: true,
   status: 200,
@@ -17,6 +31,7 @@ global.fetch = vi.fn().mockResolvedValue({
   text: async () => '',
 });
 
+// Mock XMLHttpRequest for legacy code
 class MockXMLHttpRequest {
   constructor() {
     this.readyState = 0;
@@ -45,3 +60,166 @@ class MockXMLHttpRequest {
 }
 
 global.XMLHttpRequest = MockXMLHttpRequest;
+
+// ============================================================================
+// DOM API MOCKS
+// ============================================================================
+
+// Mock window.matchMedia
+Object.defineProperty(window, 'matchMedia', {
+  writable: true,
+  value: vi.fn().mockImplementation(query => ({
+    matches: false,
+    media: query,
+    onchange: null,
+    addListener: vi.fn(),
+    removeListener: vi.fn(),
+    addEventListener: vi.fn(),
+    removeEventListener: vi.fn(),
+    dispatchEvent: vi.fn(),
+  })),
+});
+
+// Mock IntersectionObserver
+global.IntersectionObserver = class IntersectionObserver {
+  constructor() {}
+  disconnect() {}
+  observe() {}
+  takeRecords() {
+    return [];
+  }
+  unobserve() {}
+};
+
+// Mock ResizeObserver
+global.ResizeObserver = class ResizeObserver {
+  constructor() {}
+  disconnect() {}
+  observe() {}
+  unobserve() {}
+};
+
+// Mock scrollTo
+window.scrollTo = vi.fn();
+
+// ============================================================================
+// WASM MODULE MOCKS
+// ============================================================================
+
+// Mock quantum_core WASM module
+vi.mock('quantum_core', () => ({
+  HolographicConsensus: class {
+    superpose_models() { return 0.8; }
+    measure_entropy() { return 0.5; }
+    measure_coherence() { return 0.9; }
+  },
+  TunnelingScanner: class {
+    calculate_tunneling_probability() { return 0.3; }
+    run_penetration_test() { return { risk: 0.25 }; }
+    scan() { return Promise.resolve([]); }
+  },
+  ZenoStabilizer: class {
+    calculate_stability() { return 0.95; }
+    is_state_frozen() { return true; }
+  },
+  RenormalizationEngine: class {
+    predict_criticality() { return 0.1; }
+    coarse_grain() { return 0.05; }
+  },
+  QuantumAnnealer: {
+    optimize: vi.fn(() => Promise.resolve({ optimized: true, energy: 0.5 })),
+  },
+  EntangledState: {
+    create: vi.fn(() => ({ entanglement: 0.9 })),
+  },
+  SuperpositionSynthesizer: {
+    synthesize: vi.fn(() => Promise.resolve({ superposition: 0.8 })),
+  },
+}));
+
+// Mock @/quantum-core/pkg/quantum_core
+vi.mock('@/quantum-core/pkg/quantum_core', () => ({
+  HolographicConsensus: class {
+    superpose_models() { return 0.8; }
+    measure_entropy() { return 0.5; }
+    measure_coherence() { return 0.9; }
+  },
+  TunnelingScanner: class {
+    calculate_tunneling_probability() { return 0.3; }
+    run_penetration_test() { return { risk: 0.25 }; }
+    scan() { return Promise.resolve([]); }
+  },
+  ZenoStabilizer: class {
+    calculate_stability() { return 0.95; }
+    is_state_frozen() { return true; }
+  },
+  RenormalizationEngine: class {
+    predict_criticality() { return 0.1; }
+    coarse_grain() { return 0.05; }
+  },
+  QuantumAnnealer: {
+    optimize: vi.fn(() => Promise.resolve({ optimized: true, energy: 0.5 })),
+  },
+  EntangledState: {
+    create: vi.fn(() => ({ entanglement: 0.9 })),
+  },
+  SuperpositionSynthesizer: {
+    synthesize: vi.fn(() => Promise.resolve({ superposition: 0.8 })),
+  },
+}), { virtual: true });
+
+// ============================================================================
+// CONSOLE SUPPRESSION
+// ============================================================================
+
+// Suppress console errors in tests (optional)
+const originalError = console.error;
+beforeAll(() => {
+  console.error = (...args) => {
+    if (
+      typeof args[0] === 'string' &&
+      args[0].includes('Warning: ReactDOM.render')
+    ) {
+      return;
+    }
+    originalError.call(console, ...args);
+  };
+});
+
+afterAll(() => {
+  console.error = originalError;
+});
+
+// ============================================================================
+// CUSTOM MATCHERS
+// ============================================================================
+
+// Add custom matchers
+expect.extend({
+  toBeWithinRange(received, floor, ceiling) {
+    const pass = received >= floor && received <= ceiling;
+    if (pass) {
+      return {
+        message: () => `expected ${received} not to be within range ${floor} - ${ceiling}`,
+        pass: true,
+      };
+    } else {
+      return {
+        message: () => `expected ${received} to be within range ${floor} - ${ceiling}`,
+        pass: false,
+      };
+    }
+  },
+});
+
+// ============================================================================
+// GLOBAL TEST UTILITIES
+// ============================================================================
+
+global.testUtils = {
+  waitForAsync: (fn, timeout = 1000) => {
+    return new Promise((resolve) => {
+      setTimeout(() => resolve(fn()), timeout);
+    });
+  },
+};

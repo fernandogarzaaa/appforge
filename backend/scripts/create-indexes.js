@@ -85,6 +85,66 @@ const indexes = [
       { keys: { events: 1, isActive: 1 }, options: { name: 'idx_webhooks_events_active' } },
     ]
   },
+  {
+    collection: 'quantumcircuits',
+    indexes: [
+      { keys: { userId: 1, createdAt: -1 }, options: { name: 'idx_quantumcircuits_user_created' } },
+      { keys: { userId: 1, status: 1 }, options: { name: 'idx_quantumcircuits_user_status' } },
+      { keys: { isPublic: 1, createdAt: -1 }, options: { name: 'idx_quantumcircuits_public_created' } },
+      { keys: { 'metadata.tags': 1 }, options: { name: 'idx_quantumcircuits_tags' } },
+      { keys: { status: 1 }, options: { name: 'idx_quantumcircuits_status' } },
+    ]
+  },
+  {
+    collection: 'usercredits',
+    indexes: [
+      { keys: { userId: 1 }, options: { unique: true, name: 'idx_usercredits_user' } },
+      { keys: { userId: 1, billingCycleStart: -1 }, options: { name: 'idx_usercredits_user_billing' } },
+      { keys: { 'usage.openai.cost': -1 }, options: { name: 'idx_usercredits_openai_cost' } },
+      { keys: { 'usage.anthropic.cost': -1 }, options: { name: 'idx_usercredits_anthropic_cost' } },
+    ]
+  },
+  {
+    collection: 'permissions',
+    indexes: [
+      { keys: { userId: 1, resource: 1 }, options: { name: 'idx_permissions_user_resource' } },
+      { keys: { userId: 1, resource: 1, action: 1 }, options: { name: 'idx_permissions_user_resource_action' } },
+      { keys: { resource: 1 }, options: { name: 'idx_permissions_resource' } },
+    ]
+  },
+  {
+    collection: 'auditlogs',
+    indexes: [
+      { keys: { userId: 1, timestamp: -1 }, options: { name: 'idx_auditlogs_user_timestamp' } },
+      { keys: { action: 1 }, options: { name: 'idx_auditlogs_action' } },
+      { keys: { resourceType: 1 }, options: { name: 'idx_auditlogs_resourcetype' } },
+      { keys: { timestamp: -1 }, options: { name: 'idx_auditlogs_timestamp' } },
+      { keys: { createdAt: 1 }, options: { expireAfterSeconds: 7776000, name: 'idx_auditlogs_ttl' } }, // 90 days
+    ]
+  },
+  {
+    collection: 'usersettings',
+    indexes: [
+      { keys: { userId: 1 }, options: { unique: true, name: 'idx_usersettings_user' } },
+      { keys: { 'llmSettings.selectedModel': 1 }, options: { name: 'idx_usersettings_llm_model' } },
+    ]
+  },
+  {
+    collection: 'userstates',
+    indexes: [
+      { keys: { userId: 1, key: 1 }, options: { unique: true, name: 'idx_userstates_user_key' } },
+      { keys: { userId: 1, updatedAt: -1 }, options: { name: 'idx_userstates_user_updated' } },
+    ]
+  },
+  {
+    collection: 'teamworkflows',
+    indexes: [
+      { keys: { teamId: 1 }, options: { name: 'idx_teamworkflows_team' } },
+      { keys: { createdBy: 1 }, options: { name: 'idx_teamworkflows_createdby' } },
+      { keys: { isActive: 1 }, options: { name: 'idx_teamworkflows_active' } },
+      { keys: { teamId: 1, isActive: 1 }, options: { name: 'idx_teamworkflows_team_active' } },
+    ]
+  },
 ];
 
 async function createIndexes() {

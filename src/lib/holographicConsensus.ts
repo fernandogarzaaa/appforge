@@ -58,31 +58,53 @@ class EmbeddingService {
     }
 
     try {
-      const response = await fetch('/api/embeddings/openai', {
+      // Use backend embeddings API endpoint
+      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+      const response = await fetch(`${apiUrl}/api/embeddings`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`, // Include auth token
+        },
         body: JSON.stringify({ text }),
       });
 
-      const data = await response.json();
-      const embedding = data.embedding;
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.message || 'Failed to generate embedding');
+      }
 
-      // Normalize to unit sphere
-      const normalized = normalizeVector(embedding);
-      this.cache.set(cacheKey, normalized);
-      return normalized;
+      const data = await response.json();
+      const embedding = data.data.embedding;
+
+      // Embeddings from backend are already normalized
+      this.cache.set(cacheKey, embedding);
+      return embedding;
     } catch (error) {
       console.error('Failed to get OpenAI embedding:', error);
-      // Fallback: return zero vector
-      return Array(1536).fill(0);
+      console.warn('Falling back to mock embedding for development');
+      // Fallback to mock for development (will throw error in production from backend)
+      return this.generateMockEmbedding(text, 42);
     }
   }
 
   /**
-   * Generate a mock embedding for testing/development
+   * Generate a mock embedding for testing/development ONLY
+   * ⚠️ WARNING: This is a placeholder for development/testing
+   * ⚠️ In production, always provide real embeddings from your embedding API
    * Uses hash-based pseudorandom generation for consistency
+   *
+   * @deprecated Use real embedding API in production
    */
-  generateMockEmbedding(text: string, seed: number): number[] {
+  private generateMockEmbedding(text: string, seed: number): number[] {
+    // Only allow in development/test environments
+    if (typeof process !== 'undefined' && process.env.NODE_ENV === 'production') {
+      console.error('[HolographicConsensus] Mock embeddings should not be used in production!');
+      throw new Error('Mock embeddings are disabled in production. Please provide real embeddings.');
+    }
+
+    console.warn('[HolographicConsensus] Using mock embedding - replace with real embedding API in production');
+
     const embedding = new Array(1536).fill(0);
     let hash = seed;
 
@@ -210,10 +232,16 @@ export class HolographicConsensusEngine {
 
     // Step 1: Ensure all responses have embeddings
     const responsesWithEmbeddings = await Promise.all(
-      modelResponses.map(async (response) => ({
-        ...response,
-        embedding: response.embedding || this.embeddingService.generateMockEmbedding(response.text, 42),
-      }))
+      modelResponses.map(async (response) => {
+        if (!response.embedding) {
+          console.warn('[HolographicConsensus] Missing embedding for response. Consider using getEmbeddingFromOpenAI() in production.');
+          return {
+            ...response,
+            embedding: this.embeddingService.generateMockEmbedding(response.text, 42),
+          };
+        }
+        return response;
+      })
     );
 
     // Step 2: Extract embeddings

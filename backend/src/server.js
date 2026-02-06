@@ -22,6 +22,8 @@ import teamSettingsRoutes from './routes/teamSettingsRoutes.js';
 import adminRoutes from './routes/adminRoutes.js';
 import adminDashboardRoutes from './routes/adminDashboardRoutes.js';
 import persistenceRoutes from './routes/persistenceRoutes.js';
+import embeddingsRoutes from './routes/embeddingsRoutes.js';
+import base44Routes from './routes/base44Routes.js';
 import { handleStripeWebhook } from './services/stripeService.js';
 import WebSocketServer from './websocket/index.js';
 import { setIO } from './websocket/emitter.js';
@@ -154,6 +156,8 @@ app.use('/api/teams', teamRoutes);
 app.use('/api/permissions', permissionRoutes);
 app.use('/api/credits', creditsRoutes);
 app.use('/api/persistence', persistenceRoutes);
+app.use('/api/embeddings', embeddingsRoutes);
+app.use('/api/base44', base44Routes);
 
 // Frontend persistence layer routes
 app.use('/api/user', settingsRoutes);
