@@ -24,6 +24,9 @@ import adminDashboardRoutes from './routes/adminDashboardRoutes.js';
 import persistenceRoutes from './routes/persistenceRoutes.js';
 import embeddingsRoutes from './routes/embeddingsRoutes.js';
 import base44Routes from './routes/base44Routes.js';
+import botRoutes from './routes/botRoutes.js';
+import webhookRoutes from './routes/webhookRoutes.js';
+import botScheduler from './services/botScheduler.js';
 import { handleStripeWebhook } from './services/stripeService.js';
 import WebSocketServer from './websocket/index.js';
 import { setIO } from './websocket/emitter.js';
@@ -158,6 +161,8 @@ app.use('/api/credits', creditsRoutes);
 app.use('/api/persistence', persistenceRoutes);
 app.use('/api/embeddings', embeddingsRoutes);
 app.use('/api/base44', base44Routes);
+app.use('/api/bots', botRoutes);
+app.use('/api/webhooks', webhookRoutes);
 
 // Frontend persistence layer routes
 app.use('/api/user', settingsRoutes);
@@ -213,13 +218,21 @@ export async function closeServer() {
 export async function initializeDatabase() {
   try {
     const mongoUri = process.env.MONGODB_URI || 'mongodb://localhost:27017/appforge';
-    
+
     await mongoose.connect(mongoUri, {
       maxPoolSize: 10,
       serverSelectionTimeoutMS: 5000,
     });
-    
+
     console.log(`✅ MongoDB connected: ${mongoUri}`);
+
+    // Start bot scheduler after database connection
+    try {
+      await botScheduler.start();
+      console.log('✅ Bot scheduler started');
+    } catch (error) {
+      console.warn(`⚠️  Bot scheduler failed to start: ${error.message}`);
+    }
   } catch (error) {
     console.warn(`⚠️  MongoDB connection failed: ${error.message}`);
     console.warn('Database features will be unavailable. Server will continue without persistence.');

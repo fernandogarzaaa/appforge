@@ -7,6 +7,8 @@ import { createError } from '../utils/helpers.js';
 import logger from '../config/logger.js';
 import { getCachedData, setCachedData } from '../utils/caching.js';
 import UserCredits from '../models/UserCredits.js';
+import quantumLLMService from './quantumLLMService.js';
+import multiLLMService from './multiLLMService.js';
 
 class Base44Service {
   constructor() {
@@ -18,9 +20,24 @@ class Base44Service {
     this.token = null;
     this.tokenExpiry = null;
 
+    // Quantum LLM configuration
+    this.quantumEnabled = process.env.QUANTUM_DEFAULT_MODE === 'quantum';
+    this.quantumLLM = quantumLLMService;
+    this.multiLLM = multiLLMService;
+
+    // Legacy OpenAI configuration
+    this.openaiApiKey = process.env.OPENAI_API_KEY;
+    this.defaultModel = process.env.OPENAI_MODEL || 'gpt-3.5-turbo';
+
     if (!this.username || !this.password) {
-      logger.warn('[Base44Service] Base44 credentials not configured. Base44 features will be limited.');
+      logger.warn('[Base44Service] Base44 credentials not configured. Base44 platform features will be limited.');
     }
+
+    if (!this.openaiApiKey) {
+      logger.warn('[Base44Service] OpenAI API key not configured. AI features will use limited fallbacks.');
+    }
+
+    logger.info(`[Base44Service] Quantum LLM mode: ${this.quantumEnabled ? 'ENABLED ✓' : 'Disabled'}`);
   }
 
   /**
@@ -127,72 +144,81 @@ class Base44Service {
   }
 
   /**
-   * Call Base44 LLM (AI model)
-   * @param {string} model - Model name (e.g., 'base44', 'gpt-4', 'claude-3')
+   * Call LLM with intelligent routing
+   * @param {string} model - Model name (e.g., 'quantum', 'gpt-4', 'claude-3')
    * @param {string} prompt - User prompt
    * @param {Object} options - Model options and userId
    */
   async callLLM(model, prompt, options = {}) {
     try {
-      const token = await this.authenticate();
-
       const {
         userId,
         temperature = 0.7,
         maxTokens = 2000,
         systemPrompt = '',
+        taskType = 'general',
+        forceEnsemble = false,
         ...otherOptions
       } = options;
 
-      logger.info(`[Base44Service] Calling LLM: ${model}`);
+      // Route to Quantum LLM for quantum/base44 models
+      if (model === 'quantum' || model === 'base44' || this.quantumEnabled) {
+        logger.info(`[Base44Service] Routing to Quantum LLM (model: ${model})`);
 
-      const response = await fetch(`${this.apiUrl}/api/ai/chat`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-          ...(this.serviceToken ? { 'X-Service-Token': this.serviceToken } : {}),
-        },
-        body: JSON.stringify({
-          model,
-          messages: [
-            ...(systemPrompt ? [{ role: 'system', content: systemPrompt }] : []),
-            { role: 'user', content: prompt },
-          ],
+        const result = await this.quantumLLM.quantumQuery(prompt, {
+          systemPrompt,
           temperature,
-          max_tokens: maxTokens,
-          ...otherOptions,
-        }),
-      });
+          maxTokens,
+          taskType,
+          forceEnsemble: forceEnsemble || model === 'quantum',
+          userId,
+        });
 
-      if (!response.ok) {
-        const error = await response.json();
-        logger.error(`[Base44Service] LLM call failed:`, error);
-        throw new Error(error.message || `LLM ${model} failed`);
+        // Track usage
+        if (userId && result.usage) {
+          await this.trackLLMUsage(userId, 'quantum', prompt, result);
+        }
+
+        return {
+          text: result.response,
+          usage: result.usage,
+          model: result.model,
+          quantumMetrics: result.quantumMetrics,
+          raw: result,
+        };
       }
 
-      const data = await response.json();
+      // Route to specific LLM provider
+      logger.info(`[Base44Service] Routing to Multi-LLM service (model: ${model})`);
+
+      const result = await this.multiLLM.callLLM(model, prompt, {
+        systemPrompt,
+        temperature,
+        maxTokens,
+        ...otherOptions,
+      });
 
       // Track usage
-      if (userId) {
-        await this.trackLLMUsage(userId, model, prompt, data);
+      if (userId && result.usage) {
+        await this.trackLLMUsage(userId, model, prompt, result);
       }
 
       return {
-        text: data.choices?.[0]?.message?.content || data.response || '',
-        usage: data.usage,
-        model: data.model,
-        raw: data,
+        text: result.text,
+        usage: result.usage,
+        model: result.model,
+        provider: result.provider,
+        raw: result,
       };
 
     } catch (error) {
       logger.error(`[Base44Service] Error calling LLM ${model}:`, error);
-      throw createError(500, `Base44 LLM call failed: ${error.message}`);
+      throw createError(500, `LLM call failed: ${error.message}`);
     }
   }
 
   /**
-   * Stream LLM response
+   * Stream LLM response using OpenAI
    * @param {string} model - Model name
    * @param {string} prompt - User prompt
    * @param {Object} options - Model options
@@ -200,7 +226,10 @@ class Base44Service {
    */
   async streamLLM(model, prompt, options = {}) {
     try {
-      const token = await this.authenticate();
+      // Validate OpenAI API key
+      if (!this.openaiApiKey) {
+        throw createError(500, 'OpenAI API key not configured');
+      }
 
       const {
         temperature = 0.7,
@@ -209,21 +238,38 @@ class Base44Service {
         ...otherOptions
       } = options;
 
-      logger.info(`[Base44Service] Streaming LLM: ${model}`);
+      // Map model names
+      const modelMap = {
+        'base44': 'gpt-3.5-turbo',
+        'chatgpt': 'gpt-4',
+        'gpt-4': 'gpt-4',
+        'gpt-3.5-turbo': 'gpt-3.5-turbo',
+        'claude': 'gpt-4',
+        'claude-3-opus': 'gpt-4',
+        'gemini': 'gpt-3.5-turbo',
+        'gemini-pro': 'gpt-3.5-turbo',
+      };
 
-      const response = await fetch(`${this.apiUrl}/api/ai/chat/stream`, {
+      const openaiModel = modelMap[model] || this.defaultModel;
+      logger.info(`[Base44Service] Streaming OpenAI LLM: ${openaiModel}`);
+
+      // Build messages
+      const messages = [];
+      if (systemPrompt) {
+        messages.push({ role: 'system', content: systemPrompt });
+      }
+      messages.push({ role: 'user', content: prompt });
+
+      // Call OpenAI streaming API
+      const response = await fetch('https://api.openai.com/v1/chat/completions', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-          ...(this.serviceToken ? { 'X-Service-Token': this.serviceToken } : {}),
+          'Authorization': `Bearer ${this.openaiApiKey}`,
         },
         body: JSON.stringify({
-          model,
-          messages: [
-            ...(systemPrompt ? [{ role: 'system', content: systemPrompt }] : []),
-            { role: 'user', content: prompt },
-          ],
+          model: openaiModel,
+          messages,
           temperature,
           max_tokens: maxTokens,
           stream: true,
@@ -233,14 +279,15 @@ class Base44Service {
 
       if (!response.ok) {
         const error = await response.json();
-        throw new Error(error.message || `LLM streaming ${model} failed`);
+        logger.error(`[Base44Service] OpenAI streaming error:`, error);
+        throw new Error(error.error?.message || `LLM streaming ${model} failed`);
       }
 
       return response.body;
 
     } catch (error) {
       logger.error(`[Base44Service] Error streaming LLM ${model}:`, error);
-      throw createError(500, `Base44 LLM streaming failed: ${error.message}`);
+      throw createError(500, `LLM streaming failed: ${error.message}`);
     }
   }
 

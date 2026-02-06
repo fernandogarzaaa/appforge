@@ -26,13 +26,6 @@ export default defineConfig({
       jsxRuntime: 'automatic',
       // Fast refresh for better DX
       fastRefresh: true,
-      // Babel plugins for optimization
-      babel: {
-        plugins: [
-          // Remove PropTypes in production
-          process.env.NODE_ENV === 'production' && ['babel-plugin-transform-react-remove-prop-types', { removeImport: true }]
-        ].filter(Boolean)
-      }
     }),
     // Bundle analyzer - generates stats.html in build
     visualizer({

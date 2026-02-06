@@ -3,7 +3,8 @@
     "allow": [
       "Bash(test:*)",
       "Bash(copy srcglobals.css srcglobals-old.css)",
-      "Bash(npm install:*)"
+      "Bash(npm install:*)",
+      "Bash(node verify-setup.js:*)"
     ]
   }
 }
