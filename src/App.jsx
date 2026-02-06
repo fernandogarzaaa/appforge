@@ -28,6 +28,7 @@ import { validateEnv } from '@/utils/env';
 import errorTracker, { setUser, clearUser } from '@/utils/errorTracking';
 import { startHealthMonitoring } from '@/utils/healthCheck';
 import { useToast } from '@/components/ui/use-toast';
+import { initVitals } from '@/lib/vitals';
 import { ViewModeProvider } from '@/contexts/ViewModeContext';
 import { NavigationProvider, useNavigation } from '@/contexts/NavigationContext';
 import { ViewModeToggle } from '@/components/navigation/ViewModeToggle';
@@ -245,6 +246,9 @@ function App() {
     // Start health monitoring in production
     if (import.meta.env.PROD) {
       startHealthMonitoring(60000); // Check every minute
+
+      // Initialize Web Vitals tracking
+      initVitals();
     }
   }, []);
 

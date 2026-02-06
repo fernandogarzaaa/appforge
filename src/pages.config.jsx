@@ -3,8 +3,8 @@ import PageLoader from './components/common/PageLoader';
 import __Layout from './Layout.jsx';
 
 // Core pages - loaded eagerly (small, frequently used)
-import Dashboard from './pages/Dashboard';
-import Projects from './pages/Projects';
+import Dashboard from './pages/DashboardNew';
+import Projects from './pages/ProjectsNew';
 import Landing from './pages/Landing';
 import Login from './pages/Login';
 import Register from './pages/Register';

@@ -12,6 +12,7 @@ import MobileDrawerSidebar from '@/components/sidebar/MobileDrawerSidebar';
 
 // Lazy load heavy components for better code splitting
 const ConsolidatedAISidebar = lazy(() => import('@/components/sidebar/ConsolidatedAISidebar'));
+const SidebarNew = lazy(() => import('@/components/layout/SidebarNew'));
 const HelpSidebar = lazy(() => import('@/components/help/HelpSidebar'));
 
 // Theme management hook
@@ -133,8 +134,8 @@ export default function Layout({ children, currentPageName: _currentPageName, on
       {/* Desktop Sidebar - Hidden on mobile (< md:768px) */}
       <div className="hidden md:block">
         <Suspense fallback={<SidebarFallback />}>
-          <ConsolidatedAISidebar 
-            currentProject={currentProject} 
+          <SidebarNew
+            currentProject={currentProject}
             collapsed={sidebarCollapsed}
             user={user}
             onToggle={() => setSidebarCollapsed(!sidebarCollapsed)}
