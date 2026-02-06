@@ -1,43 +1,50 @@
-import { useCallback, useState } from 'react';
-
-const STORAGE_KEY = 'appforge_plugin_marketplace';
-
-const loadPlugins = () => {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    return raw ? JSON.parse(raw) : [];
-  } catch {
-    return [];
-  }
-};
-
-const savePlugins = (plugins) => {
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(plugins));
-  } catch {
-    // no-op
-  }
-};
+import { useCallback, useEffect, useState } from 'react';
+import { base44 } from '@/api/base44Client';
 
 export function usePluginMarketplace() {
-  const [plugins, setPlugins] = useState(loadPlugins);
+  const [plugins, setPlugins] = useState([]);
+  const [loading, setLoading] = useState(false);
 
-  const publishPlugin = useCallback((plugin) => {
-    const next = [{ ...plugin, id: Date.now(), status: 'published' }, ...plugins].slice(0, 200);
-    setPlugins(next);
-    savePlugins(next);
-  }, [plugins]);
+  useEffect(() => {
+    let active = true;
+    setLoading(true);
+    base44.entities.Plugin.list('-created_date', 200)
+      .then((items) => {
+        if (active) setPlugins(items || []);
+      })
+      .finally(() => {
+        if (active) setLoading(false);
+      });
+    return () => {
+      active = false;
+    };
+  }, []);
 
-  const installPlugin = useCallback((pluginId) => {
-    const next = plugins.map((plugin) =>
+  const publishPlugin = useCallback(async (plugin) => {
+    const created = await base44.entities.Plugin.create({
+      ...plugin,
+      status: 'published',
+      created_at: new Date().toISOString()
+    });
+    setPlugins((prev) => [created, ...prev].slice(0, 200));
+    return created;
+  }, []);
+
+  const installPlugin = useCallback(async (pluginId) => {
+    await base44.entities.PluginInstall.create({
+      plugin_id: pluginId,
+      status: 'installed',
+      installed_at: new Date().toISOString()
+    });
+
+    setPlugins((prev) => prev.map((plugin) =>
       plugin.id === pluginId ? { ...plugin, installed: true } : plugin
-    );
-    setPlugins(next);
-    savePlugins(next);
-  }, [plugins]);
+    ));
+  }, []);
 
   return {
     plugins,
+    loading,
     publishPlugin,
     installPlugin
   };

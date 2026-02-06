@@ -1,335 +1,192 @@
 /**
  * Webhooks System
- * Handles webhook registration, delivery, and management
- * 
- * @typedef {Object} Webhook
- * @property {string} id
- * @property {string} url
- * @property {string[]} events
- * @property {boolean} active
- * @property {string} secret
- * @property {Record<string, string>} headers
- * @property {RetryPolicy} retryPolicy
- * @property {Date} createdAt
- * @property {Date} updatedAt
- * @property {string} createdBy
- * 
- * @typedef {Object} RetryPolicy
- * @property {number} maxRetries
- * @property {number} delayMs
- * @property {number} backoffMultiplier
- * @property {number} maxDelayMs
- * 
- * @typedef {Object} WebhookDelivery
- * @property {string} id
- * @property {string} webhookId
- * @property {string} event
- * @property {Record<string, any>} payload
- * @property {'pending'|'success'|'failed'|'retrying'} status
- * @property {number} [statusCode]
- * @property {number} responseTime
- * @property {number} attempts
- * @property {Date} lastAttemptAt
- * @property {Date} [nextRetryAt]
+ * Uses Base44 entities + serverless delivery for production readiness
  */
 
-const webhookStore = new Map();
+import { base44 } from '@/api/base44Client';
+
 const webhookListeners = new Map();
-const deliveryLogs = new Map();
+
+const DEFAULT_RETRY_POLICY = {
+  maxRetries: 5,
+  delayMs: 1000,
+  backoffMultiplier: 2,
+  maxDelayMs: 60000,
+};
+
+const nowIso = () => new Date().toISOString();
 
 /**
- * Reset all webhook data (for testing)
+ * Reset all webhook data (local listeners only)
  */
 export const resetWebhooks = () => {
-  webhookStore.clear();
   webhookListeners.clear();
-  deliveryLogs.clear();
 };
 
 /**
  * Create webhook
  */
-export const createWebhook = (url, events = [], options = {}) => {
-  const webhookId = `webhook_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-  
-  const webhook = {
-    id: webhookId,
+export const createWebhook = async (url, events = [], options = {}) => {
+  const user = await base44.auth.me().catch(() => null);
+  const webhook = await base44.entities.Webhook.create({
     url,
     events,
-    active: true,
-    secret: generateSecret(),
+    is_active: options.active !== false,
+    secret: options.secret || generateSecret(),
     headers: options.headers || {},
-    retryPolicy: {
-      maxRetries: 5,
-      delayMs: 1000,
-      backoffMultiplier: 2,
-      maxDelayMs: 60000,
-      ...options.retryPolicy,
+    retry_policy: {
+      ...DEFAULT_RETRY_POLICY,
+      ...(options.retryPolicy || {})
     },
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    createdBy: getCurrentUserId(),
-  };
+    created_at: nowIso(),
+    updated_at: nowIso(),
+    user_id: user?.email || null,
+  });
 
-  webhookStore.set(webhookId, webhook);
-  deliveryLogs.set(webhookId, []);
-  
   notifyWebhookListeners('webhook_created', webhook);
-  
   return webhook;
 };
 
 /**
  * Get webhook
  */
-export const getWebhook = (webhookId) => {
-  return webhookStore.get(webhookId) || null;
+export const getWebhook = async (webhookId) => {
+  return base44.entities.Webhook.get(webhookId);
 };
 
 /**
  * List webhooks
  */
-export const listWebhooks = (filter = {}) => {
-  let webhooks = Array.from(webhookStore.values());
-  
+export const listWebhooks = async (filter = {}) => {
+  const webhooks = await base44.entities.Webhook.list('-created_date', 200);
+  let filtered = webhooks || [];
+
   if (filter.event) {
-    webhooks = webhooks.filter(w => w.events.includes(filter.event));
+    filtered = filtered.filter(w => (w.events || []).includes(filter.event));
   }
-  
+
   if (filter.active !== undefined) {
-    webhooks = webhooks.filter(w => w.active === filter.active);
+    filtered = filtered.filter(w => (w.is_active ?? w.active) === filter.active);
   }
-  
-  return webhooks;
+
+  return filtered;
 };
 
 /**
  * Update webhook
  */
-export const updateWebhook = (webhookId, updates) => {
-  const webhook = webhookStore.get(webhookId);
-  if (!webhook) throw new Error('Webhook not found');
-
-  const updatedWebhook = {
-    ...webhook,
+export const updateWebhook = async (webhookId, updates) => {
+  const updatedWebhook = await base44.entities.Webhook.update(webhookId, {
     ...updates,
-    id: webhook.id,
-    createdAt: webhook.createdAt,
-    createdBy: webhook.createdBy,
-    updatedAt: new Date(),
-  };
-
-  webhookStore.set(webhookId, updatedWebhook);
+    updated_at: nowIso(),
+  });
   notifyWebhookListeners('webhook_updated', updatedWebhook);
-  
   return updatedWebhook;
 };
 
 /**
  * Delete webhook
  */
-export const deleteWebhook = (webhookId) => {
-  const webhook = webhookStore.get(webhookId);
-  webhookStore.delete(webhookId);
-  deliveryLogs.delete(webhookId);
-  
+export const deleteWebhook = async (webhookId) => {
+  const webhook = await base44.entities.Webhook.get(webhookId).catch(() => null);
+  await base44.entities.Webhook.delete(webhookId);
   notifyWebhookListeners('webhook_deleted', webhook);
-  
   return webhook;
 };
 
 /**
  * Toggle webhook active status
  */
-export const toggleWebhook = (webhookId) => {
-  const webhook = webhookStore.get(webhookId);
-  if (!webhook) throw new Error('Webhook not found');
-
-  webhook.active = !webhook.active;
-  webhook.updatedAt = new Date();
-  
-  notifyWebhookListeners('webhook_toggled', webhook);
-  
-  return webhook;
+export const toggleWebhook = async (webhookId) => {
+  const webhook = await base44.entities.Webhook.get(webhookId);
+  const updatedWebhook = await base44.entities.Webhook.update(webhookId, {
+    is_active: !(webhook.is_active ?? webhook.active),
+    updated_at: nowIso(),
+  });
+  notifyWebhookListeners('webhook_toggled', updatedWebhook);
+  return updatedWebhook;
 };
 
 /**
  * Trigger webhook event
  */
 export const triggerWebhook = async (event, payload = {}) => {
-  const webhooks = listWebhooks({ event, active: true });
-  
-  if (webhooks.length === 0) return;
+  const webhooks = await listWebhooks({ event, active: true });
+  if (webhooks.length === 0) return [];
 
   const deliveries = [];
 
   for (const webhook of webhooks) {
-    // Skip if webhook doesn't match the event
-    if (!webhook.events.includes(event)) continue;
-    
-    const delivery = {
-      id: `delivery_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
-      webhookId: webhook.id,
-      event,
+    const response = await base44.functions.invoke('processWebhookDelivery', {
+      webhook_id: webhook.id,
+      event_type: event,
       payload,
-      status: 'pending',
-      responseTime: 0,
-      attempts: 0,
-      lastAttemptAt: new Date(),
-      timestamp: new Date(),
-    };
+    });
 
-    deliveries.push(delivery);
-    deliveryLogs.get(webhook.id).push(delivery);
-
-    // Notify that delivery was sent
-    notifyWebhookListeners('delivery_sent', delivery);
-
-    // Send webhook asynchronously
-    sendWebhookWithRetry(webhook, event, payload, delivery);
+    const result = response?.data || response;
+    deliveries.push(result?.delivery || result);
+    notifyWebhookListeners(result?.success ? 'delivery_success' : 'delivery_failed', result);
   }
 
   return deliveries;
 };
 
 /**
- * Send webhook with retry logic
- */
-async function sendWebhookWithRetry(webhook, event, payload, delivery) {
-  const signature = createSignature(webhook.secret, JSON.stringify(payload));
-  const startTime = performance.now();
-
-  for (let attempt = 0; attempt <= webhook.retryPolicy.maxRetries; attempt++) {
-    try {
-      if (attempt > 0) {
-        const delay = Math.min(
-          webhook.retryPolicy.delayMs * Math.pow(webhook.retryPolicy.backoffMultiplier, attempt - 1),
-          webhook.retryPolicy.maxDelayMs
-        );
-        await new Promise(resolve => setTimeout(resolve, delay));
-      }
-
-      delivery.attempts++;
-      delivery.lastAttemptAt = new Date();
-      delivery.status = 'retrying';
-
-      const response = await fetch(webhook.url, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-Webhook-Signature': signature,
-          'X-Webhook-Event': event,
-          'X-Webhook-Id': webhook.id,
-          'X-Webhook-Delivery': delivery.id,
-          ...webhook.headers,
-        },
-        body: JSON.stringify({
-          event,
-          payload,
-          timestamp: new Date().toISOString(),
-          deliveryId: delivery.id,
-        }),
-        signal: AbortSignal.timeout(30000),
-      });
-
-      delivery.responseTime = performance.now() - startTime;
-      delivery.statusCode = response.status;
-
-      if (response.ok) {
-        delivery.status = 'success';
-        notifyWebhookListeners('delivery_success', delivery);
-        return;
-      } else if (response.status >= 500 || response.status === 429) {
-        // Retry on server error or rate limit
-        continue;
-      } else {
-        delivery.status = 'failed';
-        delivery.error = `HTTP ${response.status}`;
-        notifyWebhookListeners('delivery_failed', delivery);
-        return;
-      }
-    } catch (error) {
-      delivery.responseTime = performance.now() - startTime;
-      delivery.error = error.message;
-
-      if (attempt === webhook.retryPolicy.maxRetries) {
-        delivery.status = 'failed';
-        notifyWebhookListeners('delivery_failed', delivery);
-      } else {
-        const nextDelay = Math.min(
-          webhook.retryPolicy.delayMs * Math.pow(webhook.retryPolicy.backoffMultiplier, attempt),
-          webhook.retryPolicy.maxDelayMs
-        );
-        delivery.nextRetryAt = new Date(Date.now() + nextDelay);
-        delivery.status = 'retrying';
-      }
-    }
-  }
-}
-
-/**
  * Get delivery logs for webhook
  */
-export const getDeliveryLogs = (webhookId, limit = 100) => {
-  const logs = deliveryLogs.get(webhookId) || [];
-  return logs.slice(-limit).reverse();
+export const getDeliveryLogs = async (webhookId, limit = 100) => {
+  const logs = await base44.entities.WebhookDelivery.filter(
+    { webhook_id: webhookId },
+    '-created_at',
+    limit
+  );
+  return logs || [];
 };
 
 /**
  * Get delivery log
  */
-export const getDeliveryLog = (webhookId, deliveryId) => {
-  const logs = deliveryLogs.get(webhookId) || [];
-  return logs.find(l => l.id === deliveryId);
+export const getDeliveryLog = async (_webhookId, deliveryId) => {
+  return base44.entities.WebhookDelivery.get(deliveryId);
 };
 
 /**
  * Resend webhook delivery
  */
 export const resendWebhook = async (webhookId, deliveryId) => {
-  const webhook = webhookStore.get(webhookId);
-  if (!webhook) throw new Error('Webhook not found');
-
-  const logs = deliveryLogs.get(webhookId) || [];
-  const delivery = logs.find(l => l.id === deliveryId);
-  if (!delivery) throw new Error('Delivery not found');
-
-  // Reset delivery for retry
-  delivery.status = 'pending';
-  delivery.attempts = 0;
-  delivery.error = undefined;
-  delivery.nextRetryAt = undefined;
-
-  await sendWebhookWithRetry(webhook, delivery.event, delivery.payload, delivery);
-  
-  return delivery;
+  const delivery = await base44.entities.WebhookDelivery.get(deliveryId);
+  const response = await base44.functions.invoke('processWebhookDelivery', {
+    webhook_id: webhookId,
+    event_type: delivery?.event_type || delivery?.event || 'webhook.resend',
+    payload: delivery?.payload || {},
+    delivery_id: deliveryId,
+  });
+  return response?.data || response;
 };
 
 /**
- * Verify webhook signature
+ * Verify webhook signature (local helper)
  */
-export const verifyWebhookSignature = (payload, secret) => {
-  const signature = createSignature(secret, payload);
-  return signature;
+export const verifyWebhookSignature = async (payload, secret) => {
+  return createSignature(secret, payload);
 };
 
 /**
  * Get webhook statistics
  */
-export const getWebhookStats = (webhookId) => {
-  const logs = deliveryLogs.get(webhookId) || [];
-  
+export const getWebhookStats = async (webhookId) => {
+  const logs = await getDeliveryLogs(webhookId, 200);
   const successCount = logs.filter(l => l.status === 'success').length;
   const failedCount = logs.filter(l => l.status === 'failed').length;
-  
+
   return {
     totalDeliveries: logs.length,
     delivered: successCount,
     failed: failedCount,
-    averageResponseTime: logs.length > 0 
-      ? logs.reduce((sum, l) => sum + (l.responseTime || 0), 0) / logs.length 
+    averageResponseTime: logs.length > 0
+      ? logs.reduce((sum, l) => sum + (l.response_time_ms || 0), 0) / logs.length
       : 0,
-    lastDelivery: logs[logs.length - 1],
+    lastDelivery: logs[0] || null,
   };
 };
 
@@ -352,26 +209,29 @@ export const onWebhookEvent = (eventType, callback) => {
 /**
  * Create signature for webhook
  */
-function createSignature(secret, payload) {
-  // Using simple hash for demo; use HMAC-SHA256 in production
+async function createSignature(secret, payload) {
+  if (!secret) return '';
   const encoder = new TextEncoder();
-  const data = encoder.encode(secret + payload);
-  const hash = Array.from(new Uint8Array(data)).map(b => b.toString(16).padStart(2, '0')).join('');
-  return `sha256=${hash.substring(0, 64)}`;
+  const key = await crypto.subtle.importKey(
+    'raw',
+    encoder.encode(secret),
+    { name: 'HMAC', hash: 'SHA-256' },
+    false,
+    ['sign']
+  );
+  const signatureBuffer = await crypto.subtle.sign('HMAC', key, encoder.encode(payload));
+  const signatureArray = Array.from(new Uint8Array(signatureBuffer));
+  const signatureHex = signatureArray.map((b) => b.toString(16).padStart(2, '0')).join('');
+  return `sha256=${signatureHex}`;
 }
 
 /**
  * Generate webhook secret
  */
 function generateSecret() {
-  return `whsec_${Date.now()}_${Math.random().toString(36).substr(2, 16)}`;
-}
-
-/**
- * Get current user ID
- */
-function getCurrentUserId() {
-  return localStorage.getItem('userId') || 'user_' + Date.now();
+  const randomBytes = crypto.getRandomValues(new Uint8Array(16));
+  const randomHex = Array.from(randomBytes).map((b) => b.toString(16).padStart(2, '0')).join('');
+  return `whsec_${randomHex}`;
 }
 
 /**

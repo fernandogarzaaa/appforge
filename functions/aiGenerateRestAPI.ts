@@ -1,12 +1,11 @@
-// @ts-nocheck
+import { createClientFromRequest } from 'npm:@base44/sdk@0.8.6';
+
 /**
  * AI-Powered REST API Code Generator
- * Takes natural language description and generates complete REST API code
+ * Takes natural language description and generates REST API spec + scaffold
  */
 
-import { createClientFromRequest } from '@base44/sdk';
-
-export default async (req: Request): Promise<Response> => {
+Deno.serve(async (req) => {
   if (req.method !== 'POST') {
     return new Response('Method not allowed', { status: 405 });
   }
@@ -15,49 +14,70 @@ export default async (req: Request): Promise<Response> => {
     const base44 = createClientFromRequest(req);
     const user = await base44.auth.me();
 
-    const { description, language = 'typescript' } = await req.json();
-    if (!description || description.trim().length < 8) {
-      return new Response(JSON.stringify({ error: 'Provide a longer description for the API' }), {
-        status: 400,
-        headers: { 'Content-Type': 'application/json' },
-      });
+    if (!user) {
+      return Response.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const entityName = description.split(' ')[0].toLowerCase();
-    const baseRoute = `/api/${entityName}`;
+    const { description, language = 'typescript' } = await req.json();
+    if (!description || description.trim().length < 8) {
+      return Response.json({ error: 'Provide a longer description for the API' }, { status: 400 });
+    }
 
-    const scaffold = {
-      endpoints: [
-        { method: 'GET', path: `${baseRoute}`, description: `List ${entityName}` },
-        { method: 'GET', path: `${baseRoute}/:id`, description: `Get ${entityName} by id` },
-        { method: 'POST', path: `${baseRoute}`, description: `Create ${entityName}` },
-        { method: 'PUT', path: `${baseRoute}/:id`, description: `Update ${entityName}` },
-        { method: 'DELETE', path: `${baseRoute}/:id`, description: `Delete ${entityName}` },
-      ],
-      validation: ['body schema', 'params schema'],
-    };
+    const prompt = `You are a senior backend engineer. Generate a REST API design and code scaffold.
 
-    const sampleCode = `// Generated ${language} REST scaffold\n` +
-      `// Entity: ${entityName}\n` +
-      `// Description: ${description}\n` +
-      `export const routes = ${JSON.stringify(scaffold.endpoints, null, 2)};`;
+Description:
+${description}
 
-    return new Response(
-      JSON.stringify({
-        success: true,
-        message: 'API generation completed locally (AI stub)',
-        functions: scaffold.endpoints,
-        code: sampleCode,
-      }),
-      {
-        status: 200,
-        headers: { 'Content-Type': 'application/json' },
+Language/framework preference: ${language}
+
+Return JSON with:
+{
+  "service_name": "string",
+  "description": "string",
+  "endpoints": [
+    {
+      "method": "GET|POST|PUT|PATCH|DELETE",
+      "path": "/resource",
+      "description": "string",
+      "request_schema": "short JSON schema summary",
+      "response_schema": "short JSON schema summary"
+    }
+  ],
+  "code": "concise scaffold code"
+}`;
+
+    const response = await base44.integrations.Core.InvokeLLM({
+      prompt,
+      response_json_schema: {
+        type: 'object',
+        properties: {
+          service_name: { type: 'string' },
+          description: { type: 'string' },
+          endpoints: {
+            type: 'array',
+            items: {
+              type: 'object',
+              properties: {
+                method: { type: 'string' },
+                path: { type: 'string' },
+                description: { type: 'string' },
+                request_schema: { type: 'string' },
+                response_schema: { type: 'string' }
+              },
+              required: ['method', 'path', 'description']
+            }
+          },
+          code: { type: 'string' }
+        },
+        required: ['service_name', 'description', 'endpoints', 'code']
       }
-    );
-  } catch (error) {
-    return new Response(JSON.stringify({ error: error.message }), {
-      status: 500,
-      headers: { 'Content-Type': 'application/json' },
     });
+
+    return Response.json({
+      success: true,
+      ...response
+    });
+  } catch (error) {
+    return Response.json({ error: error.message }, { status: 500 });
   }
-};
+});

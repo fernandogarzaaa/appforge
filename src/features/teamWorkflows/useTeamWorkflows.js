@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect } from 'react';
-import { fetchJson } from '@/utils/api';
+import { base44 } from '@/api/base44Client';
 
 /**
  * useTeamWorkflows Hook
@@ -22,13 +22,24 @@ export function useTeamWorkflows() {
 
   const loadTeamWorkflows = async () => {
     try {
-      const data = await fetchJson('/api/team/workflows', {
-        credentials: 'include'
-      });
-      setWorkflows(data.workflows || []);
-      setWebhooks(data.webhooks || []);
-      setAutomations(data.automations || []);
-      setIntegratedServices(data.services || {});
+      const [workflowList, webhookList, automationList, serviceList] = await Promise.all([
+        base44.entities.TeamWorkflow.list('-created_date', 200),
+        base44.entities.Webhook.filter({ scope: 'team' }, '-created_date', 200),
+        base44.entities.TeamAutomation.list('-created_date', 200),
+        base44.entities.TeamIntegration.list('-created_date', 200),
+      ]);
+
+      setWorkflows(workflowList || []);
+      setWebhooks(webhookList || []);
+      setAutomations(automationList || []);
+
+      const services = (serviceList || []).reduce((acc, service) => {
+        if (service?.service) {
+          acc[service.service] = service;
+        }
+        return acc;
+      }, {});
+      setIntegratedServices(services);
     } catch (error) {
       console.error('Failed to load team workflows:', error);
     } finally {
@@ -36,219 +47,199 @@ export function useTeamWorkflows() {
     }
   };
 
-  // Save workflows to backend
-  const saveToBackend = useCallback(async (type, data) => {
-    try {
-      await fetchJson('/api/team/workflows', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify({ [type]: data })
-      });
-    } catch (error) {
-      console.error('Failed to save team workflows:', error);
-    }
-  }, []);
-
   /**
    * Create a new workflow
    * @param {Object} workflow - Workflow configuration
    */
-  const createWorkflow = useCallback((workflow) => {
-    const newWorkflow = {
-      id: Date.now(),
+  const createWorkflow = useCallback(async (workflow) => {
+    const newWorkflow = await base44.entities.TeamWorkflow.create({
       ...workflow,
-      createdAt: new Date().toISOString(),
       enabled: true,
       executions: 0,
-      lastRun: null,
-      successCount: 0,
-      failureCount: 0
-    };
-    const updated = [...workflows, newWorkflow];
-    setWorkflows(updated);
-    saveToBackend('workflows', updated);
+      last_run: null,
+      success_count: 0,
+      failure_count: 0,
+      created_at: new Date().toISOString(),
+    });
+    setWorkflows((prev) => [newWorkflow, ...prev]);
     return newWorkflow;
-  }, [workflows, saveToBackend]);
+  }, []);
 
   /**
    * Delete a workflow
    */
-  const deleteWorkflow = useCallback((workflowId) => {
-    const updated = workflows.filter(w => w.id !== workflowId);
-    setWorkflows(updated);
-    saveToBackend('workflows', updated);
-  }, [workflows, saveToBackend]);
+  const deleteWorkflow = useCallback(async (workflowId) => {
+    await base44.entities.TeamWorkflow.delete(workflowId);
+    setWorkflows((prev) => prev.filter(w => w.id !== workflowId));
+  }, []);
 
   /**
    * Enable/disable a workflow
    */
-  const toggleWorkflow = useCallback((workflowId) => {
-    const updated = workflows.map(w =>
-      w.id === workflowId ? { ...w, enabled: !w.enabled } : w
-    );
-    setWorkflows(updated);
-    saveToBackend('workflows', updated);
-  }, [workflows, saveToBackend]);
+  const toggleWorkflow = useCallback(async (workflowId) => {
+    const workflow = workflows.find(w => w.id === workflowId);
+    if (!workflow) return;
+    const updated = await base44.entities.TeamWorkflow.update(workflowId, {
+      enabled: !workflow.enabled,
+      updated_at: new Date().toISOString()
+    });
+    setWorkflows((prev) => prev.map(w => w.id === workflowId ? updated : w));
+  }, [workflows]);
 
   /**
    * Register a webhook integration
    * @param {Object} webhook - Webhook configuration
    */
-  const registerWebhook = useCallback((webhook) => {
-    const newWebhook = {
-      id: Date.now(),
-      ...webhook,
-      url: generateWebhookUrl(webhook.provider),
-      token: generateWebhookToken(),
-      createdAt: new Date().toISOString(),
-      verified: false,
-      lastEvent: null,
-      eventCount: 0
-    };
-    const updated = [...webhooks, newWebhook];
-    setWebhooks(updated);
-    saveToBackend('webhooks', updated);
+  const registerWebhook = useCallback(async (webhook) => {
+    const newWebhook = await base44.entities.Webhook.create({
+      url: webhook.url,
+      events: [webhook.event],
+      secret: webhook.secret || generateWebhookToken(),
+      is_active: true,
+      scope: 'team',
+      created_at: new Date().toISOString(),
+      verified: false
+    });
+    setWebhooks((prev) => [newWebhook, ...prev]);
     return newWebhook;
-  }, [webhooks, saveToBackend]);
+  }, []);
 
   /**
    * Verify webhook by sending test event
    */
-  const verifyWebhook = useCallback((webhookId) => {
-    const updated = webhooks.map(w =>
-      w.id === webhookId
-        ? { ...w, verified: true, lastEvent: new Date().toISOString() }
-        : w
-    );
-    setWebhooks(updated);
-    saveToBackend('webhooks', updated);
+  const verifyWebhook = useCallback(async (webhookId) => {
+    const webhook = webhooks.find(w => w.id === webhookId);
+    if (!webhook) return false;
+
+    await base44.functions.invoke('processWebhookDelivery', {
+      event_type: webhook.events?.[0] || 'team.test',
+      payload: { test: true, timestamp: new Date().toISOString() },
+      webhook_id: webhook.id
+    });
+
+    const updated = await base44.entities.Webhook.update(webhookId, {
+      verified: true,
+      last_event: new Date().toISOString()
+    });
+
+    setWebhooks((prev) => prev.map(w => w.id === webhookId ? updated : w));
     return true;
-  }, [webhooks, saveToBackend]);
+  }, [webhooks]);
 
   /**
    * Delete a webhook
    */
-  const deleteWebhook = useCallback((webhookId) => {
-    const updated = webhooks.filter(w => w.id !== webhookId);
-    setWebhooks(updated);
-    saveToStorage('appforge_webhooks', updated);
-  }, [webhooks, saveToStorage]);
+  const deleteWebhook = useCallback(async (webhookId) => {
+    await base44.entities.Webhook.delete(webhookId);
+    setWebhooks((prev) => prev.filter(w => w.id !== webhookId));
+  }, []);
 
   /**
    * Create standup automation
    */
-  const createStandupAutomation = useCallback((config) => {
-    const automation = {
-      id: Date.now(),
+  const createStandupAutomation = useCallback(async (config) => {
+    const automation = await base44.entities.TeamAutomation.create({
       type: 'standup',
       ...config,
-      createdAt: new Date().toISOString(),
       enabled: true,
-      lastRun: null,
-      schedule: config.schedule || 'daily', // daily, weekly, custom
+      last_run: null,
+      schedule: config.schedule || 'daily',
       time: config.time || '09:00',
       members: config.members || [],
-      format: config.format || 'summary' // summary, detailed, thread
-    };
-    const updated = [...automations, automation];
-    setAutomations(updated);
-    saveToStorage('appforge_automations', updated);
+      format: config.format || 'summary',
+      created_at: new Date().toISOString()
+    });
+    setAutomations((prev) => [automation, ...prev]);
     return automation;
-  }, [automations, saveToStorage]);
+  }, []);
 
   /**
    * Create PR notification automation
    */
-  const createPRNotificationAutomation = useCallback((config) => {
-    const automation = {
-      id: Date.now(),
+  const createPRNotificationAutomation = useCallback(async (config) => {
+    const automation = await base44.entities.TeamAutomation.create({
       type: 'pr-notification',
       ...config,
-      createdAt: new Date().toISOString(),
       enabled: true,
-      notifyOn: config.notifyOn || ['created', 'reviewed', 'merged'],
+      notify_on: config.notifyOn || ['created', 'reviewed', 'merged'],
       channels: config.channels || ['slack'],
       template: config.template || 'default',
       filters: config.filters || {
         labels: [],
         authors: [],
         minReviewers: 0
-      }
-    };
-    const updated = [...automations, automation];
-    setAutomations(updated);
-    saveToStorage('appforge_automations', updated);
+      },
+      created_at: new Date().toISOString()
+    });
+    setAutomations((prev) => [automation, ...prev]);
     return automation;
-  }, [automations, saveToStorage]);
+  }, []);
 
   /**
    * Create issue automation
    */
-  const createIssueAutomation = useCallback((config) => {
-    const automation = {
-      id: Date.now(),
+  const createIssueAutomation = useCallback(async (config) => {
+    const automation = await base44.entities.TeamAutomation.create({
       type: 'issue-automation',
       ...config,
-      createdAt: new Date().toISOString(),
       enabled: true,
       triggers: config.triggers || ['created', 'commented'],
       actions: config.actions || ['assign', 'label', 'notify'],
-      rules: config.rules || []
-    };
-    const updated = [...automations, automation];
-    setAutomations(updated);
-    saveToStorage('appforge_automations', updated);
+      rules: config.rules || [],
+      created_at: new Date().toISOString()
+    });
+    setAutomations((prev) => [automation, ...prev]);
     return automation;
-  }, [automations, saveToStorage]);
+  }, []);
 
   /**
    * Delete automation
    */
-  const deleteAutomation = useCallback((automationId) => {
-    const updated = automations.filter(a => a.id !== automationId);
-    setAutomations(updated);
-    saveToStorage('appforge_automations', updated);
-  }, [automations, saveToStorage]);
+  const deleteAutomation = useCallback(async (automationId) => {
+    await base44.entities.TeamAutomation.delete(automationId);
+    setAutomations((prev) => prev.filter(a => a.id !== automationId));
+  }, []);
 
   /**
    * Toggle automation enabled/disabled
    */
-  const toggleAutomation = useCallback((automationId) => {
-    const updated = automations.map(a =>
-      a.id === automationId ? { ...a, enabled: !a.enabled } : a
-    );
-    setAutomations(updated);
-    saveToStorage('appforge_automations', updated);
-  }, [automations, saveToStorage]);
+  const toggleAutomation = useCallback(async (automationId) => {
+    const automation = automations.find(a => a.id === automationId);
+    if (!automation) return;
+    const updated = await base44.entities.TeamAutomation.update(automationId, {
+      enabled: !automation.enabled,
+      updated_at: new Date().toISOString()
+    });
+    setAutomations((prev) => prev.map(a => a.id === automationId ? updated : a));
+  }, [automations]);
 
   /**
    * Connect to external service (Slack, Teams, etc.)
    */
-  const connectService = useCallback((service, config) => {
-    const updated = {
-      ...integratedServices,
-      [service]: {
-        ...config,
-        connectedAt: new Date().toISOString(),
-        isConnected: true,
-        health: 'healthy'
-      }
-    };
-    setIntegratedServices(updated);
-    saveToStorage('appforge_services', updated);
-    return updated[service];
-  }, [integratedServices, saveToStorage]);
+  const connectService = useCallback(async (service, config) => {
+    const integration = await base44.entities.TeamIntegration.create({
+      service,
+      config,
+      connected_at: new Date().toISOString(),
+      is_connected: true,
+      health: 'healthy'
+    });
+    setIntegratedServices(prev => ({ ...prev, [service]: integration }));
+    return integration;
+  }, []);
 
   /**
    * Disconnect service
    */
-  const disconnectService = useCallback((service) => {
+  const disconnectService = useCallback(async (service) => {
+    const integration = integratedServices[service];
+    if (integration?.id) {
+      await base44.entities.TeamIntegration.delete(integration.id);
+    }
     const updated = { ...integratedServices };
     delete updated[service];
     setIntegratedServices(updated);
-    saveToStorage('appforge_services', updated);
-  }, [integratedServices, saveToStorage]);
+  }, [integratedServices]);
 
   /**
    * Get service health status
@@ -260,34 +251,14 @@ export function useTeamWorkflows() {
   /**
    * Execute a workflow manually
    */
-  const executeWorkflow = useCallback((workflowId) => {
-    const workflow = workflows.find(w => w.id === workflowId);
-    if (!workflow) return null;
-
-    const result = {
+  const executeWorkflow = useCallback(async (workflowId) => {
+    const response = await base44.functions.invoke('executeTeamWorkflow', {
       workflowId,
-      executedAt: new Date().toISOString(),
-      status: 'success',
-      duration: Math.random() * 5000,
-      output: {}
-    };
-
-    // Update workflow execution stats
-    const updated = workflows.map(w =>
-      w.id === workflowId
-        ? {
-            ...w,
-            executions: w.executions + 1,
-            lastRun: result.executedAt,
-            successCount: w.successCount + 1
-          }
-        : w
-    );
-    setWorkflows(updated);
-    saveToStorage('appforge_workflows', updated);
-
-    return result;
-  }, [workflows, saveToStorage]);
+      triggerData: {}
+    });
+    await loadTeamWorkflows();
+    return response?.data || response;
+  }, []);
 
   /**
    * Get workflow execution history
@@ -310,17 +281,13 @@ export function useTeamWorkflows() {
   /**
    * Generate webhook URL
    */
-  const generateWebhookUrl = useCallback((provider) => {
-    const webhookId = Math.random().toString(36).substring(2, 15);
-    return `https://api.appforge.dev/webhooks/${provider}/${webhookId}`;
-  }, []);
-
-  /**
-   * Generate secure webhook token
-   */
   const generateWebhookToken = useCallback(() => {
-    return Math.random().toString(36).substring(2) +
-           Math.random().toString(36).substring(2);
+    if (typeof crypto !== 'undefined' && crypto.getRandomValues) {
+      const bytes = new Uint8Array(16);
+      crypto.getRandomValues(bytes);
+      return Array.from(bytes).map((b) => b.toString(16).padStart(2, '0')).join('');
+    }
+    return `${Date.now().toString(36)}${Math.random().toString(36).slice(2)}`;
   }, []);
 
   return {

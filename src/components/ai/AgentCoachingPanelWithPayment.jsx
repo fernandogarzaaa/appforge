@@ -17,9 +17,10 @@ export default function AgentCoachingPanelWithPayment({ agentId, userId }) {
 
   const loadSolanaConfig = async () => {
     try {
-      const configs = await base44.entities.SolanaPaymentConfig.list();
-      if (configs.length > 0 && configs[0].payment_enabled) {
-        setSolanaConfig(configs[0]);
+      const response = await base44.functions.invoke('getSolanaConfig', {});
+      const config = response?.data || null;
+      if (config && config.payment_enabled) {
+        setSolanaConfig(config);
       }
     } catch (error) {
       console.error('Error loading Solana config:', error);

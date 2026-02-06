@@ -179,6 +179,10 @@ export class MultiverseEngine {
      */
     reset(): void;
     /**
+     * Sets a deterministic seed for entropy, enabling reproducible simulations.
+     */
+    set_seed(seed: bigint): void;
+    /**
      * Simulates time passing in all universes to see which one survives.
      * Returns the ID of the best universe.
      */
@@ -187,6 +191,10 @@ export class MultiverseEngine {
      * Spawns a new parallel reality based on a decision branch.
      */
     spawn_universe(id: string, name: string, code_quality: number): void;
+    /**
+     * Spawns a new parallel reality with explicit quantum parameters.
+     */
+    spawn_universe_with_params(id: string, name: string, code_quality: number, entanglement: number, coherence: number, decoherence_rate: number): void;
 }
 
 /**
@@ -733,8 +741,10 @@ export interface InitOutput {
     readonly multiverseengine_get_multiverse_state: (a: number) => [number, number];
     readonly multiverseengine_new: () => number;
     readonly multiverseengine_reset: (a: number) => void;
+    readonly multiverseengine_set_seed: (a: number, b: bigint) => void;
     readonly multiverseengine_simulate_evolution: (a: number, b: number) => [number, number];
     readonly multiverseengine_spawn_universe: (a: number, b: number, c: number, d: number, e: number, f: number) => void;
+    readonly multiverseengine_spawn_universe_with_params: (a: number, b: number, c: number, d: number, e: number, f: number, g: number, h: number, i: number) => void;
     readonly quantumannealer_is_frozen: (a: number) => number;
     readonly quantumannealer_new: (a: number, b: number) => number;
     readonly quantumannealer_optimize_selection: (a: number, b: number, c: number) => number;

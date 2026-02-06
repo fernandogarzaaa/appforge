@@ -1,7 +1,5 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.6';
 
-// PayMongo plan change placeholder
-
 Deno.serve(async (req) => {
   try {
     const base44 = createClientFromRequest(req);
@@ -11,26 +9,26 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Unauthorized' }, { status: 403 });
     }
 
-    const { recurring_charge_id, new_plan_amount } = await req.json();
-
-    if (!recurring_charge_id || !new_plan_amount) {
+    const { subscription_id, plan_id } = await req.json();
+    if (!subscription_id || !plan_id) {
       return Response.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
-    const paymongoSecretKey = Deno.env.get('PAYMONGO_SECRET_KEY');
-    if (!paymongoSecretKey) {
-      return Response.json({ error: 'Payment service not configured' }, { status: 500 });
+    const plan = await base44.asServiceRole.entities.Subscription.filter({ id: plan_id });
+    if (!plan.length) {
+      return Response.json({ error: 'Plan not found' }, { status: 404 });
     }
 
-    // PayMongo plan changes must be handled via Billing API or dashboard.
-    return Response.json({
-      success: false,
-      recurring_charge_id,
-      new_plan_amount,
-      message: 'Change plan via PayMongo dashboard or add Billing API call here.'
-    }, { status: 202 });
+    const updated = await base44.asServiceRole.entities.UserSubscription.update(subscription_id, {
+      subscription_id: plan_id,
+      plan_id,
+      plan_name: plan[0].tier_name || plan[0].name || plan_id,
+      price: plan[0].price_sol || plan[0].price_per_month_sol || plan[0].price || 0,
+      updated_at: new Date().toISOString()
+    });
+
+    return Response.json({ success: true, subscription: updated });
   } catch (error) {
-    console.error('Admin change plan error:', error);
-    return Response.json({ error: error.message }, { status: 500 });
+    return Response.json({ error: error.message || 'Change plan failed' }, { status: 500 });
   }
 });

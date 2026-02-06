@@ -182,8 +182,15 @@ function generateTwitterCardTags(pageData, projectData) {
 /**
  * Generate canonical URL
  */
+function resolveBaseUrl(projectData) {
+  if (projectData?.domain) return projectData.domain;
+  if (projectData?.url) return projectData.url;
+  if (typeof window !== 'undefined') return window.location.origin;
+  return '';
+}
+
 function generateCanonicalURL(pageData, projectData) {
-  const baseURL = projectData.domain || 'https://example.com';
+  const baseURL = resolveBaseUrl(projectData);
   const path = pageData.path || '/';
   return `${baseURL}${path}`;
 }
@@ -200,7 +207,7 @@ function generateStructuredData(pageData, projectData, domainContext) {
     '@type': getSchemaType(domain),
     'name': projectData.name,
     'description': projectData.description,
-    'url': projectData.domain || 'https://example.com'
+    'url': resolveBaseUrl(projectData)
   };
   
   // Add domain-specific schemas
@@ -372,7 +379,7 @@ function generateMedicalSchema(projectData, pageData) {
  * Generate sitemap entries
  */
 export function generateSitemap(pages, projectData) {
-  const baseURL = projectData.domain || 'https://example.com';
+  const baseURL = resolveBaseUrl(projectData);
   const sitemap = {
     urlset: {
       '@xmlns': 'http://www.sitemaps.org/schemas/sitemap/0.9',
@@ -412,7 +419,7 @@ function getPriority(path) {
  * Generate robots.txt content
  */
 export function generateRobotsTxt(projectData) {
-  const baseURL = projectData.domain || 'https://example.com';
+  const baseURL = resolveBaseUrl(projectData);
   
   return `# Robots.txt for ${projectData.name}
 User-agent: *

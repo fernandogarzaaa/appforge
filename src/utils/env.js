@@ -4,21 +4,26 @@
  */
 
 // Required environment variables
-const REQUIRED_ENV_VARS = [
-  'VITE_BASE44_USERNAME',
-  'VITE_BASE44_PASSWORD',
-  'VITE_BASE44_API_URL',
-];
+const REQUIRED_ENV_VARS = ['VITE_BASE44_API_URL'];
 
 // Validate environment configuration
 export function validateEnv() {
   const missing = [];
   const errors = [];
 
+  const hasAccessToken =
+    typeof window !== 'undefined' &&
+    (window.localStorage?.getItem('base44_access_token') ||
+      window.localStorage?.getItem('token'));
+
   // Check required variables
   for (const varName of REQUIRED_ENV_VARS) {
     const value = import.meta.env[varName];
     if (!value || value === 'your_username_here' || value === 'your_password_here') {
+      // If we have a token-based auth, allow missing username/password
+      if (hasAccessToken && (varName === 'VITE_BASE44_USERNAME' || varName === 'VITE_BASE44_PASSWORD')) {
+        continue;
+      }
       missing.push(varName);
     }
   }

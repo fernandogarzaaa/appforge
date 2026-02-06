@@ -23,21 +23,22 @@ export default function SolanaWalletManager() {
 
   const loadConfig = async () => {
     try {
-      const configs = await base44.asServiceRole.entities.SolanaPaymentConfig.list();
-      if (configs.length > 0) {
-        setConfig(configs[0]);
+      const response = await base44.functions.invoke('getSolanaConfig', {});
+      const loaded = response?.data || null;
+
+      if (loaded) {
+        setConfig(loaded);
         setFormData({
-          wallet_address: configs[0].wallet_address || '',
-          network: configs[0].network || 'mainnet-beta',
-          payment_enabled: configs[0].payment_enabled || false
+          wallet_address: loaded.wallet_address || '',
+          network: loaded.network || 'mainnet-beta',
+          payment_enabled: loaded.payment_enabled || false
         });
       } else {
-        // Create default config
-        const newConfig = await base44.asServiceRole.entities.SolanaPaymentConfig.create({
+        setFormData({
+          wallet_address: '',
           network: 'mainnet-beta',
           payment_enabled: false
         });
-        setConfig(newConfig);
       }
     } catch (error) {
       console.error('Error loading Solana config:', error);
@@ -55,20 +56,13 @@ export default function SolanaWalletManager() {
 
     setSaving(true);
     try {
-      if (config) {
-        await base44.asServiceRole.entities.SolanaPaymentConfig.update(config.id, {
-          wallet_address: formData.wallet_address,
-          network: formData.network,
-          payment_enabled: formData.payment_enabled
-        });
-        
-        setConfig(prev => ({
-          ...prev,
-          wallet_address: formData.wallet_address,
-          network: formData.network,
-          payment_enabled: formData.payment_enabled
-        }));
-      }
+      const response = await base44.functions.invoke('upsertSolanaConfig', {
+        wallet_address: formData.wallet_address,
+        network: formData.network,
+        payment_enabled: formData.payment_enabled
+      });
+
+      setConfig(response?.data || null);
       toast.success('Wallet configuration saved successfully');
     } catch (error) {
       console.error('Error saving config:', error);

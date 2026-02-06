@@ -7,7 +7,7 @@ import { AlertCircle, CheckCircle2, Loader2 } from 'lucide-react';
 export default function SolanaPaymentProcessor({ 
   planId, 
   planName, 
-  amount, 
+  amountSol, 
   walletAddress, 
   onPaymentSuccess, 
   onPaymentError 
@@ -27,47 +27,67 @@ export default function SolanaPaymentProcessor({
     setError('');
 
     try {
-      // Get payment transaction details from backend
-      const sessionResponse = await base44.functions.invoke('phantomCheckoutSession', {
-        priceId: planId,
-        walletAddress
-      });
-
-      const { transaction, metadata } = sessionResponse.data;
-
       // Check if Phantom is available
       if (!window.solana?.isPhantom) {
         throw new Error('Phantom wallet not found');
       }
 
-      // Create and send transaction
-      const provider = window.solana;
-      
-      // Build the transaction (simplified - in production use @solana/web3.js)
-      // This is a placeholder showing the flow
-      const transactionSignature = await provider.signAndSendTransaction({
-        transaction: {
-          amount: transaction.amount,
-          recipient: transaction.recipient,
-          mint: transaction.mint,
-          reference: transaction.reference
-        }
+      const configResponse = await base44.functions.invoke('getSolanaConfig', {});
+      const config = configResponse?.data;
+
+      if (!config?.wallet_address) {
+        throw new Error('Payment configuration not available');
+      }
+      if (config.payment_enabled === false) {
+        throw new Error('Solana payments are currently disabled');
+      }
+
+      const adminWallet = config.wallet_address;
+      const network = config.network || 'devnet';
+
+      const { Connection, PublicKey, SystemProgram, Transaction } = await import('@solana/web3.js');
+      const rpcUrl = network === 'mainnet-beta'
+        ? 'https://api.mainnet-beta.solana.com'
+        : network === 'testnet'
+        ? 'https://api.testnet.solana.com'
+        : 'https://api.devnet.solana.com';
+
+      const connection = new Connection(rpcUrl);
+      const fromPubkey = new PublicKey(walletAddress);
+      const toPubkey = new PublicKey(adminWallet);
+      const lamports = Math.round(Number(amountSol) * 1_000_000_000);
+
+      const { blockhash } = await connection.getLatestBlockhash('confirmed');
+      const transaction = new Transaction({
+        recentBlockhash: blockhash,
+        feePayer: fromPubkey
       });
+
+      transaction.add(
+        SystemProgram.transfer({
+          fromPubkey,
+          toPubkey,
+          lamports
+        })
+      );
+
+      const signed = await window.solana.signAndSendTransaction(transaction);
+      const transactionSignature = signed.signature;
 
       setTxSignature(transactionSignature);
 
-      // Notify backend of successful transaction
-      await base44.functions.invoke('phantomWebhook', {
-        signature: transactionSignature,
-        amount: transaction.amount,
-        userEmail: metadata.user_email,
-        planId: metadata.plan_id
+      // Verify payment on backend
+      await base44.functions.invoke('processSolanaPayment', {
+        amount_sol: amountSol,
+        transaction_signature: transactionSignature,
+        payment_type: 'subscription',
+        reference_id: planId
       });
 
       onPaymentSuccess?.({
         signature: transactionSignature,
-        planId: metadata.plan_id,
-        planName: metadata.plan_name
+        planId,
+        planName
       });
 
     } catch (err) {
@@ -107,13 +127,13 @@ export default function SolanaPaymentProcessor({
         <CardHeader>
           <CardTitle className="text-lg">Payment Summary</CardTitle>
           <CardDescription>
-            Pay with USDC (Solana stable token)
+            Pay with SOL via Phantom
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="flex justify-between items-center py-3 border-b border-gray-200 dark:border-gray-800">
             <span className="text-sm text-gray-600 dark:text-gray-400">{planName} Plan</span>
-            <span className="font-semibold">${amount.toFixed(2)} USDC</span>
+            <span className="font-semibold">{Number(amountSol).toFixed(4)} SOL</span>
           </div>
 
           {error && (
@@ -134,7 +154,7 @@ export default function SolanaPaymentProcessor({
                 Processing...
               </>
             ) : (
-              `Pay ${amount.toFixed(2)} USDC`
+              `Pay ${Number(amountSol).toFixed(4)} SOL`
             )}
           </Button>
 

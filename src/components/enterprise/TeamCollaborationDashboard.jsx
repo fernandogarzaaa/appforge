@@ -14,11 +14,15 @@ import {
   TrendingUp
 } from 'lucide-react';
 import { UserPresence, ActivityFeed, Mentions, CollaborativeRoom } from '@/utils/collaboration';
+import { base44 } from '@/api/base44Client';
+import { isFeatureEnabled } from '@/utils/featureFlags';
+import { appParams } from '@/lib/app-params';
 
 /**
  * TeamCollaborationDashboard - Real-time team collaboration center
  */
 export function TeamCollaborationDashboard() {
+  const collaborationEnabled = isFeatureEnabled('collaboration');
   const [onlineUsers, setOnlineUsers] = useState([]);
   const [activities, setActivities] = useState([]);
   const [mentions, setMentions] = useState([]);
@@ -26,12 +30,20 @@ export function TeamCollaborationDashboard() {
   const [selectedRoom, setSelectedRoom] = useState(null);
   const [message, setMessage] = useState('');
   const [activityFilter, setActivityFilter] = useState('all');
+  const [currentUser, setCurrentUser] = useState(null);
+  const projectId = appParams.appId;
 
-  const currentUserId = 'demo-user';
-  const currentUserName = 'Demo User';
+  const currentUserId = currentUser?.email || currentUser?.id || 'user';
+  const currentUserName = currentUser?.name || currentUser?.full_name || currentUserId;
 
   // Subscribe to updates
   useEffect(() => {
+    if (!collaborationEnabled) return;
+
+    base44.auth.me()
+      .then((user) => setCurrentUser(user))
+      .catch(() => setCurrentUser(null));
+
     const unsubscribe = UserPresence.subscribe(() => {
       refreshData();
     });
@@ -48,7 +60,7 @@ export function TeamCollaborationDashboard() {
       UserPresence.setOffline(currentUserId);
       unsubscribe();
     };
-  }, []);
+  }, [collaborationEnabled, currentUserId]);
 
   const refreshData = () => {
     setOnlineUsers(UserPresence.getOnlineUsers());
@@ -93,48 +105,20 @@ export function TeamCollaborationDashboard() {
       type: 'edit',
       action: 'Updated dashboard component',
       target: 'Dashboard.jsx',
-      metadata: { projectId: 'demo-project' }
+      metadata: { projectId }
     });
     refreshData();
   };
 
-  const generateSampleData = () => {
-    // Add sample users
-    ['Alice', 'Bob', 'Charlie', 'Diana'].forEach((name, i) => {
-      UserPresence.setOnline(`user-${i + 1}`, {
-        name,
-        currentPage: '/projects',
-        currentProject: 'demo-project',
-        avatar: ['👩', '👨', '🧑', '👩‍💼'][i]
-      });
-    });
-
-    // Add sample activities
-    const activities = [
-      { type: 'create', action: 'Created new project', target: 'E-commerce App' },
-      { type: 'edit', action: 'Updated user authentication', target: 'auth.js' },
-      { type: 'deploy', action: 'Deployed to production', target: 'v2.1.0' },
-      { type: 'comment', action: 'Commented on pull request', target: 'PR #42' },
-      { type: 'delete', action: 'Removed deprecated code', target: 'legacy.js' }
-    ];
-
-    activities.forEach((act, i) => {
-      ActivityFeed.logActivity({
-        userId: `user-${(i % 4) + 1}`,
-        userName: ['Alice', 'Bob', 'Charlie', 'Diana'][i % 4],
-        ...act,
-        metadata: { projectId: 'demo-project' }
-      });
-    });
-
-    // Create sample room
-    CollaborativeRoom.join('general', currentUserId, {
-      name: currentUserName,
-      avatar: '👤'
-    });
-
-    refreshData();
-  };
+  if (!collaborationEnabled) {
+    return (
+      <Card className="border-dashed border-gray-300">
+        <CardContent className="p-6 text-center text-sm text-muted-foreground">
+          Collaboration is disabled. Enable `VITE_COLLABORATION_ENABLED` to activate real-time collaboration.
+        </CardContent>
+      </Card>
+    );
+  }
 
   const getActivityIcon = (type) => {
     const icons = {
@@ -175,9 +159,9 @@ export function TeamCollaborationDashboard() {
             Real-time presence, activity tracking, and team communication
           </p>
         </div>
-        <Button onClick={generateSampleData}>
+        <Button onClick={handleLogActivity}>
           <TrendingUp className="h-4 w-4 mr-2" />
-          Generate Sample Data
+          Log Activity
         </Button>
       </div>
 

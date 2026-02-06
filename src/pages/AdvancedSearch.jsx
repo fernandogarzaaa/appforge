@@ -3,11 +3,12 @@ import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Search, Filter, Code, FileText, Folder, Zap, Star, Database } from 'lucide-react';
+import { Search, Filter, Code, FileText, Folder, Zap, Star } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
 import { SearchAnalytics } from '@/utils/searchAnalytics';
 import { searchIndexManager } from '@/utils/searchIndexing';
+import initializeSearchIndexes from '@/utils/searchIndexInit';
 
 export default function AdvancedSearch() {
   const [query, setQuery] = useState('');
@@ -19,6 +20,7 @@ export default function AdvancedSearch() {
   const [searchMode, setSearchMode] = useState('general');
   const [sortMode, setSortMode] = useState('relevance');
   const [highlightMatches, setHighlightMatches] = useState(true);
+  const [userId, setUserId] = useState(null);
   const [recentSearches, setRecentSearches] = useState(() => {
     try {
       return JSON.parse(localStorage.getItem('appforge_search_history') || '[]');
@@ -49,6 +51,16 @@ export default function AdvancedSearch() {
     localStorage.setItem('appforge_saved_searches', JSON.stringify(savedSearches.slice(0, 10)));
   }, [savedSearches]);
 
+  useEffect(() => {
+    initializeSearchIndexes();
+  }, []);
+
+  useEffect(() => {
+    base44.auth.me()
+      .then((user) => setUserId(user?.email || user?.id || null))
+      .catch(() => setUserId(null));
+  }, []);
+
   // Search
   const { data: results, isLoading } = useQuery({
     queryKey: ['search', debouncedQuery, filters, searchMode],
@@ -76,7 +88,7 @@ export default function AdvancedSearch() {
           resultCount: localResults.total,
           responseTime,
           filters,
-          userId: 'current-user'
+          userId: userId || undefined
         });
 
         return {
@@ -101,7 +113,7 @@ export default function AdvancedSearch() {
         resultCount: response.data?.results?.length || 0,
         responseTime,
         filters,
-        userId: 'current-user'
+        userId: userId || undefined
       });
 
       return response.data;
@@ -191,31 +203,6 @@ export default function AdvancedSearch() {
     setSavedSearches((prev) => [entry, ...prev.filter((s) => s.query !== debouncedQuery)].slice(0, 10));
   };
 
-  // Load sample data into search index
-  const loadSampleData = () => {
-    const index = searchIndexManager.getIndex('functions');
-    
-    const sampleFunctions = [
-      { id: 'auth', name: 'User Authentication', description: 'Handle user login and authentication', tags: ['security', 'auth', 'user'], type: 'function' },
-      { id: 'payment', name: 'Payment Processing', description: 'Process credit card payments and subscriptions', tags: ['payment', 'stripe', 'billing'], type: 'function' },
-      { id: 'email', name: 'Email Service', description: 'Send transactional emails and notifications', tags: ['email', 'notification', 'smtp'], type: 'function' },
-      { id: 'analytics', name: 'Analytics Dashboard', description: 'Track user behavior and generate reports', tags: ['analytics', 'metrics', 'dashboard'], type: 'function' },
-      { id: 'api', name: 'API Integration', description: 'Integrate with third-party APIs and services', tags: ['api', 'integration', 'rest'], type: 'function' },
-    ];
-
-    sampleFunctions.forEach(fn => {
-      index.addDocument(fn.id, fn, ['name', 'description', 'tags']);
-    });
-
-    alert(`Loaded ${sampleFunctions.length} sample functions into search index`);
-  };
-
-  const getIndexStats = () => {
-    const index = searchIndexManager.getIndex('functions');
-    const stats = index.getStats();
-    alert(`Index Stats:\nDocuments: ${stats.totalDocuments}\nTerms: ${stats.totalTerms}\nCache: ${stats.cacheSize}\nAvg Terms/Doc: ${stats.avgTermsPerDocument}`);
-  };
-
   return (
     <div className="p-6 max-w-7xl mx-auto">
       <div className="mb-8">
@@ -223,15 +210,6 @@ export default function AdvancedSearch() {
         <p className="text-muted-foreground">
           Full-text search across projects, entities, pages, components, and functions with relevance scoring.
         </p>
-        <div className="flex gap-2 mt-3">
-          <Button size="sm" variant="outline" onClick={loadSampleData}>
-            <Database className="w-4 h-4 mr-2" />
-            Load Sample Data
-          </Button>
-          <Button size="sm" variant="outline" onClick={getIndexStats}>
-            View Index Stats
-          </Button>
-        </div>
       </div>
 
       {/* Search Bar */}

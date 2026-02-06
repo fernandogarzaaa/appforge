@@ -13,7 +13,9 @@ export function initializeSentry() {
   const isProduction = import.meta.env.PROD;
   
   // Get DSN from environment; do not fall back to placeholder
-  const dsn = import.meta.env.VITE_SENTRY_DSN || process.env.VITE_SENTRY_DSN;
+  const dsn =
+    import.meta.env.VITE_SENTRY_DSN ||
+    (typeof process !== 'undefined' ? process.env?.VITE_SENTRY_DSN : undefined);
 
   // Only initialize in production or if explicitly enabled
   if (!isProduction && !import.meta.env.VITE_SENTRY_ENABLED) {

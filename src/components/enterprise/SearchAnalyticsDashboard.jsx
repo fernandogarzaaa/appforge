@@ -4,22 +4,23 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { 
-  Search, 
-  TrendingUp, 
-  AlertCircle, 
-  Download, 
+import {
+  Search,
+  TrendingUp,
+  AlertCircle,
+  Download,
   BarChart3,
   Clock,
-  Filter,
-  Zap
+  Filter
 } from 'lucide-react';
 import { SearchAnalytics } from '@/utils/searchAnalytics';
+import { isFeatureEnabled } from '@/utils/featureFlags';
 
 /**
  * SearchAnalyticsDashboard - Comprehensive search analytics and insights
  */
 export function SearchAnalyticsDashboard() {
+  const analyticsEnabled = isFeatureEnabled('analytics');
   const [metrics, setMetrics] = useState(SearchAnalytics.getMetrics());
   const [popularSearches, setPopularSearches] = useState([]);
   const [zeroResults, setZeroResults] = useState([]);
@@ -69,31 +70,15 @@ export function SearchAnalyticsDashboard() {
     }
   };
 
-  // Generate sample data for demo
-  const generateSampleData = () => {
-    const sampleQueries = [
-      { query: 'user authentication', resultCount: 45, responseTime: 120 },
-      { query: 'dashboard', resultCount: 32, responseTime: 95 },
-      { query: 'api integration', resultCount: 28, responseTime: 150 },
-      { query: 'payment processing', resultCount: 0, responseTime: 85 },
-      { query: 'email templates', resultCount: 18, responseTime: 110 },
-      { query: 'deployment guide', resultCount: 12, responseTime: 130 },
-      { query: 'database schema', resultCount: 25, responseTime: 105 },
-      { query: 'webhooks', resultCount: 15, responseTime: 90 },
-      { query: 'rate limiting', resultCount: 0, responseTime: 100 },
-      { query: 'analytics dashboard', resultCount: 38, responseTime: 125 }
-    ];
-
-    sampleQueries.forEach(query => {
-      SearchAnalytics.logQuery({
-        ...query,
-        filters: { category: 'all', status: 'active' },
-        userId: 'demo-user'
-      });
-    });
-
-    refreshData();
-  };
+  if (!analyticsEnabled) {
+    return (
+      <Card className="border-dashed border-gray-300">
+        <CardContent className="p-6 text-center text-sm text-muted-foreground">
+          Search analytics are not configured. Enable `VITE_ANALYTICS_ENABLED` to activate tracking.
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -109,10 +94,6 @@ export function SearchAnalyticsDashboard() {
           </p>
         </div>
         <div className="flex gap-2">
-          <Button variant="outline" onClick={generateSampleData}>
-            <Zap className="h-4 w-4 mr-2" />
-            Generate Sample Data
-          </Button>
           <Button variant="outline" onClick={handleExport}>
             <Download className="h-4 w-4 mr-2" />
             Export
@@ -204,7 +185,7 @@ export function SearchAnalyticsDashboard() {
             <CardContent>
               {popularSearches.length === 0 ? (
                 <div className="text-center py-8 text-muted-foreground">
-                  No search data yet. Generate sample data to see analytics.
+                  No search data yet.
                 </div>
               ) : (
                 <ScrollArea className="h-[400px]">

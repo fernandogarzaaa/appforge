@@ -1,52 +1,41 @@
-// deno-lint-ignore-file allow-importingTsExtensions
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.6';
-import { getCustomerInvoices } from './utils/paymongoClient.ts';
 
-Deno.serve(async (req: Request): Promise<Response> => {
+Deno.serve(async (req) => {
+  const base44 = createClientFromRequest(req);
+
   try {
-    const base44 = createClientFromRequest(req);
     const user = await base44.auth.me();
-
     if (!user) {
       return Response.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const paymongoSecretKey = Deno.env.get('PAYMONGO_SECRET_KEY');
-    
-    if (!paymongoSecretKey) {
-      return Response.json({ error: 'Payment service not configured' }, { status: 500 });
+    const subs = await base44.asServiceRole.entities.UserSubscription.filter({
+      user_id: user.email,
+      status: 'active'
+    });
+
+    if (!subs.length) {
+      return Response.json(null, { status: 200 });
     }
 
-    // PayMongo currently returns invoices via Billing/Subscriptions API.
-    // This shim returns an empty array until that wiring is complete.
-    const invoices = await getCustomerInvoices(user.id || user.email, 1, paymongoSecretKey);
+    const subscription = subs[0];
+    const plans = await base44.asServiceRole.entities.Subscription.filter({
+      id: subscription.subscription_id || subscription.plan_id
+    });
+    const plan = plans[0];
 
-    if (!invoices || invoices.length === 0) {
-      return Response.json({
-        subscription: null,
-        status: 'no_subscription',
-        message: 'User has no active subscription'
-      }, { status: 200 });
-    }
-
-    const latestInvoice = invoices[0];
-
-    // Return subscription info based on latest invoice
     return Response.json({
-      subscription: {
-        id: latestInvoice.id,
-        status: latestInvoice.status?.toLowerCase() || 'unknown',
-        amount: latestInvoice.amount,
-        currency: latestInvoice.currency,
-        created_at: latestInvoice.created,
-        description: latestInvoice.description,
-        customer_email: latestInvoice.customer?.email,
-      },
-      status: 'active',
-      payment_provider: 'paymongo'
-    }, { status: 200 });
+      id: subscription.id,
+      plan_id: subscription.subscription_id || subscription.plan_id,
+      plan_name: subscription.plan_name || plan?.tier_name || plan?.name || 'Unknown',
+      status: subscription.status,
+      price: subscription.price || plan?.price_sol || plan?.price_per_month_sol || plan?.price || 0,
+      next_billing_date: subscription.renews_at,
+      started_at: subscription.started_at,
+      payment_method: subscription.payment_method || 'solana',
+      payment_tx: subscription.payment_tx || null
+    });
   } catch (error) {
-    console.error('Get subscription error:', error);
-    return Response.json({ error: error.message }, { status: 500 });
+    return Response.json({ error: error.message || 'Failed to load subscription' }, { status: 500 });
   }
 });

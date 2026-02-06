@@ -9,7 +9,7 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { template_id, price } = await req.json();
+    const { template_id, price, transaction_signature } = await req.json();
 
     if (!template_id || price === undefined) {
       return Response.json({ error: 'Template ID and price required' }, { status: 400 });
@@ -36,14 +36,26 @@ Deno.serve(async (req) => {
     const platformFee = price * (platformFeePercentage / 100);
     const authorRevenue = price * ((100 - platformFeePercentage) / 100);
 
-    // In production, integrate with Stripe or payment processor here
-    // For now, create a completed purchase record
+    if (price > 0) {
+      if (!transaction_signature) {
+        return Response.json({ error: 'Missing transaction_signature' }, { status: 400 });
+      }
+      const tx = await base44.asServiceRole.entities.SolanaTransaction.filter({
+        transaction_signature
+      });
+      if (!tx.length) {
+        return Response.json({ error: 'Payment not verified' }, { status: 400 });
+      }
+    }
+
+    // Create a completed purchase record
     const purchase = await base44.entities.TemplatePurchase.create({
       template_id,
       buyer_email: user.email,
       price_paid: price,
-      payment_method: 'credits', // Change to 'stripe' in production
+      payment_method: price > 0 ? 'solana' : 'free',
       transaction_id: crypto.randomUUID(),
+      transaction_signature: transaction_signature || null,
       status: 'completed',
       author_revenue: authorRevenue,
       platform_fee: platformFee

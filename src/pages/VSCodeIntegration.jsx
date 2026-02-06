@@ -11,12 +11,15 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { toast } from 'sonner';
 import { Textarea } from '@/components/ui/textarea';
+import { featureFlags } from '@/utils/featureFlags';
 
 export default function VSCodeIntegration() {
   const [isExporting, setIsExporting] = useState(false);
   const [showSetupDialog, setShowSetupDialog] = useState(false);
   const [aiPrompt, setAiPrompt] = useState('');
   const [isGenerating, setIsGenerating] = useState(false);
+  const { vscodeIntegration } = featureFlags;
+  const integrationEnabled = vscodeIntegration;
 
   const urlParams = new URLSearchParams(window.location.search);
   const projectId = urlParams.get('projectId');
@@ -28,20 +31,23 @@ export default function VSCodeIntegration() {
   });
 
   const exportToVSCode = async () => {
+    if (!integrationEnabled) {
+      toast.error('VS Code integration is not configured.');
+      return;
+    }
     setIsExporting(true);
     try {
-      // Simulate export process
-      await new Promise(r => setTimeout(r, 2000));
-      toast.success('Project exported! Download starting...');
-      // In real implementation, this would generate a zip file
-    } catch (error) {
-      toast.error('Export failed');
+      toast.error('VS Code export backend is not configured for this deployment.');
     } finally {
       setIsExporting(false);
     }
   };
 
   const generateCode = async () => {
+    if (!integrationEnabled) {
+      toast.error('VS Code integration is not configured.');
+      return;
+    }
     if (!aiPrompt.trim()) {
       toast.error('Enter a prompt');
       return;
@@ -49,7 +55,7 @@ export default function VSCodeIntegration() {
 
     setIsGenerating(true);
     try {
-      const result = await base44.integrations.Core.InvokeLLM({
+      await base44.integrations.Core.InvokeLLM({
         prompt: `Generate production-ready code for: ${aiPrompt}
         
         Provide:
@@ -70,7 +76,7 @@ export default function VSCodeIntegration() {
         }
       });
       
-      toast.success('Code generated! Ready to export.');
+      toast.success('Code generated! Ready to export once VS Code integration is configured.');
     } catch (error) {
       toast.error('Failed to generate code');
     } finally {
@@ -97,7 +103,7 @@ export default function VSCodeIntegration() {
           <h1 className="text-3xl font-bold text-gray-900 mb-1">VS Code Integration</h1>
           <p className="text-gray-500">Export and sync your project with VS Code</p>
         </div>
-        <Button onClick={exportToVSCode} disabled={isExporting} className="bg-blue-600 hover:bg-blue-700">
+        <Button onClick={exportToVSCode} disabled={isExporting || !integrationEnabled} className="bg-blue-600 hover:bg-blue-700">
           {isExporting ? (
             <>
               <Loader2 className="w-4 h-4 mr-2 animate-spin" />
@@ -111,6 +117,11 @@ export default function VSCodeIntegration() {
           )}
         </Button>
       </div>
+      {!integrationEnabled && (
+        <div className="mb-6 rounded-xl border border-dashed border-gray-300 bg-gray-50 px-4 py-3 text-sm text-gray-600">
+          VS Code integration is disabled. Enable `VITE_VSCODE_INTEGRATION` after configuring the backend.
+        </div>
+      )}
 
       <Tabs defaultValue="export" className="space-y-6">
         <TabsList>

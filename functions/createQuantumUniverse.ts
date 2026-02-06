@@ -16,7 +16,7 @@ Deno.serve(async (req) => {
     }
 
     const payload = await req.json();
-    const { name, parameters } = payload;
+    const { name, parameters, seed } = payload;
 
     if (!name) {
       return Response.json({ error: 'Universe name is required' }, { status: 400 });
@@ -29,12 +29,21 @@ Deno.serve(async (req) => {
       decoherenceRate: Math.max(0, Math.min(0.1, parameters?.decoherenceRate || 0.01)),
     };
 
+    const seedValue =
+      typeof seed === 'number'
+        ? seed
+        : typeof seed === 'string'
+        ? hashString(seed)
+        : Math.floor(Date.now() % 4294967296);
+    const rng = createSeededRandom(seedValue);
+
     // Simulate quantum state vector initialization
-    const stateVector = generateQuantumStateVector();
+    const stateVector = generateQuantumStateVector(rng);
 
     // Create universe record
+    const universeId = `u_${generateId(rng)}`;
     const universe = {
-      id: `u_${generateId()}`,
+      id: universeId,
       name: name.trim(),
       parameters: validatedParameters,
       stateVector: stateVector,
@@ -50,11 +59,28 @@ Deno.serve(async (req) => {
     // Simulate multiverse branching
     const branchingFactor = calculateBranchingFactor(validatedParameters);
 
+    let storedUniverse = null;
+    try {
+      storedUniverse = await base44.entities.QuantumUniverse.create({
+        universe_id: universeId,
+        name: universe.name,
+        user_id: user.email,
+        parameters: validatedParameters,
+        state_vector: stateVector,
+        branching_factor: branchingFactor,
+        status: 'active'
+      });
+    } catch (storageError) {
+      console.warn('QuantumUniverse entity not available:', storageError?.message || storageError);
+    }
+
     return Response.json({
       success: true,
-      universe: universe,
+      id: storedUniverse?.id || universeId,
+      universe: storedUniverse || universe,
       branchingFactor: branchingFactor,
       message: `Universe "${name}" created with ${branchingFactor} potential branches`,
+      seed: seedValue
     });
 
   } catch (error) {
@@ -70,15 +96,15 @@ Deno.serve(async (req) => {
  * Generate a random quantum state vector (simplified)
  * In real quantum computing, this would be a complex superposition
  */
-function generateQuantumStateVector() {
+function generateQuantumStateVector(rng) {
   const qubits = 5; // 32 possible states
   const amplitudes = [];
   
   for (let i = 0; i < Math.pow(2, qubits); i++) {
     amplitudes.push({
       state: i.toString(2).padStart(qubits, '0'),
-      amplitude: Math.sqrt(1 / Math.pow(2, qubits)) + (Math.random() - 0.5) * 0.1,
-      phase: Math.random() * 2 * Math.PI,
+      amplitude: Math.sqrt(1 / Math.pow(2, qubits)) + (rng() - 0.5) * 0.1,
+      phase: rng() * 2 * Math.PI,
     });
   }
 
@@ -110,7 +136,26 @@ function calculateBranchingFactor(parameters) {
 /**
  * Generate a unique universe ID
  */
-function generateId() {
-  return Math.random().toString(36).substring(2, 15) +
-         Math.random().toString(36).substring(2, 15);
+function generateId(rng) {
+  return rng().toString(36).substring(2, 15) +
+         rng().toString(36).substring(2, 15);
+}
+
+function hashString(value) {
+  let hash = 2166136261;
+  for (let i = 0; i < value.length; i += 1) {
+    hash ^= value.charCodeAt(i);
+    hash = Math.imul(hash, 16777619);
+  }
+  return hash >>> 0;
+}
+
+function createSeededRandom(seed) {
+  let t = seed >>> 0;
+  return () => {
+    t += 0x6d2b79f5;
+    let r = Math.imul(t ^ (t >>> 15), 1 | t);
+    r ^= r + Math.imul(r ^ (r >>> 7), 61 | r);
+    return ((r ^ (r >>> 14)) >>> 0) / 4294967296;
+  };
 }

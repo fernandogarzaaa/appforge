@@ -22,7 +22,7 @@ export default function SubscriptionsPage() {
     try {
       setIsLoading(true);
       const [plansList, user] = await Promise.all([
-        base44.entities.SubscriptionPlan.filter({ is_active: true }),
+        base44.entities.Subscription.filter({ is_active: true }),
         base44.auth.me()
       ]);
 
@@ -53,13 +53,14 @@ export default function SubscriptionsPage() {
    setShowPayment(true);
   };
 
-  const handlePaymentSuccess = async () => {
+  const handlePaymentSuccess = async (txSignature) => {
    if (!selectedPlan) return;
 
    try {
      await base44.functions.invoke('createSubscription', {
        plan_id: selectedPlan.id,
-       payment_method: 'solana'
+       payment_method: 'solana',
+       transaction_signature: txSignature
      });
 
      setShowPayment(false);
@@ -97,7 +98,7 @@ export default function SubscriptionsPage() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-gray-600 dark:text-gray-400">Current Subscription</p>
-                  <p className="text-xl font-semibold">{userSubscription.plan_id}</p>
+                  <p className="text-xl font-semibold">{userSubscription.plan_name || userSubscription.plan_id}</p>
                   <p className="text-xs text-gray-500 mt-1">
                     Active until {new Date(userSubscription.renews_at).toLocaleDateString()}
                   </p>
@@ -152,10 +153,10 @@ export default function SubscriptionsPage() {
               setPaymentMethod(null);
             }}
             amount={selectedPlan.price_per_month_sol}
-            itemName={`${selectedPlan.name} Plan`}
+            itemName={`${selectedPlan.tier_name || selectedPlan.name} Plan`}
             paymentType="subscription"
             referenceId={selectedPlan.id}
-            onPaymentSuccess={() => handlePaymentSuccess()}
+            onPaymentSuccess={(sig) => handlePaymentSuccess(sig)}
           />
         )}
       </div>

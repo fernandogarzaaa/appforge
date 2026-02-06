@@ -11,6 +11,7 @@ export default function AccountPage() {
   const [user, setUser] = useState(null);
   const [cancelingSubscription, setCancelingSubscription] = useState(false);
   const [showCancelModal, setShowCancelModal] = useState(false);
+  const [solanaConfig, setSolanaConfig] = useState(null);
 
   useEffect(() => {
     loadUser();
@@ -19,6 +20,12 @@ export default function AccountPage() {
   const loadUser = async () => {
     const userData = await base44.auth.me();
     setUser(userData);
+    try {
+      const response = await base44.functions.invoke('getSolanaConfig', {});
+      setSolanaConfig(response?.data || null);
+    } catch {
+      setSolanaConfig(null);
+    }
   };
 
   const { data: subscriptionData, isLoading: subLoading } = useQuery({
@@ -128,7 +135,7 @@ export default function AccountPage() {
                       <div>
                         <p className="text-sm text-slate-600 mb-1">Monthly Price</p>
                         <p className="text-xl font-semibold text-slate-900">
-                          ${subscription.price}/month
+                          {Number(subscription.price).toFixed(4)} SOL/month
                         </p>
                       </div>
                       <div>
@@ -231,32 +238,27 @@ export default function AccountPage() {
                       </thead>
                       <tbody>
                         {invoices.map((invoice) => (
-                          <tr key={invoice.id} className="border-b hover:bg-slate-50">
+                          <tr key={invoice.id || invoice.transaction_signature} className="border-b hover:bg-slate-50">
                             <td className="py-3 px-4 text-slate-900">
-                              {new Date(invoice.created * 1000).toLocaleDateString()}
+                              {new Date(invoice.created_at).toLocaleDateString()}
                             </td>
                             <td className="py-3 px-4 text-slate-900 font-semibold">
-                              ${(invoice.total / 100).toFixed(2)}
+                              {Number(invoice.amount_sol).toFixed(4)} SOL
                             </td>
                             <td className="py-3 px-4">
                               <Badge className={
-                                invoice.paid
+                                invoice.status === 'confirmed'
                                   ? 'bg-green-100 text-green-800'
                                   : 'bg-yellow-100 text-yellow-800'
                               }>
-                                {invoice.paid ? 'Paid' : 'Pending'}
+                                {invoice.status || 'pending'}
                               </Badge>
                             </td>
                             <td className="py-3 px-4">
-                              {invoice.invoice_pdf ? (
-                                <a
-                                  href={invoice.invoice_pdf}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  className="text-blue-600 hover:text-blue-800"
-                                >
-                                  View
-                                </a>
+                              {invoice.transaction_signature ? (
+                                <span className="text-xs font-mono text-slate-600 break-all">
+                                  {invoice.transaction_signature}
+                                </span>
                               ) : (
                                 <span className="text-slate-400">—</span>
                               )}
@@ -288,18 +290,18 @@ export default function AccountPage() {
               </CardHeader>
               <CardContent>
                 <p className="text-slate-600 mb-4">
-                  To update your payment method, please use the PayMongo dashboard:
+                  Payments are processed via Phantom on Solana.
                 </p>
-                <Button
-                  onClick={() => window.open('https://dashboard.paymongo.com', '_blank')}
-                  className="bg-blue-600 hover:bg-blue-700"
-                >
-                  <CreditCard className="w-4 h-4 mr-2" />
-                  Go to PayMongo Dashboard
-                </Button>
-                <p className="text-xs text-slate-500 mt-4">
-                  You'll be able to manage your payments and view transaction history through the PayMongo dashboard.
-                </p>
+                <div className="rounded-lg border border-slate-200 bg-slate-50 p-4 text-sm text-slate-700">
+                  {solanaConfig?.wallet_address ? (
+                    <>
+                      <div className="font-semibold mb-1">Recipient Wallet</div>
+                      <div className="font-mono text-xs break-all">{solanaConfig.wallet_address}</div>
+                    </>
+                  ) : (
+                    <span>Solana wallet not configured yet.</span>
+                  )}
+                </div>
               </CardContent>
             </Card>
           </TabsContent>

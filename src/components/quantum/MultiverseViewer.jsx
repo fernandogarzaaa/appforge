@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { useQuantumMultiverse } from './useQuantumMultiverse';
+import { useQuantumMultiverse } from '@/hooks/useQuantumMultiverse';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { Input } from '@/components/ui/input';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Zap, GitBranch, Eye, Play, Pause, RotateCcw, Layers } from 'lucide-react';
+import { Zap, GitBranch, Eye, Play, Pause, RotateCcw, Layers, Activity, Cpu } from 'lucide-react';
 
 export default function MultiverseViewer() {
   const { 
@@ -12,14 +13,18 @@ export default function MultiverseViewer() {
     activeUniverseId, 
     isSimulating, 
     timeline,
+    isReady,
+    isLoading,
+    error,
     createUniverse, 
     switchUniverse, 
     toggleSimulation, 
     resetSimulation,
-    observeTimeline 
+    setSimulationSeed
   } = useQuantumMultiverse();
 
   const [selectedUniverse, setSelectedUniverse] = useState(null);
+  const [seedInput, setSeedInput] = useState('');
 
   useEffect(() => {
     if (activeUniverseId && universes.length > 0) {
@@ -29,12 +34,17 @@ export default function MultiverseViewer() {
   }, [activeUniverseId, universes]);
 
   const handleCreateUniverse = async () => {
+    const index = universes.length + 1;
+    const entanglement = 40 + (index * 7) % 60;
+    const coherence = 90 - (index * 3) % 30;
+    const decoherenceRate = 0.01 + (index * 0.003) % 0.05;
+
     const newUniverse = await createUniverse({
       name: `Universe ${universes.length + 1}`,
       parameters: {
-        quantumEntanglement: Math.random() * 100,
-        coherenceLevel: Math.random() * 100,
-        decoherenceRate: Math.random() * 0.1,
+        quantumEntanglement: entanglement,
+        coherenceLevel: coherence,
+        decoherenceRate,
       }
     });
     if (newUniverse) {
@@ -42,25 +52,78 @@ export default function MultiverseViewer() {
     }
   };
 
+  const handleApplySeed = () => {
+    const seed = parseInt(seedInput, 10);
+    if (!Number.isNaN(seed)) {
+      setSimulationSeed(seed);
+      resetSimulation();
+    }
+  };
+
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 p-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-lg bg-cyan-100 dark:bg-cyan-900/30 flex items-center justify-center">
             <Layers className="w-5 h-5 text-cyan-600 dark:text-cyan-400" />
           </div>
           <div>
             <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Multiverse Engine</h2>
-            <p className="text-sm text-gray-500 dark:text-gray-400">Parallel Universe Simulation</p>
+            <div className="flex items-center gap-2">
+              <span className="text-sm text-gray-500 dark:text-gray-400">Status:</span>
+              {isLoading ? (
+                <Badge
+                  variant="outline"
+                  className="bg-yellow-50 text-yellow-700 border-yellow-200 dark:bg-yellow-950/30 dark:text-yellow-200"
+                >
+                  Initializing...
+                </Badge>
+              ) : isReady ? (
+                <Badge
+                  variant="outline"
+                  className="bg-green-50 text-green-700 border-green-200 flex items-center gap-1 dark:bg-green-950/30 dark:text-green-200"
+                >
+                  <Cpu className="w-3 h-3" />
+                  WASM Active
+                </Badge>
+              ) : (
+                <Badge variant="destructive">Offline</Badge>
+              )}
+            </div>
           </div>
         </div>
-        <div className="flex gap-2">
+        <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 bg-slate-100 dark:bg-slate-900 p-1 rounded-md border border-slate-200 dark:border-slate-800">
+            <span className="text-xs text-muted-foreground pl-2">Seed:</span>
+            <Input
+              className="h-7 w-20 text-xs border-0 bg-transparent focus-visible:ring-0"
+              placeholder="Auto"
+              value={seedInput}
+              onChange={(e) => setSeedInput(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') handleApplySeed();
+              }}
+            />
+            <Button
+              size="icon"
+              variant="ghost"
+              className="h-7 w-7"
+              onClick={handleApplySeed}
+              title="Apply Deterministic Seed"
+            >
+              <Activity className="w-3 h-3" />
+            </Button>
+          </div>
+
+          <div className="h-6 w-px bg-slate-200 dark:bg-slate-700 mx-2" />
+
           <Button
             variant={isSimulating ? "default" : "outline"}
             size="sm"
             onClick={toggleSimulation}
             className="gap-2"
+            disabled={isLoading || !isReady || !!error}
           >
             {isSimulating ? (
               <>
@@ -75,16 +138,25 @@ export default function MultiverseViewer() {
             )}
           </Button>
           <Button
-            variant="outline"
+            variant="ghost"
             size="sm"
             onClick={resetSimulation}
             className="gap-2"
+            disabled={isLoading || !isReady}
           >
             <RotateCcw className="w-4 h-4" />
             Reset
           </Button>
         </div>
       </div>
+
+      {error && (
+        <Card className="border-red-200 bg-red-50 dark:border-red-800 dark:bg-red-950/30">
+          <CardContent className="py-4 text-sm text-red-700 dark:text-red-200">
+            {error}
+          </CardContent>
+        </Card>
+      )}
 
       {/* Timeline View */}
       {timeline && (
@@ -183,7 +255,7 @@ export default function MultiverseViewer() {
                         <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
                           <div
                             className="bg-cyan-500 h-2 rounded-full"
-                            style={{ width: `${Math.min(universe.parameters.quantumEntanglement, 100)}%` }}
+                            style={{ width: `${Math.min(universe.parameters.quantumEntanglement || 0, 100)}%` }}
                           />
                         </div>
                       </div>
@@ -192,13 +264,13 @@ export default function MultiverseViewer() {
                         <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
                           <div
                             className="bg-blue-500 h-2 rounded-full"
-                            style={{ width: `${Math.min(universe.parameters.coherenceLevel, 100)}%` }}
+                            style={{ width: `${Math.min(universe.parameters.coherenceLevel || 0, 100)}%` }}
                           />
                         </div>
                       </div>
                       <div className="flex gap-2 pt-2">
                         <Badge variant="outline" className="text-xs">
-                          Decoherence: {(universe.parameters.decoherenceRate * 100).toFixed(1)}%
+                          Decoherence: {((universe.parameters.decoherenceRate || 0) * 100).toFixed(1)}%
                         </Badge>
                       </div>
                     </CardContent>
@@ -226,13 +298,13 @@ export default function MultiverseViewer() {
                 <div className="p-3 bg-gray-50 dark:bg-gray-800/50 rounded-lg">
                   <p className="text-xs text-gray-600 dark:text-gray-400">Fidelity</p>
                   <p className="text-lg font-semibold text-purple-600 dark:text-purple-400 mt-1">
-                    {(Math.random() * 0.15 + 0.85 * 100).toFixed(2)}%
+                    {(selectedUniverse.metrics?.fidelity ?? 0).toFixed(2)}%
                   </p>
                 </div>
                 <div className="p-3 bg-gray-50 dark:bg-gray-800/50 rounded-lg">
                   <p className="text-xs text-gray-600 dark:text-gray-400">T1 Relaxation</p>
                   <p className="text-lg font-semibold text-indigo-600 dark:text-indigo-400 mt-1">
-                    {(Math.random() * 100 + 50).toFixed(0)} μs
+                    {(selectedUniverse.metrics?.t1Relaxation ?? 0).toFixed(0)} μs
                   </p>
                 </div>
               </div>

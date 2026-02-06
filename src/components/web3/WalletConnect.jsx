@@ -9,6 +9,7 @@ import {
 import { Wallet, Copy, LogOut, Check } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
+import { featureFlags } from '@/utils/featureFlags';
 
 const walletProviders = [
   { id: 'metamask', name: 'MetaMask', icon: '🦊', color: 'hover:bg-orange-50' },
@@ -21,22 +22,16 @@ export default function WalletConnect({ wallet, onConnect, onDisconnect }) {
   const [showDialog, setShowDialog] = useState(false);
   const [connecting, setConnecting] = useState(null);
   const [copied, setCopied] = useState(false);
+  const { web3: web3Enabled } = featureFlags;
 
   const handleConnect = async (provider) => {
-    setConnecting(provider);
-    // Simulate connection
-    await new Promise(r => setTimeout(r, 1500));
-    
-    const mockWallet = {
-      address: '0x' + Math.random().toString(16).slice(2, 10) + '...' + Math.random().toString(16).slice(2, 6),
-      provider: provider,
-      chain_id: 1,
-    };
-    
-    onConnect?.(mockWallet);
+    if (!web3Enabled) {
+      toast.error('Web3 wallet connection is not configured.');
+      return;
+    }
+    toast.error('Wallet providers are not configured for this deployment.');
     setConnecting(null);
     setShowDialog(false);
-    toast.success('Wallet connected!');
   };
 
   const handleCopy = () => {
@@ -49,6 +44,14 @@ export default function WalletConnect({ wallet, onConnect, onDisconnect }) {
     if (!addr) return '';
     return `${addr.slice(0, 6)}...${addr.slice(-4)}`;
   };
+
+  if (!web3Enabled) {
+    return (
+      <div className="rounded-xl border border-dashed border-gray-300 bg-gray-50 px-4 py-3 text-sm text-gray-600">
+        Web3 wallet connection is not configured for this deployment.
+      </div>
+    );
+  }
 
   if (wallet) {
     return (

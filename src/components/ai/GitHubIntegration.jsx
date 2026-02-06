@@ -20,6 +20,7 @@ import {
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
+import { featureFlags } from '@/utils/featureFlags';
 
 export default function GitHubIntegration({ projectId, isLocked = false, onUpgrade }) {
   const [repoUrl, setRepoUrl] = useState('');
@@ -32,73 +33,53 @@ export default function GitHubIntegration({ projectId, isLocked = false, onUpgra
   const [commitMessage, setCommitMessage] = useState('');
   const [showCommitDialog, setShowCommitDialog] = useState(false);
   const [isSyncing, setIsSyncing] = useState(false);
+  const { githubIntegration } = featureFlags;
+  const integrationEnabled = githubIntegration;
 
   const connectRepo = async () => {
+    if (!integrationEnabled) {
+      toast.error('GitHub integration is not configured.');
+      return;
+    }
     if (!repoUrl) {
       toast.error('Enter a repository URL');
       return;
     }
     setIsConnecting(true);
-
-    // Simulate connection
-    await new Promise(r => setTimeout(r, 1500));
-    
-    // Mock file structure
-    setFiles([
-      { path: 'src', type: 'folder', children: [
-        { path: 'src/components', type: 'folder', children: [
-          { path: 'src/components/Header.jsx', type: 'file' },
-          { path: 'src/components/Footer.jsx', type: 'file' },
-        ]},
-        { path: 'src/pages', type: 'folder', children: [
-          { path: 'src/pages/Home.jsx', type: 'file' },
-          { path: 'src/pages/About.jsx', type: 'file' },
-        ]},
-        { path: 'src/App.jsx', type: 'file' },
-        { path: 'src/index.js', type: 'file' },
-      ]},
-      { path: 'package.json', type: 'file' },
-      { path: 'README.md', type: 'file' },
-    ]);
-    
-    setIsConnected(true);
+    toast.error('GitHub integration backend is not configured for this deployment.');
     setIsConnecting(false);
-    toast.success('Repository connected!');
   };
 
   const loadFile = async (file) => {
     if (file.type === 'folder') return;
     setSelectedFile(file);
-    
-    // Simulate file loading
-    const mockContent = `// ${file.path}
-import React from 'react';
-
-export default function Component() {
-  return (
-    <div>
-      <h1>Hello World</h1>
-    </div>
-  );
-}`;
-    setFileContent(mockContent);
+    if (!integrationEnabled) {
+      toast.error('GitHub integration is not configured.');
+      return;
+    }
+    setFileContent('');
+    toast.error('File loading requires a configured GitHub integration.');
   };
 
   const syncChanges = async () => {
-    setIsSyncing(true);
-    await new Promise(r => setTimeout(r, 2000));
-    setIsSyncing(false);
-    toast.success('Changes synced with GitHub');
+    if (!integrationEnabled) {
+      toast.error('GitHub integration is not configured.');
+      return;
+    }
+    toast.error('Sync requires a configured GitHub integration.');
   };
 
   const commitChanges = async () => {
+    if (!integrationEnabled) {
+      toast.error('GitHub integration is not configured.');
+      return;
+    }
     if (!commitMessage.trim()) {
       toast.error('Enter a commit message');
       return;
     }
-    
     setShowCommitDialog(false);
-    toast.success(`Committed: ${commitMessage}`);
+    toast.error('Commit requires a configured GitHub integration.');
     setCommitMessage('');
   };
 
@@ -157,6 +138,11 @@ export default function Component() {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
+          {!integrationEnabled && (
+            <div className="rounded-xl border border-dashed border-gray-300 bg-gray-50 p-3 text-sm text-gray-600">
+              GitHub integration is disabled. Enable `VITE_GITHUB_INTEGRATION` after configuring the backend.
+            </div>
+          )}
           <div>
             <Label className="text-sm text-gray-600 mb-1.5 block">Repository URL</Label>
             <Input
@@ -164,6 +150,7 @@ export default function Component() {
               onChange={(e) => setRepoUrl(e.target.value)}
               placeholder="https://github.com/username/repo"
               className="h-11 rounded-xl"
+              disabled={!integrationEnabled}
             />
           </div>
           <div>
@@ -173,11 +160,12 @@ export default function Component() {
               onChange={(e) => setBranch(e.target.value)}
               placeholder="main"
               className="h-11 rounded-xl"
+              disabled={!integrationEnabled}
             />
           </div>
           <Button
             onClick={connectRepo}
-            disabled={isConnecting}
+            disabled={isConnecting || !integrationEnabled}
             className="w-full h-11 bg-gray-900 hover:bg-gray-800 text-white rounded-xl"
           >
             {isConnecting ? (

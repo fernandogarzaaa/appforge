@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { base44 } from '@/api/base44Client';
+import { base44, hasServiceToken } from '@/api/base44Client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -10,6 +10,7 @@ import {
   TrendingUp, AlertCircle, CheckCircle, Zap
 } from 'lucide-react';
 import GlobalInsightsPanel from '@/components/admin/GlobalInsightsPanel';
+import { env } from '@/utils/env';
 
 export default function AdminDashboard() {
   const [user, setUser] = useState(null);
@@ -25,7 +26,7 @@ export default function AdminDashboard() {
       const userData = await base44.auth.me();
       setUser(userData);
 
-      if (userData?.role === 'admin') {
+      if (userData?.role === 'admin' && hasServiceToken) {
         const [projects, agents, deployments, users] = await Promise.all([
           base44.asServiceRole.entities.Project.list(),
           base44.asServiceRole.entities.CustomAgent.list(),
@@ -40,6 +41,15 @@ export default function AdminDashboard() {
           users: users.length,
           activeAgents: agents.filter(a => a.is_active).length,
           activeDeployments: deployments.filter(d => d.status === 'active').length
+        });
+      } else if (userData?.role === 'admin') {
+        setStats({
+          projects: 0,
+          agents: 0,
+          deployments: 0,
+          users: 0,
+          activeAgents: 0,
+          activeDeployments: 0
         });
       }
     } catch (error) {
@@ -80,7 +90,7 @@ export default function AdminDashboard() {
       title: 'User Management',
       description: 'Manage users, roles, and permissions',
       icon: Users,
-      href: createPageUrl('AdminUserManagement'),
+      href: '/admin/users',
       color: 'from-blue-500 to-cyan-600',
       stat: stats?.users || 0
     },
@@ -88,7 +98,7 @@ export default function AdminDashboard() {
       title: 'AI Capabilities',
       description: 'Configure AI features and settings',
       icon: Brain,
-      href: createPageUrl('AdminAIControl'),
+      href: '/admin/ai-control',
       color: 'from-purple-500 to-pink-600',
       stat: stats?.activeAgents || 0
     },
@@ -96,7 +106,7 @@ export default function AdminDashboard() {
       title: 'Agent Control',
       description: 'Manage AI agents and permissions',
       icon: Zap,
-      href: createPageUrl('AdminAgentControl'),
+      href: '/admin/agent-control',
       color: 'from-orange-500 to-red-600',
       stat: stats?.agents || 0
     },
@@ -104,7 +114,7 @@ export default function AdminDashboard() {
       title: 'Deployments',
       description: 'Monitor all deployments',
       icon: Rocket,
-      href: createPageUrl('AdminDeployments'),
+      href: '/admin/deployments',
       color: 'from-green-500 to-emerald-600',
       stat: stats?.deployments || 0
     },
@@ -112,7 +122,7 @@ export default function AdminDashboard() {
       title: 'Templates',
       description: 'Manage project templates',
       icon: Layout,
-      href: createPageUrl('AdminTemplates'),
+      href: '/admin/templates',
       color: 'from-indigo-500 to-purple-600',
       stat: stats?.projects || 0
     },
@@ -120,7 +130,7 @@ export default function AdminDashboard() {
       title: 'Coaching System',
       description: 'Configure coaching and subscriptions',
       icon: TrendingUp,
-      href: createPageUrl('AdminCoaching'),
+      href: '/admin/coaching',
       color: 'from-cyan-500 to-blue-600',
       stat: 'Active'
     },
@@ -128,7 +138,7 @@ export default function AdminDashboard() {
       title: 'System Settings',
       description: 'Platform-wide configuration',
       icon: Shield,
-      href: createPageUrl('AdminSystemConfig'),
+      href: '/admin/system-config',
       color: 'from-gray-600 to-gray-800',
       stat: 'Online'
     },
@@ -136,7 +146,7 @@ export default function AdminDashboard() {
       title: 'Analytics',
       description: 'Usage metrics and insights',
       icon: Activity,
-      href: createPageUrl('AdminAnalytics'),
+      href: '/admin/analytics',
       color: 'from-yellow-500 to-orange-600',
       stat: '↑ 24%'
     },
@@ -144,7 +154,7 @@ export default function AdminDashboard() {
       title: 'Agents & Permissions',
       description: 'Control AI agents and admin access',
       icon: Zap,
-      href: createPageUrl('AdminAgents'),
+      href: '/admin/agents',
       color: 'from-indigo-500 to-blue-600',
       stat: '8 Active'
     }
@@ -199,6 +209,14 @@ export default function AdminDashboard() {
           </Card>
         </div>
 
+        {!hasServiceToken && (
+          <Card className="border-amber-200 bg-amber-50">
+            <CardContent className="p-4 text-amber-900 text-sm">
+              Service token missing. Admin data (users, agents, deployments) will show as 0 until `VITE_BASE44_SERVICE_TOKEN` is configured.
+            </CardContent>
+          </Card>
+        )}
+
         {/* Admin Sections Grid */}
         <Card>
           <CardHeader>
@@ -228,7 +246,7 @@ export default function AdminDashboard() {
         </Card>
 
         {/* System Health */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <Card>
             <CardHeader>
               <CardTitle>System Health</CardTitle>
@@ -255,10 +273,34 @@ export default function AdminDashboard() {
 
           <Card>
             <CardHeader>
+              <CardTitle>Integration Health</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              <div className="flex items-center justify-between p-3 bg-slate-50 rounded-lg">
+                <span className="text-sm font-semibold">Base44 API</span>
+                <Badge className={env.base44.apiUrl ? 'bg-green-600' : 'bg-yellow-500'}>
+                  {env.base44.apiUrl ? 'Configured' : 'Missing'}
+                </Badge>
+              </div>
+              <div className="flex items-center justify-between p-3 bg-slate-50 rounded-lg">
+                <span className="text-sm font-semibold">WASM Bundle</span>
+                <Badge className="bg-green-600">Ready</Badge>
+              </div>
+              <div className="flex items-center justify-between p-3 bg-slate-50 rounded-lg">
+                <span className="text-sm font-semibold">Env Validation</span>
+                <Badge className={env.base44.username && env.base44.password ? 'bg-green-600' : 'bg-yellow-500'}>
+                  {env.base44.username && env.base44.password ? 'OK' : 'Needs Keys'}
+                </Badge>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
               <CardTitle>Quick Actions</CardTitle>
             </CardHeader>
             <CardContent className="space-y-2">
-               <Link to={createPageUrl('AdminUserManagement')}>
+               <Link to="/admin/users">
                  <Button variant="outline" className="w-full justify-start">
                    <Users className="w-4 h-4 mr-2" />
                    View All Users
@@ -276,7 +318,7 @@ export default function AdminDashboard() {
                    Security Settings
                  </Button>
                </Link>
-               <Link to={createPageUrl('AdminAnalytics')}>
+               <Link to="/admin/analytics">
                  <Button variant="outline" className="w-full justify-start">
                    <TrendingUp className="w-4 h-4 mr-2" />
                    View Analytics

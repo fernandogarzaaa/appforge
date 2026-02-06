@@ -38,8 +38,16 @@ import { ThemeManager } from '@/features/themes/ThemeManager';
 
 const AdminDashboard = lazy(() => import('@/pages/AdminDashboard'));
 const AdminAPIKeys = lazy(() => import('@/pages/AdminAPIKeys'));
+const AdminAIControl = lazy(() => import('@/pages/AdminAIControl'));
+const AdminAgentControl = lazy(() => import('@/pages/AdminAgentControl'));
+const AdminAgents = lazy(() => import('@/pages/AdminAgents'));
+const AdminAnalytics = lazy(() => import('@/pages/AdminAnalytics'));
+const AdminCoaching = lazy(() => import('@/pages/AdminCoaching'));
+const AdminDeployments = lazy(() => import('@/pages/AdminDeployments'));
 const AdminSecrets = lazy(() => import('@/pages/AdminSecrets'));
 const AdminSystemConfig = lazy(() => import('@/pages/AdminSystemConfig'));
+const AdminTemplates = lazy(() => import('@/pages/AdminTemplates'));
+const AdminUserManagement = lazy(() => import('@/pages/AdminUserManagement'));
 const AdminMonitoring = lazy(() => import('@/pages/AdminMonitoring'));
 
 const { Pages, Layout, mainPage, publicPages = [] } = pagesConfig;
@@ -126,9 +134,49 @@ const AuthenticatedApp = ({ onSearchOpen }) => {
           {renderAdmin(AdminSecrets)}
         </AdminRoute>
       } />
+      <Route path="/admin/users" element={
+        <AdminRoute>
+          {renderAdmin(AdminUserManagement)}
+        </AdminRoute>
+      } />
+      <Route path="/admin/ai-control" element={
+        <AdminRoute>
+          {renderAdmin(AdminAIControl)}
+        </AdminRoute>
+      } />
+      <Route path="/admin/agent-control" element={
+        <AdminRoute>
+          {renderAdmin(AdminAgentControl)}
+        </AdminRoute>
+      } />
+      <Route path="/admin/deployments" element={
+        <AdminRoute>
+          {renderAdmin(AdminDeployments)}
+        </AdminRoute>
+      } />
+      <Route path="/admin/templates" element={
+        <AdminRoute>
+          {renderAdmin(AdminTemplates)}
+        </AdminRoute>
+      } />
+      <Route path="/admin/coaching" element={
+        <AdminRoute>
+          {renderAdmin(AdminCoaching)}
+        </AdminRoute>
+      } />
       <Route path="/admin/system-config" element={
         <AdminRoute>
           {renderAdmin(AdminSystemConfig)}
+        </AdminRoute>
+      } />
+      <Route path="/admin/analytics" element={
+        <AdminRoute>
+          {renderAdmin(AdminAnalytics)}
+        </AdminRoute>
+      } />
+      <Route path="/admin/agents" element={
+        <AdminRoute>
+          {renderAdmin(AdminAgents)}
         </AdminRoute>
       } />
       <Route path="/admin/monitoring" element={

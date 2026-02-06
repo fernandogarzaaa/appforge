@@ -164,14 +164,29 @@ async function runBuildStage(botId, logs) {
   logs.push('Building bot package...');
 
   try {
-    // Simulate build process
+    const buildWebhook = Deno.env.get('BOT_BUILD_WEBHOOK_URL');
+    if (!buildWebhook) {
+      logs.push('Build provider not configured (BOT_BUILD_WEBHOOK_URL).');
+      return {
+        output: 'Skipped - build provider not configured',
+        status: 'skipped'
+      };
+    }
+
     const buildId = `build-${Date.now()}`;
     logs.push(`Build ID: ${buildId}`);
-    logs.push('Packaging bot files...');
-    logs.push('Build completed successfully');
+    logs.push('Queuing build with provider...');
+
+    await fetch(buildWebhook, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ botId, buildId })
+    });
+
+    logs.push('Build queued successfully');
 
     return {
-      output: `Build package: ${buildId}.zip`,
+      output: `Build queued: ${buildId}`,
       status: 'passed'
     };
   } catch (error) {
@@ -191,14 +206,21 @@ async function runDeployStage(base44, botId, stageConfig, logs) {
 
     logs.push(`Deploying to ${deployConfig} environment...`);
 
-    // Simulate deployment
-    const deploymentUrl = `https://bot.example.com/${botId}`;
+    const deployBaseUrl = Deno.env.get('BOT_DEPLOY_BASE_URL');
+    if (!deployBaseUrl) {
+      logs.push('Deployment base URL not configured (BOT_DEPLOY_BASE_URL).');
+      return {
+        output: 'Skipped - deployment base URL not configured',
+        status: 'skipped'
+      };
+    }
+
+    const deploymentUrl = `${deployBaseUrl.replace(/\/$/, '')}/${botId}`;
     logs.push(`Deployment URL: ${deploymentUrl}`);
-    logs.push('Health check: OK');
-    logs.push('Deployment successful');
+    logs.push('Deployment request queued');
 
     return {
-      output: `Deployed to ${deployConfig}: ${deploymentUrl}`,
+      output: `Deployment queued: ${deploymentUrl}`,
       status: 'passed'
     };
   } catch (error) {

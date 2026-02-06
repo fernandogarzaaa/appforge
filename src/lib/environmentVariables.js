@@ -183,46 +183,4 @@ export const decryptValue = (encrypted, secretOverride) => {
  * @param {object} overrides - Override values
  * @returns {object} Mock environment variable
  */
-export const createMockEnvVar = (overrides = {}) => {
-  return {
-    id: `env_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
-    name: 'EXAMPLE_VAR',
-    value: 'example_value',
-    type: ENV_VAR_TYPES.STRING,
-    description: 'Example environment variable',
-    environment: ENVIRONMENT_NAMES.DEVELOPMENT,
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString(),
-    ...overrides
-  };
-};
-
-/**
- * Generate mock environment variables for testing
- * @param {number} count - Number of variables to generate
- * @returns {Array} Array of mock variables
- */
-export const generateMockEnvVariables = (count = 10) => {
-  const examples = [
-    { name: 'API_KEY', type: ENV_VAR_TYPES.SECRET, value: 'sk_test_51234567890' },
-    { name: 'DATABASE_URL', type: ENV_VAR_TYPES.SECRET, value: 'postgresql://user:pass@localhost:5432/db' },
-    { name: 'JWT_SECRET', type: ENV_VAR_TYPES.SECRET, value: 'your_jwt_secret_key_here' },
-    { name: 'STRIPE_PUBLIC_KEY', type: ENV_VAR_TYPES.STRING, value: 'pk_test_1234567890' },
-    { name: 'SMTP_HOST', type: ENV_VAR_TYPES.STRING, value: 'smtp.example.com' },
-    { name: 'SMTP_PORT', type: ENV_VAR_TYPES.NUMBER, value: '587' },
-    { name: 'REDIS_URL', type: ENV_VAR_TYPES.STRING, value: 'redis://localhost:6379' },
-    { name: 'DEBUG', type: ENV_VAR_TYPES.BOOLEAN, value: 'false' },
-    { name: 'LOG_LEVEL', type: ENV_VAR_TYPES.STRING, value: 'info' },
-    { name: 'MAX_CONNECTIONS', type: ENV_VAR_TYPES.NUMBER, value: '100' }
-  ];
-
-  return Array.from({ length: Math.min(count, examples.length) }, (_, i) => {
-    const example = examples[i];
-    return createMockEnvVar({
-      name: example.name,
-      type: example.type,
-      value: example.value,
-      description: `Example ${example.name} variable`
-    });
-  });
-};
+// Mock environment variable helpers removed for production readiness

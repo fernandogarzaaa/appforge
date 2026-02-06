@@ -27,6 +27,9 @@ export default function MobileStudio() {
     onSuccess: () => {
       queryClient.invalidateQueries(['mobileApps']);
       toast.success('App build started!');
+    },
+    onError: (error) => {
+      toast.error(error?.message || 'Build request failed. Configure a build provider to continue.');
     }
   });
 
@@ -72,7 +75,7 @@ export default function MobileStudio() {
             <Card>
               <CardContent className="pt-6">
                 <div className="text-2xl font-bold">
-                  {mobileApps.filter(a => a.status === 'building').length}
+                  {mobileApps.filter(a => a.status === 'building' || a.status === 'queued').length}
                 </div>
                 <div className="text-sm text-gray-500">Building</div>
               </CardContent>

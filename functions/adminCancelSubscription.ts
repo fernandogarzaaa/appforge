@@ -9,25 +9,18 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Unauthorized' }, { status: 403 });
     }
 
-    const { recurring_charge_id } = await req.json();
-
-    if (!recurring_charge_id) {
-      return Response.json({ error: 'Missing recurring_charge_id' }, { status: 400 });
+    const { subscription_id } = await req.json();
+    if (!subscription_id) {
+      return Response.json({ error: 'Missing subscription_id' }, { status: 400 });
     }
 
-    const paymongoSecretKey = Deno.env.get('PAYMONGO_SECRET_KEY');
-    if (!paymongoSecretKey) {
-      return Response.json({ error: 'Payment service not configured' }, { status: 500 });
-    }
+    const updated = await base44.asServiceRole.entities.UserSubscription.update(subscription_id, {
+      status: 'canceled',
+      canceled_at: new Date().toISOString()
+    });
 
-    // PayMongo cancellation is handled via Billing API; respond with guidance for now.
-    return Response.json({
-      success: false,
-      recurring_charge_id,
-      message: 'Cancel subscription via PayMongo dashboard or wire the Billing API call here.'
-    }, { status: 202 });
+    return Response.json({ success: true, subscription: updated });
   } catch (error) {
-    console.error('Admin cancel subscription error:', error);
-    return Response.json({ error: error.message }, { status: 500 });
+    return Response.json({ error: error.message || 'Cancel failed' }, { status: 500 });
   }
 });

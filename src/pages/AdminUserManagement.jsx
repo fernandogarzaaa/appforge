@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { base44 } from '@/api/base44Client';
+import { base44, hasServiceToken } from '@/api/base44Client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -24,7 +24,7 @@ export default function AdminUserManagement() {
       const userData = await base44.auth.me();
       setUser(userData);
 
-      if (userData?.role === 'admin') {
+      if (userData?.role === 'admin' && hasServiceToken) {
         const allUsers = await base44.asServiceRole.entities.User.list('-created_date');
         setUsers(allUsers);
       }
@@ -75,6 +75,14 @@ export default function AdminUserManagement() {
           <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">User Management</h1>
           <p className="text-gray-600 dark:text-gray-400 mt-1">Manage users and permissions</p>
         </div>
+
+        {!hasServiceToken && (
+          <Card className="border-amber-200 bg-amber-50">
+            <CardContent className="p-4 text-amber-900 text-sm">
+              Service token missing. Admin user list and invites require `VITE_BASE44_SERVICE_TOKEN`.
+            </CardContent>
+          </Card>
+        )}
 
         {/* Stats */}
         <div className="grid grid-cols-3 gap-4">

@@ -13,7 +13,7 @@ export default function SubscriptionMetrics() {
   const data = metrics?.data || {
     total_subscribers: 0,
     active_subscriptions: 0,
-    mrr: 0,
+    mrr_sol: 0,
     churn_rate: 0
   };
 
@@ -33,7 +33,7 @@ export default function SubscriptionMetrics() {
     {
       icon: DollarSign,
       label: 'Monthly Recurring Revenue',
-      value: `$${data.mrr.toFixed(2)}`,
+      value: `${Number(data.mrr_sol).toFixed(4)} SOL`,
       color: 'purple'
     },
     {

@@ -38,28 +38,36 @@ export default function WebhookManager() {
   const [message, setMessage] = useState('');
 
   useEffect(() => {
-    loadWebhooks();
+    void loadWebhooks();
   }, []);
 
   useEffect(() => {
     if (selectedWebhook) {
-      loadDeliveries(selectedWebhook.id);
+      void loadDeliveries(selectedWebhook.id);
     }
   }, [selectedWebhook]);
 
-  const loadWebhooks = () => {
-    // In a real app, fetch from API
-    const stored = localStorage.getItem('webhooks');
-    const whList = stored ? JSON.parse(stored) : [];
-    setWebhookList(whList);
+  const loadWebhooks = async () => {
+    try {
+      const whList = await webhooks.listWebhooks();
+      setWebhookList(whList || []);
+    } catch (error) {
+      console.error('Failed to load webhooks:', error);
+      setMessage('❌ Failed to load webhooks');
+    }
   };
 
-  const loadDeliveries = (webhookId) => {
-    const logs = webhooks.getDeliveryLogs(webhookId);
-    setDeliveryLogs(logs || []);
+  const loadDeliveries = async (webhookId) => {
+    try {
+      const logs = await webhooks.getDeliveryLogs(webhookId);
+      setDeliveryLogs(logs || []);
+    } catch (error) {
+      console.error('Failed to load deliveries:', error);
+      setMessage('❌ Failed to load deliveries');
+    }
   };
 
-  const handleCreateWebhook = (e) => {
+  const handleCreateWebhook = async (e) => {
     e.preventDefault();
     if (!formData.url || formData.events.length === 0) {
       setMessage('URL and at least one event are required');
@@ -75,15 +83,20 @@ export default function WebhookManager() {
       });
     }
 
-    const newWebhook = webhooks.createWebhook(formData.url, formData.events, {
-      headers: headersObj,
-      active: formData.active
-    });
+    try {
+      const newWebhook = await webhooks.createWebhook(formData.url, formData.events, {
+        headers: headersObj,
+        active: formData.active
+      });
 
-    setWebhookList(prev => [...prev, newWebhook]);
-    setMessage(`✅ Webhook created for ${formData.events.length} events`);
-    setFormData({ url: '', events: [], headers: '', active: true });
-    setShowCreateWebhook(false);
+      setWebhookList(prev => [newWebhook, ...prev]);
+      setMessage(`✅ Webhook created for ${formData.events.length} events`);
+      setFormData({ url: '', events: [], headers: '', active: true });
+      setShowCreateWebhook(false);
+    } catch (error) {
+      console.error('Failed to create webhook:', error);
+      setMessage('❌ Failed to create webhook');
+    }
 
     setTimeout(() => setMessage(''), 3000);
   };
@@ -97,44 +110,64 @@ export default function WebhookManager() {
     }));
   };
 
-  const handleToggleWebhook = (webhookId) => {
-    webhooks.toggleWebhook(webhookId);
-    loadWebhooks();
-    setMessage('✅ Webhook status updated');
+  const handleToggleWebhook = async (webhookId) => {
+    try {
+      await webhooks.toggleWebhook(webhookId);
+      await loadWebhooks();
+      setMessage('✅ Webhook status updated');
+    } catch (error) {
+      console.error('Failed to toggle webhook:', error);
+      setMessage('❌ Failed to update webhook status');
+    }
     setTimeout(() => setMessage(''), 3000);
   };
 
-  const handleDeleteWebhook = (webhookId) => {
-    webhooks.deleteWebhook(webhookId);
-    setWebhookList(prev => prev.filter(w => w.id !== webhookId));
-    setSelectedWebhook(null);
-    setMessage('✅ Webhook deleted');
+  const handleDeleteWebhook = async (webhookId) => {
+    try {
+      await webhooks.deleteWebhook(webhookId);
+      setWebhookList(prev => prev.filter(w => w.id !== webhookId));
+      setSelectedWebhook(null);
+      setMessage('✅ Webhook deleted');
+    } catch (error) {
+      console.error('Failed to delete webhook:', error);
+      setMessage('❌ Failed to delete webhook');
+    }
     setTimeout(() => setMessage(''), 3000);
   };
 
-  const handleResend = (deliveryId) => {
+  const handleResend = async (deliveryId) => {
     const delivery = deliveryLogs.find(d => d.id === deliveryId);
     if (delivery) {
-      webhooks.resendWebhook(selectedWebhook.id, delivery.id);
-      loadDeliveries(selectedWebhook.id);
-      setMessage('✅ Webhook resent');
+      try {
+        await webhooks.resendWebhook(selectedWebhook.id, delivery.id);
+        await loadDeliveries(selectedWebhook.id);
+        setMessage('✅ Webhook resent');
+      } catch (error) {
+        console.error('Failed to resend webhook:', error);
+        setMessage('❌ Failed to resend webhook');
+      }
       setTimeout(() => setMessage(''), 3000);
     }
   };
 
-  const handleTriggerTest = () => {
+  const handleTriggerTest = async () => {
     if (selectedWebhook) {
-      webhooks.triggerWebhook('test.event', {
-        timestamp: new Date().toISOString(),
-        message: 'Test webhook delivery'
-      });
-      loadDeliveries(selectedWebhook.id);
-      setMessage('✅ Test webhook triggered');
+      try {
+        await webhooks.triggerWebhook('test.event', {
+          timestamp: new Date().toISOString(),
+          message: 'Test webhook delivery'
+        });
+        await loadDeliveries(selectedWebhook.id);
+        setMessage('✅ Test webhook triggered');
+      } catch (error) {
+        console.error('Failed to trigger webhook:', error);
+        setMessage('❌ Test webhook failed');
+      }
       setTimeout(() => setMessage(''), 3000);
     }
   };
 
-  const getStats = (whId) => {
+  const getStats = async (whId) => {
     return webhooks.getWebhookStats(whId);
   };
 

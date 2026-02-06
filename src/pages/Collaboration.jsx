@@ -13,12 +13,15 @@ import { useToast } from '@/components/ui/use-toast';
 import { useBackendAuth } from '@/contexts/BackendAuthContext';
 import { useCollaboration } from '@/contexts/CollaborationContext';
 import { isQuantumAvailable } from '@/lib/quantumIntegration';
+import { isFeatureEnabled } from '@/utils/featureFlags';
+import { appParams } from '@/lib/app-params';
 import CollaborativeEditor from '@/components/collaboration/CollaborativeEditor';
 import PresenceIndicator from '@/components/collaboration/PresenceIndicator';
 import CollaborationChat from '@/components/collaboration/CollaborationChat';
 import { motion } from 'framer-motion';
 
 export default function Collaboration() {
+  const collaborationEnabled = isFeatureEnabled('collaboration');
   const [sessionId, setSessionId] = useState('');
   const [message, setMessage] = useState('');
   const [_cursor, setCursor] = useState({ x: 0, y: 0 });
@@ -32,9 +35,12 @@ export default function Collaboration() {
   const { toast } = useToast();
   const { isAuthenticated } = useBackendAuth();
   const { connectToDocument, disconnect, isConnected } = useCollaboration();
+  const urlParams = new URLSearchParams(window.location.search);
+  const projectId = urlParams.get('projectId') || appParams.appId;
 
   // Initialize quantum synchronization
   useEffect(() => {
+    if (!collaborationEnabled) return;
     if (isQuantumAvailable()) {
       setQuantumSync({ enabled: true, strength: 100 });
       toast({
@@ -43,20 +49,20 @@ export default function Collaboration() {
         duration: 3000
       });
     }
-  }, []);
+  }, [collaborationEnabled, toast]);
 
   // Fetch documents from backend
   const { data: documents = [], isLoading: isLoadingDocs } = useQuery({
     queryKey: ['collaboration-documents'],
-    queryFn: () => collaborationService.listDocuments(),
-    enabled: isAuthenticated,
+    queryFn: () => collaborationService.listDocuments({ project_id: projectId }),
+    enabled: isAuthenticated && collaborationEnabled && !!projectId,
     retry: 1
   });
 
   // Create document mutation
   const createDocMutation = useMutation({
     mutationFn: async ({ title, content }) => {
-      return await collaborationService.createDocument(title, content);
+      return await collaborationService.createDocument({ title, content, project_id: projectId });
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['collaboration-documents'] });
@@ -100,12 +106,13 @@ export default function Collaboration() {
 
   // Connect to WebSocket when document is selected
   useEffect(() => {
+    if (!collaborationEnabled) return;
     if (selectedDoc && showLiveEditor) {
-      connectToDocument('default-project', selectedDoc.id);
+      connectToDocument(projectId, selectedDoc.id);
     } else {
       disconnect();
     }
-  }, [selectedDoc, showLiveEditor, connectToDocument, disconnect]);
+  }, [selectedDoc, showLiveEditor, connectToDocument, disconnect, collaborationEnabled, projectId]);
 
   // Fetch active session
   const { data: session } = useQuery({
@@ -118,7 +125,7 @@ export default function Collaboration() {
       });
       return response.data;
     },
-    enabled: !!sessionId,
+    enabled: collaborationEnabled && !!sessionId,
     refetchInterval: 2000
   });
 
@@ -128,8 +135,8 @@ export default function Collaboration() {
       const response = await base44.functions.execute('collaborationSession', {
         action: 'join',
         sessionId: sid,
-        projectId: 'demo-project',
-        fileId: 'main.js'
+        projectId,
+        fileId: selectedDoc?.id || 'default'
       });
       return response.data;
     },
@@ -166,6 +173,7 @@ export default function Collaboration() {
 
   // Track mouse movement
   useEffect(() => {
+    if (!collaborationEnabled) return;
     const handleMouseMove = (e) => {
       const newPos = { x: e.clientX, y: e.clientY };
       setCursor(newPos);
@@ -176,7 +184,17 @@ export default function Collaboration() {
 
     window.addEventListener('mousemove', handleMouseMove);
     return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, [sessionId]);
+  }, [sessionId, collaborationEnabled]);
+
+  if (!collaborationEnabled) {
+    return (
+      <Card className="border-dashed border-gray-300">
+        <CardContent className="p-6 text-center text-sm text-muted-foreground">
+          Collaboration is disabled. Enable `VITE_COLLABORATION_ENABLED` to access real-time collaboration features.
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <div className="p-6 max-w-7xl mx-auto space-y-6">

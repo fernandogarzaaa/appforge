@@ -878,11 +878,19 @@ Provide helpful, actionable responses with code examples when relevant. Be conci
               </div>
             ) : (
               conversations.map((conv) => (
-                <button
+                <div
                   key={conv.id}
+                  role="button"
+                  tabIndex={0}
                   onClick={() => setActiveConversation(conv)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      setActiveConversation(conv);
+                    }
+                  }}
                   className={cn(
-                    "w-full flex items-center gap-3 p-3 rounded-xl text-left transition-all mb-1 group",
+                    "w-full flex items-center gap-3 p-3 rounded-xl text-left transition-all mb-1 group cursor-pointer",
                     activeConversation?.id === conv.id
                       ? "bg-indigo-50 border border-indigo-200"
                       : "hover:bg-gray-50"
@@ -901,7 +909,7 @@ Provide helpful, actionable responses with code examples when relevant. Be conci
                   >
                     <Trash2 className="w-3 h-3" />
                   </Button>
-                </button>
+                </div>
               ))
             )}
           </div>

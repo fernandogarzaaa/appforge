@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Check } from 'lucide-react';
 
 export default function SubscriptionCard({ plan, isCurrentPlan, onSelect }) {
-  const isPopular = plan.tier === 'premium';
+  const isPopular = plan.tier === 'premium' || plan.tier_name === 'Pro' || plan.tier_level === 2;
 
   return (
     <Card className={`relative transition-all ${isPopular ? 'ring-2 ring-purple-500 shadow-lg' : ''}`}>
@@ -17,7 +17,7 @@ export default function SubscriptionCard({ plan, isCurrentPlan, onSelect }) {
 
       <CardHeader className={isPopular ? 'pt-8' : ''}>
         <div className="flex items-center justify-between mb-2">
-          <CardTitle className="text-lg">{plan.name}</CardTitle>
+          <CardTitle className="text-lg">{plan.tier_name || plan.name}</CardTitle>
           {isCurrentPlan && (
             <Badge className="bg-green-600">Current Plan</Badge>
           )}
@@ -29,7 +29,7 @@ export default function SubscriptionCard({ plan, isCurrentPlan, onSelect }) {
         {/* Pricing */}
         <div className="space-y-1">
           <div className="flex items-baseline gap-1">
-            <span className="text-3xl font-bold">{plan.price_per_month_sol}</span>
+            <span className="text-3xl font-bold">{plan.price_per_month_sol || plan.price_sol}</span>
             <span className="text-gray-600">SOL/month</span>
           </div>
           {plan.price_per_month_usd && (

@@ -71,9 +71,10 @@ export default function CoachingSystemAdmin() {
 
   const loadSolanaConfig = async () => {
     try {
-      const configs = await base44.entities.SolanaPaymentConfig.list();
-      if (configs.length > 0) {
-        setSolanaConfig(configs[0]);
+      const response = await base44.functions.invoke('getSolanaConfig', {});
+      const loaded = response?.data || null;
+      if (loaded) {
+        setSolanaConfig(loaded);
       } else {
         setSolanaConfig({
           wallet_address: '',
@@ -149,12 +150,7 @@ export default function CoachingSystemAdmin() {
   const saveSolanaConfig = async () => {
     setIsSaving(true);
     try {
-      const configs = await base44.entities.SolanaPaymentConfig.list();
-      if (configs.length > 0) {
-        await base44.entities.SolanaPaymentConfig.update(configs[0].id, solanaConfig);
-      } else {
-        await base44.entities.SolanaPaymentConfig.create(solanaConfig);
-      }
+      await base44.functions.invoke('upsertSolanaConfig', solanaConfig);
       alert('Solana configuration saved!');
       loadSolanaConfig();
     } catch (error) {

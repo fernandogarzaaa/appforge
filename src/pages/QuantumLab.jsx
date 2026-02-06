@@ -8,6 +8,7 @@ import QuantumCircuitOptimizer from '@/components/quantum/QuantumCircuitOptimize
 import QuantumErrorPredictor from '@/components/quantum/QuantumErrorPredictor';
 import QuantumHardwareJobManager from '@/components/quantum/QuantumHardwareJobManager';
 import QuantumCircuitVisualizer from '@/components/QuantumCircuitVisualizer';
+import MultiverseViewer from '@/components/quantum/MultiverseViewer';
 
 export default function QuantumLab() {
   const [currentCircuit, setCurrentCircuit] = useState(null);
@@ -40,6 +41,10 @@ export default function QuantumLab() {
               <Sparkles className="w-4 h-4" />
               Design
             </TabsTrigger>
+            <TabsTrigger value="multiverse" className="flex items-center gap-2">
+              <Zap className="w-4 h-4" />
+              Multiverse
+            </TabsTrigger>
             <TabsTrigger value="optimize" className="flex items-center gap-2">
               <TrendingDown className="w-4 h-4" />
               Optimize
@@ -53,6 +58,16 @@ export default function QuantumLab() {
               Execute
             </TabsTrigger>
           </TabsList>
+
+          {/* Multiverse Tab */}
+          <TabsContent value="multiverse">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+            >
+              <MultiverseViewer />
+            </motion.div>
+          </TabsContent>
 
           {/* Design Tab */}
           <TabsContent value="design" className="space-y-6">

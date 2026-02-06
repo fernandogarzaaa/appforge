@@ -188,7 +188,7 @@ function buildQuantumKnowledgeGraph(learnings, emergence) {
         nodes.set(pattern, {
           id: pattern,
           concept: pattern,
-          quantum_state: Math.random(),
+          quantum_state: hashToUnitInterval(pattern),
           confidence: l.feedback_score || 0.5,
           frequency: 1,
         });
@@ -263,4 +263,13 @@ function calculateEvolutionStage(patterns, learnings) {
   }
   if (patterns.includes('high_agent_efficiency')) return 'optimization';
   return 'development';
+}
+
+function hashToUnitInterval(value: string) {
+  let hash = 2166136261;
+  for (let i = 0; i < value.length; i += 1) {
+    hash ^= value.charCodeAt(i);
+    hash = Math.imul(hash, 16777619);
+  }
+  return (hash >>> 0) / 4294967295;
 }

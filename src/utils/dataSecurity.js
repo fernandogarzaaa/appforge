@@ -32,10 +32,6 @@
 // Encryption Utilities
 // =======================
 
-/**
- * Simple encryption using base64 (WARNING: Not production-grade)
- * For production, use TweetNaCl.js or libsodium.js
- */
 class EncryptionManager {
   /**
    * Encrypt sensitive data
@@ -43,28 +39,30 @@ class EncryptionManager {
    * @param {string} key - Encryption key
    * @returns {EncryptedData} Encrypted data object
    */
-  static encrypt(data, key) {
+  static async encrypt(data, key) {
     try {
-      const jsonString = JSON.stringify(data)
-      const iv = this.generateIV()
+      const jsonString = JSON.stringify(data);
+      const iv = crypto.getRandomValues(new Uint8Array(12));
+      const salt = crypto.getRandomValues(new Uint8Array(16));
+      const cryptoKey = await deriveAesKey(key, salt);
+      const encoded = new TextEncoder().encode(jsonString);
 
-      // Simple XOR encryption (for demo only)
-      let encrypted = ''
-      for (let i = 0; i < jsonString.length; i++) {
-        encrypted += String.fromCharCode(
-          jsonString.charCodeAt(i) ^ key.charCodeAt(i % key.length)
-        )
-      }
+      const encryptedBuffer = await crypto.subtle.encrypt(
+        { name: 'AES-GCM', iv },
+        cryptoKey,
+        encoded
+      );
 
       return {
-        iv,
-        encryptedValue: btoa(encrypted), // Base64 encode
-        algorithm: 'XOR-Base64',
+        iv: toBase64(iv),
+        salt: toBase64(salt),
+        encryptedValue: toBase64(new Uint8Array(encryptedBuffer)),
+        algorithm: 'AES-GCM',
         timestamp: Date.now()
-      }
+      };
     } catch (error) {
-      console.error('Encryption error:', error)
-      return null
+      console.error('Encryption error:', error);
+      return null;
     }
   }
 
@@ -74,22 +72,28 @@ class EncryptionManager {
    * @param {string} key - Decryption key
    * @returns {any} Decrypted data
    */
-  static decrypt(encryptedData, key) {
+  static async decrypt(encryptedData, key) {
     try {
-      const encrypted = atob(encryptedData.encryptedValue)
-
-      // Simple XOR decryption (reverse operation)
-      let decrypted = ''
-      for (let i = 0; i < encrypted.length; i++) {
-        decrypted += String.fromCharCode(
-          encrypted.charCodeAt(i) ^ key.charCodeAt(i % key.length)
-        )
+      if (!encryptedData?.encryptedValue || !encryptedData?.iv || !encryptedData?.salt) {
+        throw new Error('Invalid encrypted payload');
       }
 
-      return JSON.parse(decrypted)
+      const iv = fromBase64(encryptedData.iv);
+      const salt = fromBase64(encryptedData.salt);
+      const encrypted = fromBase64(encryptedData.encryptedValue);
+      const cryptoKey = await deriveAesKey(key, salt);
+
+      const decryptedBuffer = await crypto.subtle.decrypt(
+        { name: 'AES-GCM', iv },
+        cryptoKey,
+        encrypted
+      );
+
+      const decoded = new TextDecoder().decode(decryptedBuffer);
+      return JSON.parse(decoded);
     } catch (error) {
-      console.error('Decryption error:', error)
-      return null
+      console.error('Decryption error:', error);
+      return null;
     }
   }
 
@@ -100,12 +104,8 @@ class EncryptionManager {
    * @param {number} rounds - Hash rounds
    * @returns {string} Hash
    */
-  static hash(data, rounds = 10) {
-    let hash = data
-    for (let i = 0; i < rounds; i++) {
-      hash = btoa(hash) // Simple iterative hash
-    }
-    return hash
+  static hash(data) {
+    return sha256(String(data));
   }
 
   /**
@@ -114,9 +114,9 @@ class EncryptionManager {
    * @returns {string} IV
    */
   static generateIV() {
-    return Array.from(crypto.getRandomValues(new Uint8Array(16)))
+    return Array.from(crypto.getRandomValues(new Uint8Array(12)))
       .map(b => b.toString(16).padStart(2, '0'))
-      .join('')
+      .join('');
   }
 
   /**
@@ -125,14 +125,138 @@ class EncryptionManager {
    * @returns {string} Random key
    */
   static generateKey(length = 32) {
-    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
-    let key = ''
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let key = '';
     for (let i = 0; i < length; i++) {
-      key += chars.charAt(Math.floor(Math.random() * chars.length))
+      key += chars.charAt(Math.floor(Math.random() * chars.length));
     }
-    return key
+    return key;
   }
 }
+
+// Crypto helpers
+const toBase64 = (buffer) => {
+  const bytes = buffer instanceof Uint8Array ? buffer : new Uint8Array(buffer);
+  let binary = '';
+  bytes.forEach((b) => {
+    binary += String.fromCharCode(b);
+  });
+  return btoa(binary);
+};
+
+const fromBase64 = (b64) => {
+  const binary = atob(b64);
+  const bytes = new Uint8Array(binary.length);
+  for (let i = 0; i < binary.length; i++) {
+    bytes[i] = binary.charCodeAt(i);
+  }
+  return bytes;
+};
+
+const deriveAesKey = async (password, salt) => {
+  const enc = new TextEncoder();
+  const keyMaterial = await crypto.subtle.importKey(
+    'raw',
+    enc.encode(password),
+    { name: 'PBKDF2' },
+    false,
+    ['deriveKey']
+  );
+
+  return crypto.subtle.deriveKey(
+    {
+      name: 'PBKDF2',
+      salt,
+      iterations: 100000,
+      hash: 'SHA-256'
+    },
+    keyMaterial,
+    { name: 'AES-GCM', length: 256 },
+    false,
+    ['encrypt', 'decrypt']
+  );
+};
+
+// Minimal SHA-256 implementation (sync) for anonymization use-cases
+const sha256 = (ascii) => {
+  const rightRotate = (value, amount) => (value >>> amount) | (value << (32 - amount));
+  const mathPow = Math.pow;
+  const maxWord = mathPow(2, 32);
+  let result = '';
+
+  const words = [];
+  const asciiBitLength = ascii.length * 8;
+
+  const hash = sha256.h || (sha256.h = []);
+  const k = sha256.k || (sha256.k = []);
+  let primeCounter = k.length;
+
+  const isComposite = {};
+  for (let candidate = 2; primeCounter < 64; candidate++) {
+    if (!isComposite[candidate]) {
+      for (let i = 0; i < 313; i += candidate) {
+        isComposite[i] = candidate;
+      }
+      hash[primeCounter] = (mathPow(candidate, 0.5) * maxWord) | 0;
+      k[primeCounter++] = (mathPow(candidate, 1 / 3) * maxWord) | 0;
+    }
+  }
+
+  ascii += '\x80';
+  while (ascii.length % 64 - 56) ascii += '\x00';
+  for (let i = 0; i < ascii.length; i++) {
+    const j = ascii.charCodeAt(i);
+    words[i >> 2] |= j << ((3 - i) % 4) * 8;
+  }
+  words[words.length] = (asciiBitLength / maxWord) | 0;
+  words[words.length] = asciiBitLength;
+
+  for (let j = 0; j < words.length;) {
+    const w = words.slice(j, (j += 16));
+    const oldHash = hash.slice(0);
+
+    for (let i = 0; i < 64; i++) {
+      const w15 = w[i - 15];
+      const w2 = w[i - 2];
+
+      const a = hash[0];
+      const e = hash[4];
+      const temp1 =
+        hash[7] +
+        (rightRotate(e, 6) ^ rightRotate(e, 11) ^ rightRotate(e, 25)) +
+        ((e & hash[5]) ^ (~e & hash[6])) +
+        k[i] +
+        (w[i] =
+          i < 16
+            ? w[i]
+            : (w[i - 16] +
+                (rightRotate(w15, 7) ^ rightRotate(w15, 18) ^ (w15 >>> 3)) +
+                w[i - 7] +
+                (rightRotate(w2, 17) ^ rightRotate(w2, 19) ^ (w2 >>> 10))) |
+              0);
+      const temp2 =
+        (rightRotate(a, 2) ^ rightRotate(a, 13) ^ rightRotate(a, 22)) +
+        ((a & hash[1]) ^ (a & hash[2]) ^ (hash[1] & hash[2]));
+
+      hash.unshift((temp1 + temp2) | 0);
+      hash[4] = (hash[4] + temp1) | 0;
+      hash.pop();
+    }
+
+    for (let i = 0; i < 8; i++) {
+      hash[i] = (hash[i] + oldHash[i]) | 0;
+    }
+  }
+
+  for (let i = 0; i < 8; i++) {
+    for (let j = 3; j + 1; j--) {
+      const b = (hash[i] >> (j * 8)) & 255;
+      result += (b < 16 ? '0' : '') + b.toString(16);
+    }
+  }
+
+  return result;
+};
 
 // =======================
 // Data Anonymization

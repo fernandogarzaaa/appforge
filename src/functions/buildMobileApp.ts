@@ -27,38 +27,54 @@ Deno.serve(async (req) => {
       last_build_at: new Date().toISOString()
     });
 
-    // Simulate build process (in production, trigger actual build pipeline)
-    // This would integrate with services like EAS Build, CodePush, or custom CI/CD
-    
-    // Generate build artifacts
+    const buildWebhook = Deno.env.get('MOBILE_BUILD_WEBHOOK_URL');
+
+    if (!buildWebhook) {
+      return Response.json(
+        { error: 'Mobile build provider not configured. Set MOBILE_BUILD_WEBHOOK_URL.' },
+        { status: 501 }
+      );
+    }
+
     const buildId = crypto.randomUUID();
-    const downloadUrl = `https://builds.example.com/${buildId}/${app.platform}`;
 
-    // After build completes, update status
-    setTimeout(async () => {
+    await base44.entities.MobileApp.update(app_id, {
+      status: 'queued',
+      last_build_at: new Date().toISOString(),
+      build_id: buildId
+    });
+
+    try {
+      await fetch(buildWebhook, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          build_id: buildId,
+          app_id,
+          platform: app.platform,
+          app_name: app.name,
+          build_config: app.build_config || {}
+        })
+      });
+    } catch (err) {
       await base44.entities.MobileApp.update(app_id, {
-        status: 'published',
-        download_url: downloadUrl,
-        build_config: {
-          ...app.build_config,
-          build_number: (app.build_config?.build_number || 0) + 1
-        }
+        status: 'failed'
       });
+      return Response.json(
+        { error: 'Failed to queue mobile build request' },
+        { status: 502 }
+      );
+    }
 
-      // Send notification to user
-      await base44.integrations.Core.SendEmail({
-        to: user.email,
-        subject: `Your app "${app.name}" is ready!`,
-        body: `Your mobile app build is complete. Download it here: ${downloadUrl}`
-      });
-    }, 5000);
-
-    return Response.json({
-      success: true,
-      message: 'Build started successfully',
-      build_id: buildId,
-      estimated_time: '2-5 minutes'
-    }, { status: 200 });
+    return Response.json(
+      {
+        success: true,
+        message: 'Build queued successfully',
+        build_id: buildId,
+        status: 'queued'
+      },
+      { status: 200 }
+    );
   } catch (error) {
     console.error('Build mobile app error:', error);
     return Response.json({ error: error.message }, { status: 500 });

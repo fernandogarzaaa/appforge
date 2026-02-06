@@ -37,8 +37,10 @@ export const holographicconsensus_superpose_models: (a: number, b: number, c: nu
 export const multiverseengine_get_multiverse_state: (a: number) => [number, number];
 export const multiverseengine_new: () => number;
 export const multiverseengine_reset: (a: number) => void;
+export const multiverseengine_set_seed: (a: number, b: bigint) => void;
 export const multiverseengine_simulate_evolution: (a: number, b: number) => [number, number];
 export const multiverseengine_spawn_universe: (a: number, b: number, c: number, d: number, e: number, f: number) => void;
+export const multiverseengine_spawn_universe_with_params: (a: number, b: number, c: number, d: number, e: number, f: number, g: number, h: number, i: number) => void;
 export const quantumannealer_is_frozen: (a: number) => number;
 export const quantumannealer_new: (a: number, b: number) => number;
 export const quantumannealer_optimize_selection: (a: number, b: number, c: number) => number;

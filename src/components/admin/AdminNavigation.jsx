@@ -33,6 +33,48 @@ export default function AdminNavigation() {
       description: 'Configure application'
     },
     {
+      label: 'AI Control',
+      path: '/admin/ai-control',
+      icon: Activity,
+      description: 'Manage AI capabilities'
+    },
+    {
+      label: 'Agent Control',
+      path: '/admin/agent-control',
+      icon: Activity,
+      description: 'Manage AI agents'
+    },
+    {
+      label: 'Deployments',
+      path: '/admin/deployments',
+      icon: Activity,
+      description: 'Monitor deployments'
+    },
+    {
+      label: 'Templates',
+      path: '/admin/templates',
+      icon: Activity,
+      description: 'Manage templates'
+    },
+    {
+      label: 'Coaching',
+      path: '/admin/coaching',
+      icon: Activity,
+      description: 'Manage coaching system'
+    },
+    {
+      label: 'Analytics',
+      path: '/admin/analytics',
+      icon: BarChart3,
+      description: 'Usage insights'
+    },
+    {
+      label: 'Agents & Permissions',
+      path: '/admin/agents',
+      icon: Users,
+      description: 'Admin access control'
+    },
+    {
       label: 'Monitoring',
       path: '/admin/monitoring',
       icon: Activity,
@@ -40,7 +82,7 @@ export default function AdminNavigation() {
     },
     {
       label: 'Users',
-      path: '/admin?tab=users',
+      path: '/admin/users',
       icon: Users,
       description: 'Manage user accounts'
     }

@@ -21,7 +21,7 @@ export default function SubscriptionPlansCard({ onSelectPlan }) {
       const activePlans = await base44.entities.Subscription.filter({
         is_active: true
       });
-      setPlans(activePlans.sort((a, b) => a.tier_level - b.tier_level));
+      setPlans(activePlans.sort((a, b) => (a.tier_level || 0) - (b.tier_level || 0)));
     } catch (error) {
       console.error('Error loading plans:', error);
     } finally {
@@ -56,7 +56,7 @@ export default function SubscriptionPlansCard({ onSelectPlan }) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
       {plans.map((plan) => {
-        const isCurrent = currentSubscription?.subscription_id === plan.id;
+        const isCurrent = currentSubscription?.subscription_id === plan.id || currentSubscription?.plan_id === plan.id;
         return (
           <Card
             key={plan.id}
@@ -68,24 +68,24 @@ export default function SubscriptionPlansCard({ onSelectPlan }) {
           >
             <CardHeader>
               <div className="flex items-center justify-between">
-                <CardTitle className="text-base">{plan.tier_name}</CardTitle>
+                <CardTitle className="text-base">{plan.tier_name || plan.name}</CardTitle>
                 {isCurrent && (
                   <Badge className="bg-purple-600">Current</Badge>
                 )}
               </div>
-              <p className="text-xs text-gray-500 mt-2">{plan.description}</p>
+              <p className="text-xs text-gray-500 mt-2">{plan.description || 'Flexible plan'}</p>
             </CardHeader>
 
             <CardContent className="flex-1 flex flex-col">
               <div className="mb-4">
                 <p className="text-2xl font-bold text-purple-600">
-                  {plan.price_sol} <span className="text-sm text-gray-500">SOL/mo</span>
+                  {plan.price_sol || plan.price_per_month_sol} <span className="text-sm text-gray-500">SOL/mo</span>
                 </p>
               </div>
 
               {/* Features */}
               <div className="space-y-2 mb-6 flex-1">
-                {plan.features?.map((feature, idx) => (
+                {(plan.features || []).map((feature, idx) => (
                   <div
                     key={idx}
                     className="flex items-start gap-2 text-sm"
@@ -96,7 +96,7 @@ export default function SubscriptionPlansCard({ onSelectPlan }) {
                       <div className="w-4 h-4 border border-gray-300 rounded flex-shrink-0 mt-0.5" />
                     )}
                     <span className={feature.enabled ? 'text-gray-700' : 'text-gray-400 line-through'}>
-                      {feature.feature_name}
+                      {feature.feature_name || feature}
                       {feature.limit && ` (${feature.limit})`}
                     </span>
                   </div>

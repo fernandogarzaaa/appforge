@@ -125,7 +125,7 @@ export default function Dashboard() {
   }];
 
 
-  const HeroSection = () =>
+  const heroSection = (
   <motion.div
     initial={{ opacity: 0, y: 20 }}
     animate={{ opacity: 1, y: 0 }}
@@ -210,10 +210,11 @@ export default function Dashboard() {
           </div>
         </CardContent>
       </Card>
-    </motion.div>;
+    </motion.div>
+  );
 
 
-  const SmartRecommendations = () =>
+  const smartRecommendations = (
   <motion.div
     initial={{ opacity: 0, y: 20 }}
     animate={{ opacity: 1, y: 0 }}
@@ -262,7 +263,8 @@ export default function Dashboard() {
           </motion.div>
       )}
       </div>
-    </motion.div>;
+    </motion.div>
+  );
 
 
   const CapabilityDiscovery = () =>
@@ -344,8 +346,8 @@ export default function Dashboard() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-indigo-50/30">
       <div className="bg-slate-900 mx-auto p-8 max-w-[1600px] space-y-12">
-        <HeroSection />
-        <SmartRecommendations />
+        {heroSection}
+        {smartRecommendations}
         <OnboardingTour />
 
         {/* Stats Overview */}

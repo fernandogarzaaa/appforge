@@ -22,11 +22,14 @@ import {
   VulnerabilityScanner,
   SecurityAuditLog
 } from '@/utils/security';
+import { isFeatureEnabled } from '@/utils/featureFlags';
+import { base44 } from '@/api/base44Client';
 
 /**
  * SecurityDashboard - Comprehensive security management
  */
 export function SecurityDashboard() {
+  const securityEnabled = isFeatureEnabled('security');
   const [cspPolicy, setCspPolicy] = useState(CSPManager.defaultPolicy);
   const [cspHeader, setCspHeader] = useState('');
   const [headerValidation, setHeaderValidation] = useState(null);
@@ -34,9 +37,13 @@ export function SecurityDashboard() {
   const [vulnerabilities, setVulnerabilities] = useState([]);
   const [auditLogs, setAuditLogs] = useState([]);
   const [scanInput, setScanInput] = useState('');
+  const [currentUserId, setCurrentUserId] = useState('unknown');
 
   useEffect(() => {
     refreshData();
+    base44.auth.me()
+      .then((user) => setCurrentUserId(user?.id || user?.email || 'unknown'))
+      .catch(() => setCurrentUserId('unknown'));
   }, []);
 
   const refreshData = () => {
@@ -77,7 +84,7 @@ export function SecurityDashboard() {
     SecurityAuditLog.log({
       type: 'access',
       severity: 'info',
-      userId: 'demo-user',
+      userId: currentUserId,
       action: 'Accessed security dashboard',
       resource: '/security',
       result: 'success',
@@ -97,33 +104,15 @@ export function SecurityDashboard() {
     URL.revokeObjectURL(url);
   };
 
-  const generateSampleData = () => {
-    // Generate sample threats
-    ThreatDetection.scan({ input: "SELECT * FROM users WHERE id=1 OR 1=1" });
-    ThreatDetection.scan({ input: "<script>alert('xss')</script>" });
-    ThreatDetection.scan({ input: "../../../etc/passwd" });
-
-    // Generate sample vulnerabilities
-    VulnerabilityScanner.scan({
-      password: 'weak',
-      code: 'const API_KEY = "sk-1234567890abcdef"'
-    });
-
-    // Generate sample audit logs
-    ['login', 'access', 'change', 'alert'].forEach((type, i) => {
-      SecurityAuditLog.log({
-        type,
-        severity: ['info', 'warning', 'error'][i % 3],
-        userId: `user-${i + 1}`,
-        action: `Performed ${type} action`,
-        resource: `/resource-${i}`,
-        result: i % 2 === 0 ? 'success' : 'failure',
-        ip: `192.168.1.${i + 1}`
-      });
-    });
-
-    refreshData();
-  };
+  if (!securityEnabled) {
+    return (
+      <Card className="border-dashed border-gray-300">
+        <CardContent className="p-6 text-center text-sm text-muted-foreground">
+          Security tooling is disabled. Enable `VITE_SECURITY_ENABLED` to access security monitoring.
+        </CardContent>
+      </Card>
+    );
+  }
 
   const getSeverityColor = (severity) => {
     const colors = {
@@ -155,9 +144,9 @@ export function SecurityDashboard() {
             CSP management, threat detection, and security monitoring
           </p>
         </div>
-        <Button onClick={generateSampleData}>
+        <Button onClick={handleLogAuditEvent}>
           <Activity className="h-4 w-4 mr-2" />
-          Generate Sample Data
+          Log Audit Event
         </Button>
       </div>
 

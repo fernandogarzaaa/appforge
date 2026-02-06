@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { base44 } from '@/api/base44Client';
 
 /**
  * Hook for multi-level caching strategy
@@ -32,17 +33,21 @@ export const useCacheStrategy = () => {
         return memoryCache.get(key);
       }
 
-      // L2: Redis cache (simulated)
-      const redisValue = localStorage.getItem(`redis:${key}`);
-      if (redisValue) {
-        const parsed = JSON.parse(redisValue);
-        memoryCache.set(key, parsed);
+      // L2: Backend cache
+      const cacheResponse = await base44.functions.invoke('cacheManager', {
+        action: 'get',
+        key
+      });
+
+      if (cacheResponse?.data?.hit) {
+        const cachedValue = cacheResponse.data.value;
+        memoryCache.set(key, cachedValue);
         setCacheStats(prev => ({
           ...prev,
           redis: { ...prev.redis, hits: prev.redis.hits + 1 },
         }));
         setLoading(false);
-        return parsed;
+        return cachedValue;
       }
 
       // L3: Fetch from source
@@ -72,8 +77,13 @@ export const useCacheStrategy = () => {
       // L1: Memory
       memoryCache.set(key, value);
 
-      // L2: Redis (simulated with localStorage)
-      localStorage.setItem(`redis:${key}`, JSON.stringify(value));
+      // L2: Backend cache
+      await base44.functions.invoke('cacheManager', {
+        action: 'set',
+        key,
+        value,
+        ttl
+      });
 
       // Update stats
       setCacheStats(prev => ({
@@ -82,10 +92,9 @@ export const useCacheStrategy = () => {
         redis: { ...prev.redis, size: prev.redis.size + 1 },
       }));
 
-      // Auto-expire after TTL
+      // Auto-expire memory cache after TTL
       setTimeout(() => {
         memoryCache.delete(key);
-        localStorage.removeItem(`redis:${key}`);
       }, ttl * 1000);
     } catch (err) {
       console.error('Cache set failed:', err);
@@ -108,13 +117,11 @@ export const useCacheStrategy = () => {
         }
       }
 
-      // Clear Redis cache (simulated)
-      for (let i = 0; i < localStorage.length; i++) {
-        const key = localStorage.key(i);
-        if (key?.startsWith('redis:') && (pattern === '*' || key.includes(pattern))) {
-          localStorage.removeItem(key);
-        }
-      }
+      // Clear backend cache
+      await base44.functions.invoke('cacheManager', {
+        action: 'invalidate',
+        pattern
+      });
 
       setCacheStats(prev => ({
         ...prev,

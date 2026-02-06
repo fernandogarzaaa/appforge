@@ -6,6 +6,7 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { base44 } from '@/api/base44Client';
 import { fetchJson } from '@/utils/api';
+import { isFeatureEnabled } from '@/utils/featureFlags';
 
 // Available AI Models
 export const AI_MODELS = {
@@ -97,6 +98,20 @@ const defaultContext = {
   getModelInfo: () => null,
 };
 
+const AI_ROUTER_TIMEOUT_MS = 15000;
+const BASE44_TIMEOUT_MS = 20000;
+
+const withTimeout = (promise, ms, message) => {
+  let timeoutId;
+  const timeoutPromise = new Promise((_, reject) => {
+    timeoutId = setTimeout(() => reject(new Error(message)), ms);
+  });
+
+  return Promise.race([promise, timeoutPromise]).finally(() => {
+    clearTimeout(timeoutId);
+  });
+};
+
 const LLMContext = createContext(defaultContext);
 
 export function LLMProvider({ children }) {
@@ -126,33 +141,53 @@ export function LLMProvider({ children }) {
 
   // Load saved settings from backend on mount
   useEffect(() => {
-    loadLLMSettings();
-    checkAvailableModels();
+    if (isFeatureEnabled('llmSettings')) {
+      loadLLMSettings();
+    }
+    if (isFeatureEnabled('aiRouter')) {
+      checkAvailableModels();
+    }
   }, []);
 
   const loadLLMSettings = async () => {
     try {
+      if (!isFeatureEnabled('llmSettings')) return;
       const data = await fetchJson('/api/user/llm-settings', {
         credentials: 'include'
       });
-      setSettings(data.settings || settings);
-      setUsage(data.usage || usage);
-      if (data.selectedModel) {
-        setSelectedModel(data.selectedModel);
+      if (data?.settings) setSettings(data.settings);
+      if (data?.usage) setUsage(data.usage);
+      if (data?.selectedModel) setSelectedModel(data.selectedModel);
+      if (data) {
+        localStorage.setItem('llm_settings_cache', JSON.stringify(data));
       }
     } catch (error) {
-      console.error('Failed to load LLM settings from backend:', error);
-      // Fall back to empty settings
+      const cached = localStorage.getItem('llm_settings_cache');
+      if (cached) {
+        try {
+          const data = JSON.parse(cached);
+          if (data?.settings) setSettings(data.settings);
+          if (data?.usage) setUsage(data.usage);
+          if (data?.selectedModel) setSelectedModel(data.selectedModel);
+          return;
+        } catch {
+          // ignore cache parse errors
+        }
+      }
+      console.warn('LLM settings backend unavailable, using defaults.');
     }
   };
 
   // Auto-save settings to backend when changed
   useEffect(() => {
-    saveLLMSettings();
+    if (isFeatureEnabled('llmSettings')) {
+      saveLLMSettings();
+    }
   }, [settings, usage]);
 
   const saveLLMSettings = async () => {
     try {
+      if (!isFeatureEnabled('llmSettings')) return;
       await fetchJson('/api/user/llm-settings', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -160,18 +195,25 @@ export function LLMProvider({ children }) {
         body: JSON.stringify({ settings, usage, selectedModel })
       });
     } catch (error) {
-      console.error('Failed to save LLM settings:', error);
+      localStorage.setItem(
+        'llm_settings_cache',
+        JSON.stringify({ settings, usage, selectedModel })
+      );
     }
   };
 
   // Check which models are available based on API keys
   const checkAvailableModels = async () => {
     try {
-      const response = await fetch('/functions/aiModelRouter', {
+      if (!isFeatureEnabled('aiRouter')) {
+        setAvailableModels(['base44']);
+        return;
+      }
+      const response = await withTimeout(fetch('/functions/aiModelRouter', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ action: 'analyze', prompt: 'test' }),
-      });
+      }), AI_ROUTER_TIMEOUT_MS, 'AI router timed out');
       
       if (response.ok) {
         const data = await response.json();
@@ -243,7 +285,7 @@ export function LLMProvider({ children }) {
       // Try AI Router first if model is not base44
       if (usedModel !== 'base44' && availableModels.includes(usedModel)) {
         try {
-          const response = await fetch('/functions/aiModelRouter', {
+          const response = await withTimeout(fetch('/functions/aiModelRouter', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -256,7 +298,7 @@ export function LLMProvider({ children }) {
                 retryOnFailure: true,
               },
             }),
-          });
+          }), AI_ROUTER_TIMEOUT_MS, 'AI router timed out');
 
           if (response.ok) {
             const data = await response.json();
@@ -284,11 +326,16 @@ export function LLMProvider({ children }) {
 
       // Fallback to Base44 - using Core integration with optional chaining
       // @ts-ignore - base44.integrations may not be fully typed
-      const response = await base44?.integrations?.Core?.InvokeLLM?.({
+      const base44Promise = base44?.integrations?.Core?.InvokeLLM?.({
         prompt: systemPrompt ? `${systemPrompt}\n\n${prompt}` : prompt,
         response_json_schema: jsonSchema,
         add_context_from_internet: prompt.toLowerCase().includes('latest') || prompt.toLowerCase().includes('current'),
       });
+      const response = await withTimeout(
+        base44Promise,
+        BASE44_TIMEOUT_MS,
+        'Base44 LLM request timed out'
+      );
 
       // Handle response (could be string or object)
       const responseText = typeof response === 'string' ? response : JSON.stringify(response);

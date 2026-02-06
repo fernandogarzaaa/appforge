@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { base44 } from '@/api/base44Client';
 
 /**
  * Hook for database optimization and query analysis
@@ -24,25 +25,10 @@ export const useDatabaseOptimization = () => {
     setError(null);
 
     try {
-      // Mock slow query analysis
-      const slowQueries = [
-        {
-          id: 1,
-          query: 'SELECT * FROM users WHERE created_at > ?',
-          executionTime: 245,
-          calls: 1543,
-          recommendation: 'Add index on created_at column',
-        },
-        {
-          id: 2,
-          query: 'SELECT * FROM projects JOIN templates ON...',
-          executionTime: 189,
-          calls: 823,
-          recommendation: 'Consider denormalization',
-        },
-      ];
-
-      setQueries(slowQueries);
+      const response = await base44.functions.invoke('databaseOptimization', {
+        action: 'slowQueries'
+      });
+      setQueries(response?.data?.slowQueries || []);
     } catch (err) {
       setError(err.message);
     } finally {
@@ -58,22 +44,10 @@ export const useDatabaseOptimization = () => {
     setError(null);
 
     try {
-      const suggestions = [
-        {
-          table: 'users',
-          column: 'created_at',
-          impact: 'HIGH',
-          estimatedImprovement: '65%',
-        },
-        {
-          table: 'projects',
-          column: 'user_id, status',
-          impact: 'MEDIUM',
-          estimatedImprovement: '40%',
-        },
-      ];
-
-      setIndexSuggestions(suggestions);
+      const response = await base44.functions.invoke('databaseOptimization', {
+        action: 'indexSuggestions'
+      });
+      setIndexSuggestions(response?.data?.indexSuggestions || []);
     } catch (err) {
       setError(err.message);
     } finally {
@@ -86,15 +60,15 @@ export const useDatabaseOptimization = () => {
    */
   const getPoolStats = useCallback(async () => {
     try {
-      // Mock pool stats
-      const stats = {
-        totalConnections: 20,
-        activeConnections: 12,
-        idleConnections: 8,
-        waitingRequests: 3,
-      };
-
-      setPoolStats(stats);
+      const response = await base44.functions.invoke('databaseOptimization', {
+        action: 'poolStats'
+      });
+      setPoolStats(response?.data?.poolStats || {
+        totalConnections: 0,
+        activeConnections: 0,
+        idleConnections: 0,
+        waitingRequests: 0,
+      });
     } catch (err) {
       console.error('Failed to fetch pool stats:', err);
     }

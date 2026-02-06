@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { base44 } from '@/api/base44Client';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -50,21 +51,17 @@ export default function EnhancedVisualEditor({ initialNodes = [], onSave }) {
   const handleTestRun = async () => {
     setIsTestRunning(true);
     try {
-      const response = await fetch('/api/executeAdvancedWorkflow', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          nodes,
-          initialContext: { timestamp: new Date().toISOString() }
-        })
+      const response = await base44.functions.invoke('executeAdvancedWorkflow', {
+        nodes,
+        initialContext: { timestamp: new Date().toISOString() }
       });
 
-      const result = await response.json();
-      if (result.success) {
+      const result = response?.data || response;
+      if (result?.success) {
         toast.success('Test run successful');
-        console.log('Execution context:', result.context);
+        console.log('Execution context:', result.context || result);
       } else {
-        toast.error(result.error);
+        toast.error(result?.error || 'Workflow execution failed');
       }
     } catch (error) {
       toast.error('Test run failed: ' + error.message);

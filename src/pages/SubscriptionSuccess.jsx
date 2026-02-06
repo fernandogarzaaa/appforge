@@ -6,61 +6,35 @@ import { CheckCircle2, Loader2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 
-const planNames = {
-  'price_1StWdZ8rNvlz2v0BtngMRUyS': { name: 'Basic', price: 20 },
-  'price_1StWdZ8rNvlz2v0BV7sIV4A9': { name: 'Pro', price: 30 },
-  'price_1StWdZ8rNvlz2v0BSl7yx4v7': { name: 'Premium', price: 99 }
-};
-
 export default function SubscriptionSuccess() {
   const [loading, setLoading] = useState(true);
   const [session, setSession] = useState(null);
   const [error, setError] = useState(null);
-  const [emailSending, setEmailSending] = useState(false);
 
   useEffect(() => {
-    loadCheckoutSession();
+    loadReceipt();
   }, []);
 
-  const loadCheckoutSession = async () => {
+  const loadReceipt = async () => {
     try {
       const params = new URLSearchParams(window.location.search);
-      const sessionId = params.get('session_id');
+      const signature = params.get('tx');
 
-      if (!sessionId) {
-        setError('No session found. Please start a new subscription.');
+      if (!signature) {
+        setError('No transaction found. Please start a new subscription.');
         setLoading(false);
         return;
       }
 
-      const response = await base44.functions.invoke('getCheckoutSession', {
-        sessionId
+      const response = await base44.functions.invoke('getSolanaReceipt', {
+        signature
       });
-
       setSession(response.data);
-
-      // Send confirmation email
-      await sendConfirmationEmail(response.data);
     } catch (err) {
       console.error('Error loading session:', err);
-      setError('Failed to load subscription details.');
+      setError('Failed to load payment receipt.');
     } finally {
       setLoading(false);
-    }
-  };
-
-  const sendConfirmationEmail = async (sessionData) => {
-    setEmailSending(true);
-    try {
-      await base44.functions.invoke('sendSubscriptionConfirmation', {
-        sessionId: sessionData.id,
-        priceId: sessionData.line_items?.data?.[0]?.price?.id,
-        email: sessionData.customer_email
-      });
-    } catch (err) {
-      console.error('Error sending email:', err);
-    } finally {
-      setEmailSending(false);
     }
   };
 
@@ -90,11 +64,6 @@ export default function SubscriptionSuccess() {
     );
   }
 
-  const priceId = session?.line_items?.data?.[0]?.price?.id;
-  const planInfo = planNames[priceId] || { name: 'Unknown', price: 0 };
-  const nextBillingDate = session?.current_period_end 
-    ? new Date(session.current_period_end * 1000).toLocaleDateString()
-    : 'N/A';
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100 py-12 px-4">
@@ -108,14 +77,8 @@ export default function SubscriptionSuccess() {
                 Subscription Confirmed!
               </h1>
               <p className="text-slate-600">
-                Welcome to your new plan. A confirmation email has been sent to{' '}
-                <span className="font-semibold">{session?.customer_email}</span>
+                Your Solana payment has been confirmed.
               </p>
-              {emailSending && (
-                <p className="text-sm text-slate-500 mt-2">
-                  Sending confirmation email...
-                </p>
-              )}
             </div>
           </CardContent>
         </Card>
@@ -127,34 +90,17 @@ export default function SubscriptionSuccess() {
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="flex justify-between items-center pb-4 border-b">
-              <span className="text-slate-600">Plan</span>
-              <span className="text-2xl font-bold text-slate-900">
-                {planInfo.name}
-              </span>
-            </div>
-
-            <div className="flex justify-between items-center pb-4 border-b">
-              <span className="text-slate-600">Monthly Price</span>
-              <span className="text-xl font-semibold text-slate-900">
-                ${planInfo.price}/month
-              </span>
-            </div>
-
-            <div className="flex justify-between items-center pb-4 border-b">
-              <span className="text-slate-600">Billing Email</span>
-              <span className="text-slate-900">{session?.customer_email}</span>
-            </div>
-
-            <div className="flex justify-between items-center pb-4 border-b">
               <span className="text-slate-600">Subscription ID</span>
               <span className="text-slate-900 font-mono text-sm truncate">
-                {session?.id}
+                {session?.reference_id || session?.id}
               </span>
             </div>
 
             <div className="flex justify-between items-center">
-              <span className="text-slate-600">Next Billing Date</span>
-              <span className="text-slate-900 font-semibold">{nextBillingDate}</span>
+              <span className="text-slate-600">Transaction Signature</span>
+              <span className="text-slate-900 font-mono text-sm truncate">
+                {session?.transaction_signature}
+              </span>
             </div>
           </CardContent>
         </Card>

@@ -13,6 +13,7 @@ import {
   Mail, Plus, Settings, Inbox, Send, Calendar, 
   Sparkles, CheckCircle, AlertCircle, RefreshCw
 } from 'lucide-react';
+import { featureFlags } from '@/utils/featureFlags';
 
 export default function EmailAssistant() {
   const queryClient = useQueryClient();
@@ -22,6 +23,8 @@ export default function EmailAssistant() {
   const [selectedMessage, setSelectedMessage] = useState(null);
   const [newEmail, setNewEmail] = useState('');
   const [editingReply, setEditingReply] = useState('');
+  const { emailIntegration } = featureFlags;
+  const integrationEnabled = emailIntegration;
 
   const { data: accounts = [] } = useQuery({
     queryKey: ['email-accounts'],
@@ -52,6 +55,9 @@ export default function EmailAssistant() {
 
   const sendReplyMutation = useMutation({
     mutationFn: async ({ messageId, reply }) => {
+      if (!integrationEnabled) {
+        throw new Error('Email integration is not configured');
+      }
       await base44.integrations.Core.SendEmail({
         to: messages.find(m => m.id === messageId)?.from_email,
         subject: 'Re: ' + messages.find(m => m.id === messageId)?.subject,
@@ -70,6 +76,10 @@ export default function EmailAssistant() {
   });
 
   const analyzeEmail = async (message) => {
+    if (!integrationEnabled) {
+      toast.error('Email integration is not configured.');
+      return;
+    }
     toast.loading('Analyzing email...');
     
     const analysis = await base44.integrations.Core.InvokeLLM({
@@ -112,6 +122,10 @@ Generate a helpful, professional response.`
   };
 
   const autoReplyToEmail = async (message) => {
+    if (!integrationEnabled) {
+      toast.error('Email integration is not configured.');
+      return;
+    }
     if (!message.suggested_reply) {
       await analyzeEmail(message);
       const updated = await base44.entities.EmailMessage.filter({ id: message.id });
@@ -123,28 +137,11 @@ Generate a helpful, professional response.`
   };
 
   const syncEmails = async () => {
-    toast.loading('Syncing emails...');
-    
-    // Simulate syncing - in real implementation, this would call email API
-    const mockEmails = [
-      {
-        account_id: accounts[0]?.id,
-        message_id: `msg-${Date.now()}`,
-        from_email: 'client@example.com',
-        to_email: accounts[0]?.email,
-        subject: 'Project Update Request',
-        body: 'Hi, can you provide an update on the project timeline?',
-        received_at: new Date().toISOString()
-      }
-    ];
-
-    for (const email of mockEmails) {
-      await base44.entities.EmailMessage.create(email);
+    if (!integrationEnabled) {
+      toast.error('Email integration is not configured.');
+      return;
     }
-
-    queryClient.invalidateQueries({ queryKey: ['email-messages'] });
-    toast.dismiss();
-    toast.success(`Synced ${mockEmails.length} new emails`);
+    toast.error('Email sync provider is not configured yet.');
   };
 
   const getCategoryIcon = (category) => {
@@ -173,16 +170,21 @@ Generate a helpful, professional response.`
           <p className="text-gray-500">AI-powered email management and automation</p>
         </div>
         <div className="flex gap-2">
-          <Button variant="outline" onClick={syncEmails}>
+          <Button variant="outline" onClick={syncEmails} disabled={!integrationEnabled}>
             <RefreshCw className="w-4 h-4 mr-2" />
             Sync Emails
           </Button>
-          <Button variant="outline" onClick={() => setShowConnect(true)}>
+          <Button variant="outline" onClick={() => setShowConnect(true)} disabled={!integrationEnabled}>
             <Plus className="w-4 h-4 mr-2" />
             Connect Account
           </Button>
         </div>
       </div>
+      {!integrationEnabled && (
+        <div className="mb-4 rounded-xl border border-dashed border-gray-300 bg-gray-50 px-4 py-3 text-sm text-gray-600">
+          Email integration is disabled. Enable `VITE_EMAIL_INTEGRATION` after configuring your email provider.
+        </div>
+      )}
 
       {accounts.length === 0 ? (
         <Card className="max-w-2xl mx-auto mt-20">
@@ -190,7 +192,7 @@ Generate a helpful, professional response.`
             <Mail className="w-16 h-16 mx-auto text-gray-400 mb-4" />
             <h3 className="text-xl font-semibold mb-2">No Email Accounts Connected</h3>
             <p className="text-gray-500 mb-4">Connect your email account to start using AI-powered features</p>
-            <Button onClick={() => setShowConnect(true)}>
+            <Button onClick={() => setShowConnect(true)} disabled={!integrationEnabled}>
               <Plus className="w-4 h-4 mr-2" />
               Connect Email Account
             </Button>

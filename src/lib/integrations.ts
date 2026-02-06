@@ -47,6 +47,9 @@ export async function createStripeCheckout(
   successUrl: string = PAYMENT_CONFIG.SUCCESS_URL,
   cancelUrl: string = PAYMENT_CONFIG.CANCEL_URL
 ): Promise<{ checkoutUrl: string; sessionId: string }> {
+  if (PAYMENT_CONFIG.PROVIDER !== 'Stripe') {
+    throw new Error('Stripe checkout disabled. Use Solana/Phantom payments.');
+  }
   const stripeKey = getEnv('STRIPE_SECRET_KEY');
   const fetcher = hasFetch();
 
@@ -82,6 +85,9 @@ export async function createStripeCheckout(
 }
 
 export async function handleStripeWebhook(body: string, signature: string): Promise<void> {
+  if (PAYMENT_CONFIG.PROVIDER !== 'Stripe') {
+    throw new Error('Stripe webhooks disabled. Use Solana/Phantom payments.');
+  }
   const webhookSecret = getEnv('STRIPE_WEBHOOK_SECRET');
   const [, timestampPart] = signature.split('t=');
   const timestamp = timestampPart?.split(',')[0];

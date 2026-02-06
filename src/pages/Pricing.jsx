@@ -1,58 +1,30 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { base44 } from '@/api/base44Client';
 import PhantomWalletConnect from '@/components/payments/PhantomWalletConnect';
 import SolanaPaymentProcessor from '@/components/payments/SolanaPaymentProcessor';
-import { Check } from 'lucide-react';
-
-const plans = [
-  {
-    name: 'Basic',
-    price: 20,
-    priceId: 'phantom_basic_plan',
-    description: 'Perfect for getting started',
-    features: [
-      'Up to 10 workflows',
-      'Basic automation',
-      'Email support',
-      'Monthly reports',
-      '1 GB storage'
-    ]
-  },
-  {
-    name: 'Pro',
-    price: 30,
-    priceId: 'phantom_pro_plan',
-    description: 'For growing teams',
-    popular: true,
-    features: [
-      'Unlimited workflows',
-      'Advanced automation',
-      'Priority support',
-      'Weekly reports',
-      '50 GB storage',
-      'Custom integrations'
-    ]
-  },
-  {
-    name: 'Premium',
-    price: 99,
-    priceId: 'phantom_premium_plan',
-    description: 'For enterprise needs',
-    features: [
-      'Everything in Pro',
-      'Dedicated support',
-      'Real-time analytics',
-      'Unlimited storage',
-      'API access',
-      'Custom workflows',
-      'White-label options'
-    ]
-  }
-];
+import { Check, Loader2 } from 'lucide-react';
 
 export default function PricingPage() {
   const [walletConnected, setWalletConnected] = useState(false);
   const [walletAddress, setWalletAddress] = useState('');
   const [selectedPlan, setSelectedPlan] = useState(null);
+  const [plans, setPlans] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const loadPlans = async () => {
+      try {
+        const activePlans = await base44.entities.Subscription.filter({ is_active: true });
+        const sorted = activePlans.sort((a, b) => (a.tier_level || 0) - (b.tier_level || 0));
+        setPlans(sorted);
+      } catch (error) {
+        console.error('Failed to load plans:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    loadPlans();
+  }, []);
 
   const handlePlanSelect = (plan) => {
     setSelectedPlan(plan);
@@ -79,35 +51,38 @@ export default function PricingPage() {
           {/* Pricing Cards */}
           <div className="lg:col-span-2 space-y-4">
             <h2 className="text-lg font-semibold text-slate-900 mb-4">Select Your Plan</h2>
-            {plans.map((plan) => (
+            {isLoading ? (
+              <div className="flex items-center justify-center py-8">
+                <Loader2 className="w-5 h-5 animate-spin text-gray-400" />
+              </div>
+            ) : plans.map((plan) => (
               <div
-                key={plan.name}
+                key={plan.id}
                 onClick={() => handlePlanSelect(plan)}
                 className={`rounded-lg cursor-pointer transition-all duration-300 p-6 border-2 ${
-                  selectedPlan?.name === plan.name
+                  selectedPlan?.id === plan.id
                     ? 'ring-2 ring-purple-500 border-purple-500 shadow-lg bg-purple-50'
                     : 'border-slate-200 hover:border-slate-300 bg-white'
                 }`}
               >
-                {plan.popular && (
+                {plan.tier_level === 2 && (
                   <div className="text-xs font-semibold text-purple-600 mb-2">★ MOST POPULAR</div>
                 )}
-                <h3 className="text-xl font-bold text-slate-900 mb-2">{plan.name}</h3>
-                <p className="text-slate-600 text-sm mb-3">{plan.description}</p>
+                <h3 className="text-xl font-bold text-slate-900 mb-2">{plan.tier_name || plan.name}</h3>
+                <p className="text-slate-600 text-sm mb-3">{plan.description || 'Flexible plan'}</p>
                 <div className="mb-4">
-                  <span className="text-3xl font-bold text-slate-900">${plan.price}</span>
-                  <span className="text-slate-600 ml-2">/month</span>
-                  <p className="text-xs text-slate-500 mt-1">{plan.price.toFixed(2)} USDC</p>
+                  <span className="text-3xl font-bold text-slate-900">{plan.price_sol || plan.price_per_month_sol}</span>
+                  <span className="text-slate-600 ml-2">SOL/month</span>
                 </div>
                 <div className="space-y-2">
-                  {plan.features.slice(0, 3).map((feature, idx) => (
+                  {(plan.features || []).slice(0, 3).map((feature, idx) => (
                     <div key={idx} className="flex items-start gap-2 text-sm text-slate-700">
                       <Check className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" />
-                      <span>{feature}</span>
+                      <span>{feature.feature_name || feature}</span>
                     </div>
                   ))}
-                  {plan.features.length > 3 && (
-                    <p className="text-xs text-slate-500 mt-2">+ {plan.features.length - 3} more features</p>
+                  {(plan.features || []).length > 3 && (
+                    <p className="text-xs text-slate-500 mt-2">+ {(plan.features || []).length - 3} more features</p>
                   )}
                 </div>
               </div>
@@ -132,14 +107,19 @@ export default function PricingPage() {
                   onError={() => setWalletConnected(false)}
                 />
 
-                {walletConnected && (
+                {walletConnected && selectedPlan && (
                   <SolanaPaymentProcessor
-                    planId={selectedPlan.priceId}
-                    planName={selectedPlan.name}
-                    amount={selectedPlan.price}
+                    planId={selectedPlan.id}
+                    planName={selectedPlan.tier_name || selectedPlan.name}
+                    amountSol={selectedPlan.price_sol || selectedPlan.price_per_month_sol}
                     walletAddress={walletAddress}
-                    onPaymentSuccess={() => {
-                      alert('Subscription activated! Welcome to ' + selectedPlan.name);
+                    onPaymentSuccess={async ({ signature }) => {
+                      await base44.functions.invoke('createSubscription', {
+                        plan_id: selectedPlan.id,
+                        payment_method: 'solana_wallet',
+                        transaction_signature: signature
+                      });
+                      alert('Subscription activated! Welcome to ' + (selectedPlan.tier_name || selectedPlan.name));
                       setSelectedPlan(null);
                       setWalletConnected(false);
                     }}
@@ -157,7 +137,7 @@ export default function PricingPage() {
             🔐 <strong>Solana Payments:</strong> Powered by Phantom Wallet for secure, instant transactions.
           </p>
           <p className="text-xs text-purple-700">
-            All payments processed on Solana mainnet with USDC. No KYC required.
+            All payments processed on Solana mainnet. No KYC required.
           </p>
         </div>
       </div>

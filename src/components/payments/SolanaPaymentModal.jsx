@@ -48,13 +48,19 @@ export default function SolanaPaymentModal({
       setStatus('confirming');
 
       // Get admin wallet from config
-      const configs = await base44.entities.SolanaPaymentConfig.list();
-      if (configs.length === 0) {
+      const configResponse = await base44.functions.invoke('getSolanaConfig', {});
+      const config = configResponse?.data;
+
+      if (!config?.wallet_address) {
         throw new Error('Payment configuration not available');
       }
 
-      const adminWallet = configs[0].wallet_address;
-      const network = configs[0].network || 'devnet';
+      if (config.payment_enabled === false) {
+        throw new Error('Solana payments are currently disabled');
+      }
+
+      const adminWallet = config.wallet_address;
+      const network = config.network || 'devnet';
 
       // Create transaction
       const { Connection, PublicKey, SystemProgram, Transaction } = await import('@solana/web3.js');

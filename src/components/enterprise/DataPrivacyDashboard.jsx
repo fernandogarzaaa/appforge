@@ -4,6 +4,7 @@ import {
   AnonymizationEngine,
   gdprCompliance,
 } from '@/utils/dataSecurity';
+import { isFeatureEnabled } from '@/utils/featureFlags';
 
 /**
  * DataPrivacyDashboard
@@ -15,6 +16,7 @@ import {
  * - Compliance report + privacy policy viewer
  */
 export default function DataPrivacyDashboard() {
+  const securityEnabled = isFeatureEnabled('security');
   const [plainText, setPlainText] = useState('Sensitive customer data');
   const [encryptionKey, setEncryptionKey] = useState(
     () => EncryptionManager.generateKey(24)
@@ -86,6 +88,14 @@ export default function DataPrivacyDashboard() {
       options: { ...prev.options, [key]: value },
     }));
   };
+
+  if (!securityEnabled) {
+    return (
+      <div className="rounded-xl border border-dashed border-gray-300 bg-white p-6 text-center text-sm text-muted-foreground">
+        Data privacy tooling is disabled. Enable `VITE_SECURITY_ENABLED` to activate this module.
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-8">

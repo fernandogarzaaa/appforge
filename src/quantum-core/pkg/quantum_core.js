@@ -369,6 +369,13 @@ export class MultiverseEngine {
         wasm.multiverseengine_reset(this.__wbg_ptr);
     }
     /**
+     * Sets a deterministic seed for entropy, enabling reproducible simulations.
+     * @param {bigint} seed
+     */
+    set_seed(seed) {
+        wasm.multiverseengine_set_seed(this.__wbg_ptr, seed);
+    }
+    /**
      * Simulates time passing in all universes to see which one survives.
      * Returns the ID of the best universe.
      * @param {number} cycles
@@ -398,6 +405,22 @@ export class MultiverseEngine {
         const ptr1 = passStringToWasm0(name, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
         const len1 = WASM_VECTOR_LEN;
         wasm.multiverseengine_spawn_universe(this.__wbg_ptr, ptr0, len0, ptr1, len1, code_quality);
+    }
+    /**
+     * Spawns a new parallel reality with explicit quantum parameters.
+     * @param {string} id
+     * @param {string} name
+     * @param {number} code_quality
+     * @param {number} entanglement
+     * @param {number} coherence
+     * @param {number} decoherence_rate
+     */
+    spawn_universe_with_params(id, name, code_quality, entanglement, coherence, decoherence_rate) {
+        const ptr0 = passStringToWasm0(id, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+        const len0 = WASM_VECTOR_LEN;
+        const ptr1 = passStringToWasm0(name, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+        const len1 = WASM_VECTOR_LEN;
+        wasm.multiverseengine_spawn_universe_with_params(this.__wbg_ptr, ptr0, len0, ptr1, len1, code_quality, entanglement, coherence, decoherence_rate);
     }
 }
 if (Symbol.dispose) MultiverseEngine.prototype[Symbol.dispose] = MultiverseEngine.prototype.free;

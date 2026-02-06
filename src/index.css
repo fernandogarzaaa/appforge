@@ -68,6 +68,55 @@
   }
 }
 
+@layer base {
+  .dark .bg-white {
+    background-color: hsl(var(--card));
+  }
+  .dark .bg-gray-50,
+  .dark .bg-slate-50 {
+    background-color: hsl(var(--muted));
+  }
+  .dark .bg-gray-100,
+  .dark .bg-slate-100 {
+    background-color: hsl(var(--secondary));
+  }
+  .dark .bg-gray-200,
+  .dark .bg-slate-200 {
+    background-color: hsl(var(--accent));
+  }
+  .dark .text-gray-900,
+  .dark .text-slate-900 {
+    color: hsl(var(--foreground));
+  }
+  .dark .text-gray-800,
+  .dark .text-slate-800 {
+    color: hsl(var(--foreground));
+  }
+  .dark .text-gray-700,
+  .dark .text-slate-700 {
+    color: hsl(var(--foreground));
+  }
+  .dark .text-gray-600,
+  .dark .text-slate-600 {
+    color: hsl(var(--muted-foreground));
+  }
+  .dark .text-gray-500,
+  .dark .text-slate-500 {
+    color: hsl(var(--muted-foreground));
+  }
+  .dark .border-gray-100,
+  .dark .border-gray-200,
+  .dark .border-gray-300,
+  .dark .border-slate-200,
+  .dark .border-slate-300 {
+    border-color: hsl(var(--border));
+  }
+  .dark input::placeholder,
+  .dark textarea::placeholder {
+    color: hsl(var(--muted-foreground));
+  }
+}
+
 /* Custom scrollbar styling */
 ::-webkit-scrollbar {
   width: 8px;

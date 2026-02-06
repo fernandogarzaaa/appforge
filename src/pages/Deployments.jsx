@@ -7,9 +7,12 @@ import { toast } from 'sonner';
 import { DeploymentsTable } from '@/components/deployment/DeploymentsTable';
 import { DeploymentFilters } from '@/components/deployment/DeploymentFilters';
 import { Activity, TrendingUp, CheckCircle2, AlertCircle } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { createPageUrl } from '@/utils';
 
 export default function DeploymentsPage({ projectId = 'proj_default' }) {
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
 
   const { data: deployments = [], isLoading, error } = useQuery({
     queryKey: ['deployments'],
@@ -100,7 +103,13 @@ export default function DeploymentsPage({ projectId = 'proj_default' }) {
           <h1 className="text-3xl font-bold dark:text-white mb-1">Deployment History</h1>
           <p className="text-gray-500 dark:text-gray-400">Track and manage all project deployments</p>
         </div>
-        <Button className="bg-blue-600 hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-700">
+        <Button
+          className="bg-blue-600 hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-700"
+          onClick={() => {
+            const url = createPageUrl('SmartDeployment');
+            navigate(projectId && projectId !== 'proj_default' ? `${url}?projectId=${projectId}` : url);
+          }}
+        >
           <Activity className="w-4 h-4 mr-2" />
           New Deployment
         </Button>

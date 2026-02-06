@@ -34,6 +34,9 @@ export default function MobileAppEditor({ app, onBack }) {
     },
     onSuccess: () => {
       toast.success('Build started! You\'ll receive a notification when ready.');
+    },
+    onError: (error) => {
+      toast.error(error?.message || 'Build request failed. Configure a build provider to continue.');
     }
   });
 

@@ -1,22 +1,17 @@
-import { loadPersistedState, savePersistedState } from '@/services/persistenceStore';
-
-const STORAGE_KEY = 'appforge_marketplace_extensions';
-const STATE_KEY = 'marketplaceExtensions';
-
-const load = () => loadPersistedState({ storageKey: STORAGE_KEY, stateKey: STATE_KEY, fallback: [] });
-
-const save = (value) => savePersistedState({ storageKey: STORAGE_KEY, stateKey: STATE_KEY, value });
+import { base44 } from '@/api/base44Client';
 
 export const MarketplaceExtensionsService = {
   async listPlugins() {
-    return load();
+    return base44.entities.Plugin.list('-created_date', 200);
   },
 
   async addPlugin(name, category) {
-    const plugins = await load();
-    const entry = { id: `plugin_${Date.now()}`, name, category };
-    const next = [entry, ...plugins];
-    await save(next);
-    return entry;
+    return base44.entities.Plugin.create({
+      name,
+      category,
+      status: 'published',
+      source: 'extensions',
+      created_at: new Date().toISOString()
+    });
   },
 };

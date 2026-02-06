@@ -32,6 +32,8 @@ const projectColors = ['#6366f1', '#8b5cf6', '#ec4899', '#f43f5e', '#f97316', '#
 export default function Projects() {
   const [showNewDialog, setShowNewDialog] = useState(false);
   const [showAIGenerator, setShowAIGenerator] = useState(false);
+  const [showAdvancedOptions, setShowAdvancedOptions] = useState(false);
+  const [projectGoal, setProjectGoal] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const [viewMode, setViewMode] = useState('grid');
@@ -159,6 +161,7 @@ export default function Projects() {
     const projectData = {
       name: newProject.name.trim(),
       ...(newProject.description && { description: newProject.description.trim() }),
+      ...(!newProject.description && projectGoal.trim() ? { description: projectGoal.trim() } : {}),
       ...(newProject.icon && { icon: newProject.icon }),
       ...(newProject.color && { color: newProject.color }),
       status: 'draft'
@@ -427,52 +430,15 @@ export default function Projects() {
         >
           <div className="mb-4">
             <DialogTitle className="text-base font-semibold">Create New Project</DialogTitle>
+            <p className="text-xs text-gray-500 mt-1">Quick setup with optional advanced customization.</p>
           </div>
           <div className="space-y-4">
-            {/* Icon & Color Selection */}
-            <div className="flex gap-4">
-              <div className="flex-1">
-                <Label className="text-[13px] text-gray-600 mb-2 block">Icon</Label>
-                <div className="grid grid-cols-6 gap-1.5">
-                  {projectIcons.map((icon) => (
-                    <button
-                      key={icon}
-                      onClick={() => setNewProject({ ...newProject, icon })}
-                      className={`w-9 h-9 rounded-lg flex items-center justify-center text-lg transition-all ${
-                        newProject.icon === icon
-                          ? 'bg-gray-900 text-white'
-                          : 'bg-gray-50 hover:bg-gray-100'
-                      }`}
-                    >
-                      {icon}
-                    </button>
-                  ))}
-                </div>
-              </div>
-              <div>
-                <Label className="text-[13px] text-gray-600 mb-2 block">Color</Label>
-                <div className="grid grid-cols-2 gap-1.5">
-                  {projectColors.slice(0, 8).map((color) => (
-                    <button
-                      key={color}
-                      onClick={() => setNewProject({ ...newProject, color })}
-                      className={`w-7 h-7 rounded-lg transition-all ${
-                        newProject.color === color ? 'ring-2 ring-offset-1 ring-gray-900' : ''
-                      }`}
-                      style={{ backgroundColor: color }}
-                    />
-                  ))}
-                </div>
-              </div>
-            </div>
-
             {/* Name */}
             <div>
               <Label className="text-[13px] text-gray-600 mb-1.5 block">Project Name</Label>
               <Input
                 value={newProject.name}
                 onChange={(e) => {
-                  console.log('Name changed to:', e.target.value);
                   setNewProject({ ...newProject, name: e.target.value });
                 }}
                 placeholder="My Awesome App"
@@ -480,16 +446,94 @@ export default function Projects() {
               />
             </div>
 
-            {/* Description */}
+            {/* Goal */}
             <div>
-              <Label className="text-[13px] text-gray-600 mb-1.5 block">Description</Label>
+              <Label className="text-[13px] text-gray-600 mb-1.5 block">Goal (optional)</Label>
               <Textarea
-                value={newProject.description}
-                onChange={(e) => setNewProject({ ...newProject, description: e.target.value })}
-                placeholder="What's this project about?"
+                value={projectGoal}
+                onChange={(e) => setProjectGoal(e.target.value)}
+                placeholder="Describe the outcome you want (e.g., CRM for real estate leads)"
                 className="rounded-lg border-gray-200 resize-none h-20 text-[13px]"
               />
             </div>
+
+            <div className="flex items-center justify-between rounded-lg border border-indigo-100 bg-indigo-50/50 px-3 py-2">
+              <div>
+                <p className="text-xs font-semibold text-indigo-800">Need AI help?</p>
+                <p className="text-[11px] text-indigo-700">Let AI draft the project for you.</p>
+              </div>
+              <Button
+                variant="outline"
+                size="sm"
+                className="h-8 text-[12px]"
+                onClick={() => {
+                  setShowNewDialog(false);
+                  setShowAIGenerator(true);
+                }}
+              >
+                <Sparkles className="w-3 h-3 mr-1" />
+                Use AI
+              </Button>
+            </div>
+
+            <button
+              onClick={() => setShowAdvancedOptions(!showAdvancedOptions)}
+              className="text-xs text-gray-600 hover:text-gray-900 underline underline-offset-4"
+            >
+              {showAdvancedOptions ? 'Hide' : 'Show'} advanced options
+            </button>
+
+            {showAdvancedOptions && (
+              <div className="space-y-4">
+                {/* Icon & Color Selection */}
+                <div className="flex gap-4">
+                  <div className="flex-1">
+                    <Label className="text-[13px] text-gray-600 mb-2 block">Icon</Label>
+                    <div className="grid grid-cols-6 gap-1.5">
+                      {projectIcons.map((icon) => (
+                        <button
+                          key={icon}
+                          onClick={() => setNewProject({ ...newProject, icon })}
+                          className={`w-9 h-9 rounded-lg flex items-center justify-center text-lg transition-all ${
+                            newProject.icon === icon
+                              ? 'bg-gray-900 text-white'
+                              : 'bg-gray-50 hover:bg-gray-100'
+                          }`}
+                        >
+                          {icon}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                  <div>
+                    <Label className="text-[13px] text-gray-600 mb-2 block">Color</Label>
+                    <div className="grid grid-cols-2 gap-1.5">
+                      {projectColors.slice(0, 8).map((color) => (
+                        <button
+                          key={color}
+                          onClick={() => setNewProject({ ...newProject, color })}
+                          className={`w-7 h-7 rounded-lg transition-all ${
+                            newProject.color === color ? 'ring-2 ring-offset-1 ring-gray-900' : ''
+                          }`}
+                          style={{ backgroundColor: color }}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Description */}
+                <div>
+                  <Label className="text-[13px] text-gray-600 mb-1.5 block">Description</Label>
+                  <Textarea
+                    value={newProject.description}
+                    onChange={(e) => setNewProject({ ...newProject, description: e.target.value })}
+                    placeholder="Detailed project description"
+                    className="rounded-lg border-gray-200 resize-none h-20 text-[13px]"
+                  />
+                </div>
+              </div>
+            )}
           </div>
           <div className="flex gap-2 mt-8 pt-4 border-t border-gray-100">
             <Button
@@ -501,7 +545,7 @@ export default function Projects() {
             </Button>
             <Button
               onClick={handleCreate}
-              disabled={!newProject.name || createMutation.isPending}
+              disabled={!newProject.name.trim() || createMutation.isPending}
               className="bg-gray-900 hover:bg-gray-800 text-white rounded-lg h-9 text-[13px] flex-1"
             >
               {createMutation.isPending ? 'Creating...' : 'Create Project'}

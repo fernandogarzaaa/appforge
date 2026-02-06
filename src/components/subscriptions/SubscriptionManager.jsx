@@ -99,7 +99,7 @@ export default function SubscriptionManager() {
           <CardContent className="space-y-4">
             <div>
                <p className="text-xs text-gray-500">Plan</p>
-               <p className="text-lg font-bold">{subscription.plan_id}</p>
+               <p className="text-lg font-bold">{subscription.plan_name || subscription.plan_id}</p>
              </div>
 
             <div className="grid grid-cols-2 gap-4">

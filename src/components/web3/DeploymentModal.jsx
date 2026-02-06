@@ -16,6 +16,7 @@ import {
 import NetworkBadge from './NetworkBadge';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
+import { featureFlags } from '@/utils/featureFlags';
 
 const deploymentSteps = [
   { id: 'connect', label: 'Connect Wallet', description: 'Connecting to your wallet' },
@@ -50,6 +51,7 @@ export default function DeploymentModal({
   const [gasEstimate, setGasEstimate] = useState(null);
   const [deployedAddress, setDeployedAddress] = useState(null);
   const [txHash, setTxHash] = useState(null);
+  const { web3: web3Enabled } = featureFlags;
 
   useEffect(() => {
     if (open) {
@@ -63,55 +65,15 @@ export default function DeploymentModal({
   }, [open]);
 
   const simulateDeployment = async () => {
+    if (!web3Enabled) {
+      toast.error('Web3 deployments are not configured for this deployment.');
+      return;
+    }
     if (!wallet) {
       onConnectWallet?.();
       return;
     }
-
-    setStatus('deploying');
-    setError(null);
-
-    // Step 1: Connect (already connected)
-    setCurrentStep(0);
-    await new Promise(r => setTimeout(r, 500));
-
-    // Step 2: Compile
-    setCurrentStep(1);
-    await new Promise(r => setTimeout(r, 1500));
-
-    // Step 3: Estimate Gas
-    setCurrentStep(2);
-    await new Promise(r => setTimeout(r, 1000));
-    const estimatedGas = (Math.random() * 0.05 + 0.01).toFixed(4);
-    setGasEstimate(estimatedGas);
-
-    // Step 4: Sign Transaction
-    setCurrentStep(3);
-    await new Promise(r => setTimeout(r, 2000));
-
-    // Step 5: Deploy
-    setCurrentStep(4);
-    await new Promise(r => setTimeout(r, 1500));
-    const mockTxHash = '0x' + Array.from({length: 64}, () => Math.floor(Math.random() * 16).toString(16)).join('');
-    setTxHash(mockTxHash);
-
-    // Step 6: Confirm
-    setCurrentStep(5);
-    await new Promise(r => setTimeout(r, 2000));
-
-    // Generate mock contract address
-    const mockAddress = '0x' + Array.from({length: 40}, () => Math.floor(Math.random() * 16).toString(16)).join('');
-    setDeployedAddress(mockAddress);
-    setStatus('success');
-
-    // Call completion handler
-    onDeploymentComplete?.({
-      contract_address: mockAddress,
-      tx_hash: mockTxHash,
-      gas_used: estimatedGas,
-      status: 'deployed',
-      deployed_at: new Date().toISOString(),
-    });
+    toast.error('Deployment backend is not configured for this deployment.');
   };
 
   const copyToClipboard = (text) => {
@@ -138,6 +100,11 @@ export default function DeploymentModal({
         </DialogHeader>
 
         <div className="py-4">
+          {!web3Enabled && (
+            <div className="mb-6 rounded-xl border border-dashed border-gray-300 bg-gray-50 p-4 text-sm text-gray-600">
+              Web3 deployments are disabled. Enable `VITE_WEB3_ENABLED` after configuring a deployment backend.
+            </div>
+          )}
           {/* Contract Info */}
           <div className="flex items-center justify-between p-4 bg-gray-50 rounded-xl mb-6">
             <div>

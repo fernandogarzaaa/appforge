@@ -401,15 +401,15 @@ function notifyMemberListeners(teamId, eventType, data) {
  * Mock current user helpers
  */
 function getCurrentUserId() {
-  return localStorage.getItem('userId') || 'user_' + Date.now();
+  return localStorage.getItem('userId') || '';
 }
 
 function getCurrentUserEmail() {
-  return localStorage.getItem('userEmail') || 'owner@example.com';
+  return localStorage.getItem('userEmail') || '';
 }
 
 function getCurrentUserName() {
-  return localStorage.getItem('userName') || 'User';
+  return localStorage.getItem('userName') || '';
 }
 
 export default {

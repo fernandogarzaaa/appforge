@@ -2,6 +2,8 @@ import { createClient } from '@base44/sdk';
 import { appParams } from '@/lib/app-params';
 
 const { appId, token, functionsVersion, appBaseUrl } = appParams;
+const serviceToken = import.meta.env.VITE_BASE44_SERVICE_TOKEN;
+export const hasServiceToken = Boolean(serviceToken);
 
 //Create a client with authentication required
 export const base44 = createClient({
@@ -10,7 +12,8 @@ export const base44 = createClient({
   functionsVersion,
   serverUrl: '',
   requiresAuth: false,
-  appBaseUrl
+  appBaseUrl,
+  ...(serviceToken ? { serviceToken } : {})
 });
 
 // In test environments, silence outbound analytics calls to avoid jsdom network errors
