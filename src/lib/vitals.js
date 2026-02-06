@@ -3,7 +3,7 @@
  * Tracks Core Web Vitals and sends to analytics
  */
 
-import { onCLS, onFID, onFCP, onLCP, onTTFB } from 'web-vitals';
+import { onCLS, onINP, onFCP, onLCP, onTTFB } from 'web-vitals';
 
 /**
  * Send vitals data to analytics service
@@ -76,9 +76,9 @@ export function initVitals() {
     // Good: < 0.1, Needs improvement: 0.1-0.25, Poor: > 0.25
     onCLS(sendToAnalytics);
 
-    // First Input Delay (FID)
-    // Good: < 100ms, Needs improvement: 100-300ms, Poor: > 300ms
-    onFID(sendToAnalytics);
+    // Interaction to Next Paint (INP) - Replaces FID in web-vitals v3+
+    // Good: < 200ms, Needs improvement: 200-500ms, Poor: > 500ms
+    onINP(sendToAnalytics);
 
     // First Contentful Paint (FCP)
     // Good: < 1.8s, Needs improvement: 1.8-3s, Poor: > 3s
@@ -123,7 +123,7 @@ export async function getVitals() {
     };
 
     onCLS(collectVital);
-    onFID(collectVital);
+    onINP(collectVital);
     onFCP(collectVital);
     onLCP(collectVital);
     onTTFB(collectVital);
