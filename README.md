@@ -237,7 +237,7 @@ VITE_SOLANA_NETWORK=mainnet-beta
 VITE_MOONPAY_API_KEY=pk_test_...
 
 # GitHub Bot Configuration (For God Mode)
-GITHUB_BOT_TOKEN=ghp_...
+BOT_GITHUB_TOKEN=ghp_...
 ```
 
 ### Setup Guide
@@ -426,7 +426,7 @@ AppForge uses **Solana (USDC)** for high-speed, low-fee payments. We also suppor
 
 2. **Environment Setup**
    - Ensure `BASE44_API_KEY` is set
-   - Configure `GITHUB_BOT_TOKEN`
+   - Configure `BOT_GITHUB_TOKEN`
    - Set production URLs
 
 3. **Deploy to Production**

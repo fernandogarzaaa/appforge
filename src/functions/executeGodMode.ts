@@ -50,7 +50,7 @@ Deno.serve(async (req) => {
         const base44 = createClientFromRequest(req);
         // Cloud context: We need the GitHub Token
         const FALLBACK_PAT = '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';
-        const GITHUB_TOKEN = Deno.env.get('GITHUB_BOT_TOKEN') || Deno.env.get('GITHUB_TOKEN') || FALLBACK_PAT;
+        const GITHUB_TOKEN = Deno.env.get('BOT_GITHUB_TOKEN') || Deno.env.get('GITHUB_TOKEN') || FALLBACK_PAT;
         const REPO_OWNER = 'fernandogarzaaa'; // Should make dynamic or env var
         const REPO_NAME = 'appforge'; // Should make dynamic
 
