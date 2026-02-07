@@ -1,9 +1,0 @@
-Testing Quantum Simulator in Backend...
-Simulating Bell State Circuit...
-Simulation Results: { '11': 487, '00': 513 }
-Entangled State Ratio (|00> + |11>): 100%
-SUCCESS: Strong entanglement detected (Expected ~100%)
-
-Testing Controller Helper Logic...
-Mapped SWAP Gate: {"name":"SWAP","targetQubits":[0,1],"controlQubits":[]}
-SUCCESS: SWAP Gate mapping verified

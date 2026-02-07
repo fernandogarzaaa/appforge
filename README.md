@@ -134,7 +134,7 @@ A comprehensive, full-stack application platform built with modern technologies 
 ### Prerequisites
 - Node.js 18.0.0 or higher
 - npm 9.0.0 or higher
-- Xendit account (for payment processing)
+- Phantom Wallet (for testing payments)
 - Basic knowledge of React and TypeScript
 
 ### Installation
@@ -227,36 +227,24 @@ appforge-main/
 Create a `.env.local` file in the root directory:
 
 ```bash
-# Xendit Payment Integration (REQUIRED)
-XENDIT_SECRET_KEY=xnd_development_XXXXX
-XENDIT_PUBLIC_KEY=xnd_public_XXXXX
-XENDIT_API_VERSION=2020-02-14
-XENDIT_WEBHOOK_TOKEN=whsec_XXXXX
+# Base44 App Configuration
+BASE44_APP_ID=your_app_id
+BASE44_API_KEY=your_api_key
+VITE_BASE44_API_URL=https://yourdomain.com/api
 
-# Optional: Webhook Configuration
-WEBHOOK_URL=https://yourdomain.com/webhooks
+# Solana / MoonPay Configuration
+VITE_SOLANA_NETWORK=mainnet-beta
+VITE_MOONPAY_API_KEY=pk_test_...
 
-# Optional: Base44 Configuration
-VITE_BASE44_APP_BASE_URL=https://yourdomain.com
+# GitHub Bot Configuration (For God Mode)
+GITHUB_BOT_TOKEN=ghp_...
 ```
 
-### Getting Xendit API Keys
+### Setup Guide
 
-1. Sign up at [xendit.co](https://xendit.co)
-2. Navigate to **Settings** → **API Keys**
-3. Copy your **Secret Key** and **Public Key**
-4. Add them to your `.env.local` file
-
-### Webhook Setup
-
-1. Go to **Settings** → **Webhooks** in your Xendit dashboard
-2. Add webhook endpoint: `https://yourdomain.com/functions/stripeWebhook`
-3. Subscribe to these events:
-   - `payment.successful`
-   - `invoice.created`
-   - `invoice.updated`
-   - `recurring_charge.canceled`
-   - `payment.failed`
+1. **Base44 Keys**: Get them from your Base44 Project Settings.
+2. **GitHub Token**: Generate a Personal Access Token (Classic) with `repo` scope.
+3. **MoonPay**: Sign up for a developer account if you want fiat on-ramps.
 
 ---
 
@@ -396,50 +384,35 @@ describe('Button', () => {
 
 ---
 
-## 💳 Payment Integration
+## 💳 Payment Integration (Solana + USDC)
 
 ### Overview
 
-AppForge uses **Xendit** for all payment processing, subscription management, and invoicing.
+AppForge uses **Solana (USDC)** for high-speed, low-fee payments. We also support **MoonPay** for easy fiat on-ramping.
 
 ### Payment Flow
 
-1. **User Initiates Purchase** → `createCheckoutSession.ts`
-2. **Creates Xendit Invoice** → Returns payment link
-3. **User Completes Payment** → Xendit processes
-4. **Webhook Event Triggered** → `stripeWebhook.ts`
-5. **Subscription Activated** → User gains access
+1. **User Selects Plan** → Connects Phantom Wallet.
+2. **Transactions** → Direct USDC transfer on Solana Mainnet.
+3. **Verification** → On-chain validation of transaction signature.
+4. **Access Granted** → Instant PRO status.
 
-### Key Functions
+### Functions
 
-#### Creating a Payment Link
+#### Process Payment
 ```typescript
-// POST /api/createCheckoutSession
+// POST /api/processSolanaPayment
 {
-  "planName": "Pro",
-  "amount": 2999,  // in cents
-  "description": "Monthly Pro Plan"
+  "signature": "...",
+  "wallet": "...",
+  "amount": 45
 }
-// Returns: { invoice_url, invoiceId }
 ```
 
-#### Checking Subscription Status
+#### Get Receipt
 ```typescript
-// GET /api/getSubscriptionInfo
-// Returns current subscription and billing info
+// GET /api/getSolanaReceipt?sig=...
 ```
-
-#### Canceling Subscription
-```typescript
-// POST /api/cancelSubscription
-// Cancels all active recurring charges
-```
-
-### Xendit API Reference
-
-For detailed information, see [XENDIT_MIGRATION_GUIDE.md](./XENDIT_MIGRATION_GUIDE.md)
-
----
 
 ## 🚀 Deployment
 
@@ -452,8 +425,8 @@ For detailed information, see [XENDIT_MIGRATION_GUIDE.md](./XENDIT_MIGRATION_GUI
    Creates optimized bundle in `dist/`
 
 2. **Environment Setup**
-   - Ensure all Xendit API keys are set
-   - Configure webhook endpoints
+   - Ensure `BASE44_API_KEY` is set
+   - Configure `GITHUB_BOT_TOKEN`
    - Set production URLs
 
 3. **Deploy to Production**
@@ -497,10 +470,8 @@ For detailed information, see [XENDIT_MIGRATION_GUIDE.md](./XENDIT_MIGRATION_GUI
 
 ### Key Documents
 
-- **[XENDIT_MIGRATION_GUIDE.md](./XENDIT_MIGRATION_GUIDE.md)** - Complete payment migration details
-- **[PROJECT_INTEGRITY_REPORT.md](./PROJECT_INTEGRITY_REPORT.md)** - Project audit and analysis
-- **[FIXES_COMPLETED.md](./FIXES_COMPLETED.md)** - List of all resolved issues
-- **[GIT_PUSH_SETUP.md](./GIT_PUSH_SETUP.md)** - Git authentication and push troubleshooting guide
+- **[README.md](./README.md)** - Main documentation
+- **[walkthrough.md](./walkthrough.md)** - Autonomous Bot Guide
 
 ### API Documentation
 
@@ -582,8 +553,8 @@ npm run test:watch
 
 1. **Check Documentation**
    - Review README.md sections above
-   - Check XENDIT_MIGRATION_GUIDE.md for payment issues
-   - Review PROJECT_INTEGRITY_REPORT.md for system status
+   - Check `walkthrough.md` for bot operations
+   - Review Audit Logs for system status
 
 2. **Debug Mode**
    ```bash
@@ -617,7 +588,7 @@ This project is proprietary software. Unauthorized copying, modification, or dis
 
 ### Current Version (v0.0.0)
 - ✅ Core platform functionality
-- ✅ Xendit payment integration
+- ✅ Solana + USDC payment integration
 - ✅ 60+ serverless functions
 - ✅ 65+ page components
 - ✅ Comprehensive testing framework
@@ -656,12 +627,12 @@ Built with:
 - React and the JavaScript community
 - Radix UI for accessible components
 - TailwindCSS for styling
-- Xendit for payment processing
+- Solana for payment processing
 - Base44 for backend infrastructure
 
 ---
 
-**Last Updated:** January 28, 2026  
+**Last Updated:** February 7, 2026
 **Next Review:** Quarterly
 
-For the latest updates, check the [FIXES_COMPLETED.md](./FIXES_COMPLETED.md) and [XENDIT_MIGRATION_GUIDE.md](./XENDIT_MIGRATION_GUIDE.md) files.
+For the latest updates, check the Git Commit History.
