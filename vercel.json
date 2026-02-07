@@ -5,6 +5,15 @@
   "installCommand": "npm ci --legacy-peer-deps",
   "devCommand": "npm run dev",
   "rewrites": [
-    { "source": "/(.*)", "destination": "/index.html" }
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ],
+  "crons": [
+    {
+      "path": "/api/cron",
+      "schedule": "*/15 * * * *"
+    }
   ]
 }
