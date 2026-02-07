@@ -63,6 +63,7 @@ export default function SidebarNew({ currentProject, collapsed, onToggle, user }
         { label: 'AI Assistant', icon: Zap, href: createPageUrl('AIAssistant') },
         { label: 'Templates', icon: LayoutTemplate, href: createPageUrl('TemplateMarketplace') },
         { label: 'Workflows', icon: Rocket, href: createPageUrl('WorkflowBuilder') },
+        { label: 'Pricing', icon: Coins, href: createPageUrl('Pricing') },
       ]
     },
     {

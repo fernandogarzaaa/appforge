@@ -2,7 +2,7 @@
  * Webhook Model - Persistent webhook storage
  */
 
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const webhookSchema = new mongoose.Schema({
   url: {
@@ -60,4 +60,4 @@ webhookSchema.index({ userId: 1, isActive: 1 });
 
 const Webhook = mongoose.model('Webhook', webhookSchema);
 
-module.exports = Webhook;
+export default Webhook;

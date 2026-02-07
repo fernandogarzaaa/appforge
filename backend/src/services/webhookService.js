@@ -2,11 +2,11 @@
  * Webhook Service with MongoDB persistence
  */
 
-const axios = require('axios');
-const crypto = require('crypto');
-const Webhook = require('../models/Webhook');
+import axios from 'axios';
+import crypto from 'crypto';
+import Webhook from '../models/Webhook.js';
 
-async function registerWebhook({ url, events, secret, userId, tenantId }) {
+export async function registerWebhook({ url, events, secret, userId, tenantId }) {
   const webhook = await Webhook.create({
     url,
     events,
@@ -26,7 +26,7 @@ async function registerWebhook({ url, events, secret, userId, tenantId }) {
   };
 }
 
-async function listWebhooks(userId, tenantId) {
+export async function listWebhooks(userId, tenantId) {
   const query = {};
   if (userId) query.userId = userId;
   if (tenantId) query.tenantId = tenantId;
@@ -45,12 +45,12 @@ async function listWebhooks(userId, tenantId) {
   }));
 }
 
-async function deleteWebhook(id) {
+export async function deleteWebhook(id) {
   const result = await Webhook.deleteOne({ _id: id });
   return result.deletedCount > 0;
 }
 
-async function emitWebhook(event, payload) {
+export async function emitWebhook(event, payload) {
   const hooks = await Webhook.find({ events: event, isActive: true });
   const deliveries = [];
 
@@ -111,10 +111,9 @@ async function emitWebhook(event, payload) {
   return deliveries;
 }
 
-module.exports = {
+export default {
   registerWebhook,
   listWebhooks,
   deleteWebhook,
   emitWebhook
 };
-

@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { base44 } from '@/api/base44Client';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Loader2, AlertCircle, CheckCircle2 } from 'lucide-react';
@@ -48,10 +47,17 @@ export default function SolanaPaymentModal({
       setStatus('confirming');
 
       // Get admin wallet from config
-      const configResponse = await base44.functions.invoke('getSolanaConfig', {});
-      const config = configResponse?.data;
+      const token = localStorage.getItem('base44_access_token');
+      const headers = {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      };
 
-      if (!config?.wallet_address) {
+      const configResponse = await fetch('/api/payment/solana/config', { headers });
+      if (!configResponse.ok) throw new Error('Failed to load payment config');
+      const config = await configResponse.json();
+
+      if (!config?.recipient_address) {
         throw new Error('Payment configuration not available');
       }
 
@@ -59,22 +65,22 @@ export default function SolanaPaymentModal({
         throw new Error('Solana payments are currently disabled');
       }
 
-      const adminWallet = config.wallet_address;
+      const adminWallet = config.recipient_address;
       const network = config.network || 'devnet';
 
       // Create transaction
       const { Connection, PublicKey, SystemProgram, Transaction } = await import('@solana/web3.js');
-      
-      const rpcUrl = network === 'mainnet-beta' 
+
+      const rpcUrl = network === 'mainnet-beta'
         ? 'https://api.mainnet-beta.solana.com'
         : network === 'devnet'
-        ? 'https://api.devnet.solana.com'
-        : 'https://api.testnet.solana.com';
+          ? 'https://api.devnet.solana.com'
+          : 'https://api.testnet.solana.com';
 
-      const connection = new Connection(rpcUrl);
+      const connection = new Connection(rpcUrl, 'confirmed');
       const fromPubkey = new PublicKey(publicKey);
       const toPubkey = new PublicKey(adminWallet);
-      
+
       const lamports = Math.round(amount * 1000000000);
 
       const { blockhash } = await connection.getLatestBlockhash('confirmed');
@@ -96,29 +102,33 @@ export default function SolanaPaymentModal({
       setTxSignature(signed.signature);
 
       // Verify payment on backend
-      const verifyResponse = await base44.functions.invoke('processSolanaPayment', {
-        amount_sol: amount,
-        transaction_signature: signed.signature,
-        payment_type: paymentType,
-        reference_id: referenceId
+      const verifyResponse = await fetch('/api/payment/subscription', {
+        method: 'POST',
+        headers,
+        body: JSON.stringify({
+          amount_paid: amount,
+          transaction_signature: signed.signature,
+          payment_method: 'solana_wallet',
+          plan_id: referenceId, // Using referenceId as planId
+          payment_type: paymentType
+        })
       });
 
-      if (verifyResponse.data.success) {
+      if (verifyResponse.ok) {
         setStatus('success');
         setTimeout(() => {
           onPaymentSuccess?.(signed.signature);
           onClose?.();
         }, 2000);
       } else {
-        throw new Error(verifyResponse.data.error || 'Payment verification failed');
+        const errorData = await verifyResponse.json();
+        throw new Error(errorData.message || 'Payment verification failed');
       }
     } catch (error) {
       setStatus('error');
       setErrorMsg(error.message || 'Payment failed');
     }
   };
-
-
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>

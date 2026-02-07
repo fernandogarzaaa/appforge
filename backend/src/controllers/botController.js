@@ -10,7 +10,7 @@ import BotFeedback from '../models/BotFeedback.js';
 import quantumLLMService from '../services/quantumLLMService.js';
 import multiLLMService from '../services/multiLLMService.js';
 import { createError } from '../utils/helpers.js';
-import logger from '../config/logger.js';
+import { logger } from '../config/logger.js';
 import { v4 as uuidv4 } from 'uuid';
 
 /**

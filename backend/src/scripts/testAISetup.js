@@ -7,7 +7,7 @@
 
 import dotenv from 'dotenv';
 import base44Service from '../services/base44Service.js';
-import logger from '../config/logger.js';
+import { logger } from '../config/logger.js';
 
 // Load environment variables
 dotenv.config();

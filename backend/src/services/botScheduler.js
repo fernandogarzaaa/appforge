@@ -7,7 +7,7 @@ import cron from 'node-cron';
 import Bot from '../models/Bot.js';
 import BotExecution from '../models/BotExecution.js';
 import quantumLLMService from './quantumLLMService.js';
-import logger from '../config/logger.js';
+import { logger } from '../config/logger.js';
 import { v4 as uuidv4 } from 'uuid';
 
 class BotScheduler {

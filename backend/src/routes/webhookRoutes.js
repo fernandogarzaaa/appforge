@@ -2,11 +2,11 @@
  * Webhook Routes
  */
 
-const express = require('express');
-const { authenticate  } = require('../middleware/auth');
-const { validateRequest  } = require('../middleware/validation');
-const Joi = require('joi');
-const { registerWebhook, listWebhooks, deleteWebhook, emitWebhook  } = require('../services/webhookService');
+import express from 'express';
+import { authenticate } from '../middleware/auth.js';
+import { validateRequest } from '../middleware/validation.js';
+import Joi from 'joi';
+import { registerWebhook, listWebhooks, deleteWebhook, emitWebhook } from '../services/webhookService.js';
 
 const router = express.Router();
 
@@ -63,4 +63,4 @@ router.post('/test', async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

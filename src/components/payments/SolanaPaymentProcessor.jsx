@@ -1,16 +1,15 @@
 import React, { useState } from 'react';
-import { base44 } from '@/api/base44Client';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { AlertCircle, CheckCircle2, Loader2 } from 'lucide-react';
 
-export default function SolanaPaymentProcessor({ 
-  planId, 
-  planName, 
-  amountSol, 
-  walletAddress, 
-  onPaymentSuccess, 
-  onPaymentError 
+export default function SolanaPaymentProcessor({
+  planId,
+  planName,
+  amountSol,
+  walletAddress,
+  onPaymentSuccess,
+  onPaymentError
 }) {
   const [processing, setProcessing] = useState(false);
   const [error, setError] = useState('');
@@ -32,27 +31,34 @@ export default function SolanaPaymentProcessor({
         throw new Error('Phantom wallet not found');
       }
 
-      const configResponse = await base44.functions.invoke('getSolanaConfig', {});
-      const config = configResponse?.data;
+      const token = localStorage.getItem('base44_access_token');
+      const headers = {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      };
 
-      if (!config?.wallet_address) {
+      const configResponse = await fetch('/api/payment/solana/config', { headers });
+      if (!configResponse.ok) throw new Error('Failed to load payment config');
+      const config = await configResponse.json();
+
+      if (!config?.recipient_address) {
         throw new Error('Payment configuration not available');
       }
       if (config.payment_enabled === false) {
         throw new Error('Solana payments are currently disabled');
       }
 
-      const adminWallet = config.wallet_address;
+      const adminWallet = config.recipient_address;
       const network = config.network || 'devnet';
 
       const { Connection, PublicKey, SystemProgram, Transaction } = await import('@solana/web3.js');
       const rpcUrl = network === 'mainnet-beta'
         ? 'https://api.mainnet-beta.solana.com'
         : network === 'testnet'
-        ? 'https://api.testnet.solana.com'
-        : 'https://api.devnet.solana.com';
+          ? 'https://api.testnet.solana.com'
+          : 'https://api.devnet.solana.com';
 
-      const connection = new Connection(rpcUrl);
+      const connection = new Connection(rpcUrl, 'confirmed');
       const fromPubkey = new PublicKey(walletAddress);
       const toPubkey = new PublicKey(adminWallet);
       const lamports = Math.round(Number(amountSol) * 1_000_000_000);
@@ -77,12 +83,21 @@ export default function SolanaPaymentProcessor({
       setTxSignature(transactionSignature);
 
       // Verify payment on backend
-      await base44.functions.invoke('processSolanaPayment', {
-        amount_sol: amountSol,
-        transaction_signature: transactionSignature,
-        payment_type: 'subscription',
-        reference_id: planId
+      const verifyResponse = await fetch('/api/payment/subscription', {
+        method: 'POST',
+        headers,
+        body: JSON.stringify({
+          amount_paid: amountSol,
+          transaction_signature: transactionSignature,
+          payment_method: 'solana_wallet',
+          plan_id: planId
+        })
       });
+
+      if (!verifyResponse.ok) {
+        const errorData = await verifyResponse.json();
+        throw new Error(errorData.message || 'Payment verification failed');
+      }
 
       onPaymentSuccess?.({
         signature: transactionSignature,

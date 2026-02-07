@@ -26,6 +26,7 @@ import embeddingsRoutes from './routes/embeddingsRoutes.js';
 import base44Routes from './routes/base44Routes.js';
 import botRoutes from './routes/botRoutes.js';
 import webhookRoutes from './routes/webhookRoutes.js';
+import paymentRoutes from './routes/paymentRoutes.js';
 import botScheduler from './services/botScheduler.js';
 import { handleStripeWebhook } from './services/stripeService.js';
 import WebSocketServer from './websocket/index.js';
@@ -110,7 +111,7 @@ if (NODE_ENV === 'development') {
 
 // Stripe webhook endpoint (MUST be before body parser middleware)
 // Stripe requires raw body for signature verification
-app.post('/webhook/stripe', 
+app.post('/webhook/stripe',
   express.raw({ type: 'application/json' }),
   handleStripeWebhook
 );
@@ -184,6 +185,7 @@ app.use('/api/embeddings', embeddingsRoutes);
 app.use('/api/base44', base44Routes);
 app.use('/api/bots', botRoutes);
 app.use('/api/webhooks', webhookRoutes);
+app.use('/api/payment', paymentRoutes);
 
 // Frontend persistence layer routes
 app.use('/api/user', settingsRoutes);
@@ -276,7 +278,7 @@ if (!IS_TEST && httpServer && wsServer) {
         console.log(`🌍 Environment: ${NODE_ENV}`);
         console.log(`⏰ Started at ${new Date().toISOString()}`);
         console.log(`🔌 WebSocket server ready for real-time collaboration`);
-        
+
         // Log WebSocket stats every 5 minutes
         setInterval(() => {
           const stats = wsServer.getStats();

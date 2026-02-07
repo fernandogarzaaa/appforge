@@ -4,8 +4,8 @@
  */
 
 import { createError } from '../utils/helpers.js';
-import { getCachedData, setCachedData } from '../utils/caching.js';
-import logger from '../config/logger.js';
+import redisCache from '../utils/redisCache.js';
+import { logger } from '../config/logger.js';
 import crypto from 'crypto';
 
 class EmbeddingsService {
@@ -14,7 +14,7 @@ class EmbeddingsService {
     this.model = process.env.OPENAI_EMBEDDING_MODEL || 'text-embedding-3-small';
     this.dimension = 1536; // Default dimension for text-embedding-3-small
     this.cacheEnabled = process.env.ENABLE_EMBEDDING_CACHE !== 'false';
-    this.cacheTTL = parseInt(process.env.EMBEDDING_CACHE_TTL || '86400'); // 24 hours default
+    this.cacheTTL = parseInt(process.env.EMBEDDING_CACHE_TTL || '86400'); // 24 hours default in seconds
 
     if (!this.apiKey) {
       logger.warn('[EmbeddingsService] OPENAI_API_KEY not configured. Embedding features will be limited.');
@@ -53,7 +53,7 @@ class EmbeddingsService {
     // Check cache first
     if (this.cacheEnabled) {
       const cacheKey = this._generateCacheKey(text, model);
-      const cached = await getCachedData(cacheKey);
+      const cached = await redisCache.get(cacheKey);
 
       if (cached) {
         logger.debug(`[EmbeddingsService] Cache hit for text (${text.substring(0, 50)}...)`);
@@ -107,7 +107,7 @@ class EmbeddingsService {
       // Cache the result
       if (this.cacheEnabled) {
         const cacheKey = this._generateCacheKey(text, model);
-        await setCachedData(cacheKey, normalized, this.cacheTTL);
+        await redisCache.set(cacheKey, normalized, this.cacheTTL * 1000);
         logger.debug('[EmbeddingsService] Cached embedding');
       }
 
@@ -157,7 +157,7 @@ class EmbeddingsService {
     if (this.cacheEnabled) {
       for (let i = 0; i < texts.length; i++) {
         const cacheKey = this._generateCacheKey(texts[i], model);
-        const cached = await getCachedData(cacheKey);
+        const cached = await redisCache.get(cacheKey);
 
         if (cached) {
           results[i] = cached;
@@ -217,7 +217,7 @@ class EmbeddingsService {
         // Cache each embedding
         if (this.cacheEnabled) {
           const cacheKey = this._generateCacheKey(texts[originalIndex], model);
-          await setCachedData(cacheKey, normalized, this.cacheTTL);
+          await redisCache.set(cacheKey, normalized, this.cacheTTL * 1000);
         }
       }
 

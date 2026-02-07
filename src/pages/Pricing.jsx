@@ -12,18 +12,35 @@ export default function PricingPage() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const loadPlans = async () => {
-      try {
-        const activePlans = await base44.entities.Subscription.filter({ is_active: true });
-        const sorted = activePlans.sort((a, b) => (a.tier_level || 0) - (b.tier_level || 0));
-        setPlans(sorted);
-      } catch (error) {
-        console.error('Failed to load plans:', error);
-      } finally {
-        setIsLoading(false);
+    // Hardcoded production plans
+    const productionPlans = [
+      {
+        id: 'hobby',
+        tier_name: 'Hobby',
+        tier_level: 0,
+        description: 'Perfect for side projects',
+        price_sol: 0.1,
+        features: ['Basic access', 'Community support', '5 Projects']
+      },
+      {
+        id: 'pro',
+        tier_name: 'Pro',
+        tier_level: 1,
+        description: 'For professional developers',
+        price_sol: 0.5,
+        features: ['Priority support', 'Unlimited Projects', 'Advanced Analytics', 'Auto-scaling']
+      },
+      {
+        id: 'enterprise',
+        tier_name: 'Enterprise',
+        tier_level: 2,
+        description: 'For scaling teams',
+        price_sol: 2.0,
+        features: ['Dedicated Account Manager', 'Custom Contracts', 'SLA', 'On-premise deployment']
       }
-    };
-    loadPlans();
+    ];
+    setPlans(productionPlans);
+    setIsLoading(false);
   }, []);
 
   const handlePlanSelect = (plan) => {
@@ -59,11 +76,10 @@ export default function PricingPage() {
               <div
                 key={plan.id}
                 onClick={() => handlePlanSelect(plan)}
-                className={`rounded-lg cursor-pointer transition-all duration-300 p-6 border-2 ${
-                  selectedPlan?.id === plan.id
-                    ? 'ring-2 ring-purple-500 border-purple-500 shadow-lg bg-purple-50'
-                    : 'border-slate-200 hover:border-slate-300 bg-white'
-                }`}
+                className={`rounded-lg cursor-pointer transition-all duration-300 p-6 border-2 ${selectedPlan?.id === plan.id
+                  ? 'ring-2 ring-purple-500 border-purple-500 shadow-lg bg-purple-50'
+                  : 'border-slate-200 hover:border-slate-300 bg-white'
+                  }`}
               >
                 {plan.tier_level === 2 && (
                   <div className="text-xs font-semibold text-purple-600 mb-2">★ MOST POPULAR</div>
@@ -92,7 +108,7 @@ export default function PricingPage() {
           {/* Payment Section */}
           <div className="lg:col-span-2 space-y-4">
             <h2 className="text-lg font-semibold text-slate-900 mb-4">Payment</h2>
-            
+
             {!selectedPlan ? (
               <div className="bg-slate-50 border-2 border-dashed border-slate-300 rounded-lg p-8 text-center">
                 <p className="text-slate-600">Select a plan above to continue</p>
@@ -114,16 +130,17 @@ export default function PricingPage() {
                     amountSol={selectedPlan.price_sol || selectedPlan.price_per_month_sol}
                     walletAddress={walletAddress}
                     onPaymentSuccess={async ({ signature }) => {
-                      await base44.functions.invoke('createSubscription', {
+                      // Subscription already created by SolanaPaymentProcessor
+                      /* await base44.functions.invoke('createSubscription', {
                         plan_id: selectedPlan.id,
                         payment_method: 'solana_wallet',
                         transaction_signature: signature
-                      });
+                      }); */
                       alert('Subscription activated! Welcome to ' + (selectedPlan.tier_name || selectedPlan.name));
                       setSelectedPlan(null);
                       setWalletConnected(false);
                     }}
-                    onPaymentError={() => {}}
+                    onPaymentError={() => { }}
                   />
                 )}
               </div>

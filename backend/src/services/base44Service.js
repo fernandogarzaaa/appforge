@@ -4,7 +4,7 @@
  */
 
 import { createError } from '../utils/helpers.js';
-import logger from '../config/logger.js';
+import { logger } from '../config/logger.js';
 import UserCredits from '../models/UserCredits.js';
 import quantumLLMService from './quantumLLMService.js';
 import multiLLMService from './multiLLMService.js';

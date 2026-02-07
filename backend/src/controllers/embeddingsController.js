@@ -5,7 +5,7 @@
 
 import embeddingsService from '../services/embeddingsService.js';
 import { createError } from '../utils/helpers.js';
-import logger from '../config/logger.js';
+import { logger } from '../config/logger.js';
 
 /**
  * Generate embedding for a single text

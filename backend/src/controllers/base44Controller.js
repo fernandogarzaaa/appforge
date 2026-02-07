@@ -5,7 +5,7 @@
 
 import base44Service from '../services/base44Service.js';
 import { createError } from '../utils/helpers.js';
-import logger from '../config/logger.js';
+import { logger } from '../config/logger.js';
 
 /**
  * Call a Base44 function

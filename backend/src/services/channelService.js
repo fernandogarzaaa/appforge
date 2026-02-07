@@ -3,7 +3,7 @@
  * Handles bot deployment to different channels (WhatsApp, Email, Web, etc.)
  */
 
-import logger from '../config/logger.js';
+import { logger } from '../config/logger.js';
 
 class ChannelService {
   constructor() {
