@@ -23,6 +23,9 @@ export const getSolanaConfig = async (req, res) => {
 };
 
 export const createSubscription = async (req, res, next) => {
+    console.log('DEBUG: Entered createSubscription');
+    console.log('DEBUG: Headers:', req.headers);
+    console.log('DEBUG: Body:', req.body);
     try {
         const { plan_id, payment_method, transaction_signature, amount_paid } = req.body;
         const userId = req.user.id;

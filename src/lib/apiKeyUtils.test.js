@@ -71,10 +71,10 @@ describe('API Key Utilities', () => {
   });
 
   describe('encryptAPIKey and decryptAPIKey', () => {
-    it('should encrypt and decrypt keys', () => {
+    it('should encrypt and decrypt keys', async () => {
       const original = generateAPIKey();
-      const encrypted = encryptAPIKey(original);
-      const decrypted = decryptAPIKey(encrypted);
+      const encrypted = await encryptAPIKey(original);
+      const decrypted = await decryptAPIKey(encrypted);
       expect(decrypted).toBe(original);
     });
 

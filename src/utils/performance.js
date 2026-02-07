@@ -8,8 +8,8 @@ import env from './env';
 class PerformanceMonitor {
   constructor() {
     this.metrics = new Map();
-    this.enabled = env.dev.showPerfMetrics || env.features.analytics;
-    
+    this.enabled = env.app.dev.showPerfMetrics || env.app.features.analytics;
+
     if (this.enabled) {
       this.setupObservers();
     }
@@ -82,7 +82,7 @@ class PerformanceMonitor {
 
     this.metrics.set(`${name}-${Date.now()}`, metric);
 
-    if (env.dev.showPerfMetrics) {
+    if (env.app.dev.showPerfMetrics) {
       console.log(`📊 Performance [${name}]:`, data);
     }
 
@@ -93,17 +93,17 @@ class PerformanceMonitor {
   // Measure component render time
   measureRender(componentName, callback) {
     const startTime = performance.now();
-    
+
     try {
       const result = callback();
-      
+
       if (result instanceof Promise) {
         return result.finally(() => {
           const duration = performance.now() - startTime;
           this.recordMetric('render', { component: componentName, duration });
         });
       }
-      
+
       const duration = performance.now() - startTime;
       this.recordMetric('render', { component: componentName, duration });
       return result;
@@ -138,7 +138,7 @@ class PerformanceMonitor {
   // Get Web Vitals
   getWebVitals() {
     const navigation = performance.getEntriesByType('navigation')[0];
-    
+
     return {
       // First Contentful Paint
       fcp: this.getMetricValue('paint', (m) => m.name === 'first-contentful-paint'),
@@ -191,7 +191,7 @@ class PerformanceMonitor {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(metric),
-      }).catch(() => {});
+      }).catch(() => { });
     }
   }
 
@@ -213,7 +213,7 @@ class PerformanceMonitor {
   calculateAverage(metrics, type, field) {
     const filtered = metrics.filter(m => m.name === type && m.data[field]);
     if (filtered.length === 0) return 0;
-    
+
     const sum = filtered.reduce((acc, m) => acc + m.data[field], 0);
     return sum / filtered.length;
   }

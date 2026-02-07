@@ -7,15 +7,15 @@ import {
 
 describe('Data Security Utilities', () => {
   describe('EncryptionManager', () => {
-    it('encrypts and decrypts data correctly', () => {
-      const key = EncryptionManager.generateKey(16);
+    it('encrypts and decrypts data correctly', async () => {
+      const key = EncryptionManager.generateKey(32);
       const payload = { email: 'user@appforge.io', role: 'admin' };
 
-      const encrypted = EncryptionManager.encrypt(payload, key);
+      const encrypted = await EncryptionManager.encrypt(payload, key);
       expect(encrypted).toBeTruthy();
       expect(encrypted.encryptedValue).toBeDefined();
 
-      const decrypted = EncryptionManager.decrypt(encrypted, key);
+      const decrypted = await EncryptionManager.decrypt(encrypted, key);
       expect(decrypted).toEqual(payload);
     });
 

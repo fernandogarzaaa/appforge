@@ -37,7 +37,7 @@ class EncryptionManager {
    * Encrypt sensitive data
    * @param {any} data - Data to encrypt
    * @param {string} key - Encryption key
-   * @returns {EncryptedData} Encrypted data object
+   * @returns {Promise<EncryptedData>} Encrypted data object
    */
   static async encrypt(data, key) {
     try {
@@ -70,7 +70,7 @@ class EncryptionManager {
    * Decrypt data
    * @param {EncryptedData} encryptedData - Encrypted data object
    * @param {string} key - Decryption key
-   * @returns {any} Decrypted data
+   * @returns {Promise<any>} Decrypted data
    */
   static async decrypt(encryptedData, key) {
     try {
@@ -101,7 +101,6 @@ class EncryptionManager {
    * Hash data using simple algorithm
    * For production, use bcrypt or Argon2
    * @param {string} data - Data to hash
-   * @param {number} rounds - Hash rounds
    * @returns {string} Hash
    */
   static hash(data) {
@@ -187,20 +186,22 @@ const sha256 = (ascii) => {
   const words = [];
   const asciiBitLength = ascii.length * 8;
 
-  const hash = sha256.h || (sha256.h = []);
-  const k = sha256.k || (sha256.k = []);
-  let primeCounter = k.length;
+  // Use local hash variables to avoid mutating global state
+  let hash = [
+    0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a,
+    0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19
+  ];
 
-  const isComposite = {};
-  for (let candidate = 2; primeCounter < 64; candidate++) {
-    if (!isComposite[candidate]) {
-      for (let i = 0; i < 313; i += candidate) {
-        isComposite[i] = candidate;
-      }
-      hash[primeCounter] = (mathPow(candidate, 0.5) * maxWord) | 0;
-      k[primeCounter++] = (mathPow(candidate, 1 / 3) * maxWord) | 0;
-    }
-  }
+  const k = [
+    0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5,
+    0xd807aa98, 0x12835b01, 0x243185be, 0x550c7dc3, 0x72be5d74, 0x80deb1fe, 0x9bdc06a7, 0xc19bf174,
+    0xe49b69c1, 0xefbe4786, 0x0fc19dc6, 0x240ca1cc, 0x2de92c6f, 0x4a7484aa, 0x5cb0a9dc, 0x76f988da,
+    0x983e5152, 0xa831c66d, 0xb00327c8, 0xbf597fc7, 0xc6e00bf3, 0xd5a79147, 0x06ca6351, 0x14292967,
+    0x27b70a85, 0x2e1b2138, 0x4d2c6dfc, 0x53380d13, 0x650a7354, 0x766a0abb, 0x81c2c92e, 0x92722c85,
+    0xa2bfe8a1, 0xa81a664b, 0xc24b8b70, 0xc76c51a3, 0xd192e819, 0xd6990624, 0xf40e3585, 0x106aa070,
+    0x19a4c116, 0x1e376c08, 0x2748774c, 0x34b0bcb5, 0x391c0cb3, 0x4ed8aa4a, 0x5b9cca4f, 0x682e6ff3,
+    0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208, 0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2
+  ];
 
   ascii += '\x80';
   while (ascii.length % 64 - 56) ascii += '\x00';
@@ -230,10 +231,10 @@ const sha256 = (ascii) => {
           i < 16
             ? w[i]
             : (w[i - 16] +
-                (rightRotate(w15, 7) ^ rightRotate(w15, 18) ^ (w15 >>> 3)) +
-                w[i - 7] +
-                (rightRotate(w2, 17) ^ rightRotate(w2, 19) ^ (w2 >>> 10))) |
-              0);
+              (rightRotate(w15, 7) ^ rightRotate(w15, 18) ^ (w15 >>> 3)) +
+              w[i - 7] +
+              (rightRotate(w2, 17) ^ rightRotate(w2, 19) ^ (w2 >>> 10))) |
+            0);
       const temp2 =
         (rightRotate(a, 2) ^ rightRotate(a, 13) ^ rightRotate(a, 22)) +
         ((a & hash[1]) ^ (a & hash[2]) ^ (hash[1] & hash[2]));
@@ -270,7 +271,7 @@ class AnonymizationEngine {
    * @returns {Object} Anonymized data
    */
   static anonymize(data, rules) {
-    const result = { ...data }
+    const result = { ...data };
 
     rules.forEach(rule => {
       if (result.hasOwnProperty(rule.field)) {
@@ -278,11 +279,11 @@ class AnonymizationEngine {
           result[rule.field],
           rule.method,
           rule.options
-        )
+        );
       }
-    })
+    });
 
-    return result
+    return result;
   }
 
   /**
@@ -296,19 +297,19 @@ class AnonymizationEngine {
   static applyAnonymization(value, method, options = {}) {
     switch (method) {
       case 'mask':
-        return this.maskValue(value, options)
+        return this.maskValue(value, options);
       case 'generalize':
-        return this.generalize(value, options)
+        return this.generalize(value, options);
       case 'suppress':
-        return null
+        return null;
       case 'hash':
-        return EncryptionManager.hash(String(value))
+        return EncryptionManager.hash(String(value));
       case 'pseudonymize':
-        return this.pseudonymize(value, options)
+        return this.pseudonymize(value, options);
       case 'aggregate':
-        return this.aggregate(value, options)
+        return this.aggregate(value, options);
       default:
-        return value
+        return value;
     }
   }
 
@@ -319,17 +320,17 @@ class AnonymizationEngine {
    * @returns {string} Masked value
    */
   static maskValue(value, options = {}) {
-    const strValue = String(value)
-    const visibleChars = options.visibleChars || 2
-    const maskChar = options.maskChar || '*'
+    const strValue = String(value);
+    const visibleChars = options.visibleChars || 2;
+    const maskChar = options.maskChar || '*';
 
     if (strValue.length <= visibleChars) {
-      return maskChar.repeat(strValue.length)
+      return maskChar.repeat(strValue.length);
     }
 
-    const visible = strValue.substring(0, visibleChars)
-    const masked = maskChar.repeat(strValue.length - visibleChars)
-    return visible + masked
+    const visible = strValue.substring(0, visibleChars);
+    const masked = maskChar.repeat(strValue.length - visibleChars);
+    return visible + masked;
   }
 
   /**
@@ -340,19 +341,19 @@ class AnonymizationEngine {
    */
   static generalize(value, options = {}) {
     if (options.type === 'age') {
-      const age = parseInt(value)
-      const range = options.range || 10
-      const lower = Math.floor(age / range) * range
-      const upper = lower + range - 1
-      return `${lower}-${upper}`
+      const age = parseInt(value);
+      const range = options.range || 10;
+      const lower = Math.floor(age / range) * range;
+      const upper = lower + range - 1;
+      return `${lower}-${upper}`;
     }
 
     if (options.type === 'date') {
-      const date = new Date(value)
-      return `${date.getFullYear()}-Q${Math.ceil((date.getMonth() + 1) / 3)}`
+      const date = new Date(value);
+      return `${date.getFullYear()}-Q${Math.ceil((date.getMonth() + 1) / 3)}`;
     }
 
-    return value
+    return value;
   }
 
   /**
@@ -362,9 +363,9 @@ class AnonymizationEngine {
    * @returns {string} Pseudonym
    */
   static pseudonymize(value, options = {}) {
-    const prefix = options.prefix || 'USER'
-    const hash = EncryptionManager.hash(String(value))
-    return `${prefix}_${hash.substring(0, 8)}`
+    const prefix = options.prefix || 'USER';
+    const hash = EncryptionManager.hash(String(value));
+    return `${prefix}_${hash.substring(0, 8)}`;
   }
 
   /**
@@ -374,8 +375,8 @@ class AnonymizationEngine {
    * @returns {number} Aggregated value
    */
   static aggregate(value, options = {}) {
-    const bucket = options.bucketSize || 10
-    return Math.floor(value / bucket) * bucket
+    const bucket = options.bucketSize || 10;
+    return Math.floor(value / bucket) * bucket;
   }
 }
 
@@ -385,10 +386,10 @@ class AnonymizationEngine {
 
 class GDPRCompliance {
   constructor() {
-    this.consentRecords = new Map() // userId -> consents
-    this.dataProcessingAgreements = new Map() // vendorId -> DPA
-    this.dataRetentionPolicies = new Map() // dataType -> retention days
-    this.auditLog = []
+    this.consentRecords = new Map(); // userId -> consents
+    this.dataProcessingAgreements = new Map(); // vendorId -> DPA
+    this.dataRetentionPolicies = new Map(); // dataType -> retention days
+    this.auditLog = [];
   }
 
   /**
@@ -406,21 +407,21 @@ class GDPRCompliance {
       granted,
       timestamp: Date.now(),
       version: policyVersion
-    }
+    };
 
     if (!this.consentRecords.has(userId)) {
-      this.consentRecords.set(userId, [])
+      this.consentRecords.set(userId, []);
     }
-    this.consentRecords.get(userId).push(consent)
+    this.consentRecords.get(userId).push(consent);
 
     this.auditLog.push({
       action: 'consent_recorded',
       userId,
       type,
       timestamp: Date.now()
-    })
+    });
 
-    return consent
+    return consent;
   }
 
   /**
@@ -430,9 +431,9 @@ class GDPRCompliance {
    * @returns {boolean} Consent status
    */
   hasConsent(userId, type) {
-    const consents = this.consentRecords.get(userId) || []
-    const latestConsent = consents.filter(c => c.type === type).pop()
-    return latestConsent?.granted || false
+    const consents = this.consentRecords.get(userId) || [];
+    const latestConsent = consents.filter(c => c.type === type).pop();
+    return latestConsent?.granted || false;
   }
 
   /**
@@ -492,7 +493,7 @@ class GDPRCompliance {
         <h2>6. Contact</h2>
         <p>For privacy concerns, contact: privacy@appforge.io</p>
       </div>
-    `
+    `;
   }
 
   /**
@@ -527,7 +528,7 @@ class GDPRCompliance {
           content: 'Controller reserves right to audit vendor compliance'
         }
       ]
-    }
+    };
   }
 
   /**
@@ -536,7 +537,7 @@ class GDPRCompliance {
    * @param {number} retentionDays - Days to retain
    */
   setRetentionPolicy(dataType, retentionDays) {
-    this.dataRetentionPolicies.set(dataType, retentionDays)
+    this.dataRetentionPolicies.set(dataType, retentionDays);
   }
 
   /**
@@ -546,9 +547,9 @@ class GDPRCompliance {
    * @returns {boolean} Whether data should be retained
    */
   shouldRetain(dataType, createdTime) {
-    const retentionDays = this.dataRetentionPolicies.get(dataType) || 365
-    const retentionMs = retentionDays * 24 * 60 * 60 * 1000
-    return Date.now() - createdTime < retentionMs
+    const retentionDays = this.dataRetentionPolicies.get(dataType) || 365;
+    const retentionMs = retentionDays * 24 * 60 * 60 * 1000;
+    return Date.now() - createdTime < retentionMs;
   }
 
   /**
@@ -569,7 +570,7 @@ class GDPRCompliance {
         'Update privacy policy on policy changes',
         'Maintain DPAs with all vendors'
       ]
-    }
+    };
   }
 }
 
@@ -577,13 +578,13 @@ class GDPRCompliance {
 // Exports
 // =======================
 
-export { EncryptionManager, AnonymizationEngine, GDPRCompliance }
+export { EncryptionManager, AnonymizationEngine, GDPRCompliance };
 
-export const gdprCompliance = new GDPRCompliance()
+export const gdprCompliance = new GDPRCompliance();
 
 export default {
   EncryptionManager,
   AnonymizationEngine,
   GDPRCompliance,
   gdprCompliance
-}
+};

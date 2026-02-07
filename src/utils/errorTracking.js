@@ -7,14 +7,14 @@ import env from './env';
 
 class ErrorTracker {
   constructor() {
-    this.enabled = env.features.errorTracking && env.app.isProduction;
+    this.enabled = env.app.features.errorTracking && env.app.env === 'production';
     this.errors = [];
     this.maxErrors = 100;
-    
+
     if (this.enabled) {
       this.initializeSentry();
     }
-    
+
     // Set up global error handlers
     this.setupGlobalHandlers();
   }
@@ -30,7 +30,7 @@ class ErrorTracker {
           Sentry.init({
             dsn: env.services.sentry.dsn,
             environment: env.services.sentry.environment,
-            tracesSampleRate: env.app.isProduction ? 0.1 : 1.0,
+            tracesSampleRate: env.app.env === 'production' ? 0.1 : 1.0,
             integrations: [
               Sentry.browserTracingIntegration?.() || null,
               Sentry.replayIntegration?.({
@@ -41,7 +41,7 @@ class ErrorTracker {
             replaysSessionSampleRate: 0.1,
             replaysOnErrorSampleRate: 1.0,
           });
-          
+
           console.log('✅ Sentry initialized');
         }).catch(() => {
           console.warn('Sentry not installed - Error tracking disabled. Install @sentry/react to enable.');
@@ -90,7 +90,7 @@ class ErrorTracker {
     }
 
     // Log to console in development
-    if (env.app.isDevelopment) {
+    if (env.app.env === 'development') {
       console.error('🔴 Error captured:', errorData);
     }
 
@@ -116,7 +116,7 @@ class ErrorTracker {
       url: window.location.href,
     };
 
-    if (env.app.isDevelopment) {
+    if (env.app.env === 'development') {
       console.log(`📝 Message [${level}]:`, message, context);
     }
 
@@ -131,7 +131,7 @@ class ErrorTracker {
   }
 
   async reportToBackend(errorData) {
-    if (!env.app.isProduction) return;
+    if (env.app.env !== 'production') return;
 
     try {
       // Report to your backend API

@@ -6,6 +6,7 @@ export const hasServiceToken = false; // Never expose service token on client
 
 //Create a client with authentication required
 export const base44 = createClient({
+  appId,
   token,
   functionsVersion,
   serverUrl: '',

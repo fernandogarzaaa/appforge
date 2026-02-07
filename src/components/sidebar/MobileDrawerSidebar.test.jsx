@@ -49,6 +49,7 @@ describe('MobileDrawerSidebar Component', () => {
   const mockAdminUser = {
     email: 'fernandogarzaaa@gmail.com',
     full_name: 'Admin User',
+    role: 'admin',
   };
 
   const defaultProps = {
@@ -209,11 +210,13 @@ describe('MobileDrawerSidebar Component', () => {
     // Now test with admin user
     rerender(
       <RouterProvider router={createMemoryRouter(
-        [{ path: '/', element: (
-          <LLMProvider>
-            <MobileDrawerSidebar {...defaultProps} user={mockAdminUser} />
-          </LLMProvider>
-        ) }],
+        [{
+          path: '/', element: (
+            <LLMProvider>
+              <MobileDrawerSidebar {...defaultProps} user={mockAdminUser} />
+            </LLMProvider>
+          )
+        }],
         {
           initialEntries: ['/'],
           future: {

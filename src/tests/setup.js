@@ -24,12 +24,14 @@ afterEach(() => {
 // Stub fetch/axios transport to return harmless defaults
 // This prevents jsdom tests from throwing on relative URLs
 // and prevents Base44 SDK axios calls from emitting network errors
-global.fetch = vi.fn().mockResolvedValue({
-  ok: true,
-  status: 200,
-  json: async () => ({}),
-  text: async () => '',
-});
+if (process.env.RUN_INTEGRATION_TESTS !== 'true') {
+  global.fetch = vi.fn().mockResolvedValue({
+    ok: true,
+    status: 200,
+    json: async () => ({}),
+    text: async () => '',
+  });
+}
 
 // Mock XMLHttpRequest for legacy code
 class MockXMLHttpRequest {
@@ -46,7 +48,7 @@ class MockXMLHttpRequest {
     this.url = url;
     this.readyState = 1;
   }
-  setRequestHeader() {}
+  setRequestHeader() { }
   send() {
     this.readyState = 4;
     if (typeof this.onreadystatechange === 'function') {
@@ -56,7 +58,7 @@ class MockXMLHttpRequest {
       this.onload();
     }
   }
-  abort() {}
+  abort() { }
 }
 
 global.XMLHttpRequest = MockXMLHttpRequest;
@@ -82,21 +84,21 @@ Object.defineProperty(window, 'matchMedia', {
 
 // Mock IntersectionObserver
 global.IntersectionObserver = class IntersectionObserver {
-  constructor() {}
-  disconnect() {}
-  observe() {}
+  constructor() { }
+  disconnect() { }
+  observe() { }
   takeRecords() {
     return [];
   }
-  unobserve() {}
+  unobserve() { }
 };
 
 // Mock ResizeObserver
 global.ResizeObserver = class ResizeObserver {
-  constructor() {}
-  disconnect() {}
-  observe() {}
-  unobserve() {}
+  constructor() { }
+  disconnect() { }
+  observe() { }
+  unobserve() { }
 };
 
 // Mock scrollTo
