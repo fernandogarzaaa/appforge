@@ -1,12 +1,17 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { AlertCircle, CheckCircle2, Loader2 } from 'lucide-react';
+import { AlertCircle, CheckCircle2, Loader2, CreditCard, ExternalLink } from 'lucide-react';
+import { createTransferInstruction, getAssociatedTokenAddress, TOKEN_PROGRAM_ID } from '@solana/spl-token';
+import { Connection, PublicKey, Transaction } from '@solana/web3.js';
+
+// Mainnet USDC Mint Address
+const USDC_MINT = new PublicKey('EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v');
 
 export default function SolanaPaymentProcessor({
   planId,
   planName,
-  amountSol,
+  amountSol, // This is actually amount USDC now
   walletAddress,
   onPaymentSuccess,
   onPaymentError
@@ -14,6 +19,16 @@ export default function SolanaPaymentProcessor({
   const [processing, setProcessing] = useState(false);
   const [error, setError] = useState('');
   const [txSignature, setTxSignature] = useState('');
+
+  const handleMoonPay = () => {
+    // Open MoonPay for buying USDC on Solana
+    // If user has a wallet address, prefill it
+    const baseUrl = "https://buy.moonpay.com";
+    const currencyCode = "usdc_sol";
+    const wallet = walletAddress || "";
+    const url = `${baseUrl}?currencyCode=${currencyCode}&walletAddress=${wallet}&redirectURL=${encodeURIComponent(window.location.href)}`;
+    window.open(url, '_blank');
+  };
 
   const handlePayment = async () => {
     if (!walletAddress) {
@@ -49,32 +64,37 @@ export default function SolanaPaymentProcessor({
       }
 
       const adminWallet = config.recipient_address;
-      const network = config.network || 'devnet';
-
-      const { Connection, PublicKey, SystemProgram, Transaction } = await import('@solana/web3.js');
-      const rpcUrl = network === 'mainnet-beta'
-        ? 'https://api.mainnet-beta.solana.com'
-        : network === 'testnet'
-          ? 'https://api.testnet.solana.com'
-          : 'https://api.devnet.solana.com';
+      // Force Mainnet for USDC
+      const rpcUrl = 'https://api.mainnet-beta.solana.com';
 
       const connection = new Connection(rpcUrl, 'confirmed');
       const fromPubkey = new PublicKey(walletAddress);
       const toPubkey = new PublicKey(adminWallet);
-      const lamports = Math.round(Number(amountSol) * 1_000_000_000);
 
+      // USDC has 6 decimals
+      const amountUSDC = Math.round(Number(amountSol) * 1_000_000);
+
+      // Get Associated Token Accounts
+      const sourceATA = await getAssociatedTokenAddress(USDC_MINT, fromPubkey);
+      const destinationATA = await getAssociatedTokenAddress(USDC_MINT, toPubkey);
+
+      // Create transaction
       const { blockhash } = await connection.getLatestBlockhash('confirmed');
       const transaction = new Transaction({
         recentBlockhash: blockhash,
         feePayer: fromPubkey
       });
 
+      // Add transfer instruction
       transaction.add(
-        SystemProgram.transfer({
+        createTransferInstruction(
+          sourceATA,
+          destinationATA,
           fromPubkey,
-          toPubkey,
-          lamports
-        })
+          amountUSDC,
+          [],
+          TOKEN_PROGRAM_ID
+        )
       );
 
       const signed = await window.solana.signAndSendTransaction(transaction);
@@ -89,7 +109,7 @@ export default function SolanaPaymentProcessor({
         body: JSON.stringify({
           amount_paid: amountSol,
           transaction_signature: transactionSignature,
-          payment_method: 'solana_wallet',
+          payment_method: 'solana_usdc', // Updated type
           plan_id: planId
         })
       });
@@ -142,13 +162,13 @@ export default function SolanaPaymentProcessor({
         <CardHeader>
           <CardTitle className="text-lg">Payment Summary</CardTitle>
           <CardDescription>
-            Pay with SOL via Phantom
+            Pay with USDC on Solana Mainnet
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="flex justify-between items-center py-3 border-b border-gray-200 dark:border-gray-800">
             <span className="text-sm text-gray-600 dark:text-gray-400">{planName} Plan</span>
-            <span className="font-semibold">{Number(amountSol).toFixed(4)} SOL</span>
+            <span className="font-semibold text-blue-600 dark:text-blue-400">{Number(amountSol).toFixed(2)} USDC</span>
           </div>
 
           {error && (
@@ -158,23 +178,35 @@ export default function SolanaPaymentProcessor({
             </div>
           )}
 
-          <Button
-            onClick={handlePayment}
-            disabled={processing || !walletAddress}
-            className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white h-11 rounded-lg"
-          >
-            {processing ? (
-              <>
-                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                Processing...
-              </>
-            ) : (
-              `Pay ${Number(amountSol).toFixed(4)} SOL`
-            )}
-          </Button>
+          <div className="grid gap-3">
+            <Button
+              onClick={handlePayment}
+              disabled={processing || !walletAddress}
+              className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white h-11 rounded-lg shadow-lg hover:shadow-xl transition-all"
+            >
+              {processing ? (
+                <>
+                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  Processing...
+                </>
+              ) : (
+                `Pay ${Number(amountSol).toFixed(2)} USDC`
+              )}
+            </Button>
 
-          <p className="text-xs text-gray-500 dark:text-gray-400 text-center">
-            Powered by Solana • Payments via Phantom
+            <Button
+              variant="outline"
+              onClick={handleMoonPay}
+              className="w-full border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800"
+            >
+              <CreditCard className="w-4 h-4 mr-2" />
+              Buy USDC with Card (MoonPay)
+              <ExternalLink className="w-3 h-3 ml-2 opacity-50" />
+            </Button>
+          </div>
+
+          <p className="text-xs text-gray-500 dark:text-gray-400 text-center mt-2">
+            Automated via Smart Contract • Secure & Fast
           </p>
         </CardContent>
       </Card>

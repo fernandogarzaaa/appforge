@@ -1,12 +1,14 @@
+
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.6';
 import { Connection, PublicKey } from 'npm:@solana/web3.js';
+import { getAssociatedTokenAddressSync } from 'npm:@solana/spl-token';
 
-const getRpcUrl = (network: string | undefined) => {
+const USDC_MINT = new PublicKey('EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v');
+
+const getRpcUrl = () => {
   const envRpc = Deno.env.get('SOLANA_RPC_URL');
   if (envRpc) return envRpc;
-  if (network === 'mainnet-beta') return 'https://api.mainnet-beta.solana.com';
-  if (network === 'testnet') return 'https://api.testnet.solana.com';
-  return 'https://api.devnet.solana.com';
+  return 'https://api.mainnet-beta.solana.com';
 };
 
 Deno.serve(async (req) => {
@@ -19,92 +21,93 @@ Deno.serve(async (req) => {
     }
 
     const payload = await req.json();
-    const amountSol = Number(payload.amount_sol);
+    const amountUSDC = Number(payload.amount_paid);
     const signature = String(payload.transaction_signature || '');
-    const paymentType = String(payload.payment_type || 'unknown');
-    const referenceId = payload.reference_id || null;
+    const planId = payload.plan_id;
 
-    if (!signature || !Number.isFinite(amountSol) || amountSol <= 0) {
+    if (!signature || !Number.isFinite(amountUSDC) || amountUSDC <= 0) {
       return Response.json({ error: 'Invalid payment payload' }, { status: 400 });
     }
 
     const configs = await base44.asServiceRole.entities.SolanaPaymentConfig.list();
-    let config = configs[0];
-
-    if (!config || !config.wallet_address) {
-      const envWallet = Deno.env.get('SOLANA_ADMIN_WALLET');
-      const envNetwork = Deno.env.get('SOLANA_NETWORK') || 'devnet';
-      if (envWallet) {
-        if (config) {
-          config = await base44.asServiceRole.entities.SolanaPaymentConfig.update(config.id, {
-            wallet_address: envWallet,
-            network: config.network || envNetwork,
-            payment_enabled: config.payment_enabled ?? true
-          });
-        } else {
-          config = await base44.asServiceRole.entities.SolanaPaymentConfig.create({
-            wallet_address: envWallet,
-            network: envNetwork,
-            payment_enabled: true
-          });
-        }
-      }
-    }
+    const config = configs[0];
 
     if (!config?.wallet_address) {
-      return Response.json({ error: 'Solana wallet not configured' }, { status: 400 });
-    }
-    if (config.payment_enabled === false) {
-      return Response.json({ error: 'Solana payments are disabled' }, { status: 400 });
+      return Response.json({ error: 'Admin wallet not configured' }, { status: 400 });
     }
 
-    const adminWallet = String(config.wallet_address);
-    const network = String(config.network || 'devnet');
-    const connection = new Connection(getRpcUrl(network), 'confirmed');
+    const adminWallet = new PublicKey(String(config.wallet_address));
+    const adminATA = getAssociatedTokenAddressSync(USDC_MINT, adminWallet);
+    const adminATAString = adminATA.toString();
+
+    const connection = new Connection(getRpcUrl(), 'confirmed');
 
     const parsed = await connection.getParsedTransaction(signature, {
-      maxSupportedTransactionVersion: 0
+      maxSupportedTransactionVersion: 0,
+      commitment: 'confirmed'
     });
 
     if (!parsed || parsed.meta?.err) {
-      return Response.json({ error: 'Transaction not confirmed' }, { status: 400 });
+      return Response.json({ error: 'Transaction not found or failed' }, { status: 400 });
     }
 
-    let totalLamports = 0;
-    let payer = '';
-    const instructions = parsed.transaction.message.instructions || [];
+    let totalUSDC = 0;
 
-    for (const ix of instructions) {
-      if ('parsed' in ix && ix.parsed?.type === 'transfer') {
+    // Check main instructions and inner instructions for SPL Token transfers
+    const allInstructions = [
+      ...(parsed.transaction.message.instructions || []),
+      ...(parsed.meta?.innerInstructions?.flatMap(i => i.instructions) || [])
+    ];
+
+    for (const ix of allInstructions) {
+      if ('parsed' in ix && (ix.parsed?.type === 'transfer' || ix.parsed?.type === 'transferChecked')) {
         const info = ix.parsed.info;
-        if (info?.destination === adminWallet && info?.lamports) {
-          totalLamports += Number(info.lamports);
-          payer = info.source || payer;
+        // Check if destination matches Admin ATA
+        if (info?.destination === adminATAString) {
+          // If mint is present (transferChecked), verify it
+          if (info.mint && info.mint !== USDC_MINT.toString()) continue;
+
+          // Get amount
+          // transferChecked has tokenAmount object
+          // transfer has amount (string or number)
+          let amount = 0;
+          if (info.tokenAmount) {
+            amount = Number(info.tokenAmount.amount);
+          } else if (info.amount) {
+            amount = Number(info.amount);
+          }
+
+          totalUSDC += amount;
         }
       }
     }
 
-    const expectedLamports = Math.round(amountSol * 1_000_000_000);
-    if (totalLamports < expectedLamports) {
-      return Response.json({ error: 'Transferred amount is insufficient' }, { status: 400 });
+    // Expected amount in raw units (USDC 6 decimals)
+    const expectedRaw = Math.round(amountUSDC * 1_000_000);
+
+    if (totalUSDC < expectedRaw) {
+      return Response.json({
+        error: `Insufficient payment. Received ${totalUSDC / 1e6} USDC, expected ${amountUSDC} USDC`
+      }, { status: 400 });
     }
 
+    // Record Transaction
     await base44.asServiceRole.entities.SolanaTransaction.create({
       user_id: user.email,
       transaction_signature: signature,
-      amount_sol: amountSol,
-      amount_lamports: totalLamports,
-      payment_type: paymentType,
-      reference_id: referenceId,
-      wallet_from: payer || null,
-      wallet_to: adminWallet,
-      network,
+      amount_sol: 0,
+      amount_usdc: amountUSDC,
+      currency: 'USDC',
+      plan_id: planId || null,
+      network: 'mainnet-beta',
       status: 'confirmed',
       created_at: new Date().toISOString()
     });
 
-    return Response.json({ success: true });
+    return Response.json({ success: true, verified_amount: totalUSDC / 1e6 });
+
   } catch (error) {
+    console.error('Payment Error:', error);
     return Response.json({ error: error.message || 'Payment verification failed' }, { status: 500 });
   }
 });

@@ -4,26 +4,17 @@
  */
 
 // Required environment variables
-const REQUIRED_ENV_VARS = ['VITE_BASE44_API_URL'];
+const REQUIRED_ENV_VARS = ['VITE_BASE44_APP_ID'];
 
 // Validate environment configuration
 export function validateEnv() {
   const missing = [];
   const errors = [];
 
-  const hasAccessToken =
-    typeof window !== 'undefined' &&
-    (window.localStorage?.getItem('base44_access_token') ||
-      window.localStorage?.getItem('token'));
-
   // Check required variables
   for (const varName of REQUIRED_ENV_VARS) {
     const value = import.meta.env[varName];
-    if (!value || value === 'your_username_here' || value === 'your_password_here') {
-      // If we have a token-based auth, allow missing username/password
-      if (hasAccessToken && (varName === 'VITE_BASE44_USERNAME' || varName === 'VITE_BASE44_PASSWORD')) {
-        continue;
-      }
+    if (!value) {
       missing.push(varName);
     }
   }
@@ -58,8 +49,7 @@ function isValidUrl(string) {
 export const env = {
   // Base44 Configuration
   base44: {
-    username: import.meta.env.VITE_BASE44_USERNAME || '',
-    password: import.meta.env.VITE_BASE44_PASSWORD || '',
+    appId: import.meta.env.VITE_BASE44_APP_ID || '',
     apiUrl: import.meta.env.VITE_BASE44_API_URL || 'https://appforge.fun',
   },
 
@@ -71,7 +61,7 @@ export const env = {
 
   // Application Settings
   app: {
-    env: import.meta.env.VITE_APP_ENV || 'development',
+    env: import.meta.env.VITE_APP_ENV || 'production',
     name: import.meta.env.VITE_APP_NAME || 'AppForge',
 
     // Feature Flags
@@ -81,7 +71,7 @@ export const env = {
       voiceInput: import.meta.env.VITE_FEATURE_VOICE_INPUT !== 'false',
       codeReview: import.meta.env.VITE_FEATURE_CODE_REVIEW !== 'false',
       mobileBuilder: import.meta.env.VITE_FEATURE_MOBILE_BUILDER !== 'false',
-      web3: import.meta.env.VITE_FEATURE_WEB3 === 'true',
+      web3: true,
       collaboration: import.meta.env.VITE_FEATURE_COLLABORATION !== 'false',
     },
 
@@ -97,11 +87,10 @@ export const env = {
     services: {
       sentry: {
         dsn: import.meta.env.VITE_SENTRY_DSN || '',
-        environment: import.meta.env.VITE_SENTRY_ENVIRONMENT || 'development',
+        environment: import.meta.env.VITE_SENTRY_ENVIRONMENT || 'production',
       },
       github: {
-        clientId: import.meta.env.VITE_GITHUB_CLIENT_ID || '',
-        clientSecret: import.meta.env.VITE_GITHUB_CLIENT_SECRET || '',
+        pat: import.meta.env.VITE_GITHUB_PAT || '',
       },
       stripe: {
         publicKey: import.meta.env.VITE_STRIPE_PUBLIC_KEY || '',
@@ -122,7 +111,7 @@ export const env = {
     // Development
     dev: {
       debug: import.meta.env.VITE_DEBUG === 'true',
-      mockApi: import.meta.env.VITE_MOCK_API === 'true',
+      mockApi: false, // Deployment ready: No mocks
       showPerfMetrics: import.meta.env.VITE_SHOW_PERF_METRICS === 'true',
     },
   },

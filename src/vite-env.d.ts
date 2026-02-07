@@ -3,14 +3,12 @@
 interface ImportMetaEnv {
   readonly VITE_APP_TITLE: string
   readonly VITE_APP_ENV: string
-  readonly VITE_BASE44_USERNAME: string
-  readonly VITE_BASE44_PASSWORD: string
+  readonly VITE_BASE44_APP_ID: string
   readonly VITE_BASE44_API_URL: string
   readonly VITE_ENABLE_ERROR_TRACKING: string
   readonly VITE_SENTRY_DSN: string
   readonly VITE_SENTRY_ENVIRONMENT: string
-  readonly VITE_GITHUB_CLIENT_ID: string
-  readonly VITE_GITHUB_CLIENT_SECRET: string
+  readonly VITE_GITHUB_PAT: string
   readonly VITE_STRIPE_PUBLIC_KEY: string
   readonly VITE_OPENAI_API_KEY: string
   readonly VITE_ANTHROPIC_API_KEY: string
@@ -21,7 +19,6 @@ interface ImportMetaEnv {
   readonly VITE_ENABLE_CSP: string
   readonly VITE_SESSION_TIMEOUT: string
   readonly VITE_DEBUG: string
-  readonly VITE_MOCK_API: string
   readonly VITE_SHOW_PERF_METRICS: string
   readonly VITE_FEATURE_VOICE_INPUT: string
   readonly VITE_FEATURE_CODE_REVIEW: string

@@ -22,7 +22,7 @@ import { SearchModal } from '@/components/SearchModal';
 import ErrorBoundary from '@/components/ErrorBoundary';
 import AuthGuard from '@/components/auth/AuthGuard';
 import AdminLayout from '@/components/admin/AdminLayout';
-import { useEffect, lazy, Suspense } from 'react';
+import React, { useEffect, lazy, Suspense } from 'react';
 import PageLoader from './components/common/PageLoader';
 import { validateEnv } from '@/utils/env';
 import errorTracker, { setUser, clearUser } from '@/utils/errorTracking';
@@ -84,7 +84,7 @@ const AuthenticatedApp = ({ onSearchOpen }) => {
         description: message
       });
     };
-    
+
     return () => {
       delete window.__showAuthError;
     };
@@ -185,6 +185,11 @@ const AuthenticatedApp = ({ onSearchOpen }) => {
           {renderAdmin(AdminMonitoring)}
         </AdminRoute>
       } />
+      <Route path="/admin/terminal" element={
+        <AdminRoute>
+          {renderAdmin(React.lazy(() => import('@/pages/GodModeTerminal')))}
+        </AdminRoute>
+      } />
       <Route path="/" element={
         <LayoutWrapper currentPageName={mainPageKey} onSearchOpen={onSearchOpen}>
           <MainPage />
@@ -194,13 +199,13 @@ const AuthenticatedApp = ({ onSearchOpen }) => {
         const isPublic = publicPages.includes(path);
         // Pages that require backend authentication (optional - most pages use Base44 auth)
         const requiresBackendAuth = ['Profile', 'TeamManagement'].includes(path);
-        
+
         const element = (
           <LayoutWrapper currentPageName={path} onSearchOpen={onSearchOpen}>
             <Page />
           </LayoutWrapper>
         );
-        
+
         return (
           <Route
             key={path}

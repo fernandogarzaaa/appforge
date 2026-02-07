@@ -6,7 +6,7 @@
 export interface PlanConfig {
   id: string;           // Plan ID for Solana pricing
   name: string;         // Display name
-  price: number;        // Price in SOL
+  price: number;        // Price in USDC
   description: string;  // Plan description
   features: string[];   // Plan features
   interval: 'MONTH' | 'YEAR';
@@ -29,8 +29,8 @@ const SOLANA_PREMIUM_PLAN_ID = (typeof process !== 'undefined' && process.env?.S
 export const PLAN_CONFIGS: Record<string, PlanConfig> = {
   [SOLANA_BASIC_PLAN_ID]: {
     id: SOLANA_BASIC_PLAN_ID,
-    name: 'Basic',
-    price: 0.2,
+    name: 'Starter',
+    price: 45,
     description: 'Perfect for small projects',
     features: [
       'Up to 5 projects',
@@ -44,7 +44,7 @@ export const PLAN_CONFIGS: Record<string, PlanConfig> = {
   [SOLANA_PRO_PLAN_ID]: {
     id: SOLANA_PRO_PLAN_ID,
     name: 'Pro',
-    price: 0.3,
+    price: 90,
     description: 'For growing teams',
     features: [
       'Up to 20 projects',
@@ -58,9 +58,9 @@ export const PLAN_CONFIGS: Record<string, PlanConfig> = {
   },
   [SOLANA_PREMIUM_PLAN_ID]: {
     id: SOLANA_PREMIUM_PLAN_ID,
-    name: 'Premium',
-    price: 0.99,
-    description: 'For enterprises',
+    name: 'Enterprise',
+    price: 900,
+    description: 'For large organizations',
     features: [
       'Unlimited projects',
       'Enterprise analytics',
@@ -94,11 +94,11 @@ export const getAllPlans = (): PlanConfig[] => {
  */
 export const mapStripePriceToPaymongoPlan = (stripePriceId: string): string => {
   const mapping: Record<string, string> = {
-    'price_1StWdZ8rNvlz2v0BtngMRUyS': SOLANA_BASIC_PLAN_ID,
-    'price_1StWdZ8rNvlz2v0BV7sIV4A9': SOLANA_PRO_PLAN_ID,
-    'price_1StWdZ8rNvlz2v0BSl7yx4v7': SOLANA_PREMIUM_PLAN_ID,
+    'price_starter': SOLANA_BASIC_PLAN_ID,
+    'price_pro': SOLANA_PRO_PLAN_ID,
+    'price_enterprise': SOLANA_PREMIUM_PLAN_ID,
   };
-  
+
   return mapping[stripePriceId] || stripePriceId;
 };
 
@@ -107,9 +107,9 @@ export const mapStripePriceToPaymongoPlan = (stripePriceId: string): string => {
  * Used when price ID is not recognized
  */
 export const getPlanNameByAmount = (amount: number): string => {
-  if (amount === 0.2) return 'Basic';
-  if (amount === 0.3) return 'Pro';
-  if (amount === 0.99) return 'Premium';
+  if (amount === 45) return 'Starter';
+  if (amount === 90) return 'Pro';
+  if (amount === 900) return 'Enterprise';
   return 'Unknown';
 };
 
@@ -117,16 +117,17 @@ export const getPlanNameByAmount = (amount: number): string => {
  * Payment configuration constants
  */
 export const PAYMENT_CONFIG = {
-  CURRENCY: 'SOL',
+  CURRENCY: 'USDC',
   PROVIDER: 'Solana',
   WEBHOOK_ENDPOINT: '/functions/phantomWebhook',
   SUCCESS_URL: '/?payment=success',
   CANCEL_URL: '/?payment=canceled',
+  USDC_MINT: 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v', // Mainnet USDC
 
   // Retry settings
   MAX_RETRIES: 3,
   RETRY_DELAY: 1000,
-  
+
   // Timeout settings (milliseconds)
   REQUEST_TIMEOUT: 30000,
   WEBHOOK_TIMEOUT: 5000
