@@ -5,7 +5,6 @@
 
 import { createError } from '../utils/helpers.js';
 import logger from '../config/logger.js';
-import { getCachedData, setCachedData } from '../utils/caching.js';
 import UserCredits from '../models/UserCredits.js';
 import quantumLLMService from './quantumLLMService.js';
 import multiLLMService from './multiLLMService.js';
@@ -50,12 +49,8 @@ class Base44Service {
     }
 
     // Check cache
-    const cachedToken = await getCachedData('base44:auth:token');
-    if (cachedToken) {
-      this.token = cachedToken.token;
-      this.tokenExpiry = cachedToken.expiry;
-      return this.token;
-    }
+    // Removed insecure Redis caching for auth tokens
+    // Rely on in-memory this.token instead
 
     if (!this.username || !this.password) {
       throw createError(500, 'Base44 credentials not configured');
@@ -82,14 +77,11 @@ class Base44Service {
 
       const data = await response.json();
       this.token = data.token;
-      // Tokens typically expire in 24 hours, cache for 23 hours
+      // Tokens typically expire in 24 hours
       this.tokenExpiry = Date.now() + (23 * 60 * 60 * 1000);
 
       // Cache token
-      await setCachedData('base44:auth:token', {
-        token: this.token,
-        expiry: this.tokenExpiry,
-      }, 82800); // 23 hours
+      // Removed insecure Redis caching
 
       logger.info('[Base44Service] Authentication successful');
       return this.token;

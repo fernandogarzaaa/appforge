@@ -6,14 +6,14 @@
 import { encryptString, decryptString } from './cryptoUtils';
 
 // Encrypt API key with AES-256-GCM and versioned prefix
-export function encryptAPIKey(key, secretOverride) {
+export async function encryptAPIKey(key, secretOverride) {
   if (!key) return '';
-  return encryptString(key, secretOverride);
+  return await encryptString(key, secretOverride);
 }
 
-export function decryptAPIKey(encrypted, secretOverride) {
+export async function decryptAPIKey(encrypted, secretOverride) {
   if (!encrypted || typeof encrypted !== 'string') return '';
-  return decryptString(encrypted, secretOverride);
+  return await decryptString(encrypted, secretOverride);
 }
 
 // Mask API key - show only last 8 characters
@@ -69,11 +69,11 @@ export function isKeyExpiringSoon(createdDate) {
 }
 
 // Encrypt a value (for environment variables)
-export function encryptValue(value, secretOverride) {
-  return encryptString(value, secretOverride);
+export async function encryptValue(value, secretOverride) {
+  return await encryptString(value, secretOverride);
 }
 
 // Decrypt a value (for environment variables)
-export function decryptValue(encryptedValue, secretOverride) {
-  return decryptString(encryptedValue, secretOverride);
+export async function decryptValue(encryptedValue, secretOverride) {
+  return await decryptString(encryptedValue, secretOverride);
 }

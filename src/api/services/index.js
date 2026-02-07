@@ -20,7 +20,9 @@ export { default as projectsService } from './projects';
 export { default as appforgeClient, getAuthToken, setAuthToken, clearAuthToken } from '../appforgeClient';
 
 // Local bindings for initialization logic
-import { getAuthToken } from '../appforgeClient';
+import appforgeClient, { getAuthToken } from '../appforgeClient';
+
+import env from '@/utils/env';
 
 /**
  * Initialize API services
@@ -28,14 +30,14 @@ import { getAuthToken } from '../appforgeClient';
  */
 export function initializeAPI(config = {}) {
   const {
-    apiUrl = import.meta.env.VITE_API_URL,
-    wsUrl = import.meta.env.VITE_WS_URL,
+    apiUrl = env.backend.apiUrl,
+    wsUrl = env.backend.wsUrl,
     autoConnect = false
   } = config;
 
   console.log('[API] Initializing services...', {
-    apiUrl: apiUrl || 'http://localhost:5000/api',
-    wsUrl: wsUrl || 'http://localhost:5001',
+    apiUrl,
+    wsUrl,
     autoConnect
   });
 
@@ -63,7 +65,7 @@ export { default as websocketService } from './websocketService';
 export async function checkAPIHealth() {
   try {
     const response = await appforgeClient.get('/health');
-    
+
     return {
       healthy: true,
       status: response.data.status,

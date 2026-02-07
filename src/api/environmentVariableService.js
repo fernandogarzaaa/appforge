@@ -16,11 +16,14 @@ export const environmentVariableService = {
         environment: environment
       });
 
-      return vars.map(v => ({
+      // Process variables sequentially to allow async decryption
+      const processedVars = await Promise.all(vars.map(async v => ({
         ...v,
         // Decrypt if needed
-        value: v.type === 'secret' ? decryptValue(v.value) : v.value
-      }));
+        value: v.type === 'secret' ? await decryptValue(v.value) : v.value
+      })));
+
+      return processedVars;
     } catch (error) {
       console.error('Error fetching environment variables:', error);
       return [];
@@ -32,7 +35,7 @@ export const environmentVariableService = {
    */
   async createEnvironmentVariable(base44Client, projectId, data) {
     try {
-      const value = data.type === 'secret' ? encryptValue(data.value) : data.value;
+      const value = data.type === 'secret' ? await encryptValue(data.value) : data.value;
 
       const newVar = await base44Client.entities.EnvironmentVariable.create({
         project_id: projectId,
@@ -58,7 +61,7 @@ export const environmentVariableService = {
    */
   async updateEnvironmentVariable(base44Client, varId, data) {
     try {
-      const value = data.type === 'secret' ? encryptValue(data.value) : data.value;
+      const value = data.type === 'secret' ? await encryptValue(data.value) : data.value;
 
       await base44Client.entities.EnvironmentVariable.update(varId, {
         name: data.name,
@@ -95,7 +98,7 @@ export const environmentVariableService = {
   async exportEnvironmentVariables(base44Client, projectId, environment) {
     try {
       const vars = await this.getEnvironmentVariables(base44Client, projectId, environment);
-      
+
       return vars
         .map(v => {
           const value = v.value.includes('\n') || v.value.includes('"')

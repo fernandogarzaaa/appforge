@@ -66,67 +66,65 @@ export const env = {
   // Backend API
   backend: {
     apiUrl: import.meta.env.VITE_API_URL || 'http://localhost:5000/api',
+    wsUrl: import.meta.env.VITE_WS_URL || 'http://localhost:5001',
   },
 
   // Application Settings
   app: {
     env: import.meta.env.VITE_APP_ENV || 'development',
     name: import.meta.env.VITE_APP_NAME || 'AppForge',
-    url: import.meta.env.VITE_APP_URL || 'http://localhost:5173',
-    isDevelopment: import.meta.env.DEV,
-    isProduction: import.meta.env.PROD,
-  },
 
-  // Feature Flags
-  features: {
-    analytics: import.meta.env.VITE_ENABLE_ANALYTICS === 'true',
-    errorTracking: import.meta.env.VITE_ENABLE_ERROR_TRACKING === 'true',
-    voiceInput: import.meta.env.VITE_FEATURE_VOICE_INPUT !== 'false',
-    codeReview: import.meta.env.VITE_FEATURE_CODE_REVIEW !== 'false',
-    mobileBuilder: import.meta.env.VITE_FEATURE_MOBILE_BUILDER !== 'false',
-    web3: import.meta.env.VITE_FEATURE_WEB3 === 'true',
-    collaboration: import.meta.env.VITE_FEATURE_COLLABORATION !== 'false',
-  },
-
-  // AI Model API Keys
-  ai: {
-    openai: import.meta.env.VITE_OPENAI_API_KEY || '',
-    anthropic: import.meta.env.VITE_ANTHROPIC_API_KEY || '',
-    google: import.meta.env.VITE_GOOGLE_API_KEY || '',
-    xai: import.meta.env.VITE_XAI_API_KEY || '',
-  },
-
-  // External Services
-  services: {
-    sentry: {
-      dsn: import.meta.env.VITE_SENTRY_DSN || '',
-      environment: import.meta.env.VITE_SENTRY_ENVIRONMENT || 'development',
+    // Feature Flags
+    features: {
+      analytics: import.meta.env.VITE_ENABLE_ANALYTICS === 'true',
+      errorTracking: import.meta.env.VITE_ENABLE_ERROR_TRACKING === 'true',
+      voiceInput: import.meta.env.VITE_FEATURE_VOICE_INPUT !== 'false',
+      codeReview: import.meta.env.VITE_FEATURE_CODE_REVIEW !== 'false',
+      mobileBuilder: import.meta.env.VITE_FEATURE_MOBILE_BUILDER !== 'false',
+      web3: import.meta.env.VITE_FEATURE_WEB3 === 'true',
+      collaboration: import.meta.env.VITE_FEATURE_COLLABORATION !== 'false',
     },
-    github: {
-      clientId: import.meta.env.VITE_GITHUB_CLIENT_ID || '',
-      clientSecret: import.meta.env.VITE_GITHUB_CLIENT_SECRET || '',
+
+    // AI Model API Keys
+    ai: {
+      openai: import.meta.env.VITE_OPENAI_API_KEY || '',
+      anthropic: import.meta.env.VITE_ANTHROPIC_API_KEY || '',
+      google: import.meta.env.VITE_GOOGLE_API_KEY || '',
+      xai: import.meta.env.VITE_XAI_API_KEY || '',
     },
-    stripe: {
-      publicKey: import.meta.env.VITE_STRIPE_PUBLIC_KEY || '',
+
+    // External Services
+    services: {
+      sentry: {
+        dsn: import.meta.env.VITE_SENTRY_DSN || '',
+        environment: import.meta.env.VITE_SENTRY_ENVIRONMENT || 'development',
+      },
+      github: {
+        clientId: import.meta.env.VITE_GITHUB_CLIENT_ID || '',
+        clientSecret: import.meta.env.VITE_GITHUB_CLIENT_SECRET || '',
+      },
+      stripe: {
+        publicKey: import.meta.env.VITE_STRIPE_PUBLIC_KEY || '',
+      },
     },
-  },
 
-  // Performance & Security
-  performance: {
-    cacheTtl: parseInt(import.meta.env.VITE_CACHE_TTL || '300', 10),
-    enableServiceWorker: import.meta.env.VITE_ENABLE_SERVICE_WORKER === 'true',
-  },
+    // Performance & Security
+    performance: {
+      cacheTtl: parseInt(import.meta.env.VITE_CACHE_TTL || '300', 10),
+      enableServiceWorker: import.meta.env.VITE_ENABLE_SERVICE_WORKER === 'true',
+    },
 
-  security: {
-    enableCsp: import.meta.env.VITE_ENABLE_CSP !== 'false',
-    sessionTimeout: parseInt(import.meta.env.VITE_SESSION_TIMEOUT || '60', 10),
-  },
+    security: {
+      enableCsp: import.meta.env.VITE_ENABLE_CSP !== 'false',
+      sessionTimeout: parseInt(import.meta.env.VITE_SESSION_TIMEOUT || '60', 10),
+    },
 
-  // Development
-  dev: {
-    debug: import.meta.env.VITE_DEBUG === 'true',
-    mockApi: import.meta.env.VITE_MOCK_API === 'true',
-    showPerfMetrics: import.meta.env.VITE_SHOW_PERF_METRICS === 'true',
+    // Development
+    dev: {
+      debug: import.meta.env.VITE_DEBUG === 'true',
+      mockApi: import.meta.env.VITE_MOCK_API === 'true',
+      showPerfMetrics: import.meta.env.VITE_SHOW_PERF_METRICS === 'true',
+    },
   },
 };
 

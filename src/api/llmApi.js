@@ -3,6 +3,8 @@
  * Handles all LLM API calls through the backend
  */
 
+import { getAuthToken } from './appforgeClient';
+
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
 /**
@@ -21,7 +23,7 @@ export async function callLLM(prompt, options = {}) {
   } = options;
 
   try {
-    const token = localStorage.getItem('token');
+    const token = getAuthToken();
 
     const response = await fetch(`${API_BASE_URL}/api/base44/llm`, {
       method: 'POST',
@@ -78,7 +80,7 @@ export async function streamLLM(prompt, onChunk, options = {}) {
   } = options;
 
   try {
-    const token = localStorage.getItem('token');
+    const token = getAuthToken();
 
     const response = await fetch(`${API_BASE_URL}/api/base44/llm/stream`, {
       method: 'POST',

@@ -2,11 +2,16 @@
  * Configuration utilities
  */
 
-export const getJWTConfig = () => ({
-  secret: process.env.JWT_SECRET || 'dev-secret-key',
-  expiresIn: process.env.JWT_EXPIRES_IN || '24h',
-  algorithm: 'HS256'
-});
+export const getJWTConfig = () => {
+  if (process.env.NODE_ENV === 'production' && !process.env.JWT_SECRET) {
+    throw new Error('JWT_SECRET is required in production');
+  }
+  return {
+    secret: process.env.JWT_SECRET || 'dev-secret-key',
+    expiresIn: process.env.JWT_EXPIRES_IN || '24h',
+    algorithm: 'HS256'
+  };
+};
 
 export const getDatabaseConfig = () => ({
   url: process.env.MONGODB_URI || 'mongodb://localhost:27017/appforge',

@@ -1,0 +1,18 @@
+
+> base44-app@0.0.0 lint
+> eslint . --quiet
+
+
+C:\Users\ferna\Downloads\appforge-main\src\components\layout\SidebarNew.jsx
+  34:3   error  'DialogTitle' is defined but never used  unused-imports/no-unused-imports
+  36:10  error  'Button' is defined but never used       unused-imports/no-unused-imports
+
+C:\Users\ferna\Downloads\appforge-main\src\pages\LandingNew.jsx
+  12:30  error  'Mail' is defined but never used  unused-imports/no-unused-imports
+
+C:\Users\ferna\Downloads\appforge-main\src\tests\mocks\ui-components.js
+  14:5  error  Parsing error: Unexpected token <
+
+Γ£û 4 problems (4 errors, 0 warnings)
+  3 errors and 0 warnings potentially fixable with the `--fix` option.
+

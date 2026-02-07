@@ -14,7 +14,7 @@ export const apiKeyService = {
       const keys = await base44Client.entities.APIKey.filter({
         project_id: projectId
       });
-      
+
       // Decrypt values
       return keys.map(k => ({
         ...k,
@@ -32,8 +32,8 @@ export const apiKeyService = {
    */
   async createAPIKey(base44Client, projectId, data) {
     try {
-      const encrypted = encryptValue(data.key_value);
-      
+      const encrypted = await encryptValue(data.key_value);
+
       const newKey = await base44Client.entities.APIKey.create({
         project_id: projectId,
         name: data.name,

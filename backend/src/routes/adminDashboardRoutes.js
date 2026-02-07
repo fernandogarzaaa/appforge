@@ -34,7 +34,8 @@ import {
   getSystemLogs,
   getRecentErrors,
   getHealthCheck,
-  getActiveSessions
+  getActiveSessions,
+  getDashboardStats
 } from '../controllers/adminMonitoringController.js';
 import {
   getAllConfig,
@@ -83,6 +84,7 @@ router.get('/users/:id/activity', readLimiter, getUserActivity);
 // =====================
 // Monitoring
 // =====================
+router.get('/monitoring/stats', readLimiter, getDashboardStats);
 router.get('/monitoring/metrics', readLimiter, getRealTimeMetrics);
 router.get('/monitoring/logs', readLimiter, getSystemLogs);
 router.get('/monitoring/errors', readLimiter, getRecentErrors);

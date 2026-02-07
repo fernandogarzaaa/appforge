@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { base44, hasServiceToken } from '@/api/base44Client';
+import { base44 } from '@/api/base44Client';
+import appforgeClient from '@/api/appforgeClient';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -24,12 +25,13 @@ export default function AdminUserManagement() {
       const userData = await base44.auth.me();
       setUser(userData);
 
-      if (userData?.role === 'admin' && hasServiceToken) {
-        const allUsers = await base44.asServiceRole.entities.User.list('-created_date');
-        setUsers(allUsers);
+      if (userData?.role === 'admin') {
+        const response = await appforgeClient.get('/api/admin/users');
+        setUsers(response.data.data.users || []);
       }
     } catch (error) {
       console.error('Failed to load:', error);
+      toast.error('Failed to load user list');
     } finally {
       setLoading(false);
     }
@@ -42,6 +44,8 @@ export default function AdminUserManagement() {
     }
 
     try {
+      // Assuming base44.users.inviteUser works with admin user token
+      // If not, we might need a backend proxy for this as well.
       await base44.users.inviteUser(inviteEmail, inviteRole);
       toast.success(`Invitation sent to ${inviteEmail}`);
       setInviteEmail('');
@@ -50,9 +54,10 @@ export default function AdminUserManagement() {
     }
   };
 
-  const filteredUsers = users.filter(u => 
+  const filteredUsers = users.filter(u =>
     u.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    u.full_name?.toLowerCase().includes(searchTerm.toLowerCase())
+    u.full_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    u.username?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   if (loading) return <div className="p-6 text-center">Loading...</div>;
@@ -75,14 +80,6 @@ export default function AdminUserManagement() {
           <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">User Management</h1>
           <p className="text-gray-600 dark:text-gray-400 mt-1">Manage users and permissions</p>
         </div>
-
-        {!hasServiceToken && (
-          <Card className="border-amber-200 bg-amber-50">
-            <CardContent className="p-4 text-amber-900 text-sm">
-              Service token missing. Admin user list and invites require `VITE_BASE44_SERVICE_TOKEN`.
-            </CardContent>
-          </Card>
-        )}
 
         {/* Stats */}
         <div className="grid grid-cols-3 gap-4">
@@ -161,13 +158,13 @@ export default function AdminUserManagement() {
           <CardContent>
             <div className="space-y-2">
               {filteredUsers.map(u => (
-                <div key={u.id} className="p-4 bg-gray-50 rounded-lg border flex items-center justify-between">
+                <div key={u._id || u.id} className="p-4 bg-gray-50 rounded-lg border flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-semibold">
-                      {u.full_name?.charAt(0) || u.email?.charAt(0)}
+                      {(u.full_name || u.firstName || u.username || u.email || '?').charAt(0).toUpperCase()}
                     </div>
                     <div>
-                      <div className="font-semibold">{u.full_name || 'Unnamed'}</div>
+                      <div className="font-semibold">{u.full_name || `${u.firstName || ''} ${u.lastName || ''}`.trim() || u.username || 'Unnamed'}</div>
                       <div className="text-sm text-gray-600">{u.email}</div>
                     </div>
                   </div>
@@ -180,7 +177,7 @@ export default function AdminUserManagement() {
                       )}
                     </Badge>
                     <div className="text-xs text-gray-500">
-                      Joined {new Date(u.created_date).toLocaleDateString()}
+                      Joined {u.created_date ? new Date(u.created_date).toLocaleDateString() : (u.createdAt ? new Date(u.createdAt).toLocaleDateString() : 'N/A')}
                     </div>
                   </div>
                 </div>

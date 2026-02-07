@@ -140,7 +140,7 @@ export const parseEnvFileContent = (content) => {
     if (line && !line.startsWith('#')) {
       const [name, ...valueParts] = line.split('=');
       const value = valueParts.join('=').replace(/^["']|["']$/g, '');
-      
+
       const validation = validateVariableName(name.trim());
       if (validation.isValid) {
         variables.push({
@@ -149,7 +149,6 @@ export const parseEnvFileContent = (content) => {
           value: value.trim(),
           type: ENV_VAR_TYPES.STRING,
           description: '',
-          environment: ENVIRONMENT_NAMES.DEVELOPMENT
         });
       }
     }
@@ -164,8 +163,8 @@ export const parseEnvFileContent = (content) => {
  * @param {string} [secretOverride] - Optional secret override
  * @returns {string} Encrypted value
  */
-export const encryptValue = (value, secretOverride) => {
-  return encryptString(value, secretOverride);
+export const encryptValue = async (value, secretOverride) => {
+  return await encryptString(value, secretOverride);
 };
 
 /**
@@ -174,13 +173,6 @@ export const encryptValue = (value, secretOverride) => {
  * @param {string} [secretOverride] - Optional secret override
  * @returns {string} Decrypted value
  */
-export const decryptValue = (encrypted, secretOverride) => {
-  return decryptString(encrypted, secretOverride);
+export const decryptValue = async (encrypted, secretOverride) => {
+  return await decryptString(encrypted, secretOverride);
 };
-
-/**
- * Create mock environment variable
- * @param {object} overrides - Override values
- * @returns {object} Mock environment variable
- */
-// Mock environment variable helpers removed for production readiness

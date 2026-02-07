@@ -6,7 +6,7 @@
 
 import multiLLMService from './multiLLMService.js';
 import { createError } from '../utils/helpers.js';
-import logger from '../config/logger.js';
+import { logger } from '../config/logger.js';
 
 class QuantumLLMService {
   constructor() {
@@ -271,7 +271,16 @@ class QuantumLLMService {
     const validEmbeddings = embeddings.filter(e => e !== null);
 
     if (validEmbeddings.length === 0) {
-      throw new Error('Failed to generate embeddings for consensus');
+      logger.warn('[QuantumLLM] No embeddings available - skipping holographic consensus');
+      // Return low-confidence consensus to trigger weighted vote fallback
+      return {
+        text: responses[0].text,
+        coherence: 0,
+        entropy: 1.0,
+        confidence: 0,
+        numModels: responses.length,
+        skipped: true
+      };
     }
 
     // Calculate pairwise coherence (cosine similarity)
@@ -286,11 +295,15 @@ class QuantumLLMService {
     // Calculate overall confidence
     const confidence = this.calculateConfidence(coherence, entropy, responses.length);
 
+    const centroid = this.calculateCentroid(validEmbeddings);
+    const qfi = this.calculateQuantumFisherInformation(validEmbeddings, centroid);
+
     return {
       text: consensusText,
       coherence,
       entropy,
       confidence,
+      qfi,
       numModels: responses.length,
     };
   }
@@ -394,6 +407,30 @@ class QuantumLLMService {
       consensus.entropy <= this.config.entropyThreshold &&
       consensus.confidence >= this.config.confidenceThreshold
     );
+  }
+
+  /**
+   * Calculate Quantum Fisher Information
+   * Metaphorical QFI for LLM Consensus Stability
+   * QFI = Variance of the consensus gradient
+   */
+  calculateQuantumFisherInformation(embeddings, consensusEmbedding) {
+    if (!embeddings || embeddings.length === 0) return 0;
+
+    // Calculate variance from centroid (consensus)
+    // High variance = low "classic" info, but high QFI implies high sensitivity to parameter change
+    // In this context, we define QFI as the sharpness of the consensus valley.
+    // QFI ~ 1 / Variance (simplified metaphorical mapping)
+
+    let totalDistanceSquared = 0;
+    for (const emb of embeddings) {
+      const dist = 1 - this.cosineSimilarity(emb, consensusEmbedding);
+      totalDistanceSquared += dist * dist;
+    }
+
+    const variance = totalDistanceSquared / embeddings.length;
+    // Avoid division by zero, max QFI 100
+    return Math.min(100, 1 / (variance + 0.01));
   }
 
   /**

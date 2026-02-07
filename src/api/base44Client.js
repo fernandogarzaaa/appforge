@@ -2,18 +2,15 @@ import { createClient } from '@base44/sdk';
 import { appParams } from '@/lib/app-params';
 
 const { appId, token, functionsVersion, appBaseUrl } = appParams;
-const serviceToken = import.meta.env.VITE_BASE44_SERVICE_TOKEN;
-export const hasServiceToken = Boolean(serviceToken);
+export const hasServiceToken = false; // Never expose service token on client
 
 //Create a client with authentication required
 export const base44 = createClient({
-  appId,
   token,
   functionsVersion,
   serverUrl: '',
   requiresAuth: false,
-  appBaseUrl,
-  ...(serviceToken ? { serviceToken } : {})
+  appBaseUrl
 });
 
 // In test environments, silence outbound analytics calls to avoid jsdom network errors
@@ -24,6 +21,6 @@ if (typeof process !== 'undefined' && process.env?.NODE_ENV === 'test') {
     base44.analytics.flush = noop;
   }
   if (base44.log) {
-    base44.log = () => {};
+    base44.log = () => { };
   }
 }

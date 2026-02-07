@@ -1,15 +1,10 @@
-/**
- * AppForge Landing Page - Minimalist Redesign
- * Clean, modern, and user-friendly
- */
-
 import React, { useState } from 'react';
-import { base44 } from '@/api/base44Client';
+import { useAuth } from '@/lib/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import {
   Sparkles, Code, Zap, Globe2, ArrowRight, Check,
-  Github, Twitter, Linkedin, Mail, Menu, X
+  Github, Twitter, Linkedin, Menu, X
 } from 'lucide-react';
 import { createPageUrl } from '@/utils';
 import { Link, useNavigate } from 'react-router-dom';
@@ -32,13 +27,13 @@ const staggerChildren = {
 export default function LandingNew() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
+  const { isAuthenticated, navigateToLogin } = useAuth();
 
-  const handleGetStarted = async () => {
-    const isAuth = await base44.auth.isAuthenticated();
-    if (isAuth) {
+  const handleGetStarted = () => {
+    if (isAuthenticated) {
       navigate(createPageUrl('Dashboard'));
     } else {
-      base44.auth.redirectToLogin(createPageUrl('Dashboard'));
+      navigateToLogin();
     }
   };
 

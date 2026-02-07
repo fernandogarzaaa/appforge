@@ -31,9 +31,7 @@ import { Input } from '@/components/ui/input';
 import {
   Dialog,
   DialogContent,
-  DialogTitle,
-} from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
+} from "@/components/ui/dialog";
 
 export default function SidebarNew({ currentProject, collapsed, onToggle, user }) {
   const [expandedGroups, setExpandedGroups] = useState(['core']);
@@ -146,9 +144,9 @@ export default function SidebarNew({ currentProject, collapsed, onToggle, user }
 
   const filteredFeatures = searchQuery
     ? allFeatures.filter(feature =>
-        feature.label.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        feature.category.toLowerCase().includes(searchQuery.toLowerCase())
-      )
+      feature.label.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      feature.category.toLowerCase().includes(searchQuery.toLowerCase())
+    )
     : allFeatures;
 
   const handleFeatureClick = (href) => {

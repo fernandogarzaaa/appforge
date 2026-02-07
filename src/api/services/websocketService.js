@@ -5,8 +5,9 @@
 
 import { io } from 'socket.io-client';
 import { getAuthToken } from '../appforgeClient';
+import env from '@/utils/env';
 
-const WS_URL = import.meta.env.VITE_WS_URL || 'http://localhost:5001';
+const WS_URL = env.backend.wsUrl;
 
 class WebSocketService {
   constructor() {
@@ -24,7 +25,7 @@ class WebSocketService {
     }
 
     const token = getAuthToken();
-    
+
     this.socket = io(WS_URL, {
       auth: {
         token

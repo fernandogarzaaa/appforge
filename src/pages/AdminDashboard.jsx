@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { base44, hasServiceToken } from '@/api/base44Client';
+import { base44 } from '@/api/base44Client';
+import appforgeClient from '@/api/appforgeClient';
+import { toast } from 'sonner';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import {
-  Users, Activity, Rocket, Brain, Code, Shield, Layout, 
+  Users, Activity, Rocket, Brain, Code, Shield, Layout,
   TrendingUp, AlertCircle, CheckCircle, Zap
 } from 'lucide-react';
 import GlobalInsightsPanel from '@/components/admin/GlobalInsightsPanel';
@@ -26,46 +28,28 @@ export default function AdminDashboard() {
       const userData = await base44.auth.me();
       setUser(userData);
 
-      if (userData?.role === 'admin' && hasServiceToken) {
-        const [projects, agents, deployments, users] = await Promise.all([
-          base44.asServiceRole.entities.Project.list(),
-          base44.asServiceRole.entities.CustomAgent.list(),
-          base44.asServiceRole.entities.AgentDeployment.list(),
-          base44.asServiceRole.entities.User.list()
-        ]);
-
-        setStats({
-          projects: projects.length,
-          agents: agents.length,
-          deployments: deployments.length,
-          users: users.length,
-          activeAgents: agents.filter(a => a.is_active).length,
-          activeDeployments: deployments.filter(d => d.status === 'active').length
-        });
-      } else if (userData?.role === 'admin') {
-        setStats({
-          projects: 0,
-          agents: 0,
-          deployments: 0,
-          users: 0,
-          activeAgents: 0,
-          activeDeployments: 0
-        });
+      if (userData?.role === 'admin') {
+        // Use backend proxy for stats
+        const response = await appforgeClient.get('/api/admin/monitoring/stats');
+        setStats(response.data.data);
       }
     } catch (error) {
       console.error('Failed to load:', error);
+      toast.error('Failed to load admin stats');
     } finally {
       setLoading(false);
     }
   };
 
   if (loading) {
-    return <div className="min-h-screen flex items-center justify-center">
-      <div className="text-center">
-        <div className="w-16 h-16 border-4 border-purple-600 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-        <p className="text-gray-600">Loading admin dashboard...</p>
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-purple-600 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+          <p className="text-gray-600">Loading admin dashboard...</p>
+        </div>
       </div>
-    </div>;
+    );
   }
 
   if (user?.role !== 'admin') {
@@ -209,14 +193,6 @@ export default function AdminDashboard() {
           </Card>
         </div>
 
-        {!hasServiceToken && (
-          <Card className="border-amber-200 bg-amber-50">
-            <CardContent className="p-4 text-amber-900 text-sm">
-              Service token missing. Admin data (users, agents, deployments) will show as 0 until `VITE_BASE44_SERVICE_TOKEN` is configured.
-            </CardContent>
-          </Card>
-        )}
-
         {/* Admin Sections Grid */}
         <Card>
           <CardHeader>
@@ -300,31 +276,31 @@ export default function AdminDashboard() {
               <CardTitle>Quick Actions</CardTitle>
             </CardHeader>
             <CardContent className="space-y-2">
-               <Link to="/admin/users">
-                 <Button variant="outline" className="w-full justify-start">
-                   <Users className="w-4 h-4 mr-2" />
-                   View All Users
-                 </Button>
-               </Link>
-               <Link to={createPageUrl('AuditLog')}>
-                 <Button variant="outline" className="w-full justify-start">
-                   <Activity className="w-4 h-4 mr-2" />
-                   System Logs
-                 </Button>
-               </Link>
-               <Link to={createPageUrl('Security')}>
-                 <Button variant="outline" className="w-full justify-start">
-                   <Shield className="w-4 h-4 mr-2" />
-                   Security Settings
-                 </Button>
-               </Link>
-               <Link to="/admin/analytics">
-                 <Button variant="outline" className="w-full justify-start">
-                   <TrendingUp className="w-4 h-4 mr-2" />
-                   View Analytics
-                 </Button>
-               </Link>
-             </CardContent>
+              <Link to="/admin/users">
+                <Button variant="outline" className="w-full justify-start">
+                  <Users className="w-4 h-4 mr-2" />
+                  View All Users
+                </Button>
+              </Link>
+              <Link to={createPageUrl('AuditLog')}>
+                <Button variant="outline" className="w-full justify-start">
+                  <Activity className="w-4 h-4 mr-2" />
+                  System Logs
+                </Button>
+              </Link>
+              <Link to={createPageUrl('Security')}>
+                <Button variant="outline" className="w-full justify-start">
+                  <Shield className="w-4 h-4 mr-2" />
+                  Security Settings
+                </Button>
+              </Link>
+              <Link to="/admin/analytics">
+                <Button variant="outline" className="w-full justify-start">
+                  <TrendingUp className="w-4 h-4 mr-2" />
+                  View Analytics
+                </Button>
+              </Link>
+            </CardContent>
           </Card>
         </div>
 

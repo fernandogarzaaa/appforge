@@ -63,6 +63,37 @@ export const getRealTimeMetrics = async (req, res, next) => {
   }
 };
 
+import base44Service from '../services/base44Service.js';
+
+/**
+ * Get admin dashboard stats (proxy to Base44)
+ * GET /admin/monitoring/stats
+ */
+export const getDashboardStats = async (req, res, next) => {
+  try {
+    // Fetch stats in parallel
+    const [projects, agents, deployments, users] = await Promise.all([
+      base44Service.listEntities('Project').catch(() => []),
+      base44Service.listEntities('CustomAgent').catch(() => []),
+      base44Service.listEntities('AgentDeployment').catch(() => []),
+      base44Service.listEntities('User').catch(() => [])
+    ]);
+
+    const stats = {
+      projects: projects.length,
+      agents: agents.length,
+      deployments: deployments.length,
+      users: users.length,
+      activeAgents: agents.filter(a => a.is_active).length,
+      activeDeployments: deployments.filter(d => d.status === 'active').length
+    };
+
+    res.json(successResponse(stats, 'Dashboard stats retrieved successfully'));
+  } catch (err) {
+    next(err);
+  }
+};
+
 /**
  * Get system logs with filtering
  * GET /admin/monitoring/logs

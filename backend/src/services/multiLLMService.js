@@ -4,7 +4,7 @@
  */
 
 import { createError } from '../utils/helpers.js';
-import logger from '../config/logger.js';
+import { logger } from '../config/logger.js';
 
 class MultiLLMService {
   constructor() {
