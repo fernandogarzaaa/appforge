@@ -1,6 +1,26 @@
 
 import dotenv from 'dotenv';
-dotenv.config({ path: '../.env.local' }); // Ensure env is loaded
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+// Resolve .env.local from project root
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+// loop.ts is in /swarm/core, so root is two levels up: ../../
+const envPath = path.resolve(__dirname, '../../.env.local');
+
+console.log(`Loading env from: ${envPath}`);
+const result = dotenv.config({ path: envPath });
+
+if (result.error) {
+    console.error('Error loading .env.local:', result.error);
+}
+
+if (!process.env.OPENAI_API_KEY) {
+    console.error('❌ FATAL: OPENAI_API_KEY not found in environment.');
+    console.error('Please ensure .env.local exists in the project root and mimics the structure of .env.example');
+    process.exit(1);
+}
 
 import { Base44Tool } from '../tools/base44.js';
 import { FileSystemTool } from '../tools/filesystem.js';
