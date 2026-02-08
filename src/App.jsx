@@ -195,6 +195,11 @@ const AuthenticatedApp = ({ onSearchOpen }) => {
           <MainPage />
         </LayoutWrapper>
       } />
+      <Route path="/swarm" element={
+        <LayoutWrapper currentPageName="Swarm" onSearchOpen={onSearchOpen}>
+          {renderAdmin(React.lazy(() => import('@/pages/SwarmDashboard')))}
+        </LayoutWrapper>
+      } />
       {Object.entries(Pages).map(([path, Page]) => {
         const isPublic = publicPages.includes(path);
         // Pages that require backend authentication (optional - most pages use Base44 auth)

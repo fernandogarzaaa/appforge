@@ -31,6 +31,8 @@ import { BugHunterAgent } from '../agents/BugHunter.js';
 import { OptimizerAgent } from '../agents/Optimizer.js';
 import { GodModeAgent } from '../agents/GodMode.js';
 
+import { ProductOwnerAgent } from '../agents/ProductOwner.js';
+
 async function main() {
     console.log('🐝 AppForge Swarm Daemon Starting...');
 
@@ -44,6 +46,7 @@ async function main() {
     const bugHunter = new BugHunterAgent(base44, fs);
     const optimizer = new OptimizerAgent(base44);
     const godMode = new GodModeAgent(base44, fs, git);
+    const productOwner = new ProductOwnerAgent(base44, fs);
 
     console.log('✅ Agents Initialized. Entering Poll Loop...');
 
@@ -61,15 +64,17 @@ async function main() {
                     const results: any = {};
 
                     // Parallel Execution of Specialist Bots
-                    const [sentinelRes, bugHunterRes, optimizerRes] = await Promise.all([
+                    const [sentinelRes, bugHunterRes, optimizerRes, poRes] = await Promise.all([
                         sentinel.run(),
                         bugHunter.run(),
-                        optimizer.run()
+                        optimizer.run(),
+                        productOwner.run()
                     ]);
 
                     results.sentinel = sentinelRes;
                     results.bugHunter = bugHunterRes;
                     results.optimizer = optimizerRes;
+                    results.productOwner = poRes;
 
                     // Collaboration: Pass findings to God Mode
                     const context = {
