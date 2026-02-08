@@ -23,7 +23,7 @@ export default async function handler(request, response) {
         if (!baseUrl.startsWith('http')) {
             baseUrl = `https://${baseUrl}`;
         }
-        const targetUrl = `${baseUrl}/functions/v1/autonomousCycle`;
+        const targetUrl = `${baseUrl}/functions/autonomousCycle`;
         console.log(`[Cron] Pinging: ${targetUrl}`);
 
         const res = await axios.post(targetUrl, {}, {
