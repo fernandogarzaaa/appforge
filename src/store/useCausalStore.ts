@@ -74,7 +74,6 @@ export const useCausalStore = create<CausalState>()(
 
         // Collapse State
         collapsedState: null,
-        autoRemediate: () => { },
 
         // Observability State
         quantumMetrics: null,
