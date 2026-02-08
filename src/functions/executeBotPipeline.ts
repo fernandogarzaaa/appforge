@@ -63,7 +63,7 @@ Deno.serve(async (req) => {
         }
 
         const stageDuration = (Date.now() - stageStartTime) / 1000;
-        
+
         stageResults.push({
           stage_name: stage.name,
           status: stageStatus,
@@ -97,6 +97,18 @@ Deno.serve(async (req) => {
           break;
         }
       }
+    }
+
+    // 🔬 Quantum Expansion: Swarm Analysis
+    try {
+      const { analyzePipelineLogs } = await import('./quantumAnalysis.ts');
+      logs.push('\n--- ⚛️ Quantum Analysis ---');
+      const quantumResult = await analyzePipelineLogs(logs, botId);
+      logs.push(`Entropy: ${quantumResult.entropy}%`);
+      logs.push(`Insight: ${quantumResult.patterns}`);
+      logs.push(`Status: ${quantumResult.recommendation}`);
+    } catch (e: any) {
+      logs.push(`⚠ Quantum Analysis Unavailable: ${e.message}`);
     }
 
     const totalDuration = (Date.now() - startTime) / 1000;
@@ -133,7 +145,7 @@ async function runTestStage(base44, botId, logs) {
 
   try {
     const testCases = await base44.entities.BotTestCase.filter({ bot_id: botId, status: 'active' });
-    
+
     if (testCases.length === 0) {
       logs.push('No test cases found, skipping');
       return { output: 'No tests', status: 'passed' };
@@ -229,7 +241,7 @@ async function runDeployStage(base44, botId, stageConfig, logs) {
 }
 
 async function sendNotifications(pipeline, run, logs) {
-  const shouldNotify = 
+  const shouldNotify =
     (run.status === 'passed' && pipeline.notifications.notify_on?.includes('success')) ||
     (run.status === 'failed' && pipeline.notifications.notify_on?.includes('failure')) ||
     pipeline.notifications.notify_on?.includes('all');

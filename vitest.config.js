@@ -18,7 +18,9 @@ export default defineConfig({
       'backend/src/__tests__/**',
       'src/lib/__tests__/quantum*.{js,ts}',
       'src/lib/__tests__/holographic*.{js,ts}',
-      'backend/node_modules/**'
+      'backend/node_modules/**',
+      'swarm/node_modules/**',
+      'functions/node_modules/**'
     ],
     coverage: {
       provider: 'v8',

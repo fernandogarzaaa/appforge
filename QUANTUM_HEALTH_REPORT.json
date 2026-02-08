@@ -1,0 +1,25 @@
+{
+  "timestamp": "2026-02-08T17:50:12.571Z",
+  "buildStatus": "PASSED",
+  "testStatus": "FAILED",
+  "analysis": [
+    {
+      "file": "src/store/useCausalStore.ts",
+      "coherence": 0.988,
+      "complexity": 6,
+      "density": 3.55
+    },
+    {
+      "file": "src/components/anomalies/CausalInferenceViewer.jsx",
+      "coherence": 0.974,
+      "complexity": 13,
+      "density": 11.767
+    },
+    {
+      "file": "QuantumEngine.js",
+      "coherence": 0.758,
+      "complexity": 121,
+      "density": 37.823
+    }
+  ]
+}

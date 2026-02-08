@@ -65,6 +65,10 @@ export default function SwarmDashboard() {
                             <span>Next Pulse:</span>
                             <span>{new Date(Date.now() + 15 * 60000).toLocaleTimeString()}</span>
                         </div>
+                        <div className="flex justify-between border-t border-green-800 pt-2 mt-2">
+                            <span>⚛️ Quantum Core:</span>
+                            <span className="text-cyan-400 font-bold">ONLINE</span>
+                        </div>
                     </div>
                 </div>
 
