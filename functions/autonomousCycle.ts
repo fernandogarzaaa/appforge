@@ -1,92 +1,57 @@
 
-
 Deno.serve(async (req) => {
     try {
-        // Dynamic import to catch load errors
+        // Dynamic import to catch load errors & generic fallback
         let createClientFromRequest;
         try {
-            // Option A: Explicit NPM version
             const module = await import('npm:@base44/sdk@0.8.18');
             createClientFromRequest = module.createClientFromRequest;
         } catch (e1) {
             console.warn('NPM import failed, trying ESM.sh...', e1.message);
             try {
-                // Option B: ESM.sh CDN (Universal fallback)
-                // Note: We use ?external=react,react-dom to avoid bundling conflicts if any
                 const module = await import('https://esm.sh/@base44/sdk@0.8.18');
                 createClientFromRequest = module.createClientFromRequest;
             } catch (e2) {
                 return Response.json({
                     success: false,
-                    error: `CRITICAL: All SDK Import Strategies Failed.\n1. NPM: ${e1.message}\n2. CDN: ${e2.message}`,
-                    stack: e2.stack
+                    error: `Critical: SDK Import Failed. \nNPM: ${e1.message}\nCDN: ${e2.message}`,
                 }, { status: 200 });
             }
         }
 
         const base44 = createClientFromRequest(req);
-        // Verify system/admin access (or just allow if it's a scheduled task)
 
-        const results: any = {};
+        console.log('📡 Emitting Swarm Signal...');
 
-        console.log('🤖 Starting Autonomous Cycle...');
-
-        // 1. Sentinel (Security)
-        try {
-            console.log('🛡️ Invoking Sentinel...');
-            results.sentinel = await base44.functions.invoke('detectRealTimeErrors', {});
-        } catch (e) {
-            results.sentinel = { error: e.message };
-        }
-
-        // 2. Bug Hunter (QA)
-        try {
-            console.log('🐞 Invoking Bug Hunter...');
-            results.bugHunter = await base44.functions.invoke('analyzeBugsProactively', {});
-        } catch (e) {
-            results.bugHunter = { error: e.message };
-        }
-
-        // 3. Optimizer (Performance)
-        try {
-            console.log('⚡ Invoking Optimizer...');
-            // monitorResourceUsage is the existing function name
-            results.optimizer = await base44.functions.invoke('monitorResourceUsage', {});
-        } catch (e) {
-            results.optimizer = { error: e.message };
-        }
-
-        // 4. God Mode (Developer)
-        try {
-            console.log('🧙‍♂️ Invoking God Mode...');
-            results.godMode = await base44.functions.invoke('executeGodMode', {});
-        } catch (e) {
-            results.godMode = { error: e.message };
-        }
-
-        // Log the cycle completion
+        // Create a 'Signal' record in AuditLog
+        // The Local Swarm Daemon will poll for this specific action
+        let signalResult;
         try {
             if (base44.entities.AuditLog) {
-                await base44.entities.AuditLog.create({
-                    action: 'autonomous_cycle_complete',
-                    description: 'Completed full autonomous bot cycle',
-                    changes: results
+                signalResult = await base44.entities.AuditLog.create({
+                    action: 'SWARM_SIGNAL',
+                    description: 'Manual Trigger: Execute Autonomous Cycle',
+                    changes: {
+                        status: 'PENDING',
+                        timestamp: new Date().toISOString(),
+                        source: 'dashboard_manual_trigger'
+                    }
                 });
             } else {
-                results.auditLog = { warning: 'AuditLog entity not found in SDK' };
+                return Response.json({ success: false, error: 'AuditLog entity missing' }, { status: 200 });
             }
         } catch (auditError) {
-            results.auditLog = { error: auditError.message };
+            return Response.json({ success: false, error: `Signal Failed: ${auditError.message}` }, { status: 200 });
         }
 
         return Response.json({
             success: true,
             timestamp: new Date().toISOString(),
-            results
+            message: 'Signal sent to Local Swarm Daemon',
+            signalId: signalResult?.id
         });
 
     } catch (error) {
-        // Return 200 so the client receives the error details instead of a generic 500
         return Response.json({
             success: false,
             error: error.message,

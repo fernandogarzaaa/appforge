@@ -1,0 +1,21 @@
+{
+    "name": "appforge-swarm",
+    "version": "1.0.0",
+    "description": "Local MCP Swarm Daemon for AppForge",
+    "main": "index.ts",
+    "type": "module",
+    "scripts": {
+        "start": "tsx core/loop.ts",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "dependencies": {
+        "@base44/sdk": "^0.8.18",
+        "chalk": "^5.3.0",
+        "dotenv": "^16.4.5",
+        "glob": "^10.3.10",
+        "openai": "^4.28.0",
+        "simple-git": "^3.22.0",
+        "tsx": "^4.7.1",
+        "typescript": "^5.3.3"
+    }
+}
