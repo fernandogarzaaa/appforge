@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { base44 } from '@/api/base44Client';
 import PhantomWalletConnect from '@/components/payments/PhantomWalletConnect';
 import SolanaPaymentProcessor from '@/components/payments/SolanaPaymentProcessor';
+import { getAllPlans } from '@/config/payment.config';
 import { Check, Loader2 } from 'lucide-react';
 
 export default function PricingPage() {
@@ -12,33 +13,8 @@ export default function PricingPage() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Hardcoded production plans
-    const productionPlans = [
-      {
-        id: 'hobby',
-        tier_name: 'Hobby',
-        tier_level: 0,
-        description: 'Perfect for side projects',
-        price_sol: 0.1,
-        features: ['Basic access', 'Community support', '5 Projects']
-      },
-      {
-        id: 'pro',
-        tier_name: 'Pro',
-        tier_level: 1,
-        description: 'For professional developers',
-        price_sol: 0.5,
-        features: ['Priority support', 'Unlimited Projects', 'Advanced Analytics', 'Auto-scaling']
-      },
-      {
-        id: 'enterprise',
-        tier_name: 'Enterprise',
-        tier_level: 2,
-        description: 'For scaling teams',
-        price_sol: 2.0,
-        features: ['Dedicated Account Manager', 'Custom Contracts', 'SLA', 'On-premise deployment']
-      }
-    ];
+    // Load plans from centralized config
+    const productionPlans = getAllPlans().sort((a, b) => (a.tier_level || 0) - (b.tier_level || 0));
     setPlans(productionPlans);
     setIsLoading(false);
   }, []);
@@ -56,7 +32,7 @@ export default function PricingPage() {
             Simple, Transparent Pricing
           </h1>
           <p className="text-xl text-slate-600">
-            Choose the perfect plan and pay with Solana
+            Choose the perfect plan and pay with USDC on Solana
           </p>
           <p className="text-sm text-slate-500 mt-2">
             ⚡ Fast • Secure • Low Fees
@@ -81,20 +57,20 @@ export default function PricingPage() {
                   : 'border-slate-200 hover:border-slate-300 bg-white'
                   }`}
               >
-                {plan.tier_level === 2 && (
+                {plan.popular && (
                   <div className="text-xs font-semibold text-purple-600 mb-2">★ MOST POPULAR</div>
                 )}
-                <h3 className="text-xl font-bold text-slate-900 mb-2">{plan.tier_name || plan.name}</h3>
+                <h3 className="text-xl font-bold text-slate-900 mb-2">{plan.name}</h3>
                 <p className="text-slate-600 text-sm mb-3">{plan.description || 'Flexible plan'}</p>
                 <div className="mb-4">
-                  <span className="text-3xl font-bold text-slate-900">{plan.price_sol || plan.price_per_month_sol}</span>
-                  <span className="text-slate-600 ml-2">SOL/month</span>
+                  <span className="text-3xl font-bold text-slate-900">${plan.price}</span>
+                  <span className="text-slate-600 ml-2">USDC/month</span>
                 </div>
                 <div className="space-y-2">
                   {(plan.features || []).slice(0, 3).map((feature, idx) => (
                     <div key={idx} className="flex items-start gap-2 text-sm text-slate-700">
                       <Check className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" />
-                      <span>{feature.feature_name || feature}</span>
+                      <span>{feature}</span>
                     </div>
                   ))}
                   {(plan.features || []).length > 3 && (
@@ -126,8 +102,8 @@ export default function PricingPage() {
                 {walletConnected && selectedPlan && (
                   <SolanaPaymentProcessor
                     planId={selectedPlan.id}
-                    planName={selectedPlan.tier_name || selectedPlan.name}
-                    amountSol={selectedPlan.price_sol || selectedPlan.price_per_month_sol}
+                    planName={selectedPlan.name}
+                    amountUSDC={selectedPlan.price}
                     walletAddress={walletAddress}
                     onPaymentSuccess={async ({ signature }) => {
                       // Subscription already created by SolanaPaymentProcessor

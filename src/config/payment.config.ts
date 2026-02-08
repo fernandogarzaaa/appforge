@@ -11,6 +11,8 @@ export interface PlanConfig {
   features: string[];   // Plan features
   interval: 'MONTH' | 'YEAR';
   intervalCount: number;
+  tier_level?: number;
+  popular?: boolean;
 }
 
 const SOLANA_BASIC_PLAN_ID = (typeof process !== 'undefined' && process.env?.SOLANA_BASIC_PLAN_ID)
@@ -39,7 +41,8 @@ export const PLAN_CONFIGS: Record<string, PlanConfig> = {
       '1GB storage'
     ],
     interval: 'MONTH',
-    intervalCount: 1
+    intervalCount: 1,
+    tier_level: 0
   },
   [SOLANA_PRO_PLAN_ID]: {
     id: SOLANA_PRO_PLAN_ID,
@@ -54,7 +57,9 @@ export const PLAN_CONFIGS: Record<string, PlanConfig> = {
       'Team collaboration'
     ],
     interval: 'MONTH',
-    intervalCount: 1
+    intervalCount: 1,
+    tier_level: 1,
+    popular: true
   },
   [SOLANA_PREMIUM_PLAN_ID]: {
     id: SOLANA_PREMIUM_PLAN_ID,
@@ -71,7 +76,8 @@ export const PLAN_CONFIGS: Record<string, PlanConfig> = {
       'SLA guarantee'
     ],
     interval: 'MONTH',
-    intervalCount: 1
+    intervalCount: 1,
+    tier_level: 2
   }
 };
 

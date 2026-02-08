@@ -11,7 +11,7 @@ const USDC_MINT = new PublicKey('EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v');
 export default function SolanaPaymentProcessor({
   planId,
   planName,
-  amountSol, // This is actually amount USDC now
+  amountUSDC, // Updated prop name
   walletAddress,
   onPaymentSuccess,
   onPaymentError
@@ -72,7 +72,7 @@ export default function SolanaPaymentProcessor({
       const toPubkey = new PublicKey(adminWallet);
 
       // USDC has 6 decimals
-      const amountUSDC = Math.round(Number(amountSol) * 1_000_000);
+      const amountUnits = Math.round(Number(amountUSDC) * 1_000_000);
 
       // Get Associated Token Accounts
       const sourceATA = await getAssociatedTokenAddress(USDC_MINT, fromPubkey);
@@ -91,7 +91,7 @@ export default function SolanaPaymentProcessor({
           sourceATA,
           destinationATA,
           fromPubkey,
-          amountUSDC,
+          amountUnits,
           [],
           TOKEN_PROGRAM_ID
         )
@@ -107,7 +107,7 @@ export default function SolanaPaymentProcessor({
         method: 'POST',
         headers,
         body: JSON.stringify({
-          amount_paid: amountSol,
+          amount_paid: amountUSDC,
           transaction_signature: transactionSignature,
           payment_method: 'solana_usdc', // Updated type
           plan_id: planId
@@ -168,7 +168,7 @@ export default function SolanaPaymentProcessor({
         <CardContent className="space-y-4">
           <div className="flex justify-between items-center py-3 border-b border-gray-200 dark:border-gray-800">
             <span className="text-sm text-gray-600 dark:text-gray-400">{planName} Plan</span>
-            <span className="font-semibold text-blue-600 dark:text-blue-400">{Number(amountSol).toFixed(2)} USDC</span>
+            <span className="font-semibold text-blue-600 dark:text-blue-400">{Number(amountUSDC).toFixed(2)} USDC</span>
           </div>
 
           {error && (
@@ -190,7 +190,7 @@ export default function SolanaPaymentProcessor({
                   Processing...
                 </>
               ) : (
-                `Pay ${Number(amountSol).toFixed(2)} USDC`
+                `Pay ${Number(amountUSDC).toFixed(2)} USDC`
               )}
             </Button>
 
