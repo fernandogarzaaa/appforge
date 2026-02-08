@@ -10,7 +10,11 @@ export default async function handler(request, response) {
     }
 
     try {
-        const targetUrl = `${apiUrl}/functions/v1/autonomousCycle`;
+        let baseUrl = apiUrl;
+        if (!baseUrl.startsWith('http')) {
+            baseUrl = `https://${baseUrl}`;
+        }
+        const targetUrl = `${baseUrl}/functions/v1/autonomousCycle`;
         console.log(`[Cron] Pinging: ${targetUrl}`);
 
         const res = await fetch(targetUrl, {
