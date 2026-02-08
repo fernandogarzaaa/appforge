@@ -13,7 +13,7 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': path.resolve(__dirname, 'src'),
-      'quantum': path.resolve(__dirname, 'QuantumEngine.js'),
+      'quantum': path.resolve(__dirname, 'src/lib/QuantumEngine.js'),
     },
   },
   plugins: [
