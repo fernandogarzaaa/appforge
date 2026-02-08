@@ -21,6 +21,7 @@ import { useToast } from '@/components/ui/use-toast';
 import QuantumCircuitDisplay from '@/components/QuantumCircuitDisplay';
 import QuantumCircuitVisualizer from '@/components/QuantumCircuitVisualizer';
 import QuantumCircuitEducation from '@/components/QuantumCircuitEducation';
+import AutonomousTrigger from '@/components/admin/AutonomousTrigger';
 
 export default function Dashboard() {
   const [ideaInput, setIdeaInput] = useState('');
@@ -506,6 +507,10 @@ export default function Dashboard() {
 
                 {/* Quantum Education Section */}
                 <QuantumCircuitEducation />
+
+                <div className="mt-6">
+                  <AutonomousTrigger />
+                </div>
               </CardContent>
             </Card>
           </motion.div>
