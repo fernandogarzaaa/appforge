@@ -1,5 +1,5 @@
 
-import { createClientFromRequest } from 'npm:@base44/sdk@0.8.18';
+import { createClientFromRequest } from 'npm:@base44/sdk';
 
 const githubRequest = async (token: string, method: string, endpoint: string, body?: any) => {
     const url = `https://api.github.com${endpoint}`;

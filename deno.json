@@ -1,6 +1,6 @@
 {
   "imports": {
-    "npm:@base44/sdk@0.8.6": "npm:@base44/sdk@0.8.6",
+    "npm:@base44/sdk": "npm:@base44/sdk@0.8.18",
     "npm:@base44/vite-plugin": "npm:@base44/vite-plugin"
   },
   "tasks": {
@@ -19,8 +19,13 @@
   },
   "lint": {
     "rules": {
-      "tags": ["recommended"],
-      "exclude": ["no-unused-vars", "no-explicit-any"]
+      "tags": [
+        "recommended"
+      ],
+      "exclude": [
+        "no-unused-vars",
+        "no-explicit-any"
+      ]
     }
   }
 }
