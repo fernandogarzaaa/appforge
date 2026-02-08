@@ -1,5 +1,5 @@
 
-import { createClient } from 'npm:@base44/sdk@0.8.18';
+import { createClient } from '@base44/sdk';
 import dotenv from 'dotenv';
 dotenv.config({ path: '../.env.local' }); // Load from root
 
