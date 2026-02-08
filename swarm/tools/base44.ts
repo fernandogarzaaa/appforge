@@ -18,24 +18,31 @@ export class Base44Tool {
 
         this.client = createClient({
             key: apiKey,
-            secret: apiKey // Trying common variations if apiKey alone fails type check
+            secret: apiKey,
+            appId: process.env.BASE44_APP_ID
         } as any);
 
     }
 
     async getPendingTasks() {
-        // Poll AuditLog for 'SWARM_SIGNAL' with status 'PENDING'
-        // Since we might not have a dedicated Task entity, we use AuditLog query
-        // "Find AuditLogs where action = 'SWARM_SIGNAL' and changes->status = 'PENDING'"
-        // SDK might not support deep JSON filter, so we fetch recent signals and filter in-memory
-        const logs = await this.client.entities.AuditLog.list({
-            filter: { action: 'SWARM_SIGNAL' },
-            sort: { createdAt: 'desc' },
-            limit: 5
-        });
+        try {
+            // Poll AuditLog for 'SWARM_SIGNAL' with status 'PENDING'
+            const logs = await this.client.entities.AuditLog.list({
+                filter: { action: 'SWARM_SIGNAL' },
+                sort: { createdAt: 'desc' },
+                limit: 5
+            });
 
-        const pending = logs.items.filter((l: any) => l.changes?.status === 'PENDING');
-        return pending;
+            const pending = logs.items.filter((l: any) => l.changes?.status === 'PENDING');
+            return pending;
+        } catch (error: any) {
+            // Gracefully handle auth errors (Client Key vs Service Key issue)
+            if (error.status === 403 || error.status === 404 || error.message.includes('private')) {
+                console.warn('⚠️ [Base44] Offline Mode: Cloud Bridge disconnected (Auth Error 403/404). Swarm running locally only.');
+                return [];
+            }
+            throw error;
+        }
     }
 
     async completeTask(taskId: string, results: any) {

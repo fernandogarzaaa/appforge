@@ -1,0 +1,57 @@
+name: Autonomous Swarm Cycle
+
+on:
+  schedule:
+    - cron: '*/15 * * * *' # Run every 15 minutes
+  workflow_dispatch: # Allow manual trigger from GitHub UI
+
+jobs:
+  swarm-execution:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # Allow committing back to repo
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }} # Built-in token
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Swarm Dependencies
+        run: |
+          cd swarm
+          npm install
+
+      - name: Run Swarm (One-Shot)
+        env:
+          # AI Keys (Must be added to Repo Secrets)
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          XAI_API_KEY: ${{ secrets.XAI_API_KEY }}
+          
+          # App Config
+          BASE44_API_KEY: ${{ secrets.BASE44_API_KEY }}
+          BASE44_APP_ID: ${{ secrets.BASE44_APP_ID }}
+          
+          # Mode
+          ONE_SHOT: "true"
+        run: |
+          # Configure Git for potential commits
+          git config --global user.name "AppForge Swarm"
+          git config --global user.email "swarm@appforge.bot"
+          
+          # Run the Daemon
+          cd swarm
+          npm start
+
+      - name: Push any Swarm artifacts
+        run: |
+          git add .
+          git commit -m "chore: swarm autonomous update" || echo "No changes to commit"
+          git push

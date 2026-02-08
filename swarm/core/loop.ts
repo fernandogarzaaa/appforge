@@ -85,13 +85,22 @@ async function main() {
                 }
             } else {
                 // Heartbeat / Idle check could go here
+                if (process.env.ONE_SHOT === 'true') {
+                    console.log('🛑 One-Shot Mode: No tasks found. Exiting.');
+                    process.exit(0);
+                }
             }
 
         } catch (error: any) {
             console.error('❌ Loop Error:', error.message);
+            if (process.env.ONE_SHOT === 'true') process.exit(1);
         }
 
         // Wait 5 seconds before next poll
+        if (process.env.ONE_SHOT === 'true') {
+            console.log('🛑 One-Shot Mode: Cycle complete. Exiting.');
+            process.exit(0);
+        }
         await new Promise(resolve => setTimeout(resolve, 5000));
     }
 }
