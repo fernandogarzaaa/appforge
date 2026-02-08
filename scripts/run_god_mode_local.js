@@ -33,19 +33,10 @@ const env = loadEnv();
 // Provider Config
 const PROVIDERS = [
     { name: 'OpenAI', key: env.OPENAI_API_KEY, url: 'https://api.openai.com/v1/chat/completions', model: 'gpt-4o' },
-    { name: 'Anthropic', key: env.ANTHROPIC_API_KEY, url: 'https://api.anthropic.com/v1/messages', model: 'claude-3-opus-20240229' },
-    { name: 'Gemini', key: env.GEMINI_API_KEY, url: `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro-latest:generateContent?key=${env.GEMINI_API_KEY}`, model: 'gemini-1.5-pro' },
+    { name: 'Anthropic', key: env.ANTHROPIC_API_KEY, url: 'https://api.anthropic.com/v1/messages', model: 'claude-3-haiku-20240307' },
+    { name: 'Gemini', key: env.GEMINI_API_KEY, url: `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${env.GEMINI_API_KEY}`, model: 'gemini-pro' },
     { name: 'Grok', key: env.GROK_API_KEY, url: 'https://api.x.ai/v1/chat/completions', model: 'grok-beta' }
 ];
-
-const activeProvider = PROVIDERS.find(p => p.key && p.key.length > 10);
-
-if (!activeProvider) {
-    console.error('❌ Error: No valid API keys found in backend/.env (OpenAI, Anthropic, Gemini, or Grok)');
-    process.exit(1);
-}
-
-console.log(`✅ Using Provider: ${activeProvider.name} (${activeProvider.model})`);
 
 // 2. Main Logic
 async function runGodMode() {
@@ -68,7 +59,6 @@ async function runGodMode() {
 
     const task = match[1];
     console.log(`🤖 Found Task: "${task}"`);
-    console.log(`🧠 Consulting ${activeProvider.name}...`);
 
     const prompt = `You are an autonomous AI Lead Developer.
     Task: "${task}"
@@ -80,88 +70,112 @@ async function runGodMode() {
     
     JSON ONLY. No code fences.`;
 
-    try {
-        let responseData;
+    // Filter for available providers
+    const availableProviders = PROVIDERS.filter(p => p.key && p.key.length > 10);
 
-        if (activeProvider.name === 'OpenAI' || activeProvider.name === 'Grok') {
-            const response = await axios.post(activeProvider.url, {
-                model: activeProvider.model,
-                messages: [
-                    { role: "system", content: "You are a senior software engineer." },
-                    { role: "user", content: prompt }
-                ],
-                response_format: { type: "json_object" }
-            }, {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${activeProvider.key}`
-                },
-                timeout: 60000
-            });
-            responseData = JSON.parse(response.data.choices[0].message.content);
-        }
-        else if (activeProvider.name === 'Anthropic') {
-            const response = await axios.post(activeProvider.url, {
-                model: activeProvider.model,
-                max_tokens: 4000,
-                messages: [
-                    { role: "user", content: prompt }
-                ]
-            }, {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'x-api-key': activeProvider.key,
-                    'anthropic-version': '2023-06-01'
-                },
-                timeout: 60000
-            });
-            const content = response.data.content[0].text;
-            responseData = JSON.parse(content.replace(/```json/g, '').replace(/```/g, '').trim());
-        }
-        else if (activeProvider.name === 'Gemini') {
-            const response = await axios.post(activeProvider.url, {
-                contents: [{ parts: [{ text: prompt + " \nRespond with VALID JSON only." }] }]
-            }, {
-                headers: { 'Content-Type': 'application/json' },
-                timeout: 60000
-            });
-            const text = response.data.candidates[0].content.parts[0].text;
-            responseData = JSON.parse(text.replace(/```json/g, '').replace(/```/g, '').trim());
-        }
+    if (availableProviders.length === 0) {
+        console.error('❌ No valid API keys found in backend/.env');
+        return;
+    }
 
-        const result = responseData;
-        console.log(`💡 Plan: Modify ${result.filepath}`);
+    let success = false;
 
-        // Write File
-        const dir = path.dirname(result.filepath);
-        if (dir && dir !== '.') {
-            fs.mkdirSync(dir, { recursive: true });
-        }
-        fs.writeFileSync(result.filepath, result.code);
-        console.log(`📝 Wrote to ${result.filepath}`);
-
-        // Git Operations
-        console.log('📦 Committing...');
+    // Loop through providers until one works
+    for (const activeProvider of availableProviders) {
+        console.log(`🧠 Consulting ${activeProvider.name}...`);
         try {
-            await execAsync(`git add ${result.filepath}`);
-            await execAsync(`git commit -m "${result.message || 'feat: god mode update'}"`);
+            let responseData;
 
-            // Update TODO.md
-            const newTodo = todoContent.replace(match[0], `DONE: [GOD_MODE] ${result.message} - ${task}`);
-            fs.writeFileSync('TODO.md', newTodo);
-            await execAsync(`git add TODO.md`);
-            await execAsync(`git commit -m "docs: complete task ${task}"`);
+            if (activeProvider.name === 'OpenAI' || activeProvider.name === 'Grok') {
+                const response = await axios.post(activeProvider.url, {
+                    model: activeProvider.model,
+                    messages: [
+                        { role: "system", content: "You are a senior software engineer." },
+                        { role: "user", content: prompt }
+                    ],
+                    response_format: { type: "json_object" }
+                }, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${activeProvider.key}`
+                    },
+                    timeout: 60000
+                });
+                responseData = JSON.parse(response.data.choices[0].message.content);
+            }
+            else if (activeProvider.name === 'Anthropic') {
+                const response = await axios.post(activeProvider.url, {
+                    model: activeProvider.model,
+                    max_tokens: 4000,
+                    messages: [
+                        { role: "user", content: prompt }
+                    ]
+                }, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'x-api-key': activeProvider.key,
+                        'anthropic-version': '2023-06-01'
+                    },
+                    timeout: 60000
+                });
+                const content = response.data.content[0].text;
+                responseData = JSON.parse(content.replace(/```json/g, '').replace(/```/g, '').trim());
+            }
+            else if (activeProvider.name === 'Gemini') {
+                const response = await axios.post(activeProvider.url, {
+                    contents: [{ parts: [{ text: prompt + " \nRespond with VALID JSON only." }] }]
+                }, {
+                    headers: { 'Content-Type': 'application/json' },
+                    timeout: 60000
+                });
+                const text = response.data.candidates[0].content.parts[0].text;
+                responseData = JSON.parse(text.replace(/```json/g, '').replace(/```/g, '').trim());
+            }
 
-            console.log('🚀 Changes committed locally. Please push when ready.');
-        } catch (gitErr) {
-            console.error('❌ Git Error:', gitErr.message);
+            const result = responseData;
+            console.log(`💡 Plan: Modify ${result.filepath}`);
+
+            // Write File
+            const dir = path.dirname(result.filepath);
+            if (dir && dir !== '.') {
+                fs.mkdirSync(dir, { recursive: true });
+            }
+            fs.writeFileSync(result.filepath, result.code);
+            console.log(`📝 Wrote to ${result.filepath}`);
+
+            // Git Operations
+            console.log('📦 Committing...');
+            try {
+                await execAsync(`git add ${result.filepath}`);
+                await execAsync(`git commit -m "${result.message || 'feat: god mode update'}"`);
+
+                // Update TODO.md
+                const newTodo = todoContent.replace(match[0], `DONE: [GOD_MODE] ${result.message} - ${task}`);
+                fs.writeFileSync('TODO.md', newTodo);
+                await execAsync(`git add TODO.md`);
+                await execAsync(`git commit -m "docs: complete task ${task}"`);
+
+                console.log('🚀 Changes committed locally. Please push when ready.');
+                success = true;
+                break; // Stop loop on success
+            } catch (gitErr) {
+                console.error('❌ Git Error:', gitErr.message);
+                success = true;
+                break;
+            }
+
+        } catch (error) {
+            console.error(`❌ ${activeProvider.name} Failed:`, error.message);
+            if (error.response) {
+                console.error(`   Status: ${error.response.status}`);
+                console.error(`   Data:`, JSON.stringify(error.response.data, null, 2));
+            }
+            // Continue to next provider
         }
+    }
 
-    } catch (error) {
-        console.error('❌ Execution Failed:', error.message);
-        if (error.response) {
-            console.error('Response Data:', JSON.stringify(error.response.data, null, 2));
-        }
+    if (!success) {
+        console.error('\n❌ All providers failed.');
     }
 }
 
