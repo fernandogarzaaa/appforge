@@ -127,3 +127,4 @@ docker-compose.override.yml
 # PM2 & Process Management
 ecosystem.config.js.example
 logs/
+QuantumEngine.js
