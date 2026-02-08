@@ -29,6 +29,7 @@ export default async function handler(request, response) {
         const res = await axios.post(targetUrl, {}, {
             headers: {
                 'Authorization': `Bearer ${apiKey}`,
+                'api_key': apiKey, // Add this to support standard API keys
                 'Content-Type': 'application/json'
             }
         });
