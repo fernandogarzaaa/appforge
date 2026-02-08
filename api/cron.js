@@ -1,9 +1,17 @@
+import axios from 'axios';
+
 export default async function handler(request, response) {
     const apiKey = process.env.BASE44_API_KEY;
     const apiUrl = process.env.BASE44_API_URL;
 
+    console.log('[Cron] Config Check:', {
+        hasKey: !!apiKey,
+        hasUrl: !!apiUrl,
+        urlValue: apiUrl
+    });
+
     if (!apiKey || !apiUrl) {
-        console.error('[Cron] Missing Config: BASE44_API_KEY or BASE44_API_URL not set');
+        console.error('[Cron] Missing Config');
         return response.status(400).json({
             error: 'Missing Configuration',
             details: 'Please set BASE44_API_KEY and BASE44_API_URL in Vercel Environment Variables.'
@@ -18,23 +26,33 @@ export default async function handler(request, response) {
         const targetUrl = `${baseUrl}/functions/v1/autonomousCycle`;
         console.log(`[Cron] Pinging: ${targetUrl}`);
 
-        const res = await fetch(targetUrl, {
-            method: 'POST',
+        const res = await axios.post(targetUrl, {}, {
             headers: {
                 'Authorization': `Bearer ${apiKey}`,
                 'Content-Type': 'application/json'
             }
         });
 
-        if (!res.ok) {
-            const errorText = await res.text();
-            return response.status(res.status).json({ error: 'Function Call Failed', details: errorText });
-        }
-
-        const data = await res.json();
-        return response.status(200).json({ success: true, daemons_awakened: true, data });
+        return response.status(200).json({
+            success: true,
+            daemons_awakened: true,
+            data: res.data
+        });
 
     } catch (error) {
-        return response.status(500).json({ error: error.message });
+        console.error('[Cron] Execution Failed:', error.message);
+        if (error.response) {
+            console.error('[Cron] Response Error:', error.response.status, error.response.data);
+            return response.status(error.response.status).json({
+                error: 'Upstream Error',
+                status: error.response.status,
+                data: error.response.data
+            });
+        }
+        return response.status(500).json({
+            error: 'Internal Server Error',
+            message: error.message,
+            stack: error.stack
+        });
     }
 }
