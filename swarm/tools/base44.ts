@@ -38,9 +38,9 @@ export class Base44Tool {
             const pending = items.filter((l: any) => l.changes?.status === 'PENDING');
             return pending;
         } catch (error: any) {
-            // Gracefully handle auth errors (Client Key vs Service Key issue)
-            if (error.status === 403 || error.status === 404 || error.message.includes('private')) {
-                console.warn('⚠️ [Base44] Offline Mode: Cloud Bridge disconnected (Auth Error 403/404). Swarm running locally only.');
+            // Gracefully handle auth errors or network glitches
+            if (error.status === 403 || error.status === 404 || error.message.includes('private') || error.code === 'ECONNRESET') {
+                console.warn('⚠️ [Base44] Offline Mode: Cloud Bridge disconnected or network blip. Swarm running locally only.');
                 return [];
             }
             throw error;
