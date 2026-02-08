@@ -1,8 +1,20 @@
 
-import { createClientFromRequest } from 'npm:@base44/sdk';
 
 Deno.serve(async (req) => {
     try {
+        // Dynamic import to catch load errors
+        let createClientFromRequest;
+        try {
+            const module = await import('npm:@base44/sdk@0.8.18');
+            createClientFromRequest = module.createClientFromRequest;
+        } catch (importError) {
+            return Response.json({
+                success: false,
+                error: `SDK Import Failed: ${importError.message}`,
+                stack: importError.stack
+            }, { status: 200 });
+        }
+
         const base44 = createClientFromRequest(req);
         // Verify system/admin access (or just allow if it's a scheduled task)
 

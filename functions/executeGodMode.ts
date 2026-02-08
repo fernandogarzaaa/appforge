@@ -1,5 +1,4 @@
 
-import { createClientFromRequest } from 'npm:@base44/sdk';
 
 const githubRequest = async (token: string, method: string, endpoint: string, body?: any) => {
     const url = `https://api.github.com${endpoint}`;
@@ -47,6 +46,14 @@ const updateFile = async (token: string, owner: string, repo: string, path: stri
 
 Deno.serve(async (req) => {
     try {
+        let createClientFromRequest;
+        try {
+            const module = await import('npm:@base44/sdk@0.8.18');
+            createClientFromRequest = module.createClientFromRequest;
+        } catch (e) {
+            return Response.json({ error: `SDK Import Failed: ${e.message}` }, { status: 200 });
+        }
+
         const base44 = createClientFromRequest(req);
         // Cloud context: We need the GitHub Token
         const FALLBACK_PAT = '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';
