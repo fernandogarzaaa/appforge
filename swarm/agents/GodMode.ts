@@ -1,20 +1,23 @@
 
-import { OpenAI } from 'openai';
+import { MultiLLMClient } from '../core/llm.js';
 import { Base44Tool } from '../tools/base44.js';
 import { FileSystemTool } from '../tools/filesystem.js';
 import { GitTool } from '../tools/git.js';
+import { QuantumLayer } from '../core/quantum.js';
 
 export class GodModeAgent {
     base44: Base44Tool;
     fs: FileSystemTool;
     git: GitTool;
-    openai: OpenAI;
+    llm: MultiLLMClient;
+    quantum: QuantumLayer;
 
     constructor(base44: Base44Tool, fs: FileSystemTool, git: GitTool) {
         this.base44 = base44;
         this.fs = fs;
         this.git = git;
-        this.openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+        this.llm = new MultiLLMClient();
+        this.quantum = new QuantumLayer();
     }
 
     async run(context: any) {
@@ -22,16 +25,20 @@ export class GodModeAgent {
 
         if (context?.source === 'dashboard_manual_trigger') {
             await this.base44.logActivity('GOD_MODE', 'Acknowledged manual trigger. Running full diagnostic.');
-            // Here we would use LLM to decide what to do based on project state
-            // For now, we simulate a "fix" action
 
-            // Example: Create a "checked_by_godmode.txt" file
-            await this.fs.writeFile('godmode_check.txt', `Checked at ${new Date().toISOString()}`);
+            // QUANTUM DECISION: Ask the Cluster what to do
+            const decision = await this.quantum.collapseWavefunction(
+                "User triggered manual autonomous check. What should we improve?",
+                context
+            );
 
-            // Commit it
-            // await this.git.commit('chore: godmode routine check');
+            console.log('⚛️ Quantum Decision:', decision);
 
-            return { status: 'executed', action: 'diagnostic_complete' };
+            // Execute Action (Simulated for safety)
+            await this.fs.writeFile('swarm_audit_log.txt', `[${new Date().toISOString()}] Quantum Decision:\n${decision}\n---\n`);
+            // await this.git.commit('chore: autonomous swarm audit');
+
+            return { status: 'executed', action: 'diagnostic_complete', decision };
         }
 
         return { status: 'idle' };
