@@ -20,6 +20,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { motion } from 'framer-motion';
 import Skeletons from '@/components/common/Skeletons';
 import { useToast } from '@/components/ui/use-toast';
+import AutonomousTrigger from '@/components/admin/AutonomousTrigger';
 
 export default function DashboardNew() {
   const [ideaInput, setIdeaInput] = useState('');
@@ -341,19 +342,23 @@ export default function DashboardNew() {
                       Integrations
                     </Button>
                   </Link>
-                  <Link to={createPageUrl('QuantumComputing')}>
-                    <Button variant="outline" className="border-gray-300 hover:border-gray-400">
-                      Quantum
-                    </Button>
-                  </Link>
                 </div>
               </div>
             </CardContent>
           </Card>
         </motion.div>
 
-      </div>
-    </div>
+        {/* Autonomous Control Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: 0.5 }}
+        >
+          <AutonomousTrigger />
+        </motion.div>
+
+      </div >
+    </div >
   );
 }
 
