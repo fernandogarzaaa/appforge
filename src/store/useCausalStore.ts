@@ -245,7 +245,7 @@ export const useCausalStore = create<CausalState>()(
           // NOTE: The file exports `QuantumInspiredAI` class.
 
           try {
-            const { QuantumInspiredAI } = await import('../../QuantumEngine.js');
+            const { QuantumInspiredAI } = await import('quantum');
             const engine = new QuantumInspiredAI(); // No client needed for health check
 
             // We consider predictions as 'ghost nodes' for the measure

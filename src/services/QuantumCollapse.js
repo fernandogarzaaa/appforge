@@ -1,4 +1,4 @@
-import { QuantumEngine } from '../../QuantumEngine.js';
+import { QuantumEngine } from 'quantum';
 
 // 🌠 Quantum Collapse Service
 // Uses Quantum Decision Making to collapse the wavefunction of possible future states
