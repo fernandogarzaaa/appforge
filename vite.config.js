@@ -6,6 +6,9 @@ import { visualizer } from 'rollup-plugin-visualizer'
 
 // https://vite.dev/config/
 export default defineConfig({
+  define: {
+    'global': 'window',
+  },
   logLevel: 'info', // Show server URL and info
   resolve: {
     alias: {
