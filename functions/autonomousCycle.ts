@@ -6,7 +6,7 @@ Deno.serve(async (req) => {
         const base44 = createClientFromRequest(req);
         // Verify system/admin access (or just allow if it's a scheduled task)
 
-        const results = {};
+        const results: any = {};
 
         console.log('🤖 Starting Autonomous Cycle...');
 
@@ -44,11 +44,19 @@ Deno.serve(async (req) => {
         }
 
         // Log the cycle completion
-        await base44.entities.AuditLog.create({
-            action: 'autonomous_cycle_complete',
-            description: 'Completed full autonomous bot cycle',
-            changes: results
-        });
+        try {
+            if (base44.entities.AuditLog) {
+                await base44.entities.AuditLog.create({
+                    action: 'autonomous_cycle_complete',
+                    description: 'Completed full autonomous bot cycle',
+                    changes: results
+                });
+            } else {
+                results.auditLog = { warning: 'AuditLog entity not found in SDK' };
+            }
+        } catch (auditError) {
+            results.auditLog = { error: auditError.message };
+        }
 
         return Response.json({
             success: true,
@@ -57,6 +65,11 @@ Deno.serve(async (req) => {
         });
 
     } catch (error) {
-        return Response.json({ error: error.message }, { status: 500 });
+        // Return 200 so the client receives the error details instead of a generic 500
+        return Response.json({
+            success: false,
+            error: error.message,
+            stack: error.stack
+        }, { status: 200 });
     }
 });
