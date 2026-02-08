@@ -48,10 +48,19 @@ Deno.serve(async (req) => {
     try {
         let createClientFromRequest;
         try {
+            // Option A: Explicit NPM version
             const module = await import('npm:@base44/sdk@0.8.18');
             createClientFromRequest = module.createClientFromRequest;
-        } catch (e) {
-            return Response.json({ error: `SDK Import Failed: ${e.message}` }, { status: 200 });
+        } catch (e1) {
+            try {
+                // Option B: ESM.sh CDN
+                const module = await import('https://esm.sh/@base44/sdk@0.8.18');
+                createClientFromRequest = module.createClientFromRequest;
+            } catch (e2) {
+                return Response.json({
+                    error: `SDK Import Failed (Both NPM and CDN). NPM: ${e1.message} | CDN: ${e2.message}`
+                }, { status: 200 });
+            }
         }
 
         const base44 = createClientFromRequest(req);

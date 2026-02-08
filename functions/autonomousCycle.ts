@@ -5,14 +5,23 @@ Deno.serve(async (req) => {
         // Dynamic import to catch load errors
         let createClientFromRequest;
         try {
+            // Option A: Explicit NPM version
             const module = await import('npm:@base44/sdk@0.8.18');
             createClientFromRequest = module.createClientFromRequest;
-        } catch (importError) {
-            return Response.json({
-                success: false,
-                error: `SDK Import Failed: ${importError.message}`,
-                stack: importError.stack
-            }, { status: 200 });
+        } catch (e1) {
+            console.warn('NPM import failed, trying ESM.sh...', e1.message);
+            try {
+                // Option B: ESM.sh CDN (Universal fallback)
+                // Note: We use ?external=react,react-dom to avoid bundling conflicts if any
+                const module = await import('https://esm.sh/@base44/sdk@0.8.18');
+                createClientFromRequest = module.createClientFromRequest;
+            } catch (e2) {
+                return Response.json({
+                    success: false,
+                    error: `CRITICAL: All SDK Import Strategies Failed.\n1. NPM: ${e1.message}\n2. CDN: ${e2.message}`,
+                    stack: e2.stack
+                }, { status: 200 });
+            }
         }
 
         const base44 = createClientFromRequest(req);
