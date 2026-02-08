@@ -25,6 +25,7 @@ if (!process.env.OPENAI_API_KEY) {
 import { Base44Tool } from '../tools/base44.js';
 import { FileSystemTool } from '../tools/filesystem.js';
 import { GitTool } from '../tools/git.js';
+import { SwarmMemory } from '../core/memory.js';
 
 import { SentinelAgent } from '../agents/Sentinel.js';
 import { BugHunterAgent } from '../agents/BugHunter.js';
@@ -40,13 +41,14 @@ async function main() {
     const base44 = new Base44Tool();
     const fs = new FileSystemTool();
     const git = new GitTool();
+    const memory = new SwarmMemory();
 
     // Initialize Agents
     const sentinel = new SentinelAgent(base44);
     const bugHunter = new BugHunterAgent(base44, fs);
     const optimizer = new OptimizerAgent(base44);
     const godMode = new GodModeAgent(base44, fs, git);
-    const productOwner = new ProductOwnerAgent(base44, fs);
+    const productOwner = new ProductOwnerAgent(base44, fs, memory);
 
     console.log('✅ Agents Initialized. Entering Poll Loop...');
 

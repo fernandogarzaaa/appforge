@@ -1,7 +1,4 @@
-
 import { OpenAI } from 'openai';
-import { createAnthropic } from '@ai-sdk/anthropic';
-import { createGoogleGenerativeAI } from '@ai-sdk/google';
 
 // We'll use the official SDKs or generic fetch for broader support if needed, 
 // but sticking to a unified interface via a custom wrapper is safest for this "God Mode" usage.
@@ -119,6 +116,20 @@ export class MultiLLMClient {
         } catch (error: any) {
             console.error(`❌ [LLM] All Fallbacks Failed.`);
             throw new Error(`Critical Intelligence Failure: ${error.message}`);
+        }
+    }
+
+    async getEmbedding(text: string): Promise<number[]> {
+        if (!this.openai) return [];
+        try {
+            const response = await this.openai.embeddings.create({
+                model: "text-embedding-3-small",
+                input: text,
+            });
+            return response.data[0].embedding;
+        } catch (e) {
+            console.error('❌ Embedding Error:', e);
+            return [];
         }
     }
 }

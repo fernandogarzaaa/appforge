@@ -2,16 +2,19 @@
 import { MultiLLMClient } from '../core/llm.js';
 import { Base44Tool } from '../tools/base44.js';
 import { FileSystemTool } from '../tools/filesystem.js';
+import { SwarmMemory } from '../core/memory.js';
 
 export class ProductOwnerAgent {
     base44: Base44Tool;
     fs: FileSystemTool;
     llm: MultiLLMClient;
+    memory: SwarmMemory;
 
-    constructor(base44: Base44Tool, fs: FileSystemTool) {
+    constructor(base44: Base44Tool, fs: FileSystemTool, memory: SwarmMemory) {
         this.base44 = base44;
         this.fs = fs;
         this.llm = new MultiLLMClient();
+        this.memory = memory;
     }
 
     async run() {
@@ -60,6 +63,13 @@ export class ProductOwnerAgent {
 
             const newFeature = response.trim().replace(/["']/g, '');
             console.log(`   -> Idea Generated: "${newFeature}"`);
+
+            // 3.5 Check Memory (Have we done this before?)
+            const pastWisdom = await this.memory.search(newFeature);
+            if (pastWisdom.length > 0 && pastWisdom[0].score > 0.85) {
+                console.log(`   -> 🛑 DEJA VU: We already did something similar: "${pastWisdom[0].text}" (Score: ${pastWisdom[0].score}). Skipping.`);
+                return { status: 'skipped', reason: 'duplicate_idea' };
+            }
 
             // 4. Update Backlog
             const newTodoLine = `- [ ] TODO: [GOD_MODE] ${newFeature}`;
