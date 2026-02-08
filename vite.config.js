@@ -40,6 +40,8 @@ export default defineConfig({
     }),
   ],
   optimizeDeps: {
+    // Include React for proper ESM module resolution in preview/sandbox environments
+    include: ['react', 'react-dom', 'react/jsx-runtime', 'react/jsx-dev-runtime'],
     // Exclude the WASM glue so Vite doesn't try to prebundle it
     exclude: ['@/quantum-core/pkg/quantum_core']
   },
