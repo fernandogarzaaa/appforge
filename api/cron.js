@@ -3,7 +3,8 @@ export default async function handler(request, response) {
     const apiUrl = process.env.BASE44_API_URL;
 
     if (!apiKey || !apiUrl) {
-        return response.status(500).json({
+        console.error('[Cron] Missing Config: BASE44_API_KEY or BASE44_API_URL not set');
+        return response.status(400).json({
             error: 'Missing Configuration',
             details: 'Please set BASE44_API_KEY and BASE44_API_URL in Vercel Environment Variables.'
         });
