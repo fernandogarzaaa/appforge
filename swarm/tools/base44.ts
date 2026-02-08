@@ -33,7 +33,9 @@ export class Base44Tool {
                 limit: 5
             });
 
-            const pending = logs.items.filter((l: any) => l.changes?.status === 'PENDING');
+            // console.log('DEBUG: AuditLog.list response:', JSON.stringify(logs, null, 2));
+            const items = (logs && Array.isArray(logs)) ? logs : (logs?.items || []);
+            const pending = items.filter((l: any) => l.changes?.status === 'PENDING');
             return pending;
         } catch (error: any) {
             // Gracefully handle auth errors (Client Key vs Service Key issue)
