@@ -44,7 +44,7 @@ export default function AutonomousTrigger() {
                 <Button
                     onClick={runCycle}
                     disabled={loading}
-                    className="w-full bg-indigo-600 hover:bg-indigo-700 text-white"
+                    className="w-full bg-indigo-600 hover:bg-indigo-700 text-white mb-3"
                 >
                     {loading ? (
                         <>
@@ -54,6 +54,28 @@ export default function AutonomousTrigger() {
                     ) : (
                         'Run Autonomous Cycle Now'
                     )}
+                </Button>
+
+                <Button
+                    onClick={async () => {
+                        setLoading(true);
+                        setResult(null);
+                        try {
+                            const res = await base44.functions.invoke('simpleHealth', {});
+                            setResult(res);
+                            toast.success('Health Check Passed');
+                        } catch (e) {
+                            setResult({ error: e.message });
+                            toast.error('Health Check Failed');
+                        } finally {
+                            setLoading(false);
+                        }
+                    }}
+                    disabled={loading}
+                    variant="outline"
+                    className="w-full border-indigo-200 text-indigo-700 hover:bg-indigo-50 dark:border-indigo-800 dark:text-indigo-300 dark:hover:bg-indigo-900/50"
+                >
+                    Run System Health Check (Probe)
                 </Button>
 
                 {result && (
