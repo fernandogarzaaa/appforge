@@ -1,80 +1,104 @@
 
-import fs from 'fs';
+import { FileSystemTool } from '../tools/filesystem.js';
 import path from 'path';
-import { MultiLLMClient } from './llm.js';
 
-export interface MemoryItem {
-    id: string;
-    text: string;
-    vector: number[];
-    metadata: any;
-    timestamp: string;
-    score?: number;
+export interface FileNode {
+    path: string;
+    type: 'component' | 'hook' | 'service' | 'utility' | 'config' | 'other';
+    imports: string[];
+    exports: string[];
+    summary: string;
+    lastModified: string;
 }
 
 export class SwarmMemory {
-    private filePath: string;
-    private items: MemoryItem[] = [];
-    private llm: MultiLLMClient;
+    fs: FileSystemTool;
+    memoryFile: string;
+    projectMap: Map<string, FileNode>;
 
-    constructor() {
-        this.filePath = path.resolve('swarm_memory.json');
-        this.llm = new MultiLLMClient();
-        this.load();
+    constructor(fsTool: FileSystemTool) {
+        this.fs = fsTool;
+        this.memoryFile = 'swarm_memory.json';
+        this.projectMap = new Map();
     }
 
-    private load() {
-        if (fs.existsSync(this.filePath)) {
-            try {
-                this.items = JSON.parse(fs.readFileSync(this.filePath, 'utf-8'));
-            } catch (e) {
-                console.error('⚠️ Failed to load memory:', e);
-                this.items = [];
-            }
+    async loadMemory() {
+        try {
+            const content = await this.fs.readFile(this.memoryFile);
+            const data = JSON.parse(content);
+            this.projectMap = new Map(Object.entries(data));
+            console.log(`🧠 [Memory] Loaded context for ${this.projectMap.size} files.`);
+        } catch (e) {
+            console.log('🧠 [Memory] No existing memory found. Starting fresh.');
         }
     }
 
-    private save() {
-        fs.writeFileSync(this.filePath, JSON.stringify(this.items, null, 2));
+    async saveMemory() {
+        const obj = Object.fromEntries(this.projectMap);
+        await this.fs.writeFile(this.memoryFile, JSON.stringify(obj, null, 2));
     }
 
-    async add(text: string, metadata: any = {}) {
-        const vector = await this.llm.getEmbedding(text);
-        if (vector.length === 0) return; // Embedding failed
+    async buildContextMap() {
+        console.log('🧠 [Memory] Scanning project architecture...');
+        const files = await this.fs.listFiles('src/**/*.{js,jsx,ts,tsx}');
 
-        const item: MemoryItem = {
-            id: Math.random().toString(36).substring(7),
-            text,
-            vector,
-            metadata,
-            timestamp: new Date().toISOString()
+        for (const file of files) {
+            const content = await this.fs.readFile(file);
+            const node = this.analyzeFile(file, content);
+            this.projectMap.set(file, node);
+        }
+
+        await this.saveMemory();
+        console.log(`🧠 [Memory] Context Map built with ${this.projectMap.size} nodes.`);
+        return this.projectMap;
+    }
+
+    analyzeFile(filePath: string, content: string): FileNode {
+        const imports = this.extractImports(content);
+        const exports = this.extractExports(content);
+        const type = this.determineType(filePath);
+
+        return {
+            path: filePath,
+            type,
+            imports,
+            exports,
+            summary: `Contains ${exports.length} exports. Depends on ${imports.length} modules.`,
+            lastModified: new Date().toISOString()
         };
-
-        this.items.push(item);
-        this.save();
-        console.log(`🧠 Memory Stored: "${text.substring(0, 50)}..."`);
     }
 
-    async search(query: string, limit: number = 3): Promise<MemoryItem[]> {
-        const queryVector = await this.llm.getEmbedding(query);
-        if (queryVector.length === 0) return [];
-
-        // Calculate Cosine Similarity
-        const scoredItems = this.items.map(item => {
-            const similarity = this.cosineSimilarity(queryVector, item.vector);
-            return { ...item, score: similarity };
-        });
-
-        // Sort by Score DESC
-        return scoredItems
-            .sort((a, b) => b.score - a.score)
-            .slice(0, limit);
+    determineType(filePath: string): FileNode['type'] {
+        if (filePath.includes('/components/')) return 'component';
+        if (filePath.includes('/hooks/')) return 'hook';
+        if (filePath.includes('/services/')) return 'service';
+        if (filePath.includes('/utils/') || filePath.includes('/lib/')) return 'utility';
+        if (filePath.includes('.config.')) return 'config';
+        return 'other';
     }
 
-    private cosineSimilarity(vecA: number[], vecB: number[]): number {
-        const dotProduct = vecA.reduce((sum, a, i) => sum + a * vecB[i], 0);
-        const magnitudeA = Math.sqrt(vecA.reduce((sum, a) => sum + a * a, 0));
-        const magnitudeB = Math.sqrt(vecB.reduce((sum, b) => sum + b * b, 0));
-        return dotProduct / (magnitudeA * magnitudeB);
+    extractImports(content: string): string[] {
+        const regex = /from\s+['"]([^'"]+)['"]/g;
+        const matches = [...content.matchAll(regex)];
+        return matches.map(m => m[1]);
+    }
+
+    extractExports(content: string): string[] {
+        const regex = /export\s+(const|function|class|default)\s+([a-zA-Z0-9_]+)/g;
+        const matches = [...content.matchAll(regex)];
+        return matches.map(m => m[2]);
+    }
+
+    async retrieveContext(query: string): Promise<string> {
+        // Simple keyword search in memory
+        // In a real RAG system, this would use embeddings
+        const relevantNodes = [];
+        for (const [path, node] of this.projectMap.entries()) {
+            if (path.includes(query) || node.exports.some(e => e.includes(query))) {
+                relevantNodes.push(node);
+            }
+        }
+
+        return JSON.stringify(relevantNodes.slice(0, 5), null, 2);
     }
 }
