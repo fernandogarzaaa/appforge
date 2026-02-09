@@ -1,7 +1,7 @@
 
-import { QuantumGeneticAlgorithm } from '../src/utils/quantumInspiredAI.js';
+import { QuantumGeneticAlgorithm } from '../QuantumEnginePortable.js';
 
-console.log('🔮 QUANTUM CREATION ENGINE');
+console.log('🔮 QUANTUM CREATION ENGINE (PORTABLE MODE)');
 console.log('⚛️  Objective: Evolve "Code" from Quantum Noise...\n');
 
 const TARGET_PHRASE = "Quantum AI";
@@ -11,9 +11,7 @@ const MUTATION_RATE = 0.1;
 // Fitness: How close is the string to the target?
 function fitness(individual) {
     let score = 0;
-    const genes = individual.genes; // Array of numbers 0-1 implies char codes? 
-    // Wait, the GeneticAlgo in quantumInspiredAI.js uses numbers 0-1 for genes.
-    // I need to map them to chars.
+    const genes = individual.genes;
 
     let str = genesToStr(genes);
     for (let i = 0; i < TARGET_PHRASE.length; i++) {
@@ -32,7 +30,7 @@ function genesToStr(genes) {
 
 // Subclass to override initialization for String evolution
 class QuantumStringGenerator extends QuantumGeneticAlgorithm {
-    initializeQuantumPopulation() {
+    initializePopulation() {
         const population = [];
         for (let i = 0; i < this.populationSize; i++) {
             population.push({
@@ -53,7 +51,6 @@ console.log(`...Initializing ${POOL_SIZE} quantum timelines...`);
 const result = engine.evolve((ind) => fitness(ind), 1000); // 1000 gens max
 
 console.log('\n✨ CREATION COMPLETE');
-console.log(`Generations: ${result.generations}`);
 console.log(`Final Result: "${genesToStr(result.solution.genes)}"`);
 console.log(`Complexity: ${TARGET_PHRASE.length} chars`);
 console.log(`Quantum Advantage: Parallel Evolution enabled.`);
