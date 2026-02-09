@@ -45,7 +45,9 @@ Deno.serve(async (req) => {
 
         // Log the cycle completion
         await base44.entities.AuditLog.create({
-            action: 'autonomous_cycle_complete',
+            action_type: 'autonomous_cycle_complete',
+            resource_type: 'function',
+            performed_by: 'autonomous_bot',
             description: 'Completed full autonomous bot cycle',
             changes: results
         });

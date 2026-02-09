@@ -29,7 +29,7 @@ export class Base44Tool {
         try {
             // Poll AuditLog for 'SWARM_SIGNAL' with status 'PENDING'
             const logs = await this.client.entities.AuditLog.list({
-                filter: { action: 'SWARM_SIGNAL' },
+                filter: { action_type: 'SWARM_SIGNAL' },
                 sort: { createdAt: 'desc' },
                 limit: 5
             });
@@ -73,8 +73,10 @@ export class Base44Tool {
 
     async logActivity(agent: string, message: string) {
         await this.client.entities.AuditLog.create({
-            action: `${agent.toUpperCase()}_LOG`,
-            description: message
+            action_type: `${agent.toUpperCase()}_LOG`,
+            description: message,
+            resource_type: 'swarm_agent',
+            performed_by: agent
         });
     }
 }
