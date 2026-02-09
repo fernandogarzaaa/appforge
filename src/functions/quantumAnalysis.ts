@@ -2,7 +2,7 @@
 // Quantum Analysis Adapter for Deno Edge Functions
 // Imports the core Quantum Engine and exposes it for the Swarm Pipeline
 
-import { QuantumInspiredAI } from 'quantum';
+import { QuantumInspiredAI } from '@/lib/QuantumEngine';
 
 export async function analyzePipelineLogs(logs: string[], botId: string) {
     const engine = new QuantumInspiredAI();

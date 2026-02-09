@@ -1,4 +1,4 @@
-import { QuantumEngine } from 'quantum';
+import { QuantumEngine } from '@/lib/QuantumEngine';
 
 // 🌠 Quantum Collapse Service
 // Uses Quantum Decision Making to collapse the wavefunction of possible future states

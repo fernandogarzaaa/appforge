@@ -1,4 +1,4 @@
-import { QuantumEngine } from 'quantum';
+import { QuantumEngine } from '@/lib/QuantumEngine';
 
 // 📡 Quantum Stream Simulation
 // Simulates a high-frequency data stream from external sensors
