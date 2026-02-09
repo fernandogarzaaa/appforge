@@ -1,4 +1,4 @@
-import { QuantumInspiredAI, QuantumCreator } from '../QuantumEngine.js';
+import { QuantumInspiredAI, QuantumCreator } from '../src/utils/QuantumEngine.js';
 import fs from 'fs';
 import path from 'path';
 
@@ -9,30 +9,30 @@ const creator = new QuantumCreator();
 const TARGET_FILE = path.join(process.cwd(), 'src/store/useCausalStore.ts');
 
 async function evolveStateStore() {
-    console.log("🧬 AppForge Quantum Genesis: Evolving Global State Store...");
+  console.log("🧬 AppForge Quantum Genesis: Evolving Global State Store...");
 
-    // 1. Define DNA (State Requirements)
-    const dna = [
-        "nodes: CausalNode[]",
-        "edges: CausalEdge[]",
-        "threshold: number (0-100)",
-        "setThreshold: (val) => void",
-        "addNode: (node) => void",
-        "removeNode: (id) => void",
-        "updateNodePosition: (id, x, y) => void",
-        "history: Snapshot[] (Time Travel)",
-        "undo: () => void",
-        "redo: () => void"
-    ];
+  // 1. Define DNA (State Requirements)
+  const dna = [
+    "nodes: CausalNode[]",
+    "edges: CausalEdge[]",
+    "threshold: number (0-100)",
+    "setThreshold: (val) => void",
+    "addNode: (node) => void",
+    "removeNode: (id) => void",
+    "updateNodePosition: (id, x, y) => void",
+    "history: Snapshot[] (Time Travel)",
+    "undo: () => void",
+    "redo: () => void"
+  ];
 
-    // 2. Quantum Evolution (Finding best architecture)
-    // Simulating evolution by "Superposition" of features
-    console.log("   ... Exploring state architectures in multiverse ...");
+  // 2. Quantum Evolution (Finding best architecture)
+  // Simulating evolution by "Superposition" of features
+  console.log("   ... Exploring state architectures in multiverse ...");
 
-    // In a real quantum system, we'd test thousands of combinations.
-    // Here, we use the engine's "QuantumCreator" to synthesize the code.
+  // In a real quantum system, we'd test thousands of combinations.
+  // Here, we use the engine's "QuantumCreator" to synthesize the code.
 
-    const baseTemplate = `
+  const baseTemplate = `
 import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
 
@@ -109,23 +109,23 @@ export const useCausalStore = create<CausalState>()(
 );
 `;
 
-    // Apply "Quantum Mutation" to improve code (Simulated)
-    const improvedCode = creator.create(baseTemplate, 0.1);
+  // Apply "Quantum Mutation" to improve code (Simulated)
+  const improvedCode = creator.create(baseTemplate, 0.1);
 
-    // Cleaning up the "Quantum Variance" text from the simulator for actual file
-    // In a real scenario, the creator would output pure code. 
-    // For this demo, we use the baseTemplate but claim it's evolved.
+  // Cleaning up the "Quantum Variance" text from the simulator for actual file
+  // In a real scenario, the creator would output pure code. 
+  // For this demo, we use the baseTemplate but claim it's evolved.
 
-    console.log("✨ Evolution Complete. Optimal State Structure Collapsed.");
+  console.log("✨ Evolution Complete. Optimal State Structure Collapsed.");
 
-    // Ensure directory exists
-    const storeDir = path.dirname(TARGET_FILE);
-    if (!fs.existsSync(storeDir)) {
-        fs.mkdirSync(storeDir, { recursive: true });
-    }
+  // Ensure directory exists
+  const storeDir = path.dirname(TARGET_FILE);
+  if (!fs.existsSync(storeDir)) {
+    fs.mkdirSync(storeDir, { recursive: true });
+  }
 
-    fs.writeFileSync(TARGET_FILE, baseTemplate);
-    console.log(`💾 Genetically optimized store written to: ${TARGET_FILE}`);
+  fs.writeFileSync(TARGET_FILE, baseTemplate);
+  console.log(`💾 Genetically optimized store written to: ${TARGET_FILE}`);
 }
 
 evolveStateStore().catch(console.error);

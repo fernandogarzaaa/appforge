@@ -7,8 +7,8 @@ import { Badge } from '@/components/ui/badge';
 import { Switch } from '@/components/ui/switch';
 import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { 
-  Bot, Settings, Mail, Clock, CheckCircle2, 
+import {
+  Bot, Settings, Mail, Clock, CheckCircle2,
   Activity, TrendingUp, RefreshCw
 } from 'lucide-react';
 import { toast } from 'sonner';
@@ -20,11 +20,11 @@ export default function AIAgentControl() {
   const queryClient = useQueryClient();
 
   useEffect(() => {
-    base44.auth.me().then(setUser).catch(() => {});
+    base44.auth.me().then(setUser).catch(() => { });
   }, []);
 
   // Fetch AI agent config
-  const { data: configs = [], isLoading } = useQuery({
+  const { data: configs = [], isLoading: isLoadingConfig } = useQuery({
     queryKey: ['aiAgentConfig'],
     queryFn: () => base44.entities.AIAgentConfig.list(),
   });
@@ -32,7 +32,7 @@ export default function AIAgentControl() {
   const config = configs[0];
 
   // Fetch recent reports
-  const { data: reports = [], isLoading } = useQuery({
+  const { data: reports = [], isLoading: isLoadingReports } = useQuery({
     queryKey: ['healthReports'],
     queryFn: () => base44.entities.ProjectHealthReport.list('-scan_timestamp', 10),
   });
@@ -72,7 +72,7 @@ export default function AIAgentControl() {
     );
   }
 
-  const totalIssuesFixed = reports.reduce((sum, r) => 
+  const totalIssuesFixed = reports.reduce((sum, r) =>
     sum + (r.issues_found?.filter(i => i.auto_fixed).length || 0), 0
   );
 
@@ -92,153 +92,152 @@ export default function AIAgentControl() {
       <TabsContent value="dashboard" className="space-y-6">
         {/* Header */}
         <Card className="bg-gradient-to-r from-purple-500 to-indigo-600">
-        <CardContent className="p-6 text-white">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
-                <Bot className="w-6 h-6" />
-              </div>
-              <div>
-                <h2 className="text-2xl font-bold">🔮 Quantum AI Agent</h2>
-                <p className="text-purple-100 text-sm">
-                  Autonomous quantum-enhanced monitoring across parallel timelines
-                </p>
-              </div>
-            </div>
-            <Badge className={`${config?.autonomous_fixes_enabled ? 'bg-green-500' : 'bg-yellow-500'} text-white border-0 text-sm px-3 py-1`}>
-              {config?.autonomous_fixes_enabled ? '🔮 Quantum Active' : '👀 Monitor'}
-            </Badge>
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card>
-          <CardContent className="p-4">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-lg bg-green-50 flex items-center justify-center">
-                <CheckCircle2 className="w-5 h-5 text-green-600" />
-              </div>
-              <div>
-                <div className="text-2xl font-bold text-gray-900">{totalIssuesFixed}</div>
-                <div className="text-xs text-gray-600">Issues Fixed</div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardContent className="p-4">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-lg bg-blue-50 flex items-center justify-center">
-                <TrendingUp className="w-5 h-5 text-blue-600" />
-              </div>
-              <div>
-                <div className="text-2xl font-bold text-gray-900">{avgHealthScore}/100</div>
-                <div className="text-xs text-gray-600">Avg Health</div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardContent className="p-4">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-lg bg-purple-50 flex items-center justify-center">
-                <Activity className="w-5 h-5 text-purple-600" />
-              </div>
-              <div>
-                <div className="text-2xl font-bold text-gray-900">{reports.length}</div>
-                <div className="text-xs text-gray-600">Recent Scans</div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardContent className="p-4">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-lg bg-indigo-50 flex items-center justify-center">
-                <Clock className="w-5 h-5 text-indigo-600" />
-              </div>
-              <div>
-                <div className="text-2xl font-bold text-gray-900">5min</div>
-                <div className="text-xs text-gray-600">Scan Interval</div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
-
-
-      {/* Recent Reports */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Recent Reports</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-3">
-            {reports.map((report) => (
-              <div
-                key={report.id}
-                className="p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition"
-              >
-                <div className="flex items-start justify-between">
-                  <div className="flex-1">
-                    <div className="flex items-center gap-3 mb-2">
-                      <Badge className={`${
-                        report.health_score >= 80 ? 'bg-green-100 text-green-700' :
-                        report.health_score >= 60 ? 'bg-yellow-100 text-yellow-700' :
-                        'bg-red-100 text-red-700'
-                      } border-0`}>
-                        {report.health_score}/100
-                      </Badge>
-                      <span className="text-sm text-gray-500">
-                        {new Date(report.scan_timestamp).toLocaleString()}
-                      </span>
-                    </div>
-                    <div className="space-y-1">
-                      {report.actions_taken?.length > 0 && (
-                        <div className="text-sm text-green-700">
-                          {report.actions_taken.filter(a => a.quantum_validated).length > 0 ? '🔮' : '✅'} {report.actions_taken.filter(a => a.success).length} actions taken
-                          {report.actions_taken.filter(a => a.quantum_validated).length > 0 && (
-                            <span className="text-purple-600 ml-2">
-                              ({report.actions_taken.filter(a => a.quantum_validated).length} quantum-validated)
-                            </span>
-                          )}
-                        </div>
-                      )}
-                      {report.issues_found?.length > 0 && (
-                        <div className="text-sm text-gray-600">
-                          📊 {report.issues_found.length} issues found
-                          {report.issues_found.filter(i => i.auto_fixed).length > 0 && (
-                            <span className="text-green-600 ml-2">
-                              ({report.issues_found.filter(i => i.auto_fixed).length} fixed)
-                            </span>
-                          )}
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                  {report.email_sent && (
-                    <Badge variant="outline" className="text-xs">
-                      <Mail className="w-3 h-3 mr-1" />
-                      Sent
-                    </Badge>
-                  )}
+          <CardContent className="p-6 text-white">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
+                  <Bot className="w-6 h-6" />
+                </div>
+                <div>
+                  <h2 className="text-2xl font-bold">🔮 Quantum AI Agent</h2>
+                  <p className="text-purple-100 text-sm">
+                    Autonomous quantum-enhanced monitoring across parallel timelines
+                  </p>
                 </div>
               </div>
-            ))}
-            {reports.length === 0 && (
-              <div className="text-center py-8 text-gray-500">
-                No reports yet. Agent will start monitoring automatically.
+              <Badge className={`${config?.autonomous_fixes_enabled ? 'bg-green-500' : 'bg-yellow-500'} text-white border-0 text-sm px-3 py-1`}>
+                {config?.autonomous_fixes_enabled ? '🔮 Quantum Active' : '👀 Monitor'}
+              </Badge>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Stats */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <Card>
+            <CardContent className="p-4">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-lg bg-green-50 flex items-center justify-center">
+                  <CheckCircle2 className="w-5 h-5 text-green-600" />
+                </div>
+                <div>
+                  <div className="text-2xl font-bold text-gray-900">{totalIssuesFixed}</div>
+                  <div className="text-xs text-gray-600">Issues Fixed</div>
+                </div>
               </div>
-            )}
-          </div>
-        </CardContent>
-      </Card>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardContent className="p-4">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-lg bg-blue-50 flex items-center justify-center">
+                  <TrendingUp className="w-5 h-5 text-blue-600" />
+                </div>
+                <div>
+                  <div className="text-2xl font-bold text-gray-900">{avgHealthScore}/100</div>
+                  <div className="text-xs text-gray-600">Avg Health</div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardContent className="p-4">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-lg bg-purple-50 flex items-center justify-center">
+                  <Activity className="w-5 h-5 text-purple-600" />
+                </div>
+                <div>
+                  <div className="text-2xl font-bold text-gray-900">{reports.length}</div>
+                  <div className="text-xs text-gray-600">Recent Scans</div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardContent className="p-4">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-lg bg-indigo-50 flex items-center justify-center">
+                  <Clock className="w-5 h-5 text-indigo-600" />
+                </div>
+                <div>
+                  <div className="text-2xl font-bold text-gray-900">5min</div>
+                  <div className="text-xs text-gray-600">Scan Interval</div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+
+
+        {/* Recent Reports */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Recent Reports</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-3">
+              {reports.map((report) => (
+                <div
+                  key={report.id}
+                  className="p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition"
+                >
+                  <div className="flex items-start justify-between">
+                    <div className="flex-1">
+                      <div className="flex items-center gap-3 mb-2">
+                        <Badge className={`${report.health_score >= 80 ? 'bg-green-100 text-green-700' :
+                            report.health_score >= 60 ? 'bg-yellow-100 text-yellow-700' :
+                              'bg-red-100 text-red-700'
+                          } border-0`}>
+                          {report.health_score}/100
+                        </Badge>
+                        <span className="text-sm text-gray-500">
+                          {new Date(report.scan_timestamp).toLocaleString()}
+                        </span>
+                      </div>
+                      <div className="space-y-1">
+                        {report.actions_taken?.length > 0 && (
+                          <div className="text-sm text-green-700">
+                            {report.actions_taken.filter(a => a.quantum_validated).length > 0 ? '🔮' : '✅'} {report.actions_taken.filter(a => a.success).length} actions taken
+                            {report.actions_taken.filter(a => a.quantum_validated).length > 0 && (
+                              <span className="text-purple-600 ml-2">
+                                ({report.actions_taken.filter(a => a.quantum_validated).length} quantum-validated)
+                              </span>
+                            )}
+                          </div>
+                        )}
+                        {report.issues_found?.length > 0 && (
+                          <div className="text-sm text-gray-600">
+                            📊 {report.issues_found.length} issues found
+                            {report.issues_found.filter(i => i.auto_fixed).length > 0 && (
+                              <span className="text-green-600 ml-2">
+                                ({report.issues_found.filter(i => i.auto_fixed).length} fixed)
+                              </span>
+                            )}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                    {report.email_sent && (
+                      <Badge variant="outline" className="text-xs">
+                        <Mail className="w-3 h-3 mr-1" />
+                        Sent
+                      </Badge>
+                    )}
+                  </div>
+                </div>
+              ))}
+              {reports.length === 0 && (
+                <div className="text-center py-8 text-gray-500">
+                  No reports yet. Agent will start monitoring automatically.
+                </div>
+              )}
+            </div>
+          </CardContent>
+        </Card>
       </TabsContent>
 
       <TabsContent value="config">

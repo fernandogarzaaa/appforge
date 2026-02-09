@@ -24,17 +24,17 @@ export default function PredictiveAnalytics() {
     queryFn: () => base44.entities.Prediction.list('-last_prediction', 50)
   });
 
-  const { data: rules = [], isLoading } = useQuery({
+  const { data: rules = [], isLoading: isLoadingRules } = useQuery({
     queryKey: ['monitoring-rules'],
     queryFn: () => base44.entities.MonitoringRule.list('-created_date', 50)
   });
 
-  const { data: insights = [], isLoading } = useQuery({
+  const { data: insights = [], isLoading: isLoadingInsights } = useQuery({
     queryKey: ['ai-insights'],
     queryFn: () => base44.entities.AIInsight.list('-created_date', 100)
   });
 
-  const { data: feedback = [], isLoading } = useQuery({
+  const { data: feedback = [], isLoading: isLoadingFeedback } = useQuery({
     queryKey: ['feedback'],
     queryFn: () => base44.entities.AIFeedback.list('-created_date', 100)
   });

@@ -3,7 +3,7 @@ import { base44 } from '@/api/base44Client';
 import { useQuery } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
-import { 
+import {
   Coins, Image, FileCode, ArrowRight, Wallet, Activity, Zap
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -28,19 +28,19 @@ export default function Web3Dashboard() {
     enabled: !!projectId,
   });
 
-  const { data: collections = [], isLoading } = useQuery({
+  const { data: collections = [], isLoading: isLoadingCollections } = useQuery({
     queryKey: ['nft-collections', projectId],
     queryFn: () => base44.entities.NFTCollection.filter({ project_id: projectId }, '-created_date', 3),
     enabled: !!projectId,
   });
 
-  const { data: contracts = [], isLoading } = useQuery({
+  const { data: contracts = [], isLoading: isLoadingContracts } = useQuery({
     queryKey: ['contracts', projectId],
     queryFn: () => base44.entities.SmartContract.filter({ project_id: projectId }, '-created_date', 3),
     enabled: !!projectId,
   });
 
-  const { data: transactions = [], isLoading } = useQuery({
+  const { data: transactions = [], isLoading: isLoadingTransactions } = useQuery({
     queryKey: ['transactions', projectId],
     queryFn: () => base44.entities.Transaction.filter({ project_id: projectId }, '-created_date', 5),
     enabled: !!projectId,
@@ -66,15 +66,15 @@ export default function Web3Dashboard() {
           <h1 className="text-3xl font-bold text-gray-900 mb-1">Web3 Studio</h1>
           <p className="text-gray-500">Create tokens, NFTs, and smart contracts</p>
         </div>
-        <WalletConnect 
-          wallet={wallet} 
-          onConnect={setWallet} 
-          onDisconnect={() => setWallet(null)} 
+        <WalletConnect
+          wallet={wallet}
+          onConnect={setWallet}
+          onDisconnect={() => setWallet(null)}
         />
       </div>
 
       {/* Stats */}
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8"

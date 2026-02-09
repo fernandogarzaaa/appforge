@@ -5,9 +5,9 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { 
-  Sparkles, X, Lightbulb, ArrowRight, 
-  Zap, BookOpen, AlertCircle 
+import {
+  Sparkles, X, Lightbulb, ArrowRight,
+  Zap, BookOpen, AlertCircle
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -20,7 +20,7 @@ export default function ProactiveAIAssistant({ projectId, currentPage }) {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
-  const { data: config, isLoading } = useQuery({
+  const { data: config, isLoading: isLoadingConfig } = useQuery({
     queryKey: ['proactiveAIConfig'],
     queryFn: async () => {
       const configs = await base44.entities.ProactiveAIConfig.list();
@@ -29,7 +29,7 @@ export default function ProactiveAIAssistant({ projectId, currentPage }) {
     staleTime: 5 * 60 * 1000
   });
 
-  const { data: user, isLoading } = useQuery({
+  const { data: user, isLoading: isLoadingUser } = useQuery({
     queryKey: ['currentUser'],
     queryFn: () => base44.auth.me(),
     staleTime: 5 * 60 * 1000
@@ -48,7 +48,7 @@ export default function ProactiveAIAssistant({ projectId, currentPage }) {
   const shouldShowAssistance = () => {
     if (!config?.enabled) return false;
     if (dismissed) return false;
-    
+
     const pageName = currentPage || location.pathname.split('/').pop();
     if (!config?.show_on_pages?.includes(pageName)) return false;
 
@@ -97,12 +97,12 @@ export default function ProactiveAIAssistant({ projectId, currentPage }) {
         user_id: user.email,
         context_page: currentPage || location.pathname.split('/').pop()
       });
-      
+
       if (recent.length > 0) {
-        const latest = recent.sort((a, b) => 
+        const latest = recent.sort((a, b) =>
           new Date(b.triggered_at) - new Date(a.triggered_at)
         )[0];
-        
+
         await base44.entities.ProactiveAssistance.update(latest.id, {
           user_action: action
         });

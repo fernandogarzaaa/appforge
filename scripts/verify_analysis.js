@@ -1,4 +1,4 @@
-import { QuantumInspiredAI } from '../QuantumEngine.js';
+import { QuantumInspiredAI } from '../src/utils/QuantumEngine.js';
 
 // Initialize Engine
 const engine = new QuantumInspiredAI({});

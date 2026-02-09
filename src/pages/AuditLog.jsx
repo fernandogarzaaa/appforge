@@ -31,7 +31,7 @@ export default function AuditLog() {
   });
 
   // Get statistics
-  const { data: stats, isLoading } = useQuery({
+  const { data: stats, isLoading: isLoadingStats } = useQuery({
     queryKey: ['audit-stats'],
     queryFn: async () => {
       const response = await base44.functions.execute('auditLog', {
@@ -42,7 +42,7 @@ export default function AuditLog() {
   });
 
   // Get timeline
-  const { data: timeline, isLoading } = useQuery({
+  const { data: timeline, isLoading: isLoadingTimeline } = useQuery({
     queryKey: ['audit-timeline'],
     queryFn: async () => {
       const response = await base44.functions.execute('auditLog', {
@@ -65,8 +65,8 @@ export default function AuditLog() {
     });
 
     // Download file
-    const blob = new Blob([response.data.content], { 
-      type: format === 'csv' ? 'text/csv' : 'application/json' 
+    const blob = new Blob([response.data.content], {
+      type: format === 'csv' ? 'text/csv' : 'application/json'
     });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -150,7 +150,7 @@ export default function AuditLog() {
 
             <div>
               <Label>Action Type</Label>
-              <select 
+              <select
                 className="w-full border rounded-md px-3 py-2"
                 value={actionFilter}
                 onChange={(e) => setActionFilter(e.target.value)}
@@ -221,7 +221,7 @@ export default function AuditLog() {
                         {new Date(log.timestamp).toLocaleString()}
                       </span>
                     </div>
-                    
+
                     <div className="text-sm text-muted-foreground space-y-1">
                       <div>User: {log.userId}</div>
                       {log.details && <div>Details: {log.details}</div>}
@@ -255,14 +255,14 @@ export default function AuditLog() {
                 {Object.entries(timeline).map(([date, count]) => (
                   <div key={date} className="space-y-1">
                     <div className="flex justify-between text-sm">
-                      <span>{new Date(date).toLocaleDateString('en-US', { 
-                        month: 'short', 
-                        day: 'numeric' 
+                      <span>{new Date(date).toLocaleDateString('en-US', {
+                        month: 'short',
+                        day: 'numeric'
                       })}</span>
                       <span className="font-semibold">{count}</span>
                     </div>
                     <div className="h-2 bg-muted rounded-full overflow-hidden">
-                      <div 
+                      <div
                         className="h-full bg-primary"
                         style={{ width: `${(count / Math.max(...Object.values(timeline))) * 100}%` }}
                       />

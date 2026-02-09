@@ -7,8 +7,8 @@ import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import SupportChatbot from '@/components/support/SupportChatbot';
-import { 
-  MessageCircle, BookOpen, Ticket, Search, 
+import {
+  MessageCircle, BookOpen, Ticket, Search,
   Clock, CheckCircle, AlertCircle, Eye
 } from 'lucide-react';
 
@@ -25,13 +25,13 @@ export default function Support() {
     setUser(userData);
   };
 
-  const { data: tickets = [], isLoading } = useQuery({
+  const { data: tickets = [], isLoading: isLoadingTickets } = useQuery({
     queryKey: ['support-tickets', user?.email],
     queryFn: () => base44.entities.SupportTicket.filter({ user_email: user.email }, '-created_date'),
     enabled: !!user?.email
   });
 
-  const { data: articles = [], isLoading } = useQuery({
+  const { data: articles = [], isLoading: isLoadingArticles } = useQuery({
     queryKey: ['knowledge-base'],
     queryFn: () => base44.entities.KnowledgeBase.filter({ is_published: true })
   });
@@ -156,8 +156,8 @@ export default function Support() {
                       <div className="flex flex-col items-end gap-2">
                         <Badge className={
                           ticket.status === 'resolved' ? 'bg-green-600' :
-                          ticket.status === 'in_progress' ? 'bg-orange-600' :
-                          'bg-blue-600'
+                            ticket.status === 'in_progress' ? 'bg-orange-600' :
+                              'bg-blue-600'
                         }>
                           {statusIcons[ticket.status]}
                           <span className="ml-2">{ticket.status}</span>

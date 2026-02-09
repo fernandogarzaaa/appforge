@@ -14,7 +14,7 @@ export default function EnterpriseIntelligence() {
     queryFn: () => base44.entities.BusinessImpact.list('-created_date', 50)
   });
 
-  const { data: benchmarks, isLoading } = useQuery({
+  const { data: benchmarks, isLoading: isLoadingBenchmarks } = useQuery({
     queryKey: ['benchmark-metrics'],
     queryFn: () => base44.entities.BenchmarkMetric.list('-created_date', 20)
   });
@@ -102,10 +102,9 @@ export default function EnterpriseIntelligence() {
                       <span className="font-semibold text-blue-600">{benchmark.performance_percentile}th</span>
                     </div>
                     <div className="pt-2 border-t">
-                      <span className={`text-xs font-semibold ${
-                        benchmark.trend === 'improving' ? 'text-green-600' :
-                        benchmark.trend === 'degrading' ? 'text-red-600' : 'text-slate-600'
-                      }`}>
+                      <span className={`text-xs font-semibold ${benchmark.trend === 'improving' ? 'text-green-600' :
+                          benchmark.trend === 'degrading' ? 'text-red-600' : 'text-slate-600'
+                        }`}>
                         Trend: {benchmark.trend.toUpperCase()}
                       </span>
                     </div>

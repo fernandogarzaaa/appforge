@@ -20,13 +20,13 @@ export default function ProjectViewer() {
   // Handle both {data: project} and project response formats
   const project = projectResponse?.data || projectResponse;
 
-  const { data: entities = [], isLoading } = useQuery({
+  const { data: entities = [], isLoading: isLoadingEntities } = useQuery({
     queryKey: ['entities', id],
     queryFn: () => base44.entities.Entity.filter({ project_id: id }),
     enabled: !!id,
   });
 
-  const { data: pages = [], isLoading } = useQuery({
+  const { data: pages = [], isLoading: isLoadingPages } = useQuery({
     queryKey: ['pages', id],
     queryFn: () => base44.entities.Page.filter({ project_id: id }),
     enabled: !!id,
@@ -473,9 +473,9 @@ export default function ProjectViewer() {
                         {Object.entries(entity.metadata.api_endpoints).map(([_name, config], i) => (
                           <div key={i} className="flex items-center gap-3 p-2 bg-white rounded border border-green-100">
                             <span className={`px-2 py-1 text-xs font-mono rounded font-semibold ${config.method === 'GET' ? 'bg-green-100 text-green-700' :
-                                config.method === 'POST' ? 'bg-blue-100 text-blue-700' :
-                                  config.method === 'PUT' ? 'bg-yellow-100 text-yellow-700' :
-                                    'bg-red-100 text-red-700'
+                              config.method === 'POST' ? 'bg-blue-100 text-blue-700' :
+                                config.method === 'PUT' ? 'bg-yellow-100 text-yellow-700' :
+                                  'bg-red-100 text-red-700'
                               }`}>
                               {config.method}
                             </span>

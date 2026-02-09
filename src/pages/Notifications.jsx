@@ -28,7 +28,7 @@ export default function Notifications() {
   });
 
   // Get preferences
-  const { data: preferences, isLoading } = useQuery({
+  const { data: preferences, isLoading: isLoadingPrefs } = useQuery({
     queryKey: ['notification-preferences'],
     queryFn: async () => {
       const response = await base44.functions.execute('notificationCenter', {
@@ -39,7 +39,7 @@ export default function Notifications() {
   });
 
   // Get stats
-  const { data: stats, isLoading } = useQuery({
+  const { data: stats, isLoading: isLoadingStats } = useQuery({
     queryKey: ['notification-stats'],
     queryFn: async () => {
       const response = await base44.functions.execute('notificationCenter', {
@@ -217,9 +217,8 @@ export default function Notifications() {
                     return (
                       <div
                         key={notification.id}
-                        className={`border-l-4 rounded-lg p-4 ${getNotificationColor(notification.type)} ${
-                          !notification.read ? 'border-l-4' : 'opacity-60'
-                        }`}
+                        className={`border-l-4 rounded-lg p-4 ${getNotificationColor(notification.type)} ${!notification.read ? 'border-l-4' : 'opacity-60'
+                          }`}
                       >
                         <div className="flex items-start justify-between mb-2">
                           <div className="flex items-center gap-2">
@@ -341,7 +340,7 @@ export default function Notifications() {
             <div className="border-t pt-4">
               <h4 className="font-semibold mb-3">Categories</h4>
               <div className="space-y-2 text-sm">
-                {preferences?.preferences?.categories && 
+                {preferences?.preferences?.categories &&
                   Object.entries(preferences.preferences.categories).map(([category, prefs]) => (
                     <div key={category} className="flex justify-between items-center">
                       <span className="capitalize">{category}</span>
@@ -354,8 +353,8 @@ export default function Notifications() {
               </div>
             </div>
 
-            <Button 
-              className="w-full" 
+            <Button
+              className="w-full"
               variant="outline"
               onClick={() => sendTest.mutate()}
             >

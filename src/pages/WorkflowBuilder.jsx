@@ -10,7 +10,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { toast } from 'sonner';
 import WorkflowCanvas from '@/components/workflow/WorkflowCanvas';
-import { 
+import {
   Save, Play, Plus, FolderOpen, Loader2,
   Database, Brain, Mail, FileText, BarChart3, Stethoscope, Building2,
   Clock, History, AlertCircle, CheckCircle
@@ -50,14 +50,14 @@ export default function WorkflowBuilder() {
   const [showExecutionHistory, setShowExecutionHistory] = useState(false);
   const [executionLogs, setExecutionLogs] = useState([]);
 
-  const { data: savedWorkflows = [], isLoading } = useQuery({
+  const { data: savedWorkflows = [], isLoading: isLoadingWorkflows } = useQuery({
     queryKey: ['workflows'],
     queryFn: () => base44.entities.Workflow.list('-created_date')
   });
 
-  const { data: workflowExecutions = [], isLoading } = useQuery({
+  const { data: workflowExecutions = [], isLoading: isLoadingExecutions } = useQuery({
     queryKey: ['workflow-executions', currentWorkflowId],
-    queryFn: () => currentWorkflowId 
+    queryFn: () => currentWorkflowId
       ? base44.entities.WorkflowExecution.filter({ workflow_id: currentWorkflowId }, '-created_date', 20)
       : [],
     enabled: !!currentWorkflowId
@@ -154,19 +154,19 @@ export default function WorkflowBuilder() {
       // Build execution order based on connections
       const executionOrder = [];
       const visited = new Set();
-      
+
       const buildOrder = (nodeId) => {
         if (visited.has(nodeId)) return;
         visited.add(nodeId);
-        
+
         const node = nodes.find(n => n.id === nodeId);
         if (node) executionOrder.push(node);
-        
+
         connections
           .filter(c => c.from === nodeId)
           .forEach(c => buildOrder(c.to));
       };
-      
+
       buildOrder(startNode.id);
 
       // Execute nodes in order
@@ -175,7 +175,7 @@ export default function WorkflowBuilder() {
 
       for (const node of executionOrder) {
         const nodeStartTime = Date.now();
-        
+
         try {
           if (node.type === 'trigger') {
             results[node.id] = { status: 'started', timestamp: new Date().toISOString() };
@@ -187,18 +187,18 @@ export default function WorkflowBuilder() {
           if (node.type === 'conditional') {
             const condition = node.config.condition || '';
             const conditionMet = await evaluateCondition(condition, previousOutput);
-            
+
             const nextNodeId = conditionMet ? node.config.true_path : node.config.false_path;
             results[node.id] = { status: 'success', output: { condition_met: conditionMet, next: nextNodeId } };
-            logs.push({ 
-              node_id: node.id, 
-              node_name: node.name, 
-              status: 'success', 
+            logs.push({
+              node_id: node.id,
+              node_name: node.name,
+              status: 'success',
               output: { condition_met: conditionMet },
               timestamp: new Date().toISOString(),
               duration_ms: Date.now() - nodeStartTime
             });
-            
+
             // Modify execution order based on condition
             const branchNode = nodes.find(n => n.id === nextNodeId);
             if (branchNode) {
@@ -276,15 +276,15 @@ export default function WorkflowBuilder() {
           }
         } catch (nodeError) {
           results[node.id] = { status: 'error', error: nodeError.message };
-          logs.push({ 
-            node_id: node.id, 
-            node_name: node.name, 
-            status: 'error', 
+          logs.push({
+            node_id: node.id,
+            node_name: node.name,
+            status: 'error',
             error: nodeError.message,
             timestamp: new Date().toISOString(),
             duration_ms: Date.now() - nodeStartTime
           });
-          
+
           if (!errorHandling.retry_on_failure) {
             throw nodeError;
           }
@@ -318,7 +318,7 @@ export default function WorkflowBuilder() {
       setExecutionLogs(logs);
       toast.dismiss();
       toast.error('Workflow execution failed: ' + errorMessage);
-      
+
       // Update execution record with failure
       await base44.entities.WorkflowExecution.update(executionRecord.id, {
         status: 'failed',
@@ -571,8 +571,8 @@ export default function WorkflowBuilder() {
                           {log.status === 'success' && <CheckCircle className="w-3 h-3 text-green-600" />}
                           {log.status === 'error' && <AlertCircle className="w-3 h-3 text-red-600" />}
                           <Badge className={
-                            log.status === 'success' ? 'bg-green-600' : 
-                            log.status === 'error' ? 'bg-red-600' : 'bg-gray-600'
+                            log.status === 'success' ? 'bg-green-600' :
+                              log.status === 'error' ? 'bg-red-600' : 'bg-gray-600'
                           }>
                             {log.status}
                           </Badge>
@@ -666,7 +666,7 @@ export default function WorkflowBuilder() {
               />
               <label className="text-sm font-medium">Enable Scheduled Execution</label>
             </div>
-            
+
             {schedule.enabled && (
               <>
                 <div>
@@ -706,7 +706,7 @@ export default function WorkflowBuilder() {
                   />
                   <label className="text-sm">Retry on failure</label>
                 </div>
-                
+
                 {errorHandling.retry_on_failure && (
                   <div>
                     <label className="text-sm font-medium mb-1 block">Max Retries</label>
@@ -766,8 +766,8 @@ export default function WorkflowBuilder() {
                       <div className="flex items-center gap-2 mb-2">
                         <Badge className={
                           execution.status === 'completed' ? 'bg-green-600' :
-                          execution.status === 'failed' ? 'bg-red-600' :
-                          execution.status === 'running' ? 'bg-blue-600' : 'bg-gray-600'
+                            execution.status === 'failed' ? 'bg-red-600' :
+                              execution.status === 'running' ? 'bg-blue-600' : 'bg-gray-600'
                         }>
                           {execution.status}
                         </Badge>

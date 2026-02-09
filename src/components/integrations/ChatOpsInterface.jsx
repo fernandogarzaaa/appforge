@@ -12,17 +12,17 @@ export default function ChatOpsInterface() {
     { type: 'bot', text: 'Hi! I\'m your ChatOps assistant. Try commands like /status, /alerts, /acknowledge <id>, or /help' }
   ]);
 
-  const { data: commands, isLoading } = useQuery({
+  const { data: commands, isLoading: isLoadingCommands } = useQuery({
     queryKey: ['chatops-commands'],
     queryFn: () => base44.entities.ChatOpsCommand.list('-created_date', 50)
   });
 
-  const { data: activeAlerts, isLoading } = useQuery({
+  const { data: activeAlerts, isLoading: isLoadingAlerts } = useQuery({
     queryKey: ['active-alerts'],
     queryFn: () => base44.entities.AnomalyAlert.filter({ status: 'new' }, '-created_date', 10)
   });
 
-  const { data: activePredictions, isLoading } = useQuery({
+  const { data: activePredictions, isLoading: isLoadingPredictions } = useQuery({
     queryKey: ['active-predictions'],
     queryFn: () => base44.entities.AnomalyForecast.filter({ status: 'active' })
   });
@@ -105,11 +105,10 @@ export default function ChatOpsInterface() {
               className={`flex ${msg.type === 'user' ? 'justify-end' : 'justify-start'}`}
             >
               <div
-                className={`max-w-xs p-3 rounded-lg ${
-                  msg.type === 'user'
+                className={`max-w-xs p-3 rounded-lg ${msg.type === 'user'
                     ? 'bg-blue-600 text-white rounded-br-none'
                     : 'bg-slate-100 text-slate-900 rounded-bl-none'
-                }`}
+                  }`}
               >
                 <p className="text-sm whitespace-pre-wrap">{msg.text}</p>
               </div>

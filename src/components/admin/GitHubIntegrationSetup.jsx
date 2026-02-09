@@ -7,9 +7,9 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { Switch } from '@/components/ui/switch';
-import { 
-  Github, Plus, Trash2, ExternalLink, CheckCircle, AlertCircle, 
-  GitBranch, Settings 
+import {
+  Github, Plus, Trash2, ExternalLink, CheckCircle, AlertCircle,
+  GitBranch, Settings
 } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -27,13 +27,13 @@ export default function GitHubIntegrationSetup() {
   const queryClient = useQueryClient();
 
   // Fetch projects
-  const { data: projects = [], isLoading } = useQuery({
+  const { data: projects = [], isLoading: isLoadingProjects } = useQuery({
     queryKey: ['projects'],
     queryFn: () => base44.entities.Project.list(),
   });
 
   // Fetch GitHub integrations
-  const { data: integrations = [], isLoading } = useQuery({
+  const { data: integrations = [], isLoading: isLoadingIntegrations } = useQuery({
     queryKey: ['githubIntegrations'],
     queryFn: () => base44.entities.ProjectGitHubIntegration.list(),
   });
@@ -67,7 +67,7 @@ export default function GitHubIntegrationSetup() {
 
   // Toggle auto-commit
   const toggleMutation = useMutation({
-    mutationFn: ({ id, enabled }) => 
+    mutationFn: ({ id, enabled }) =>
       base44.entities.ProjectGitHubIntegration.update(id, { auto_commit_enabled: enabled }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['githubIntegrations'] });
@@ -102,7 +102,7 @@ export default function GitHubIntegrationSetup() {
                 Connect projects to GitHub repos for autonomous code commits
               </CardDescription>
             </div>
-            <Button 
+            <Button
               onClick={() => setShowAddForm(!showAddForm)}
               className="bg-gray-900 hover:bg-gray-800"
             >
@@ -167,7 +167,7 @@ export default function GitHubIntegrationSetup() {
                 <div className="flex items-center gap-2">
                   <Switch
                     checked={formData.auto_commit_enabled}
-                    onCheckedChange={(checked) => 
+                    onCheckedChange={(checked) =>
                       setFormData({ ...formData, auto_commit_enabled: checked })
                     }
                   />
@@ -226,8 +226,8 @@ export default function GitHubIntegrationSetup() {
                     </div>
                     <div className="flex items-center gap-3">
                       <div className="flex flex-col items-end gap-2">
-                        <Badge className={integration.auto_commit_enabled ? 
-                          'bg-green-100 text-green-700 border-0' : 
+                        <Badge className={integration.auto_commit_enabled ?
+                          'bg-green-100 text-green-700 border-0' :
                           'bg-gray-100 text-gray-700 border-0'
                         }>
                           {integration.auto_commit_enabled ? (
@@ -244,7 +244,7 @@ export default function GitHubIntegrationSetup() {
                         </Badge>
                         <Switch
                           checked={integration.auto_commit_enabled}
-                          onCheckedChange={(checked) => 
+                          onCheckedChange={(checked) =>
                             toggleMutation.mutate({ id: integration.id, enabled: checked })
                           }
                         />
@@ -288,7 +288,7 @@ export default function GitHubIntegrationSetup() {
               Username: {Deno.env.get('GITHUB_BOT_USERNAME') || 'Not configured'}
             </p>
           </div>
-          
+
           <div>
             <h4 className="font-semibold text-blue-900 mb-2">2. Grant Write Access</h4>
             <p className="text-blue-800">

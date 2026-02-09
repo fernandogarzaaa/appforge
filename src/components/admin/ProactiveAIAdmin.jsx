@@ -18,7 +18,7 @@ export default function ProactiveAIAdmin() {
     }
   });
 
-  const { data: stats, isLoading } = useQuery({
+  const { data: stats, isLoading: isLoadingStats } = useQuery({
     queryKey: ['proactiveAIStats'],
     queryFn: async () => {
       const assistance = await base44.asServiceRole.entities.ProactiveAssistance.list();

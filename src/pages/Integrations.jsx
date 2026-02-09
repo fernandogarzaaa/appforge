@@ -162,7 +162,7 @@ export default function Integrations() {
     queryFn: () => base44.entities.CustomIntegration.list('-created_date')
   });
 
-  const { data: marketplaceIntegrations = [], isLoading } = useQuery({
+  const { data: marketplaceIntegrations = [], isLoading: isLoadingMarketplace } = useQuery({
     queryKey: ['marketplace-integrations'],
     queryFn: () => base44.entities.CustomIntegration.filter({ is_public: true }, '-install_count', 20)
   });

@@ -11,7 +11,7 @@ export default function IntegrationAnalytics() {
     queryFn: () => base44.entities.ExternalBotIntegration.list()
   });
 
-  const { data: logs = [], isLoading } = useQuery({
+  const { data: logs = [], isLoading: isLoadingLogs } = useQuery({
     queryKey: ['webhookLogs'],
     queryFn: () => base44.entities.WebhookLog.list('-created_date', 1000)
   });
@@ -24,7 +24,7 @@ export default function IntegrationAnalytics() {
 
   const platformChartData = Object.entries(platformData).map(([name, value]) => ({ name, value }));
 
-  const successRate = logs.length > 0 
+  const successRate = logs.length > 0
     ? ((logs.filter(l => l.status === 'success').length / logs.length) * 100).toFixed(1)
     : 0;
 

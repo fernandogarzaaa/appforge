@@ -2,7 +2,7 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { QuantumNeuralNetwork } from '../QuantumEngine.js';
+import { QuantumNeuralNetwork } from '../src/utils/QuantumEngine.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);

@@ -1,4 +1,4 @@
-import { QuantumInspiredAI, QuantumAnnealingOptimizer, SuperpositionProcessor } from '../QuantumEngine.js';
+import { QuantumInspiredAI, QuantumAnnealingOptimizer, SuperpositionProcessor } from '../src/utils/QuantumEngine.js';
 
 /**
  * 🚀 Quantum Pre-Flight Health Check

@@ -1,4 +1,4 @@
-import { QuantumEngine } from '../QuantumEngine.js';
+import { QuantumEngine } from '../src/utils/QuantumEngine.js';
 import { exec } from 'child_process';
 import util from 'util';
 import fs from 'fs';

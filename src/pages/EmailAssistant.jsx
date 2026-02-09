@@ -9,8 +9,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import { toast } from 'sonner';
-import { 
-  Mail, Plus, Settings, Inbox, Send, Calendar, 
+import {
+  Mail, Plus, Settings, Inbox, Send, Calendar,
   Sparkles, CheckCircle, AlertCircle, RefreshCw
 } from 'lucide-react';
 import { featureFlags } from '@/utils/featureFlags';
@@ -31,7 +31,7 @@ export default function EmailAssistant() {
     queryFn: () => base44.entities.EmailAccount.list('-created_date')
   });
 
-  const { data: messages = [], isLoading } = useQuery({
+  const { data: messages = [], isLoading: isLoadingMessages } = useQuery({
     queryKey: ['email-messages'],
     queryFn: () => base44.entities.EmailMessage.list('-received_at', 50)
   });
@@ -81,7 +81,7 @@ export default function EmailAssistant() {
       return;
     }
     toast.loading('Analyzing email...');
-    
+
     const analysis = await base44.integrations.Core.InvokeLLM({
       prompt: `Analyze this email and provide structured analysis:
 From: ${message.from_email}
@@ -209,9 +209,8 @@ Generate a helpful, professional response.`
               {accounts.map(account => (
                 <div
                   key={account.id}
-                  className={`p-3 rounded-lg border cursor-pointer transition-all ${
-                    selectedAccount?.id === account.id ? 'bg-indigo-50 border-indigo-600' : 'hover:bg-gray-50'
-                  }`}
+                  className={`p-3 rounded-lg border cursor-pointer transition-all ${selectedAccount?.id === account.id ? 'bg-indigo-50 border-indigo-600' : 'hover:bg-gray-50'
+                    }`}
                   onClick={() => setSelectedAccount(account)}
                 >
                   <div className="flex items-center justify-between mb-2">
@@ -258,9 +257,8 @@ Generate a helpful, professional response.`
                 {messages.map(message => (
                   <div
                     key={message.id}
-                    className={`p-3 rounded-lg border cursor-pointer transition-all ${
-                      selectedMessage?.id === message.id ? 'bg-indigo-50 border-indigo-600' : 'hover:bg-gray-50'
-                    } ${message.status === 'unread' ? 'border-l-4 border-l-indigo-600' : ''}`}
+                    className={`p-3 rounded-lg border cursor-pointer transition-all ${selectedMessage?.id === message.id ? 'bg-indigo-50 border-indigo-600' : 'hover:bg-gray-50'
+                      } ${message.status === 'unread' ? 'border-l-4 border-l-indigo-600' : ''}`}
                     onClick={() => setSelectedMessage(message)}
                   >
                     <div className="flex items-start justify-between mb-2">

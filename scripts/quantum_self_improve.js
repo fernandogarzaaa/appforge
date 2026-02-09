@@ -1,5 +1,5 @@
 
-import { QuantumErrorCorrection, QuantumTunnelingSearch } from '../src/utils/quantumInspiredAI.js';
+import { QuantumErrorCorrection, QuantumTunnelingSearch } from '../src/utils/QuantumEngine.js';
 
 console.log('🔮 QUANTUM SELF-EVOLUTION PROTOCOL');
 console.log('⚛️  Status: Theorizing new capabilities...\n');

@@ -1,5 +1,5 @@
 
-import { QuantumGeneticAlgorithm } from '../src/utils/quantumInspiredAI.js';
+import { QuantumGeneticAlgorithm } from '../src/utils/QuantumEngine.js';
 import fs from 'fs';
 import path from 'path';
 
@@ -109,7 +109,7 @@ while (!evolved && generations < 100) {
 }
 
 function injectQuantumCreator() {
-    const filePath = path.join(process.cwd(), 'src', 'utils', 'quantumInspiredAI.js');
+    const filePath = path.join(process.cwd(), 'src', 'utils', 'QuantumEngine.js');
     console.log(`\n📝 INJECTING SELF-CREATED MODULE INTO: ${filePath}`);
 
     const newClass = `

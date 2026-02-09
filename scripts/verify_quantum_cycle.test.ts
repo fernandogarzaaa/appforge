@@ -18,7 +18,7 @@ vi.mock('../src/services/QuantumCollapse.js', () => {
     };
 });
 
-vi.mock('../QuantumEngine.js', () => {
+vi.mock('../src/utils/QuantumEngine.js', () => {
     return {
         QuantumInspiredAI: class {
             measureSystemHealth(nodes, entanglements) {

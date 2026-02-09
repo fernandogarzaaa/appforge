@@ -12,7 +12,7 @@ export default function ProactiveSuggestions({ projectId, onApplySuggestion }) {
   const [suggestions, setSuggestions] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  const { data: project, isLoading } = useQuery({
+  const { data: project, isLoading: isLoadingProject } = useQuery({
     queryKey: ['project', projectId],
     queryFn: async () => {
       const projects = await base44.entities.Project.filter({ id: projectId });
@@ -21,13 +21,13 @@ export default function ProactiveSuggestions({ projectId, onApplySuggestion }) {
     enabled: !!projectId
   });
 
-  const { data: entities = [], isLoading } = useQuery({
+  const { data: entities = [], isLoading: isLoadingEntities } = useQuery({
     queryKey: ['entities', projectId],
     queryFn: () => base44.entities.Entity.filter({ project_id: projectId }),
     enabled: !!projectId
   });
 
-  const { data: pages = [], isLoading } = useQuery({
+  const { data: pages = [], isLoading: isLoadingPages } = useQuery({
     queryKey: ['pages', projectId],
     queryFn: () => base44.entities.Page.filter({ project_id: projectId }),
     enabled: !!projectId
@@ -106,8 +106,8 @@ Be specific and actionable.`,
   };
 
   // Template suggestions based on project context
-  const relevantTemplates = templates.filter(t => 
-    t.id !== 'blank' && 
+  const relevantTemplates = templates.filter(t =>
+    t.id !== 'blank' &&
     (!project?.name || t.name.toLowerCase().includes(project.name.toLowerCase().split(' ')[0]))
   ).slice(0, 2);
 
@@ -138,7 +138,7 @@ Be specific and actionable.`,
         <div className="space-y-2">
           {suggestions.map((suggestion, i) => {
             const Icon = categoryIcons[suggestion.category.toLowerCase()] || categoryIcons.default;
-            
+
             return (
               <motion.div
                 key={i}
@@ -183,7 +183,7 @@ Be specific and actionable.`,
               {relevantTemplates.map((template, i) => (
                 <Card key={template.id} className="p-3 hover:shadow-md transition-shadow cursor-pointer">
                   <div className="flex items-center gap-2">
-                    <div 
+                    <div
                       className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0"
                       style={{ backgroundColor: `${template.color}20` }}
                     >

@@ -1,5 +1,5 @@
 
-import { SuperpositionProcessor, initializeWasm } from '../QuantumEngine.js';
+import { SuperpositionProcessor, initializeWasm } from '../src/utils/QuantumEngine.js';
 
 (async () => {
     console.log("🧪 Testing Quantum Bridge...");

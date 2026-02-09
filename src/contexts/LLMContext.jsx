@@ -11,7 +11,7 @@ import { base44 } from '@/api/base44Client';
 import { fetchJson } from '@/utils/api';
 import { isFeatureEnabled } from '@/utils/featureFlags';
 import { callLLM as apiCallLLM } from '@/api/llmApi';
-import { QuantumInspiredAI } from '@/utils/quantumInspiredAI';
+import { QuantumEngine } from '@/utils/QuantumEngine';
 
 // Available AI Models
 export const AI_MODELS = {
@@ -380,7 +380,7 @@ export function LLMProvider({ children }) {
 
       // 🔧 QUANTUM FALLBACK: Generate local AI response using QuantumEngine
       try {
-        const quantumAI = new QuantumInspiredAI();
+        const quantumAI = new QuantumEngine(base44);
 
         // Generate quantum-inspired response based on prompt analysis
         const response = await generateQuantumFallbackResponse(quantumAI, prompt);

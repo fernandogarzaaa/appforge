@@ -1,4 +1,4 @@
-import { QuantumEngine, QuantumArchitect, QuantumInspiredAI, EntanglementAnalyzer, SuperpositionProcessor } from '../QuantumEngine.js';
+import { QuantumEngine, QuantumArchitect, QuantumInspiredAI, EntanglementAnalyzer, SuperpositionProcessor } from '../src/utils/QuantumEngine.js';
 import fs from 'fs';
 import path from 'path';
 

@@ -10,7 +10,7 @@ export default function ChatbotKnowledgeConfig({ sources, onUpdate }) {
   const [sourceType, setSourceType] = useState('document');
   const [selectedSource, setSelectedSource] = useState('');
 
-  const { data: documents = [], isLoading } = useQuery({
+  const { data: documents = [], isLoading: isLoadingDocs } = useQuery({
     queryKey: ['projectDocuments'],
     queryFn: async () => {
       try {
@@ -21,7 +21,7 @@ export default function ChatbotKnowledgeConfig({ sources, onUpdate }) {
     }
   });
 
-  const { data: botEntities = [], isLoading } = useQuery({
+  const { data: botEntities = [], isLoading: isLoadingEntities } = useQuery({
     queryKey: ['chatbotAvailableEntities'],
     queryFn: async () => {
       try {
@@ -41,10 +41,10 @@ export default function ChatbotKnowledgeConfig({ sources, onUpdate }) {
 
   const handleAddSource = () => {
     if (!selectedSource) return;
-    
+
     const availableSources = getAvailableSources();
     const selected = availableSources.find(s => s.id === selectedSource);
-    
+
     if (selected && !sources.find(s => s.source_id === selectedSource)) {
       onUpdate([
         ...sources,

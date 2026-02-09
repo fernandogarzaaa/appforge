@@ -19,12 +19,12 @@ export default function CodeGenerator() {
     queryFn: () => base44.entities.Project.list('-updated_date', 10)
   });
 
-  const { data: entities = [], isLoading } = useQuery({
+  const { data: entities = [], isLoading: isLoadingEntities } = useQuery({
     queryKey: ['entities'],
     queryFn: () => base44.asServiceRole.entities.Entity.list()
   });
 
-  const { data: pages = [], isLoading } = useQuery({
+  const { data: pages = [], isLoading: isLoadingPages } = useQuery({
     queryKey: ['pages'],
     queryFn: () => base44.asServiceRole.entities.Page.list()
   });

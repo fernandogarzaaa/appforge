@@ -12,18 +12,18 @@ export default function LivePreview({ projectId }) {
   const [refreshKey, setRefreshKey] = useState(0);
   const iframeRef = useRef(null);
 
-  const { data: project, isLoading } = useQuery({
+  const { data: project, isLoading: isLoadingProject } = useQuery({
     queryKey: ['project', projectId],
     queryFn: () => base44.entities.Project.get(projectId),
   });
 
-  const { data: entities = [], isLoading } = useQuery({
+  const { data: entities = [], isLoading: isLoadingEntities } = useQuery({
     queryKey: ['entities', projectId],
     queryFn: () => base44.entities.Entity.filter({ project_id: projectId }),
     enabled: !!projectId,
   });
 
-  const { data: pages = [], isLoading } = useQuery({
+  const { data: pages = [], isLoading: isLoadingPages } = useQuery({
     queryKey: ['pages', projectId],
     queryFn: () => base44.entities.Page.filter({ project_id: projectId }),
     enabled: !!projectId,
@@ -44,7 +44,7 @@ export default function LivePreview({ projectId }) {
     const businessName = actualProject?.name || 'My App';
     const description = actualProject?.description || 'Welcome to our application';
     const primaryColor = actualProject?.color || '#6366f1';
-    
+
     // Get homepage content
     const homepage = pagesArray.find(p => p.path === '/' || p.name === 'Home');
     const pageContent = homepage?.content || {};
@@ -88,9 +88,9 @@ export default function LivePreview({ projectId }) {
           <span class="text-xl font-bold text-gray-900">${businessName}</span>
         </div>
         <div class="hidden md:flex items-center gap-6">
-          ${pagesArray.slice(0, 5).map(page => 
-            `<a href="#${page.path}" class="text-gray-600 hover:text-gray-900 transition-colors">${page.name}</a>`
-          ).join('')}
+          ${pagesArray.slice(0, 5).map(page =>
+      `<a href="#${page.path}" class="text-gray-600 hover:text-gray-900 transition-colors">${page.name}</a>`
+    ).join('')}
           <button class="primary-btn px-6 py-2 rounded-lg font-medium shadow-md">Get Started</button>
         </div>
       </div>
@@ -243,14 +243,14 @@ export default function LivePreview({ projectId }) {
               Real-time
             </span>
           </div>
-          
+
           <div className="flex items-center gap-2">
             {/* Device Selector */}
             <Tabs value={device} onValueChange={setDevice} className="w-auto">
               <TabsList className="h-9 bg-white">
                 {Object.entries(deviceSizes).map(([key, { icon: Icon, label }]) => (
-                  <TabsTrigger 
-                    key={key} 
+                  <TabsTrigger
+                    key={key}
                     value={key}
                     className="px-3 h-8"
                   >
@@ -297,7 +297,7 @@ export default function LivePreview({ projectId }) {
 
       {/* Preview Frame */}
       <div className="bg-gray-100 p-8 min-h-[600px] flex items-center justify-center">
-        <div 
+        <div
           className={cn(
             "bg-white rounded-lg shadow-2xl overflow-hidden transition-all duration-300",
             device === 'desktop' && "w-full h-full",
@@ -322,7 +322,7 @@ export default function LivePreview({ projectId }) {
       {/* Preview Footer */}
       <div className="bg-gray-50 border-t border-gray-200 px-4 py-2 text-xs text-gray-500 flex items-center justify-between">
         <span>
-          {device === 'desktop' ? 'Responsive' : `${deviceSizes[device].width}x${deviceSizes[device].height}`} • 
+          {device === 'desktop' ? 'Responsive' : `${deviceSizes[device].width}x${deviceSizes[device].height}`} •
           {' '}{entities?.length || 0} entities • {pages?.length || 0} pages
         </span>
         <span className="text-gray-400">

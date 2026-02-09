@@ -22,7 +22,7 @@ export default function TemplateMarketplace() {
   const [viewMode, setViewMode] = useState('marketplace'); // 'marketplace' or 'myTemplates'
   const queryClient = useQueryClient();
 
-  const { data: templates = [], isLoading } = useQuery({
+  const { data: templates = [], isLoading: isLoadingTemplates } = useQuery({
     queryKey: ['botTemplates', viewMode],
     queryFn: async () => {
       if (viewMode === 'myTemplates') {
@@ -33,7 +33,7 @@ export default function TemplateMarketplace() {
     }
   });
 
-  const { data: user, isLoading } = useQuery({
+  const { data: user, isLoading: isLoadingUser } = useQuery({
     queryKey: ['user'],
     queryFn: () => base44.auth.me()
   });

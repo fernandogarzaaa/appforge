@@ -26,7 +26,7 @@ export default function APIManagement() {
     }
   });
 
-  const { data: webhooks = [], isLoading } = useQuery({
+  const { data: webhooks = [], isLoading: isLoadingWebhooks } = useQuery({
     queryKey: ['webhooks'],
     queryFn: async () => {
       const result = await base44.entities.Webhook.list('-created_at');

@@ -16,12 +16,12 @@ export default function CollaboratorManager({ botId }) {
   const [inviting, setInviting] = useState(false);
   const queryClient = useQueryClient();
 
-  const { data: collaborators = [], isLoading } = useQuery({
+  const { data: collaborators = [], isLoading: isLoadingCollaborators } = useQuery({
     queryKey: ['collaborators', botId],
     queryFn: () => base44.entities.BotCollaborator.filter({ bot_id: botId }),
   });
 
-  const { data: currentUser, isLoading } = useQuery({
+  const { data: currentUser, isLoading: isLoadingUser } = useQuery({
     queryKey: ['currentUser'],
     queryFn: () => base44.auth.me(),
   });
@@ -65,7 +65,7 @@ export default function CollaboratorManager({ botId }) {
   });
 
   const isOwner = collaborators.find(c => c.created_by === currentUser?.email)?.role === 'owner' ||
-                  collaborators[0]?.role === 'owner';
+    collaborators[0]?.role === 'owner';
 
   const roleColor = {
     owner: 'bg-purple-100 text-purple-800',

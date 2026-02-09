@@ -11,7 +11,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Import quantum classes from QuantumEngine
-import { SuperpositionProcessor } from '../QuantumEngine.js';
+import { SuperpositionProcessor } from '../src/utils/QuantumEngine.js';
 
 console.log('\n⚛️ QUANTUM BATCH FIXER v3.0');
 console.log('═══════════════════════════════════════\n');

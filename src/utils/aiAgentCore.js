@@ -5,7 +5,7 @@
  * Enhanced with Domain-Aware Context Extraction for domain-specific planning
  */
 
-import { QuantumInspiredAI } from './quantumInspiredAI';
+import { QuantumEngine } from './QuantumEngine';
 import { extractDomainContext, generateDomainSpecificPlan } from './domainContextExtractor';
 
 /**
@@ -22,7 +22,7 @@ export const AGENT_TOOLS = {
       focus: 'performance|security|quality|architecture'
     }
   },
-  
+
   // Project Understanding
   analyzeProject: {
     name: 'analyze_project',
@@ -31,7 +31,7 @@ export const AGENT_TOOLS = {
       project_id: 'string'
     }
   },
-  
+
   // Entity Operations
   createEntity: {
     name: 'create_entity',
@@ -42,7 +42,7 @@ export const AGENT_TOOLS = {
       relationships: 'array'
     }
   },
-  
+
   updateEntity: {
     name: 'update_entity',
     description: 'Update an existing entity schema',
@@ -51,7 +51,7 @@ export const AGENT_TOOLS = {
       changes: 'object'
     }
   },
-  
+
   // Page Operations
   createPage: {
     name: 'create_page',
@@ -63,7 +63,7 @@ export const AGENT_TOOLS = {
       components: 'array'
     }
   },
-  
+
   // Code Generation
   generateComponent: {
     name: 'generate_component',
@@ -75,7 +75,7 @@ export const AGENT_TOOLS = {
       styling: 'tailwind|css|styled-components'
     }
   },
-  
+
   generateAPI: {
     name: 'generate_api',
     description: 'Generate API endpoint with validation and error handling',
@@ -86,7 +86,7 @@ export const AGENT_TOOLS = {
       authentication: 'boolean'
     }
   },
-  
+
   // Search and Discovery
   searchCode: {
     name: 'search_code',
@@ -97,7 +97,7 @@ export const AGENT_TOOLS = {
       scope: 'project|workspace'
     }
   },
-  
+
   findDependencies: {
     name: 'find_dependencies',
     description: 'Find and analyze project dependencies',
@@ -106,7 +106,7 @@ export const AGENT_TOOLS = {
       check_updates: 'boolean'
     }
   },
-  
+
   // Optimization
   optimizePerformance: {
     name: 'optimize_performance',
@@ -116,7 +116,7 @@ export const AGENT_TOOLS = {
       file_path: 'string (optional)'
     }
   },
-  
+
   // Testing
   generateTests: {
     name: 'generate_tests',
@@ -127,7 +127,7 @@ export const AGENT_TOOLS = {
       coverage_target: 'number'
     }
   },
-  
+
   // Documentation
   generateDocs: {
     name: 'generate_docs',
@@ -138,7 +138,7 @@ export const AGENT_TOOLS = {
       format: 'markdown|jsdoc|typescript'
     }
   },
-  
+
   // Debugging
   debugIssue: {
     name: 'debug_issue',
@@ -149,7 +149,7 @@ export const AGENT_TOOLS = {
       stack_trace: 'string (optional)'
     }
   },
-  
+
   // Security
   securityAudit: {
     name: 'security_audit',
@@ -171,7 +171,7 @@ export class AgentMemory {
     this.goals = []; // Current goals/tasks
     this.achievements = []; // Completed tasks
   }
-  
+
   addMessage(role, content, metadata = {}) {
     this.shortTerm.push({
       role,
@@ -179,13 +179,13 @@ export class AgentMemory {
       metadata,
       timestamp: Date.now()
     });
-    
+
     // Keep only last 20 messages in short-term
     if (this.shortTerm.length > 20) {
       this.shortTerm.shift();
     }
   }
-  
+
   rememberFact(key, value, projectId = null) {
     const storageKey = projectId ? `${projectId}:${key}` : key;
     this.longTerm.set(storageKey, {
@@ -194,12 +194,12 @@ export class AgentMemory {
       projectId
     });
   }
-  
+
   recallFact(key, projectId = null) {
     const storageKey = projectId ? `${projectId}:${key}` : key;
     return this.longTerm.get(storageKey)?.value;
   }
-  
+
   setGoal(goal) {
     this.goals.push({
       description: goal,
@@ -207,14 +207,14 @@ export class AgentMemory {
       createdAt: Date.now()
     });
   }
-  
+
   completeGoal(goalIndex) {
     if (this.goals[goalIndex]) {
       this.goals[goalIndex].status = 'completed';
       this.achievements.push(this.goals[goalIndex]);
     }
   }
-  
+
   getContext() {
     return {
       recentMessages: this.shortTerm.slice(-5),
@@ -232,11 +232,11 @@ export class AgentPlanner {
     this.currentPlan = null;
     this.executionLog = [];
   }
-  
+
   async createPlan(userRequest, context, base44) {
     // Extract domain context from user request
     const domainContext = extractDomainContext(userRequest);
-    
+
     // Try to generate domain-specific plan first
     let domainPlan = null;
     if (domainContext.domain) {
@@ -244,13 +244,13 @@ export class AgentPlanner {
       console.log(`🎯 Domain Context: ${domainContext.domainName} (Confidence: ${(domainContext.contextConfidence * 100).toFixed(0)}%)`);
       console.log(`📋 Identified keywords: ${domainContext.matchedKeywords.join(', ')}`);
     }
-    
+
     // If domain plan generated and confidence is high, use it
     if (domainPlan && domainContext.contextConfidence > 0.7) {
       this.currentPlan = domainPlan;
       return domainPlan;
     }
-    
+
     // Fall back to LLM-based planning if no domain identified
     const planningPrompt = `You are an AI Agent helping to build a software project.
 
@@ -313,7 +313,7 @@ Return a JSON plan with:
           }
         }
       });
-      
+
       this.currentPlan = plan;
       return plan;
     } catch (error) {
@@ -321,7 +321,7 @@ Return a JSON plan with:
       return this.createFallbackPlan(userRequest);
     }
   }
-  
+
   createFallbackPlan(userRequest) {
     return {
       goal: userRequest,
@@ -338,7 +338,7 @@ Return a JSON plan with:
       complexity: 'simple'
     };
   }
-  
+
   logExecution(step, result, success = true) {
     this.executionLog.push({
       step,
@@ -347,13 +347,13 @@ Return a JSON plan with:
       timestamp: Date.now()
     });
   }
-  
+
   getProgress() {
     if (!this.currentPlan) return null;
-    
+
     const totalSteps = this.currentPlan.steps.length;
     const completedSteps = this.executionLog.filter(log => log.success).length;
-    
+
     return {
       total: totalSteps,
       completed: completedSteps,
@@ -371,7 +371,7 @@ export class AgentReasoner {
   constructor() {
     this.thoughtProcess = [];
   }
-  
+
   async reason(situation, options, base44) {
     const reasoningPrompt = `As an AI Agent, analyze this situation and decide the best course of action.
 
@@ -412,13 +412,13 @@ Return JSON with:
           }
         }
       });
-      
+
       this.thoughtProcess.push({
         situation,
         reasoning,
         timestamp: Date.now()
       });
-      
+
       return reasoning;
     } catch (error) {
       console.error('Reasoning failed:', error);
@@ -432,7 +432,7 @@ Return JSON with:
       };
     }
   }
-  
+
   async selfCorrect(error, attemptedAction, base44) {
     const correctionPrompt = `An action failed. Help fix it.
 
@@ -485,19 +485,19 @@ export class AIAgent {
     this.planner = new AgentPlanner();
     this.reasoner = new AgentReasoner();
     this.tools = AGENT_TOOLS;
-    this.quantumAI = new QuantumInspiredAI(base44); // Quantum enhancement!
+    this.quantumAI = new QuantumEngine(base44); // Quantum enhancement!
   }
-  
+
   async processRequest(userRequest, projectId = null) {
     // Remember this interaction
     this.memory.addMessage('user', userRequest);
-    
+
     // Get context
     const context = this.memory.getContext();
-    
+
     // Create a plan using standard method
     const plan = await this.planner.createPlan(userRequest, context, this.base44);
-    
+
     // QUANTUM ENHANCEMENT: Optimize plan using quantum annealing
     if (plan.steps && plan.steps.length > 3) {
       try {
@@ -507,21 +507,21 @@ export class AIAgent {
           plan.steps,
           ['fastest', 'most_reliable', 'least_complex']
         );
-        
+
         // Update plan with quantum optimization insights
         plan.quantum_optimized = true;
         plan.quantum_confidence = quantumOptimized.confidence;
         plan.quantum_technique = quantumOptimized.technique;
-        
+
         console.log('🔮 Quantum optimization applied:', quantumOptimized.quantumAdvantage);
       } catch (error) {
         console.log('Quantum optimization skipped:', error.message);
       }
     }
-    
+
     // Set goal
     this.memory.setGoal(plan.goal);
-    
+
     return {
       plan,
       context,
@@ -529,32 +529,32 @@ export class AIAgent {
       quantumEnhanced: plan.quantum_optimized || false
     };
   }
-  
+
   async executeStep(step, projectId) {
     try {
       const toolName = step.action;
       const tool = this.tools[toolName];
-      
+
       if (!tool) {
         throw new Error(`Unknown tool: ${toolName}`);
       }
-      
+
       // Execute the tool (this would call actual implementation)
       const result = await this.executeTool(tool, step.parameters, projectId);
-      
+
       // Log success
       this.planner.logExecution(step, result, true);
-      this.memory.addMessage('assistant', `Completed: ${step.description}`, { 
+      this.memory.addMessage('assistant', `Completed: ${step.description}`, {
         step: step.step,
-        result 
+        result
       });
-      
+
       return {
         success: true,
         result,
         step: step.step
       };
-      
+
     } catch (error) {
       // Self-correct on error
       const correction = await this.reasoner.selfCorrect(
@@ -562,9 +562,9 @@ export class AIAgent {
         step.action,
         this.base44
       );
-      
+
       this.planner.logExecution(step, error.message, false);
-      
+
       return {
         success: false,
         error: error.message,
@@ -573,12 +573,12 @@ export class AIAgent {
       };
     }
   }
-  
+
   async executeTool(tool, parameters, projectId) {
     // Tool execution is not wired up yet; fail fast to avoid silent no-ops
     throw new Error(`Tool execution not configured for ${tool.name}`);
   }
-  
+
   async provideFeedback(feedback, rating) {
     // Learn from user feedback
     this.memory.rememberFact('last_feedback', {
@@ -586,7 +586,7 @@ export class AIAgent {
       rating,
       context: this.memory.getContext()
     });
-    
+
     // Adjust behavior based on feedback
     if (rating < 3) {
       // User not satisfied, be more cautious
@@ -595,10 +595,10 @@ export class AIAgent {
       // User satisfied, remember this pattern
       return 'Great! I\'ll remember this approach for similar tasks.';
     }
-    
+
     return 'Thanks for the feedback!';
   }
-  
+
   getProgress() {
     return {
       plan: this.planner.currentPlan,

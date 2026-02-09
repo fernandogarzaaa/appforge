@@ -42,22 +42,22 @@ export default function AIMonitoring() {
     queryFn: () => base44.entities.Workflow.list('-created_date', 50)
   });
 
-  const { data: dataConnectors = [], isLoading } = useQuery({
+  const { data: dataConnectors = [], isLoading: isLoadingConnectors } = useQuery({
     queryKey: ['data-connectors'],
     queryFn: () => base44.entities.DataSourceConnector.list('-created_date', 50)
   });
 
-  const { data: rules = [], isLoading } = useQuery({
+  const { data: rules = [], isLoading: isLoadingRules } = useQuery({
     queryKey: ['monitoring-rules'],
     queryFn: () => base44.entities.MonitoringRule.list('-created_date')
   });
 
-  const { data: insights = [], isLoading } = useQuery({
+  const { data: insights = [], isLoading: isLoadingInsights } = useQuery({
     queryKey: ['ai-insights'],
     queryFn: () => base44.entities.AIInsight.list('-created_date', 50)
   });
 
-  const { data: aiTasks = [], isLoading } = useQuery({
+  const { data: aiTasks = [], isLoading: isLoadingTasks } = useQuery({
     queryKey: ['ai-tasks'],
     queryFn: () => base44.entities.AITask.list('-ai_priority_score', 20)
   });

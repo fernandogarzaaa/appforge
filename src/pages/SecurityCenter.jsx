@@ -5,8 +5,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { 
-  Shield, AlertTriangle, Activity, Lock, Zap, 
+import {
+  Shield, AlertTriangle, Activity, Lock, Zap,
   Ban, CheckCircle, XCircle
 } from 'lucide-react';
 
@@ -33,7 +33,7 @@ export default function SecurityCenter() {
     queryFn: () => base44.entities.ThreatIntelligence.list('-last_seen', 20)
   });
 
-  const { data: tenantIsolation = [], isLoading } = useQuery({
+  const { data: tenantIsolation = [], isLoading: isLoadingTenant } = useQuery({
     queryKey: ['tenantIsolation'],
     queryFn: () => base44.entities.TenantIsolation.list()
   });
@@ -56,7 +56,7 @@ export default function SecurityCenter() {
 
   const criticalEvents = securityEvents.filter(e => e.severity === 'critical').length;
   const highEvents = securityEvents.filter(e => e.severity === 'high').length;
-  const avgRiskScore = securityEvents.length > 0 
+  const avgRiskScore = securityEvents.length > 0
     ? Math.round(securityEvents.reduce((sum, e) => sum + (e.risk_score || 0), 0) / securityEvents.length)
     : 0;
 
@@ -161,7 +161,7 @@ export default function SecurityCenter() {
               <CardContent>
                 <div className="space-y-3">
                   {securityEvents.map((event) => (
-                    <div 
+                    <div
                       key={event.id}
                       className="p-4 border-l-4 rounded-lg bg-white dark:bg-slate-800/50 hover:shadow-md dark:hover:shadow-slate-900/50 transition cursor-pointer"
                       style={{ borderLeftColor: event.severity === 'critical' ? '#dc2626' : event.severity === 'high' ? '#ea580c' : event.severity === 'medium' ? '#ca8a04' : '#2563eb' }}
@@ -180,7 +180,7 @@ export default function SecurityCenter() {
                               {event.event_type.replace(/_/g, ' ').toUpperCase()}
                             </span>
                           </div>
-                          
+
                           <div className="text-xs text-gray-600 dark:text-gray-400 space-y-1">
                             <p><strong className="dark:text-gray-300">Tenant:</strong> {event.tenant_id}</p>
                             <p><strong className="dark:text-gray-300">User:</strong> {event.user_id}</p>
@@ -250,11 +250,11 @@ export default function SecurityCenter() {
                           {threat.occurrences} occurrences
                         </Badge>
                       </div>
-                      
+
                       <p className="text-xs text-gray-600 dark:text-gray-400 mb-2">
                         <strong className="dark:text-gray-300">Signature:</strong> {threat.threat_signature}
                       </p>
-                      
+
                       {threat.mitigation_strategy && (
                         <div className="p-2 bg-blue-50 dark:bg-blue-950/50 rounded border border-blue-200 dark:border-blue-800">
                           <p className="text-xs font-semibold text-blue-900 dark:text-blue-300">Mitigation:</p>
@@ -295,22 +295,22 @@ export default function SecurityCenter() {
                       {tenant.access_controls && (
                         <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                           <div className="flex items-center gap-1 text-xs dark:text-gray-300">
-                            {tenant.access_controls.network_isolation ? 
-                              <CheckCircle className="w-3 h-3 text-green-600 dark:text-green-400" /> : 
+                            {tenant.access_controls.network_isolation ?
+                              <CheckCircle className="w-3 h-3 text-green-600 dark:text-green-400" /> :
                               <XCircle className="w-3 h-3 text-red-600 dark:text-red-400" />
                             }
                             Network Isolation
                           </div>
                           <div className="flex items-center gap-1 text-xs dark:text-gray-300">
-                            {tenant.access_controls.data_encryption ? 
-                              <CheckCircle className="w-3 h-3 text-green-600 dark:text-green-400" /> : 
+                            {tenant.access_controls.data_encryption ?
+                              <CheckCircle className="w-3 h-3 text-green-600 dark:text-green-400" /> :
                               <XCircle className="w-3 h-3 text-red-600 dark:text-red-400" />
                             }
                             Data Encryption
                           </div>
                           <div className="flex items-center gap-1 text-xs dark:text-gray-300">
-                            {tenant.access_controls.api_restrictions ? 
-                              <CheckCircle className="w-3 h-3 text-green-600 dark:text-green-400" /> : 
+                            {tenant.access_controls.api_restrictions ?
+                              <CheckCircle className="w-3 h-3 text-green-600 dark:text-green-400" /> :
                               <XCircle className="w-3 h-3 text-red-600 dark:text-red-400" />
                             }
                             API Restrictions

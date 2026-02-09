@@ -11,12 +11,12 @@ export default function SmartDeployment() {
   const [showWizard, setShowWizard] = useState(false);
   const [selectedProject, setSelectedProject] = useState(null);
 
-  const { data: projects = [], isLoading } = useQuery({
+  const { data: projects = [], isLoading: isLoadingProjects } = useQuery({
     queryKey: ['projects'],
     queryFn: () => base44.entities.Project.list('-updated_date')
   });
 
-  const { data: deployments = [], isLoading } = useQuery({
+  const { data: deployments = [], isLoading: isLoadingDeployments } = useQuery({
     queryKey: ['deployments'],
     queryFn: () => base44.entities.AgentDeployment.list('-created_date', 10)
   });
@@ -52,14 +52,14 @@ export default function SmartDeployment() {
 
         {showWizard ? (
           <div>
-            <Button 
-              variant="outline" 
+            <Button
+              variant="outline"
               onClick={() => setShowWizard(false)}
               className="mb-4"
             >
               ← Back to Projects
             </Button>
-            <AIDeploymentWizard 
+            <AIDeploymentWizard
               projectId={selectedProject?.id}
               projectType={selectedProject?.type || 'web-app'}
               onComplete={() => {
@@ -79,7 +79,7 @@ export default function SmartDeployment() {
                 <CardContent>
                   <div className="space-y-2">
                     {deployments.map((deployment) => (
-                      <div 
+                      <div
                         key={deployment.id}
                         className="p-4 border rounded-lg flex items-center justify-between hover:bg-gray-50 transition"
                       >
@@ -108,7 +108,7 @@ export default function SmartDeployment() {
                 <CardTitle>Select Project to Deploy</CardTitle>
               </CardHeader>
               <CardContent>
-                {isLoading ? (
+                {isLoadingProjects ? (
                   <div className="text-center py-8">
                     <div className="w-12 h-12 border-4 border-purple-600 border-t-transparent rounded-full animate-spin mx-auto" />
                   </div>
@@ -119,7 +119,7 @@ export default function SmartDeployment() {
                 ) : (
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     {projects.map((project) => (
-                      <Card 
+                      <Card
                         key={project.id}
                         className="hover:shadow-lg transition-all cursor-pointer border-2 hover:border-purple-300"
                         onClick={() => {

@@ -17,7 +17,7 @@ export default function OnboardingSystemConfig() {
     }
   });
 
-  const { data: stats, isLoading } = useQuery({
+  const { data: stats, isLoading: isLoadingStats } = useQuery({
     queryKey: ['onboardingStats'],
     queryFn: async () => {
       const allProgress = await base44.asServiceRole.entities.OnboardingProgress.list();
@@ -25,7 +25,7 @@ export default function OnboardingSystemConfig() {
         total: allProgress.length,
         completed: allProgress.filter(p => p.completed).length,
         active: allProgress.filter(p => !p.completed).length,
-        completionRate: allProgress.length > 0 
+        completionRate: allProgress.length > 0
           ? Math.round((allProgress.filter(p => p.completed).length / allProgress.length) * 100)
           : 0
       };
@@ -52,7 +52,7 @@ export default function OnboardingSystemConfig() {
         user_id: userId,
         completed: false
       });
-      
+
       if (progress.length > 0) {
         await base44.asServiceRole.entities.OnboardingProgress.delete(progress[0].id);
       }

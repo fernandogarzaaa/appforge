@@ -13,7 +13,7 @@ export default function RateLimits() {
   const queryClient = useQueryClient();
 
   // Get rate limit info
-  const { data: limits, isLoading } = useQuery({
+  const { data: limits, isLoading: isLoadingLimits } = useQuery({
     queryKey: ['rate-limits'],
     queryFn: async () => {
       const response = await base44.functions.execute('rateLimitManager', {
@@ -26,7 +26,7 @@ export default function RateLimits() {
   });
 
   // Get quota info
-  const { data: quotas, isLoading } = useQuery({
+  const { data: quotas, isLoading: isLoadingQuotas } = useQuery({
     queryKey: ['quotas'],
     queryFn: async () => {
       const response = await base44.functions.execute('rateLimitManager', {
@@ -38,7 +38,7 @@ export default function RateLimits() {
   });
 
   // Get usage analytics
-  const { data: analytics, isLoading } = useQuery({
+  const { data: analytics, isLoading: isLoadingAnalytics } = useQuery({
     queryKey: ['usage-analytics'],
     queryFn: async () => {
       const response = await base44.functions.execute('rateLimitManager', {
@@ -112,8 +112,8 @@ export default function RateLimits() {
                   <span>Requests Used</span>
                   <span>{limits.remaining} / {limits.limit}</span>
                 </div>
-                <Progress 
-                  value={((limits.limit - limits.remaining) / limits.limit) * 100} 
+                <Progress
+                  value={((limits.limit - limits.remaining) / limits.limit) * 100}
                 />
               </div>
 
@@ -144,8 +144,8 @@ export default function RateLimits() {
                   <span>AI Requests</span>
                   <span>{quotas.used} / {quotas.limit}</span>
                 </div>
-                <Progress 
-                  value={(quotas.used / quotas.limit) * 100} 
+                <Progress
+                  value={(quotas.used / quotas.limit) * 100}
                 />
               </div>
 

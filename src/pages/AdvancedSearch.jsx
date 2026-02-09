@@ -81,7 +81,7 @@ export default function AdvancedSearch() {
       // If local index has results, use them
       if (localResults.total > 0) {
         const responseTime = performance.now() - startTime;
-        
+
         // Log to analytics
         SearchAnalytics.logQuery({
           query: debouncedQuery,
@@ -122,7 +122,7 @@ export default function AdvancedSearch() {
   });
 
   // Autocomplete
-  const { data: suggestions, isLoading } = useQuery({
+  const { data: suggestions, isLoading: isLoadingSuggestions } = useQuery({
     queryKey: ['autocomplete', debouncedQuery],
     queryFn: async () => {
       if (!debouncedQuery || debouncedQuery.length < 2) return null;
@@ -130,7 +130,7 @@ export default function AdvancedSearch() {
       // Try local index suggestions first
       const localIndex = searchIndexManager.getIndex('functions');
       const localSuggestions = localIndex.getSuggestions(debouncedQuery, 5);
-      
+
       if (localSuggestions.length > 0) {
         return localSuggestions;
       }
@@ -146,7 +146,7 @@ export default function AdvancedSearch() {
   });
 
   // Facets
-  const { data: facets, isLoading } = useQuery({
+  const { data: facets, isLoading: isLoadingFacets } = useQuery({
     queryKey: ['search-facets'],
     queryFn: async () => {
       const response = await base44.functions.execute('advancedSearch', {
@@ -384,8 +384,8 @@ export default function AdvancedSearch() {
               </>
             )}
 
-            <Button 
-              variant="outline" 
+            <Button
+              variant="outline"
               className="w-full"
               onClick={() => setFilters({ type: '', project: '' })}
             >
@@ -480,15 +480,15 @@ export default function AdvancedSearch() {
                     {result.highlights && result.highlights.length > 0 && (
                       <div className="space-y-1">
                         {result.highlights.map((highlight, hIdx) => (
-                          <div 
-                            key={hIdx} 
+                          <div
+                            key={hIdx}
                             className="text-xs font-mono bg-muted px-2 py-1 rounded"
-                            dangerouslySetInnerHTML={{ 
+                            dangerouslySetInnerHTML={{
                               __html: highlightMatches
                                 ? highlight.replace(
-                                    new RegExp(debouncedQuery, 'gi'),
-                                    match => `<mark class="bg-yellow-200">${match}</mark>`
-                                  )
+                                  new RegExp(debouncedQuery, 'gi'),
+                                  match => `<mark class="bg-yellow-200">${match}</mark>`
+                                )
                                 : highlight
                             }}
                           />

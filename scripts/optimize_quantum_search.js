@@ -1,4 +1,4 @@
-import { QuantumInspiredAI } from '../QuantumEngine.js';
+import { QuantumInspiredAI } from '../src/utils/QuantumEngine.js';
 
 // 🧪 Meta-Annealing: Optimizing the Optimizer
 // We use the Quantum Engine to find the best parameters for itself.

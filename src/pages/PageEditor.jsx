@@ -45,7 +45,7 @@ export default function PageEditor() {
 
   const queryClient = useQueryClient();
 
-  const { data: pages = [], isLoading } = useQuery({
+  const { data: pages = [], isLoading: isLoadingPages } = useQuery({
     queryKey: ['pages', projectId],
     queryFn: () => base44.entities.Page.filter({ project_id: projectId }),
     enabled: !!projectId,
@@ -133,7 +133,7 @@ export default function ${newPage.name.replace(/\s+/g, '') || 'NewPage'}() {
 
         <ScrollArea className="flex-1">
           <div className="p-2">
-            {isLoading ? (
+            {isLoadingPages ? (
               <div className="space-y-2">
                 {[1, 2, 3].map((i) => (
                   <div key={i} className="h-14 bg-gray-100 rounded-xl animate-pulse" />

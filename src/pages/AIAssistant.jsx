@@ -13,7 +13,7 @@ import { generateEnhancedEntities } from '@/utils/enhancedEntityGeneration';
 import { generateBusinessContent } from '@/utils/intelligentContentGenerator';
 import { AIAgent } from '@/utils/aiAgentCore';
 import { extractDomainContext, generateDomainSpecificPlan } from '@/utils/domainContextExtractor';
-import { QuantumInspiredAI } from '@/utils/quantumInspiredAI';
+import { QuantumEngine } from '@/utils/QuantumEngine';
 import { detectLanguage, generateLocalizedContent } from '@/utils/multiLanguageSupport';
 import { useLLM } from '@/contexts/LLMContext';
 import ModelSelector from '@/components/ai/ModelSelector';
@@ -454,13 +454,13 @@ export default function AIAssistant() {
   // Use 'general' as workspace ID when no project is selected
   const workspaceId = projectId || 'general';
 
-  const { data: documents = [], isLoading } = useQuery({
+  const { data: documents = [], isLoading: isLoadingDocs } = useQuery({
     queryKey: ['documents', projectId],
     queryFn: () => projectId ? base44.entities.ProjectDocument.filter({ project_id: projectId }) : Promise.resolve([]),
     enabled: !!projectId
   });
 
-  const { data: conversations = [], isLoading } = useQuery({
+  const { data: conversations = [], isLoading: isLoadingConvos } = useQuery({
     queryKey: ['conversations', workspaceId],
     queryFn: () => {
       if (projectId) {

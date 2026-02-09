@@ -1,5 +1,5 @@
 
-import { QuantumInspiredAI } from '../QuantumEngine.js';
+import { QuantumInspiredAI } from '../src/utils/QuantumEngine.js';
 
 console.log('🤖 The Turing Test: Initiating Singularity Validation...');
 

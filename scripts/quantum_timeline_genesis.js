@@ -1,4 +1,4 @@
-import { QuantumCreator } from '../QuantumEngine.js';
+import { QuantumCreator } from '../src/utils/QuantumEngine.js';
 import fs from 'fs';
 import path from 'path';
 
