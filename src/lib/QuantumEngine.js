@@ -8,7 +8,50 @@
  * - Quantum Annealing: Find optimal solutions in complex landscapes
  * - Interference: Amplify good solutions, cancel bad ones
  * - Tunneling: Escape local optima to find global solutions
+ * 
+ * 🦀 WASM Acceleration: Core algorithms are accelerated via Rust/WebAssembly
+ *    when available, with automatic JavaScript fallback.
  */
+
+// WASM Acceleration Layer
+let wasmModule = null;
+let wasmLoading = false;
+let wasmAccelerated = false;
+
+/**
+ * Initialize WASM acceleration (called lazily on first use)
+ */
+async function initWasm() {
+    if (wasmModule !== null || wasmLoading) return;
+    wasmLoading = true;
+
+    try {
+        const wasm = await import('@/lib/wasmLoader');
+        const { wasm: module, usingWasm } = await wasm.loadQuantumCore();
+        wasmModule = module;
+        wasmAccelerated = usingWasm;
+
+        if (usingWasm) {
+            console.log('⚛️ QuantumEngine: WASM acceleration enabled');
+        }
+    } catch (e) {
+        console.debug('QuantumEngine: WASM not available', e.message);
+    }
+
+    wasmLoading = false;
+}
+
+// Pre-initialize WASM in background
+if (typeof window !== 'undefined') {
+    setTimeout(initWasm, 100);
+}
+
+/**
+ * Check if WASM acceleration is active
+ */
+export function isWasmAccelerated() {
+    return wasmAccelerated;
+}
 
 /**
  * Quantum-Inspired Superposition Processor

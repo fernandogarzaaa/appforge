@@ -33,13 +33,30 @@ export class Base44Tool {
                 limit: 5
             });
 
-            // console.log('DEBUG: AuditLog.list response:', JSON.stringify(logs, null, 2));
-            const items = (logs && Array.isArray(logs)) ? logs : (logs?.items || []);
-            const pending = items.filter((l: any) => l.changes?.status === 'PENDING');
+            // Robust null handling for various API response shapes
+            let items: any[] = [];
+            if (logs) {
+                if (Array.isArray(logs)) {
+                    items = logs;
+                } else if (logs.items && Array.isArray(logs.items)) {
+                    items = logs.items;
+                } else if (logs.data && Array.isArray(logs.data)) {
+                    items = logs.data;
+                }
+            }
+
+            const pending = items.filter((l: any) => l?.changes?.status === 'PENDING');
             return pending;
         } catch (error: any) {
             // Gracefully handle auth errors or network glitches
-            if (error.status === 403 || error.status === 404 || error.message.includes('private') || error.code === 'ECONNRESET') {
+            const message = error?.message || '';
+            const status = error?.status || error?.response?.status;
+            const code = error?.code || '';
+
+            if (status === 403 || status === 404 || status === 502 || status === 503 ||
+                message.includes('private') ||
+                code === 'ECONNRESET' || code === 'ETIMEDOUT' ||
+                message.includes('network') || message.includes('socket')) {
                 console.warn('⚠️ [Base44] Offline Mode: Cloud Bridge disconnected or network blip. Swarm running locally only.');
                 return [];
             }

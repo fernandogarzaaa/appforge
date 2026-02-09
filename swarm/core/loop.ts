@@ -99,7 +99,30 @@ async function main() {
             }
 
         } catch (error: any) {
-            console.error('❌ Loop Error:', error.message);
+            // ⚛️ Quantum-Enhanced Error Classification
+            const errorMessage = error?.message || String(error);
+            const isNetworkError =
+                errorMessage.includes('ECONNRESET') ||
+                errorMessage.includes('ETIMEDOUT') ||
+                errorMessage.includes('502') ||
+                errorMessage.includes('503') ||
+                errorMessage.includes('network') ||
+                errorMessage.includes('socket') ||
+                errorMessage.includes('timeout');
+
+            const isNullError =
+                errorMessage.includes('undefined') ||
+                errorMessage.includes('null') ||
+                errorMessage.includes('Cannot read properties');
+
+            if (isNetworkError) {
+                console.warn('⚠️ [Quantum] Network fluctuation detected. Continuing with reduced coherence...');
+            } else if (isNullError) {
+                console.warn('⚠️ [Quantum] Data coherence loss detected. Awaiting wave function collapse...');
+            } else {
+                console.error('❌ Loop Error:', errorMessage);
+            }
+
             if (process.env.ONE_SHOT === 'true') process.exit(1);
         }
 
@@ -113,3 +136,4 @@ async function main() {
 }
 
 main().catch(console.error);
+
