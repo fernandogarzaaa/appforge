@@ -21,11 +21,19 @@ export default function SwarmDashboard() {
                 // Let's rely on a dynamic import.
 
                 const data = await import('../data/quantum_verification_report.json');
-                // The import default might be the JSON content
-                setQuantumData(data.default || data);
+                const predictions = await import('../data/quantum_predictions.json').catch(() => []);
+                const hyperparams = await import('../data/quantum_hyperparameters.json').catch(() => null);
 
-                if (data.swarmState) {
-                    setSwarmState(data.swarmState);
+                // The import default might be the JSON content
+                const baseData = data.default || data;
+                setQuantumData({
+                    ...baseData,
+                    predictions: predictions.default || predictions,
+                    hyperparameters: hyperparams.default || hyperparams
+                });
+
+                if (baseData.swarmState) {
+                    setSwarmState(baseData.swarmState);
                 } else {
                     // Fallback if not found in report
                     setSwarmState({
@@ -126,6 +134,29 @@ export default function SwarmDashboard() {
                         </div>
                     </div>
 
+                    {/* Neural Predictions (Ghost Bugs) */}
+                    <div className="border border-purple-900 bg-gray-900 bg-opacity-80 p-5 rounded-lg">
+                        <h2 className="text-lg font-bold mb-3 text-purple-300 flex items-center gap-2">
+                            <span className="animate-pulse">🔮</span> QUANTUM PREDICTIONS
+                        </h2>
+                        <div className="space-y-3">
+                            {quantumData?.predictions ? (
+                                quantumData.predictions.map((pred, i) => (
+                                    <div key={i} className="text-xs flex justify-between items-center border-b border-purple-900 pb-1">
+                                        <span className="text-purple-200">{pred.component}</span>
+                                        <span className={`px-2 py-0.5 rounded ${pred.ghostBugs > 2 ? 'bg-red-900 text-red-300' : 'bg-purple-900 text-purple-300'}`}>
+                                            {pred.ghostBugs} GHOST BUGS
+                                        </span>
+                                    </div>
+                                ))
+                            ) : (
+                                <div className="text-purple-400 italic text-center text-xs">
+                                    Neural Network Initializing...
+                                </div>
+                            )}
+                        </div>
+                    </div>
+
                     {/* Active Issues Preview */}
                     <div className="border border-green-900 bg-gray-900 bg-opacity-80 p-5 rounded-lg h-64 overflow-hidden flex flex-col">
                         <h2 className="text-lg font-bold mb-3 text-white">ANOMALY DETECTOR</h2>
@@ -185,6 +216,32 @@ export default function SwarmDashboard() {
                             ))}
                         </div>
                     </div>
+
+                    {/* Genetic Evolution Status */}
+                    {quantumData?.hyperparameters && (
+                        <div className="border border-cyan-900 bg-gray-900 bg-opacity-80 p-5 rounded-lg">
+                            <h2 className="text-lg font-bold mb-3 text-cyan-300 flex items-center gap-2">
+                                <span className="animate-spin-slow">🧬</span> GENETIC EVOLUTION
+                            </h2>
+                            <div className="grid grid-cols-2 gap-4 text-sm">
+                                <div>
+                                    <div className="text-cyan-500 text-xs">GENERATIONS</div>
+                                    <div className="text-white text-xl">{quantumData.hyperparameters.generations}</div>
+                                </div>
+                                <div>
+                                    <div className="text-cyan-500 text-xs">FITNESS</div>
+                                    <div className="text-white text-xl">{parseFloat(quantumData.hyperparameters.fitness).toFixed(2)}</div>
+                                </div>
+                                <div className="col-span-2 border-t border-cyan-900 pt-2 mt-2">
+                                    <div className="text-center text-xs text-cyan-400">OPTIMIZED PARAMETERS</div>
+                                    <div className="flex justify-between mt-1">
+                                        <span>Temp: {parseFloat(quantumData.hyperparameters.temperature).toFixed(0)}</span>
+                                        <span>Cooling: {parseFloat(quantumData.hyperparameters.coolingRate).toFixed(4)}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    )}
 
                     {/* Todo / Manifest */}
                     <div className="border border-green-900 bg-gray-900 bg-opacity-80 p-5 rounded-lg h-96 flex flex-col">
