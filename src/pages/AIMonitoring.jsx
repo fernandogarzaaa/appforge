@@ -11,7 +11,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { toast } from 'sonner';
 import {
-  Eye, Plus, TrendingUp, AlertTriangle, Lightbulb, 
+  Eye, Plus, TrendingUp, AlertTriangle, Lightbulb,
   Activity, Database, Mail, Code, CheckCircle, Zap, Target, Brain, Play, Pause
 } from 'lucide-react';
 import { InsightsTrendChart, SeverityDistribution, InsightTypeChart } from '@/components/monitoring/InsightsChart';
@@ -26,7 +26,6 @@ import { checkAndTriggerAlerts } from '@/components/alerts/AlertService';
 export default function AIMonitoring() {
   const queryClient = useQueryClient();
   const [showRuleDialog, setShowRuleDialog] = useState(false);
-  const [selectedInsight, setSelectedInsight] = useState(null);
   const [newRule, setNewRule] = useState({
     name: '',
     description: '',
@@ -37,29 +36,28 @@ export default function AIMonitoring() {
     actions: [],
     connector_id: ''
   });
-  const [connectors, setConnectors] = useState([]);
 
-  const { data: workflows = [] } = useQuery({
+  const { data: workflows = [], isLoading } = useQuery({
     queryKey: ['workflows'],
     queryFn: () => base44.entities.Workflow.list('-created_date', 50)
   });
 
-  const { data: dataConnectors = [] } = useQuery({
+  const { data: dataConnectors = [], isLoading } = useQuery({
     queryKey: ['data-connectors'],
     queryFn: () => base44.entities.DataSourceConnector.list('-created_date', 50)
   });
 
-  const { data: rules = [] } = useQuery({
+  const { data: rules = [], isLoading } = useQuery({
     queryKey: ['monitoring-rules'],
     queryFn: () => base44.entities.MonitoringRule.list('-created_date')
   });
 
-  const { data: insights = [] } = useQuery({
+  const { data: insights = [], isLoading } = useQuery({
     queryKey: ['ai-insights'],
     queryFn: () => base44.entities.AIInsight.list('-created_date', 50)
   });
 
-  const { data: aiTasks = [] } = useQuery({
+  const { data: aiTasks = [], isLoading } = useQuery({
     queryKey: ['ai-tasks'],
     queryFn: () => base44.entities.AITask.list('-ai_priority_score', 20)
   });
@@ -91,7 +89,7 @@ export default function AIMonitoring() {
 
   const evaluateTriggers = (insight, rule) => {
     if (!rule.trigger_conditions || rule.trigger_conditions.length === 0) return true;
-    
+
     return rule.trigger_conditions.every(condition => {
       if (condition.condition_type === 'severity') {
         return condition.severity_match?.includes(insight.severity);
@@ -149,7 +147,7 @@ export default function AIMonitoring() {
 
   const triggerMonitoring = async (rule) => {
     toast.loading('Running monitoring check...');
-    
+
     try {
       const analysis = await base44.integrations.Core.InvokeLLM({
         prompt: `Analyze data source: ${rule.data_source} (${rule.entity_name || rule.api_endpoint})
@@ -205,7 +203,7 @@ Provide:
       queryClient.invalidateQueries({ queryKey: ['ai-insights'] });
       queryClient.invalidateQueries({ queryKey: ['monitoring-rules'] });
       queryClient.invalidateQueries({ queryKey: ['ai-tasks'] });
-      
+
       toast.dismiss();
       toast.success('Monitoring completed - new insight found!');
     } catch (error) {
@@ -414,7 +412,7 @@ Calculate:
                           {insight.ai_analysis.substring(0, 100)}...
                         </div>
                       )}
-                      
+
                       {insight.recommended_actions && insight.recommended_actions.length > 0 && (
                         <div>
                           <p className="text-xs font-semibold mb-1">Recommended:</p>
@@ -439,8 +437,8 @@ Calculate:
                           <Zap className="w-3 h-3 mr-1" />
                           {insight.status === 'action_taken' ? 'Task Created' : 'Create Task'}
                         </Button>
-                        <FeedbackWidget 
-                          type="insight" 
+                        <FeedbackWidget
+                          type="insight"
                           targetId={insight.id}
                           onFeedbackSubmitted={() => queryClient.invalidateQueries({ queryKey: ['ai-insights'] })}
                         />
@@ -481,15 +479,15 @@ Calculate:
                           <h4 className="font-semibold">{task.title}</h4>
                           <Badge className={
                             task.priority === 'urgent' ? 'bg-red-600' :
-                            task.priority === 'high' ? 'bg-orange-600' :
-                            task.priority === 'medium' ? 'bg-yellow-600' : 'bg-green-600'
+                              task.priority === 'high' ? 'bg-orange-600' :
+                                task.priority === 'medium' ? 'bg-yellow-600' : 'bg-green-600'
                           }>
                             {task.priority}
                           </Badge>
                           <Badge variant="outline">Score: {task.ai_priority_score || 0}</Badge>
                         </div>
                         <p className="text-sm text-gray-600 mb-2">{task.description}</p>
-                        
+
                         {task.urgency_factors && (
                           <div className="flex gap-3 text-xs text-gray-500">
                             <span>Impact: {((task.urgency_factors.business_impact || 0) * 100).toFixed(0)}%</span>
@@ -512,8 +510,8 @@ Calculate:
                         <Button size="sm" variant="outline">
                           <CheckCircle className="w-4 h-4" />
                         </Button>
-                        <FeedbackWidget 
-                          type="task" 
+                        <FeedbackWidget
+                          type="task"
                           targetId={task.id}
                           onFeedbackSubmitted={() => queryClient.invalidateQueries({ queryKey: ['ai-tasks'] })}
                         />
@@ -537,7 +535,7 @@ Calculate:
 
         <TabsContent value="rules" className="flex-1 overflow-y-auto">
           <div className="mb-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
-            <DataSourceConnectorManager 
+            <DataSourceConnectorManager
               connectors={dataConnectors}
               onConnectorsChange={() => queryClient.invalidateQueries({ queryKey: ['data-connectors'] })}
             />

@@ -19,7 +19,7 @@ export default function DocumentUpload({ projectId }) {
   
   const queryClient = useQueryClient();
 
-  const { data: documents = [] } = useQuery({
+  const { data: documents = [], isLoading } = useQuery({
     queryKey: ['documents', projectId],
     queryFn: () => base44.entities.ProjectDocument.filter({ project_id: projectId }),
     enabled: !!projectId

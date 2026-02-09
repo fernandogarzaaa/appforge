@@ -11,7 +11,7 @@ export default function AdminPermissionsManager() {
   const queryClient = useQueryClient();
   const [selectedUser, setSelectedUser] = useState(null);
 
-  const { data: users = [] } = useQuery({
+  const { data: users = [], isLoading } = useQuery({
     queryKey: ['adminUsers'],
     queryFn: () => base44.asServiceRole.entities.User.filter({ role: 'admin' }).catch(() => []),
   });
@@ -67,11 +67,10 @@ export default function AdminPermissionsManager() {
                 <button
                   key={user.id}
                   onClick={() => setSelectedUser(user)}
-                  className={`w-full text-left p-3 rounded-lg border transition ${
-                    selectedUser?.id === user.id
+                  className={`w-full text-left p-3 rounded-lg border transition ${selectedUser?.id === user.id
                       ? 'bg-blue-50 border-blue-300'
                       : 'bg-gray-50 border-gray-200 hover:border-gray-300'
-                  }`}
+                    }`}
                 >
                   <p className="font-semibold text-sm">{user.full_name}</p>
                   <p className="text-xs text-gray-500">{user.email}</p>
@@ -103,7 +102,14 @@ export default function AdminPermissionsManager() {
                         <span className="text-xl">{perm.icon}</span>
                         <span className="font-semibold text-sm">{perm.label}</span>
                       </div>
-                      <Switch defaultChecked onChange={() => {}} />
+                      <Switch
+                        defaultChecked
+                        onCheckedChange={(checked) => updatePermissionMutation.mutate({
+                          userId: selectedUser.id,
+                          permission: perm.id,
+                          value: checked
+                        })}
+                      />
                     </div>
                     <Badge className="bg-green-100 text-green-800">Enabled</Badge>
                   </div>

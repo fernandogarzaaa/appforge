@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Slider } from '@/components/ui/slider';
-import { Dice5, Sparkles, 
+import {
+  Dice5, Sparkles,
   Coins, DollarSign
 } from 'lucide-react';
 import { toast } from 'sonner';
@@ -17,6 +18,19 @@ export default function CryptoGambling() {
   const [rolling, setRolling] = useState(false);
   const [history, setHistory] = useState([]);
   const [lotteryTickets, setLotteryTickets] = useState(0);
+
+  // Load balance from local storage
+  useEffect(() => {
+    const savedBalance = localStorage.getItem('appforge_crypto_balance');
+    if (savedBalance) {
+      setBalance(parseFloat(savedBalance));
+    }
+  }, []);
+
+  // Save balance to local storage
+  useEffect(() => {
+    localStorage.setItem('appforge_crypto_balance', balance.toString());
+  }, [balance]);
 
   const rollDice = () => {
     if (betAmount > balance) {
@@ -150,7 +164,7 @@ export default function CryptoGambling() {
                 value={[winChance]}
                 onValueChange={(val) => {
                   setWinChance(val[0]);
-                  setMultiplier(((98 / val[0]) * 1).toFixed(2));
+                  setMultiplier(parseFloat(((98 / val[0]) * 1).toFixed(2)));
                 }}
                 min={1}
                 max={95}
@@ -213,7 +227,7 @@ export default function CryptoGambling() {
                 <CardContent className="pt-4 text-center">
                   <div className="text-3xl mb-2">🎰</div>
                   <div className="font-semibold mb-1">Slots</div>
-                  <div className="text-xs text-gray-600 mb-3">Coming soon</div>
+                  <div className="text-xs text-gray-600 mb-3">In Development</div>
                   <Button size="sm" className="w-full" disabled>
                     Play
                   </Button>

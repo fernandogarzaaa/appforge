@@ -2,7 +2,7 @@ import React, { useState, Suspense } from 'react';
 import { base44 } from '@/api/base44Client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import ProactiveAIAssistant from '@/components/ai/ProactiveAIAssistant';
-import { 
+import {
   FileCode, Plus, Save, Trash2, Eye, Code, Layout,
   Search, MoreHorizontal, ChevronRight, Home, Settings2
 } from 'lucide-react';
@@ -145,40 +145,40 @@ export default function ${newPage.name.replace(/\s+/g, '') || 'NewPage'}() {
               </div>
             ) : (
               <Suspense fallback={<div className="space-y-2 p-2">{[1, 2, 3].map(i => <div key={i} className="h-14 bg-gray-100 rounded-xl animate-pulse" />)}</div>}>
-              <AnimatePresence>
-                {filteredPages.map((page) => (
-                  <motion.button
-                    key={page.id}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    onClick={() => setSelectedPage(page)}
-                    className={cn(
-                      "w-full flex items-center gap-3 p-3 rounded-xl text-left transition-all mb-1",
-                      selectedPage?.id === page.id
-                        ? "bg-indigo-50 border border-indigo-200"
-                        : "hover:bg-gray-50"
-                    )}
-                  >
-                    <span className="text-xl">{page.icon || '📄'}</span>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2">
-                        <p className="font-medium text-gray-900 truncate">{page.name}</p>
-                        {page.is_home && (
-                          <Home className="w-3 h-3 text-indigo-500" />
-                        )}
+                <AnimatePresence>
+                  {filteredPages.map((page) => (
+                    <motion.button
+                      key={page.id}
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      onClick={() => setSelectedPage(page)}
+                      className={cn(
+                        "w-full flex items-center gap-3 p-3 rounded-xl text-left transition-all mb-1",
+                        selectedPage?.id === page.id
+                          ? "bg-indigo-50 border border-indigo-200"
+                          : "hover:bg-gray-50"
+                      )}
+                    >
+                      <span className="text-xl">{page.icon || '📄'}</span>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2">
+                          <p className="font-medium text-gray-900 truncate">{page.name}</p>
+                          {page.is_home && (
+                            <Home className="w-3 h-3 text-indigo-500" />
+                          )}
+                        </div>
+                        <p className="text-xs text-gray-500 truncate">
+                          /{page.path || page.name.toLowerCase().replace(/\s+/g, '-')}
+                        </p>
                       </div>
-                      <p className="text-xs text-gray-500 truncate">
-                        /{page.path || page.name.toLowerCase().replace(/\s+/g, '-')}
-                      </p>
-                    </div>
-                    <ChevronRight className={cn(
-                      "w-4 h-4 text-gray-400 transition-transform",
-                      selectedPage?.id === page.id && "rotate-90"
-                    )} />
-                  </motion.button>
-                ))}
-              </AnimatePresence>
-            </Suspense>
+                      <ChevronRight className={cn(
+                        "w-4 h-4 text-gray-400 transition-transform",
+                        selectedPage?.id === page.id && "rotate-90"
+                      )} />
+                    </motion.button>
+                  ))}
+                </AnimatePresence>
+              </Suspense>
             )}
           </div>
         </ScrollArea>
@@ -235,7 +235,7 @@ export default function ${newPage.name.replace(/\s+/g, '') || 'NewPage'}() {
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end" className="rounded-xl">
-                      <DropdownMenuItem 
+                      <DropdownMenuItem
                         onClick={() => window.open(`/preview/${projectId}/${selectedPage.path || selectedPage.name}`, '_blank')}
                         className="rounded-lg cursor-pointer">
                         <Eye className="w-4 h-4 mr-2" />
@@ -259,21 +259,21 @@ export default function ${newPage.name.replace(/\s+/g, '') || 'NewPage'}() {
             <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col">
               <div className="bg-white border-b border-gray-100 px-4">
                 <TabsList className="h-12 bg-transparent p-0 gap-4">
-                  <TabsTrigger 
-                    value="code" 
+                  <TabsTrigger
+                    value="code"
                     className="data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-indigo-500 rounded-none px-0"
                   >
                     <Code className="w-4 h-4 mr-2" />
                     Code
                   </TabsTrigger>
-                  <TabsTrigger 
+                  <TabsTrigger
                     value="design"
                     className="data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-indigo-500 rounded-none px-0"
                   >
                     <Layout className="w-4 h-4 mr-2" />
                     Design
                   </TabsTrigger>
-                  <TabsTrigger 
+                  <TabsTrigger
                     value="settings"
                     className="data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-indigo-500 rounded-none px-0"
                   >
@@ -300,7 +300,7 @@ export default function ${newPage.name.replace(/\s+/g, '') || 'NewPage'}() {
                   <div className="text-center">
                     <Layout className="w-12 h-12 mx-auto mb-4 text-gray-300" />
                     <p className="font-medium">Visual Designer</p>
-                    <p className="text-sm text-gray-400 mt-1">Coming soon...</p>
+                    <p className="text-sm text-gray-400 mt-1">Visual Designer is in development.</p>
                   </div>
                 </div>
               </TabsContent>
@@ -403,9 +403,9 @@ export default function ${newPage.name.replace(/\s+/g, '') || 'NewPage'}() {
               Cancel
             </Button>
             <Button
-              onClick={() => createMutation.mutate({ 
-                ...newPage, 
-                project_id: projectId, 
+              onClick={() => createMutation.mutate({
+                ...newPage,
+                project_id: projectId,
                 code: defaultCode.replace(/NewPage/g, newPage.name.replace(/\s+/g, '') || 'NewPage').replace(/New Page/g, newPage.name || 'New Page')
               })}
               disabled={!newPage.name || createMutation.isPending}

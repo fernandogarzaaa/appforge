@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { 
+import {
   Coins, Plus, Search, Rocket, Settings2, Code,
   ChevronRight, Sparkles
 } from 'lucide-react';
@@ -147,7 +147,7 @@ export default function TokenCreator() {
   const generateContractCode = () => {
     if (!selectedToken) return '';
     const { name, symbol, type, features } = selectedToken;
-    
+
     if (type === 'ERC20') {
       return `// SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
@@ -286,10 +286,10 @@ contract ${name.replace(/\s+/g, '')} is ERC20${features?.burnable ? ', ERC20Burn
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
-                  <WalletConnect 
-                    wallet={wallet} 
-                    onConnect={setWallet} 
-                    onDisconnect={() => setWallet(null)} 
+                  <WalletConnect
+                    wallet={wallet}
+                    onConnect={setWallet}
+                    onDisconnect={() => setWallet(null)}
                   />
                   <Button
                     onClick={() => updateMutation.mutate({ id: selectedToken.id, data: selectedToken })}
@@ -461,7 +461,7 @@ contract ${name.replace(/\s+/g, '')} is ERC20${features?.burnable ? ', ERC20Burn
         contract={{ ...selectedToken, template: selectedToken?.type }}
         wallet={wallet}
         onDeploymentComplete={handleDeploymentComplete}
-        onConnectWallet={() => {}}
+        onConnectWallet={() => toast.info('Please connect your wallet using the button above')}
       />
 
       {/* New Token Dialog */}

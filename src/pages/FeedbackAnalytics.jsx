@@ -14,7 +14,7 @@ export default function FeedbackAnalytics() {
   const [filterType, setFilterType] = useState('all');
   const [isRetraining, setIsRetraining] = useState(false);
 
-  const { data: feedback = [] } = useQuery({
+  const { data: feedback = [], isLoading } = useQuery({
     queryKey: ['feedback'],
     queryFn: () => base44.entities.AIFeedback.list('-created_date', 200)
   });

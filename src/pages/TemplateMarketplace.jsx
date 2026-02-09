@@ -33,7 +33,7 @@ export default function TemplateMarketplace() {
     }
   });
 
-  const { data: user } = useQuery({
+  const { data: user, isLoading } = useQuery({
     queryKey: ['user'],
     queryFn: () => base44.auth.me()
   });

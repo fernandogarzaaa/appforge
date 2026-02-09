@@ -14,7 +14,7 @@ export default function IntegrationDetailsPanel({ integration, onClose }) {
   const queryClient = useQueryClient();
   const [activeTab, setActiveTab] = useState('overview');
 
-  const { data: logs = [] } = useQuery({
+  const { data: logs = [], isLoading } = useQuery({
     queryKey: ['integrationLogs', integration.id],
     queryFn: async () => {
       const response = await base44.functions.invoke('getIntegrationLogs', { 

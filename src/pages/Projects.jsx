@@ -24,7 +24,7 @@ const ProjectCard = lazy(() => import('@/components/dashboard/ProjectCard'));
 const AIProjectGenerator = lazy(() => import('@/components/ai/AIProjectGenerator'));
 import EmptyState from '@/components/common/EmptyState';
 import { AnimatePresence } from 'framer-motion';
-import { useToast } from '@/components/ui/use-toast';
+// Lazy load ProjectCard for better initial load
 
 const projectIcons = ['📁', '🚀', '💼', '🎨', '📱', '🌐', '🛒', '📊', '🎮', '📝', '🔧', '💡'];
 const projectColors = ['#6366f1', '#8b5cf6', '#ec4899', '#f43f5e', '#f97316', '#eab308', '#22c55e', '#14b8a6', '#06b6d4', '#3b82f6'];
@@ -46,15 +46,13 @@ export default function Projects() {
     color: '#6366f1',
     status: 'draft',
   });
-  const [_selectedTemplate, _setSelectedTemplate] = useState(null);
   const [selectedProjects, setSelectedProjects] = useState(new Set());
   const [isSelectionMode, setIsSelectionMode] = useState(false);
 
   const queryClient = useQueryClient();
-  const { toast: _toast } = useToast();
 
   // Fetch base44 projects
-  const { data: projects = [], isLoading, error: _error } = useQuery({
+  const { data: projects = [], isLoading } = useQuery({
     queryKey: ['projects'],
     queryFn: async () => {
       try {
@@ -115,7 +113,7 @@ export default function Projects() {
   const batchDuplicateMutation = useMutation({
     mutationFn: async (ids) => {
       const projectsToDuplicate = projects.filter(p => ids.includes(p.id));
-      await Promise.all(projectsToDuplicate.map(project => 
+      await Promise.all(projectsToDuplicate.map(project =>
         base44.entities.Project.create({
           name: `${project.name} (Copy)`,
           description: project.description,
@@ -207,45 +205,45 @@ export default function Projects() {
           <p className="text-gray-500">Manage and organize all your applications</p>
         </div>
         <div className="flex gap-2">
-           {filteredProjects.length > 0 && (
-             <Button
-               variant={isSelectionMode ? "default" : "outline"}
-               onClick={() => {
-                 setIsSelectionMode(!isSelectionMode);
-                 setSelectedProjects(new Set());
-               }}
-               className={isSelectionMode ? "bg-gray-900 hover:bg-gray-800 text-white rounded-xl h-11 px-4" : "rounded-xl h-11 px-4"}
-             >
-               {isSelectionMode ? (
-                 <>
-                   <CheckSquare className="w-4 h-4 mr-2" />
-                   Exit Selection
-                 </>
-               ) : (
-                 <>
-                   <Square className="w-4 h-4 mr-2" />
-                   Select
-                 </>
-               )}
-             </Button>
-           )}
-           <Suspense fallback={null}>
-             <Button
-               onClick={() => setShowAIGenerator(true)}
-               className="bg-gradient-to-r from-purple-500 to-pink-600 hover:from-purple-600 hover:to-pink-700 text-white rounded-xl h-11 px-6 shadow-lg shadow-purple-500/25"
-             >
-               <Sparkles className="w-4 h-4 mr-2" />
-               AI Generate
-             </Button>
-           </Suspense>
-           <Button
-             onClick={() => setShowNewDialog(true)}
-             className="bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white rounded-xl h-11 px-6 shadow-lg shadow-indigo-500/25"
-           >
-             <Plus className="w-4 h-4 mr-2" />
-             New Project
-           </Button>
-         </div>
+          {filteredProjects.length > 0 && (
+            <Button
+              variant={isSelectionMode ? "default" : "outline"}
+              onClick={() => {
+                setIsSelectionMode(!isSelectionMode);
+                setSelectedProjects(new Set());
+              }}
+              className={isSelectionMode ? "bg-gray-900 hover:bg-gray-800 text-white rounded-xl h-11 px-4" : "rounded-xl h-11 px-4"}
+            >
+              {isSelectionMode ? (
+                <>
+                  <CheckSquare className="w-4 h-4 mr-2" />
+                  Exit Selection
+                </>
+              ) : (
+                <>
+                  <Square className="w-4 h-4 mr-2" />
+                  Select
+                </>
+              )}
+            </Button>
+          )}
+          <Suspense fallback={null}>
+            <Button
+              onClick={() => setShowAIGenerator(true)}
+              className="bg-gradient-to-r from-purple-500 to-pink-600 hover:from-purple-600 hover:to-pink-700 text-white rounded-xl h-11 px-6 shadow-lg shadow-purple-500/25"
+            >
+              <Sparkles className="w-4 h-4 mr-2" />
+              AI Generate
+            </Button>
+          </Suspense>
+          <Button
+            onClick={() => setShowNewDialog(true)}
+            className="bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white rounded-xl h-11 px-6 shadow-lg shadow-indigo-500/25"
+          >
+            <Plus className="w-4 h-4 mr-2" />
+            New Project
+          </Button>
+        </div>
       </div>
 
       {/* Bulk Actions Toolbar */}
@@ -359,7 +357,7 @@ export default function Projects() {
         />
       ) : (
         <div>
-          <div className={viewMode === 'grid' 
+          <div className={viewMode === 'grid'
             ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'
             : 'flex flex-col gap-3'
           }>
@@ -418,7 +416,7 @@ export default function Projects() {
 
       {/* New Project Dialog */}
       <Dialog open={showNewDialog} onOpenChange={setShowNewDialog}>
-        <DialogContent 
+        <DialogContent
           className="sm:max-w-lg rounded-2xl p-6"
           style={{
             maxHeight: '90vh',
@@ -494,11 +492,10 @@ export default function Projects() {
                         <button
                           key={icon}
                           onClick={() => setNewProject({ ...newProject, icon })}
-                          className={`w-9 h-9 rounded-lg flex items-center justify-center text-lg transition-all ${
-                            newProject.icon === icon
-                              ? 'bg-gray-900 text-white'
-                              : 'bg-gray-50 hover:bg-gray-100'
-                          }`}
+                          className={`w-9 h-9 rounded-lg flex items-center justify-center text-lg transition-all ${newProject.icon === icon
+                            ? 'bg-gray-900 text-white'
+                            : 'bg-gray-50 hover:bg-gray-100'
+                            }`}
                         >
                           {icon}
                         </button>
@@ -512,9 +509,8 @@ export default function Projects() {
                         <button
                           key={color}
                           onClick={() => setNewProject({ ...newProject, color })}
-                          className={`w-7 h-7 rounded-lg transition-all ${
-                            newProject.color === color ? 'ring-2 ring-offset-1 ring-gray-900' : ''
-                          }`}
+                          className={`w-7 h-7 rounded-lg transition-all ${newProject.color === color ? 'ring-2 ring-offset-1 ring-gray-900' : ''
+                            }`}
                           style={{ backgroundColor: color }}
                         />
                       ))}

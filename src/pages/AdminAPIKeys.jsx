@@ -9,11 +9,10 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
-import { base44 } from '@/api/base44Client';
 import { toast } from 'sonner';
 import {
   Key, Plus, Trash2, Copy, Eye, EyeOff,
-  Shield, Clock, RefreshCw, AlertTriangle, CheckCircle
+  Shield, Clock, RefreshCw, AlertTriangle
 } from 'lucide-react';
 import { calculateAuditRiskScore } from '@/lib/wasmLoader';
 

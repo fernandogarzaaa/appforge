@@ -20,13 +20,13 @@ export default function ProjectViewer() {
   // Handle both {data: project} and project response formats
   const project = projectResponse?.data || projectResponse;
 
-  const { data: entities = [] } = useQuery({
+  const { data: entities = [], isLoading } = useQuery({
     queryKey: ['entities', id],
     queryFn: () => base44.entities.Entity.filter({ project_id: id }),
     enabled: !!id,
   });
 
-  const { data: pages = [] } = useQuery({
+  const { data: pages = [], isLoading } = useQuery({
     queryKey: ['pages', id],
     queryFn: () => base44.entities.Page.filter({ project_id: id }),
     enabled: !!id,

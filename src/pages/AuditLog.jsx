@@ -15,7 +15,7 @@ export default function AuditLog() {
   const [dateRange, setDateRange] = useState({ start: '', end: '' });
 
   // Get audit logs
-  const { data: logs } = useQuery({
+  const { data: logs, isLoading } = useQuery({
     queryKey: ['audit-logs', searchTerm, actionFilter, dateRange],
     queryFn: async () => {
       const response = await base44.functions.execute('auditLog', {
@@ -31,7 +31,7 @@ export default function AuditLog() {
   });
 
   // Get statistics
-  const { data: stats } = useQuery({
+  const { data: stats, isLoading } = useQuery({
     queryKey: ['audit-stats'],
     queryFn: async () => {
       const response = await base44.functions.execute('auditLog', {
@@ -42,7 +42,7 @@ export default function AuditLog() {
   });
 
   // Get timeline
-  const { data: timeline } = useQuery({
+  const { data: timeline, isLoading } = useQuery({
     queryKey: ['audit-timeline'],
     queryFn: async () => {
       const response = await base44.functions.execute('auditLog', {

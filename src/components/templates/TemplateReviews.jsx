@@ -14,7 +14,7 @@ export default function TemplateReviews({ templateId }) {
   const [formData, setFormData] = useState({ rating: 5, title: '', review_text: '' });
   const queryClient = useQueryClient();
 
-  const { data: reviews = [] } = useQuery({
+  const { data: reviews = [], isLoading } = useQuery({
     queryKey: ['templateReviews', templateId],
     queryFn: () => base44.entities.TemplateReview.filter({ template_id: templateId }, '-created_date')
   });

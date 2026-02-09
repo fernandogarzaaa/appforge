@@ -25,7 +25,6 @@ import AutonomousTrigger from '@/components/admin/AutonomousTrigger';
 
 export default function Dashboard() {
   const [ideaInput, setIdeaInput] = useState('');
-  const [isCreating, setIsCreating] = useState(false);
   const { toast } = useToast();
   const [user, setUser] = React.useState(null);
 

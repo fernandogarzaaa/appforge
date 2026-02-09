@@ -14,7 +14,7 @@ export default function QuantumBackendAdmin() {
   const [apiKey, setApiKey] = useState('');
   const queryClient = useQueryClient();
 
-  const { data: configs = [] } = useQuery({
+  const { data: configs = [], isLoading } = useQuery({
     queryKey: ['quantum_backend_configs'],
     queryFn: () => base44.asServiceRole.entities.QuantumBackendConfig.list()
   });

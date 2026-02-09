@@ -7,8 +7,8 @@ import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
-import { 
-  Image as ImageIcon, Wand2, Download, 
+import {
+  Image as ImageIcon, Wand2, Download,
   Copy, RefreshCw
 } from 'lucide-react';
 import { toast } from 'sonner';
@@ -103,13 +103,19 @@ export default function MediaStudio() {
             <CardContent className="space-y-4">
               <div>
                 <Label>Media Type</Label>
-                <Select value={mediaType} onValueChange={setMediaType}>
+                <Select value={mediaType} onValueChange={(val) => {
+                  if (val === 'video') {
+                    toast.info('Video generation is currently in development.');
+                    return;
+                  }
+                  setMediaType(val);
+                }}>
                   <SelectTrigger className="mt-2">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="image">Image</SelectItem>
-                    <SelectItem value="video">Video (Coming Soon)</SelectItem>
+                    <SelectItem value="video">Video (Planned)</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -226,8 +232,8 @@ export default function MediaStudio() {
                   {generatedMedia.map((media, i) => (
                     <Card key={i} className="overflow-hidden">
                       <div className="aspect-square bg-gray-100">
-                        <img 
-                          src={media.url} 
+                        <img
+                          src={media.url}
                           alt={media.prompt}
                           className="w-full h-full object-cover"
                         />

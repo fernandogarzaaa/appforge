@@ -23,7 +23,7 @@ export default function BotTestBuilder({ botId }) {
   const [newAssertion, setNewAssertion] = useState({ variable: '', operator: 'equals', value: '' });
   const [showDialog, setShowDialog] = useState(false);
 
-  const { data: testCases = [] } = useQuery({
+  const { data: testCases = [], isLoading } = useQuery({
     queryKey: ['botTestCases', botId],
     queryFn: () => base44.entities.BotTestCase.filter({ bot_id: botId })
   });

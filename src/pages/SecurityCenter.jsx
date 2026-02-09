@@ -28,12 +28,12 @@ export default function SecurityCenter() {
     queryFn: () => base44.entities.SecurityEvent.list('-created_date', 50)
   });
 
-  const { data: threats = [] } = useQuery({
+  const { data: threats = [], isLoading } = useQuery({
     queryKey: ['threats'],
     queryFn: () => base44.entities.ThreatIntelligence.list('-last_seen', 20)
   });
 
-  const { data: tenantIsolation = [] } = useQuery({
+  const { data: tenantIsolation = [], isLoading } = useQuery({
     queryKey: ['tenantIsolation'],
     queryFn: () => base44.entities.TenantIsolation.list()
   });

@@ -12,12 +12,12 @@ export default function BotTestRunner({ botId, botNodes }) {
   const [isRunning, setIsRunning] = useState(false);
   const [selectedTests, setSelectedTests] = useState([]);
 
-  const { data: testCases = [] } = useQuery({
+  const { data: testCases = [], isLoading } = useQuery({
     queryKey: ['botTestCases', botId],
     queryFn: () => base44.entities.BotTestCase.filter({ bot_id: botId, status: 'active' })
   });
 
-  const { data: testResults = [] } = useQuery({
+  const { data: testResults = [], isLoading } = useQuery({
     queryKey: ['botTestResults', botId],
     queryFn: () => base44.entities.BotTestResult.filter({ bot_id: botId }, '-run_at', 50)
   });

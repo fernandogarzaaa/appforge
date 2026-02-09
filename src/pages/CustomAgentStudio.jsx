@@ -12,6 +12,7 @@ import ClawdBotBuilder from '@/components/ai/ClawdBotBuilder';
 import CodeReviewPanel from '@/components/ai/CodeReviewPanel';
 import SuperiorAIStudio from '@/components/ai/SuperiorAIStudio';
 import { Sparkles, Plus, Save, Download } from 'lucide-react';
+import { toast } from 'sonner';
 
 export default function CustomAgentStudio() {
   const [user, setUser] = useState(null);
@@ -40,6 +41,7 @@ export default function CustomAgentStudio() {
       setUser(userData);
     } catch (error) {
       console.error('Failed to load user:', error);
+      toast.error('Failed to load user profile');
     }
   };
 
@@ -53,6 +55,7 @@ export default function CustomAgentStudio() {
       setAgents(data || []);
     } catch (error) {
       console.error('Failed to load agents:', error);
+      toast.error('Failed to load custom agents');
     }
   };
 
@@ -62,12 +65,13 @@ export default function CustomAgentStudio() {
       loadAgents();
     } catch (error) {
       console.error('Failed to update agent:', error);
+      toast.error('Failed to update agent status');
     }
   };
 
   const saveAgentVersion = async (agentId) => {
     if (!saveMessage.trim()) {
-      alert('Enter a change description');
+      toast.warning('Enter a change description');
       return;
     }
 
@@ -79,10 +83,10 @@ export default function CustomAgentStudio() {
       });
       setSaveMessage('');
       loadAgents();
-      alert('Version saved successfully!');
+      toast.success('Version saved successfully!');
     } catch (error) {
       console.error('Save error:', error);
-      alert('Failed to save version');
+      toast.error('Failed to save version');
     } finally {
       setIsSaving(false);
     }

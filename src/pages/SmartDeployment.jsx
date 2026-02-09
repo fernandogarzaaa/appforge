@@ -16,7 +16,7 @@ export default function SmartDeployment() {
     queryFn: () => base44.entities.Project.list('-updated_date')
   });
 
-  const { data: deployments = [] } = useQuery({
+  const { data: deployments = [], isLoading } = useQuery({
     queryKey: ['deployments'],
     queryFn: () => base44.entities.AgentDeployment.list('-created_date', 10)
   });

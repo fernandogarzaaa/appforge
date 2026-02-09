@@ -22,7 +22,7 @@ const actionLabels = {
 };
 
 export default function ActivityLog({ botId }) {
-  const { data: activities = [] } = useQuery({
+  const { data: activities = [], isLoading } = useQuery({
     queryKey: ['botActivities', botId],
     queryFn: () => base44.entities.BotActivityLog.filter(
       { bot_id: botId },

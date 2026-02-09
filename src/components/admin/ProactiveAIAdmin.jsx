@@ -10,7 +10,7 @@ import { toast } from 'sonner';
 export default function ProactiveAIAdmin() {
   const queryClient = useQueryClient();
 
-  const { data: config } = useQuery({
+  const { data: config, isLoading } = useQuery({
     queryKey: ['proactiveAIConfig'],
     queryFn: async () => {
       const configs = await base44.asServiceRole.entities.ProactiveAIConfig.list();
@@ -18,7 +18,7 @@ export default function ProactiveAIAdmin() {
     }
   });
 
-  const { data: stats } = useQuery({
+  const { data: stats, isLoading } = useQuery({
     queryKey: ['proactiveAIStats'],
     queryFn: async () => {
       const assistance = await base44.asServiceRole.entities.ProactiveAssistance.list();

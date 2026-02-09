@@ -25,7 +25,7 @@ export default function ScheduledDowntimeManager() {
   });
   const queryClient = useQueryClient();
 
-  const { data: downtimes } = useQuery({
+  const { data: downtimes, isLoading } = useQuery({
     queryKey: ['scheduled-downtimes'],
     queryFn: () => base44.entities.ScheduledDowntime.list()
   });

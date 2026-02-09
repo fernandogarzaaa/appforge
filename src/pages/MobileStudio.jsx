@@ -14,7 +14,7 @@ export default function MobileStudio() {
   const [showCreateModal, setShowCreateModal] = useState(false);
   const queryClient = useQueryClient();
 
-  const { data: mobileApps = [] } = useQuery({
+  const { data: mobileApps = [], isLoading } = useQuery({
     queryKey: ['mobileApps'],
     queryFn: () => base44.entities.MobileApp.list('-created_date')
   });

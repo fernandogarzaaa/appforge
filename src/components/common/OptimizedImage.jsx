@@ -183,13 +183,13 @@ export function ResponsiveImage({
  * @param {Object} props
  * @param {string} props.src - Image source
  * @param {string} props.alt - Alt text
- * @param {string} [props.placeholder] - Placeholder color or image
+ * @param {string} [props.placeholderClass] - Placeholder color or image
  * @param {string} [props.className] - CSS classes
  */
 export function LazyImage({
   src,
   alt,
-  placeholder = 'bg-gray-200',
+  placeholderClass = 'bg-gray-200',
   className,
   ...props
 }) {
@@ -217,7 +217,7 @@ export function LazyImage({
   return (
     <div ref={containerRef} className={cn('relative overflow-hidden', className)}>
       {!isVisible && (
-        <div className={cn('absolute inset-0 animate-pulse', placeholder)} />
+        <div className={cn('absolute inset-0 animate-pulse', placeholderClass)} />
       )}
       {isVisible && (
         <OptimizedImage

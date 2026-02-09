@@ -23,7 +23,7 @@ export default function PipelineBuilder({ botId }) {
   ]);
   const [showDialog, setShowDialog] = useState(false);
 
-  const { data: pipelines = [] } = useQuery({
+  const { data: pipelines = [], isLoading } = useQuery({
     queryKey: ['botPipelines', botId],
     queryFn: () => base44.entities.BotPipeline.filter({ bot_id: botId })
   });

@@ -90,7 +90,7 @@ export default function TutorialModal({ isOpen, onClose }) {
     loadProgress(userData.email);
   };
 
-  const { data: progress } = useQuery({
+  const { data: progress, isLoading } = useQuery({
     queryKey: ['onboarding-progress', user?.email],
     queryFn: () => base44.entities.OnboardingProgress.filter({ user_email: user?.email }),
     enabled: !!user?.email

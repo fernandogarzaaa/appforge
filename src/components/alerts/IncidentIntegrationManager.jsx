@@ -19,7 +19,7 @@ export default function IncidentIntegrationManager() {
   });
   const queryClient = useQueryClient();
 
-  const { data: integrations } = useQuery({
+  const { data: integrations, isLoading } = useQuery({
     queryKey: ['incident-integrations'],
     queryFn: () => base44.entities.IncidentIntegration.list()
   });

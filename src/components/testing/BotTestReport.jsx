@@ -10,7 +10,7 @@ import { base44 } from '@/api/base44Client';
 export default function BotTestReport({ botId }) {
   const [selectedResult, setSelectedResult] = useState(null);
 
-  const { data: testResults = [] } = useQuery({
+  const { data: testResults = [], isLoading } = useQuery({
     queryKey: ['botTestResults', botId],
     queryFn: () => base44.entities.BotTestResult.filter({ bot_id: botId }, '-run_at')
   });

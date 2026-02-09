@@ -24,7 +24,7 @@ export default function GitHubConnect() {
 
   const queryClient = useQueryClient();
 
-  const { data: integrations = [] } = useQuery({
+  const { data: integrations = [], isLoading } = useQuery({
     queryKey: ['integrations', projectId],
     queryFn: () => base44.entities.Integration.filter({ project_id: projectId, type: 'github' }),
     enabled: !!projectId

@@ -17,13 +17,13 @@ export default function CollaborationPanel({ botId }) {
 
   const queryClient = useQueryClient();
 
-  const { data: collaborators } = useQuery({
+  const { data: collaborators, isLoading } = useQuery({
     queryKey: ['collaborators', botId],
     queryFn: () => base44.entities.BotCollaborator.filter({ bot_id: botId }),
     initialData: []
   });
 
-  const { data: activityLogs } = useQuery({
+  const { data: activityLogs, isLoading } = useQuery({
     queryKey: ['activityLogs', botId],
     queryFn: () => base44.entities.BotActivityLog.filter({ bot_id: botId }, '-timestamp', 50),
     initialData: []

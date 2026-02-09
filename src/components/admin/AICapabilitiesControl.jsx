@@ -11,7 +11,7 @@ export default function AICapabilitiesControl() {
   const queryClient = useQueryClient();
   const [selectedAgent, setSelectedAgent] = useState(null);
 
-  const { data: agents = [] } = useQuery({
+  const { data: agents = [], isLoading } = useQuery({
     queryKey: ['customAgents'],
     queryFn: () => base44.asServiceRole.entities.CustomAgent.list(),
   });

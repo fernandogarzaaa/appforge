@@ -14,7 +14,7 @@ export default function ExternalSyncDashboard() {
   const [editingSync, setEditingSync] = useState(null);
   const queryClient = useQueryClient();
 
-  const { data: syncs } = useQuery({
+  const { data: syncs, isLoading } = useQuery({
     queryKey: ['external-analytics-syncs'],
     queryFn: () => base44.entities.ExternalAnalyticsSync.list('-created_date', 20)
   });

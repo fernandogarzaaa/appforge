@@ -24,7 +24,7 @@ export default function VSCodeIntegration() {
   const urlParams = new URLSearchParams(window.location.search);
   const projectId = urlParams.get('projectId');
 
-  const { data: project } = useQuery({
+  const { data: project, isLoading } = useQuery({
     queryKey: ['project', projectId],
     queryFn: () => base44.entities.Project.filter({ id: projectId }).then(p => p[0]),
     enabled: !!projectId

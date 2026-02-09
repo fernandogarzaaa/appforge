@@ -6,7 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { Lightbulb, TrendingUp, AlertTriangle, Zap } from 'lucide-react';
 
 export default function GlobalInsightsPanel() {
-  const { data: insights = [] } = useQuery({
+  const { data: insights = [], isLoading } = useQuery({
     queryKey: ['globalInsights'],
     queryFn: () => base44.asServiceRole.entities.GlobalInsight.filter({ is_active: true }),
   });

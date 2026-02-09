@@ -41,7 +41,7 @@ export default function IntegrationTriggerManager() {
     });
   }, [editingRule, showDialog]);
 
-  const { data: rules } = useQuery({
+  const { data: rules, isLoading } = useQuery({
     queryKey: ['integration-trigger-rules'],
     queryFn: () => base44.entities.IntegrationTriggerRule.list('-created_date', 50)
   });

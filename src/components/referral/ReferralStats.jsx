@@ -6,7 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { Users, CheckCircle2, Clock } from 'lucide-react';
 
 export default function ReferralStats({ userEmail }) {
-  const { data: referrals } = useQuery({
+  const { data: referrals, isLoading } = useQuery({
     queryKey: ['referrals', userEmail],
     queryFn: () => base44.entities.Referral.filter({ referrer_email: userEmail })
   });

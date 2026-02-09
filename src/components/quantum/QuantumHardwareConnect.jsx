@@ -29,7 +29,7 @@ export default function QuantumHardwareConnect() {
       name: 'AWS Braket',
       provider: 'Amazon',
       qubits: 30,
-      status: 'coming_soon',
+      status: 'planned',
       description: 'Quantum computing service',
       icon: Zap,
       color: 'from-orange-500 to-red-500'
@@ -113,11 +113,10 @@ export default function QuantumHardwareConnect() {
             {backends.map(backend => (
               <div
                 key={backend.id}
-                className={`p-4 rounded-lg border-2 transition-all cursor-pointer ${
-                  selectedBackend?.id === backend.id
-                    ? 'border-blue-600 bg-blue-100'
-                    : 'border-gray-200 hover:border-blue-300'
-                }`}
+                className={`p-4 rounded-lg border-2 transition-all cursor-pointer ${selectedBackend?.id === backend.id
+                  ? 'border-blue-600 bg-blue-100'
+                  : 'border-gray-200 hover:border-blue-300'
+                  }`}
                 onClick={() => setSelectedBackend(backend)}
               >
                 <div className="flex items-start justify-between mb-2">
@@ -125,7 +124,7 @@ export default function QuantumHardwareConnect() {
                     <backend.icon className="w-5 h-5 text-white" />
                   </div>
                   <Badge variant={backend.status === 'available' ? 'default' : 'secondary'}>
-                    {backend.status === 'available' ? 'Available' : 'Coming Soon'}
+                    {backend.status === 'available' ? 'Available' : 'Planned'}
                   </Badge>
                 </div>
                 <h3 className="font-semibold text-sm mb-1">{backend.name}</h3>

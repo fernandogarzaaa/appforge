@@ -27,7 +27,7 @@ export default function GitHubIntegrationSetup() {
   const queryClient = useQueryClient();
 
   // Fetch projects
-  const { data: projects = [] } = useQuery({
+  const { data: projects = [], isLoading } = useQuery({
     queryKey: ['projects'],
     queryFn: () => base44.entities.Project.list(),
   });

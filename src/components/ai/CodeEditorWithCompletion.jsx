@@ -7,7 +7,7 @@ import { Badge } from '@/components/ui/badge';
 export default function CodeEditorWithCompletion({
   value,
   onChange,
-  placeholder,
+  placeholder: placeholderText,
   language = 'javascript',
   context = '',
   className,
@@ -35,7 +35,7 @@ export default function CodeEditorWithCompletion({
       const after = value.substring(cursorPosition);
       const newValue = before + code + after;
       onChange(newValue);
-      
+
       setTimeout(() => {
         textareaRef.current.selectionStart = cursorPosition + code.length;
         textareaRef.current.selectionEnd = cursorPosition + code.length;
@@ -59,7 +59,7 @@ export default function CodeEditorWithCompletion({
   return (
     <div className="relative">
       {showAIBadge && (
-        <Badge 
+        <Badge
           className="absolute top-2 right-2 z-10 bg-purple-600 text-white"
           variant="default"
         >
@@ -67,14 +67,14 @@ export default function CodeEditorWithCompletion({
           AI Completion
         </Badge>
       )}
-      
+
       <Textarea
         ref={textareaRef}
         value={value}
         onChange={handleChange}
         onKeyDown={handleKeyDown}
         onClick={(e) => setCursorPosition(e.target.selectionStart)}
-        placeholder={placeholder}
+        placeholder={placeholderText}
         className={className}
         rows={rows}
       />

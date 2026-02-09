@@ -13,7 +13,7 @@ export default function RateLimits() {
   const queryClient = useQueryClient();
 
   // Get rate limit info
-  const { data: limits } = useQuery({
+  const { data: limits, isLoading } = useQuery({
     queryKey: ['rate-limits'],
     queryFn: async () => {
       const response = await base44.functions.execute('rateLimitManager', {
@@ -26,7 +26,7 @@ export default function RateLimits() {
   });
 
   // Get quota info
-  const { data: quotas } = useQuery({
+  const { data: quotas, isLoading } = useQuery({
     queryKey: ['quotas'],
     queryFn: async () => {
       const response = await base44.functions.execute('rateLimitManager', {
@@ -38,7 +38,7 @@ export default function RateLimits() {
   });
 
   // Get usage analytics
-  const { data: analytics } = useQuery({
+  const { data: analytics, isLoading } = useQuery({
     queryKey: ['usage-analytics'],
     queryFn: async () => {
       const response = await base44.functions.execute('rateLimitManager', {

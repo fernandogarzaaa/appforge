@@ -38,7 +38,7 @@ export default function KanbanBoard({ tasks, projectId }) {
 
     const { draggableId, destination } = result;
     const task = tasks.find(t => t.id === draggableId);
-    
+
     if (task && task.status !== destination.droppableId) {
       updateTaskMutation.mutate({
         id: draggableId,
@@ -56,10 +56,13 @@ export default function KanbanBoard({ tasks, projectId }) {
       <div className="flex gap-4 overflow-x-auto pb-4">
         {statusColumns.map((column) => {
           const columnTasks = getTasksByStatus(column.id);
-          
+
           return (
             <div key={column.id} className="flex-shrink-0 w-72">
-              <div className="bg-white rounded-lg border border-gray-200 h-full flex flex-col">
+              <div className={cn(
+                "bg-white rounded-lg border border-gray-200 h-full flex flex-col transition-opacity",
+                updateTaskMutation.isPending && "opacity-70 pointer-events-none"
+              )}>
                 <div className="p-3 border-b border-gray-100">
                   <div className="flex items-center justify-between mb-2">
                     <h3 className="font-medium text-[13px] text-gray-900">{column.label}</h3>
@@ -99,7 +102,7 @@ export default function KanbanBoard({ tasks, projectId }) {
                                   <MoreHorizontal className="w-3 h-3" />
                                 </Button>
                               </div>
-                              
+
                               {task.description && (
                                 <p className="text-[11px] text-gray-500 line-clamp-2 mb-2">
                                   {task.description}

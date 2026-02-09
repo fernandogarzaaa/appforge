@@ -122,7 +122,7 @@ export default function AdvancedSearch() {
   });
 
   // Autocomplete
-  const { data: suggestions } = useQuery({
+  const { data: suggestions, isLoading } = useQuery({
     queryKey: ['autocomplete', debouncedQuery],
     queryFn: async () => {
       if (!debouncedQuery || debouncedQuery.length < 2) return null;
@@ -146,7 +146,7 @@ export default function AdvancedSearch() {
   });
 
   // Facets
-  const { data: facets } = useQuery({
+  const { data: facets, isLoading } = useQuery({
     queryKey: ['search-facets'],
     queryFn: async () => {
       const response = await base44.functions.execute('advancedSearch', {

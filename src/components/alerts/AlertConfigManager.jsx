@@ -30,7 +30,7 @@ export default function AlertConfigManager({ monitoringRuleId }) {
     prediction_type: 'all'
   });
 
-  const { data: configs = [] } = useQuery({
+  const { data: configs = [], isLoading } = useQuery({
     queryKey: ['alert-configs', monitoringRuleId],
     queryFn: () => {
       if (monitoringRuleId) {
@@ -82,16 +82,22 @@ export default function AlertConfigManager({ monitoringRuleId }) {
       };
 
       if (config.webhook_url) {
-        const response = await fetch(config.webhook_url, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            ...(config.webhook_auth_header && { 'Authorization': config.webhook_auth_header })
-          },
-          body: JSON.stringify(testPayload)
-        });
-        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        try {
+          const response = await fetch(config.webhook_url, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              ...(config.webhook_auth_header && { 'Authorization': config.webhook_auth_header })
+            },
+            body: JSON.stringify(testPayload)
+          });
+          if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        } catch (fetchError) {
+          console.error('Webhook fetch failed:', fetchError);
+          throw new Error(`Webhook test failed: ${fetchError.message}`);
+        }
       }
+
 
       if (config.recipient_emails.includes('test')) {
         await base44.integrations.Core.SendEmail({

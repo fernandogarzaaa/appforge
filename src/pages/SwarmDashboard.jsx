@@ -15,7 +15,7 @@ export default function SwarmDashboard() {
         const fetchState = async () => {
             try {
                 // This URL would need to be the RAW version of the file committed by the bot
-                // const res = await fetch('https://raw.githubusercontent.com/fernandogarzaaa/appforge/main/swarm_state.json');
+                // const res = await fetch(getSwarmStateUrl());
                 // const data = await res.json();
 
                 // Mock Data for Visualization

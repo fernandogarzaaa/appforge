@@ -50,12 +50,12 @@ export default function WorkflowBuilder() {
   const [showExecutionHistory, setShowExecutionHistory] = useState(false);
   const [executionLogs, setExecutionLogs] = useState([]);
 
-  const { data: savedWorkflows = [] } = useQuery({
+  const { data: savedWorkflows = [], isLoading } = useQuery({
     queryKey: ['workflows'],
     queryFn: () => base44.entities.Workflow.list('-created_date')
   });
 
-  const { data: workflowExecutions = [] } = useQuery({
+  const { data: workflowExecutions = [], isLoading } = useQuery({
     queryKey: ['workflow-executions', currentWorkflowId],
     queryFn: () => currentWorkflowId 
       ? base44.entities.WorkflowExecution.filter({ workflow_id: currentWorkflowId }, '-created_date', 20)

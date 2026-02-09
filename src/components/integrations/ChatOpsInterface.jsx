@@ -12,17 +12,17 @@ export default function ChatOpsInterface() {
     { type: 'bot', text: 'Hi! I\'m your ChatOps assistant. Try commands like /status, /alerts, /acknowledge <id>, or /help' }
   ]);
 
-  const { data: commands } = useQuery({
+  const { data: commands, isLoading } = useQuery({
     queryKey: ['chatops-commands'],
     queryFn: () => base44.entities.ChatOpsCommand.list('-created_date', 50)
   });
 
-  const { data: activeAlerts } = useQuery({
+  const { data: activeAlerts, isLoading } = useQuery({
     queryKey: ['active-alerts'],
     queryFn: () => base44.entities.AnomalyAlert.filter({ status: 'new' }, '-created_date', 10)
   });
 
-  const { data: activePredictions } = useQuery({
+  const { data: activePredictions, isLoading } = useQuery({
     queryKey: ['active-predictions'],
     queryFn: () => base44.entities.AnomalyForecast.filter({ status: 'active' })
   });

@@ -21,12 +21,12 @@ export default function AIOnboardingWizard({ projectIdea, onComplete }) {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
-  const { data: user } = useQuery({
+  const { data: user, isLoading } = useQuery({
     queryKey: ['currentUser'],
     queryFn: () => base44.auth.me()
   });
 
-  const { data: config } = useQuery({
+  const { data: config, isLoading } = useQuery({
     queryKey: ['onboardingConfig'],
     queryFn: async () => {
       const configs = await base44.entities.OnboardingConfig.list();
@@ -34,7 +34,7 @@ export default function AIOnboardingWizard({ projectIdea, onComplete }) {
     }
   });
 
-  const { data: progress } = useQuery({
+  const { data: progress, isLoading } = useQuery({
     queryKey: ['onboardingProgress', user?.email],
     queryFn: async () => {
       if (!user) return null;

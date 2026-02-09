@@ -25,17 +25,17 @@ export default function CentralAnalytics() {
     refetchInterval: 30000 // Refresh every 30s
   });
 
-  const { data: integrations = [] } = useQuery({
+  const { data: integrations = [], isLoading } = useQuery({
     queryKey: ['integrations'],
     queryFn: () => base44.entities.ExternalBotIntegration.list()
   });
 
-  const { data: templates = [] } = useQuery({
+  const { data: templates = [], isLoading } = useQuery({
     queryKey: ['templates'],
     queryFn: () => base44.entities.BotTemplate.list()
   });
 
-  const { data: webhookLogs = [] } = useQuery({
+  const { data: webhookLogs = [], isLoading } = useQuery({
     queryKey: ['recentLogs'],
     queryFn: () => base44.entities.WebhookLog.list('-created_date', 100)
   });

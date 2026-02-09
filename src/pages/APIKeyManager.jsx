@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useQueryClient } from '@tanstack/react-query';
+
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -8,8 +8,8 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { useAPIKeys } from '@/hooks/useAPIKeys';
-import { 
-  Plus, Key, Eye, EyeOff, Copy, Trash2, Shield, 
+import {
+  Plus, Key, Eye, EyeOff, Copy, Trash2, Shield,
   AlertTriangle, CheckCircle2, Clock
 } from 'lucide-react';
 import { toast } from 'sonner';
@@ -19,7 +19,6 @@ export default function APIKeyManager() {
   const [newKey, setNewKey] = useState(null);
   const [showValue, setShowValue] = useState({});
   const { keys: apiKeys, createKey, revokeKey } = useAPIKeys();
-  const _queryClient = useQueryClient();
 
   // Create mutation-like objects for compatibility
   const createKeyMutation = {
@@ -43,26 +42,6 @@ export default function APIKeyManager() {
       } catch (error) {
         toast.error('Failed to revoke API key');
       }
-    }
-  };
-
-  const _handleCreateKey = async (name, scopes) => {
-    try {
-      const newKey = await createKey({ name, scopes });
-      toast.success('API key created successfully');
-      return newKey;
-    } catch (error) {
-      toast.error('Failed to create API key');
-      throw error;
-    }
-  };
-
-  const _handleRevokeKey = async (keyId) => {
-    try {
-      await revokeKey(keyId);
-      toast.success('API key revoked successfully');
-    } catch (error) {
-      toast.error('Failed to revoke API key');
     }
   };
 
@@ -239,7 +218,7 @@ export default function APIKeyManager() {
                   For security reasons, you won't be able to see this key again.
                 </p>
               </div>
-              
+
               <div>
                 <Label>API Key</Label>
                 <div className="flex gap-2 mt-1">

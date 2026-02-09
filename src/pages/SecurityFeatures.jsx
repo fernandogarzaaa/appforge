@@ -24,7 +24,7 @@ export default function Security() {
   const queryClient = useQueryClient();
 
   // Fetch GDPR requests
-  const { data: gdprRequests = [] } = useQuery({
+  const { data: gdprRequests = [], isLoading } = useQuery({
     queryKey: ['gdprRequests'],
     queryFn: () => securityService.getGdprStatus(),
     enabled: isAuthenticated,

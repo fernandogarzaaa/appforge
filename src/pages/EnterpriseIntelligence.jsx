@@ -9,12 +9,12 @@ import { base44 } from '@/api/base44Client';
 import { Brain, Zap, AlertTriangle, BookOpen, TrendingUp } from 'lucide-react';
 
 export default function EnterpriseIntelligence() {
-  const { data: impacts } = useQuery({
+  const { data: impacts, isLoading } = useQuery({
     queryKey: ['business-impacts'],
     queryFn: () => base44.entities.BusinessImpact.list('-created_date', 50)
   });
 
-  const { data: benchmarks } = useQuery({
+  const { data: benchmarks, isLoading } = useQuery({
     queryKey: ['benchmark-metrics'],
     queryFn: () => base44.entities.BenchmarkMetric.list('-created_date', 20)
   });

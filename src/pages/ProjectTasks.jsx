@@ -35,7 +35,7 @@ export default function ProjectTasks() {
     enabled: !!projectId
   });
 
-  const { data: project } = useQuery({
+  const { data: project, isLoading } = useQuery({
     queryKey: ['project', projectId],
     queryFn: async () => {
       const projects = await base44.entities.Project.filter({ id: projectId });

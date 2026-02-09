@@ -12,18 +12,18 @@ export default function LivePreview({ projectId }) {
   const [refreshKey, setRefreshKey] = useState(0);
   const iframeRef = useRef(null);
 
-  const { data: project } = useQuery({
+  const { data: project, isLoading } = useQuery({
     queryKey: ['project', projectId],
     queryFn: () => base44.entities.Project.get(projectId),
   });
 
-  const { data: entities = [] } = useQuery({
+  const { data: entities = [], isLoading } = useQuery({
     queryKey: ['entities', projectId],
     queryFn: () => base44.entities.Entity.filter({ project_id: projectId }),
     enabled: !!projectId,
   });
 
-  const { data: pages = [] } = useQuery({
+  const { data: pages = [], isLoading } = useQuery({
     queryKey: ['pages', projectId],
     queryFn: () => base44.entities.Page.filter({ project_id: projectId }),
     enabled: !!projectId,

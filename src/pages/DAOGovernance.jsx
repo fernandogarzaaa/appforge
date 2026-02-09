@@ -34,7 +34,7 @@ export default function DAOGovernance() {
 
   const queryClient = useQueryClient();
 
-  const { data: daos = [] } = useQuery({
+  const { data: daos = [], isLoading } = useQuery({
     queryKey: ['daos', projectId],
     queryFn: () => base44.entities.DAO.filter({ project_id: projectId }),
     enabled: !!projectId

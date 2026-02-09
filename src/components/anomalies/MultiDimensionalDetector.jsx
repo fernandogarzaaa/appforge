@@ -7,7 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { Network, TrendingUp } from 'lucide-react';
 
 export default function MultiDimensionalDetector() {
-  const { data: multidimAnomalies } = useQuery({
+  const { data: multidimAnomalies, isLoading } = useQuery({
     queryKey: ['multidimensional-anomalies'],
     queryFn: () => base44.entities.MultiDimensionalAnomaly.list('-created_at', 20)
   });

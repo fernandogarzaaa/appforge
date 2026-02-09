@@ -16,12 +16,12 @@ export default function CollaboratorManager({ botId }) {
   const [inviting, setInviting] = useState(false);
   const queryClient = useQueryClient();
 
-  const { data: collaborators = [] } = useQuery({
+  const { data: collaborators = [], isLoading } = useQuery({
     queryKey: ['collaborators', botId],
     queryFn: () => base44.entities.BotCollaborator.filter({ bot_id: botId }),
   });
 
-  const { data: currentUser } = useQuery({
+  const { data: currentUser, isLoading } = useQuery({
     queryKey: ['currentUser'],
     queryFn: () => base44.auth.me(),
   });

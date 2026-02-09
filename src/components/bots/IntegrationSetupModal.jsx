@@ -26,7 +26,7 @@ export default function IntegrationSetupModal({ open, onClose }) {
   });
 
   // Fetch available API keys
-  const { data: apiKeys = [] } = useQuery({
+  const { data: apiKeys = [], isLoading } = useQuery({
     queryKey: ['apiKeys'],
     queryFn: async () => {
       const keys = await base44.entities.APIKey.filter({ is_active: true, is_revoked: false });

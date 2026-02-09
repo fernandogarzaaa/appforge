@@ -22,25 +22,25 @@ export default function Web3Dashboard() {
   const urlParams = new URLSearchParams(window.location.search);
   const projectId = urlParams.get('projectId');
 
-  const { data: tokens = [] } = useQuery({
+  const { data: tokens = [], isLoading } = useQuery({
     queryKey: ['tokens', projectId],
     queryFn: () => base44.entities.Token.filter({ project_id: projectId }, '-created_date', 3),
     enabled: !!projectId,
   });
 
-  const { data: collections = [] } = useQuery({
+  const { data: collections = [], isLoading } = useQuery({
     queryKey: ['nft-collections', projectId],
     queryFn: () => base44.entities.NFTCollection.filter({ project_id: projectId }, '-created_date', 3),
     enabled: !!projectId,
   });
 
-  const { data: contracts = [] } = useQuery({
+  const { data: contracts = [], isLoading } = useQuery({
     queryKey: ['contracts', projectId],
     queryFn: () => base44.entities.SmartContract.filter({ project_id: projectId }, '-created_date', 3),
     enabled: !!projectId,
   });
 
-  const { data: transactions = [] } = useQuery({
+  const { data: transactions = [], isLoading } = useQuery({
     queryKey: ['transactions', projectId],
     queryFn: () => base44.entities.Transaction.filter({ project_id: projectId }, '-created_date', 5),
     enabled: !!projectId,

@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { 
+import {
   CheckCircle2, XCircle, AlertTriangle, Info, RefreshCw
 } from 'lucide-react';
 
@@ -12,8 +12,13 @@ export default function ProjectHealthReport() {
   const { data: report, isLoading, refetch } = useQuery({
     queryKey: ['healthReport'],
     queryFn: async () => {
-      const response = await base44.functions.invoke('runProjectDiagnostics', {});
-      return response.data;
+      try {
+        const response = await base44.functions.invoke('runProjectDiagnostics', {});
+        return response.data;
+      } catch (error) {
+        console.error('Diagnostics failed:', error);
+        throw error;
+      }
     }
   });
 

@@ -10,7 +10,7 @@ import { BookOpen } from 'lucide-react';
 
 export default function ResponsePlaybookLibrary() {
   const [showPlaybook, setShowPlaybook] = useState(null);
-  const { data: playbooks } = useQuery({
+  const { data: playbooks, isLoading } = useQuery({
     queryKey: ['response-playbooks'],
     queryFn: () => base44.entities.ResponsePlaybook.list('-created_date', 50)
   });

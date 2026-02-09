@@ -20,7 +20,7 @@ export default function KnowledgeBaseSearch() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
 
-  const { data: articles } = useQuery({
+  const { data: articles, isLoading } = useQuery({
     queryKey: ['knowledge-base'],
     queryFn: () => base44.entities.KnowledgeBase.filter({ is_published: true })
   });

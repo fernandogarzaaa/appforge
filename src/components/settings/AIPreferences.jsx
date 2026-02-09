@@ -10,12 +10,12 @@ import { toast } from 'sonner';
 export default function AIPreferences() {
   const queryClient = useQueryClient();
 
-  const { data: user } = useQuery({
+  const { data: user, isLoading } = useQuery({
     queryKey: ['user'],
     queryFn: () => base44.auth.me()
   });
 
-  const { data: prefs = [] } = useQuery({
+  const { data: prefs = [], isLoading } = useQuery({
     queryKey: ['userPrefs'],
     queryFn: async () => {
       if (!user) return [];

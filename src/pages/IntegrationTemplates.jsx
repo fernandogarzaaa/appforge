@@ -65,7 +65,7 @@ export default function IntegrationTemplates() {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const queryClient = useQueryClient();
 
-  const { data: templates = [] } = useQuery({
+  const { data: templates = [], isLoading } = useQuery({
     queryKey: ['integrationTemplates'],
     queryFn: () => base44.entities.IntegrationTemplate.list(),
     initialData: []

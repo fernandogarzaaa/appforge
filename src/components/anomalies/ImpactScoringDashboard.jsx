@@ -7,7 +7,7 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Responsive
 import { AlertTriangle, Users, Clock } from 'lucide-react';
 
 export default function ImpactScoringDashboard() {
-  const { data: impactScores } = useQuery({
+  const { data: impactScores, isLoading } = useQuery({
     queryKey: ['anomaly-impact-scores'],
     queryFn: () => base44.entities.AnomalyImpactScore.list('-overall_impact_score', 20)
   });

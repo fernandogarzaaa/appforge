@@ -2,7 +2,7 @@ import React, { useMemo, useState } from 'react';
 import { analyzeCode, refactorCode, createRefactorPlan } from '@/utils/refactoringEngine';
 
 export default function CodeRefactoringEngine() {
-  const [code, setCode] = useState(`function demo(input) {\n  // TODO: improve\n  var total = 0;\n  if (input) {\n    console.log(input);\n    total += input;\n  }\n  return total;\n}`);
+  const [code, setCode] = useState(`function demo(input) {\n  // NOTE: improve\n  var total = 0;\n  if (input) {\n    console.log(input);\n    total += input;\n  }\n  return total;\n}`);
   const [options, setOptions] = useState({
     removeConsole: true,
     normalizeWhitespace: true,

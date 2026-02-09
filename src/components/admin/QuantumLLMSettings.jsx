@@ -18,7 +18,7 @@ export default function QuantumLLMSettings() {
   const queryClient = useQueryClient();
 
   // Fetch config
-  const { data: configs = [] } = useQuery({
+  const { data: configs = [], isLoading } = useQuery({
     queryKey: ['quantumLLMConfig'],
     queryFn: () => base44.entities.QuantumLLMConfig.list(),
   });

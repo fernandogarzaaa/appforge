@@ -78,8 +78,8 @@ export default function DeploymentsPage({ projectId = 'proj_default' }) {
     total: deployments.length,
     successful: deployments.filter(d => d.status === 'active' || d.status === 'completed').length,
     failed: deployments.filter(d => d.status === 'failed').length,
-    successRate: deployments.length > 0 
-      ? Math.round((deployments.filter(d => d.status === 'active' || d.status === 'completed').length / deployments.length) * 100) 
+    successRate: deployments.length > 0
+      ? Math.round((deployments.filter(d => d.status === 'active' || d.status === 'completed').length / deployments.length) * 100)
       : 0
   };
 
@@ -123,7 +123,11 @@ export default function DeploymentsPage({ projectId = 'proj_default' }) {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">Total Deployments</p>
-                <p className="text-3xl font-bold dark:text-white">{stats.total}</p>
+                {isLoading ? (
+                  <div className="h-9 w-16 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
+                ) : (
+                  <p className="text-3xl font-bold dark:text-white">{stats.total}</p>
+                )}
               </div>
               <Activity className="w-10 h-10 text-blue-500 opacity-20" />
             </div>
@@ -136,7 +140,11 @@ export default function DeploymentsPage({ projectId = 'proj_default' }) {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">Success Rate</p>
-                <p className="text-3xl font-bold dark:text-white">{stats.successRate}%</p>
+                {isLoading ? (
+                  <div className="h-9 w-16 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
+                ) : (
+                  <p className="text-3xl font-bold dark:text-white">{stats.successRate}%</p>
+                )}
               </div>
               <TrendingUp className="w-10 h-10 text-green-500 opacity-20" />
             </div>
@@ -149,7 +157,11 @@ export default function DeploymentsPage({ projectId = 'proj_default' }) {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">Successful</p>
-                <p className="text-3xl font-bold text-green-600 dark:text-green-400">{stats.successful}</p>
+                {isLoading ? (
+                  <div className="h-9 w-16 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
+                ) : (
+                  <p className="text-3xl font-bold text-green-600 dark:text-green-400">{stats.successful}</p>
+                )}
               </div>
               <CheckCircle2 className="w-10 h-10 text-green-500 opacity-20" />
             </div>
@@ -162,7 +174,11 @@ export default function DeploymentsPage({ projectId = 'proj_default' }) {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">Failed</p>
-                <p className="text-3xl font-bold text-red-600 dark:text-red-400">{stats.failed}</p>
+                {isLoading ? (
+                  <div className="h-9 w-16 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
+                ) : (
+                  <p className="text-3xl font-bold text-red-600 dark:text-red-400">{stats.failed}</p>
+                )}
               </div>
               <AlertCircle className="w-10 h-10 text-red-500 opacity-20" />
             </div>
@@ -205,13 +221,15 @@ export default function DeploymentsPage({ projectId = 'proj_default' }) {
       </Card>
 
       {/* Error Message */}
-      {error && (
-        <Card className="bg-red-50 dark:bg-red-950/30 border-red-200 dark:border-red-900">
-          <CardContent className="pt-6">
-            <p className="text-red-700 dark:text-red-400">Error: {error}</p>
-          </CardContent>
-        </Card>
-      )}
-    </div>
+      {
+        error && (
+          <Card className="bg-red-50 dark:bg-red-950/30 border-red-200 dark:border-red-900">
+            <CardContent className="pt-6">
+              <p className="text-red-700 dark:text-red-400">Error: {error}</p>
+            </CardContent>
+          </Card>
+        )
+      }
+    </div >
   );
 }

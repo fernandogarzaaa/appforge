@@ -25,13 +25,13 @@ export default function Support() {
     setUser(userData);
   };
 
-  const { data: tickets = [] } = useQuery({
+  const { data: tickets = [], isLoading } = useQuery({
     queryKey: ['support-tickets', user?.email],
     queryFn: () => base44.entities.SupportTicket.filter({ user_email: user.email }, '-created_date'),
     enabled: !!user?.email
   });
 
-  const { data: articles = [] } = useQuery({
+  const { data: articles = [], isLoading } = useQuery({
     queryKey: ['knowledge-base'],
     queryFn: () => base44.entities.KnowledgeBase.filter({ is_published: true })
   });

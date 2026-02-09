@@ -115,7 +115,7 @@ export default function Collaboration() {
   }, [selectedDoc, showLiveEditor, connectToDocument, disconnect, collaborationEnabled, projectId]);
 
   // Fetch active session
-  const { data: session } = useQuery({
+  const { data: session, isLoading } = useQuery({
     queryKey: ['collaboration-session', sessionId],
     queryFn: async () => {
       if (!sessionId) return null;

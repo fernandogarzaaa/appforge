@@ -27,7 +27,7 @@ export default function QuantumHardwareJobManager() {
   const queryClient = useQueryClient();
 
   // Fetch jobs
-  const { data: jobs = [] } = useQuery({
+  const { data: jobs = [], isLoading } = useQuery({
     queryKey: ['quantum_jobs'],
     queryFn: () => base44.entities.QuantumJob.list('-submitted_at'),
     refetchInterval: 5000

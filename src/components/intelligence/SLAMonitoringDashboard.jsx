@@ -6,7 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { AlertTriangle, Clock } from 'lucide-react';
 
 export default function SLAMonitoringDashboard() {
-  const { data: slas } = useQuery({
+  const { data: slas, isLoading } = useQuery({
     queryKey: ['sla-breaches'],
     queryFn: () => base44.entities.SLABreach.list('-breach_probability', 50)
   });

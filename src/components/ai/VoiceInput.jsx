@@ -25,7 +25,7 @@ export default function VoiceInput({ onTranscript, disabled }) {
       mediaRecorder.onstop = async () => {
         const audioBlob = new Blob(chunksRef.current, { type: 'audio/webm' });
         await processAudio(audioBlob);
-        
+
         // Stop all tracks
         stream.getTracks().forEach(track => track.stop());
       };
@@ -52,16 +52,16 @@ export default function VoiceInput({ onTranscript, disabled }) {
       // Convert audio to base64
       const reader = new FileReader();
       reader.readAsDataURL(audioBlob);
-      
+
       reader.onloadend = async () => {
         const base64Audio = reader.result.split(',')[1];
-        
+
         // Use Web Speech API if available (free, client-side)
         if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
           // Already handled by the recognition API
           setIsProcessing(false);
         } else {
-          // Fallback: Use a simple placeholder
+          // Fallback: Use a simple alert
           toast.info('Voice transcription requires a supported browser');
           setIsProcessing(false);
         }
@@ -78,7 +78,7 @@ export default function VoiceInput({ onTranscript, disabled }) {
     if (!isRecording) return;
 
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    
+
     if (!SpeechRecognition) {
       toast.error('Speech recognition not supported in this browser');
       setIsRecording(false);

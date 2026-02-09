@@ -15,7 +15,7 @@ export default function TwoFactorAuth() {
   const queryClient = useQueryClient();
 
   // Check 2FA status
-  const { data: status } = useQuery({
+  const { data: status, isLoading } = useQuery({
     queryKey: ['2fa-status'],
     queryFn: async () => {
       // @ts-ignore - base44 SDK supports execute method at runtime

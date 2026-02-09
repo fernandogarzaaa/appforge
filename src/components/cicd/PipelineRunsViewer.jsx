@@ -11,7 +11,7 @@ export default function PipelineRunsViewer({ botId }) {
   const [selectedRun, setSelectedRun] = useState(null);
   const [expandedRun, setExpandedRun] = useState(null);
 
-  const { data: runs = [] } = useQuery({
+  const { data: runs = [], isLoading } = useQuery({
     queryKey: ['pipelineRuns', botId],
     queryFn: () => base44.entities.PipelineRun.filter({ bot_id: botId }, '-started_at')
   });

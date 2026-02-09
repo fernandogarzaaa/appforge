@@ -4,6 +4,7 @@ import PhantomWalletConnect from '@/components/payments/PhantomWalletConnect';
 import SolanaPaymentProcessor from '@/components/payments/SolanaPaymentProcessor';
 import { getAllPlans } from '@/config/payment.config';
 import { Check, Loader2 } from 'lucide-react';
+import { toast } from 'sonner';
 
 export default function PricingPage() {
   const [walletConnected, setWalletConnected] = useState(false);
@@ -116,7 +117,7 @@ export default function PricingPage() {
                       setSelectedPlan(null);
                       setWalletConnected(false);
                     }}
-                    onPaymentError={() => { }}
+                    onPaymentError={(err) => toast.error('Payment failed: ' + (err?.message || 'Unknown error'))}
                   />
                 )}
               </div>

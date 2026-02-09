@@ -18,12 +18,12 @@ export default function RoleManagement() {
   const [newUserRole, setNewUserRole] = useState('read_only');
   const queryClient = useQueryClient();
 
-  const { data: permissions } = useQuery({
+  const { data: permissions, isLoading } = useQuery({
     queryKey: ['user-permissions'],
     queryFn: () => base44.entities.UserPermission.list('-assigned_at', 100)
   });
 
-  const { data: roles } = useQuery({
+  const { data: roles, isLoading } = useQuery({
     queryKey: ['user-roles'],
     queryFn: () => base44.entities.UserRole.list('-created_date', 20)
   });

@@ -14,12 +14,12 @@ export default function WebhookMonitor() {
   const [selectedWebhook, setSelectedWebhook] = useState(null);
   const [openCreate, setOpenCreate] = useState(false);
 
-  const { data: webhooks = [] } = useQuery({
+  const { data: webhooks = [], isLoading } = useQuery({
     queryKey: ['webhooks'],
     queryFn: () => base44.asServiceRole.entities.Webhook.list('-created_at')
   });
 
-  const { data: deliveries = [] } = useQuery({
+  const { data: deliveries = [], isLoading } = useQuery({
     queryKey: ['webhook-deliveries'],
     queryFn: () => base44.asServiceRole.entities.WebhookDelivery.list('-created_at'),
     refetchInterval: 5000

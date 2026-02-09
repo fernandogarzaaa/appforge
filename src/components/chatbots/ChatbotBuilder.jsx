@@ -38,7 +38,7 @@ export default function ChatbotBuilder() {
 
   const queryClient = useQueryClient();
 
-  const { data: chatbots = [] } = useQuery({
+  const { data: chatbots = [], isLoading } = useQuery({
     queryKey: ['chatbots'],
     queryFn: () => base44.entities.Chatbot.list('-updated_date')
   });

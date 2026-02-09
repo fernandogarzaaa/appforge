@@ -13,11 +13,12 @@ import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { QRCodeSVG } from 'qrcode.react';
 import { Shield, Smartphone, Mail, Key, Globe, Lock, CheckCircle, XCircle } from 'lucide-react';
+import { toast } from 'sonner';
 
 /**
  * SAML Configuration Component
  */
-export function SAMLConfig({ onSave = (_config) => {}, initialConfig = {} } = {}) {
+export function SAMLConfig({ onSave = (_config) => { }, initialConfig = {} } = {}) {
   /** @type {{entityId?: string; idpEntityId?: string; idpSsoUrl?: string; idpCertificate?: string; preset?: string;}} */
   const config_typed = initialConfig;
   const [config, setConfig] = useState({
@@ -120,7 +121,7 @@ export function SAMLConfig({ onSave = (_config) => {}, initialConfig = {} } = {}
 /**
  * OIDC Configuration Component
  */
-export function OIDCConfig({ onSave = (_config) => {}, initialConfig = {} } = {}) {
+export function OIDCConfig({ onSave = (_config) => { }, initialConfig = {} } = {}) {
   /** @type {{issuer?: string; clientId?: string; clientSecret?: string; provider?: string;}} */
   const config_typed = initialConfig;
   const [config, setConfig] = useState({
@@ -229,13 +230,21 @@ export function MFASetup({ userId, onComplete }) {
     setStep('setup');
 
     if (selectedMethod === 'totp') {
-      // Generate TOTP secret
-      const response = await fetch(`/api/mfa/totp/setup?userId=${userId}`);
-      const data = await response.json();
-      setTotpSecret(data.secret);
-      setTotpUri(data.qrCodeUri);
+      try {
+        // Generate TOTP secret
+        const response = await fetch(`/api/mfa/totp/setup?userId=${userId}`);
+        if (!response.ok) throw new Error('Failed to generate TOTP secret');
+        const data = await response.json();
+        setTotpSecret(data.secret);
+        setTotpUri(data.qrCodeUri);
+      } catch (err) {
+        setError('Failed to set up authenticator. Please try again.');
+        setStep('select');
+        console.error('TOTP setup error:', err);
+      }
     }
   };
+
 
   const handleVerify = async () => {
     try {
@@ -386,18 +395,22 @@ export function ActiveSessions({ userId }) {
   const revokeSession = async (sessionId) => {
     try {
       await fetch(`/api/sessions/${sessionId}`, { method: 'DELETE' });
+      toast.success('Session revoked');
       fetchSessions();
     } catch (error) {
       console.error('Failed to revoke session:', error);
+      toast.error('Failed to revoke session');
     }
   };
 
   const revokeAll = async () => {
     try {
       await fetch(`/api/sessions/revoke-all?userId=${userId}`, { method: 'POST' });
+      toast.success('All other sessions revoked');
       fetchSessions();
     } catch (error) {
       console.error('Failed to revoke all sessions:', error);
+      toast.error('Failed to revoke sessions');
     }
   };
 

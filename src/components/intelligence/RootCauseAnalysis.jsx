@@ -6,7 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { TrendingUp, Zap, Network } from 'lucide-react';
 
 export default function RootCauseAnalysis({ anomalyId }) {
-  const { data: correlation } = useQuery({
+  const { data: correlation, isLoading } = useQuery({
     queryKey: ['anomaly-correlation', anomalyId],
     queryFn: () => base44.entities.AnomalyCorrelation.filter({ primary_anomaly_id: anomalyId }).then(r => r[0])
   });

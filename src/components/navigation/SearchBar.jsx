@@ -2,7 +2,7 @@ import React from 'react';
 import { Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
-export default function SearchBar({ onOpen, placeholder = 'Search...', showShortcut = true }) {
+export default function SearchBar({ onOpen, placeholder: placeholderText = 'Search...', showShortcut = true }) {
   return (
     <Button
       variant="outline"
@@ -11,7 +11,7 @@ export default function SearchBar({ onOpen, placeholder = 'Search...', showShort
       onClick={onOpen}
     >
       <Search className="w-4 h-4 mr-2 shrink-0" />
-      <span className="hidden md:inline text-xs flex-1 text-left">{placeholder}</span>
+      <span className="hidden md:inline text-xs flex-1 text-left">{placeholderText}</span>
       {showShortcut && (
         <kbd className="ml-auto hidden md:inline-block px-1.5 py-0.5 text-xs border border-gray-300 dark:border-slate-600 rounded bg-gray-50 dark:bg-slate-700 text-gray-700 dark:text-gray-300 font-mono">
           ⌘K

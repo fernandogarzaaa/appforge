@@ -8,12 +8,12 @@ import { AlertTriangle, TrendingUp, CheckCircle2, Clock } from 'lucide-react';
 import ProactiveAnomalyCard from './ProactiveAnomalyCard';
 
 export default function ProactiveMonitoringPanel() {
-  const { data: forecasts } = useQuery({
+  const { data: forecasts, isLoading } = useQuery({
     queryKey: ['anomaly-forecasts'],
     queryFn: () => base44.entities.AnomalyForecast.filter({ status: 'active' }, '-probability_percent', 50)
   });
 
-  const { data: actions } = useQuery({
+  const { data: actions, isLoading } = useQuery({
     queryKey: ['preventative-actions'],
     queryFn: () => base44.entities.PreventativeAction.filter({ status: 'recommended' })
   });

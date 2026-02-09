@@ -9,7 +9,7 @@ import { toast } from 'sonner';
 export default function OnboardingSystemConfig() {
   const queryClient = useQueryClient();
 
-  const { data: config } = useQuery({
+  const { data: config, isLoading } = useQuery({
     queryKey: ['onboardingConfig'],
     queryFn: async () => {
       const configs = await base44.asServiceRole.entities.OnboardingConfig.list();
@@ -17,7 +17,7 @@ export default function OnboardingSystemConfig() {
     }
   });
 
-  const { data: stats } = useQuery({
+  const { data: stats, isLoading } = useQuery({
     queryKey: ['onboardingStats'],
     queryFn: async () => {
       const allProgress = await base44.asServiceRole.entities.OnboardingProgress.list();

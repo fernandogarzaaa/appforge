@@ -6,12 +6,12 @@ import { LineChart, Line, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tool
 import { TrendingUp, Activity, Zap, AlertCircle } from 'lucide-react';
 
 export default function IntegrationAnalytics() {
-  const { data: integrations = [] } = useQuery({
+  const { data: integrations = [], isLoading } = useQuery({
     queryKey: ['integrations'],
     queryFn: () => base44.entities.ExternalBotIntegration.list()
   });
 
-  const { data: logs = [] } = useQuery({
+  const { data: logs = [], isLoading } = useQuery({
     queryKey: ['webhookLogs'],
     queryFn: () => base44.entities.WebhookLog.list('-created_date', 1000)
   });

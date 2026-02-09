@@ -20,7 +20,7 @@ export default function ProactiveAIAssistant({ projectId, currentPage }) {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
-  const { data: config } = useQuery({
+  const { data: config, isLoading } = useQuery({
     queryKey: ['proactiveAIConfig'],
     queryFn: async () => {
       const configs = await base44.entities.ProactiveAIConfig.list();
@@ -29,7 +29,7 @@ export default function ProactiveAIAssistant({ projectId, currentPage }) {
     staleTime: 5 * 60 * 1000
   });
 
-  const { data: user } = useQuery({
+  const { data: user, isLoading } = useQuery({
     queryKey: ['currentUser'],
     queryFn: () => base44.auth.me(),
     staleTime: 5 * 60 * 1000

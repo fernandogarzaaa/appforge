@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { toast } from 'sonner';
 import { base44 } from '@/api/base44Client';
 import { useQuery } from '@tanstack/react-query';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
@@ -13,7 +14,7 @@ export default function GitHubAutomationMonitor() {
   const [filter, setFilter] = useState('');
   const [isRefreshing, setIsRefreshing] = useState(false);
 
-  const { data: automationLogs = [], refetch } = useQuery({
+  const { data: automationLogs = [], isLoading, refetch } = useQuery({
     queryKey: ['githubAutomationLogs'],
     queryFn: () => base44.entities.GitHubAutomationLog.list('-ran_at', 50),
   });
@@ -23,9 +24,15 @@ export default function GitHubAutomationMonitor() {
   }, [automationLogs]);
 
   const handleRefresh = async () => {
-    setIsRefreshing(true);
-    await refetch();
-    setIsRefreshing(false);
+    try {
+      setIsRefreshing(true);
+      await refetch();
+      toast.success('Logs refreshed');
+    } catch (error) {
+      toast.error('Failed to refresh logs');
+    } finally {
+      setIsRefreshing(false);
+    }
   };
 
   const filteredLogs = logs.filter(log =>

@@ -10,7 +10,7 @@ import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import {
   Activity, Cpu, Database, Server, Globe,
-  RefreshCw, AlertTriangle, CheckCircle, Clock,
+  RefreshCw, CheckCircle,
   TrendingUp, TrendingDown, Zap, BarChart2
 } from 'lucide-react';
 import { QuantumInspiredAI, isWasmAccelerated } from '@/lib/QuantumEngine';

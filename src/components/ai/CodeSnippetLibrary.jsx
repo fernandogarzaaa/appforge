@@ -15,7 +15,7 @@ export default function CodeSnippetLibrary({ projectId, contextCode }) {
   const [search, setSearch] = useState('');
   const [copiedId, setCopiedId] = useState(null);
 
-  const { data: snippets = [] } = useQuery({
+  const { data: snippets = [], isLoading } = useQuery({
     queryKey: ['codeSnippets', projectId],
     queryFn: () => base44.entities.CodeSnippet.filter({ project_id: projectId }, '-created_date')
   });

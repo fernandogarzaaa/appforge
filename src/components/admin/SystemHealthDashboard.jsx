@@ -8,12 +8,12 @@ import { Activity, AlertCircle, Zap, TrendingUp } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 
 export default function SystemHealthDashboard() {
-  const { data: healthMetrics } = useQuery({
+  const { data: healthMetrics, isLoading } = useQuery({
     queryKey: ['system-health-metrics'],
     queryFn: () => base44.entities.SystemHealthMetric.list('-timestamp', 100)
   });
 
-  const { data: performanceMetrics } = useQuery({
+  const { data: performanceMetrics, isLoading } = useQuery({
     queryKey: ['model-performance-metrics'],
     queryFn: () => base44.entities.ModelPerformanceMetric.list('-timestamp', 100)
   });

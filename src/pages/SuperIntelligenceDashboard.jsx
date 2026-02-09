@@ -16,11 +16,17 @@ export default function SuperIntelligenceDashboard() {
 
   useEffect(() => {
     const loadUser = async () => {
-      const user = await base44.auth.me();
-      setUserEmail(user?.email);
+      try {
+        const user = await base44.auth.me();
+        setUserEmail(user?.email);
+      } catch (error) {
+        console.error('Failed to load user:', error);
+        toast.error('Failed to load user data');
+      }
     };
     loadUser();
   }, []);
+
 
   const { data: superIntelligence, isLoading, refetch } = useQuery({
     queryKey: ['superIntelligence', userEmail],

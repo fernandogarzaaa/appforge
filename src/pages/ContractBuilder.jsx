@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { 
+import {
   FileCode, Plus, Search, Rocket, Code, Settings2,
   ChevronRight, Users, Clock, Coins, Vote, Gift, Lock,
   CheckCircle, Play
@@ -271,7 +271,9 @@ export default function ContractBuilder() {
   );
 
   const handleCompile = () => {
-    toast.info('Compilation requires backend functions to be enabled.');
+    toast.info('Connecting to Quantum Compilation Engine... (Simulated)', {
+      description: 'Backend compilation service coming in Phase 4.'
+    });
   };
 
   const handleDeploy = () => {
@@ -411,10 +413,10 @@ export default function ContractBuilder() {
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
-                  <WalletConnect 
-                    wallet={wallet} 
-                    onConnect={setWallet} 
-                    onDisconnect={() => setWallet(null)} 
+                  <WalletConnect
+                    wallet={wallet}
+                    onConnect={setWallet}
+                    onDisconnect={() => setWallet(null)}
                   />
                   <Button
                     onClick={handleCompile}
@@ -496,8 +498,8 @@ export default function ContractBuilder() {
                       </div>
                       <div>
                         <Label className="text-sm text-gray-600 mb-1.5 block">Network</Label>
-                        <Select 
-                          value={selectedContract.network} 
+                        <Select
+                          value={selectedContract.network}
                           onValueChange={(v) => setSelectedContract({ ...selectedContract, network: v })}
                         >
                           <SelectTrigger className="h-11 rounded-xl">
@@ -559,7 +561,7 @@ export default function ContractBuilder() {
         contract={selectedContract}
         wallet={wallet}
         onDeploymentComplete={handleDeploymentComplete}
-        onConnectWallet={() => {}}
+        onConnectWallet={() => toast.info('Please connect your wallet using the button above')}
       />
 
       {/* New Contract Dialog */}
@@ -642,9 +644,9 @@ export default function ContractBuilder() {
               Cancel
             </Button>
             <Button
-              onClick={() => createMutation.mutate({ 
-                ...newContract, 
-                project_id: projectId, 
+              onClick={() => createMutation.mutate({
+                ...newContract,
+                project_id: projectId,
                 status: 'draft',
                 source_code: getTemplateCode(newContract.template)
               })}

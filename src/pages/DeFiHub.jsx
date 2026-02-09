@@ -40,7 +40,7 @@ export default function DeFiHub() {
 
   const queryClient = useQueryClient();
 
-  const { data: protocols = [] } = useQuery({
+  const { data: protocols = [], isLoading } = useQuery({
     queryKey: ['defi-protocols', projectId],
     queryFn: () => base44.entities.DeFiProtocol.filter({ project_id: projectId }),
     enabled: !!projectId

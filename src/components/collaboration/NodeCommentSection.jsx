@@ -13,12 +13,12 @@ export default function NodeCommentSection({ botId, nodeId }) {
   const [isOpen, setIsOpen] = useState(false);
   const queryClient = useQueryClient();
 
-  const { data: comments = [] } = useQuery({
+  const { data: comments = [], isLoading } = useQuery({
     queryKey: ['nodeComments', botId, nodeId],
     queryFn: () => base44.entities.BotComment.filter({ bot_id: botId, node_id: nodeId }),
   });
 
-  const { data: currentUser } = useQuery({
+  const { data: currentUser, isLoading } = useQuery({
     queryKey: ['currentUser'],
     queryFn: () => base44.auth.me(),
   });

@@ -26,7 +26,7 @@ export default function UserAlertPreferences() {
     loadPreferences(userData.email);
   };
 
-  const { data: preferences } = useQuery({
+  const { data: preferences, isLoading } = useQuery({
     queryKey: ['alert-preferences', user?.email],
     queryFn: () => base44.entities.AlertPreference.filter({ user_email: user?.email }),
     enabled: !!user?.email

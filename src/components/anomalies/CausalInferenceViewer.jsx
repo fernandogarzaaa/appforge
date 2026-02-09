@@ -28,7 +28,7 @@ export default function CausalInferenceViewer() {
     collapsedState, collapseWavefunction, autoRemediate
   } = useCausalStore();
 
-  const { data: relationships } = useQuery({
+  const { data: relationships, isLoading } = useQuery({
     queryKey: ['causal-relationships'],
     queryFn: () => base44.entities.CausalRelationship.list('-causal_strength', 30)
   });

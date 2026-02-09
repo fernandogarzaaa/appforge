@@ -12,7 +12,7 @@ export default function ProactiveSuggestions({ projectId, onApplySuggestion }) {
   const [suggestions, setSuggestions] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  const { data: project } = useQuery({
+  const { data: project, isLoading } = useQuery({
     queryKey: ['project', projectId],
     queryFn: async () => {
       const projects = await base44.entities.Project.filter({ id: projectId });
@@ -21,13 +21,13 @@ export default function ProactiveSuggestions({ projectId, onApplySuggestion }) {
     enabled: !!projectId
   });
 
-  const { data: entities = [] } = useQuery({
+  const { data: entities = [], isLoading } = useQuery({
     queryKey: ['entities', projectId],
     queryFn: () => base44.entities.Entity.filter({ project_id: projectId }),
     enabled: !!projectId
   });
 
-  const { data: pages = [] } = useQuery({
+  const { data: pages = [], isLoading } = useQuery({
     queryKey: ['pages', projectId],
     queryFn: () => base44.entities.Page.filter({ project_id: projectId }),
     enabled: !!projectId

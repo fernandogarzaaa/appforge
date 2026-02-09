@@ -9,7 +9,7 @@ import { AlertTriangle, Clock, TrendingUp } from 'lucide-react';
 export default function AnomalyTimelinePredictor() {
   const [selectedTimeline, setSelectedTimeline] = useState(null);
   
-  const { data: timelines } = useQuery({
+  const { data: timelines, isLoading } = useQuery({
     queryKey: ['anomaly-timelines'],
     queryFn: () => base44.entities.AnomalyTimeline.list('-created_at', 20)
   });

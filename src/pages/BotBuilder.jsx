@@ -451,7 +451,7 @@ export default function BotBuilder() {
     }
   });
 
-  const { data: currentUser } = useQuery({
+  const { data: currentUser, isLoading } = useQuery({
     queryKey: ['currentUser'],
     queryFn: () => base44.auth.me(),
   });

@@ -22,7 +22,7 @@ export default function AgentManagementHub() {
   const queryClient = useQueryClient();
   const [agentStates, setAgentStates] = useState({});
 
-  const { data: agents = [] } = useQuery({
+  const { data: agents = [], isLoading } = useQuery({
     queryKey: ['customAgents'],
     queryFn: () => base44.asServiceRole.entities.CustomAgent.list().catch(() => []),
   });

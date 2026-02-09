@@ -14,17 +14,17 @@ export default function CodeGenerator() {
   const [selectedEntity, setSelectedEntity] = useState(null);
   const [selectedPage, setSelectedPage] = useState(null);
 
-  const { data: projects = [] } = useQuery({
+  const { data: projects = [], isLoading } = useQuery({
     queryKey: ['projects'],
     queryFn: () => base44.entities.Project.list('-updated_date', 10)
   });
 
-  const { data: entities = [] } = useQuery({
+  const { data: entities = [], isLoading } = useQuery({
     queryKey: ['entities'],
     queryFn: () => base44.asServiceRole.entities.Entity.list()
   });
 
-  const { data: pages = [] } = useQuery({
+  const { data: pages = [], isLoading } = useQuery({
     queryKey: ['pages'],
     queryFn: () => base44.asServiceRole.entities.Page.list()
   });

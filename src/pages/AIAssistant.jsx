@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
-import { 
+import {
   Sparkles, Send, Plus, Trash2, MessageSquare,
   Loader2, Copy, Check, Code, FileCode, Database,
   Globe, Brain, Zap, MessageCircle, ArrowLeft, BarChart3, ChevronDown,
@@ -100,13 +100,13 @@ export default function AIAssistant() {
   const [showProjectWizard, setShowProjectWizard] = useState(false);
   const [quantumAnalysis, setQuantumAnalysis] = useState(null);
   const [userActivity, setUserActivity] = useState({});
-  const [simulationData, setSimulationData] = useState({});
+
   const messagesEndRef = useRef(null);
   const navigate = useNavigate();
-  
+
   // LLM Context for model selection and usage tracking
   const { query: llmQuery, selectedModel, getModelInfo } = useLLM();
-  
+
   // Initialize AI Agent
   useEffect(() => {
     const agent = new AIAgent(base44);
@@ -135,7 +135,7 @@ export default function AIAssistant() {
       if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
         return;
       }
-      
+
       if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
         e.preventDefault();
         setShowCommandPalette(true);
@@ -160,7 +160,7 @@ export default function AIAssistant() {
     try {
       const projects = await base44.entities.Project.list();
       setAvailableProjects(projects || []);
-      
+
       // Set project from URL if available
       if (urlProjectId && projects) {
         const matchedProject = projects.find(p => p.id === urlProjectId);
@@ -183,21 +183,21 @@ export default function AIAssistant() {
     // Step 1: Detect language and localization
     const languageInfo = detectLanguage(idea);
     const localizedContent = generateLocalizedContent({ name: 'Project' }, languageInfo);
-    
+
     // Step 2: Use quantum AI to analyze the prompt with superposition (parallel exploration)
     const quantumAI = new QuantumInspiredAI();
-    
+
     // Step 3: Extract domain context with AI
     const domainContext = extractDomainContext(idea);
-    
+
     // Step 4: Use quantum decision making for ambiguous prompts
     let enhancedIdea = idea;
     let confidenceBoost = '';
-    
+
     if (domainContext.domain) {
       const confidence = Math.round(domainContext.contextConfidence * 100);
       confidenceBoost = `\n\n🎯 **AI Analysis**: Detected **${domainContext.domainName}** business (${confidence}% confidence)\n💡 **Key Features**: ${domainContext.matchedKeywords.slice(0, 3).join(', ')}`;
-      
+
       // Use quantum decision making to optimize feature selection
       try {
         const options = domainContext.specifications?.features?.map(f => ({
@@ -208,14 +208,14 @@ export default function AIAssistant() {
             value: f.priority === 'high' ? 0.9 : f.priority === 'medium' ? 0.7 : 0.5
           }
         })) || [];
-        
+
         if (options.length > 0) {
           const optimalFeatures = quantumAI.quantumDecisionMaker(options, {
             relevance: 0.5,
             complexity: 0.2,
             value: 0.3
           });
-          
+
           if (optimalFeatures && optimalFeatures.length > 0) {
             confidenceBoost += `\n🚀 **Recommended Features**: ${optimalFeatures.slice(0, 3).map(f => f.name).join(', ')}`;
           }
@@ -224,13 +224,13 @@ export default function AIAssistant() {
         console.warn('Quantum optimization skipped:', quantumError);
       }
     }
-    
+
     // Step 5: Add language and SEO information
     let languageBoost = '';
     if (languageInfo.detected && languageInfo.code !== 'en') {
       languageBoost = `\n🌍 **Language**: ${languageInfo.name} (${languageInfo.code.toUpperCase()})\n💱 **Currency**: ${localizedContent.currency.symbol} ${localizedContent.currency.name}`;
     }
-    
+
     // Create initial welcome message from AI
     const welcomeMessage = {
       role: 'assistant',
@@ -256,29 +256,29 @@ export default function AIAssistant() {
           .replace(/\s+(landing\s+page|website|web\s+app|app|page|site|for\s+me)$/i, '')
           .replace(/\s+for\s+/i, ' - ')
           .trim();
-        
+
         // Capitalize first letter of each word
         cleaned = cleaned.split(' ')
           .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
           .join(' ');
-        
+
         return cleaned.substring(0, 50) || 'My Project';
       };
-      
+
       const projectName = extractProjectName(idea);
-      
+
       // Use domain-specific plan if available (high confidence)
       let detectedFeatures = {};
       let enhancedEntities = [];
-      
+
       if (domainContext.domain && domainContext.contextConfidence > 0.7) {
         // Generate domain-specific plan with quantum optimization
         const domainPlan = generateDomainSpecificPlan(idea, domainContext);
-        
+
         if (domainPlan && domainPlan.entities) {
           enhancedEntities = domainPlan.entities;
           detectedFeatures = domainPlan.metadata?.features || {};
-          
+
           console.log('📋 Using domain-specific plan:', domainPlan.name);
           console.log('✨ Features:', Object.keys(detectedFeatures).filter(k => detectedFeatures[k]));
         }
@@ -288,7 +288,7 @@ export default function AIAssistant() {
         enhancedEntities = entityGeneration.entities;
         detectedFeatures = entityGeneration.features;
       }
-      
+
       const newProject = await base44.entities.Project.create({
         name: projectName,
         description: idea,
@@ -329,7 +329,7 @@ export default function AIAssistant() {
           let businessContent = null;
           try {
             businessContent = await generateBusinessContent(idea, base44);
-            
+
             if (businessContent.context.businessName) {
               setMessages(prev => [...prev, {
                 role: 'assistant',
@@ -361,7 +361,7 @@ export default function AIAssistant() {
           if (businessContent && businessContent.entityMap) {
             const totalItems = Object.values(businessContent.entityMap).reduce((sum, items) => sum + items.length, 0);
             const entityTypes = Object.keys(businessContent.entityMap);
-            
+
             setMessages(prev => [...prev, {
               role: 'assistant',
               content: `📝 **Adding sample data**: ${totalItems} items across ${entityTypes.length} ${entityTypes.length === 1 ? 'entity' : 'entities'} (${businessContent.context.currency})...`
@@ -378,7 +378,7 @@ export default function AIAssistant() {
                       ...item,
                       slug: item.slug || (item.name || item.title || 'item').toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')
                     };
-                    
+
                     await base44.entities[entity.name].create(itemData);
                   } catch (itemError) {
                     console.error(`Failed to create ${entityName} item:`, itemError);
@@ -414,12 +414,12 @@ export default function AIAssistant() {
 
           // Show completion
           setTimeout(() => {
-            const totalItems = businessContent?.entityMap 
+            const totalItems = businessContent?.entityMap
               ? Object.values(businessContent.entityMap).reduce((sum, items) => sum + items.length, 0)
               : 0;
             const businessName = businessContent?.context?.businessName || 'your website';
             const businessType = businessContent?.context?.businessType || 'website';
-            
+
             const completeMessage = {
               role: 'assistant',
               content: `🎉 **${businessName} is LIVE!**\n\n✅ Database structure created\n${totalItems > 0 ? `✅ ${totalItems} sample items added\n` : ''}✅ Professional content generated\n✅ Ready to customize\n\n🔗 [**View Your ${businessType.charAt(0).toUpperCase() + businessType.slice(1)} →**](/projects/${newProject.id})\n\n💬 What would you like to customize? (colors, add more items, change layout, etc.)`,
@@ -451,13 +451,13 @@ export default function AIAssistant() {
   // Use 'general' as workspace ID when no project is selected
   const workspaceId = projectId || 'general';
 
-  const { data: documents = [] } = useQuery({
+  const { data: documents = [], isLoading } = useQuery({
     queryKey: ['documents', projectId],
     queryFn: () => projectId ? base44.entities.ProjectDocument.filter({ project_id: projectId }) : Promise.resolve([]),
     enabled: !!projectId
   });
 
-  const { data: conversations = [] } = useQuery({
+  const { data: conversations = [], isLoading } = useQuery({
     queryKey: ['conversations', workspaceId],
     queryFn: () => {
       if (projectId) {
@@ -555,12 +555,12 @@ export default function AIAssistant() {
     try {
       // Check if agent mode is enabled and user wants autonomous execution
       const shouldUseAgent = agentMode || /\b(build|create|make|generate|implement|setup|configure)\b/i.test(currentInput);
-      
+
       if (shouldUseAgent && aiAgent && projectId) {
         // Use AI Agent for autonomous multi-step execution
         const { plan, context } = await aiAgent.processRequest(currentInput, projectId);
         setCurrentPlan(plan);
-        
+
         // Show the plan to user
         const planMessage = {
           role: 'assistant',
@@ -568,15 +568,15 @@ export default function AIAssistant() {
           timestamp: new Date().toISOString(),
           metadata: { isPlan: true, plan }
         };
-        
+
         setMessages(prev => [...prev, planMessage]);
-        
+
         // Execute each step
         for (let i = 0; i < plan.steps.length; i++) {
           const step = plan.steps[i];
           const progress = aiAgent.getProgress();
           setExecutionProgress(progress);
-          
+
           const stepStartMsg = {
             role: 'assistant',
             content: `⏳ **Step ${step.step}:** ${step.description}...`,
@@ -584,9 +584,9 @@ export default function AIAssistant() {
             metadata: { isStepUpdate: true }
           };
           setMessages(prev => [...prev, stepStartMsg]);
-          
+
           const result = await aiAgent.executeStep(step, projectId);
-          
+
           if (result.success) {
             const stepDoneMsg = {
               role: 'assistant',
@@ -605,7 +605,7 @@ export default function AIAssistant() {
             setMessages(prev => [...prev, stepErrorMsg]);
           }
         }
-        
+
         // Final completion
         const finalProgress = aiAgent.getProgress();
         const completionMsg = {
@@ -615,12 +615,12 @@ export default function AIAssistant() {
           metadata: { isCompletion: true, progress: finalProgress }
         };
         setMessages(prev => [...prev, completionMsg]);
-        
+
         setIsLoading(false);
         setExecutionProgress(null);
         return;
       }
-      
+
       // Regular chat mode (existing logic)
       // Suggest relevant tools based on input (using LLM context)
       const toolResult = await llmQuery(`Analyze this request and suggest which tools would be most helpful: "${currentInput}"
@@ -652,13 +652,13 @@ Return JSON: {"suggested_tools": ["tool1", "tool2"], "reasoning": "why these too
         setSuggestedTools(toolResult.parsedResponse.suggested_tools);
       }
 
-      const documentContext = documents.length > 0 
+      const documentContext = documents.length > 0
         ? `\n\nProject Documents Available: ${documents.map(d => d.name).join(', ')}`
         : '';
 
       // Get model info for response attribution
       const modelInfo = getModelInfo(selectedModel);
-      
+
       // Main response using LLM context
       const result = await llmQuery(`You are an advanced AI assistant helping to build web applications with AI capabilities.
 ${integratedAPIs.length > 0 ? `\nIntegrated APIs: ${integratedAPIs.map(a => a.name).join(', ')}` : ''}${documentContext}
@@ -670,15 +670,15 @@ Provide helpful, actionable responses with code examples when relevant. Be conci
       const responseText = result.response || 'I apologize, but I was unable to generate a response. Please try again.';
       const usedModel = result.model || 'base44';
       const usedModelInfo = getModelInfo(usedModel);
-      
-      const assistantMessage = { 
-        role: 'assistant', 
+
+      const assistantMessage = {
+        role: 'assistant',
         content: responseText,
         model: usedModel,
         modelName: usedModelInfo?.name || 'AI',
-        timestamp: new Date().toISOString() 
+        timestamp: new Date().toISOString()
       };
-      
+
       const updatedMessages = [...newMessages, assistantMessage];
       setMessages(updatedMessages);
 
@@ -848,7 +848,7 @@ Provide helpful, actionable responses with code examples when relevant. Be conci
           >
             <Plus className="w-4 h-4 mr-2" />
             New Chat
-          </Button>          
+          </Button>
           <div className="mt-3 p-3 bg-gradient-to-r from-purple-50 to-indigo-50 rounded-lg">
             <div className="flex items-center justify-between mb-2">
               <span className="text-sm font-medium text-gray-700">🤖 Agent Mode</span>
@@ -928,7 +928,7 @@ Provide helpful, actionable responses with code examples when relevant. Be conci
             <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl text-center mb-8">
               Describe your idea and I'll help you create it with AI-powered tools
             </p>
-            
+
             {/* Input Box */}
             <div className="max-w-3xl w-full mb-12">
               <div className="relative">
@@ -961,48 +961,48 @@ Provide helpful, actionable responses with code examples when relevant. Be conci
                 </Button>
               </div>
             </div>
-            
+
             {/* Quick Actions Grid */}
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4 max-w-4xl w-full mb-12">
               {quickActions.map((action) => (
-              <button
-              key={action.label}
-              onClick={() => {
-                if (action.isWizard) {
-                  setShowProjectWizard(true);
-                } else if (action.panel) {
-                  setActivePanel(action.panel);
-                } else {
-                  setInput(action.prompt);
-                }
-              }}
-              aria-label={action.label}
-              className={cn(
-                "p-6 bg-white dark:bg-gray-800 rounded-xl border-2 transition-all group",
-                action.isWizard 
-                  ? "border-indigo-200 dark:border-indigo-800 hover:border-indigo-500 dark:hover:border-indigo-500 hover:shadow-xl bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-900/20 dark:to-purple-900/20 md:col-span-3"
-                  : "border-gray-100 dark:border-gray-700 hover:border-indigo-500 dark:hover:border-indigo-600 hover:shadow-lg"
-              )}
-              >
-              {action.isWizard ? (
-                <div className="flex items-center justify-center gap-4">
-                  <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
-                    <Rocket className="w-7 h-7 text-white" />
-                  </div>
-                  <div className="text-left">
-                    <div className="font-bold text-lg text-gray-900 dark:text-white">Generate Full Project</div>
-                    <div className="text-sm text-gray-500 dark:text-gray-400">Create entities, workflows, and pages from a description</div>
-                  </div>
-                  <Wand2 className="w-6 h-6 text-indigo-500 ml-4" />
-                </div>
-              ) : (
-                <>
-                  <action.icon className="w-8 h-8 mb-3 text-gray-400 group-hover:text-indigo-600 transition-colors mx-auto" />
-                  <div className="font-medium text-sm text-gray-700 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white">{action.label}</div>
-                  {action.desc && <div className="text-xs text-gray-500 mt-1">{action.desc}</div>}
-                </>
-              )}
-              </button>
+                <button
+                  key={action.label}
+                  onClick={() => {
+                    if (action.isWizard) {
+                      setShowProjectWizard(true);
+                    } else if (action.panel) {
+                      setActivePanel(action.panel);
+                    } else {
+                      setInput(action.prompt);
+                    }
+                  }}
+                  aria-label={action.label}
+                  className={cn(
+                    "p-6 bg-white dark:bg-gray-800 rounded-xl border-2 transition-all group",
+                    action.isWizard
+                      ? "border-indigo-200 dark:border-indigo-800 hover:border-indigo-500 dark:hover:border-indigo-500 hover:shadow-xl bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-900/20 dark:to-purple-900/20 md:col-span-3"
+                      : "border-gray-100 dark:border-gray-700 hover:border-indigo-500 dark:hover:border-indigo-600 hover:shadow-lg"
+                  )}
+                >
+                  {action.isWizard ? (
+                    <div className="flex items-center justify-center gap-4">
+                      <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
+                        <Rocket className="w-7 h-7 text-white" />
+                      </div>
+                      <div className="text-left">
+                        <div className="font-bold text-lg text-gray-900 dark:text-white">Generate Full Project</div>
+                        <div className="text-sm text-gray-500 dark:text-gray-400">Create entities, workflows, and pages from a description</div>
+                      </div>
+                      <Wand2 className="w-6 h-6 text-indigo-500 ml-4" />
+                    </div>
+                  ) : (
+                    <>
+                      <action.icon className="w-8 h-8 mb-3 text-gray-400 group-hover:text-indigo-600 transition-colors mx-auto" />
+                      <div className="font-medium text-sm text-gray-700 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white">{action.label}</div>
+                      {action.desc && <div className="text-xs text-gray-500 mt-1">{action.desc}</div>}
+                    </>
+                  )}
+                </button>
               ))}
             </div>
 
@@ -1022,7 +1022,7 @@ Provide helpful, actionable responses with code examples when relevant. Be conci
                   <Zap className="w-4 h-4 text-green-600" />
                   Deployment Check
                 </button>
-                <a 
+                <a
                   href={base44.agents.getWhatsAppConnectURL('project_integrity_monitor')}
                   target="_blank"
                   rel="noopener noreferrer"
@@ -1095,12 +1095,12 @@ Provide helpful, actionable responses with code examples when relevant. Be conci
 
         {/* Tool Panels */}
         {activePanel === 'api' && (
-           <div className="flex-1 p-6 overflow-auto">
-             <React.Suspense fallback={<div className="text-center py-8">Loading...</div>}>
-               <APIDiscoveryPanel onIntegrate={(api) => setIntegratedAPIs([...integratedAPIs, api])} />
-             </React.Suspense>
-           </div>
-         )}
+          <div className="flex-1 p-6 overflow-auto">
+            <React.Suspense fallback={<div className="text-center py-8">Loading...</div>}>
+              <APIDiscoveryPanel onIntegrate={(api) => setIntegratedAPIs([...integratedAPIs, api])} />
+            </React.Suspense>
+          </div>
+        )}
 
         {activePanel === 'models' && (
           <div className="flex-1 p-6 overflow-auto">
@@ -1197,7 +1197,7 @@ Provide helpful, actionable responses with code examples when relevant. Be conci
         {activePanel === 'snippets' && (
           <div className="flex-1 p-6 overflow-auto">
             <div className="max-w-6xl mx-auto">
-              <CodeSnippetLibrary 
+              <CodeSnippetLibrary
                 projectId={projectId}
                 contextCode={messages[messages.length - 1]?.role === 'assistant' ? messages[messages.length - 1]?.content : null}
               />
@@ -1241,11 +1241,11 @@ Provide helpful, actionable responses with code examples when relevant. Be conci
           <div className="flex-1 p-6 overflow-auto">
             <div className="max-w-4xl mx-auto space-y-6">
               <React.Suspense fallback={<div className="text-center py-8">Loading...</div>}>
-                <QuantumQueryAnalyzer 
+                <QuantumQueryAnalyzer
                   onAnalysisComplete={(analysis) => {
                     setQuantumAnalysis(analysis);
                     setUserActivity(prev => ({ ...prev, lastQuery: analysis }));
-                  }} 
+                  }}
                 />
               </React.Suspense>
 
@@ -1438,7 +1438,7 @@ Provide helpful, actionable responses with code examples when relevant. Be conci
                 Usage
               </Button>
             </div>
-            
+
             <div className="flex gap-3 items-end">
               <div className="flex-1 relative">
                 <Textarea
@@ -1455,7 +1455,7 @@ Provide helpful, actionable responses with code examples when relevant. Be conci
                   rows={2}
                 />
                 <div className="absolute right-3 bottom-3 flex items-center gap-2">
-                  <VoiceInput 
+                  <VoiceInput
                     onTranscript={(text) => setInput(input + (input ? ' ' : '') + text)}
                     disabled={isLoading}
                   />
@@ -1499,7 +1499,7 @@ Provide helpful, actionable responses with code examples when relevant. Be conci
                   <AgentCollaborationDashboard userEmail={user?.email} />
                 </React.Suspense>
                 <React.Suspense fallback={null}>
-                  <CustomAgentBuilder 
+                  <CustomAgentBuilder
                     userEmail={user?.email}
                     onAgentCreated={() => {
                       setInput('Custom agent created! You can now train it with examples.');
@@ -1507,7 +1507,7 @@ Provide helpful, actionable responses with code examples when relevant. Be conci
                   />
                 </React.Suspense>
                 <React.Suspense fallback={null}>
-                  <ProactiveAnticipationEngine 
+                  <ProactiveAnticipationEngine
                     userEmail={user?.email}
                     onSuggestionSelect={(suggestion) => {
                       if (suggestion.action) {
@@ -1520,7 +1520,7 @@ Provide helpful, actionable responses with code examples when relevant. Be conci
                   <SuperIntelligenceDashboard userEmail={user?.email} />
                 </React.Suspense>
                 <React.Suspense fallback={null}>
-                  <AutoAgentDeployer 
+                  <AutoAgentDeployer
                     userEmail={user?.email}
                     onAgentsDeployed={(agents) => {
                       setUserActivity(prev => ({ ...prev, lastAgentDeploy: agents }));
@@ -1528,15 +1528,15 @@ Provide helpful, actionable responses with code examples when relevant. Be conci
                   />
                 </React.Suspense>
                 <React.Suspense fallback={null}>
-                  <QuantumLearningEngine 
+                  <QuantumLearningEngine
                     userEmail={user?.email}
                     onLearningsUpdate={(data) => {
                       setUserActivity(prev => ({ ...prev, lastLearning: data }));
                     }}
                   />
                 </React.Suspense>
-                <ProactiveSuggestions 
-                  projectId={projectId} 
+                <ProactiveSuggestions
+                  projectId={projectId}
                   onApplySuggestion={(suggestion) => setInput(suggestion.action)}
                 />
               </div>
@@ -1568,7 +1568,7 @@ Provide helpful, actionable responses with code examples when relevant. Be conci
       {/* Project Wizard Modal */}
       {showProjectWizard && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.95 }}
@@ -1584,9 +1584,9 @@ Provide helpful, actionable responses with code examples when relevant. Be conci
                   <p className="text-sm text-gray-500 dark:text-gray-400">Create a complete project from a description</p>
                 </div>
               </div>
-              <Button 
-                variant="ghost" 
-                size="sm" 
+              <Button
+                variant="ghost"
+                size="sm"
                 onClick={() => setShowProjectWizard(false)}
                 className="text-gray-500 hover:text-gray-700"
               >
@@ -1595,7 +1595,7 @@ Provide helpful, actionable responses with code examples when relevant. Be conci
               </Button>
             </div>
             <React.Suspense fallback={<div className="text-center py-8">Loading...</div>}>
-              <ProjectWizard 
+              <ProjectWizard
                 onComplete={(result) => {
                   setShowProjectWizard(false);
                   toast.success(`Project "${result.project.name}" created successfully!`);

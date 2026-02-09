@@ -17,7 +17,7 @@ import { useViewMode } from '@/contexts/ViewModeContext';
 
 const RECENTS_KEY = 'admin_search_recents';
 
-export default function SearchBar({ placeholder = 'Search admin...', onSearch, className }) {
+export default function SearchBar({ placeholder: placeholderText = 'Search admin...', onSearch, className }) {
   const { isBeginnerMode } = useViewMode();
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState('');
@@ -64,14 +64,14 @@ export default function SearchBar({ placeholder = 'Search admin...', onSearch, c
         aria-label="Open admin search"
       >
         <Search className="h-4 w-4" />
-        <span>{placeholder}</span>
+        <span>{placeholderText}</span>
         <CommandShortcut className="ml-4">⌘K</CommandShortcut>
       </Button>
 
       <CommandDialog open={open} onOpenChange={setOpen}>
         <Command>
           <CommandInput
-            placeholder={placeholder}
+            placeholder={placeholderText}
             value={query}
             onValueChange={setQuery}
             onKeyDown={(event) => {

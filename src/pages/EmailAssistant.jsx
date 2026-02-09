@@ -26,12 +26,12 @@ export default function EmailAssistant() {
   const { emailIntegration } = featureFlags;
   const integrationEnabled = emailIntegration;
 
-  const { data: accounts = [] } = useQuery({
+  const { data: accounts = [], isLoading } = useQuery({
     queryKey: ['email-accounts'],
     queryFn: () => base44.entities.EmailAccount.list('-created_date')
   });
 
-  const { data: messages = [] } = useQuery({
+  const { data: messages = [], isLoading } = useQuery({
     queryKey: ['email-messages'],
     queryFn: () => base44.entities.EmailMessage.list('-received_at', 50)
   });

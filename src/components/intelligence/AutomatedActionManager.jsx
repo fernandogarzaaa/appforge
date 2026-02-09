@@ -15,7 +15,7 @@ export default function AutomatedActionManager() {
   const [editingAction, setEditingAction] = useState(null);
   const queryClient = useQueryClient();
 
-  const { data: actions } = useQuery({
+  const { data: actions, isLoading } = useQuery({
     queryKey: ['automated-actions'],
     queryFn: () => base44.entities.AutomatedAction.list('-created_date', 50)
   });

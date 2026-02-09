@@ -13,7 +13,7 @@ export default function Notifications() {
   const queryClient = useQueryClient();
 
   // Get notifications
-  const { data: notificationsData } = useQuery({
+  const { data: notificationsData, isLoading } = useQuery({
     queryKey: ['notifications', showUnreadOnly],
     queryFn: async () => {
       const response = await base44.functions.execute('notificationCenter', {
@@ -28,7 +28,7 @@ export default function Notifications() {
   });
 
   // Get preferences
-  const { data: preferences } = useQuery({
+  const { data: preferences, isLoading } = useQuery({
     queryKey: ['notification-preferences'],
     queryFn: async () => {
       const response = await base44.functions.execute('notificationCenter', {
@@ -39,7 +39,7 @@ export default function Notifications() {
   });
 
   // Get stats
-  const { data: stats } = useQuery({
+  const { data: stats, isLoading } = useQuery({
     queryKey: ['notification-stats'],
     queryFn: async () => {
       const response = await base44.functions.execute('notificationCenter', {

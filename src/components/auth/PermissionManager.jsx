@@ -24,12 +24,12 @@ export default function PermissionManager() {
   const [selectedPermission, setSelectedPermission] = useState('');
   const queryClient = useQueryClient();
 
-  const { data: permissions = [] } = useQuery({
+  const { data: permissions = [], isLoading } = useQuery({
     queryKey: ['permissions'],
     queryFn: () => base44.entities.UserPermission.list('-created_date'),
   });
 
-  const { data: currentUser } = useQuery({
+  const { data: currentUser, isLoading } = useQuery({
     queryKey: ['currentUser'],
     queryFn: () => base44.auth.me(),
   });

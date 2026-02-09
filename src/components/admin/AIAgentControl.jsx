@@ -32,7 +32,7 @@ export default function AIAgentControl() {
   const config = configs[0];
 
   // Fetch recent reports
-  const { data: reports = [] } = useQuery({
+  const { data: reports = [], isLoading } = useQuery({
     queryKey: ['healthReports'],
     queryFn: () => base44.entities.ProjectHealthReport.list('-scan_timestamp', 10),
   });

@@ -44,7 +44,7 @@ export default function AgentDeploymentPanel() {
 
   const queryClient = useQueryClient();
 
-  const { data: deployedAgents = [] } = useQuery({
+  const { data: deployedAgents = [], isLoading } = useQuery({
     queryKey: ['deployed-agents'],
     queryFn: async () => {
       try {
