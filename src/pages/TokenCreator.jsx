@@ -312,7 +312,7 @@ contract ${name.replace(/\s+/g, '')} is ERC20${features?.burnable ? ', ERC20Burn
             </div>
 
             {/* Tabs */}
-            <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col">
+            <Tabs value={activeTab} onValueChange={(val) => setActiveTab(val)} className="flex-1 flex flex-col">
               <div className="bg-white border-b border-gray-100 px-4">
                 <TabsList className="h-12 bg-transparent p-0 gap-4">
                   <TabsTrigger value="config" className="data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-indigo-500 rounded-none px-0">

@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
-import { 
+import {
   TrendingUp, TrendingDown, Wallet, Zap, Coins
 } from 'lucide-react';
 import TradingChart from '@/components/web3/TradingChart';
@@ -72,9 +72,8 @@ export default function CryptoExchange() {
                 <div
                   key={i}
                   onClick={() => setSelectedPair(pair)}
-                  className={`p-3 rounded-lg cursor-pointer transition-colors ${
-                    selectedPair.symbol === pair.symbol ? 'bg-gray-900 text-white' : 'hover:bg-gray-50'
-                  }`}
+                  className={`p-3 rounded-lg cursor-pointer transition-colors ${selectedPair.symbol === pair.symbol ? 'bg-gray-900 text-white' : 'hover:bg-gray-50'
+                    }`}
                 >
                   <div className="flex justify-between items-start mb-1">
                     <span className="font-semibold text-sm">{pair.symbol}</span>
@@ -166,7 +165,7 @@ export default function CryptoExchange() {
                     <CardTitle className="text-base">Place Order</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <Tabs value={side} onValueChange={setSide} className="mb-4">
+                    <Tabs value={side} onValueChange={(val) => setSide(val)} className="mb-4">
                       <TabsList className="grid w-full grid-cols-2">
                         <TabsTrigger value="buy" className="data-[state=active]:bg-green-600 data-[state=active]:text-white">
                           Buy
@@ -178,7 +177,7 @@ export default function CryptoExchange() {
                     </Tabs>
 
                     <div className="space-y-4">
-                      <Select value={orderType} onValueChange={setOrderType}>
+                      <Select value={orderType} onValueChange={(val) => setOrderType(val)}>
                         <SelectTrigger>
                           <SelectValue />
                         </SelectTrigger>

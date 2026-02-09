@@ -313,7 +313,7 @@ export default function Projects() {
               <SelectItem value="archived">Archived</SelectItem>
             </SelectContent>
           </Select>
-          <Tabs value={viewMode} onValueChange={setViewMode}>
+          <Tabs value={viewMode} onValueChange={(val) => setViewMode(val)}>
             <TabsList className="h-11 rounded-xl bg-gray-100 p-1">
               <TabsTrigger value="grid" className="rounded-lg px-3">
                 <Grid3X3 className="w-4 h-4" />

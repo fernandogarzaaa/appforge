@@ -12,7 +12,7 @@ import { toast } from 'sonner';
 
 export default function APIManagement() {
   const [showNewKeyDialog, setShowNewKeyDialog] = useState(false);
-  const [showDocumentation, setShowDocumentation] = useState(false);
+
   const [keyName, setKeyName] = useState('');
   const [newKeyData, setNewKeyData] = useState(null);
   const [copied, setCopied] = useState(false);

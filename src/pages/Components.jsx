@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { base44 } from '@/api/base44Client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { 
+import {
   Component, Plus, Save, Trash2, Search,
   MoreHorizontal, ChevronRight, Copy, Layers
 } from 'lucide-react';
@@ -58,7 +58,7 @@ export default function Components() {
   const [selectedComponent, setSelectedComponent] = useState(null);
   const [showNewDialog, setShowNewDialog] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const [categoryFilter, setCategoryFilter] = useState('all');
+
   const [newComponent, setNewComponent] = useState({ name: '', description: '', category: 'custom' });
 
   const urlParams = new URLSearchParams(window.location.search);
@@ -239,8 +239,8 @@ export default function ${newComponent.name.replace(/\s+/g, '') || 'NewComponent
                       className="text-lg font-semibold border-0 p-0 h-auto focus-visible:ring-0 bg-transparent"
                     />
                     <div className="flex items-center gap-2 mt-1">
-                      <Select 
-                        value={selectedComponent.category} 
+                      <Select
+                        value={selectedComponent.category}
                         onValueChange={(v) => setSelectedComponent({ ...selectedComponent, category: v })}
                       >
                         <SelectTrigger className="h-7 w-auto border-0 p-0 text-sm text-gray-500 focus:ring-0">
@@ -319,7 +319,7 @@ export default function ${newComponent.name.replace(/\s+/g, '') || 'NewComponent
       </div>
 
       {/* New Component Dialog */}
-      <Dialog open={showNewDialog} onOpenChange={setShowNewDialog}>
+      <Dialog open={showNewDialog} onOpenChange={(val) => setShowNewDialog(val)}>
         <DialogContent className="sm:max-w-md rounded-2xl">
           <DialogHeader>
             <DialogTitle>Create New Component</DialogTitle>
@@ -336,8 +336,8 @@ export default function ${newComponent.name.replace(/\s+/g, '') || 'NewComponent
             </div>
             <div>
               <Label className="text-sm text-gray-600 mb-1.5 block">Category</Label>
-              <Select 
-                value={newComponent.category} 
+              <Select
+                value={newComponent.category}
                 onValueChange={(v) => setNewComponent({ ...newComponent, category: v })}
               >
                 <SelectTrigger className="h-11 rounded-xl">
@@ -370,8 +370,8 @@ export default function ${newComponent.name.replace(/\s+/g, '') || 'NewComponent
               Cancel
             </Button>
             <Button
-              onClick={() => createMutation.mutate({ 
-                ...newComponent, 
+              onClick={() => createMutation.mutate({
+                ...newComponent,
                 project_id: projectId,
                 code: defaultCode.replace(/NewComponent/g, newComponent.name.replace(/\s+/g, '') || 'NewComponent')
               })}

@@ -12,7 +12,7 @@ import FeedbackSummary from '@/components/feedback/FeedbackSummary';
 export default function FeedbackAnalytics() {
   const queryClient = useQueryClient();
   const [filterType, setFilterType] = useState('all');
-  const [isRetraining, setIsRetraining] = useState(false);
+
 
   const { data: feedback = [], isLoading } = useQuery({
     queryKey: ['feedback'],
@@ -22,7 +22,7 @@ export default function FeedbackAnalytics() {
   const retainModelMutation = useMutation({
     mutationFn: async () => {
       const lowRatedFeedback = feedback.filter(f => f.accuracy_rating <= 2);
-      
+
       if (lowRatedFeedback.length === 0) {
         throw new Error('No low-rated feedback to learn from');
       }
@@ -66,8 +66,8 @@ Provide:
     }
   });
 
-  const filteredFeedback = filterType === 'all' 
-    ? feedback 
+  const filteredFeedback = filterType === 'all'
+    ? feedback
     : feedback.filter(f => f.feedback_type === filterType);
 
   const newFeedback = feedback.filter(f => f.feedback_status === 'new').length;
@@ -83,13 +83,13 @@ Provide:
           </h1>
           <p className="text-gray-500">Improve AI models with user feedback</p>
         </div>
-        <Button 
-          onClick={() => retainModelMutation.mutate()} 
-          disabled={isRetraining || newFeedback === 0}
+        <Button
+          onClick={() => retainModelMutation.mutate()}
+          disabled={retainModelMutation.isPending || newFeedback === 0}
           className="gap-2"
         >
           <RefreshCw className="w-4 h-4" />
-          {isRetraining ? 'Analyzing...' : 'Analyze & Improve'}
+          {retainModelMutation.isPending ? 'Analyzing...' : 'Analyze & Improve'}
         </Button>
       </div>
 
@@ -144,7 +144,7 @@ Provide:
       <div className="flex-1 overflow-auto">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-lg font-bold">Feedback Details</h2>
-          <Select value={filterType} onValueChange={setFilterType}>
+          <Select value={filterType} onValueChange={(val) => setFilterType(val)}>
             <SelectTrigger className="w-40">
               <SelectValue />
             </SelectTrigger>

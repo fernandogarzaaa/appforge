@@ -46,7 +46,7 @@ export default function PredictiveAnalytics() {
     try {
       for (const rule of rules.slice(0, 5)) {
         const ruleInsights = insights.filter(i => i.monitoring_rule_id === rule.id).slice(0, 20);
-        
+
         if (ruleInsights.length < 5) continue;
 
         const historicalData = ruleInsights.map((i, idx) => ({
@@ -93,8 +93,8 @@ Provide realistic predictions with confidence scores and bounds.`,
           }
         });
 
-        const prediction_type = forecast.anomaly_risk > 60 ? 'anomaly' : 
-                               forecast.threshold_breach_risk > 60 ? 'threshold_breach' : 'trend';
+        const prediction_type = forecast.anomaly_risk > 60 ? 'anomaly' :
+          forecast.threshold_breach_risk > 60 ? 'threshold_breach' : 'trend';
 
         const pred = await base44.entities.Prediction.create({
           monitoring_rule_id: rule.id,
@@ -148,7 +148,7 @@ Provide realistic predictions with confidence scores and bounds.`,
           <p className="text-gray-500">ML-powered forecasts and anomaly detection</p>
         </div>
         <div className="flex items-center gap-3">
-          <Select value={selectedForecast} onValueChange={setSelectedForecast}>
+          <Select value={selectedForecast} onValueChange={(val) => setSelectedForecast(val)}>
             <SelectTrigger className="w-32">
               <SelectValue />
             </SelectTrigger>
@@ -219,8 +219,8 @@ Provide realistic predictions with confidence scores and bounds.`,
             <div key={pred.id} className="space-y-2">
               <div className="flex items-center justify-between">
                 <span></span>
-                <FeedbackWidget 
-                  type="prediction" 
+                <FeedbackWidget
+                  type="prediction"
                   targetId={pred.id}
                   onFeedbackSubmitted={() => queryClient.invalidateQueries({ queryKey: ['feedback'] })}
                 />

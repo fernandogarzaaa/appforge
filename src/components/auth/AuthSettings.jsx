@@ -254,14 +254,20 @@ export function MFASetup({ userId, onComplete }) {
         body: JSON.stringify({ userId, code: verificationCode }),
       });
 
+      if (!response.ok) throw new Error('Verification failed');
       const data = await response.json();
 
       if (data.valid) {
         // Generate backup codes
-        const codesResponse = await fetch(`/api/mfa/backup-codes?userId=${userId}`);
-        const codesData = await codesResponse.json();
-        setBackupCodes(codesData.codes);
-        setStep('complete');
+        try {
+          const codesResponse = await fetch(`/api/mfa/backup-codes?userId=${userId}`);
+          if (!codesResponse.ok) throw new Error('Failed to generate backup codes');
+          const codesData = await codesResponse.json();
+          setBackupCodes(codesData.codes);
+          setStep('complete');
+        } catch (backupError) {
+          throw backupError;
+        }
       } else {
         setError('Invalid verification code. Please try again.');
       }
@@ -380,13 +386,17 @@ export function ActiveSessions({ userId }) {
     fetchSessions();
   }, [userId]);
 
+
+
   const fetchSessions = async () => {
     try {
       const response = await fetch(`/api/sessions?userId=${userId}`);
+      if (!response.ok) throw new Error('Failed to load sessions');
       const data = await response.json();
       setSessions(data);
     } catch (error) {
       console.error('Failed to fetch sessions:', error);
+      toast.error('Failed to load active sessions');
     } finally {
       setLoading(false);
     }
@@ -394,7 +404,8 @@ export function ActiveSessions({ userId }) {
 
   const revokeSession = async (sessionId) => {
     try {
-      await fetch(`/api/sessions/${sessionId}`, { method: 'DELETE' });
+      const response = await fetch(`/api/sessions/${sessionId}`, { method: 'DELETE' });
+      if (!response.ok) throw new Error('Revoke failed');
       toast.success('Session revoked');
       fetchSessions();
     } catch (error) {
@@ -405,7 +416,8 @@ export function ActiveSessions({ userId }) {
 
   const revokeAll = async () => {
     try {
-      await fetch(`/api/sessions/revoke-all?userId=${userId}`, { method: 'POST' });
+      const response = await fetch(`/api/sessions/revoke-all?userId=${userId}`, { method: 'POST' });
+      if (!response.ok) throw new Error('Revoke all failed');
       toast.success('All other sessions revoked');
       fetchSessions();
     } catch (error) {
@@ -477,7 +489,7 @@ export function AuthSettings({ userId }) {
 
   return (
     <div className="space-y-6">
-      <Tabs value={activeTab} onValueChange={setActiveTab}>
+      <Tabs value={activeTab} onValueChange={(val) => setActiveTab(val)}>
         <TabsList className="grid w-full grid-cols-4">
           <TabsTrigger value="sso">SSO</TabsTrigger>
           <TabsTrigger value="oidc">OIDC</TabsTrigger>

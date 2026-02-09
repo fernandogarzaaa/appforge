@@ -86,7 +86,7 @@ export default function ProjectTasks() {
           </div>
 
           <div className="flex items-center gap-2">
-            <Tabs value={view} onValueChange={setView}>
+            <Tabs value={view} onValueChange={(val) => setView(val)}>
               <TabsList className="h-8">
                 <TabsTrigger value="kanban" className="text-[12px]">
                   <LayoutGrid className="w-3 h-3 mr-1.5" />

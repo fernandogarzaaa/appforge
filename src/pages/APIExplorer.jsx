@@ -40,7 +40,7 @@ export default function APIExplorer() {
 
   const handleSearch = async () => {
     if (!searchQuery.trim()) return;
-    
+
     setLoading(true);
     try {
       const result = await base44.integrations.Core.InvokeLLM({
@@ -76,9 +76,9 @@ export default function APIExplorer() {
           }
         }
       });
-      
+
       setDiscoveredAPIs(result.apis || []);
-      
+
       // Auto-generate code snippets for top 3 free APIs
       const freeAPIs = (result.apis || []).filter(api => api.free).slice(0, 3);
       if (freeAPIs.length > 0) {
@@ -122,7 +122,7 @@ export default function APIExplorer() {
           }
         }
       });
-      
+
       setCodeSnippets(result.snippets || []);
       toast.success('Code snippets generated for top 3 free APIs!');
     } catch (error) {
@@ -142,7 +142,7 @@ export default function APIExplorer() {
         method: testMethod,
         headers: { 'Content-Type': 'application/json' }
       });
-      
+
       const data = await response.json();
       setTestResponse({
         status: response.status,
@@ -170,8 +170,8 @@ export default function APIExplorer() {
   };
 
   const categories = ['all', ...new Set(popularAPIs.map(api => api.category))];
-  const filteredPopular = category === 'all' 
-    ? popularAPIs 
+  const filteredPopular = category === 'all'
+    ? popularAPIs
     : popularAPIs.filter(api => api.category === category);
 
   return (
@@ -279,7 +279,7 @@ export default function APIExplorer() {
       <div>
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-xl font-semibold">Popular APIs</h2>
-          <Tabs value={category} onValueChange={setCategory}>
+          <Tabs value={category} onValueChange={(val) => setCategory(val)}>
             <TabsList>
               {categories.map(cat => (
                 <TabsTrigger key={cat} value={cat} className="text-xs capitalize">
@@ -433,7 +433,7 @@ export default function APIExplorer() {
           <div className="space-y-4 py-4">
             <div>
               <Label>HTTP Method</Label>
-              <Tabs value={testMethod} onValueChange={setTestMethod} className="mt-2">
+              <Tabs value={testMethod} onValueChange={(val) => setTestMethod(val)} className="mt-2">
                 <TabsList>
                   <TabsTrigger value="GET">GET</TabsTrigger>
                   <TabsTrigger value="POST">POST</TabsTrigger>

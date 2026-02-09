@@ -256,7 +256,7 @@ export default function ${newPage.name.replace(/\s+/g, '') || 'NewPage'}() {
             </div>
 
             {/* Editor Tabs */}
-            <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col">
+            <Tabs value={activeTab} onValueChange={(val) => setActiveTab(val)} className="flex-1 flex flex-col">
               <div className="bg-white border-b border-gray-100 px-4">
                 <TabsList className="h-12 bg-transparent p-0 gap-4">
                   <TabsTrigger

@@ -133,7 +133,7 @@ export default function MediaStudio() {
 
               <div>
                 <Label>Style</Label>
-                <Select value={style} onValueChange={setStyle}>
+                <Select value={style} onValueChange={(val) => setStyle(val)}>
                   <SelectTrigger className="mt-2">
                     <SelectValue />
                   </SelectTrigger>

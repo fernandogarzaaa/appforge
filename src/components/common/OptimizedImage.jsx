@@ -178,12 +178,12 @@ export function ResponsiveImage({
 
 /**
  * LazyImage with Intersection Observer
- * Shows placeholder until image enters viewport
+ * Shows loading state until image enters viewport
  *
  * @param {Object} props
  * @param {string} props.src - Image source
  * @param {string} props.alt - Alt text
- * @param {string} [props.placeholderClass] - Placeholder color or image
+ * @param {string} [props.placeholderClass] - Loading color or image
  * @param {string} [props.className] - CSS classes
  */
 export function LazyImage({

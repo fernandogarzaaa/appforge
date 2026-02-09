@@ -341,7 +341,7 @@ export default function ProjectsNew() {
                 <SelectItem value="archived">Archived</SelectItem>
               </SelectContent>
             </Select>
-            <Tabs value={viewMode} onValueChange={setViewMode}>
+            <Tabs value={viewMode} onValueChange={(val) => setViewMode(val)}>
               <TabsList className="bg-white border border-gray-200">
                 <TabsTrigger value="grid" className="data-[state=active]:bg-gray-100">
                   <Grid3X3 className="w-4 h-4" />
@@ -566,11 +566,10 @@ function ProjectCardMinimal({ project, onDelete, isSelectionMode, isSelected, on
       transition={{ duration: 0.2 }}
     >
       <Card
-        className={`h-full border transition-all cursor-pointer ${
-          isSelected
+        className={`h-full border transition-all cursor-pointer ${isSelected
             ? 'border-blue-500 bg-blue-50 shadow-md'
             : 'border-gray-200 hover:border-blue-300 hover:shadow-md'
-        }`}
+          }`}
         onClick={isSelectionMode ? onToggleSelect : undefined}
       >
         <CardContent className="p-6">

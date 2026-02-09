@@ -30,7 +30,7 @@ const triggerTypes = [
 ];
 
 const botTemplates = [
-  { 
+  {
     name: 'Email Assistant Bot',
     description: 'Auto-read emails, suggest replies, auto-respond to queries, and schedule appointments',
     trigger: { type: 'email', config: {} },
@@ -300,7 +300,7 @@ const promptSuggestions = [
 
 export default function BotBuilder() {
   const [showDialog, setShowDialog] = useState(false);
-  const [selectedBot, setSelectedBot] = useState(null);
+
   const [isGenerating, setIsGenerating] = useState(false);
   const [activeTab, setActiveTab] = useState('all');
   const [showVisualEditor, setShowVisualEditor] = useState(false);
@@ -548,7 +548,7 @@ Trading Bot: {name: "Crypto Grid Trader", trigger_type: "schedule", workflow_ste
           required: ['name', 'description', 'trigger_type', 'workflow_steps', 'capabilities', 'integrations']
         }
       });
-      
+
       // Validate the AI response
       if (!result.name || !result.description || !result.workflow_steps) {
         throw new Error('Incomplete AI response - missing required fields');
@@ -585,7 +585,7 @@ Trading Bot: {name: "Crypto Grid Trader", trigger_type: "schedule", workflow_ste
       }
 
       const complexity = result.complexity || analyzeWorkflowComplexity(result.workflow_steps);
-      
+
       const enhancedMetadata = {
         ai_generated: true,
         generation_prompt: description,
@@ -635,7 +635,7 @@ Trading Bot: {name: "Crypto Grid Trader", trigger_type: "schedule", workflow_ste
 
       const successMessage = `✨ Generated ${complexity} ${category} bot with ${result.workflow_steps.length} steps!`;
       toast.success(successMessage, { duration: 5000 });
-      
+
       // Show integration suggestions
       if (allIntegrations.length > 0) {
         toast.info(`Suggested integrations: ${allIntegrations.slice(0, 3).join(', ')}${allIntegrations.length > 3 ? '...' : ''}`, { duration: 4000 });
@@ -698,7 +698,7 @@ Trading Bot: {name: "Crypto Grid Trader", trigger_type: "schedule", workflow_ste
 
   const categorizeBot = (name, description, workflow) => {
     const text = `${name} ${description}`.toLowerCase();
-    
+
     if (text.match(/email|inbox|mail|message/)) return 'email';
     if (text.match(/social|twitter|facebook|instagram|linkedin/)) return 'social';
     if (text.match(/trading|crypto|stock|finance|investment/)) return 'trading';
@@ -706,7 +706,7 @@ Trading Bot: {name: "Crypto Grid Trader", trigger_type: "schedule", workflow_ste
     if (text.match(/data|database|analytics|report/)) return 'data_processing';
     if (text.match(/monitor|alert|track|watch/)) return 'monitoring';
     if (text.match(/customer|support|ticket|helpdesk/)) return 'support';
-    
+
     return 'automation';
   };
 
@@ -741,7 +741,7 @@ Trading Bot: {name: "Crypto Grid Trader", trigger_type: "schedule", workflow_ste
 
   const calculateRelevanceScore = (template, searchTerm) => {
     if (!searchTerm) return 0;
-    
+
     const term = searchTerm.toLowerCase();
     let score = 0;
 
@@ -847,9 +847,10 @@ Trading Bot: {name: "Crypto Grid Trader", trigger_type: "schedule", workflow_ste
         <div className="flex items-center gap-3 text-xs text-gray-600">
           <Switch
             checked={autoOpenVisualEditor}
-            onCheckedChange={setAutoOpenVisualEditor}
+            onCheckedChange={(val) => setAutoOpenVisualEditor(val)}
             id="auto-open-visual"
           />
+
           <Label htmlFor="auto-open-visual" className="text-xs">Auto-open visual editor after generation</Label>
         </div>
 
@@ -1012,7 +1013,7 @@ Trading Bot: {name: "Crypto Grid Trader", trigger_type: "schedule", workflow_ste
                   </CardHeader>
                   <CardContent>
                     <p className="text-sm text-gray-600 mb-4">{bot.description}</p>
-                    
+
                     {/* Capabilities Panel */}
                     {bot.metadata?.capabilities && bot.metadata.capabilities.length > 0 && (
                       <div className="mb-4 p-3 bg-gray-50 rounded-lg border border-gray-200">
@@ -1089,13 +1090,13 @@ Trading Bot: {name: "Crypto Grid Trader", trigger_type: "schedule", workflow_ste
         </div>
       )}
 
-      <Dialog open={showDialog} onOpenChange={setShowDialog}>
+      <Dialog open={showDialog} onOpenChange={(val) => setShowDialog(val)}>
         <DialogContent className="sm:max-w-4xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>Create New Bot</DialogTitle>
           </DialogHeader>
-          
-          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+
+          <Tabs value={activeTab} onValueChange={(val) => setActiveTab(val)} className="w-full">
             <TabsList className="grid w-full grid-cols-6">
               <TabsTrigger value="all">All Templates</TabsTrigger>
               <TabsTrigger value="email">Email</TabsTrigger>
@@ -1131,8 +1132,8 @@ Trading Bot: {name: "Crypto Grid Trader", trigger_type: "schedule", workflow_ste
                   const TemplateIcon = template.icon;
                   const capabilityPreview = template.capabilities || template.workflow;
                   return (
-                    <Card 
-                      key={idx} 
+                    <Card
+                      key={idx}
                       className="cursor-pointer hover:bg-gray-50 transition-colors"
                       onClick={() => {
                         setNewBot({
@@ -1189,8 +1190,8 @@ Trading Bot: {name: "Crypto Grid Trader", trigger_type: "schedule", workflow_ste
                   const TemplateIcon = template.icon;
                   const capabilityPreview = template.capabilities || template.workflow;
                   return (
-                    <Card 
-                      key={idx} 
+                    <Card
+                      key={idx}
                       className="cursor-pointer hover:bg-gray-50 transition-colors"
                       onClick={() => {
                         setNewBot({
@@ -1244,8 +1245,8 @@ Trading Bot: {name: "Crypto Grid Trader", trigger_type: "schedule", workflow_ste
                   const TemplateIcon = template.icon;
                   const capabilityPreview = template.capabilities || template.workflow;
                   return (
-                    <Card 
-                      key={idx} 
+                    <Card
+                      key={idx}
                       className="cursor-pointer hover:bg-gray-50 transition-colors"
                       onClick={() => {
                         setNewBot({
@@ -1294,8 +1295,8 @@ Trading Bot: {name: "Crypto Grid Trader", trigger_type: "schedule", workflow_ste
                   const TemplateIcon = template.icon;
                   const capabilityPreview = template.capabilities || template.workflow;
                   return (
-                    <Card 
-                      key={idx} 
+                    <Card
+                      key={idx}
                       className="cursor-pointer hover:bg-gray-50 transition-colors"
                       onClick={() => {
                         setNewBot({
@@ -1472,20 +1473,20 @@ Trading Bot: {name: "Crypto Grid Trader", trigger_type: "schedule", workflow_ste
                   Open Visual Editor
                 </Button>
               </div>
-              </TabsContent>
-              </Tabs>
+            </TabsContent>
+          </Tabs>
 
-              <DialogFooter>
-              <Button variant="outline" onClick={() => setShowDialog(false)}>Cancel</Button>
-              <Button onClick={() => createMutation.mutate(newBot)} disabled={!newBot.name}>
-                Create Bot
-              </Button>
-            </DialogFooter>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setShowDialog(false)}>Cancel</Button>
+            <Button onClick={() => createMutation.mutate(newBot)} disabled={!newBot.name}>
+              Create Bot
+            </Button>
+          </DialogFooter>
         </DialogContent>
       </Dialog>
 
       {showVisualEditor && (
-        <Dialog open={showVisualEditor} onOpenChange={setShowVisualEditor}>
+        <Dialog open={showVisualEditor} onOpenChange={(val) => setShowVisualEditor(val)}>
           <DialogContent className="max-w-6xl max-h-[90vh]">
             <DialogHeader>
               <DialogTitle>Visual Workflow Editor</DialogTitle>

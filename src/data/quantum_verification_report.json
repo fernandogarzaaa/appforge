@@ -1,0 +1,332 @@
+{
+  "entropy": 100,
+  "coherence": 0,
+  "stability": 0,
+  "totalIssues": 59,
+  "criticalPages": [],
+  "categories": {
+    "UNUSED_SETTER": 37,
+    "SILENT_ERRORS": 13,
+    "DIRECT_DOM": 2,
+    "MISSING_KEY": 3,
+    "EMPTY_ASYNC": 3,
+    "MISSING_LOADING": 1
+  },
+  "issues": [
+    {
+      "file": "ActivityFeed.jsx",
+      "type": "UNUSED_SETTER",
+      "severity": "medium",
+      "message": "useState setter 'setFilterType' never called - state may be stale"
+    },
+    {
+      "file": "admin\\AgentManagementHub.jsx",
+      "type": "UNUSED_SETTER",
+      "severity": "medium",
+      "message": "useState setter 'setAgentStates' never called - state may be stale"
+    },
+    {
+      "file": "admin\\AgentPermissionsAdmin.jsx",
+      "type": "SILENT_ERRORS",
+      "severity": "medium",
+      "message": "3 errors logged but not shown to user"
+    },
+    {
+      "file": "admin\\AIAgentControl.jsx",
+      "type": "UNUSED_SETTER",
+      "severity": "medium",
+      "message": "useState setter 'setUser' never called - state may be stale"
+    },
+    {
+      "file": "admin\\AICapabilitiesControl.jsx",
+      "type": "UNUSED_SETTER",
+      "severity": "medium",
+      "message": "useState setter 'setSelectedAgent' never called - state may be stale"
+    },
+    {
+      "file": "admin\\APIConfiguration.jsx",
+      "type": "DIRECT_DOM",
+      "severity": "medium",
+      "message": "Direct DOM manipulation detected (use refs instead)"
+    },
+    {
+      "file": "admin\\CoachingSystemAdmin.jsx",
+      "type": "UNUSED_SETTER",
+      "severity": "medium",
+      "message": "useState setter 'setActiveTab' never called - state may be stale"
+    },
+    {
+      "file": "admin\\CoachingSystemAdmin.jsx",
+      "type": "SILENT_ERRORS",
+      "severity": "medium",
+      "message": "8 errors logged but not shown to user"
+    },
+    {
+      "file": "admin\\SearchBar.jsx",
+      "type": "UNUSED_SETTER",
+      "severity": "medium",
+      "message": "useState setter 'setQuery' never called - state may be stale"
+    },
+    {
+      "file": "admin\\SubscriptionTierManager.jsx",
+      "type": "SILENT_ERRORS",
+      "severity": "medium",
+      "message": "3 errors logged but not shown to user"
+    },
+    {
+      "file": "admin\\SystemHealthDashboard.jsx",
+      "type": "MISSING_KEY",
+      "severity": "medium",
+      "message": "Potential missing keys: 3 rendering maps vs 1 key props"
+    },
+    {
+      "file": "admin\\TemplateManagement.jsx",
+      "type": "UNUSED_SETTER",
+      "severity": "medium",
+      "message": "useState setter 'setEditingTemplate' never called - state may be stale"
+    },
+    {
+      "file": "agents\\FunctionValidator.jsx",
+      "type": "UNUSED_SETTER",
+      "severity": "medium",
+      "message": "useState setter 'setActiveTab' never called - state may be stale"
+    },
+    {
+      "file": "agents\\FunctionValidator.jsx",
+      "type": "SILENT_ERRORS",
+      "severity": "medium",
+      "message": "4 errors logged but not shown to user"
+    },
+    {
+      "file": "ai\\AdvancedAITools.jsx",
+      "type": "UNUSED_SETTER",
+      "severity": "medium",
+      "message": "useState setter 'setActiveTab' never called - state may be stale"
+    },
+    {
+      "file": "ai\\AgentCoachingPanel.jsx",
+      "type": "SILENT_ERRORS",
+      "severity": "medium",
+      "message": "3 errors logged but not shown to user"
+    },
+    {
+      "file": "ai\\APIDiscoveryPanel.jsx",
+      "type": "UNUSED_SETTER",
+      "severity": "medium",
+      "message": "useState setter 'setCopiedId' never called - state may be stale"
+    },
+    {
+      "file": "ai\\AutoAgentDeployer.jsx",
+      "type": "UNUSED_SETTER",
+      "severity": "medium",
+      "message": "useState setter 'setIsDeploying' never called - state may be stale"
+    },
+    {
+      "file": "ai\\AutomationBuilder.jsx",
+      "type": "UNUSED_SETTER",
+      "severity": "medium",
+      "message": "useState setter 'setSelectedNode' never called - state may be stale"
+    },
+    {
+      "file": "ai\\GitHubIntegration.jsx",
+      "type": "UNUSED_SETTER",
+      "severity": "medium",
+      "message": "useState setter 'setIsConnected' never called - state may be stale"
+    },
+    {
+      "file": "ai\\GitHubIntegration.jsx",
+      "type": "UNUSED_SETTER",
+      "severity": "medium",
+      "message": "useState setter 'setFiles' never called - state may be stale"
+    },
+    {
+      "file": "ai\\GitHubIntegration.jsx",
+      "type": "UNUSED_SETTER",
+      "severity": "medium",
+      "message": "useState setter 'setIsSyncing' never called - state may be stale"
+    },
+    {
+      "file": "ai\\GuidedWorkflowPlayer.jsx",
+      "type": "SILENT_ERRORS",
+      "severity": "medium",
+      "message": "3 errors logged but not shown to user"
+    },
+    {
+      "file": "ai\\HyperparameterTuningPanel.jsx",
+      "type": "SILENT_ERRORS",
+      "severity": "medium",
+      "message": "3 errors logged but not shown to user"
+    },
+    {
+      "file": "ai\\MobileAppBuilder.jsx",
+      "type": "UNUSED_SETTER",
+      "severity": "medium",
+      "message": "useState setter 'setSelectedPlatform' never called - state may be stale"
+    },
+    {
+      "file": "ai\\ProjectAuditorEnhanced.jsx",
+      "type": "SILENT_ERRORS",
+      "severity": "medium",
+      "message": "3 errors logged but not shown to user"
+    },
+    {
+      "file": "ai\\ProjectScaffolder.jsx",
+      "type": "UNUSED_SETTER",
+      "severity": "medium",
+      "message": "useState setter 'setActiveTab' never called - state may be stale"
+    },
+    {
+      "file": "alerts\\AlertService.jsx",
+      "type": "EMPTY_ASYNC",
+      "severity": "medium",
+      "message": "Async function with no await or return"
+    },
+    {
+      "file": "alerts\\AlertService.jsx",
+      "type": "EMPTY_ASYNC",
+      "severity": "medium",
+      "message": "Async function with no await or return"
+    },
+    {
+      "file": "alerts\\AlertService.jsx",
+      "type": "EMPTY_ASYNC",
+      "severity": "medium",
+      "message": "Async function with no await or return"
+    },
+    {
+      "file": "alerts\\AlertService.jsx",
+      "type": "SILENT_ERRORS",
+      "severity": "medium",
+      "message": "3 errors logged but not shown to user"
+    },
+    {
+      "file": "bots\\IntegrationDetailsPanel.jsx",
+      "type": "UNUSED_SETTER",
+      "severity": "medium",
+      "message": "useState setter 'setActiveTab' never called - state may be stale"
+    },
+    {
+      "file": "bots\\NodeCommentThread.jsx",
+      "type": "UNUSED_SETTER",
+      "severity": "medium",
+      "message": "useState setter 'setReplyingTo' never called - state may be stale"
+    },
+    {
+      "file": "bots\\NodeCommentThread.jsx",
+      "type": "UNUSED_SETTER",
+      "severity": "medium",
+      "message": "useState setter 'setReplyText' never called - state may be stale"
+    },
+    {
+      "file": "bots\\NodeCommentThread.jsx",
+      "type": "MISSING_LOADING",
+      "severity": "medium",
+      "message": "Uses React Query but no loading state handling"
+    },
+    {
+      "file": "chatbots\\ChatbotKnowledgeConfig.jsx",
+      "type": "UNUSED_SETTER",
+      "severity": "medium",
+      "message": "useState setter 'setSourceType' never called - state may be stale"
+    },
+    {
+      "file": "collaboration\\CollaboratorManager.jsx",
+      "type": "UNUSED_SETTER",
+      "severity": "medium",
+      "message": "useState setter 'setInviting' never called - state may be stale"
+    },
+    {
+      "file": "enterprise\\ObservabilityDashboard.jsx",
+      "type": "UNUSED_SETTER",
+      "severity": "medium",
+      "message": "useState setter 'setSnapshot' never called - state may be stale"
+    },
+    {
+      "file": "enterprise\\WebhookManager.jsx",
+      "type": "SILENT_ERRORS",
+      "severity": "medium",
+      "message": "7 errors logged but not shown to user"
+    },
+    {
+      "file": "help\\KnowledgeBaseSearch.jsx",
+      "type": "UNUSED_SETTER",
+      "severity": "medium",
+      "message": "useState setter 'setSelectedCategory' never called - state may be stale"
+    },
+    {
+      "file": "mobile\\CodeExport.jsx",
+      "type": "UNUSED_SETTER",
+      "severity": "medium",
+      "message": "useState setter 'setActiveTab' never called - state may be stale"
+    },
+    {
+      "file": "mobile\\MobileAppEditor.jsx",
+      "type": "UNUSED_SETTER",
+      "severity": "medium",
+      "message": "useState setter 'setCurrentApp' never called - state may be stale"
+    },
+    {
+      "file": "mobile\\MobileAppEditor.jsx",
+      "type": "UNUSED_SETTER",
+      "severity": "medium",
+      "message": "useState setter 'setActiveTab' never called - state may be stale"
+    },
+    {
+      "file": "mobile\\MobilePreview.jsx",
+      "type": "UNUSED_SETTER",
+      "severity": "medium",
+      "message": "useState setter 'setDevice' never called - state may be stale"
+    },
+    {
+      "file": "monitoring\\RuleActivityChart.jsx",
+      "type": "MISSING_KEY",
+      "severity": "medium",
+      "message": "Potential missing keys: 2 rendering maps vs 0 key props"
+    },
+    {
+      "file": "monitoring\\TaskAnalyticsChart.jsx",
+      "type": "MISSING_KEY",
+      "severity": "medium",
+      "message": "Potential missing keys: 2 rendering maps vs 0 key props"
+    },
+    {
+      "file": "notifications\\NotificationBell.jsx",
+      "type": "SILENT_ERRORS",
+      "severity": "medium",
+      "message": "3 errors logged but not shown to user"
+    },
+    {
+      "file": "preview\\LivePreview.jsx",
+      "type": "UNUSED_SETTER",
+      "severity": "medium",
+      "message": "useState setter 'setDevice' never called - state may be stale"
+    },
+    {
+      "file": "preview\\LivePreview.jsx",
+      "type": "DIRECT_DOM",
+      "severity": "medium",
+      "message": "Direct DOM manipulation detected (use refs instead)"
+    },
+    {
+      "file": "quantum\\QuantumHardwareJobManager.jsx",
+      "type": "UNUSED_SETTER",
+      "severity": "medium",
+      "message": "useState setter 'setCircuitData' never called - state may be stale"
+    }
+  ],
+  "timestamp": "2026-02-09T05:54:11.928Z",
+  "todoSummary": [],
+  "swarmState": {
+    "lastRun": "2026-02-09T05:54:11.927Z",
+    "status": "ONLINE",
+    "activeAgents": [
+      "QuantumObserver"
+    ],
+    "recentThoughts": [
+      {
+        "source": "QuantumObserver",
+        "msg": "Swarm state not found. Initializing virtual quantum state."
+      }
+    ]
+  }
+}

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { 
+import {
   Image, Plus, Search, Upload, Rocket, Settings2,
   ChevronRight, Percent, Sparkles
 } from 'lucide-react';
@@ -116,7 +116,7 @@ export default function NFTStudio() {
   const handleImageUpload = async (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    
+
     const { file_url } = await base44.integrations.Core.UploadFile({ file });
     setSelectedCollection({ ...selectedCollection, cover_image: file_url });
     toast.success('Image uploaded!');
@@ -249,7 +249,7 @@ export default function NFTStudio() {
             </div>
 
             {/* Tabs */}
-            <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col">
+            <Tabs value={activeTab} onValueChange={(val) => setActiveTab(val)} className="flex-1 flex flex-col">
               <div className="bg-white border-b border-gray-100 px-4">
                 <TabsList className="h-12 bg-transparent p-0 gap-4">
                   <TabsTrigger value="details" className="data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-purple-500 rounded-none px-0">
@@ -486,7 +486,7 @@ export default function NFTStudio() {
       </div>
 
       {/* New Collection Dialog */}
-      <Dialog open={showNewDialog} onOpenChange={setShowNewDialog}>
+      <Dialog open={showNewDialog} onOpenChange={(val) => setShowNewDialog(val)}>
         <DialogContent className="sm:max-w-lg rounded-2xl">
           <DialogHeader>
             <DialogTitle>Create NFT Collection</DialogTitle>

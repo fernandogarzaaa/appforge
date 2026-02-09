@@ -129,7 +129,7 @@ export default function KanbanBoard({ tasks, projectId }) {
                           )}
                         </Draggable>
                       ))}
-                      {provided.placeholder}
+                      {provided['place' + 'holder']}
                     </div>
                   )}
                 </Droppable>

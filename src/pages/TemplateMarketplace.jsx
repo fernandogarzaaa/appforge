@@ -45,18 +45,18 @@ export default function TemplateMarketplace() {
         throw new Error('Template not found');
       }
       const template = templates[0];
-      
+
       if (!user) {
         throw new Error('You must be logged in to download templates');
       }
-      
+
       // Check if premium and handle payment
       if (template.is_premium && template.price > 0) {
         const purchases = await base44.entities.TemplatePurchase.filter({
           template_id: templateId,
           buyer_email: user.email
         });
-        
+
         if (purchases.length === 0) {
           toast.error('Please purchase this template first');
           return null;
@@ -110,7 +110,7 @@ export default function TemplateMarketplace() {
 
   const filteredTemplates = templates.filter(t => {
     const matchesSearch = t.name?.toLowerCase().includes(search.toLowerCase()) ||
-                         t.description?.toLowerCase().includes(search.toLowerCase());
+      t.description?.toLowerCase().includes(search.toLowerCase());
     const matchesCategory = category === 'all' || t.category === category;
     return matchesSearch && matchesCategory;
   });
@@ -165,7 +165,7 @@ export default function TemplateMarketplace() {
         <Card>
           <CardContent className="pt-6">
             <div className="text-2xl font-bold">
-              {viewMode === 'myTemplates' 
+              {viewMode === 'myTemplates'
                 ? `$${templates.reduce((sum, t) => sum + (t.total_revenue || 0), 0).toFixed(2)}`
                 : templates.filter(t => t.is_featured).length
               }
@@ -188,7 +188,7 @@ export default function TemplateMarketplace() {
             className="pl-10"
           />
         </div>
-        <Select value={category} onValueChange={setCategory}>
+        <Select value={category} onValueChange={(val) => setCategory(val)}>
           <SelectTrigger className="w-48">
             <SelectValue />
           </SelectTrigger>
@@ -250,8 +250,8 @@ export default function TemplateMarketplace() {
                   Revenue: ${(template.total_revenue || 0).toFixed(2)}
                 </div>
               )}
-              <Button 
-                className="w-full" 
+              <Button
+                className="w-full"
                 onClick={(e) => {
                   e.stopPropagation();
                   if (viewMode === 'marketplace') {
@@ -294,7 +294,7 @@ export default function TemplateMarketplace() {
             <DialogHeader>
               <DialogTitle className="text-2xl">{selectedTemplate.name}</DialogTitle>
             </DialogHeader>
-            
+
             <Tabs defaultValue="overview">
               <TabsList>
                 <TabsTrigger value="overview">Overview</TabsTrigger>
@@ -350,13 +350,13 @@ export default function TemplateMarketplace() {
                   <p className="text-gray-700">{selectedTemplate.author_name || 'Anonymous'}</p>
                 </div>
 
-                <Button 
+                <Button
                   className="w-full"
                   onClick={() => {
                     if (selectedTemplate.is_premium && selectedTemplate.price > 0) {
-                      purchaseMutation.mutate({ 
-                        templateId: selectedTemplate.id, 
-                        price: selectedTemplate.price 
+                      purchaseMutation.mutate({
+                        templateId: selectedTemplate.id,
+                        price: selectedTemplate.price
                       });
                     } else {
                       downloadMutation.mutate(selectedTemplate.id);

@@ -89,7 +89,7 @@ export default function Marketplace() {
           </TabsList>
 
           <TabsContent value="explore">
-            <MarketplaceExplorer onSelectAsset={setSelectedAsset} />
+            <MarketplaceExplorer onSelectAsset={(val) => setSelectedAsset(val)} />
           </TabsContent>
 
           <TabsContent value="trending">

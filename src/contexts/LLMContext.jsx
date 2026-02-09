@@ -110,7 +110,7 @@ const defaultContext = {
 
   // Methods
   setSelectedModel: () => { },
-  query: async () => { },
+  query: async () => ({ success: false, response: '', usage: {} }),
   updateSettings: () => { },
   resetUsage: () => { },
   getModelInfo: () => null,

@@ -7,8 +7,8 @@ import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
-import { 
-  FileText, Sparkles, Copy, Download, RefreshCw, 
+import {
+  FileText, Sparkles, Copy, Download, RefreshCw,
   BookOpen, Mail, Code, Newspaper, Briefcase
 } from 'lucide-react';
 import { toast } from 'sonner';
@@ -78,12 +78,12 @@ Provide the content in markdown format.`;
 
       setGeneratedContent(result.content);
       setShowResult(true);
-      setHistory([{ 
-        type: contentType, 
-        topic, 
-        content: result.content, 
+      setHistory([{
+        type: contentType,
+        topic,
+        content: result.content,
         title: result.title,
-        date: new Date().toISOString() 
+        date: new Date().toISOString()
       }, ...history]);
       toast.success('Content generated successfully!');
     } catch (error) {
@@ -95,7 +95,7 @@ Provide the content in markdown format.`;
 
   const improveContent = async () => {
     if (!generatedContent) return;
-    
+
     setGenerating(true);
     try {
       const result = await base44.integrations.Core.InvokeLLM({
@@ -159,7 +159,7 @@ Improvements to make:
             <CardContent className="space-y-4">
               <div>
                 <Label>Content Type</Label>
-                <Select value={contentType} onValueChange={setContentType}>
+                <Select value={contentType} onValueChange={(val) => setContentType(val)}>
                   <SelectTrigger className="mt-2">
                     <SelectValue />
                   </SelectTrigger>
@@ -186,7 +186,7 @@ Improvements to make:
 
               <div>
                 <Label>Tone</Label>
-                <Select value={tone} onValueChange={setTone}>
+                <Select value={tone} onValueChange={(val) => setTone(val)}>
                   <SelectTrigger className="mt-2">
                     <SelectValue />
                   </SelectTrigger>
@@ -203,7 +203,7 @@ Improvements to make:
 
               <div>
                 <Label>Length</Label>
-                <Select value={length} onValueChange={setLength}>
+                <Select value={length} onValueChange={(val) => setLength(val)}>
                   <SelectTrigger className="mt-2">
                     <SelectValue />
                   </SelectTrigger>

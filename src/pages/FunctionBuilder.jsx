@@ -68,7 +68,7 @@ Deno.serve(async (req) => {
               <label className="text-sm font-medium mb-2 block">Function Code</label>
               <CodeEditorWithCompletion
                 value={functionCode}
-                onChange={setFunctionCode}
+                onChange={(val) => setFunctionCode(val)}
                 language="typescript"
                 context="Backend function using Base44 SDK and Deno. Handle authentication, database operations, and API integrations."
                 placeholder="Write your backend function..."

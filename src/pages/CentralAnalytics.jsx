@@ -4,8 +4,8 @@ import { useQuery } from '@tanstack/react-query';
 import { Card, CardContent } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { 
-  Activity, TrendingUp, AlertTriangle, Zap, Clock, 
+import {
+  Activity, TrendingUp, AlertTriangle, Zap, Clock,
   CheckCircle2, XCircle, BarChart3, LineChart as LineChartIcon
 } from 'lucide-react';
 import PerformanceMonitor from '@/components/analytics/PerformanceMonitor';
@@ -64,7 +64,7 @@ export default function CentralAnalytics() {
           <h1 className="text-3xl font-bold text-gray-900 mb-1">Analytics Dashboard</h1>
           <p className="text-gray-500">Centralized insights across all bots and integrations</p>
         </div>
-        <Select value={timeRange} onValueChange={setTimeRange}>
+        <Select value={timeRange} onValueChange={(val) => setTimeRange(val)}>
           <SelectTrigger className="w-40">
             <SelectValue />
           </SelectTrigger>
@@ -193,8 +193,8 @@ export default function CentralAnalytics() {
         </TabsContent>
 
         <TabsContent value="usage" className="mt-6">
-          <UsageStatistics 
-            timeRange={timeRange} 
+          <UsageStatistics
+            timeRange={timeRange}
             integrations={integrations}
             templates={templates}
             logs={webhookLogs}

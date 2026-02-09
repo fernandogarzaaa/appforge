@@ -17,7 +17,7 @@ export default function GitHubConnect() {
   const [githubUsername, setGithubUsername] = useState('');
   const [accessToken, setAccessToken] = useState('');
   const [isLinking, setIsLinking] = useState(false);
-  const [linkedAccount, setLinkedAccount] = useState(null);
+
 
   const urlParams = new URLSearchParams(window.location.search);
   const projectId = urlParams.get('projectId');
@@ -164,8 +164,8 @@ export default function GitHubConnect() {
                   </div>
                   <div className="p-4 bg-gray-50 rounded-lg">
                     <div className="text-2xl font-bold text-gray-900 mb-1">
-                      {activeIntegration.last_sync 
-                        ? new Date(activeIntegration.last_sync).toLocaleDateString() 
+                      {activeIntegration.last_sync
+                        ? new Date(activeIntegration.last_sync).toLocaleDateString()
                         : 'Never'}
                     </div>
                     <div className="text-sm text-gray-600">Last Sync</div>

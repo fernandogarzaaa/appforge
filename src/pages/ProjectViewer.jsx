@@ -41,10 +41,10 @@ export default function ProjectViewer() {
   // Generate custom content based on project description
   const generateCustomContent = () => {
     if (!project) return null;
-    
+
     const desc = project.description.toLowerCase();
     const name = project.name;
-    
+
     // Smart business name extraction
     const extractBusinessName = () => {
       // Remove filler words and extract core name
@@ -53,27 +53,27 @@ export default function ProjectViewer() {
         'landing page', 'website', 'web app', 'app', 'page', 'site',
         'for me', 'for', 'a', 'an', 'the'
       ];
-      
+
       let cleaned = name;
       fillerWords.forEach(word => {
         const regex = new RegExp(`\\b${word}\\b`, 'gi');
         cleaned = cleaned.replace(regex, '');
       });
-      
+
       cleaned = cleaned.replace(/\s+/g, ' ').trim();
-      
+
       // Capitalize properly
       if (cleaned.length > 2) {
         return cleaned.split(' ')
           .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
           .join(' ');
       }
-      
+
       return null;
     };
-    
+
     const businessName = extractBusinessName();
-    
+
     // Intelligent keyword detection with scoring
     const detectIntent = () => {
       const keywords = {
@@ -87,20 +87,20 @@ export default function ProjectViewer() {
         real_estate: ['real estate', 'property', 'rental', 'listing'],
         education: ['course', 'learning', 'education', 'training', 'tutorial']
       };
-      
+
       const scores = {};
       Object.entries(keywords).forEach(([category, words]) => {
         scores[category] = words.filter(word => desc.includes(word)).length;
       });
-      
+
       const maxScore = Math.max(...Object.values(scores));
       const detected = Object.entries(scores).find(([_, score]) => score === maxScore && score > 0);
-      
+
       return detected ? detected[0] : 'generic';
     };
-    
+
     const intent = detectIntent();
-    
+
     const templates = {
       cafe: {
         hero: businessName ? `Welcome to ${businessName}` : 'Your Perfect Coffee Spot',
@@ -193,11 +193,11 @@ export default function ProjectViewer() {
         ]
       }
     };
-    
+
     if (templates[intent]) {
       return templates[intent];
     }
-    
+
     // Default/generic - use cleaned name if available
     return {
       hero: businessName || name,
@@ -261,7 +261,7 @@ export default function ProjectViewer() {
 
       {/* Content */}
       <div className="max-w-7xl mx-auto px-6 py-8">
-        <Tabs value={activeTab} onValueChange={setActiveTab}>
+        <Tabs value={activeTab} onValueChange={(val) => setActiveTab(val)}>
           <TabsList className="mb-6">
             <TabsTrigger value="preview" className="gap-2">
               <Eye className="w-4 h-4" />
@@ -472,12 +472,11 @@ export default function ProjectViewer() {
                       <div className="space-y-2">
                         {Object.entries(entity.metadata.api_endpoints).map(([_name, config], i) => (
                           <div key={i} className="flex items-center gap-3 p-2 bg-white rounded border border-green-100">
-                            <span className={`px-2 py-1 text-xs font-mono rounded font-semibold ${
-                              config.method === 'GET' ? 'bg-green-100 text-green-700' :
-                              config.method === 'POST' ? 'bg-blue-100 text-blue-700' :
-                              config.method === 'PUT' ? 'bg-yellow-100 text-yellow-700' :
-                              'bg-red-100 text-red-700'
-                            }`}>
+                            <span className={`px-2 py-1 text-xs font-mono rounded font-semibold ${config.method === 'GET' ? 'bg-green-100 text-green-700' :
+                                config.method === 'POST' ? 'bg-blue-100 text-blue-700' :
+                                  config.method === 'PUT' ? 'bg-yellow-100 text-yellow-700' :
+                                    'bg-red-100 text-red-700'
+                              }`}>
                               {config.method}
                             </span>
                             <code className="text-sm font-mono flex-1">{config.path}</code>

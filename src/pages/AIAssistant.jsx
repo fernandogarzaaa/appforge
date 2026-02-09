@@ -170,6 +170,7 @@ export default function AIAssistant() {
       }
     } catch (error) {
       console.error('Failed to load projects:', error);
+      toast.error('Failed to load projects');
     }
   };
 
@@ -338,6 +339,7 @@ export default function AIAssistant() {
             }
           } catch (contentError) {
             console.error('Content generation error:', contentError);
+            toast.warning('Content generation partially failed, proceeding with defaults');
           }
 
           // Create all enhanced entities with proper relationships and validations
@@ -431,6 +433,7 @@ export default function AIAssistant() {
 
         } catch (buildError) {
           console.error('Build error:', buildError);
+          toast.error('Project build failed. Please try again.');
           setIsLoading(false);
         }
 

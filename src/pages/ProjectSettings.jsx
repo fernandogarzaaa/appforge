@@ -4,7 +4,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { useQuantum } from '@/hooks/useQuantum';
-import { 
+import {
   Settings, Save, Trash2, Globe, Palette,
   Copy
 } from 'lucide-react';
@@ -48,7 +48,7 @@ export default function ProjectSettings() {
   const [project, setProject] = useState(null);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [hasChanges, setHasChanges] = useState(false);
-  const [quantumOptimizing, setQuantumOptimizing] = useState(false);
+
   const { optimizeDeps, available: quantumAvailable } = useQuantum();
 
   const urlParams = new URLSearchParams(window.location.search);
@@ -322,8 +322,8 @@ export default function ProjectSettings() {
             <CardContent>
               <div>
                 <Label className="text-sm text-gray-600 mb-1.5 block">Theme</Label>
-                <Select 
-                  value={project.settings?.theme || 'system'} 
+                <Select
+                  value={project.settings?.theme || 'system'}
                   onValueChange={(v) => handleSettingsChange('theme', v)}
                 >
                   <SelectTrigger className="h-11 rounded-xl">
@@ -375,7 +375,7 @@ export default function ProjectSettings() {
       </div>
 
       {/* Delete Confirmation Dialog */}
-      <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
+      <AlertDialog open={showDeleteDialog} onOpenChange={(val) => setShowDeleteDialog(val)}>
         <AlertDialogContent className="rounded-2xl">
           <AlertDialogHeader>
             <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>

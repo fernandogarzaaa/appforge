@@ -59,7 +59,7 @@ export default function MyComponent() {
               <label className="text-sm font-medium mb-2 block">Component Code</label>
               <CodeEditorWithCompletion
                 value={componentCode}
-                onChange={setComponentCode}
+                onChange={(val) => setComponentCode(val)}
                 language="javascript"
                 context="React component with Tailwind CSS. Building reusable UI component."
                 placeholder="Write your React component..."

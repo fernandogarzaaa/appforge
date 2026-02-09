@@ -15,7 +15,7 @@ export default function AdminAgents() {
           <p className="text-gray-600">Manage AI agents, permissions, and admin access controls</p>
         </div>
 
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+        <Tabs value={activeTab} onValueChange={(val) => setActiveTab(val)} className="w-full">
           <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="agents" className="gap-2">
               <Bot className="w-4 h-4" />

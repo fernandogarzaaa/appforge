@@ -13,6 +13,7 @@ import Register from './pages/Register';
 const AdvancedSearch = lazy(() => import('./pages/AdvancedSearch'));
 const AGIStudio = lazy(() => import('./pages/AGIStudio'));
 const AIAssistant = lazy(() => import('./pages/AIAssistant'));
+const AIAgentControl = lazy(() => import('./pages/AIAgentControl'));
 const AIDeployment = lazy(() => import('./pages/AIDeployment'));
 const AIMonitoring = lazy(() => import('./pages/AIMonitoring'));
 const AITemplates = lazy(() => import('./pages/AITemplates'));
@@ -29,6 +30,7 @@ const AdminAnalytics = lazy(() => import('./pages/AdminAnalytics'));
 const AdminCoaching = lazy(() => import('./pages/AdminCoaching'));
 const AdminDashboard = lazy(() => import('./pages/AdminDashboard'));
 const AdminDeployments = lazy(() => import('./pages/AdminDeployments'));
+const AdminQuantumBackends = lazy(() => import('./pages/AdminQuantumBackends'));
 const AdminMonitoring = lazy(() => import('./pages/AdminMonitoring'));
 const AdminSecrets = lazy(() => import('./pages/AdminSecrets'));
 const AdminSubscriptions = lazy(() => import('./pages/AdminSubscriptions'));
@@ -37,6 +39,7 @@ const AdminTemplates = lazy(() => import('./pages/AdminTemplates'));
 const AdminUserManagement = lazy(() => import('./pages/AdminUserManagement'));
 const AdvancedAnomalyDetection = lazy(() => import('./pages/AdvancedAnomalyDetection'));
 const Analytics = lazy(() => import('./pages/Analytics'));
+const AnalyticsPage = lazy(() => import('./pages/AnalyticsPage'));
 const BotBuilder = lazy(() => import('./pages/BotBuilder'));
 const CodeGenerator = lazy(() => import('./pages/CodeGenerator'));
 const CentralAnalytics = lazy(() => import('./pages/CentralAnalytics'));
@@ -46,6 +49,7 @@ const CodeRefactoring = lazy(() => import('./pages/CodeRefactoring'));
 const CodeReview = lazy(() => import('./pages/CodeReview'));
 const CodePlayground = lazy(() => import('./pages/CodePlayground'));
 const Collaboration = lazy(() => import('./pages/Collaboration'));
+const CollaborationHub = lazy(() => import('./pages/CollaborationHub'));
 const Components = lazy(() => import('./pages/Components'));
 const ContentStudio = lazy(() => import('./pages/ContentStudio'));
 const ContractBuilder = lazy(() => import('./pages/ContractBuilder'));
@@ -57,12 +61,14 @@ const DataAnalytics = lazy(() => import('./pages/DataAnalytics'));
 const DataPipeline = lazy(() => import('./pages/DataPipeline'));
 const DataPrivacy = lazy(() => import('./pages/DataPrivacy'));
 const DeFiHub = lazy(() => import('./pages/DeFiHub'));
+const DesignSystem = lazy(() => import('./pages/DesignSystem'));
 const Deployments = lazy(() => import('./pages/Deployments'));
 const DeveloperExperience = lazy(() => import('./pages/DeveloperExperience'));
 const EmailAssistant = lazy(() => import('./pages/EmailAssistant'));
 const EmailCampaigns = lazy(() => import('./pages/EmailCampaigns'));
 const EnterpriseIntelligence = lazy(() => import('./pages/EnterpriseIntelligence'));
 const EnterpriseSecurity = lazy(() => import('./pages/EnterpriseSecurity'));
+const EnterpriseValuation = lazy(() => import('./pages/EnterpriseValuation'));
 const EntityDesigner = lazy(() => import('./pages/EntityDesigner'));
 const EnvironmentVariables = lazy(() => import('./pages/EnvironmentVariables'));
 const ExternalBotIntegrations = lazy(() => import('./pages/ExternalBotIntegrations'));
@@ -82,6 +88,7 @@ const IntegrationHub = lazy(() => import('./pages/IntegrationHub'));
 const IntegrationTemplates = lazy(() => import('./pages/IntegrationTemplates'));
 const IntegrationEcosystem = lazy(() => import('./pages/IntegrationEcosystem'));
 const Integrations = lazy(() => import('./pages/Integrations'));
+const LandingNew = lazy(() => import('./pages/LandingNew'));
 const LLMSettings = lazy(() => import('./pages/LLMSettings'));
 const MediaStudio = lazy(() => import('./pages/MediaStudio'));
 const MarketplaceExtensions = lazy(() => import('./pages/MarketplaceExtensions'));
@@ -102,8 +109,10 @@ const Pricing = lazy(() => import('./pages/Pricing'));
 const ProductAnalytics = lazy(() => import('./pages/ProductAnalytics'));
 const Profile = lazy(() => import('./pages/Profile'));
 const ProjectDiagnostics = lazy(() => import('./pages/ProjectDiagnostics'));
+const ProjectScaffolder = lazy(() => import('./pages/ProjectScaffolder'));
 const ProjectSettings = lazy(() => import('./pages/ProjectSettings'));
 const RateLimits = lazy(() => import('./pages/RateLimits'));
+const QuantumLab = lazy(() => import('./pages/QuantumLab'));
 const ProjectTasks = lazy(() => import('./pages/ProjectTasks'));
 const RbacTenancy = lazy(() => import('./pages/RbacTenancy'));
 const RealtimeCollaboration = lazy(() => import('./pages/RealtimeCollaboration'));
@@ -118,10 +127,12 @@ const SearchAnalytics = lazy(() => import('./pages/SearchAnalytics'));
 const SocialMediaHub = lazy(() => import('./pages/SocialMediaHub'));
 const Settings = lazy(() => import('./pages/Settings'));
 const SubscriptionSuccess = lazy(() => import('./pages/SubscriptionSuccess'));
+const SuperIntelligenceDashboard = lazy(() => import('./pages/SuperIntelligenceDashboard'));
 const Support = lazy(() => import('./pages/Support'));
 const SmartDeployment = lazy(() => import('./pages/SmartDeployment'));
 const SuperiorAIStudio = lazy(() => import('./pages/SuperiorAIStudio'));
 const SystemHealth = lazy(() => import('./pages/SystemHealth'));
+const SystemStatus = lazy(() => import('./pages/SystemStatus'));
 const TeamCollaboration = lazy(() => import('./pages/TeamCollaboration'));
 const TeamManagement = lazy(() => import('./pages/TeamManagement'));
 const TemplateMarketplace = lazy(() => import('./pages/TemplateMarketplace'));
@@ -145,137 +156,148 @@ const withSuspense = (Component) => {
 };
 
 const PAGES = {
-    "AdvancedSearch": withSuspense(AdvancedSearch),
-    "AGIStudio": withSuspense(AGIStudio),
-    "AIAssistant": withSuspense(AIAssistant),
-    "AIDeployment": withSuspense(AIDeployment),
-    "AIMonitoring": withSuspense(AIMonitoring),
-    "AITemplates": withSuspense(AITemplates),
-    "APIExplorer": withSuspense(APIExplorer),
-    "APIKeyManager": withSuspense(APIKeyManager),
-    "APIManagement": withSuspense(APIManagement),
-    "Account": withSuspense(Account),
-    "AdminAPIKeys": withSuspense(AdminAPIKeys),
-    "AdminAIControl": withSuspense(AdminAIControl),
-    "AdminAgentControl": withSuspense(AdminAgentControl),
-    "AdminAgents": withSuspense(AdminAgents),
-    "AdminAnalytics": withSuspense(AdminAnalytics),
-    "AdminCoaching": withSuspense(AdminCoaching),
-    "AdminDashboard": withSuspense(AdminDashboard),
-    "AdminDeployments": withSuspense(AdminDeployments),
-    "AdminMonitoring": withSuspense(AdminMonitoring),
-    "AdminSecrets": withSuspense(AdminSecrets),
-    "AdminSubscriptions": withSuspense(AdminSubscriptions),
-    "AdminSystemConfig": withSuspense(AdminSystemConfig),
-    "AdminTemplates": withSuspense(AdminTemplates),
-    "AdminUserManagement": withSuspense(AdminUserManagement),
-    "AdvancedAnomalyDetection": withSuspense(AdvancedAnomalyDetection),
-    "AuditLog": withSuspense(AuditLog),
-    "Analytics": withSuspense(Analytics),
-    "BotBuilder": withSuspense(BotBuilder),
-    "CodeGenerator": withSuspense(CodeGenerator),
-    "CentralAnalytics": withSuspense(CentralAnalytics),
-    "Collaboration": withSuspense(Collaboration),
-    "ChatbotManager": withSuspense(ChatbotManager),
-    "ComponentBuilder": withSuspense(ComponentBuilder),
-    "CodeRefactoring": withSuspense(CodeRefactoring),
-    "CodeReview": withSuspense(CodeReview),
-    "CodePlayground": withSuspense(CodePlayground),
-    "Components": withSuspense(Components),
-    "ContentStudio": withSuspense(ContentStudio),
-    "ContractBuilder": withSuspense(ContractBuilder),
-    "CryptoExchange": withSuspense(CryptoExchange),
-    "CryptoGambling": withSuspense(CryptoGambling),
-    "CustomAgentStudio": withSuspense(CustomAgentStudio),
-    "DAOGovernance": withSuspense(DAOGovernance),
-    "Dashboard": Dashboard, // Core - eager load
-    "DataAnalytics": withSuspense(DataAnalytics),
-    "DataPipeline": withSuspense(DataPipeline),
-    "DataPrivacy": withSuspense(DataPrivacy),
-    "DeFiHub": withSuspense(DeFiHub),
-    "Deployments": withSuspense(Deployments),
-    "DeveloperExperience": withSuspense(DeveloperExperience),
-    "EmailAssistant": withSuspense(EmailAssistant),
-    "EmailCampaigns": withSuspense(EmailCampaigns),
-    "EnterpriseIntelligence": withSuspense(EnterpriseIntelligence),
-    "EnterpriseSecurity": withSuspense(EnterpriseSecurity),
-    "EntityDesigner": withSuspense(EntityDesigner),
-    "EnvironmentVariables": withSuspense(EnvironmentVariables),
-    "ExternalBotIntegrations": withSuspense(ExternalBotIntegrations),
-    "FeatureFlags": withSuspense(FeatureFlags),
-    "FeedbackAnalytics": withSuspense(FeedbackAnalytics),
-    "FunctionBuilder": withSuspense(FunctionBuilder),
-    "FunctionValidator": withSuspense(FunctionValidator),
-    "GamingPlatform": withSuspense(GamingPlatform),
-    "GitHubConnect": withSuspense(GitHubConnect),
-    "GovernmentTools": withSuspense(GovernmentTools),
-    "Guide": withSuspense(Guide),
-    "IntelligentAutomation": withSuspense(IntelligentAutomation),
-    "IntelligentInterface": withSuspense(IntelligentInterface),
-    "IncidentIntelligence": withSuspense(IncidentIntelligence),
-    "IntegrationAnalytics": withSuspense(IntegrationAnalytics),
-    "IntegrationHub": withSuspense(IntegrationHub),
-    "IntegrationTemplates": withSuspense(IntegrationTemplates),
-    "IntegrationEcosystem": withSuspense(IntegrationEcosystem),
-    "Integrations": withSuspense(Integrations),
-    "LLMSettings": withSuspense(LLMSettings),
-    "Landing": Landing, // Core - eager load
-    "Login": Login, // Auth - eager load
-    "Register": Register, // Auth - eager load
-    "MediaStudio": withSuspense(MediaStudio),
-    "MarketplaceExtensions": withSuspense(MarketplaceExtensions),
-    "MedicalAI": withSuspense(MedicalAI),
-    "MobileStudio": withSuspense(MobileStudio),
-    "Monetization": withSuspense(Monetization),
-    "MLIntegration": withSuspense(MLIntegration),
-    "NFTMarketplace": withSuspense(NFTMarketplace),
-    "NFTStudio": withSuspense(NFTStudio),
-    "Notifications": withSuspense(Notifications),
-    "Observability": withSuspense(Observability),
-    "PerformanceScalability": withSuspense(PerformanceScalability),
-    "PageEditor": withSuspense(PageEditor),
-    "PredictiveAnalytics": withSuspense(PredictiveAnalytics),
-    "Pricing": withSuspense(Pricing),
-    "ProductAnalytics": withSuspense(ProductAnalytics),
-    "Profile": withSuspense(Profile),
-    "ProjectDiagnostics": withSuspense(ProjectDiagnostics),
-    "ProjectExport": withSuspense(ProjectExport),
-    "ProjectSettings": withSuspense(ProjectSettings),
-    "ProjectTasks": withSuspense(ProjectTasks),
-    "RbacTenancy": withSuspense(RbacTenancy),
-    "RealtimeCollaboration": withSuspense(RealtimeCollaboration),
-    "Projects": Projects, // Core - eager load
-    "projects/:id": withSuspense(ProjectViewer),
-    "ReferralProgram": withSuspense(ReferralProgram),
-    "ReportingAnalytics": withSuspense(ReportingAnalytics),
-    "Roadmap": withSuspense(Roadmap),
-    "RoleManagement": withSuspense(RoleManagement),
-    "SecurityFeatures": withSuspense(SecurityFeatures),
-    "SecurityCenter": withSuspense(SecurityCenter),
-    "Security": withSuspense(Security),
-    "SearchAnalytics": withSuspense(SearchAnalytics),
-    "SocialMediaHub": withSuspense(SocialMediaHub),
-    "Settings": withSuspense(Settings),
-    "SubscriptionSuccess": withSuspense(SubscriptionSuccess),
-    "Support": withSuspense(Support),
-    "SmartDeployment": withSuspense(SmartDeployment),
-    "SuperiorAIStudio": withSuspense(SuperiorAIStudio),
-    "SystemHealth": withSuspense(SystemHealth),
-    "TeamCollaboration": withSuspense(TeamCollaboration),
-    "TeamManagement": withSuspense(TeamManagement),
-    "TemplateMarketplace": withSuspense(TemplateMarketplace),
-    "TokenCreator": withSuspense(TokenCreator),
-    "TwoFactorAuth": withSuspense(TwoFactorAuth),
-    "VSCodeIntegration": withSuspense(VSCodeIntegration),
-    "VisualizationStudio": withSuspense(VisualizationStudio),
-    "Web3Dashboard": withSuspense(Web3Dashboard),
-    "WebhookMonitor": withSuspense(WebhookMonitor),
-    "WorkflowBuilder": withSuspense(WorkflowBuilder),
+  "AdvancedSearch": withSuspense(AdvancedSearch),
+  "AGIStudio": withSuspense(AGIStudio),
+  "AIAssistant": withSuspense(AIAssistant),
+  "AIAgentControl": withSuspense(AIAgentControl),
+  "AIDeployment": withSuspense(AIDeployment),
+  "AIMonitoring": withSuspense(AIMonitoring),
+  "AITemplates": withSuspense(AITemplates),
+  "APIExplorer": withSuspense(APIExplorer),
+  "APIKeyManager": withSuspense(APIKeyManager),
+  "APIManagement": withSuspense(APIManagement),
+  "Account": withSuspense(Account),
+  "AdminAPIKeys": withSuspense(AdminAPIKeys),
+  "AdminAIControl": withSuspense(AdminAIControl),
+  "AdminAgentControl": withSuspense(AdminAgentControl),
+  "AdminAgents": withSuspense(AdminAgents),
+  "AdminAnalytics": withSuspense(AdminAnalytics),
+  "AdminCoaching": withSuspense(AdminCoaching),
+  "AdminDashboard": withSuspense(AdminDashboard),
+  "AdminDeployments": withSuspense(AdminDeployments),
+  "AdminQuantumBackends": withSuspense(AdminQuantumBackends),
+  "AdminMonitoring": withSuspense(AdminMonitoring),
+  "AdminSecrets": withSuspense(AdminSecrets),
+  "AdminSubscriptions": withSuspense(AdminSubscriptions),
+  "AdminSystemConfig": withSuspense(AdminSystemConfig),
+  "AdminTemplates": withSuspense(AdminTemplates),
+  "AdminUserManagement": withSuspense(AdminUserManagement),
+  "AdvancedAnomalyDetection": withSuspense(AdvancedAnomalyDetection),
+  "AuditLog": withSuspense(AuditLog),
+  "Analytics": withSuspense(Analytics),
+  "AnalyticsPage": withSuspense(AnalyticsPage),
+  "BotBuilder": withSuspense(BotBuilder),
+  "CodeGenerator": withSuspense(CodeGenerator),
+  "CentralAnalytics": withSuspense(CentralAnalytics),
+  "Collaboration": withSuspense(Collaboration),
+  "CollaborationHub": withSuspense(CollaborationHub),
+  "ChatbotManager": withSuspense(ChatbotManager),
+  "ComponentBuilder": withSuspense(ComponentBuilder),
+  "CodeRefactoring": withSuspense(CodeRefactoring),
+  "CodeReview": withSuspense(CodeReview),
+  "CodePlayground": withSuspense(CodePlayground),
+  "Components": withSuspense(Components),
+  "ContentStudio": withSuspense(ContentStudio),
+  "ContractBuilder": withSuspense(ContractBuilder),
+  "CryptoExchange": withSuspense(CryptoExchange),
+  "CryptoGambling": withSuspense(CryptoGambling),
+  "CustomAgentStudio": withSuspense(CustomAgentStudio),
+  "DAOGovernance": withSuspense(DAOGovernance),
+  "Dashboard": Dashboard, // Core - eager load
+  "DataAnalytics": withSuspense(DataAnalytics),
+  "DataPipeline": withSuspense(DataPipeline),
+  "DataPrivacy": withSuspense(DataPrivacy),
+  "DeFiHub": withSuspense(DeFiHub),
+  "DesignSystem": withSuspense(DesignSystem),
+  "Deployments": withSuspense(Deployments),
+  "DeveloperExperience": withSuspense(DeveloperExperience),
+  "EmailAssistant": withSuspense(EmailAssistant),
+  "EmailCampaigns": withSuspense(EmailCampaigns),
+  "EnterpriseIntelligence": withSuspense(EnterpriseIntelligence),
+  "EnterpriseSecurity": withSuspense(EnterpriseSecurity),
+  "EnterpriseValuation": withSuspense(EnterpriseValuation),
+  "EntityDesigner": withSuspense(EntityDesigner),
+  "EnvironmentVariables": withSuspense(EnvironmentVariables),
+  "ExternalBotIntegrations": withSuspense(ExternalBotIntegrations),
+  "FeatureFlags": withSuspense(FeatureFlags),
+  "FeedbackAnalytics": withSuspense(FeedbackAnalytics),
+  "FunctionBuilder": withSuspense(FunctionBuilder),
+  "FunctionValidator": withSuspense(FunctionValidator),
+  "GamingPlatform": withSuspense(GamingPlatform),
+  "GitHubConnect": withSuspense(GitHubConnect),
+  "GovernmentTools": withSuspense(GovernmentTools),
+  "Guide": withSuspense(Guide),
+  "IntelligentAutomation": withSuspense(IntelligentAutomation),
+  "IntelligentInterface": withSuspense(IntelligentInterface),
+  "IncidentIntelligence": withSuspense(IncidentIntelligence),
+  "IntegrationAnalytics": withSuspense(IntegrationAnalytics),
+  "IntegrationHub": withSuspense(IntegrationHub),
+  "IntegrationTemplates": withSuspense(IntegrationTemplates),
+  "IntegrationEcosystem": withSuspense(IntegrationEcosystem),
+  "Integrations": withSuspense(Integrations),
+  "LLMSettings": withSuspense(LLMSettings),
+  "Landing": Landing, // Core - eager load
+  "LandingNew": withSuspense(LandingNew),
+  "Login": Login, // Auth - eager load
+  "Register": Register, // Auth - eager load
+  "MediaStudio": withSuspense(MediaStudio),
+  "MarketplaceExtensions": withSuspense(MarketplaceExtensions),
+  "MedicalAI": withSuspense(MedicalAI),
+  "MobileStudio": withSuspense(MobileStudio),
+  "Monetization": withSuspense(Monetization),
+  "MLIntegration": withSuspense(MLIntegration),
+  "NFTMarketplace": withSuspense(NFTMarketplace),
+  "NFTStudio": withSuspense(NFTStudio),
+  "Notifications": withSuspense(Notifications),
+  "Observability": withSuspense(Observability),
+  "PerformanceScalability": withSuspense(PerformanceScalability),
+  "PageEditor": withSuspense(PageEditor),
+  "PredictiveAnalytics": withSuspense(PredictiveAnalytics),
+  "Pricing": withSuspense(Pricing),
+  "ProductAnalytics": withSuspense(ProductAnalytics),
+  "Profile": withSuspense(Profile),
+  "ProjectDiagnostics": withSuspense(ProjectDiagnostics),
+  "ProjectScaffolder": withSuspense(ProjectScaffolder),
+  "ProjectExport": withSuspense(ProjectExport),
+  "ProjectSettings": withSuspense(ProjectSettings),
+  "ProjectTasks": withSuspense(ProjectTasks),
+  "QuantumLab": withSuspense(QuantumLab),
+  "RbacTenancy": withSuspense(RbacTenancy),
+  "RealtimeCollaboration": withSuspense(RealtimeCollaboration),
+  "Projects": Projects, // Core - eager load
+  "projects/:id": withSuspense(ProjectViewer),
+  "ReferralProgram": withSuspense(ReferralProgram),
+  "ReportingAnalytics": withSuspense(ReportingAnalytics),
+  "Roadmap": withSuspense(Roadmap),
+  "RoleManagement": withSuspense(RoleManagement),
+  "SecurityFeatures": withSuspense(SecurityFeatures),
+  "SecurityCenter": withSuspense(SecurityCenter),
+  "Security": withSuspense(Security),
+  "SearchAnalytics": withSuspense(SearchAnalytics),
+  "SocialMediaHub": withSuspense(SocialMediaHub),
+  "Settings": withSuspense(Settings),
+  "SubscriptionSuccess": withSuspense(SubscriptionSuccess),
+  "SuperIntelligenceDashboard": withSuspense(SuperIntelligenceDashboard),
+  "Support": withSuspense(Support),
+  "SmartDeployment": withSuspense(SmartDeployment),
+  "SuperiorAIStudio": withSuspense(SuperiorAIStudio),
+  "SystemHealth": withSuspense(SystemHealth),
+  "SystemStatus": withSuspense(SystemStatus),
+  "TeamCollaboration": withSuspense(TeamCollaboration),
+  "TeamManagement": withSuspense(TeamManagement),
+  "TemplateMarketplace": withSuspense(TemplateMarketplace),
+  "TokenCreator": withSuspense(TokenCreator),
+  "TwoFactorAuth": withSuspense(TwoFactorAuth),
+  "VSCodeIntegration": withSuspense(VSCodeIntegration),
+  "VisualizationStudio": withSuspense(VisualizationStudio),
+  "Web3Dashboard": withSuspense(Web3Dashboard),
+  "WebhookMonitor": withSuspense(WebhookMonitor),
+  "WorkflowBuilder": withSuspense(WorkflowBuilder),
 }
 
 export const pagesConfig = {
-    mainPage: "Dashboard",
-    Pages: PAGES,
-    Layout: __Layout,
-    publicPages: ['Landing', 'Login', 'Register', 'Pricing', 'Guide']
+  mainPage: "Dashboard",
+  Pages: PAGES,
+  Layout: __Layout,
+  publicPages: ['Landing', 'Login', 'Register', 'Pricing', 'Guide']
 };

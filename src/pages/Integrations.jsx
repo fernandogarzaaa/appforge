@@ -9,8 +9,8 @@ import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
-import { 
-  Bot, Database, Mail, MessageSquare, Zap, Code, 
+import {
+  Bot, Database, Mail, MessageSquare, Zap, Code,
   Cloud, Share2, CreditCard, BarChart3, FileText, Search, CheckCircle, Plus, Settings, Star,
   Users, Briefcase, ShoppingCart, TrendingUp, Package,
   Calendar, Video, Phone, Download
@@ -211,11 +211,11 @@ export default function Integrations() {
     custom: true
   }))];
 
-  const filteredIntegrations = selectedCategory === 'all' 
-    ? allIntegrations 
+  const filteredIntegrations = selectedCategory === 'all'
+    ? allIntegrations
     : selectedCategory === 'custom'
-    ? customIntegrations.map(c => ({ ...c, icon: Package, status: 'available', color: 'indigo', custom: true }))
-    : integrations[selectedCategory] || [];
+      ? customIntegrations.map(c => ({ ...c, icon: Package, status: 'available', color: 'indigo', custom: true }))
+      : integrations[selectedCategory] || [];
 
   const searchFiltered = filteredIntegrations.filter(int =>
     int.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -253,7 +253,7 @@ export default function Integrations() {
         />
       </div>
 
-      <Tabs defaultValue="all" onValueChange={setSelectedCategory}>
+      <Tabs defaultValue="all" onValueChange={(val) => setSelectedCategory(val)}>
         <TabsList className="mb-6 flex-wrap h-auto">
           <TabsTrigger value="all">All ({totalCount})</TabsTrigger>
           <TabsTrigger value="ai">AI & LLMs ({integrations.ai.length})</TabsTrigger>
@@ -280,11 +280,11 @@ export default function Integrations() {
               <Card key={idx} className="hover:shadow-lg transition-all">
                 <CardHeader>
                   <div className="flex items-start justify-between mb-2">
-                    <div 
+                    <div
                       className="w-12 h-12 rounded-lg flex items-center justify-center"
                       style={{ backgroundColor: `var(--color-${integration.color}-100)` }}
                     >
-                      <IntegrationIcon 
+                      <IntegrationIcon
                         className="w-6 h-6"
                         style={{ color: `var(--color-${integration.color}-600)` }}
                       />
@@ -312,8 +312,8 @@ export default function Integrations() {
                 </CardHeader>
                 <CardContent>
                   {integration.status === 'connected' ? (
-                    <Button 
-                      variant="outline" 
+                    <Button
+                      variant="outline"
                       className="w-full"
                       onClick={() => handleConfigure(integration.name)}
                     >
@@ -321,7 +321,7 @@ export default function Integrations() {
                       Configure
                     </Button>
                   ) : (
-                    <Button 
+                    <Button
                       className="w-full"
                       onClick={() => handleConnect(integration.name)}
                     >

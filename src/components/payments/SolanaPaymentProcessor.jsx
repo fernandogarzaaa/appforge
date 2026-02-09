@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
+import { toast } from 'sonner';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { AlertCircle, CheckCircle2, Loader2, CreditCard, ExternalLink } from 'lucide-react';
 import { createTransferInstruction, getAssociatedTokenAddress, TOKEN_PROGRAM_ID } from '@solana/spl-token';
@@ -52,9 +53,12 @@ export default function SolanaPaymentProcessor({
         'Authorization': `Bearer ${token}`
       };
 
-      const configResponse = await fetch('/api/payment/solana/config', { headers });
-      if (!configResponse.ok) throw new Error('Failed to load payment config');
-      const config = await configResponse.json();
+      let config;
+      try {
+        const configResponse = await fetch('/api/payment/solana/config', { headers });
+        if (!configResponse.ok) throw new Error('Failed to load payment config');
+        config = await configResponse.json();
+      } catch (e) { throw e; }
 
       if (!config?.recipient_address) {
         throw new Error('Payment configuration not available');
@@ -130,6 +134,7 @@ export default function SolanaPaymentProcessor({
       setError(errorMsg);
       onPaymentError?.(errorMsg);
       console.error('Payment error:', err);
+      toast.error(err.message || 'Payment failed');
     } finally {
       setProcessing(false);
     }

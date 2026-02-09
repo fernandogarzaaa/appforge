@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { base44 } from '@/api/base44Client';
 import { useQuery } from '@tanstack/react-query';
-import { 
+import {
   Code, Download, FolderTree, FileCode, Settings,
   CheckCircle, Loader2, ExternalLink, Copy, Sparkles, Zap
 } from 'lucide-react';
@@ -15,7 +15,7 @@ import { featureFlags } from '@/utils/featureFlags';
 
 export default function VSCodeIntegration() {
   const [isExporting, setIsExporting] = useState(false);
-  const [showSetupDialog, setShowSetupDialog] = useState(false);
+
   const [aiPrompt, setAiPrompt] = useState('');
   const [isGenerating, setIsGenerating] = useState(false);
   const { vscodeIntegration } = featureFlags;
@@ -75,7 +75,7 @@ export default function VSCodeIntegration() {
           }
         }
       });
-      
+
       toast.success('Code generated! Ready to export once VS Code integration is configured.');
     } catch (error) {
       toast.error('Failed to generate code');
