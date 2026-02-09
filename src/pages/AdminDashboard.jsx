@@ -9,9 +9,11 @@ import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import {
   Users, Activity, Rocket, Brain, Code, Shield, Layout,
-  TrendingUp, AlertCircle, CheckCircle, Zap
+  TrendingUp, AlertCircle, CheckCircle, Zap, Atom
 } from 'lucide-react';
 import GlobalInsightsPanel from '@/components/admin/GlobalInsightsPanel';
+import QuantumSystemHealthPanel from '@/components/admin/QuantumSystemHealthPanel';
+import QuantumAIInsightsPanel from '@/components/admin/QuantumAIInsightsPanel';
 import { env } from '@/utils/env';
 
 export default function AdminDashboard() {
@@ -141,6 +143,14 @@ export default function AdminDashboard() {
       href: '/admin/agents',
       color: 'from-indigo-500 to-blue-600',
       stat: '8 Active'
+    },
+    {
+      title: 'Quantum Backend',
+      description: 'WASM acceleration and quantum cores',
+      icon: Atom,
+      href: '/admin/quantum-backends',
+      color: 'from-purple-500 to-violet-600',
+      stat: 'Active'
     }
   ];
 
@@ -303,6 +313,12 @@ export default function AdminDashboard() {
             </CardContent>
           </Card>
         </div>
+
+        {/* Quantum System Health */}
+        <QuantumSystemHealthPanel />
+
+        {/* Quantum AI Insights */}
+        <QuantumAIInsightsPanel stats={stats} />
 
         {/* Global Insights */}
         <GlobalInsightsPanel />
