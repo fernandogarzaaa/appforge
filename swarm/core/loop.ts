@@ -108,7 +108,9 @@ async function main() {
                 errorMessage.includes('503') ||
                 errorMessage.includes('network') ||
                 errorMessage.includes('socket') ||
-                errorMessage.includes('timeout');
+                errorMessage.includes('timeout') ||
+                errorMessage.includes('ENOTFOUND') ||
+                errorMessage.includes('fetch failed');
 
             const isNullError =
                 errorMessage.includes('undefined') ||
