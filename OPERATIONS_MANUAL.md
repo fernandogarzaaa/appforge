@@ -22,14 +22,17 @@ When a client (HFT Firm, AI Lab) wants to buy, send them this link:
 
 > **[Buy Quantum License ($80,000/Mo)](https://buy.moonpay.com?apiKey=pk_test_12345&walletAddress=2ZeBAFtHq5vNThXMjbZ7E59Msgv6xPpBFn7cw4KMxmot&currencyCode=usdc_sol&baseCurrencyAmount=80000&baseCurrencyCode=usd&lockAmount=true)**
 
-## 📦 3. Delivery (The Product)
-Once the console says:
-`✅ Transaction Confirmed`
+## 📦 3. Delivery (The "White Glove" Service)
+**IMPORTANT**: The system generates the key, but **YOU** deliver it.
+* *Why?* For $80,000 deals, clients expect a secure, human handover (and you need to verify they aren't bad actors).
 
-You must deliver the **Proprietary Package**:
-1. Locate the folder: `universal_quantum_dist/`
-2. Zip it: `universal_quantum_dist.zip`
-3. Send it to the client via secure email/Telegram.
+**The Workflow:**
+1. **Monitor Logs**: Watch for `✅ MATCH FOUND! Signature: ...` in your backend terminal.
+2. **Capture Key**: Copy the `🔑 REAL LICENSE KEY: ...` from the terminal.
+3. **Secure Transfer**:
+    * Contact the buyer (via the channel they used to find you: Telegram, Signal, Email).
+    * Send the `universal_quantum_dist.zip` and the Key.
+    * *Optional*: Verification Call to onboard them.
 
 ## 📈 4. Maintenance
 * **Performance**: Monitor `COMMERCIAL_STRATEGY.md` for Oracle updates.

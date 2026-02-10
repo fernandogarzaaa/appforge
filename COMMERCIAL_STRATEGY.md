@@ -9,7 +9,15 @@
 
 The Oracle has refined the strategy. Instead of low-ticket SaaS, we are pivoting to **High-Ticket Enterprise Licensing**.
 
-### Use Case
+### 3. Marketing Channels (The "Whisper" Campaign)
+* **Target**: We do not market to the masses. We target the elite.
+* **Channels**:
+    1. **Solana Breakpoint & Token2049**: Physical networking with HFT desks.
+    2. **Governance Forums**: Proposing "Quantum Optimization" to major DAO treasuries (Jito, Jupiter).
+    3. **Direct Sales**: LinkedIn/Telegram outreach to CTOs of Prop Trading Firms.
+    4. **DePIN Narratives**: Positioning Quantum Engine as the "Compute Layer" for DePIN.
+
+### 4. Sales Process
 * **Price**: **80,000 USDC** / Month (Recurring).
 * **Network**: **Solana** (Mainnet-Beta) for high-speed settlement.
 * **Gateway**: **Direct Web3 (Phantom)** - Zero merchant fees.

@@ -18,10 +18,11 @@ async function verifyGrandDesign() {
     console.log('================================================');
 
     const checks = [
-        { name: 'Singularity Core', cmd: 'npx tsx scripts/verify_singularity.ts' },
-        { name: 'Commercial Package', cmd: 'npx tsx scripts/verify_commercial_release.ts' },
-        { name: 'Solana Commerce Node', cmd: 'node scripts/verify_solana_commerce.js' },
-        { name: 'Deployment Readiness', cmd: 'node scripts/verify_deployment.js' }
+        { name: 'Quantum Integrity', cmd: 'npx tsx scripts/verify_quantum_integrity.ts' },
+        { name: 'Swarm Intelligence', cmd: 'npx tsx scripts/verify_quantum_swarm.ts' },
+        { name: 'Universal Package', cmd: 'npx tsx scripts/verify_universal_package.ts' },
+        { name: 'Deployment Readiness', cmd: 'node scripts/verify_deployment.js' },
+        { name: 'Server Integrity', cmd: 'node examples/debug_import.js' } // Quick check that imports work
     ];
 
     let passed = 0;

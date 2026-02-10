@@ -35,10 +35,14 @@ async function verifyDeployment() {
         process.exit(1);
     }
 
-    // Check payment_portal.html for Web3 Native Protocol
+    // Check payment_portal.html for Web3 Native Protocol and Claim Logic
     const portalContent = fs.readFileSync('public/payment_portal.html', 'utf8');
     if (!portalContent.includes('solana:') && !portalContent.includes('window.solana')) {
-        console.error('❌ payment_portal.html is missing Web3 Native logic (solana protocol or window.solana)');
+        console.error('❌ payment_portal.html is missing Web3 Native logic');
+        process.exit(1);
+    }
+    if (!portalContent.includes('claimLicense')) {
+        console.error('❌ payment_portal.html is missing Auto-Claim Logic (claimLicense)');
         process.exit(1);
     }
     if (portalContent.includes('moonpay.com')) {

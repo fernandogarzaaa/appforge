@@ -25,16 +25,21 @@ You have two components to host:
     * **Your Portal**: `https://quantum-engine.vercel.app/payment_portal.html`
 
 ### 2. Backend (Railway / Render)
-*Best for: `solana_commerce_prod.js` (Must run 24/7)*
+*Best for: `quantum_commerce_server.js` (API & Emailer)*
 
-1. **Go to [Railway.app](https://railway.app)** or **[Render.com](https://render.com)**.
+1. **Go to [Railway.app](https://railway.app)**.
 2. **New Service**: connect your GitHub repo.
 3. **Start Command**:
-    * Edit the "Start Command" to: `node examples/solana_commerce_prod.js`
-4. **Environment Variables**:
-    * Add your `MOONPAY_LIVE_KEY` if you didn't hardcode it (Recommended for security).
-5. **Deploy**:
-    * **Result**: The script runs in the cloud, watching the blockchain forever.
+    * Change to: `node examples/quantum_commerce_server.js`
+4. **Environment Variables** (Required):
+    * `EMAIL_USER`: Your Gmail address.
+    * `EMAIL_PASS`: Your Gmail App Password (NOT your login password).
+    * `PORT`: `3000` (or let Railway assign it).
+5. **Get URL**: Railway will give you a domain (e.g., `https://backend.railway.app`).
+6. **Update Frontend**:
+    * Open `public/payment_portal.html`.
+    * Replace `http://localhost:3000` with your new Railway URL.
+    * Push changes to GitHub to update Vercel.
 
 ---
 

@@ -75,6 +75,19 @@
             Transfer $80k USDC 💸
         </button>
 
+        <div id="claimSection" class="hidden mt-6 pt-6 border-t border-gray-700">
+            <h3 class="text-lg font-bold text-gray-300 mb-2">Step 2: Claim License 🔑</h3>
+            <input id="email" type="email" placeholder="Enter your email"
+                class="w-full p-3 mb-3 rounded bg-gray-800 text-white border border-gray-700 focus:border-blue-500 outline-none">
+            <input id="signature" type="text" placeholder="Paste Solana Transaction Signature"
+                class="w-full p-3 mb-3 rounded bg-gray-800 text-white border border-gray-700 focus:border-blue-500 outline-none">
+
+            <button onclick="claimLicense()"
+                class="w-full py-3 bg-purple-600 hover:bg-purple-500 rounded font-bold text-white transition-all">
+                Verify & Email License 📨
+            </button>
+        </div>
+
         <p class="mt-6 text-xs text-gray-500">
             0% Fees. Direct On-Chain Settlement.<br>
             Requires Phantom Wallet installed.
@@ -125,44 +138,54 @@
             log("⏳ Constructing Transaction...");
 
             try {
-                const buyer = provider.publicKey;
-                const mint = new solanaWeb3.PublicKey(USDC_MINT);
-                const treasury = new solanaWeb3.PublicKey(TREASURY);
-
-                // 1. Get Token Accounts
-                // Note: Simplified for web. In a real app we'd use getAssociatedTokenAddress
-                // For this demo, we assume user has USDC account. 
-                // A robust implementation would perform a full build using @solana/spl-token
-
-                // Fallback to simple SOL transfer for demo if USDC fails implies complexity
-                // But for $80k, we MUST use USDC.
-
-                log("⚠️ Initiating Direct Transfer... check your wallet.");
-
-                // Construct a text-based memo/transfer for the wallet to sign
-                // Since browser-side transaction construction without a bundler is tricky,
-                // We will use the simplest "Sign Message" to verify intent, 
-                // OR ideally, use the standard SPL Token transfer instruction if imports work.
-
-                // For this static HTML, we can't easily import the full SPL library without build steps.
-                // STRATEGY: Create a "Solana Pay" URL link which Phantom handles natively.
-
+                // Solana Pay URL Spec
                 const label = "Quantum Engine License";
                 const message = "Monthly Enterprise Subscription";
-                const memo = "ENT-80K";
 
-                // Solana Pay URL Spec
-                // solana:<recipient>?amount=<amount>&spl-token=<mint>&label=<label>&message=<message>
                 const solanaPayUrl = `solana:${TREASURY}?amount=${AMOUNT_USDC}&spl-token=${USDC_MINT}&label=${encodeURIComponent(label)}&message=${encodeURIComponent(message)}`;
 
                 // Attempt to open standard handler
                 window.location.href = solanaPayUrl;
 
-                log("🚀 Wallet should prompt for transfer!");
+                log("🚀 Wallet opened! After payment, paste Signature below to claim.", 'info');
+                document.getElementById('claimSection').classList.remove('hidden');
 
             } catch (err) {
                 console.error(err);
                 log(`❌ Error: ${err.message}`, "error");
+            }
+        }
+
+        async function claimLicense() {
+            const email = document.getElementById('email').value;
+            const signature = document.getElementById('signature').value;
+            const API_URL = "http://localhost:3000"; // REPLACE WITH YOUR RAILWAY URL
+
+            if (!email || !signature) {
+                log("⚠️ Please enter Email and Signature", "error");
+                return;
+            }
+
+            log("⏳ Verifying on-chain...", "info");
+
+            try {
+                const res = await fetch(`${API_URL}/api/claim`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, signature })
+                });
+
+                const data = await res.json();
+
+                if (data.success) {
+                    log("✅ SUCCESS! License emailed to you.", "info");
+                    document.getElementById('claimSection').innerHTML = `<p class="text-green-400 font-bold">License Sent to ${email} 📩</p>`;
+                } else {
+                    log(`❌ Verification Failed: ${data.error}`, "error");
+                }
+            } catch (e) {
+                log("❌ Server Connection Error. Checks Console.", "error");
+                console.error(e);
             }
         }
     </script>
