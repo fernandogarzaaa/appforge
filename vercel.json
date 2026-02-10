@@ -1,19 +1,15 @@
 {
-  "framework": "vite",
-  "buildCommand": "npm run build",
-  "outputDirectory": "dist",
-  "installCommand": "npm ci --legacy-peer-deps",
-  "devCommand": "npm run dev",
-  "rewrites": [
+  "version": 2,
+  "builds": [
     {
-      "source": "/(.*)",
-      "destination": "/index.html"
+      "src": "public/*.html",
+      "use": "@vercel/static"
     }
   ],
-  "crons": [
+  "routes": [
     {
-      "path": "/api/cron",
-      "schedule": "0 0 * * *"
+      "src": "/(.*)",
+      "dest": "/public/$1"
     }
   ]
 }
