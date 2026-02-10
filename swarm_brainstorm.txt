@@ -1,0 +1,939 @@
+[1m[90m[TAILING] Tailing last 500 lines for [appforge-swarm] process (change the value with --lines option)[39m[22m
+[90mC:\Users\ferna\.pm2\logs\appforge-swarm-error.log last 500 lines:[39m
+[31m0|appforge | [39mΓ¥î Loop Error: Base44Error
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓ¥î Loop Error: getaddrinfo ENOTFOUND base44.app
+[31m0|appforge | [39mΓÜá∩╕Å [Quantum] Network fluctuation detected. Continuing with reduced coherence...
+[31m0|appforge | [39mΓ¥î Loop Error: Base44Error
+[31m0|appforge | [39mΓ¥î Loop Error: Base44Error
+[31m0|appforge | [39mΓ¥î Loop Error: Base44Error
+[31m0|appforge | [39mΓ¥î Loop Error: Base44Error
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] OpenAI Failed: 429 Your account is not active, please check your billing details on our website.. Switching to Fallback...
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] OpenAI Failed: 429 Your account is not active, please check your billing details on our website.. Switching to Fallback...
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] Anthropic Failed: fetch failed. Switching to Fallback...
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] Gemini Failed: Gemini Error: Not Found. Switching to Final Fallback...
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] Anthropic Failed: Anthropic Error: Bad Request. Switching to Fallback...
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] Gemini Failed: Gemini Error: Not Found. Switching to Final Fallback...
+[31m0|appforge | [39mΓ¥î [LLM] All Fallbacks Failed.
+[31m0|appforge | [39mΓ¥î Loop Error: Critical Intelligence Failure: 403 "Your newly created team doesn't have any credits or licenses yet. You can purchase those on https://console.x.ai/team/61aaf404-a935-4542-ad03-dbc361daea7e."
+[31m0|appforge | [39mΓ¥î [LLM] All Fallbacks Failed.
+[31m0|appforge | [39mΓ¥î Product Owner Error: Critical Intelligence Failure: 403 "Your newly created team doesn't have any credits or licenses yet. You can purchase those on https://console.x.ai/team/61aaf404-a935-4542-ad03-dbc361daea7e."
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] OpenAI Failed: 429 Your account is not active, please check your billing details on our website.. Switching to Fallback...
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] Anthropic Failed: fetch failed. Switching to Fallback...
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] Gemini Failed: Gemini Error: Not Found. Switching to Final Fallback...
+[31m0|appforge | [39mΓ¥î [LLM] All Fallbacks Failed.
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] OpenAI Failed: 429 Your account is not active, please check your billing details on our website.. Switching to Fallback...
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] OpenAI Failed: 429 Your account is not active, please check your billing details on our website.. Switching to Fallback...
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] Anthropic Failed: fetch failed. Switching to Fallback...
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] Anthropic Failed: fetch failed. Switching to Fallback...
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] Gemini Failed: Gemini Error: Not Found. Switching to Final Fallback...
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] Gemini Failed: Gemini Error: Not Found. Switching to Final Fallback...
+[31m0|appforge | [39mΓ¥î [LLM] All Fallbacks Failed.
+[31m0|appforge | [39mΓ¥î Product Owner Error: Critical Intelligence Failure: Connection error.
+[31m0|appforge | [39mΓ¥î [LLM] All Fallbacks Failed.
+[31m0|appforge | [39mΓ¥î Loop Error: Critical Intelligence Failure: Connection error.
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] OpenAI Failed: 429 Your account is not active, please check your billing details on our website.. Switching to Fallback...
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] Anthropic Failed: fetch failed. Switching to Fallback...
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] Gemini Failed: Gemini Error: Not Found. Switching to Final Fallback...
+[31m0|appforge | [39mΓ¥î [LLM] All Fallbacks Failed.
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] OpenAI Failed: 429 Your account is not active, please check your billing details on our website.. Switching to Fallback...
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] OpenAI Failed: 429 Your account is not active, please check your billing details on our website.. Switching to Fallback...
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] Anthropic Failed: Anthropic Error: Bad Request. Switching to Fallback...
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] Anthropic Failed: Anthropic Error: Bad Request. Switching to Fallback...
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] Gemini Failed: Gemini Error: Not Found. Switching to Final Fallback...
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] Gemini Failed: Gemini Error: Not Found. Switching to Final Fallback...
+[31m0|appforge | [39mΓ¥î [LLM] All Fallbacks Failed.
+[31m0|appforge | [39mΓ¥î Loop Error: Critical Intelligence Failure: 403 "Your newly created team doesn't have any credits or licenses yet. You can purchase those on https://console.x.ai/team/61aaf404-a935-4542-ad03-dbc361daea7e."
+[31m0|appforge | [39mΓ¥î [LLM] All Fallbacks Failed.
+[31m0|appforge | [39mΓ¥î Product Owner Error: Critical Intelligence Failure: 403 "Your newly created team doesn't have any credits or licenses yet. You can purchase those on https://console.x.ai/team/61aaf404-a935-4542-ad03-dbc361daea7e."
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] OpenAI Failed: 429 Your account is not active, please check your billing details on our website.. Switching to Fallback...
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] Anthropic Failed: fetch failed. Switching to Fallback...
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] Gemini Failed: Gemini Error: Not Found. Switching to Final Fallback...
+[31m0|appforge | [39mΓ¥î [LLM] All Fallbacks Failed.
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] OpenAI Failed: 429 Your account is not active, please check your billing details on our website.. Switching to Fallback...
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] Anthropic Failed: fetch failed. Switching to Fallback...
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] OpenAI Failed: 429 Your account is not active, please check your billing details on our website.. Switching to Fallback...
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] Anthropic Failed: fetch failed. Switching to Fallback...
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] Gemini Failed: Gemini Error: Not Found. Switching to Final Fallback...
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] Gemini Failed: Gemini Error: Not Found. Switching to Final Fallback...
+[31m0|appforge | [39mΓ¥î [LLM] All Fallbacks Failed.
+[31m0|appforge | [39mΓ¥î Loop Error: Critical Intelligence Failure: 403 "Your newly created team doesn't have any credits or licenses yet. You can purchase those on https://console.x.ai/team/61aaf404-a935-4542-ad03-dbc361daea7e."
+[31m0|appforge | [39mΓ¥î [LLM] All Fallbacks Failed.
+[31m0|appforge | [39mΓ¥î Product Owner Error: Critical Intelligence Failure: 403 "Your newly created team doesn't have any credits or licenses yet. You can purchase those on https://console.x.ai/team/61aaf404-a935-4542-ad03-dbc361daea7e."
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] OpenAI Failed: 429 Your account is not active, please check your billing details on our website.. Switching to Fallback...
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] Anthropic Failed: fetch failed. Switching to Fallback...
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] Gemini Failed: Gemini Error: Not Found. Switching to Final Fallback...
+[31m0|appforge | [39mΓ¥î [LLM] All Fallbacks Failed.
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] OpenAI Failed: 429 Your account is not active, please check your billing details on our website.. Switching to Fallback...
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] Anthropic Failed: fetch failed. Switching to Fallback...
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] OpenAI Failed: 429 Your account is not active, please check your billing details on our website.. Switching to Fallback...
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] Anthropic Failed: fetch failed. Switching to Fallback...
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] Gemini Failed: Gemini Error: Not Found. Switching to Final Fallback...
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] Gemini Failed: Gemini Error: Not Found. Switching to Final Fallback...
+[31m0|appforge | [39mΓ¥î [LLM] All Fallbacks Failed.
+[31m0|appforge | [39mΓ¥î Product Owner Error: Critical Intelligence Failure: 403 "Your newly created team doesn't have any credits or licenses yet. You can purchase those on https://console.x.ai/team/61aaf404-a935-4542-ad03-dbc361daea7e."
+[31m0|appforge | [39mΓ¥î [LLM] All Fallbacks Failed.
+[31m0|appforge | [39mΓ¥î Loop Error: Critical Intelligence Failure: 403 "Your newly created team doesn't have any credits or licenses yet. You can purchase those on https://console.x.ai/team/61aaf404-a935-4542-ad03-dbc361daea7e."
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] OpenAI Failed: 429 Your account is not active, please check your billing details on our website.. Switching to Fallback...
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] Anthropic Failed: Anthropic Error: Bad Request. Switching to Fallback...
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] Gemini Failed: Gemini Error: Not Found. Switching to Final Fallback...
+[31m0|appforge | [39mΓ¥î [LLM] All Fallbacks Failed.
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] OpenAI Failed: 429 Your account is not active, please check your billing details on our website.. Switching to Fallback...
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] OpenAI Failed: 429 Your account is not active, please check your billing details on our website.. Switching to Fallback...
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] Anthropic Failed: fetch failed. Switching to Fallback...
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] Anthropic Failed: fetch failed. Switching to Fallback...
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] Gemini Failed: Gemini Error: Not Found. Switching to Final Fallback...
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] Gemini Failed: Gemini Error: Not Found. Switching to Final Fallback...
+[31m0|appforge | [39mΓ¥î [LLM] All Fallbacks Failed.
+[31m0|appforge | [39mΓ¥î Product Owner Error: Critical Intelligence Failure: 403 "Your newly created team doesn't have any credits or licenses yet. You can purchase those on https://console.x.ai/team/61aaf404-a935-4542-ad03-dbc361daea7e."
+[31m0|appforge | [39mΓ¥î [LLM] All Fallbacks Failed.
+[31m0|appforge | [39mΓ¥î Loop Error: Critical Intelligence Failure: 403 "Your newly created team doesn't have any credits or licenses yet. You can purchase those on https://console.x.ai/team/61aaf404-a935-4542-ad03-dbc361daea7e."
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] OpenAI Failed: 429 Your account is not active, please check your billing details on our website.. Switching to Fallback...
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] Anthropic Failed: fetch failed. Switching to Fallback...
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] Gemini Failed: Gemini Error: Not Found. Switching to Final Fallback...
+[31m0|appforge | [39mΓ¥î [LLM] All Fallbacks Failed.
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] OpenAI Failed: 429 Your account is not active, please check your billing details on our website.. Switching to Fallback...
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] OpenAI Failed: 429 Your account is not active, please check your billing details on our website.. Switching to Fallback...
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] Anthropic Failed: fetch failed. Switching to Fallback...
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] Anthropic Failed: fetch failed. Switching to Fallback...
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] Gemini Failed: Gemini Error: Not Found. Switching to Final Fallback...
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] Gemini Failed: Gemini Error: Not Found. Switching to Final Fallback...
+[31m0|appforge | [39mΓ¥î [LLM] All Fallbacks Failed.
+[31m0|appforge | [39mΓ¥î Loop Error: Critical Intelligence Failure: 403 "Your newly created team doesn't have any credits or licenses yet. You can purchase those on https://console.x.ai/team/61aaf404-a935-4542-ad03-dbc361daea7e."
+[31m0|appforge | [39mΓ¥î [LLM] All Fallbacks Failed.
+[31m0|appforge | [39mΓ¥î Product Owner Error: Critical Intelligence Failure: 403 "Your newly created team doesn't have any credits or licenses yet. You can purchase those on https://console.x.ai/team/61aaf404-a935-4542-ad03-dbc361daea7e."
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] OpenAI Failed: 429 Your account is not active, please check your billing details on our website.. Switching to Fallback...
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] Anthropic Failed: fetch failed. Switching to Fallback...
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] Gemini Failed: Gemini Error: Not Found. Switching to Final Fallback...
+[31m0|appforge | [39mΓ¥î [LLM] All Fallbacks Failed.
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] OpenAI Failed: 429 Your account is not active, please check your billing details on our website.. Switching to Fallback...
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] OpenAI Failed: 429 Your account is not active, please check your billing details on our website.. Switching to Fallback...
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] Anthropic Failed: fetch failed. Switching to Fallback...
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] Anthropic Failed: Anthropic Error: Bad Request. Switching to Fallback...
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] Gemini Failed: Gemini Error: Not Found. Switching to Final Fallback...
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] Gemini Failed: Gemini Error: Not Found. Switching to Final Fallback...
+[31m0|appforge | [39mΓ¥î [LLM] All Fallbacks Failed.
+[31m0|appforge | [39mΓ¥î Product Owner Error: Critical Intelligence Failure: Connection error.
+[31m0|appforge | [39mΓ¥î [LLM] All Fallbacks Failed.
+[31m0|appforge | [39mΓ¥î Loop Error: Critical Intelligence Failure: Connection error.
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] OpenAI Failed: 429 Your account is not active, please check your billing details on our website.. Switching to Fallback...
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] Anthropic Failed: fetch failed. Switching to Fallback...
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] Gemini Failed: Gemini Error: Not Found. Switching to Final Fallback...
+[31m0|appforge | [39mΓ¥î [LLM] All Fallbacks Failed.
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] OpenAI Failed: 429 Your account is not active, please check your billing details on our website.. Switching to Fallback...
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] OpenAI Failed: 429 Your account is not active, please check your billing details on our website.. Switching to Fallback...
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] Anthropic Failed: fetch failed. Switching to Fallback...
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] Anthropic Failed: Anthropic Error: Bad Request. Switching to Fallback...
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] Gemini Failed: Gemini Error: Not Found. Switching to Final Fallback...
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] Gemini Failed: Gemini Error: Not Found. Switching to Final Fallback...
+[31m0|appforge | [39mΓ¥î [LLM] All Fallbacks Failed.
+[31m0|appforge | [39mΓ¥î Loop Error: Critical Intelligence Failure: 403 "Your newly created team doesn't have any credits or licenses yet. You can purchase those on https://console.x.ai/team/61aaf404-a935-4542-ad03-dbc361daea7e."
+[31m0|appforge | [39mΓ¥î [LLM] All Fallbacks Failed.
+[31m0|appforge | [39mΓ¥î Product Owner Error: Critical Intelligence Failure: 403 "Your newly created team doesn't have any credits or licenses yet. You can purchase those on https://console.x.ai/team/61aaf404-a935-4542-ad03-dbc361daea7e."
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] OpenAI Failed: 429 Your account is not active, please check your billing details on our website.. Switching to Fallback...
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] Anthropic Failed: fetch failed. Switching to Fallback...
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] Gemini Failed: Gemini Error: Not Found. Switching to Final Fallback...
+[31m0|appforge | [39mΓ¥î [LLM] All Fallbacks Failed.
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] OpenAI Failed: 429 Your account is not active, please check your billing details on our website.. Switching to Fallback...
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] OpenAI Failed: 429 Your account is not active, please check your billing details on our website.. Switching to Fallback...
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] Anthropic Failed: fetch failed. Switching to Fallback...
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] Anthropic Failed: fetch failed. Switching to Fallback...
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] Gemini Failed: Gemini Error: Not Found. Switching to Final Fallback...
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] Gemini Failed: Gemini Error: Not Found. Switching to Final Fallback...
+[31m0|appforge | [39mΓ¥î [LLM] All Fallbacks Failed.
+[31m0|appforge | [39mΓ¥î Product Owner Error: Critical Intelligence Failure: 403 "Your newly created team doesn't have any credits or licenses yet. You can purchase those on https://console.x.ai/team/61aaf404-a935-4542-ad03-dbc361daea7e."
+[31m0|appforge | [39mΓ¥î [LLM] All Fallbacks Failed.
+[31m0|appforge | [39mΓ¥î Loop Error: Critical Intelligence Failure: 403 "Your newly created team doesn't have any credits or licenses yet. You can purchase those on https://console.x.ai/team/61aaf404-a935-4542-ad03-dbc361daea7e."
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] OpenAI Failed: 429 Your account is not active, please check your billing details on our website.. Switching to Fallback...
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] Anthropic Failed: fetch failed. Switching to Fallback...
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] Gemini Failed: Gemini Error: Not Found. Switching to Final Fallback...
+[31m0|appforge | [39mΓ¥î [LLM] All Fallbacks Failed.
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] OpenAI Failed: 429 Your account is not active, please check your billing details on our website.. Switching to Fallback...
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] OpenAI Failed: 429 Your account is not active, please check your billing details on our website.. Switching to Fallback...
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] Anthropic Failed: fetch failed. Switching to Fallback...
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] Anthropic Failed: fetch failed. Switching to Fallback...
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] Gemini Failed: Gemini Error: Not Found. Switching to Final Fallback...
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] Gemini Failed: Gemini Error: Not Found. Switching to Final Fallback...
+[31m0|appforge | [39mΓ¥î [LLM] All Fallbacks Failed.
+[31m0|appforge | [39mΓ¥î Product Owner Error: Critical Intelligence Failure: 403 "Your newly created team doesn't have any credits or licenses yet. You can purchase those on https://console.x.ai/team/61aaf404-a935-4542-ad03-dbc361daea7e."
+[31m0|appforge | [39mΓ¥î [LLM] All Fallbacks Failed.
+[31m0|appforge | [39mΓ¥î Loop Error: Critical Intelligence Failure: 403 "Your newly created team doesn't have any credits or licenses yet. You can purchase those on https://console.x.ai/team/61aaf404-a935-4542-ad03-dbc361daea7e."
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] OpenAI Failed: 429 Your account is not active, please check your billing details on our website.. Switching to Fallback...
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] Anthropic Failed: fetch failed. Switching to Fallback...
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] Gemini Failed: Gemini Error: Not Found. Switching to Final Fallback...
+[31m0|appforge | [39mΓ¥î [LLM] All Fallbacks Failed.
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] OpenAI Failed: 429 Your account is not active, please check your billing details on our website.. Switching to Fallback...
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] OpenAI Failed: 429 Your account is not active, please check your billing details on our website.. Switching to Fallback...
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] Anthropic Failed: fetch failed. Switching to Fallback...
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] Anthropic Failed: Anthropic Error: Bad Request. Switching to Fallback...
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] Gemini Failed: Gemini Error: Not Found. Switching to Final Fallback...
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] Gemini Failed: Gemini Error: Not Found. Switching to Final Fallback...
+[31m0|appforge | [39mΓ¥î [LLM] All Fallbacks Failed.
+[31m0|appforge | [39mΓ¥î Loop Error: Critical Intelligence Failure: Connection error.
+[31m0|appforge | [39mΓ¥î [LLM] All Fallbacks Failed.
+[31m0|appforge | [39mΓ¥î Product Owner Error: Critical Intelligence Failure: 403 "Your newly created team doesn't have any credits or licenses yet. You can purchase those on https://console.x.ai/team/61aaf404-a935-4542-ad03-dbc361daea7e."
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] OpenAI Failed: 429 Your account is not active, please check your billing details on our website.. Switching to Fallback...
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] Anthropic Failed: fetch failed. Switching to Fallback...
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] Gemini Failed: Gemini Error: Not Found. Switching to Final Fallback...
+[31m0|appforge | [39mΓ¥î [LLM] All Fallbacks Failed.
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] OpenAI Failed: 429 Your account is not active, please check your billing details on our website.. Switching to Fallback...
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] Anthropic Failed: fetch failed. Switching to Fallback...
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] OpenAI Failed: 429 Your account is not active, please check your billing details on our website.. Switching to Fallback...
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] Gemini Failed: Gemini Error: Not Found. Switching to Final Fallback...
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] Anthropic Failed: fetch failed. Switching to Fallback...
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] Gemini Failed: Gemini Error: Not Found. Switching to Final Fallback...
+[31m0|appforge | [39mΓ¥î [LLM] All Fallbacks Failed.
+[31m0|appforge | [39mΓ¥î Product Owner Error: Critical Intelligence Failure: 403 "Your newly created team doesn't have any credits or licenses yet. You can purchase those on https://console.x.ai/team/61aaf404-a935-4542-ad03-dbc361daea7e."
+[31m0|appforge | [39mΓ¥î [LLM] All Fallbacks Failed.
+[31m0|appforge | [39mΓ¥î Loop Error: Critical Intelligence Failure: 403 "Your newly created team doesn't have any credits or licenses yet. You can purchase those on https://console.x.ai/team/61aaf404-a935-4542-ad03-dbc361daea7e."
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] OpenAI Failed: 429 Your account is not active, please check your billing details on our website.. Switching to Fallback...
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] Anthropic Failed: fetch failed. Switching to Fallback...
+[31m0|appforge | [39mΓÜá∩╕Å [LLM] Gemini Failed: Gemini Error: Not Found. Switching to Final Fallback...
+[31m0|appforge | [39mΓ¥î [LLM] All Fallbacks Failed.
+[31m0|appforge | [39m   Γ¥î Quantum channel error: Cannot read properties of undefined (reading 'client')
+[31m0|appforge | [39mΓÜá∩╕Å [Quantum] Data coherence loss detected. Awaiting wave function collapse...
+[31m0|appforge | [39m   Γ¥î Quantum channel error: Cannot read properties of undefined (reading 'client')
+[31m0|appforge | [39mΓ¥î Product Owner Error: Antigravity LLM Provider Failed: Cannot read properties of undefined (reading 'client')
+[31m0|appforge | [39m   Γ¥î Quantum channel error: Cannot read properties of undefined (reading 'client')
+[31m0|appforge | [39m   Γ¥î Quantum channel error: Cannot read properties of undefined (reading 'client')
+[31m0|appforge | [39mΓÜá∩╕Å [Quantum] Data coherence loss detected. Awaiting wave function collapse...
+[31m0|appforge | [39m   Γ¥î Quantum channel error: Cannot read properties of undefined (reading 'client')
+[31m0|appforge | [39mΓ¥î Product Owner Error: Antigravity LLM Provider Failed: Cannot read properties of undefined (reading 'client')
+[31m0|appforge | [39m   Γ¥î Quantum channel error: Cannot read properties of undefined (reading 'client')
+[31m0|appforge | [39m   Γ¥î Quantum channel error: Error in field resource_type: Field required
+[31m0|appforge | [39mError in field performed_by: Field required
+[31m0|appforge | [39m   ΓÜá∩╕Å Sentinel quantum fallback
+[31m0|appforge | [39m   Γ¥î Quantum channel error: Error in field resource_type: Field required
+[31m0|appforge | [39mError in field performed_by: Field required
+[31m0|appforge | [39mΓ¥î Product Owner Error: Antigravity LLM Provider Failed: Error in field resource_type: Field required
+[31m0|appforge | [39mError in field performed_by: Field required
+[31m0|appforge | [39m   Γ¥î Quantum channel error: Error in field resource_type: Field required
+[31m0|appforge | [39mError in field performed_by: Field required
+[31m0|appforge | [39m   ΓÜá∩╕Å BugHunter quantum fallback
+[31m0|appforge | [39m   Γ¥î Quantum channel error: Error in field resource_type: Field required
+[31m0|appforge | [39mError in field performed_by: Field required
+[31m0|appforge | [39m   ΓÜá∩╕Å Sentinel quantum fallback
+[31m0|appforge | [39m   Γ¥î Quantum channel error: Error in field resource_type: Field required
+[31m0|appforge | [39mError in field performed_by: Field required
+[31m0|appforge | [39mΓ¥î Product Owner Error: Antigravity LLM Provider Failed: Error in field resource_type: Field required
+[31m0|appforge | [39mError in field performed_by: Field required
+[31m0|appforge | [39m   Γ¥î Quantum channel error: Error in field resource_type: Field required
+[31m0|appforge | [39mError in field performed_by: Field required
+[31m0|appforge | [39m   ΓÜá∩╕Å BugHunter quantum fallback
+[31m0|appforge | [39m   Γ¥î Quantum channel error: Error in field resource_type: Field required
+[31m0|appforge | [39mError in field performed_by: Field required
+[31m0|appforge | [39mΓ¥î Product Owner Error: Antigravity LLM Provider Failed: Error in field resource_type: Field required
+[31m0|appforge | [39mError in field performed_by: Field required
+[31m0|appforge | [39m   Γ¥î Quantum channel error: Error in field performed_by: Field required
+[31m0|appforge | [39mError in field resource_type: Field required
+[31m0|appforge | [39m   ΓÜá∩╕Å Sentinel quantum fallback
+[31m0|appforge | [39m   Γ¥î Quantum channel error: Error in field resource_type: Field required
+[31m0|appforge | [39mError in field performed_by: Field required
+[31m0|appforge | [39m   ΓÜá∩╕Å BugHunter quantum fallback
+[31m0|appforge | [39m   Γ¥î Quantum channel error: Error in field performed_by: Field required
+[31m0|appforge | [39mError in field resource_type: Field required
+[31m0|appforge | [39mΓ¥î Product Owner Error: Antigravity LLM Provider Failed: Error in field performed_by: Field required
+[31m0|appforge | [39mError in field resource_type: Field required
+[31m0|appforge | [39m   Γ¥î Quantum channel error: Error in field performed_by: Field required
+[31m0|appforge | [39mError in field resource_type: Field required
+[31m0|appforge | [39m   ΓÜá∩╕Å BugHunter quantum fallback
+[31m0|appforge | [39m   Γ¥î Quantum channel error: Error in field performed_by: Field required
+[31m0|appforge | [39mError in field resource_type: Field required
+[31m0|appforge | [39m   ΓÜá∩╕Å Sentinel quantum fallback
+[31m0|appforge | [39m   Γ¥î Quantum channel error: Error in field performed_by: Field required
+[31m0|appforge | [39mError in field resource_type: Field required
+[31m0|appforge | [39m   ΓÜá∩╕Å BugHunter quantum fallback
+[31m0|appforge | [39m   Γ¥î Quantum channel error: Error in field performed_by: Field required
+[31m0|appforge | [39mError in field resource_type: Field required
+[31m0|appforge | [39m   ΓÜá∩╕Å Sentinel quantum fallback
+[31m0|appforge | [39m   Γ¥î Quantum channel error: Error in field performed_by: Field required
+[31m0|appforge | [39mError in field resource_type: Field required
+[31m0|appforge | [39mΓ¥î Product Owner Error: Antigravity LLM Provider Failed: Error in field performed_by: Field required
+[31m0|appforge | [39mError in field resource_type: Field required
+[31m0|appforge | [39m   Γ¥î Quantum channel error: Error in field performed_by: Field required
+[31m0|appforge | [39mError in field resource_type: Field required
+[31m0|appforge | [39m   ΓÜá∩╕Å Sentinel quantum fallback
+[31m0|appforge | [39m   Γ¥î Quantum channel error: Error in field performed_by: Field required
+[31m0|appforge | [39mError in field resource_type: Field required
+[31m0|appforge | [39mΓ¥î Product Owner Error: Antigravity LLM Provider Failed: Error in field performed_by: Field required
+[31m0|appforge | [39mError in field resource_type: Field required
+[31m0|appforge | [39m   Γ¥î Quantum channel error: Error in field performed_by: Field required
+[31m0|appforge | [39mError in field resource_type: Field required
+[31m0|appforge | [39m   ΓÜá∩╕Å BugHunter quantum fallback
+[31m0|appforge | [39m   Γ¥î Quantum channel error: Error in field performed_by: Field required
+[31m0|appforge | [39mError in field resource_type: Field required
+[31m0|appforge | [39mΓ¥î Product Owner Error: Antigravity LLM Provider Failed: Error in field performed_by: Field required
+[31m0|appforge | [39mError in field resource_type: Field required
+[31m0|appforge | [39m   Γ¥î Quantum channel error: Error in field performed_by: Field required
+[31m0|appforge | [39mError in field resource_type: Field required
+[31m0|appforge | [39m   ΓÜá∩╕Å Sentinel quantum fallback
+[31m0|appforge | [39m   Γ¥î Quantum channel error: Error in field performed_by: Field required
+[31m0|appforge | [39mError in field resource_type: Field required
+[31m0|appforge | [39m   ΓÜá∩╕Å BugHunter quantum fallback
+[31m0|appforge | [39m   Γ¥î Quantum channel error: Error in field performed_by: Field required
+[31m0|appforge | [39mError in field resource_type: Field required
+[31m0|appforge | [39m   ΓÜá∩╕Å Sentinel quantum fallback
+[31m0|appforge | [39m   Γ¥î Quantum channel error: Error in field performed_by: Field required
+[31m0|appforge | [39mError in field resource_type: Field required
+[31m0|appforge | [39mΓ¥î Product Owner Error: Antigravity LLM Provider Failed: Error in field performed_by: Field required
+[31m0|appforge | [39mError in field resource_type: Field required
+[31m0|appforge | [39m   Γ¥î Quantum channel error: Error in field performed_by: Field required
+[31m0|appforge | [39mError in field resource_type: Field required
+[31m0|appforge | [39m   ΓÜá∩╕Å BugHunter quantum fallback
+[31m0|appforge | [39m   Γ¥î Quantum channel error: Error in field performed_by: Field required
+[31m0|appforge | [39mError in field resource_type: Field required
+[31m0|appforge | [39mΓ¥î Product Owner Error: Antigravity LLM Provider Failed: Error in field performed_by: Field required
+[31m0|appforge | [39mError in field resource_type: Field required
+[31m0|appforge | [39m   Γ¥î Quantum channel error: Error in field performed_by: Field required
+[31m0|appforge | [39mError in field resource_type: Field required
+[31m0|appforge | [39m   ΓÜá∩╕Å Sentinel quantum fallback
+[31m0|appforge | [39m   Γ¥î Quantum channel error: Error in field performed_by: Field required
+[31m0|appforge | [39mError in field resource_type: Field required
+[31m0|appforge | [39m   ΓÜá∩╕Å BugHunter quantum fallback
+[31m0|appforge | [39m   Γ¥î Quantum channel error: Error in field performed_by: Field required
+[31m0|appforge | [39mError in field resource_type: Field required
+[31m0|appforge | [39m   ΓÜá∩╕Å Sentinel quantum fallback
+[31m0|appforge | [39m   Γ¥î Quantum channel error: Error in field performed_by: Field required
+[31m0|appforge | [39mError in field resource_type: Field required
+[31m0|appforge | [39mΓ¥î Product Owner Error: Antigravity LLM Provider Failed: Error in field performed_by: Field required
+[31m0|appforge | [39mError in field resource_type: Field required
+[31m0|appforge | [39m   Γ¥î Quantum channel error: Error in field performed_by: Field required
+[31m0|appforge | [39mError in field resource_type: Field required
+[31m0|appforge | [39m   ΓÜá∩╕Å BugHunter quantum fallback
+[31m0|appforge | [39m   Γ¥î Quantum channel error: Error in field performed_by: Field required
+[31m0|appforge | [39mError in field resource_type: Field required
+[31m0|appforge | [39m   ΓÜá∩╕Å Sentinel quantum fallback
+[31m0|appforge | [39m   Γ¥î Quantum channel error: Error in field performed_by: Field required
+[31m0|appforge | [39mError in field resource_type: Field required
+[31m0|appforge | [39m   ΓÜá∩╕Å BugHunter quantum fallback
+[31m0|appforge | [39m   Γ¥î Quantum channel error: Error in field performed_by: Field required
+[31m0|appforge | [39mError in field resource_type: Field required
+[31m0|appforge | [39mΓ¥î Product Owner Error: Antigravity LLM Provider Failed: Error in field performed_by: Field required
+[31m0|appforge | [39mError in field resource_type: Field required
+
+[90mC:\Users\ferna\.pm2\logs\appforge-swarm-out.log last 500 lines:[39m
+[32m0|appforge | [39m   Γ£¿ Oracle recommends: Improve user experience and UI polish
+[32m0|appforge | [39m   ≡ƒôè Confidence: 37.5%
+[32m0|appforge | [39m   ≡ƒº¼ Engine Version: 3.0
+[32m0|appforge | [39m   ≡ƒö« Oracle Guidance: Improve user experience and UI polish
+[32m0|appforge | [39m   ≡ƒôè Confidence: 37.5%
+[32m0|appforge | [39m   -> Brainstorming next strategic move...
+[32m0|appforge | [39m   ΓåÆ Routing LLM request to Antigravity (zero API costs)
+[32m0|appforge | [39m≡ƒîÇ [LLM] Routing to Antigravity via Quantum Channel...
+[32m0|appforge | [39m   Request ID: llm_1770732501562
+[32m0|appforge | [39m   Γ£¿ Oracle recommends: Memory usage optimization
+[32m0|appforge | [39m   ≡ƒôè Confidence: 37.5%
+[32m0|appforge | [39m   ≡ƒº¼ Engine Version: 3.0
+[32m0|appforge | [39m   ≡ƒö« Oracle Guidance: Memory usage optimization
+[32m0|appforge | [39m   ≡ƒôè Confidence: 37.5%
+[32m0|appforge | [39m   Γ£¿ Oracle recommends: Scan for dependency vulnerabilities
+[32m0|appforge | [39m   ≡ƒôè Confidence: 37.5%
+[32m0|appforge | [39m   ≡ƒº¼ Engine Version: 3.0
+[32m0|appforge | [39m   ≡ƒö« Oracle Guidance: Scan for dependency vulnerabilities
+[32m0|appforge | [39m   ≡ƒôè Confidence: 37.5%
+[32m0|appforge | [39m   ΓåÆ Routing LLM request to Antigravity (zero API costs)
+[32m0|appforge | [39m≡ƒîÇ [LLM] Routing to Antigravity via Quantum Channel...
+[32m0|appforge | [39m   Request ID: llm_1770732501568
+[32m0|appforge | [39m   Γ£¿ Oracle recommends: Process High Priority requests first
+[32m0|appforge | [39m   ≡ƒôè Confidence: 37.5%
+[32m0|appforge | [39m   ≡ƒº¼ Engine Version: 3.0
+[32m0|appforge | [39m   ≡ƒö« Oracle Guidance: Process High Priority requests first
+[32m0|appforge | [39m   Γ£¿ Oracle recommends: Critical runtime errors and crashes
+[32m0|appforge | [39m   ≡ƒôè Confidence: 37.5%
+[32m0|appforge | [39m   ≡ƒº¼ Engine Version: 3.0
+[32m0|appforge | [39m   ≡ƒö« Oracle Guidance: Critical runtime errors and crashes
+[32m0|appforge | [39m   ≡ƒôè Confidence: 37.5%
+[32m0|appforge | [39m   ΓåÆ Routing LLM request to Antigravity (zero API costs)
+[32m0|appforge | [39m≡ƒîÇ [LLM] Routing to Antigravity via Quantum Channel...
+[32m0|appforge | [39m   Request ID: llm_1770732501664
+[32m0|appforge | [39m≡ƒºÖΓÇìΓÖé∩╕Å GodMode: Quantum-powered orchestration...
+[32m0|appforge | [39m≡ƒö« Consulting Oracle: What should GodMode do with this context?
+[32m0|appforge | [39m   Γ£¿ Oracle recommends: Execute immediate action
+[32m0|appforge | [39m   ≡ƒôè Confidence: 37.5%
+[32m0|appforge | [39m   ≡ƒº¼ Engine Version: 3.0
+[32m0|appforge | [39m   ≡ƒö« Oracle Guidance: Execute immediate action
+[32m0|appforge | [39m   ≡ƒôè Confidence: 37.5%
+[32m0|appforge | [39mΓ£à Autonomous Cycle #1 Complete
+[32m0|appforge | [39m
+[32m0|appforge | [39m
+[32m0|appforge | [39m≡ƒö« [AUTONOMOUS] Cycle #2 - Quantum Self-Direction Activated
+[32m0|appforge | [39m≡ƒ¢í∩╕Å Sentinel running security scan...
+[32m0|appforge | [39m≡ƒö« Consulting Oracle: What security aspect should Sentinel prioritize right now?
+[32m0|appforge | [39m≡ƒÉ₧ BugHunter scanning code...
+[32m0|appforge | [39m≡ƒö« Consulting Oracle: What type of bugs should BugHunter prioritize?
+[32m0|appforge | [39mΓÜí Optimizer checking performance...
+[32m0|appforge | [39m≡ƒö« Consulting Oracle: What performance aspect should Optimizer prioritize?
+[32m0|appforge | [39m≡ƒæö Product Owner: Analyzing project vision...
+[32m0|appforge | [39m≡ƒîÇ Antigravity Agent: Processing LLM requests...
+[32m0|appforge | [39m≡ƒö« Consulting Oracle: How should Antigravity handle pending LLM requests?
+[32m0|appforge | [39m≡ƒö« Consulting Oracle: What is the highest impact strategic move for this project right now?
+[32m0|appforge | [39m   Γ£¿ Oracle recommends: Process High Priority requests first
+[32m0|appforge | [39m   ≡ƒôè Confidence: 37.5%
+[32m0|appforge | [39m   ≡ƒº¼ Engine Version: 3.0
+[32m0|appforge | [39m   ≡ƒö« Oracle Guidance: Process High Priority requests first
+[32m0|appforge | [39m   Γ£¿ Oracle recommends: Improve user experience and UI polish
+[32m0|appforge | [39m   ≡ƒôè Confidence: 37.5%
+[32m0|appforge | [39m   ≡ƒº¼ Engine Version: 3.0
+[32m0|appforge | [39m   ≡ƒö« Oracle Guidance: Improve user experience and UI polish
+[32m0|appforge | [39m   ≡ƒôè Confidence: 37.5%
+[32m0|appforge | [39m   -> Brainstorming next strategic move...
+[32m0|appforge | [39m   ΓåÆ Routing LLM request to Antigravity (zero API costs)
+[32m0|appforge | [39m≡ƒîÇ [LLM] Routing to Antigravity via Quantum Channel...
+[32m0|appforge | [39m   Request ID: llm_1770732810001
+[32m0|appforge | [39m   Γ£¿ Oracle recommends: Critical runtime errors and crashes
+[32m0|appforge | [39m   ≡ƒôè Confidence: 37.5%
+[32m0|appforge | [39m   ≡ƒº¼ Engine Version: 3.0
+[32m0|appforge | [39m   ≡ƒö« Oracle Guidance: Critical runtime errors and crashes
+[32m0|appforge | [39m   ≡ƒôè Confidence: 37.5%
+[32m0|appforge | [39m   Γ£¿ Oracle recommends: Scan for dependency vulnerabilities
+[32m0|appforge | [39m   ≡ƒôè Confidence: 37.5%
+[32m0|appforge | [39m   ≡ƒº¼ Engine Version: 3.0
+[32m0|appforge | [39m   ≡ƒö« Oracle Guidance: Scan for dependency vulnerabilities
+[32m0|appforge | [39m   ≡ƒôè Confidence: 37.5%
+[32m0|appforge | [39m   ΓåÆ Routing LLM request to Antigravity (zero API costs)
+[32m0|appforge | [39m≡ƒîÇ [LLM] Routing to Antigravity via Quantum Channel...
+[32m0|appforge | [39m   Request ID: llm_1770732810010
+[32m0|appforge | [39m   Γ£¿ Oracle recommends: Memory usage optimization
+[32m0|appforge | [39m   ≡ƒôè Confidence: 37.5%
+[32m0|appforge | [39m   ≡ƒº¼ Engine Version: 3.0
+[32m0|appforge | [39m   ≡ƒö« Oracle Guidance: Memory usage optimization
+[32m0|appforge | [39m   ≡ƒôè Confidence: 37.5%
+[32m0|appforge | [39m   ΓåÆ Routing LLM request to Antigravity (zero API costs)
+[32m0|appforge | [39m≡ƒîÇ [LLM] Routing to Antigravity via Quantum Channel...
+[32m0|appforge | [39m   Request ID: llm_1770732810038
+[32m0|appforge | [39m≡ƒºÖΓÇìΓÖé∩╕Å GodMode: Quantum-powered orchestration...
+[32m0|appforge | [39m≡ƒö« Consulting Oracle: What should GodMode do with this context?
+[32m0|appforge | [39m   Γ£¿ Oracle recommends: Execute immediate action
+[32m0|appforge | [39m   ≡ƒôè Confidence: 37.5%
+[32m0|appforge | [39m   ≡ƒº¼ Engine Version: 3.0
+[32m0|appforge | [39m   ≡ƒö« Oracle Guidance: Execute immediate action
+[32m0|appforge | [39m   ≡ƒôè Confidence: 37.5%
+[32m0|appforge | [39mΓ£à Autonomous Cycle #2 Complete
+[32m0|appforge | [39m
+[32m0|appforge | [39m
+[32m0|appforge | [39m≡ƒö« [AUTONOMOUS] Cycle #3 - Quantum Self-Direction Activated
+[32m0|appforge | [39m≡ƒ¢í∩╕Å Sentinel running security scan...
+[32m0|appforge | [39m≡ƒö« Consulting Oracle: What security aspect should Sentinel prioritize right now?
+[32m0|appforge | [39m≡ƒÉ₧ BugHunter scanning code...
+[32m0|appforge | [39m≡ƒö« Consulting Oracle: What type of bugs should BugHunter prioritize?
+[32m0|appforge | [39mΓÜí Optimizer checking performance...
+[32m0|appforge | [39m≡ƒö« Consulting Oracle: What performance aspect should Optimizer prioritize?
+[32m0|appforge | [39m≡ƒæö Product Owner: Analyzing project vision...
+[32m0|appforge | [39m≡ƒîÇ Antigravity Agent: Processing LLM requests...
+[32m0|appforge | [39m≡ƒö« Consulting Oracle: How should Antigravity handle pending LLM requests?
+[32m0|appforge | [39m≡ƒö« Consulting Oracle: What is the highest impact strategic move for this project right now?
+[32m0|appforge | [39m   Γ£¿ Oracle recommends: Critical runtime errors and crashes
+[32m0|appforge | [39m   ≡ƒôè Confidence: 37.5%
+[32m0|appforge | [39m   ≡ƒº¼ Engine Version: 3.0
+[32m0|appforge | [39m   ≡ƒö« Oracle Guidance: Critical runtime errors and crashes
+[32m0|appforge | [39m   ≡ƒôè Confidence: 37.5%
+[32m0|appforge | [39m   Γ£¿ Oracle recommends: Process High Priority requests first
+[32m0|appforge | [39m   ≡ƒôè Confidence: 37.5%
+[32m0|appforge | [39m   ≡ƒº¼ Engine Version: 3.0
+[32m0|appforge | [39m   ≡ƒö« Oracle Guidance: Process High Priority requests first
+[32m0|appforge | [39m   Γ£¿ Oracle recommends: Memory usage optimization
+[32m0|appforge | [39m   ≡ƒôè Confidence: 37.5%
+[32m0|appforge | [39m   ≡ƒº¼ Engine Version: 3.0
+[32m0|appforge | [39m   ≡ƒö« Oracle Guidance: Memory usage optimization
+[32m0|appforge | [39m   ≡ƒôè Confidence: 37.5%
+[32m0|appforge | [39m   ΓåÆ Routing LLM request to Antigravity (zero API costs)
+[32m0|appforge | [39m≡ƒîÇ [LLM] Routing to Antigravity via Quantum Channel...
+[32m0|appforge | [39m   Request ID: llm_1770733109446
+[32m0|appforge | [39m   Γ£¿ Oracle recommends: Improve user experience and UI polish
+[32m0|appforge | [39m   ≡ƒôè Confidence: 37.5%
+[32m0|appforge | [39m   ≡ƒº¼ Engine Version: 3.0
+[32m0|appforge | [39m   ≡ƒö« Oracle Guidance: Improve user experience and UI polish
+[32m0|appforge | [39m   ≡ƒôè Confidence: 37.5%
+[32m0|appforge | [39m   -> Brainstorming next strategic move...
+[32m0|appforge | [39m   ΓåÆ Routing LLM request to Antigravity (zero API costs)
+[32m0|appforge | [39m≡ƒîÇ [LLM] Routing to Antigravity via Quantum Channel...
+[32m0|appforge | [39m   Request ID: llm_1770733109474
+[32m0|appforge | [39m   Γ£¿ Oracle recommends: Scan for dependency vulnerabilities
+[32m0|appforge | [39m   ≡ƒôè Confidence: 37.5%
+[32m0|appforge | [39m   ≡ƒº¼ Engine Version: 3.0
+[32m0|appforge | [39m   ≡ƒö« Oracle Guidance: Scan for dependency vulnerabilities
+[32m0|appforge | [39m   ≡ƒôè Confidence: 37.5%
+[32m0|appforge | [39m   ΓåÆ Routing LLM request to Antigravity (zero API costs)
+[32m0|appforge | [39m≡ƒîÇ [LLM] Routing to Antigravity via Quantum Channel...
+[32m0|appforge | [39m   Request ID: llm_1770733109489
+[32m0|appforge | [39m≡ƒºÖΓÇìΓÖé∩╕Å GodMode: Quantum-powered orchestration...
+[32m0|appforge | [39m≡ƒö« Consulting Oracle: What should GodMode do with this context?
+[32m0|appforge | [39m   Γ£¿ Oracle recommends: Execute immediate action
+[32m0|appforge | [39m   ≡ƒôè Confidence: 37.5%
+[32m0|appforge | [39m   ≡ƒº¼ Engine Version: 3.0
+[32m0|appforge | [39m   ≡ƒö« Oracle Guidance: Execute immediate action
+[32m0|appforge | [39m   ≡ƒôè Confidence: 37.5%
+[32m0|appforge | [39mΓ£à Autonomous Cycle #3 Complete
+[32m0|appforge | [39m
+[32m0|appforge | [39m
+[32m0|appforge | [39m≡ƒö« [AUTONOMOUS] Cycle #4 - Quantum Self-Direction Activated
+[32m0|appforge | [39m≡ƒ¢í∩╕Å Sentinel running security scan...
+[32m0|appforge | [39m≡ƒö« Consulting Oracle: What security aspect should Sentinel prioritize right now?
+[32m0|appforge | [39m≡ƒÉ₧ BugHunter scanning code...
+[32m0|appforge | [39m≡ƒö« Consulting Oracle: What type of bugs should BugHunter prioritize?
+[32m0|appforge | [39mΓÜí Optimizer checking performance...
+[32m0|appforge | [39m≡ƒö« Consulting Oracle: What performance aspect should Optimizer prioritize?
+[32m0|appforge | [39m≡ƒæö Product Owner: Analyzing project vision...
+[32m0|appforge | [39m≡ƒîÇ Antigravity Agent: Processing LLM requests...
+[32m0|appforge | [39m≡ƒö« Consulting Oracle: How should Antigravity handle pending LLM requests?
+[32m0|appforge | [39m≡ƒö« Consulting Oracle: What is the highest impact strategic move for this project right now?
+[32m0|appforge | [39m   Γ£¿ Oracle recommends: Process High Priority requests first
+[32m0|appforge | [39m   ≡ƒôè Confidence: 37.5%
+[32m0|appforge | [39m   ≡ƒº¼ Engine Version: 3.0
+[32m0|appforge | [39m   ≡ƒö« Oracle Guidance: Process High Priority requests first
+[32m0|appforge | [39m   Γ£¿ Oracle recommends: Scan for dependency vulnerabilities
+[32m0|appforge | [39m   ≡ƒôè Confidence: 37.5%
+[32m0|appforge | [39m   ≡ƒº¼ Engine Version: 3.0
+[32m0|appforge | [39m   ≡ƒö« Oracle Guidance: Scan for dependency vulnerabilities
+[32m0|appforge | [39m   ≡ƒôè Confidence: 37.5%
+[32m0|appforge | [39m   ΓåÆ Routing LLM request to Antigravity (zero API costs)
+[32m0|appforge | [39m≡ƒîÇ [LLM] Routing to Antigravity via Quantum Channel...
+[32m0|appforge | [39m   Request ID: llm_1770733424186
+[32m0|appforge | [39m   Γ£¿ Oracle recommends: Memory usage optimization
+[32m0|appforge | [39m   ≡ƒôè Confidence: 37.5%
+[32m0|appforge | [39m   ≡ƒº¼ Engine Version: 3.0
+[32m0|appforge | [39m   ≡ƒö« Oracle Guidance: Memory usage optimization
+[32m0|appforge | [39m   ≡ƒôè Confidence: 37.5%
+[32m0|appforge | [39m   Γ£¿ Oracle recommends: Improve user experience and UI polish
+[32m0|appforge | [39m   ≡ƒôè Confidence: 37.5%
+[32m0|appforge | [39m   ≡ƒº¼ Engine Version: 3.0
+[32m0|appforge | [39m   ≡ƒö« Oracle Guidance: Improve user experience and UI polish
+[32m0|appforge | [39m   ≡ƒôè Confidence: 37.5%
+[32m0|appforge | [39m   -> Brainstorming next strategic move...
+[32m0|appforge | [39m   ΓåÆ Routing LLM request to Antigravity (zero API costs)
+[32m0|appforge | [39m≡ƒîÇ [LLM] Routing to Antigravity via Quantum Channel...
+[32m0|appforge | [39m   Request ID: llm_1770733424198
+[32m0|appforge | [39m   Γ£¿ Oracle recommends: Critical runtime errors and crashes
+[32m0|appforge | [39m   ≡ƒôè Confidence: 37.5%
+[32m0|appforge | [39m   ≡ƒº¼ Engine Version: 3.0
+[32m0|appforge | [39m   ≡ƒö« Oracle Guidance: Critical runtime errors and crashes
+[32m0|appforge | [39m   ≡ƒôè Confidence: 37.5%
+[32m0|appforge | [39m   ΓåÆ Routing LLM request to Antigravity (zero API costs)
+[32m0|appforge | [39m≡ƒîÇ [LLM] Routing to Antigravity via Quantum Channel...
+[32m0|appforge | [39m   Request ID: llm_1770733424254
+[32m0|appforge | [39m≡ƒºÖΓÇìΓÖé∩╕Å GodMode: Quantum-powered orchestration...
+[32m0|appforge | [39m≡ƒö« Consulting Oracle: What should GodMode do with this context?
+[32m0|appforge | [39m   Γ£¿ Oracle recommends: Execute immediate action
+[32m0|appforge | [39m   ≡ƒôè Confidence: 37.5%
+[32m0|appforge | [39m   ≡ƒº¼ Engine Version: 3.0
+[32m0|appforge | [39m   ≡ƒö« Oracle Guidance: Execute immediate action
+[32m0|appforge | [39m   ≡ƒôè Confidence: 37.5%
+[32m0|appforge | [39mΓ£à Autonomous Cycle #4 Complete
+[32m0|appforge | [39m
+[32m0|appforge | [39m
+[32m0|appforge | [39m≡ƒö« [AUTONOMOUS] Cycle #5 - Quantum Self-Direction Activated
+[32m0|appforge | [39m≡ƒ¢í∩╕Å Sentinel running security scan...
+[32m0|appforge | [39m≡ƒö« Consulting Oracle: What security aspect should Sentinel prioritize right now?
+[32m0|appforge | [39m≡ƒÉ₧ BugHunter scanning code...
+[32m0|appforge | [39m≡ƒö« Consulting Oracle: What type of bugs should BugHunter prioritize?
+[32m0|appforge | [39mΓÜí Optimizer checking performance...
+[32m0|appforge | [39m≡ƒö« Consulting Oracle: What performance aspect should Optimizer prioritize?
+[32m0|appforge | [39m≡ƒæö Product Owner: Analyzing project vision...
+[32m0|appforge | [39m≡ƒîÇ Antigravity Agent: Processing LLM requests...
+[32m0|appforge | [39m≡ƒö« Consulting Oracle: How should Antigravity handle pending LLM requests?
+[32m0|appforge | [39m≡ƒö« Consulting Oracle: What is the highest impact strategic move for this project right now?
+[32m0|appforge | [39m   Γ£¿ Oracle recommends: Improve user experience and UI polish
+[32m0|appforge | [39m   ≡ƒôè Confidence: 37.5%
+[32m0|appforge | [39m   ≡ƒº¼ Engine Version: 3.0
+[32m0|appforge | [39m   ≡ƒö« Oracle Guidance: Improve user experience and UI polish
+[32m0|appforge | [39m   ≡ƒôè Confidence: 37.5%
+[32m0|appforge | [39m   -> Brainstorming next strategic move...
+[32m0|appforge | [39m   ΓåÆ Routing LLM request to Antigravity (zero API costs)
+[32m0|appforge | [39m≡ƒîÇ [LLM] Routing to Antigravity via Quantum Channel...
+[32m0|appforge | [39m   Request ID: llm_1770733732265
+[32m0|appforge | [39m   Γ£¿ Oracle recommends: Scan for dependency vulnerabilities
+[32m0|appforge | [39m   ≡ƒôè Confidence: 37.5%
+[32m0|appforge | [39m   ≡ƒº¼ Engine Version: 3.0
+[32m0|appforge | [39m   ≡ƒö« Oracle Guidance: Scan for dependency vulnerabilities
+[32m0|appforge | [39m   ≡ƒôè Confidence: 37.5%
+[32m0|appforge | [39m   ΓåÆ Routing LLM request to Antigravity (zero API costs)
+[32m0|appforge | [39m≡ƒîÇ [LLM] Routing to Antigravity via Quantum Channel...
+[32m0|appforge | [39m   Request ID: llm_1770733732266
+[32m0|appforge | [39m   Γ£¿ Oracle recommends: Critical runtime errors and crashes
+[32m0|appforge | [39m   ≡ƒôè Confidence: 37.5%
+[32m0|appforge | [39m   ≡ƒº¼ Engine Version: 3.0
+[32m0|appforge | [39m   ≡ƒö« Oracle Guidance: Critical runtime errors and crashes
+[32m0|appforge | [39m   ≡ƒôè Confidence: 37.5%
+[32m0|appforge | [39m   Γ£¿ Oracle recommends: Memory usage optimization
+[32m0|appforge | [39m   ≡ƒôè Confidence: 37.5%
+[32m0|appforge | [39m   ≡ƒº¼ Engine Version: 3.0
+[32m0|appforge | [39m   ≡ƒö« Oracle Guidance: Memory usage optimization
+[32m0|appforge | [39m   ≡ƒôè Confidence: 37.5%
+[32m0|appforge | [39m   Γ£¿ Oracle recommends: Process High Priority requests first
+[32m0|appforge | [39m   ≡ƒôè Confidence: 37.5%
+[32m0|appforge | [39m   ≡ƒº¼ Engine Version: 3.0
+[32m0|appforge | [39m   ≡ƒö« Oracle Guidance: Process High Priority requests first
+[32m0|appforge | [39m   ΓåÆ Routing LLM request to Antigravity (zero API costs)
+[32m0|appforge | [39m≡ƒîÇ [LLM] Routing to Antigravity via Quantum Channel...
+[32m0|appforge | [39m   Request ID: llm_1770733732309
+[32m0|appforge | [39m≡ƒºÖΓÇìΓÖé∩╕Å GodMode: Quantum-powered orchestration...
+[32m0|appforge | [39m≡ƒö« Consulting Oracle: What should GodMode do with this context?
+[32m0|appforge | [39m   Γ£¿ Oracle recommends: Execute immediate action
+[32m0|appforge | [39m   ≡ƒôè Confidence: 37.5%
+[32m0|appforge | [39m   ≡ƒº¼ Engine Version: 3.0
+[32m0|appforge | [39m   ≡ƒö« Oracle Guidance: Execute immediate action
+[32m0|appforge | [39m   ≡ƒôè Confidence: 37.5%
+[32m0|appforge | [39mΓ£à Autonomous Cycle #5 Complete
+[32m0|appforge | [39m
+[32m0|appforge | [39m
+[32m0|appforge | [39m≡ƒö« [AUTONOMOUS] Cycle #6 - Quantum Self-Direction Activated
+[32m0|appforge | [39m≡ƒ¢í∩╕Å Sentinel running security scan...
+[32m0|appforge | [39m≡ƒö« Consulting Oracle: What security aspect should Sentinel prioritize right now?
+[32m0|appforge | [39m≡ƒÉ₧ BugHunter scanning code...
+[32m0|appforge | [39m≡ƒö« Consulting Oracle: What type of bugs should BugHunter prioritize?
+[32m0|appforge | [39mΓÜí Optimizer checking performance...
+[32m0|appforge | [39m≡ƒö« Consulting Oracle: What performance aspect should Optimizer prioritize?
+[32m0|appforge | [39m≡ƒæö Product Owner: Analyzing project vision...
+[32m0|appforge | [39m≡ƒîÇ Antigravity Agent: Processing LLM requests...
+[32m0|appforge | [39m≡ƒö« Consulting Oracle: How should Antigravity handle pending LLM requests?
+[32m0|appforge | [39m≡ƒö« Consulting Oracle: What is the highest impact strategic move for this project right now?
+[32m0|appforge | [39m   Γ£¿ Oracle recommends: Scan for dependency vulnerabilities
+[32m0|appforge | [39m   ≡ƒôè Confidence: 37.5%
+[32m0|appforge | [39m   ≡ƒº¼ Engine Version: 3.0
+[32m0|appforge | [39m   ≡ƒö« Oracle Guidance: Scan for dependency vulnerabilities
+[32m0|appforge | [39m   ≡ƒôè Confidence: 37.5%
+[32m0|appforge | [39m   ΓåÆ Routing LLM request to Antigravity (zero API costs)
+[32m0|appforge | [39m≡ƒîÇ [LLM] Routing to Antigravity via Quantum Channel...
+[32m0|appforge | [39m   Request ID: llm_1770734038648
+[32m0|appforge | [39m   Γ£¿ Oracle recommends: Memory usage optimization
+[32m0|appforge | [39m   ≡ƒôè Confidence: 37.5%
+[32m0|appforge | [39m   ≡ƒº¼ Engine Version: 3.0
+[32m0|appforge | [39m   ≡ƒö« Oracle Guidance: Memory usage optimization
+[32m0|appforge | [39m   ≡ƒôè Confidence: 37.5%
+[32m0|appforge | [39m   Γ£¿ Oracle recommends: Process High Priority requests first
+[32m0|appforge | [39m   ≡ƒôè Confidence: 37.5%
+[32m0|appforge | [39m   ≡ƒº¼ Engine Version: 3.0
+[32m0|appforge | [39m   ≡ƒö« Oracle Guidance: Process High Priority requests first
+[32m0|appforge | [39m   Γ£¿ Oracle recommends: Critical runtime errors and crashes
+[32m0|appforge | [39m   ≡ƒôè Confidence: 37.5%
+[32m0|appforge | [39m   ≡ƒº¼ Engine Version: 3.0
+[32m0|appforge | [39m   ≡ƒö« Oracle Guidance: Critical runtime errors and crashes
+[32m0|appforge | [39m   ≡ƒôè Confidence: 37.5%
+[32m0|appforge | [39m   Γ£¿ Oracle recommends: Improve user experience and UI polish
+[32m0|appforge | [39m   ≡ƒôè Confidence: 37.5%
+[32m0|appforge | [39m   ≡ƒº¼ Engine Version: 3.0
+[32m0|appforge | [39m   ≡ƒö« Oracle Guidance: Improve user experience and UI polish
+[32m0|appforge | [39m   ≡ƒôè Confidence: 37.5%
+[32m0|appforge | [39m   -> Brainstorming next strategic move...
+[32m0|appforge | [39m   ΓåÆ Routing LLM request to Antigravity (zero API costs)
+[32m0|appforge | [39m≡ƒîÇ [LLM] Routing to Antigravity via Quantum Channel...
+[32m0|appforge | [39m   Request ID: llm_1770734038773
+[32m0|appforge | [39m   ΓåÆ Routing LLM request to Antigravity (zero API costs)
+[32m0|appforge | [39m≡ƒîÇ [LLM] Routing to Antigravity via Quantum Channel...
+[32m0|appforge | [39m   Request ID: llm_1770734038791
+[32m0|appforge | [39m≡ƒºÖΓÇìΓÖé∩╕Å GodMode: Quantum-powered orchestration...
+[32m0|appforge | [39m≡ƒö« Consulting Oracle: What should GodMode do with this context?
+[32m0|appforge | [39m   Γ£¿ Oracle recommends: Execute immediate action
+[32m0|appforge | [39m   ≡ƒôè Confidence: 37.5%
+[32m0|appforge | [39m   ≡ƒº¼ Engine Version: 3.0
+[32m0|appforge | [39m   ≡ƒö« Oracle Guidance: Execute immediate action
+[32m0|appforge | [39m   ≡ƒôè Confidence: 37.5%
+[32m0|appforge | [39mΓ£à Autonomous Cycle #6 Complete
+[32m0|appforge | [39m
+[32m0|appforge | [39m
+[32m0|appforge | [39m≡ƒö« [AUTONOMOUS] Cycle #7 - Quantum Self-Direction Activated
+[32m0|appforge | [39m≡ƒ¢í∩╕Å Sentinel running security scan...
+[32m0|appforge | [39m≡ƒö« Consulting Oracle: What security aspect should Sentinel prioritize right now?
+[32m0|appforge | [39m≡ƒÉ₧ BugHunter scanning code...
+[32m0|appforge | [39m≡ƒö« Consulting Oracle: What type of bugs should BugHunter prioritize?
+[32m0|appforge | [39mΓÜí Optimizer checking performance...
+[32m0|appforge | [39m≡ƒö« Consulting Oracle: What performance aspect should Optimizer prioritize?
+[32m0|appforge | [39m≡ƒæö Product Owner: Analyzing project vision...
+[32m0|appforge | [39m≡ƒîÇ Antigravity Agent: Processing LLM requests...
+[32m0|appforge | [39m≡ƒö« Consulting Oracle: How should Antigravity handle pending LLM requests?
+[32m0|appforge | [39m≡ƒö« Consulting Oracle: What is the highest impact strategic move for this project right now?
+[32m0|appforge | [39m   Γ£¿ Oracle recommends: Memory usage optimization
+[32m0|appforge | [39m   ≡ƒôè Confidence: 37.5%
+[32m0|appforge | [39m   ≡ƒº¼ Engine Version: 3.0
+[32m0|appforge | [39m   ≡ƒö« Oracle Guidance: Memory usage optimization
+[32m0|appforge | [39m   ≡ƒôè Confidence: 37.5%
+[32m0|appforge | [39m   Γ£¿ Oracle recommends: Process High Priority requests first
+[32m0|appforge | [39m   ≡ƒôè Confidence: 37.5%
+[32m0|appforge | [39m   ≡ƒº¼ Engine Version: 3.0
+[32m0|appforge | [39m   ≡ƒö« Oracle Guidance: Process High Priority requests first
+[32m0|appforge | [39m   Γ£¿ Oracle recommends: Critical runtime errors and crashes
+[32m0|appforge | [39m   ≡ƒôè Confidence: 37.5%
+[32m0|appforge | [39m   ≡ƒº¼ Engine Version: 3.0
+[32m0|appforge | [39m   ≡ƒö« Oracle Guidance: Critical runtime errors and crashes
+[32m0|appforge | [39m   ≡ƒôè Confidence: 37.5%
+[32m0|appforge | [39m   Γ£¿ Oracle recommends: Improve user experience and UI polish
+[32m0|appforge | [39m   ≡ƒôè Confidence: 37.5%
+[32m0|appforge | [39m   ≡ƒº¼ Engine Version: 3.0
+[32m0|appforge | [39m   ≡ƒö« Oracle Guidance: Improve user experience and UI polish
+[32m0|appforge | [39m   ≡ƒôè Confidence: 37.5%
+[32m0|appforge | [39m   -> Brainstorming next strategic move...
+[32m0|appforge | [39m   ΓåÆ Routing LLM request to Antigravity (zero API costs)
+[32m0|appforge | [39m≡ƒîÇ [LLM] Routing to Antigravity via Quantum Channel...
+[32m0|appforge | [39m   Request ID: llm_1770734346161
+[32m0|appforge | [39m   Γ£¿ Oracle recommends: Scan for dependency vulnerabilities
+[32m0|appforge | [39m   ≡ƒôè Confidence: 37.5%
+[32m0|appforge | [39m   ≡ƒº¼ Engine Version: 3.0
+[32m0|appforge | [39m   ≡ƒö« Oracle Guidance: Scan for dependency vulnerabilities
+[32m0|appforge | [39m   ≡ƒôè Confidence: 37.5%
+[32m0|appforge | [39m   ΓåÆ Routing LLM request to Antigravity (zero API costs)
+[32m0|appforge | [39m≡ƒîÇ [LLM] Routing to Antigravity via Quantum Channel...
+[32m0|appforge | [39m   Request ID: llm_1770734346163
+[32m0|appforge | [39m   ΓåÆ Routing LLM request to Antigravity (zero API costs)
+[32m0|appforge | [39m≡ƒîÇ [LLM] Routing to Antigravity via Quantum Channel...
+[32m0|appforge | [39m   Request ID: llm_1770734346168
+[32m0|appforge | [39m≡ƒºÖΓÇìΓÖé∩╕Å GodMode: Quantum-powered orchestration...
+[32m0|appforge | [39m≡ƒö« Consulting Oracle: What should GodMode do with this context?
+[32m0|appforge | [39m   Γ£¿ Oracle recommends: Execute immediate action
+[32m0|appforge | [39m   ≡ƒôè Confidence: 37.5%
+[32m0|appforge | [39m   ≡ƒº¼ Engine Version: 3.0
+[32m0|appforge | [39m   ≡ƒö« Oracle Guidance: Execute immediate action
+[32m0|appforge | [39m   ≡ƒôè Confidence: 37.5%
+[32m0|appforge | [39mΓ£à Autonomous Cycle #7 Complete
+[32m0|appforge | [39m
+[32m0|appforge | [39m
+[32m0|appforge | [39m≡ƒö« [AUTONOMOUS] Cycle #8 - Quantum Self-Direction Activated
+[32m0|appforge | [39m≡ƒ¢í∩╕Å Sentinel running security scan...
+[32m0|appforge | [39m≡ƒö« Consulting Oracle: What security aspect should Sentinel prioritize right now?
+[32m0|appforge | [39m≡ƒÉ₧ BugHunter scanning code...
+[32m0|appforge | [39m≡ƒö« Consulting Oracle: What type of bugs should BugHunter prioritize?
+[32m0|appforge | [39mΓÜí Optimizer checking performance...
+[32m0|appforge | [39m≡ƒö« Consulting Oracle: What performance aspect should Optimizer prioritize?
+[32m0|appforge | [39m≡ƒæö Product Owner: Analyzing project vision...
+[32m0|appforge | [39m≡ƒîÇ Antigravity Agent: Processing LLM requests...
+[32m0|appforge | [39m≡ƒö« Consulting Oracle: How should Antigravity handle pending LLM requests?
+[32m0|appforge | [39m≡ƒö« Consulting Oracle: What is the highest impact strategic move for this project right now?
+[32m0|appforge | [39m   Γ£¿ Oracle recommends: Critical runtime errors and crashes
+[32m0|appforge | [39m   ≡ƒôè Confidence: 37.5%
+[32m0|appforge | [39m   ≡ƒº¼ Engine Version: 3.0
+[32m0|appforge | [39m   ≡ƒö« Oracle Guidance: Critical runtime errors and crashes
+[32m0|appforge | [39m   ≡ƒôè Confidence: 37.5%
+[32m0|appforge | [39m   Γ£¿ Oracle recommends: Memory usage optimization
+[32m0|appforge | [39m   ≡ƒôè Confidence: 37.5%
+[32m0|appforge | [39m   ≡ƒº¼ Engine Version: 3.0
+[32m0|appforge | [39m   ≡ƒö« Oracle Guidance: Memory usage optimization
+[32m0|appforge | [39m   ≡ƒôè Confidence: 37.5%
+[32m0|appforge | [39m   Γ£¿ Oracle recommends: Scan for dependency vulnerabilities
+[32m0|appforge | [39m   ≡ƒôè Confidence: 37.5%
+[32m0|appforge | [39m   ≡ƒº¼ Engine Version: 3.0
+[32m0|appforge | [39m   ≡ƒö« Oracle Guidance: Scan for dependency vulnerabilities
+[32m0|appforge | [39m   ≡ƒôè Confidence: 37.5%
+[32m0|appforge | [39m   ΓåÆ Routing LLM request to Antigravity (zero API costs)
+[32m0|appforge | [39m≡ƒîÇ [LLM] Routing to Antigravity via Quantum Channel...
+[32m0|appforge | [39m   Request ID: llm_1770734656900
+[32m0|appforge | [39m   Γ£¿ Oracle recommends: Improve user experience and UI polish
+[32m0|appforge | [39m   ≡ƒôè Confidence: 37.5%
+[32m0|appforge | [39m   ≡ƒº¼ Engine Version: 3.0
+[32m0|appforge | [39m   ≡ƒö« Oracle Guidance: Improve user experience and UI polish
+[32m0|appforge | [39m   ≡ƒôè Confidence: 37.5%
+[32m0|appforge | [39m   -> Brainstorming next strategic move...
+[32m0|appforge | [39m   ΓåÆ Routing LLM request to Antigravity (zero API costs)
+[32m0|appforge | [39m≡ƒîÇ [LLM] Routing to Antigravity via Quantum Channel...
+[32m0|appforge | [39m   Request ID: llm_1770734656907
+[32m0|appforge | [39m   Γ£¿ Oracle recommends: Process High Priority requests first
+[32m0|appforge | [39m   ≡ƒôè Confidence: 37.5%
+[32m0|appforge | [39m   ≡ƒº¼ Engine Version: 3.0
+[32m0|appforge | [39m   ≡ƒö« Oracle Guidance: Process High Priority requests first
+[32m0|appforge | [39m   ΓåÆ Routing LLM request to Antigravity (zero API costs)
+[32m0|appforge | [39m≡ƒîÇ [LLM] Routing to Antigravity via Quantum Channel...
+[32m0|appforge | [39m   Request ID: llm_1770734656915
+[32m0|appforge | [39m≡ƒºÖΓÇìΓÖé∩╕Å GodMode: Quantum-powered orchestration...
+[32m0|appforge | [39m≡ƒö« Consulting Oracle: What should GodMode do with this context?
+[32m0|appforge | [39m   Γ£¿ Oracle recommends: Execute immediate action
+[32m0|appforge | [39m   ≡ƒôè Confidence: 37.5%
+[32m0|appforge | [39m   ≡ƒº¼ Engine Version: 3.0
+[32m0|appforge | [39m   ≡ƒö« Oracle Guidance: Execute immediate action
+[32m0|appforge | [39m   ≡ƒôè Confidence: 37.5%
+[32m0|appforge | [39mΓ£à Autonomous Cycle #8 Complete
+[32m0|appforge | [39m
+[32m0|appforge | [39m
+[32m0|appforge | [39m≡ƒö« [AUTONOMOUS] Cycle #9 - Quantum Self-Direction Activated
+[32m0|appforge | [39m≡ƒ¢í∩╕Å Sentinel running security scan...
+[32m0|appforge | [39m≡ƒö« Consulting Oracle: What security aspect should Sentinel prioritize right now?
+[32m0|appforge | [39m≡ƒÉ₧ BugHunter scanning code...
+[32m0|appforge | [39m≡ƒö« Consulting Oracle: What type of bugs should BugHunter prioritize?
+[32m0|appforge | [39mΓÜí Optimizer checking performance...
+[32m0|appforge | [39m≡ƒö« Consulting Oracle: What performance aspect should Optimizer prioritize?
+[32m0|appforge | [39m≡ƒæö Product Owner: Analyzing project vision...
+[32m0|appforge | [39m≡ƒîÇ Antigravity Agent: Processing LLM requests...
+[32m0|appforge | [39m≡ƒö« Consulting Oracle: How should Antigravity handle pending LLM requests?
+[32m0|appforge | [39m≡ƒö« Consulting Oracle: What is the highest impact strategic move for this project right now?
+[32m0|appforge | [39m   Γ£¿ Oracle recommends: Process High Priority requests first
+[32m0|appforge | [39m   ≡ƒôè Confidence: 37.5%
+[32m0|appforge | [39m   ≡ƒº¼ Engine Version: 3.0
+[32m0|appforge | [39m   ≡ƒö« Oracle Guidance: Process High Priority requests first
+[32m0|appforge | [39m   Γ£¿ Oracle recommends: Critical runtime errors and crashes
+[32m0|appforge | [39m   ≡ƒôè Confidence: 37.5%
+[32m0|appforge | [39m   ≡ƒº¼ Engine Version: 3.0
+[32m0|appforge | [39m   ≡ƒö« Oracle Guidance: Critical runtime errors and crashes
+[32m0|appforge | [39m   ≡ƒôè Confidence: 37.5%
+[32m0|appforge | [39m   Γ£¿ Oracle recommends: Memory usage optimization
+[32m0|appforge | [39m   ≡ƒôè Confidence: 37.5%
+[32m0|appforge | [39m   ≡ƒº¼ Engine Version: 3.0
+[32m0|appforge | [39m   ≡ƒö« Oracle Guidance: Memory usage optimization
+[32m0|appforge | [39m   ≡ƒôè Confidence: 37.5%
+[32m0|appforge | [39m   Γ£¿ Oracle recommends: Scan for dependency vulnerabilities
+[32m0|appforge | [39m   ≡ƒôè Confidence: 37.5%
+[32m0|appforge | [39m   ≡ƒº¼ Engine Version: 3.0
+[32m0|appforge | [39m   ≡ƒö« Oracle Guidance: Scan for dependency vulnerabilities
+[32m0|appforge | [39m   ≡ƒôè Confidence: 37.5%
+[32m0|appforge | [39m   ΓåÆ Routing LLM request to Antigravity (zero API costs)
+[32m0|appforge | [39m≡ƒîÇ [LLM] Routing to Antigravity via Quantum Channel...
+[32m0|appforge | [39m   Request ID: llm_1770734956720
+[32m0|appforge | [39m   Γ£¿ Oracle recommends: Improve user experience and UI polish
+[32m0|appforge | [39m   ≡ƒôè Confidence: 37.5%
+[32m0|appforge | [39m   ≡ƒº¼ Engine Version: 3.0
+[32m0|appforge | [39m   ≡ƒö« Oracle Guidance: Improve user experience and UI polish
+[32m0|appforge | [39m   ≡ƒôè Confidence: 37.5%
+[32m0|appforge | [39m   -> Brainstorming next strategic move...
+[32m0|appforge | [39m   ΓåÆ Routing LLM request to Antigravity (zero API costs)
+[32m0|appforge | [39m≡ƒîÇ [LLM] Routing to Antigravity via Quantum Channel...
+[32m0|appforge | [39m   Request ID: llm_1770734956726
+[32m0|appforge | [39m   ΓåÆ Routing LLM request to Antigravity (zero API costs)
+[32m0|appforge | [39m≡ƒîÇ [LLM] Routing to Antigravity via Quantum Channel...
+[32m0|appforge | [39m   Request ID: llm_1770734956735
+[32m0|appforge | [39m≡ƒºÖΓÇìΓÖé∩╕Å GodMode: Quantum-powered orchestration...
+[32m0|appforge | [39m≡ƒö« Consulting Oracle: What should GodMode do with this context?
+[32m0|appforge | [39m   Γ£¿ Oracle recommends: Execute immediate action
+[32m0|appforge | [39m   ≡ƒôè Confidence: 37.5%
+[32m0|appforge | [39m   ≡ƒº¼ Engine Version: 3.0
+[32m0|appforge | [39m   ≡ƒö« Oracle Guidance: Execute immediate action
+[32m0|appforge | [39m   ≡ƒôè Confidence: 37.5%
+[32m0|appforge | [39mΓ£à Autonomous Cycle #9 Complete
+[32m0|appforge | [39m
+[32m0|appforge | [39m≡ƒîî Quantum Engine v3.0 [Holographic Architecture] Online
+[32m0|appforge | [39mLoading env from: C:\Users\ferna\Downloads\appforge-main\.env.local
+[32m0|appforge | [39m≡ƒÉ¥ AppForge Swarm Daemon Starting...
+[32m0|appforge | [39mΓÜ¢∩╕Å AUTONOMOUS MODE: Quantum-Powered Proactive Intelligence
+[32m0|appforge | [39mΓ£à 6 Agents Initialized (including Antigravity). Entering Autonomous Loop...
+[32m0|appforge | [39mΓÜ¢∩╕Å Quantum Core: Active
+[32m0|appforge | [39m≡ƒö« Oracle: Available for consultation
+[32m0|appforge | [39m
+[32m0|appforge | [39m≡ƒôè Quantum Stats: {
+[32m0|appforge | [39m  version: '3.0',
+[32m0|appforge | [39m  memoryItems: 0,
+[32m0|appforge | [39m  historyLength: 0,
+[32m0|appforge | [39m  learningParams: { bias: 1, exploration: 0.2 },
+[32m0|appforge | [39m  quantum_coherence: 0.964026862135365,
+[32m0|appforge | [39m  swarm_integrity: 'Peak',
+[32m0|appforge | [39m  holographic_recall: true
+[32m0|appforge | [39m}
+

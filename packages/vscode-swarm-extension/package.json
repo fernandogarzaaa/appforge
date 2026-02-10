@@ -1,0 +1,95 @@
+{
+    "name": "autonomous-swarm-vscode",
+    "displayName": "Autonomous Swarm",
+    "description": "AI-powered autonomous code assistant with 6 intelligent agents",
+    "version": "1.0.0",
+    "publisher": "appforge",
+    "engines": {
+        "vscode": "^1.80.0"
+    },
+    "categories": [
+        "AI",
+        "Programming Languages",
+        "Other"
+    ],
+    "activationEvents": [
+        "onStartupFinished"
+    ],
+    "main": "./dist/extension.js",
+    "contributes": {
+        "commands": [
+            {
+                "command": "autonomousSwarm.start",
+                "title": "Autonomous Swarm: Start"
+            },
+            {
+                "command": "autonomousSwarm.stop",
+                "title": "Autonomous Swarm: Stop"
+            },
+            {
+                "command": "autonomousSwarm.status",
+                "title": "Autonomous Swarm: View Status"
+            },
+            {
+                "command": "autonomousSwarm.dispatchTask",
+                "title": "Autonomous Swarm: Dispatch Custom Task"
+            }
+        ],
+        "viewsContainers": {
+            "activitybar": [
+                {
+                    "id": "autonomousSwarm",
+                    "title": "Autonomous Swarm",
+                    "icon": "media/swarm-icon.svg"
+                }
+            ]
+        },
+        "views": {
+            "autonomousSwarm": [
+                {
+                    "id": "swarmStatus",
+                    "name": "Swarm Status"
+                },
+                {
+                    "id": "agentActivity",
+                    "name": "Agent Activity"
+                }
+            ]
+        },
+        "configuration": {
+            "title": "Autonomous Swarm",
+            "properties": {
+                "autonomousSwarm.enabled": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Enable autonomous swarm"
+                },
+                "autonomousSwarm.intervalMinutes": {
+                    "type": "number",
+                    "default": 5,
+                    "description": "Autonomous run interval in minutes"
+                },
+                "autonomousSwarm.licenseKey": {
+                    "type": "string",
+                    "default": "",
+                    "description": "License key (leave empty for trial)"
+                }
+            }
+        }
+    },
+    "scripts": {
+        "vscode:prepublish": "npm run compile",
+        "compile": "tsc -p ./",
+        "watch": "tsc -watch -p ./",
+        "package": "vsce package"
+    },
+    "devDependencies": {
+        "@types/node": "^20.0.0",
+        "@types/vscode": "^1.80.0",
+        "typescript": "^5.0.0",
+        "@vscode/vsce": "^2.0.0"
+    },
+    "dependencies": {
+        "@appforge/autonomous-swarm": "^1.0.0"
+    }
+}

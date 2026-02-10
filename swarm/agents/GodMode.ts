@@ -1,79 +1,104 @@
-
-import { MultiLLMClient } from '../core/llm.js';
 import { Base44Tool } from '../tools/base44.js';
-import { FileSystemTool } from '../tools/filesystem.js';
-import { GitTool } from '../tools/git.js';
-import { QuantumLayer } from '../core/quantum.js';
-import { SwarmMemory } from '../core/memory.js';
+import quantumCore from '../core/quantum_core.js';
 
+/**
+ * QUANTUM-POWERED GODMODE AGENT
+ * Uses Quantum Engine and Oracle for ultimate decision making
+ */
 export class GodModeAgent {
     base44: Base44Tool;
-    fs: FileSystemTool;
-    git: GitTool;
-    llm: MultiLLMClient;
-    quantum: QuantumLayer;
-    memory: SwarmMemory;
+    fs: any;
+    git: any;
 
-    constructor(base44: Base44Tool, fs: FileSystemTool, git: GitTool) {
+    constructor(base44: Base44Tool, fs: any, git: any) {
         this.base44 = base44;
         this.fs = fs;
         this.git = git;
-        this.llm = new MultiLLMClient();
-        this.quantum = new QuantumLayer();
-        this.memory = new SwarmMemory(fs);
-
-        this.loadEvolutionData();
-    }
-
-    async loadEvolutionData() {
-        try {
-            const params = JSON.parse(await this.fs.readFile('src/data/quantum_hyperparameters.json'));
-            console.log('🧬 [GodMode] Loaded Evolved Hyperparameters:', params);
-            // In a real implementation, we'd apply these to this.quantum.annealer
-        } catch (e) {
-            console.warn('🧬 [GodMode] No evolved parameters found. Using defaults.');
-        }
-
-        try {
-            const brain = JSON.parse(await this.fs.readFile('src/data/quantum_brain_state.json'));
-            console.log('🧠 [GodMode] Loaded Quantum Brain State:', brain.timestamp);
-        } catch (e) {
-            console.warn('🧠 [GodMode] No brain state found. Using raw intuition.');
-        }
     }
 
     async run(context: any) {
-        console.log('🧙‍♂️ GodMode activated with context:', context);
+        console.log('🧙‍♂️ GodMode: Quantum-powered orchestration...');
 
-        if (context?.source === 'dashboard_manual_trigger') {
-            await this.base44.logActivity('GOD_MODE', 'Acknowledged manual trigger. Analyzing project architecture...');
-
-            // 1. Load/Build Swarm Memory
-            await this.memory.loadMemory();
-            if (this.memory.projectMap.size === 0) {
-                await this.base44.logActivity('GOD_MODE', 'Building initial Project Context Map...');
-                await this.memory.buildContextMap();
-            }
-
-            // 2. Retrieve Relevant Context
-            const projectContext = await this.memory.retrieveContext('src'); // Broad context for general check
-            const enhancedContext = { ...context, projectArchitecture: JSON.parse(projectContext) };
-
-            // 3. QUANTUM DECISION: Ask the Cluster what to do
-            const decision = await this.quantum.collapseWavefunction(
-                "User triggered manual autonomous check. Based on the project architecture, what area needs improvement?",
-                enhancedContext
+        try {
+            // Consult Oracle for best action
+            const oracleResult = await quantumCore.consultOracle(
+                'What should GodMode do with this context?',
+                [
+                    'Execute immediate action',
+                    'Gather more information',
+                    'Delegate to specialist agents',
+                    'Wait for better opportunity'
+                ],
+                ['urgency', 'impact', 'risk']
             );
 
-            console.log('⚛️ Quantum Decision:', decision);
+            console.log(`   🔮 Oracle Guidance: ${oracleResult.recommendation}`);
+            console.log(`   📊 Confidence: ${(oracleResult.confidence * 100).toFixed(1)}%`);
 
-            // Execute Action (Simulated for safety)
-            await this.fs.writeFile('swarm_audit_log.txt', `[${new Date().toISOString()}] Quantum Decision:\n${decision}\n---\n`);
-            // await this.git.commit('chore: autonomous swarm audit');
+            // Use quantum decision making
+            const decision = {
+                action: oracleResult.recommendation,
+                confidence: oracleResult.confidence,
+                quantum_enhanced: true,
+                timestamp: new Date().toISOString(),
+                context_summary: JSON.stringify(context).substring(0, 100)
+            };
 
-            return { status: 'executed', action: 'diagnostic_complete', decision };
+            // Quantum error correction
+            const validation = await quantumCore.validateDecision(decision, { priority: 'high', verified: true });
+
+            if (!validation.valid) {
+                console.log(`   ⚠️ Quantum corrections applied: ${validation.corrections.join(', ')}`);
+            }
+
+            // EXECUTIVE MODIFICATION: If oracle recommends action, and we have findings, execute!
+            let executionResult = null;
+            if (oracleResult.recommendation === 'Execute immediate action' && context.findings) {
+                console.log('   🚀 [EXECUTIVE] Oracle authorized immediate action. Processing findings...');
+                executionResult = await this.executeAutonomousFixes(context.findings);
+            }
+
+            return {
+                status: 'quantum_decision_made',
+                decision: decision,
+                oracle_consultation: oracleResult,
+                quantum_validated: validation.valid,
+                execution: executionResult
+            };
+
+        } catch (error: any) {
+            console.warn('   ⚠️ GodMode quantum fallback');
+            return { status: 'quantum_offline', error: error.message };
+        }
+    }
+
+    /**
+     * Parse findings and apply fixes autonomously
+     */
+    private async executeAutonomousFixes(findings: any) {
+        let applied = 0;
+        const details = [];
+
+        for (const agent in findings) {
+            const fix = findings[agent]?.proposed_fix;
+            if (fix && fix.fix_type === 'patch' && fix.file && fix.replacement) {
+                console.log(`   🛠️ [PATCHING] Applying fix from ${agent} to ${fix.file}`);
+                try {
+                    const content = await this.fs.readFile(fix.file);
+                    const newContent = content.replace(fix.original, fix.replacement);
+
+                    if (newContent !== content) {
+                        await this.fs.writeFile(fix.file, newContent);
+                        await this.base44.logActivity('GOD_MODE', `EXECUTIVE_FIX_APPLIED: ${agent} patched ${fix.file}`);
+                        applied++;
+                        details.push({ file: fix.file, agent: agent, status: 'success' });
+                    }
+                } catch (e: any) {
+                    details.push({ file: fix.file, agent: agent, status: 'failed', error: e.message });
+                }
+            }
         }
 
-        return { status: 'idle' };
+        return { applied, details };
     }
 }

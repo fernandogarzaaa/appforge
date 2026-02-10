@@ -1,12 +1,14 @@
 
 import { MultiLLMClient } from './llm.js';
+import { Base44Tool } from '../tools/base44.js';
 
 export class QuantumLayer {
     llm: MultiLLMClient;
 
-    constructor() {
-        this.llm = new MultiLLMClient();
+    constructor(base44: Base44Tool) {
+        this.llm = new MultiLLMClient(base44);
     }
+
 
     // "Super Intelligence" - Aggregates multiple perspectives
     async collapseWavefunction(problem: string, context: any): Promise<string> {

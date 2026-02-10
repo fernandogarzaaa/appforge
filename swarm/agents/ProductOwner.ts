@@ -3,6 +3,7 @@ import { MultiLLMClient } from '../core/llm.js';
 import { Base44Tool } from '../tools/base44.js';
 import { FileSystemTool } from '../tools/filesystem.js';
 import { SwarmMemory } from '../core/memory.js';
+import quantumCore from '../core/quantum_core.js';
 
 export class ProductOwnerAgent {
     base44: Base44Tool;
@@ -13,7 +14,7 @@ export class ProductOwnerAgent {
     constructor(base44: Base44Tool, fs: FileSystemTool, memory: SwarmMemory) {
         this.base44 = base44;
         this.fs = fs;
-        this.llm = new MultiLLMClient();
+        this.llm = new MultiLLMClient(base44);
         this.memory = memory;
     }
 
@@ -21,33 +22,47 @@ export class ProductOwnerAgent {
         console.log('👔 Product Owner: Analyzing project vision...');
 
         try {
-            // 1. Gather Context
+            // 1. Context Gathering
             const readme = await this.fs.readFile('README.md').catch(() => '');
             const todo = await this.fs.readFile('TODO.md').catch(() => '');
 
-            // If no README, we can't really dream.
             if (!readme) {
                 console.log('   -> No README.md found. Cannot determine vision.');
                 return { status: 'idle', reason: 'no_vision' };
             }
 
-            // 2. Check if we already have enough work
+            // Consult Oracle for Strategic Direction
+            const oracleResult = await quantumCore.consultOracle(
+                'What is the highest impact strategic move for this project right now?',
+                [
+                    'Improve user experience and UI polish',
+                    'Refactor core architecture for scalability',
+                    'Add new user-facing features',
+                    'Enhance documentation and onboarding'
+                ],
+                ['business_value', 'user_need', 'feasibility']
+            );
+
+            console.log(`   🔮 Oracle Guidance: ${oracleResult.recommendation}`);
+            console.log(`   📊 Confidence: ${(oracleResult.confidence * 100).toFixed(1)}%`);
+
+            // 2. Check backlog size
             const pendingTasks = todo.split('\n').filter(l => l.includes('TODO:')).length;
             if (pendingTasks > 3) {
                 console.log(`   -> Application has ${pendingTasks} pending tasks. Holding off on new ideas.`);
-                return { status: 'idle', reason: 'backlog_full' };
+                return { status: 'idle', reason: 'backlog_full', oracle_strategy: oracleResult.recommendation };
             }
 
-            // 3. Dream of a new feature
+            // 3. Brainstorm with Oracle Strategy
             console.log('   -> Brainstorming next strategic move...');
             const response = await this.llm.chat({
-                system: `You are the Visionary Product Owner for this software project. 
-                Your goal is to invent the next meaningful feature or improvement based on the README.
+                system: `You are the Visionary Product Owner. 
+                Your strategic focus is currently: ${oracleResult.recommendation}.
                 
                 Rules:
                 1. Propose SMALL, atomic tasks (implementable in 15-30 mins).
                 2. Do not propose things already in TODO.
-                3. Focus on high-impact, low-effort changes first.
+                3. Focus on high-impact, low-effort changes aligned with the strategic focus.
                 4. Output ONLY the task description string.`,
 
                 user: `
@@ -57,7 +72,7 @@ export class ProductOwnerAgent {
                 Current Backlog (TODO):
                 ${todo}
 
-                What is the ONE next best task for the development team? 
+                What is the ONE next best task? 
                 Format: "Implement [Feature Name] to [Benefit]"`
             });
 

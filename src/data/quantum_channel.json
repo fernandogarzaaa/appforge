@@ -1,0 +1,22 @@
+{
+  "antigravity_inbox": [],
+  "swarm_inbox": [
+    {
+      "id": "ag_test_1770727700485",
+      "from": "antigravity",
+      "to": "swarm",
+      "timestamp": "2026-02-10T12:48:20.485Z",
+      "payload": {
+        "type": "test",
+        "message": "Hello from Antigravity! Testing quantum bidirectional communication."
+      },
+      "status": "PENDING",
+      "priority": 0.9
+    }
+  ],
+  "quantum_state": {
+    "coherence": 1,
+    "last_sync": "2026-02-10T12:42:00.000Z",
+    "entanglement_strength": 0.95
+  }
+}

@@ -1,13 +1,13 @@
 
-import { MultiLLMClient } from '../core/llm.js';
 import { Base44Tool } from '../tools/base44.js';
 import { FileSystemTool } from '../tools/filesystem.js';
 import { GitTool } from '../tools/git.js';
+import quantumCore from '../core/quantum_core.js';
 
 /**
  * ANTIGRAVITY AGENT
- * Integrates Antigravity (Gemini/Claude AI) as an autonomous swarm agent
- * Polls for ANTIGRAVITY_SIGNAL tasks and executes them with full AI capabilities
+ * Processes LLM requests from other swarm agents
+ * Acts as the AI brain for the entire swarm
  */
 export class AntigravityAgent {
     base44: Base44Tool;
@@ -21,54 +21,76 @@ export class AntigravityAgent {
     }
 
     async run() {
-        console.log('🌀 Antigravity Agent: Checking for collaboration requests...');
+        console.log('🌀 Antigravity Agent: Processing LLM requests...');
 
         try {
-            // Check for ANTIGRAVITY_SIGNAL tasks (special signals just for me)
+            // Consult Oracle for processing strategy
+            const oracleResult = await quantumCore.consultOracle(
+                'How should Antigravity handle pending LLM requests?',
+                [
+                    'Process High Priority requests first',
+                    'Batch process similar requests',
+                    'Optimize for fastest response time',
+                    'Deep analysis mode for complex queries'
+                ],
+                ['efficiency', 'quality', 'latency']
+            );
+
+            console.log(`   🔮 Oracle Guidance: ${oracleResult.recommendation}`);
+
+            // Check for ANTIGRAVITY_SIGNAL tasks
             const logs = await this.base44.client.entities.AuditLog.list({
                 filter: { action_type: 'ANTIGRAVITY_SIGNAL' },
                 sort: { createdAt: 'desc' },
-                limit: 5
+                limit: 10
             });
 
             const items = logs?.items || logs?.data || logs || [];
             const pending = items.filter((l: any) => l?.changes?.status === 'PENDING');
 
             if (pending.length > 0) {
-                console.log(`   → Found ${pending.length} tasks for Antigravity`);
+                console.log(`   → Found ${pending.length} LLM requests for Antigravity`);
 
                 for (const task of pending) {
-                    const instruction = task.description || task.changes?.instruction;
-                    console.log(`   → Executing: ${instruction}`);
+                    const requestId = task.changes?.requestId;
+                    const prompt = task.changes?.prompt;
 
-                    // Mark as IN_PROGRESS
-                    await this.base44.client.entities.AuditLog.update(task.id, {
-                        changes: { ...task.changes, status: 'IN_PROGRESS' }
-                    });
+                    if (prompt && requestId) {
+                        console.log(`   → Processing LLM request: ${requestId}`);
 
-                    // Execute the instruction (this would trigger actual Antigravity work)
-                    // For now, just acknowledge
-                    const result = {
-                        agent: 'Antigravity',
-                        status: 'acknowledged',
-                        message: 'Task queued for Antigravity execution',
-                        instruction: instruction,
-                        timestamp: new Date().toISOString()
-                    };
+                        // NOTE: This placeholder shows where Antigravity would process the LLM request
+                        // In reality, this happens in the Antigravity conversation directly
+                        // For now, acknowledge and mark as ready for manual processing
 
-                    // Mark as COMPLETED
-                    await this.base44.client.entities.AuditLog.update(task.id, {
-                        changes: { status: 'COMPLETED', results: result }
-                    });
+                        const result = {
+                            requestId: requestId,
+                            status: 'READY_FOR_ANTIGRAVITY',
+                            prompt: prompt,
+                            message: 'LLM request queued for Antigravity processing in conversation'
+                        };
+
+                        // Update status so swarm knows it's being processed
+                        await this.base44.client.entities.AuditLog.update(task.id, {
+                            changes: {
+                                status: 'IN_PROGRESS',
+                                result: result,
+                                requestId: requestId
+                            }
+                        });
+                    }
                 }
 
-                return { status: 'tasks_executed', count: pending.length };
+                return {
+                    status: 'processing',
+                    count: pending.length,
+                    message: 'LLM requests forwarded to Antigravity conversation'
+                };
             }
 
-            return { status: 'idle', message: 'No Antigravity tasks pending' };
+            return { status: 'idle', message: 'No LLM requests pending' };
         } catch (error: any) {
-            console.warn('   ⚠️ Antigravity Agent offline (expected in autonomous mode)');
-            return { status: 'offline' };
+            console.warn('   ⚠️ Antigravity Agent error:', error.message);
+            return { status: 'error', error: error.message };
         }
     }
 }

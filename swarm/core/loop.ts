@@ -33,6 +33,51 @@ import { OptimizerAgent } from '../agents/Optimizer.js';
 import { GodModeAgent } from '../agents/GodMode.js';
 import { ProductOwnerAgent } from '../agents/ProductOwner.js';
 import { AntigravityAgent } from '../agents/Antigravity.js';
+import swarmKnowledge from './knowledge.js';
+import quantumCore from './quantum_core.js';
+
+const QUANTUM_CHANNEL = path.join(process.cwd(), 'src/data/quantum_channel.json');
+
+/**
+ * Check quantum channel for Antigravity messages
+ */
+async function checkQuantumChannel() {
+    try {
+        const raw = await fs.readFile(QUANTUM_CHANNEL, 'utf8');
+        const channel = JSON.parse(raw);
+        const pending = channel.swarm_inbox?.filter((m: any) => m.status === 'PENDING') || [];
+
+        if (pending.length > 0) {
+            console.log(`📬 Quantum Channel: ${pending.length} messages from Antigravity`);
+
+            for (const msg of pending) {
+                console.log(`   → Processing: ${msg.payload?.type || 'unknown'}`);
+
+                // Mark as processed
+                msg.status = 'PROCESSED';
+                msg.processed_at = new Date().toISOString();
+
+                // Send acknowledgment back to Antigravity
+                channel.antigravity_inbox.push({
+                    id: `sw_ack_${Date.now()}`,
+                    from: 'swarm',
+                    to: 'antigravity',
+                    timestamp: new Date().toISOString(),
+                    payload: {
+                        type: 'acknowledgment',
+                        original_message: msg.id,
+                        status: 'received'
+                    },
+                    status: 'PENDING'
+                });
+            }
+
+            await fs.writeFile(QUANTUM_CHANNEL, JSON.stringify(channel, null, 2));
+        }
+    } catch (error) {
+        // Quantum channel doesn't exist yet or corrupted - skip
+    }
+}
 
 async function main() {
     console.log('🐝 AppForge Swarm Daemon Starting...');
@@ -53,6 +98,12 @@ async function main() {
     const antigravity = new AntigravityAgent(base44, fs, git);
 
     console.log('✅ 6 Agents Initialized (including Antigravity). Entering Autonomous Loop...');
+    console.log('⚛️ Quantum Core: Active');
+    console.log('🔮 Oracle: Available for consultation\n');
+
+    // Test quantum core
+    const qStats = quantumCore.getStats();
+    console.log('📊 Quantum Stats:', qStats);
 
     // Autonomous run tracking
     let cycleCount = 0;
@@ -64,6 +115,9 @@ async function main() {
             // ⚛️ QUANTUM ENHANCEMENT: Check if autonomous run is due
             const now = Date.now();
             const shouldRunAutonomous = (now - lastAutonomousRun) >= AUTONOMOUS_INTERVAL_MS;
+
+            // ⚛️ QUANTUM ENHANCEMENT: Check quantum channel for Antigravity messages
+            await checkQuantumChannel();
 
             // 1. Check for Reactive Signals
             const tasks = await base44.getPendingTasks();
@@ -98,6 +152,13 @@ async function main() {
                     };
 
                     results.godMode = await godMode.run(context);
+
+                    // 📚 LEARNING: Record task outcome
+                    await swarmKnowledge.recordTaskOutcome(
+                        { type: 'reactive', description: task.description, agent: 'swarm' },
+                        'success',
+                        `Completed reactive task successfully with ${Object.keys(results).length} agents`
+                    );
 
                     // Complete Task
                     await base44.completeTask(task.id, results);

@@ -101,4 +101,29 @@ export class SwarmMemory {
 
         return JSON.stringify(relevantNodes.slice(0, 5), null, 2);
     }
+
+    async search(query: string): Promise<Array<{ text: string, score: number }>> {
+        // Simulated semantic search
+        // In a real implementation, this would query a vector DB
+        const results = [];
+        const terms = query.toLowerCase().split(' ');
+
+        for (const [path, node] of this.projectMap.entries()) {
+            let score = 0;
+            const content = (node.summary + ' ' + node.path).toLowerCase();
+
+            terms.forEach(term => {
+                if (content.includes(term)) score += 0.2;
+            });
+
+            if (score > 0) {
+                results.push({
+                    text: `File: ${node.path} - ${node.summary}`,
+                    score: Math.min(score, 1.0)
+                });
+            }
+        }
+
+        return results.sort((a, b) => b.score - a.score).slice(0, 5);
+    }
 }

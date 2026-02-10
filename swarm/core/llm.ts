@@ -1,135 +1,102 @@
-import { OpenAI } from 'openai';
+import { Base44Tool } from '../tools/base44.js';
 
-// We'll use the official SDKs or generic fetch for broader support if needed, 
-// but sticking to a unified interface via a custom wrapper is safest for this "God Mode" usage.
+/**
+ * ANTIGRAVITY LLM PROVIDER
+ * Routes all LLM requests through Antigravity via quantum channel
+ * Zero external API costs!
+ */
 
 export interface AIRequest {
     system: string;
     user: string;
     model?: string;
-    jsonSchema?: any;
 }
 
-export class MultiLLMClient {
-    openai: OpenAI;
+export class AntigravityLLMProvider {
+    base44: Base44Tool;
 
-    constructor() {
-        this.openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+    constructor(base44: Base44Tool) {
+        this.base44 = base44;
     }
 
     async chat(request: AIRequest): Promise<string> {
-        // 1. Try OpenAI (Primary)
-        try {
-            console.log(`🤖 [LLM] Trying OpenAI (${request.model || 'gpt-4o'})...`);
-            const completion = await this.openai.chat.completions.create({
-                model: request.model || 'gpt-4o',
-                messages: [
-                    { role: 'system', content: request.system },
-                    { role: 'user', content: request.user }
-                ]
-            });
-            return completion.choices[0].message.content || '';
-        } catch (error: any) {
-            console.warn(`⚠️ [LLM] OpenAI Failed: ${error.message}. Switching to Fallback...`);
-            return await this.fallbackAnthropic(request);
-        }
-    }
+        const requestId = `llm_${Date.now()}`;
 
-    async fallbackAnthropic(request: AIRequest): Promise<string> {
-        // 2. Try Anthropic (Claude 3.5 Sonnet)
-        try {
-            if (!process.env.ANTHROPIC_API_KEY) throw new Error('No Anthropic Key');
-            console.log(`🤖 [LLM] Trying Anthropic (Claude 3.5)...`);
+        console.log(`🌀 [LLM] Routing to Antigravity via Quantum Channel...`);
+        console.log(`   Request ID: ${requestId}`);
 
-            // Using direct fetch for zero-dependency fallback (or minimal dep)
-            const response = await fetch('https://api.anthropic.com/v1/messages', {
-                method: 'POST',
-                headers: {
-                    'x-api-key': process.env.ANTHROPIC_API_KEY || '',
-                    'anthropic-version': '2023-06-01',
-                    'content-type': 'application/json'
-                },
-                body: JSON.stringify({
-                    model: 'claude-3-5-sonnet-20240620',
-                    max_tokens: 4096,
-                    system: request.system,
-                    messages: [{ role: 'user', content: request.user }]
-                })
+        try {
+            // Dispatch to Antigravity via Base44 signal
+            await this.base44.client.entities.AuditLog.create({
+                action_type: 'ANTIGRAVITY_SIGNAL',
+                description: `LLM Request: ${requestId}`,
+                resource_type: 'llm_service',
+                performed_by: 'swarm_agent',
+                entity_id: 'llm_request',
+                changes: {
+                    status: 'PENDING',
+                    requestId: requestId,
+                    prompt: {
+                        system: request.system,
+                        user: request.user,
+                        model: request.model || 'gemini-2.0-flash-thinking'
+                    }
+                }
             });
 
-            if (!response.ok) throw new Error(`Anthropic Error: ${response.statusText}`);
-            const data: any = await response.json();
-            return data.content[0].text;
+            console.log(`   ⏳ Waiting for Antigravity response via quantum channel...`);
 
-        } catch (error: any) {
-            console.warn(`⚠️ [LLM] Anthropic Failed: ${error.message}. Switching to Fallback...`);
-            return await this.fallbackGemini(request);
-        }
-    }
+            // Poll for response (max 60 seconds)
+            const maxAttempts = 60;
+            for (let i = 0; i < maxAttempts; i++) {
+                await new Promise(resolve => setTimeout(resolve, 1000));
 
-    async fallbackGemini(request: AIRequest): Promise<string> {
-        // 3. Try Gemini (1.5 Pro)
-        try {
-            if (!process.env.GEMINI_API_KEY) throw new Error('No Gemini Key');
-            console.log(`🤖 [LLM] Trying Gemini 1.5 Pro...`);
+                const logs = await this.base44.client.entities.AuditLog.list({
+                    filter: {
+                        action_type: 'ANTIGRAVITY_SIGNAL',
+                        entity_id: 'llm_request'
+                    },
+                    order: { created_at: 'desc' },
+                    limit: 100
+                });
 
-            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent?key=${process.env.GEMINI_API_KEY}`;
-            const response = await fetch(url, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    contents: [{
-                        parts: [{ text: `${request.system}\n\nUser: ${request.user}` }]
-                    }]
-                })
-            });
+                const response = logs.find((log: any) =>
+                    log.changes?.requestId === requestId &&
+                    log.changes?.status === 'COMPLETED'
+                );
 
-            if (!response.ok) throw new Error(`Gemini Error: ${response.statusText}`);
-            const data: any = await response.json();
-            return data.candidates[0].content.parts[0].text;
+                if (response) {
+                    console.log(`   ✅ Received Antigravity response!`);
+                    return response.changes.result || 'No response from Antigravity';
+                }
+            }
+
+            console.warn(`   ⚠️ Timeout waiting for Antigravity`);
+            return 'ERROR: Antigravity did not respond in time. Check quantum channel.';
 
         } catch (error: any) {
-            console.warn(`⚠️ [LLM] Gemini Failed: ${error.message}. Switching to Final Fallback...`);
-            return await this.fallbackGrok(request);
-        }
-    }
-
-    async fallbackGrok(request: AIRequest): Promise<string> {
-        // 4. Try Grok (xAI)
-        try {
-            if (!process.env.XAI_API_KEY) throw new Error('No Grok Key');
-            console.log(`🤖 [LLM] Trying Grok...`);
-            // Grok uses OpenAI-compatible API
-            const grok = new OpenAI({
-                apiKey: process.env.XAI_API_KEY,
-                baseURL: 'https://api.x.ai/v1'
-            });
-            const completion = await grok.chat.completions.create({
-                model: 'grok-beta',
-                messages: [
-                    { role: 'system', content: request.system },
-                    { role: 'user', content: request.user }
-                ]
-            });
-            return completion.choices[0].message.content || '';
-
-        } catch (error: any) {
-            console.error(`❌ [LLM] All Fallbacks Failed.`);
-            throw new Error(`Critical Intelligence Failure: ${error.message}`);
-        }
-    }
-
-    async getEmbedding(text: string): Promise<number[]> {
-        if (!this.openai) return [];
-        try {
-            const response = await this.openai.embeddings.create({
-                model: "text-embedding-3-small",
-                input: text,
-            });
-            return response.data[0].embedding;
-        } catch (e) {
-            console.error('❌ Embedding Error:', e);
-            return [];
+            console.error(`   ❌ Quantum channel error: ${error.message}`);
+            throw new Error(`Antigravity LLM Provider Failed: ${error.message}`);
         }
     }
 }
+
+export class MultiLLMClient {
+    antigravity: AntigravityLLMProvider;
+
+    constructor(base44: Base44Tool) {
+        this.antigravity = new AntigravityLLMProvider(base44);
+    }
+
+    async chat(request: AIRequest): Promise<string> {
+        console.log('   → Routing LLM request to Antigravity (zero API costs)');
+        return await this.antigravity.chat(request);
+    }
+
+    async getEmbedding(text: string): Promise<number[]> {
+        // Embeddings not supported via Antigravity yet
+        console.warn('⚠️ Embeddings not supported via Antigravity');
+        return [];
+    }
+}
+

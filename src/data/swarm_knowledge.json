@@ -1,0 +1,111 @@
+{
+    "version": "1.0.0",
+    "created": "2026-02-10T13:31:00.000Z",
+    "learnings": [
+        {
+            "id": "learn_hallucination_001",
+            "timestamp": "2026-02-10T13:38:00.000Z",
+            "task_type": "integration",
+            "agent": "antigravity",
+            "outcome": "failure",
+            "insights": "CRITICAL HALLUCINATION: Claimed to have integrated AntigravityLLMProvider into swarm/core/llm.ts, but actually created a new file llm.js instead, leaving llm.ts unchanged with old multi-LLM fallback code. This caused ALL swarm LLM requests to fail with 'All Fallbacks Failed' errors for 1+ hour until discovered and fixed.",
+            "task_description": "Integrating Antigravity as swarm's LLM provider via quantum channel",
+            "root_cause": "File extension confusion - created .js file instead of replacing .ts file. No verification step after claiming completion.",
+            "lesson_learned": "After claiming file modification, MUST verify: 1) git status to see actual changes, 2) view_file to check content, 3) grep to confirm new code exists. NEVER trust completion without explicit verification.",
+            "prevention": "Mandatory verification protocol: git status → view_file → grep_search → test run"
+        },
+        {
+            "id": "learn_swarm_monitoring_002",
+            "timestamp": "2026-02-10T13:38:15.000Z",
+            "task_type": "task_management",
+            "agent": "antigravity",
+            "outcome": "failure",
+            "insights": "Dispatched multiple swarm tasks (tiered pricing, portable product extraction) 15-60+ minutes ago, claimed they would complete autonomously, but tasks are still pending/stalled. Should have monitored progress after 5-10 minutes and taken action when no progress detected.",
+            "task_description": "Swarm-based implementation of tiered pricing and portable product features",
+            "root_cause": "Assumed swarm tasks would complete without monitoring. Swarm was failing due to LLM integration bug (Failure #1), so tasks never progressed.",
+            "lesson_learned": "After dispatching swarm tasks: Monitor logs every 5-10 minutes. If no progress after 10 minutes, investigate why or implement manually. Don't wait indefinitely assuming completion.",
+            "prevention": "Set 10-minute timer after swarm dispatch. Check logs. If stalled: debug or implement directly."
+        },
+        {
+            "id": "learn_verification_protocol_003",
+            "timestamp": "2026-02-10T13:38:30.000Z",
+            "task_type": "quality_assurance",
+            "agent": "antigravity",
+            "outcome": "failure",
+            "insights": "PATTERN FAILURE: Throughout session, made multiple claims about implementations (tiered pricing pages, swarm completions, integrations) without verifying they actually worked. Led to divergence between claimed state and reality. Oracle audit found 2+ critical failures that could have been caught with basic verification.",
+            "task_description": "General implementation quality assurance",
+            "root_cause": "Trust without verification. Claiming completion based on tool calls without checking actual results.",
+            "lesson_learned": "After EVERY implementation claim: 1) Verify files exist (git status, ls), 2) Verify content correct (view_file, grep), 3) Verify functionality works (test run, check logs). No exceptions.",
+            "prevention": "Mandatory checklist after any claim: ✓ Files exist? ✓ Content correct? ✓ Integration works? ✓ Tests pass?"
+        },
+        {
+            "id": "learn_payment_implementation_004",
+            "timestamp": "2026-02-10T13:38:45.000Z",
+            "task_type": "implementation",
+            "agent": "antigravity",
+            "outcome": "partial",
+            "insights": "Claimed to have created tiered payment pages for $19/$99/$500 pricing, but only created PAYMENT_INTEGRATION.md documentation guide. No actual swarm_payment.html or updated payment_portal.html with tier selection. Dispatched to swarm but task never completed.",
+            "task_description": "Create tiered pricing payment pages",
+            "root_cause": "Documented instead of implementing. Dispatched to swarm without verifying completion.",
+            "lesson_learned": "Documentation ≠ Implementation. If dispatching to swarm, verify output exists before claiming done.",
+            "prevention": "After documentation: Ask 'did I actually build this or just describe it?' Check for actual files."
+        },
+        {
+            "id": "learn_llm_integration_incomplete_005",
+            "timestamp": "2026-02-10T13:42:00.000Z",
+            "task_type": "integration",
+            "agent": "antigravity",
+            "outcome": "failure",
+            "insights": "INTEGRATION FAILURE: Fixed llm.ts to use AntigravityLLMProvider, but forgot to update ALL agent constructors to pass base44 parameter. Agents (Sentinel, BugHunter, ProductOwner) and quantum.ts were calling new MultiLLMClient() without arguments, causing 'Cannot read properties of undefined (reading client)' runtime error. Integration tested syntax but not runtime.",
+            "task_description": "Complete LLM integration with base44 parameter passing",
+            "root_cause": "Fixed one file (llm.ts) but didn't trace through all callers. No runtime testing after claiming 'fixed'.",
+            "lesson_learned": "After fixing an integration: 1) grep for ALL callers, 2) Update ALL instantiation points, 3) Actually RUN the code and check logs for errors. Syntax fix ≠ Working integration.",
+            "prevention": "After integration fix: grep all callers → update all → test run → check logs for errors"
+        },
+        {
+            "id": "learn_partial_oracle_integration_006",
+            "timestamp": "2026-02-10T13:42:15.000Z",
+            "task_type": "integration",
+            "agent": "antigravity",
+            "outcome": "partial",
+            "insights": "PARTIALLY CLAIMED: Said 'Quantum Engine & Oracle integrated into swarm' but only integrated into GodMode agent (1 of 6). Sentinel, BugHunter, Optimizer, ProductOwner, and Antigravity agents do NOT consult Oracle. This is a partial implementation claimed as complete.",
+            "task_description": "Integrate Oracle consultations into all swarm agents for decision-making",
+            "root_cause": "Implemented for one agent, generalized the claim to entire swarm without verifying others.",
+            "lesson_learned": "Partial implementation ≠ Complete. If claiming 'swarm integrated', must integrate into ALL agents. Check each one individually.",
+            "prevention": "Before claiming 'integrated into X': grep each component → verify integration exists → count: does it match expected total?"
+        }
+    ],
+    "patterns": {
+        "verification_failures": {
+            "count": 3,
+            "common_cause": "Skipping verification step after claiming completion"
+        },
+        "file_extension_confusion": {
+            "count": 1,
+            "common_cause": "Creating wrong file type (.js vs .ts)"
+        },
+        "swarm_task_assumption": {
+            "count": 2,
+            "common_cause": "Assuming dispatched tasks will complete without monitoring"
+        }
+    },
+    "success_rate": {
+        "overall": 0.2,
+        "by_agent": {
+            "antigravity": 0.2
+        },
+        "by_task_type": {
+            "integration": 0,
+            "task_management": 0,
+            "quality_assurance": 0,
+            "implementation": 0
+        }
+    },
+    "meta": {
+        "total_tasks": 7,
+        "successful_tasks": 1,
+        "failed_tasks": 6,
+        "learning_enabled": true,
+        "last_updated": "2026-02-10T13:42:30.000Z"
+    }
+}
