@@ -21,6 +21,25 @@ export class GodModeAgent {
         this.llm = new MultiLLMClient();
         this.quantum = new QuantumLayer();
         this.memory = new SwarmMemory(fs);
+
+        this.loadEvolutionData();
+    }
+
+    async loadEvolutionData() {
+        try {
+            const params = JSON.parse(await this.fs.readFile('src/data/quantum_hyperparameters.json'));
+            console.log('🧬 [GodMode] Loaded Evolved Hyperparameters:', params);
+            // In a real implementation, we'd apply these to this.quantum.annealer
+        } catch (e) {
+            console.warn('🧬 [GodMode] No evolved parameters found. Using defaults.');
+        }
+
+        try {
+            const brain = JSON.parse(await this.fs.readFile('src/data/quantum_brain_state.json'));
+            console.log('🧠 [GodMode] Loaded Quantum Brain State:', brain.timestamp);
+        } catch (e) {
+            console.warn('🧠 [GodMode] No brain state found. Using raw intuition.');
+        }
     }
 
     async run(context: any) {
