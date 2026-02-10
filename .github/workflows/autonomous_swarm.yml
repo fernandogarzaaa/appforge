@@ -15,21 +15,69 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
         with:
-          token: ${{ secrets.GITHUB_TOKEN }} # Built-in token
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: "20"
 
+      # 🦀 TRANSCENDENCE: Rust Toolchain for Quantum Bridge
+      - name: Setup Rust Toolchain
+        uses: actions-rust-lang/setup-rust-toolchain@v1
+        with:
+          toolchain: stable
+
+      # ⚡ CACHE: Node.js dependencies
+      - name: Cache Node Modules
+        uses: actions/cache@v4
+        with:
+          path: |
+            swarm/node_modules
+            node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('swarm/package-lock.json', 'package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      # 🦀 CACHE: Rust build artifacts
+      - name: Cache Rust Build
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            swarm/core/quantum_bridge/target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('swarm/core/quantum_bridge/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-
+
+      # 📦 CACHE: Swarm Memory (evolution state persistence)
+      - name: Cache Swarm Memory
+        uses: actions/cache@v4
+        with:
+          path: |
+            swarm/swarm_memory.json
+            src/data/quantum_state.json
+            src/data/quantum_predictions.json
+          key: swarm-memory-${{ github.run_number }}
+          restore-keys: |
+            swarm-memory-
+
       - name: Install Swarm Dependencies
         run: |
           cd swarm
           npm install
 
+      # 🦀 TRANSCENDENCE: Build Rust Quantum Bridge
+      - name: Build Quantum Bridge
+        run: |
+          cd swarm/core/quantum_bridge
+          cargo build --release
+          echo "🦀 Quantum Bridge compiled for cloud execution"
+
       - name: Run Swarm (One-Shot)
         env:
-          # AI Keys (Must be added to Repo Secrets)
+          # AI Keys
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
@@ -46,12 +94,24 @@ jobs:
           git config --global user.name "AppForge Swarm"
           git config --global user.email "swarm@appforge.bot"
 
-          # Run the Daemon
+          # Run the Daemon (One-Shot Cycle)
           cd swarm
           npm start
+
+      # 📡 Upload evolution artifacts for persistence
+      - name: Upload Swarm Artifacts
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: swarm-evolution-${{ github.run_number }}
+          path: |
+            swarm/swarm_memory.json
+            src/data/quantum_state.json
+            src/data/quantum_predictions.json
+          retention-days: 30
 
       - name: Push any Swarm artifacts
         run: |
           git add .
-          git commit -m "chore: swarm autonomous update" || echo "No changes to commit"
+          git commit -m "chore: swarm autonomous update [Transcendence Era]" || echo "No changes to commit"
           git push
