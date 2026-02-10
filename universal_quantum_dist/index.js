@@ -113,36 +113,46 @@ export class QuantumAnnealingOptimizer {
         this.minTemperature = options.minTemperature || 0.01;
     }
 
-    async optimize(initialSolution, energyFunction) {
+    async optimize(initialSolution, energyFn) {
         let currentSolution = initialSolution;
-        let currentEnergy = energyFunction(currentSolution);
-        let bestSolution = { ...currentSolution };
+        let currentEnergy = energyFn(currentSolution);
+        let bestSolution = currentSolution;
         let bestEnergy = currentEnergy;
+        let temp = this.temperature;
         const history = [];
 
-        while (this.temperature > this.minTemperature) {
-            const neighbor = this.generateNeighbor(currentSolution);
-            const neighborEnergy = energyFunction(neighbor);
-            const deltaE = neighborEnergy - currentEnergy;
-            const acceptanceProb = deltaE < 0 ? 1 : Math.exp(-deltaE / this.temperature);
+        for (let i = 0; i < 100; i++) { // Default steps
+            if (temp <= this.minTemperature) break;
 
-            if (Math.random() < acceptanceProb) {
+            const neighbor = this.generateNeighbor(currentSolution);
+            const neighborEnergy = energyFn(neighbor);
+            const deltaE = neighborEnergy - currentEnergy;
+
+            if (deltaE < 0 || Math.random() < Math.exp(-deltaE / temp)) {
                 currentSolution = neighbor;
                 currentEnergy = neighborEnergy;
+
                 if (currentEnergy < bestEnergy) {
-                    bestSolution = { ...currentSolution };
+                    bestSolution = currentSolution;
                     bestEnergy = currentEnergy;
                 }
             }
 
-            this.temperature *= this.coolingRate;
-            history.push({ temp: this.temperature, energy: currentEnergy });
+            temp *= this.coolingRate;
+            history.push({ temp, energy: currentEnergy });
         }
 
-        return { solution: bestSolution, energy: bestEnergy, iterations: history.length };
+        return { solution: bestSolution, energy: bestEnergy };
     }
 
     generateNeighbor(solution) {
+        // Handle Primitive Strings (Prevention of Object conversion)
+        if (typeof solution === 'string') {
+            // Simple string mutation: append or trim
+            if (Math.random() > 0.5) return solution + "_opt";
+            return solution;
+        }
+
         const neighbor = { ...solution };
         const keys = Object.keys(neighbor);
         if (keys.length === 0) return neighbor;
@@ -152,7 +162,6 @@ export class QuantumAnnealingOptimizer {
         if (typeof neighbor[randomKey] === 'number') {
             neighbor[randomKey] += (Math.random() - 0.5) * 2;
         } else if (typeof neighbor[randomKey] === 'string') {
-            // String mutation (simple char flip or similar could go here)
             neighbor[randomKey] += "_mut";
         }
         return neighbor;
@@ -403,10 +412,12 @@ export default class QuantumEngine {
             (sol) => -evalFn(sol)
         );
 
-        return {
+        const result = {
             originalBest: measurement.bestSolution,
             optimizedBest: optimized.solution,
             confidence: measurement.probability
         };
+        // console.log('DEBUG: quantumSolve result:', result);
+        return result;
     }
 }
