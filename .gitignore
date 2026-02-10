@@ -124,8 +124,5 @@ load-tests/output/
 .docker-sync/
 docker-compose.override.yml
 
-# PM2 & Process Management
-ecosystem.config.js.example
-logs/
-/QuantumEngine.js
-QuantumEnginePortable.js
+# Quantum Engine (Tracked)
+!QuantumEnginePortable.js
