@@ -10,7 +10,7 @@
 The Oracle has refined the strategy. Instead of low-ticket SaaS, we are pivoting to **High-Ticket Enterprise Licensing**.
 
 ### Use Case
-* **Price**: **80,000 USDC** / License.
+* **Price**: **80,000 USDC** / Month (Recurring).
 * **Network**: Solana (Speed & Transparency).
 * **Gateway**: Phantom Wallet + MoonPay (Fiat-to-Crypto onramp).
 * **Target**: HFT Firms, AI Labs, Sovereign Wealth Funds.
@@ -19,12 +19,12 @@ The Oracle has refined the strategy. Instead of low-ticket SaaS, we are pivoting
 
 ### Phase 1: The Transaction
 Create `examples/solana_commerce.js` to manage the sale:
-1. **Generate Payment Link**: Deep link to Phantom/MoonPay.
+1. **Generate Payment Link**: Deep link to Phantom/MoonPay for the *First Month*.
 2. **Verify Transaction**: Listen for 80,000 USDC transfer to the Treasury Wallet.
-3. **Release Asset**: Automatically decrypt and send `universal_quantum_dist` upon confirmation.
+3. **Issue License**: Valid for 30 days. Auto-revokes if renewal missing.
 
 ### Treasury Wallet
-* **Address**: `[To be injected by Quantum Engine]` 
+* **Address**: `2ZeBAFtHq5vNThXMjbZ7E59Msgv6xPpBFn7cw4KMxmot`
 * **Token**: USDC (SPL Token)
 
 ## 3. The "Web2" Experience
