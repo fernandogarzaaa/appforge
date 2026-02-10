@@ -26,7 +26,8 @@
     "build:quantum": "cd quantum-core && wasm-pack build --target web --out-dir ../src/quantum-core/pkg",
     "build:quantum:release": "cd quantum-core && wasm-pack build --release --target web --out-dir ../src/quantum-core/pkg",
     "build:analyzer": "cd static-analyzer-core && wasm-pack build --target web --out-dir ../src/static-analyzer-core/pkg",
-    "build:analyzer:release": "cd static-analyzer-core && wasm-pack build --release --target web --out-dir ../src/static-analyzer-core/pkg"
+    "build:analyzer:release": "cd static-analyzer-core && wasm-pack build --release --target web --out-dir ../src/static-analyzer-core/pkg",
+    "start:server": "node server.js"
   },
   "dependencies": {
     "@apollo/client": "latest",
@@ -121,7 +122,9 @@
     "web-vitals": "^5.1.0",
     "yaml": "^2.5.1",
     "zod": "^3.24.2",
-    "zustand": "^5.0.11"
+    "zustand": "^5.0.11",
+    "nodemailer": "^6.9.9",
+    "@solana/web3.js": "^1.89.0"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.11.0",
