@@ -31,17 +31,18 @@ import { SentinelAgent } from '../agents/Sentinel.js';
 import { BugHunterAgent } from '../agents/BugHunter.js';
 import { OptimizerAgent } from '../agents/Optimizer.js';
 import { GodModeAgent } from '../agents/GodMode.js';
-
 import { ProductOwnerAgent } from '../agents/ProductOwner.js';
+import { AntigravityAgent } from '../agents/Antigravity.js';
 
 async function main() {
     console.log('🐝 AppForge Swarm Daemon Starting...');
+    console.log('⚛️ AUTONOMOUS MODE: Quantum-Powered Proactive Intelligence');
 
     // Initialize Tools
     const base44 = new Base44Tool();
     const fs = new FileSystemTool();
     const git = new GitTool();
-    const memory = new SwarmMemory();
+    const memory = new SwarmMemory(fs);
 
     // Initialize Agents
     const sentinel = new SentinelAgent(base44);
@@ -49,38 +50,50 @@ async function main() {
     const optimizer = new OptimizerAgent(base44);
     const godMode = new GodModeAgent(base44, fs, git);
     const productOwner = new ProductOwnerAgent(base44, fs, memory);
+    const antigravity = new AntigravityAgent(base44, fs, git);
 
-    console.log('✅ Agents Initialized. Entering Poll Loop...');
+    console.log('✅ 6 Agents Initialized (including Antigravity). Entering Autonomous Loop...');
+
+    // Autonomous run tracking
+    let cycleCount = 0;
+    const AUTONOMOUS_INTERVAL_MS = 5 * 60 * 1000; // 5 minutes
+    let lastAutonomousRun = Date.now();
 
     while (true) {
         try {
-            // 1. Check for Signals
+            // ⚛️ QUANTUM ENHANCEMENT: Check if autonomous run is due
+            const now = Date.now();
+            const shouldRunAutonomous = (now - lastAutonomousRun) >= AUTONOMOUS_INTERVAL_MS;
+
+            // 1. Check for Reactive Signals
             const tasks = await base44.getPendingTasks();
 
             if (tasks.length > 0) {
-                console.log(`📥 Received ${tasks.length} tasks.`);
+                console.log(`📥 [REACTIVE] Received ${tasks.length} tasks.`);
 
                 for (const task of tasks) {
                     console.log(`▶️ Executing Task: ${task.id} (${task.changes?.source})`);
 
-                    const results: any = {};
+                    const results: any = { mode: 'REACTIVE' };
 
-                    // Parallel Execution of Specialist Bots
-                    const [sentinelRes, bugHunterRes, optimizerRes, poRes] = await Promise.all([
+                    // Parallel Execution of Specialist Bots (including Antigravity)
+                    const [sentinelRes, bugHunterRes, optimizerRes, poRes, agRes] = await Promise.all([
                         sentinel.run(),
                         bugHunter.run(),
                         optimizer.run(),
-                        productOwner.run()
+                        productOwner.run(),
+                        antigravity.run()
                     ]);
 
                     results.sentinel = sentinelRes;
                     results.bugHunter = bugHunterRes;
                     results.optimizer = optimizerRes;
                     results.productOwner = poRes;
+                    results.antigravity = agRes;
 
                     // Collaboration: Pass findings to God Mode
                     const context = {
-                        source: task.changes?.source || 'autonomous_loop',
+                        source: task.changes?.source || 'reactive_signal',
                         findings: results
                     };
 
@@ -90,8 +103,43 @@ async function main() {
                     await base44.completeTask(task.id, results);
                     console.log(`✅ Task ${task.id} Completed.`);
                 }
+            } else if (shouldRunAutonomous) {
+                // 2. ⚛️ AUTONOMOUS RUN (Oracle-Powered)
+                cycleCount++;
+                console.log(`\n🔮 [AUTONOMOUS] Cycle #${cycleCount} - Quantum Self-Direction Activated`);
+                lastAutonomousRun = now;
+
+                const results: any = { mode: 'AUTONOMOUS', cycle: cycleCount };
+
+                // Run all agents proactively (including Antigravity)
+                const [sentinelRes, bugHunterRes, optimizerRes, poRes, agRes] = await Promise.all([
+                    sentinel.run(),
+                    bugHunter.run(),
+                    optimizer.run(),
+                    productOwner.run(),
+                    antigravity.run()
+                ]);
+
+                results.sentinel = sentinelRes;
+                results.bugHunter = bugHunterRes;
+                results.optimizer = optimizerRes;
+                results.productOwner = poRes;
+                results.antigravity = agRes;
+
+                // GodMode decides if any action is needed
+                const context = {
+                    source: 'autonomous_cycle',
+                    cycle: cycleCount,
+                    findings: results
+                };
+
+                results.godMode = await godMode.run(context);
+
+                // Log autonomous activity
+                await base44.logActivity('AUTONOMOUS_SWARM', `Cycle #${cycleCount}: ${JSON.stringify(results.godMode)}`);
+                console.log(`✅ Autonomous Cycle #${cycleCount} Complete\n`);
             } else {
-                // Heartbeat / Idle check could go here
+                // Heartbeat / Idle
                 if (process.env.ONE_SHOT === 'true') {
                     console.log('🛑 One-Shot Mode: No tasks found. Exiting.');
                     process.exit(0);

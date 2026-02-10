@@ -22,7 +22,7 @@ async function verifyGrandDesign() {
         { name: 'Swarm Intelligence', cmd: 'npx tsx scripts/verify_quantum_swarm.ts' },
         { name: 'Universal Package', cmd: 'npx tsx scripts/verify_universal_package.ts' },
         { name: 'Deployment Readiness', cmd: 'node scripts/verify_deployment.js' },
-        { name: 'Server Integrity', cmd: 'node examples/debug_import.js' } // Quick check that imports work
+        { name: 'Server Integrity', cmd: 'node scripts/verify_server_status.js' } // Verify API is live
     ];
 
     let passed = 0;

@@ -9,9 +9,103 @@ import { initializeWasm, QuantumBridge } from './wasmBridge.js';
  * - Superposition: Explore multiple solution paths simultaneously
  * - Entanglement: Analyze correlated patterns across data
  * - Quantum Annealing: Find optimal solutions in complex landscapes
- * - Interference: Amplify good solutions, cancel bad ones
- * - Tunneling: Escape local optima to find global solutions
+ * - Interference: Amplify * Usage:
+ * import QuantumEngine from './QuantumEnginePortable.js';
+ * const engine = new QuantumEngine();
+ * const result = await engine.quantumSolve(problem, solutions, criteria);
  */
+
+/**
+ * Quantum Error Correction
+ * Protects quantum state against decoherence using redundancy.
+ */
+export class QuantumErrorCorrection {
+    constructor(redundancy = 3) {
+        this.redundancy = redundancy;
+    }
+
+    encode(data) {
+        // Simple repetition code
+        const encoded = [];
+        for (let i = 0; i < data.length; i++) {
+            const qubits = [];
+            for (let r = 0; r < this.redundancy; r++) {
+                qubits.push({ val: data[i], phase: 0 }); // Logical qubit
+            }
+            encoded.push(qubits);
+        }
+        return encoded;
+    }
+
+    recover(protectedState) {
+        let recovered = "";
+        protectedState.forEach(qubits => {
+            // Majority voting to correct errors
+            const counts = {};
+            qubits.forEach(q => {
+                counts[q.val] = (counts[q.val] || 0) + 1;
+            });
+
+            // Find value with max counts
+            let bestVal = '?';
+            let maxCount = -1;
+            for (const [val, count] of Object.entries(counts)) {
+                if (count > maxCount) {
+                    maxCount = count;
+                    bestVal = val;
+                }
+            }
+            recovered += bestVal;
+        });
+        return recovered;
+    }
+}
+
+/**
+ * Quantum Tunneling Search
+ * Probabilistic search capable of escaping local optima.
+ */
+export class QuantumTunnelingSearch {
+    constructor(tunnelingProbability = 0.3) {
+        this.tunnelingProbability = tunnelingProbability;
+    }
+
+    search(database, query) {
+        const results = [];
+
+        // Quantum parallelism: check all entries "simultaneously"
+        database.forEach(entry => {
+            const exactMatch = entry.includes(query);
+
+            if (exactMatch) {
+                results.push({ entry, confidence: 1.0, method: 'DIRECT' });
+            } else {
+                // Tunneled match (fuzzy / probabilistic)
+                const similarity = this.calculateSimilarity(entry, query);
+
+                // If similarity is low but random check passes -> Tunneling Event
+                if (similarity > 0.4 || (Math.random() < this.tunnelingProbability && similarity > 0.2)) {
+                    results.push({
+                        entry,
+                        confidence: similarity,
+                        method: 'TUNNELING'
+                    });
+                }
+            }
+        });
+
+        return results.sort((a, b) => b.confidence - a.confidence);
+    }
+
+    calculateSimilarity(str1, str2) {
+        // Jaccard Index approximation
+        const set1 = new Set(str1.split(''));
+        const set2 = new Set(str2.split(''));
+        const intersection = new Set([...set1].filter(x => set2.has(x)));
+        const union = new Set([...set1, ...set2]);
+        return intersection.size / union.size;
+    }
+}
 
 /**
  * Quantum-Inspired Superposition Processor
@@ -1011,99 +1105,7 @@ export class QuantumReinforcementLearning {
     }
 }
 
-/**
- * Quantum Error Correction - Self-healing data structures
- * Uses redundancy and entanglement to recover corrupted information
- */
-export class QuantumErrorCorrection {
-    constructor(redundancyLevel = 3) {
-        this.redundancyLevel = redundancyLevel;
-    }
 
-    /**
-     * Encode data into a quantum-protected state (Entangled Redundancy)
-     */
-    encode(data) {
-        const encoded = [];
-        for (let char of data) {
-            // Create 'qubits' for each character - multiple copies with slight variations (noise)
-            const qubits = [];
-            for (let i = 0; i < this.redundancyLevel; i++) {
-                qubits.push({
-                    val: char,
-                    noise: Math.random() * 0.01 // Quantum noise
-                });
-            }
-            encoded.push(qubits);
-        }
-        return encoded;
-    }
-
-    /**
-     * Attempt to recover data from a corrupted state
-     */
-    recover(corruptedData) {
-        // corruptedData is assumed to be an array of qubit-arrays
-        // "Measurement" collapses the superposition to the most likely value (Majority Vote / Mean)
-        return corruptedData.map(qubits => {
-            // Frequency analysis (Majority Vote)
-            const counts = {};
-            qubits.forEach(q => {
-                const v = q.val;
-                counts[v] = (counts[v] || 0) + 1;
-            });
-
-            // Find most common value
-            return Object.keys(counts).reduce((a, b) => counts[a] > counts[b] ? a : b);
-        }).join('');
-    }
-}
-
-/**
- * Quantum Tunneling Search - Find hidden connections
- * Bypasses semantic barriers to find non-obvious matches
- */
-export class QuantumTunnelingSearch {
-    constructor(tunnelProb = 0.2) {
-        this.tunnelProb = tunnelProb;
-    }
-
-    /**
-     * Search with tunneling capability
-     * @param {Array} database - List of items to search
-     * @param {String} query - Search term
-     */
-    search(database, query) {
-        return database.filter(item => {
-            // Standard Check (Classical Barrier)
-            if (item.includes(query)) return true;
-
-            // Quantum Tunneling Check
-            // Calculate "Potential Barrier" based on similarity
-            const similarity = this.calculateSimilarity(item, query);
-            const barrierHeight = 1 - similarity;
-
-            // Tunneling probability T = exp(-2 * barrier * width)
-            // Simplified: if random < (tunnelProb * similarity), we tunnel through
-            // This allows finding "related" but not "exact" matches
-            if (Math.random() < (this.tunnelProb * similarity)) {
-                return true;
-            }
-            return false;
-        });
-    }
-
-    calculateSimilarity(s1, s2) {
-        // Simple overlap coefficient
-        const long = s1.length > s2.length ? s1 : s2;
-        const short = s1.length > s2.length ? s2 : s1;
-        let match = 0;
-        for (let i = 0; i < short.length; i++) {
-            if (long.includes(short[i])) match++;
-        }
-        return match / long.length;
-    }
-}
 
 /**
  * Quantum Creator - The Engine's Self-Built Creative Module

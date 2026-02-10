@@ -1,0 +1,9 @@
+feat: autonomous swarm with Antigravity integration
+
+- Implemented 6-agent autonomous swarm system
+- Added Antigravity as 6th agent for AI-powered collaboration
+- Swarm runs every 5 minutes proactively
+- Agents: Sentinel, BugHunter, Optimizer, ProductOwner, GodMode, Antigravity
+- All agents execute in parallel for efficiency
+
+BREAKING CHANGE: Swarm now requires OPENAI_API_KEY
