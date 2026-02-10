@@ -18,13 +18,24 @@ const brain = new QuantumNeuralNetwork([5, 10, 1]);
 
 // 2. Load Historical Data (Simulated for this demo)
 // In a real scenario, this would parse git history and bug reports
-const trainingData = [
+let trainingData = [
     { input: [0.8, 0.9, 0.5, 0.2, 0.8], output: [0.9] }, // High complexity, many lines -> High bug prob
     { input: [0.1, 0.2, 0.1, 0.0, 0.0], output: [0.1] }, // Simple, small -> Low bug prob
     { input: [0.5, 0.5, 0.5, 0.5, 0.5], output: [0.5] }, // Moderate -> Medium prob
     { input: [0.9, 0.1, 0.9, 0.0, 0.1], output: [0.7] }, // Complex dependencies -> High prob
     { input: [0.2, 0.8, 0.2, 0.0, 0.1], output: [0.3] }  // Large but simple -> Low/Med prob
 ];
+
+// [QUANTUM OMNI-KNOWLEDGE UPDATE]
+const externalDataPath = path.join(PROJECT_ROOT, 'src/data/external_knowledge_refined.json');
+if (fs.existsSync(externalDataPath)) {
+    console.log('🌌 Assessing External Knowledge Vectors...');
+    const externalData = JSON.parse(fs.readFileSync(externalDataPath, 'utf8'));
+    trainingData = [...trainingData, ...externalData];
+    console.log(`✨ Absorbed ${externalData.length} new patterns from the Multiverse.`);
+} else {
+    console.log('⚠️ No external knowledge found. Running on local intuition only.');
+}
 
 // 3. Train the Brain
 console.log('🎓 Training on historical component patterns...');
