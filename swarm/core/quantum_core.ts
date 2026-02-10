@@ -46,6 +46,15 @@ export class QuantumSwarmCore {
     }
 
     /**
+     * Update cognitive weights based on outcomes (Hyper Intelligence Recursive Loop)
+     */
+    async evolveWeights(type: string, success: boolean) {
+        console.log(`🧬 [QUANTUM-EVOLUTION] Recalibrating ${type} weights...`);
+        // This integrates with the engine's internal learning state
+        this.engine.reportOutcome(`evolve_${type}`, success, { timestamp: Date.now() });
+    }
+
+    /**
      * Make quantum-optimized decision between options
      */
     async quantumDecide(options: any[], scoringFn: (option: any) => number) {

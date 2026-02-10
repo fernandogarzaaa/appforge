@@ -101,4 +101,50 @@ export class GodModeAgent {
 
         return { applied, details };
     }
+
+    public async performRemoteSyncAudit() {
+        console.log('   🌐 [REMOTE] Initiating GitHub Synchronization Audit...');
+
+        try {
+            await this.git.fetch();
+            const remoteCommits = await this.git.getRemoteCommits();
+            const localCommits = await this.git.getLocalCommits();
+
+            const status = {
+                behind: remoteCommits.total,
+                ahead: localCommits.total,
+                synchronized: remoteCommits.total === 0 && localCommits.total === 0,
+                remote_repository: 'https://github.com/fernandogarzaaa/appforge.git'
+            };
+
+            console.log(`   📊 [REMOTE STATUS] Behind: ${status.behind} | Ahead: ${status.ahead}`);
+
+            await this.base44.logActivity('GOD_MODE', `REMOTE_SYNC_AUDIT: ${JSON.stringify(status)}`);
+
+            return status;
+        } catch (e: any) {
+            console.error('   ❌ [REMOTE] Audit Failed:', e.message);
+            return { status: 'error', message: e.message };
+        }
+    }
+
+    public async executeRemoteSync() {
+        console.log('   🚀 [REMOTE] Executing Sovereign Wave-function Alignment (Pull)...');
+
+        try {
+            const pullResult = await this.git.pull();
+            console.log('   ✅ [REMOTE] Synchronization Complete.');
+
+            await this.base44.logActivity('GOD_MODE', 'REMOTE_SYNC_EXECUTED: Sovereign alignment complete.');
+
+            return {
+                status: 'success',
+                files: pullResult.files,
+                summary: pullResult.summary
+            };
+        } catch (e: any) {
+            console.error('   ❌ [REMOTE] Synchronization Failed:', e.message);
+            return { status: 'error', message: e.message };
+        }
+    }
 }

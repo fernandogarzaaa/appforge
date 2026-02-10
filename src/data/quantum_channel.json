@@ -1,5 +1,18 @@
 {
-  "antigravity_inbox": [],
+  "antigravity_inbox": [
+    {
+      "id": "sw_ack_1770742161574",
+      "from": "swarm",
+      "to": "antigravity",
+      "timestamp": "2026-02-10T16:49:21.574Z",
+      "payload": {
+        "type": "acknowledgment",
+        "original_message": "ag_test_1770727700485",
+        "status": "received"
+      },
+      "status": "PENDING"
+    }
+  ],
   "swarm_inbox": [
     {
       "id": "ag_test_1770727700485",
@@ -10,8 +23,9 @@
         "type": "test",
         "message": "Hello from Antigravity! Testing quantum bidirectional communication."
       },
-      "status": "PENDING",
-      "priority": 0.9
+      "status": "PROCESSED",
+      "priority": 0.9,
+      "processed_at": "2026-02-10T16:49:21.573Z"
     }
   ],
   "quantum_state": {

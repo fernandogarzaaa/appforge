@@ -1,6 +1,6 @@
-
 import dotenv from 'dotenv';
 import path from 'path';
+import * as fs from 'fs/promises';
 import { fileURLToPath } from 'url';
 
 // Resolve .env.local from project root
@@ -35,6 +35,10 @@ import { ProductOwnerAgent } from '../agents/ProductOwner.js';
 import { AntigravityAgent } from '../agents/Antigravity.js';
 import swarmKnowledge from './knowledge.js';
 import quantumCore from './quantum_core.js';
+import { hyperBrain } from './hyper_brain.js';
+import { nas } from './nas.js';
+import { p2pResonance } from './p2p_resonance.js';
+import { resolveQuantumGate, bridgeVersion } from './quantum_bridge_ts.js';
 
 const QUANTUM_CHANNEL = path.join(process.cwd(), 'src/data/quantum_channel.json');
 
@@ -186,6 +190,33 @@ async function main() {
                 results.optimizer = optimizerRes;
                 results.productOwner = poRes;
                 results.antigravity = agRes;
+
+                // 🌀 NEURAL RESONANCE: Entangle all agent findings into the HyperBrain
+                Object.entries(results).forEach(([agent, res]) => {
+                    if (res) hyperBrain.entangle(agent, res);
+                });
+
+                // 🧬 TRANSCENDENCE: NAS Persona Evolution (every 10 cycles)
+                if (cycleCount % 10 === 0) {
+                    console.log('🧬 [TRANSCENDENCE] Evolving NAS Layers...');
+                    await nas.evolveLayers();
+                }
+
+                // 🦀 TRANSCENDENCE: Rust-Quantum Bridge Decision
+                const agentPriorities = Object.entries(results)
+                    .filter(([_, v]) => v)
+                    .map(([id, _]) => ({ id, score: Math.random() * 10 }));
+                if (agentPriorities.length > 1) {
+                    const bridgeResult = resolveQuantumGate(agentPriorities);
+                    console.log(`🦀 [RUST-BRIDGE] Priority Agent: ${bridgeResult.bestOptionId}`);
+                }
+
+                // 📡 TRANSCENDENCE: P2P Resonance Broadcast
+                p2pResonance.ingest({ cycle: cycleCount, findings: Object.keys(results) });
+                if (cycleCount % 5 === 0) {
+                    await p2pResonance.synergize();
+                    await p2pResonance.broadcastEvolution('cycle_weights', cycleCount);
+                }
 
                 // GodMode decides if any action is needed
                 const context = {
