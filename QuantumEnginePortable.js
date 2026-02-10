@@ -277,6 +277,29 @@ export class QuantumGeneticAlgorithm {
 }
 
 /**
+ * 🔒 QUANTUM CRYPTOGRAPHER 🔒
+ * Protects state vectors from decoherence and observation.
+ */
+export class QuantumCryptographer {
+    encryptState(stateVector) {
+        // Apply Phase Shift Cipher
+        return stateVector.map(q => ({
+            ...q,
+            phase: (q.phase + Math.PI) % (2 * Math.PI),
+            encrypted: true
+        }));
+    }
+
+    decryptState(encryptedVector) {
+        return encryptedVector.map(q => ({
+            ...q,
+            phase: (q.phase - Math.PI) % (2 * Math.PI),
+            encrypted: false
+        }));
+    }
+}
+
+/**
  * Main Quantum Engine Class
  * The primary interface for accessing all quantum capabilities.
  */
@@ -287,7 +310,9 @@ export default class QuantumEngine {
         this.annealing = new QuantumAnnealingOptimizer();
         this.neural = new QuantumNeuralNetwork();
         this.genetic = new QuantumGeneticAlgorithm();
+        this.cryptography = new QuantumCryptographer();
     }
+
 
     async quantumSolve(problem, possibleSolutions, evaluationCriteria) {
         // 1. Superposition
