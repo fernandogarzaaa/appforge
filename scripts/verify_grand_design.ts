@@ -20,7 +20,8 @@ async function verifyGrandDesign() {
     const checks = [
         { name: 'Singularity Core', cmd: 'npx tsx scripts/verify_singularity.ts' },
         { name: 'Commercial Package', cmd: 'npx tsx scripts/verify_commercial_release.ts' },
-        { name: 'Solana Commerce Node', cmd: 'node scripts/verify_solana_commerce.js' }
+        { name: 'Solana Commerce Node', cmd: 'node scripts/verify_solana_commerce.js' },
+        { name: 'Deployment Readiness', cmd: 'node scripts/verify_deployment.js' }
     ];
 
     let passed = 0;

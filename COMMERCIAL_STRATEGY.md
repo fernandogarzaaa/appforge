@@ -11,9 +11,9 @@ The Oracle has refined the strategy. Instead of low-ticket SaaS, we are pivoting
 
 ### Use Case
 * **Price**: **80,000 USDC** / Month (Recurring).
-* **Network**: Solana (Speed & Transparency).
-* **Gateway**: Phantom Wallet + MoonPay (Fiat-to-Crypto onramp).
-* **Target**: HFT Firms, AI Labs, Sovereign Wealth Funds.
+* **Network**: **Solana** (Mainnet-Beta) for high-speed settlement.
+* **Gateway**: **Direct Web3 (Phantom)** - Zero merchant fees.
+* **Target Audience**: High-Frequency Trading Firms, AI Labs, Sovereign Wealth Funds.
 
 ## 2. Implementation Plan
 
