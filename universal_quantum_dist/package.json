@@ -4,6 +4,7 @@
   "description": "Zero-dependency Quantum AI",
   "main": "index.js",
   "type": "module",
+  "private": true,
   "scripts": {
     "test": "node index.js"
   },
@@ -15,6 +16,6 @@
     "swarm",
     "portable"
   ],
-  "author": "AppForge Swarm (Synthetically Generated)",
-  "license": "MIT"
+  "author": "AppForge Swarm (Proprietary)",
+  "license": "Proprietary"
 }
