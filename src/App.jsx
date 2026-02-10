@@ -200,6 +200,12 @@ const AuthenticatedApp = ({ onSearchOpen }) => {
           {renderAdmin(React.lazy(() => import('@/pages/SwarmDashboard')))}
         </LayoutWrapper>
       } />
+      {/* 🌌 QUANTUM UI ROUTE */}
+      <Route path="/quantum-dashboard" element={
+        <LayoutWrapper currentPageName="Quantum Engine" onSearchOpen={onSearchOpen}>
+          {renderAdmin(React.lazy(() => import('@/components/QuantumDashboard')))}
+        </LayoutWrapper>
+      } />
       {Object.entries(Pages).map(([path, Page]) => {
         const isPublic = publicPages.includes(path);
         // Pages that require backend authentication (optional - most pages use Base44 auth)
