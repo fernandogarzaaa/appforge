@@ -50,12 +50,13 @@ async function universalize() {
         description: bestIdentity.description,
         main: "index.js",
         type: bestIdentity.type,
+        private: true, // 🔒 COMMERCIAL LOCK: Prevents accidental public publish
         scripts: {
             "test": "node index.js"
         },
         keywords: ["quantum", "ai", "genetic", "neural", "swarm", "portable"],
-        author: "AppForge Swarm (Synthetically Generated)",
-        license: "MIT" // Open Source for the Multiverse
+        author: "AppForge Swarm (Proprietary)",
+        license: "Proprietary" // 🔒 IP PROTECTION
     };
 
     fs.writeFileSync(
