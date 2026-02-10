@@ -126,3 +126,5 @@ docker-compose.override.yml
 
 # Quantum Engine (Tracked)
 !QuantumEnginePortable.js
+
+swarm/core/quantum_bridge/target/
