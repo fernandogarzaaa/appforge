@@ -25,15 +25,16 @@ You have two components to host:
     * **Your Portal**: `https://quantum-engine.vercel.app/payment_portal.html`
 
 ### 2. Backend (Railway / Render)
-*Best for: `quantum_commerce_server.js` (API & Emailer)*
+*Best for: `server.js` (API & Emailer)*
 
 1. **Go to [Railway.app](https://railway.app)**.
 2. **New Service**: connect your GitHub repo.
 3. **Start Command**:
-    * Change to: `node examples/quantum_commerce_server.js`
+    * Railway should auto-detect `npm run start:server`.
+    * If not, use: `node server.js`
 4. **Environment Variables** (Required):
     * `EMAIL_USER`: Your Gmail address.
-    * `EMAIL_PASS`: Your Gmail App Password (NOT your login password).
+    * `EMAIL_PASS`: Your Gmail App Password.
     * `PORT`: `3000` (or let Railway assign it).
 5. **Get URL**: Railway will give you a domain (e.g., `https://backend.railway.app`).
 6. **Update Frontend**:
@@ -67,8 +68,9 @@ You have two components to host:
 ---
 
 ## ✅ Checklist for Launch
-1. [ ] **MoonPay Key**: Is it the LIVE key in `solana_commerce_prod.js`?
-2. [ ] **Wallet**: Is `TREASURY_WALLET` correct?
-3. [ ] **Testing**: Try a small $1 transaction first if possible, or verify the "Pending" state in logs.
+1. [ ] **Wallet**: Is `TREASURY_WALLET` correct in `server.js` AND `payment_portal.html`?
+2. [ ] **Email**: Did you set `EMAIL_USER` / `EMAIL_PASS` in Railway?
+3. [ ] **Connection**: Did you update the `API_URL` in `payment_portal.html`?
+4. [ ] **Testing**: Click "Pay", Sign (Phantom), and Check Email for License.
 
 *The Swarm is ready to ascend to the Cloud.* ☁️
