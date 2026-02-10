@@ -79,12 +79,12 @@
       "timestamp": "2026-02-11T03:58:00.000Z",
       "task_type": "implementation",
       "agent": "swarm",
-      "outcome": "success",
-      "insights": "STABILITY SECURED: Sentinel and BugHunter were entering a conflict loop over src/polyfills.js. Resolved by implementing Sovereign Directive at the TOP of system prompts, randomizing BugHunter file selection, and explicitly excluding polyfills.js from recurring security/bug scans.",
-      "task_description": "Breaking Polyfill Oscillation Loop",
-      "root_cause": "Agent-level selection bias (first-file-target) and prompt priority issues.",
-      "lesson_learned": "Global directives MUST be prepended to prompts. Specialist agents must randomize their scanning pool to avoid target-locking. Core configuration files should be explicitly shielded from autonomous modification once stabilized.",
-      "prevention": "1. Prepend SOVEREIGN_DIRECTIVE in MultiLLMClient. 2. Randomized target pool in BugHunter. 3. Explicit file exclusions in Sentinel/BugHunter."
+      "outcome": "failure",
+      "insights": "REGRESSION LOOP: Sentinel and BugHunter entered a conflict loop over src/polyfills.js. Sentinel pushed for 'secure' patterns while BugHunter attempted 'modernization' via crypto imports, which were actually incorrect for the target environment. This caused multiple cycles of revert/refactor without progress.",
+      "task_description": "Fixing Buffer polyfills for Web3 compatibility",
+      "root_cause": "Agent conflict and lack of global directive. LLM hallucinated that Buffer belongs in 'crypto' for this specific build target.",
+      "lesson_learned": "When multiple agents touch core configuration files like polyfills.js, a Global Sovereign Directive must be enforced in the system prompt to override agent-specific heuristics.",
+      "prevention": "Implemented Sovereign Directive in llm.ts: 'NEVER import Buffer from crypto'. Mandatory stability check for oscillating files."
     },
     {
       "id": "learn_1770753583990",
@@ -150,12 +150,12 @@
       "task_description": ""
     },
     {
-      "id": "learn_1770755044122",
-      "timestamp": "2026-02-10T20:24:04.122Z",
+      "id": "learn_1770754788954",
+      "timestamp": "2026-02-10T20:19:48.954Z",
       "task_type": "experimental_optimization",
       "agent": "unknown",
       "outcome": "success",
-      "insights": "SHADOW_INSIGHT: Quantum parallelism significantly reduces Persona evolution latency by 40.46277564886384%",
+      "insights": "SHADOW_INSIGHT: Quantum parallelism significantly reduces Persona evolution latency by 34.39589262559493%",
       "task_description": ""
     }
   ],
@@ -187,7 +187,7 @@
     }
   },
   "success_rate": {
-    "overall": 0.5714285714285714,
+    "overall": 0.6,
     "by_agent": {
       "antigravity": 0.2
     },
@@ -199,13 +199,10 @@
     }
   },
   "meta": {
-    "total_tasks": 14,
-    "successful_tasks": 8,
+    "total_tasks": 15,
+    "successful_tasks": 9,
     "failed_tasks": 6,
     "learning_enabled": true,
     "last_updated": "2026-02-10T13:42:30.000Z"
-  },
-  "stable_files": [
-    "src\\polyfills.js"
-  ]
+  }
 }

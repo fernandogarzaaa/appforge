@@ -1,6 +1,7 @@
 import { Base44Tool } from '../tools/base44.js';
 import { sovereignLLM } from './sovereign_llm.js';
 import { sovereignModel } from './sovereign_model.js';
+import swarmKnowledge from './knowledge.js';
 
 /**
  * ANTIGRAVITY LLM PROVIDER
@@ -109,12 +110,23 @@ export class MultiLLMClient {
     }
 
     async chat(request: AIRequest): Promise<string> {
+        // --- SOVEREIGN DIRECTIVE: Prevent agent oscillation and regression ---
+        const stableList = await swarmKnowledge.load().then(() => swarmKnowledge.knowledge.stable_files || []);
+        const stableFilesStr = stableList.length > 0 ? `\n- IMMUTABLE COGNITIVE LOCK: The following files are stabilized and LOCKED: ${stableList.join(', ')}. DO NOT attempt to modify them.` : '';
+
+        const SOVEREIGN_DIRECTIVE = `\n\n⚖️ SOVEREIGN DIRECTIVE (Zero Regression):${stableFilesStr}\n1. Polyfills: Use standard ES imports (e.g., import { Buffer } from 'buffer'). NEVER import Buffer from 'crypto'.\n2. Stability: If a file shows signs of frequent oscillation (like src/polyfills.js), stick to proven patterns and avoid experimental refactors.`;
+
+        const optimizedRequest = {
+            ...request,
+            system: SOVEREIGN_DIRECTIVE + '\n\n' + request.system
+        };
+
         // --- COGNITIVE HIERARCHY ---
 
         // 1. PHYSICAL LAYER: The Sovereign Model (Local AI Brain)
         // Highest priority: 0 API cost, absolute intelligence, 100% autonomy.
         try {
-            const modRes = await sovereignModel.chat(request);
+            const modRes = await sovereignModel.chat(optimizedRequest);
             if (modRes) {
                 return modRes.choices[0].message.content;
             }
@@ -124,14 +136,14 @@ export class MultiLLMClient {
 
         // 2. SYNTHETIC LAYER: Sovereign Intelligence Gateway
         // Mid priority: 0 API cost, synthetic inference, bypasses rate limits.
-        const sovereignResponse = await sovereignLLM.chat(request);
+        const sovereignResponse = await sovereignLLM.chat(optimizedRequest);
         if (sovereignResponse) {
             return sovereignResponse.choices[0].message.content;
         }
 
         // 3. EXTERNAL LAYER: Fallback to Antigravity
         console.log('   → Routing LLM request to Antigravity (zero API costs)');
-        return await this.antigravity.chat(request);
+        return await this.antigravity.chat(optimizedRequest);
     }
 
     async getEmbedding(text: string): Promise<number[]> {

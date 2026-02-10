@@ -40,4 +40,8 @@ export class GitTool {
         // checks remote origin
         return await this.git.push('origin', 'main');
     }
+
+    async clone(url: string, targetPath: string) {
+        return await simpleGit().clone(url, targetPath);
+    }
 }

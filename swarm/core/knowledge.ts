@@ -6,19 +6,29 @@ import path from 'path';
  * Enables swarm to learn from past experiences and improve over time
  */
 
-const KNOWLEDGE_FILE = path.join(process.cwd(), 'src/data/swarm_knowledge.json');
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const DEFAULT_KNOWLEDGE_FILE = path.resolve(__dirname, '../../src/data/swarm_knowledge.json');
 
 export class SwarmKnowledge {
     knowledge: any;
+    knowledgeFilePath: string;
 
-    constructor() {
+    constructor(filePath: string = DEFAULT_KNOWLEDGE_FILE) {
         this.knowledge = null;
+        this.knowledgeFilePath = filePath;
     }
 
     async load() {
         try {
-            const data = await fs.readFile(KNOWLEDGE_FILE, 'utf8');
+            const data = await fs.readFile(this.knowledgeFilePath, 'utf8');
             this.knowledge = JSON.parse(data);
+            // Ensure schema compatibility for stability shield
+            if (!this.knowledge.stable_files) {
+                this.knowledge.stable_files = [];
+            }
         } catch (error) {
             // Initialize if doesn't exist
             this.knowledge = {
@@ -27,14 +37,15 @@ export class SwarmKnowledge {
                 learnings: [],
                 patterns: {},
                 success_rate: { overall: 0, by_agent: {}, by_task_type: {} },
-                meta: { total_tasks: 0, successful_tasks: 0, failed_tasks: 0, learning_enabled: true }
+                meta: { total_tasks: 0, successful_tasks: 0, failed_tasks: 0, learning_enabled: true },
+                stable_files: []
             };
             await this.save();
         }
     }
 
     async save() {
-        await fs.writeFile(KNOWLEDGE_FILE, JSON.stringify(this.knowledge, null, 2));
+        await fs.writeFile(this.knowledgeFilePath, JSON.stringify(this.knowledge, null, 2));
     }
 
     /**
@@ -126,6 +137,72 @@ export class SwarmKnowledge {
         const successful = similar.filter(l => l.outcome === 'success');
 
         return successful.map(l => l.insights).slice(0, 5);
+    }
+
+    /**
+     * STABILITY SHIELD: Check if a file is cognitively locked (stabilized)
+     */
+    isLocked(filePath: string): boolean {
+        if (!this.knowledge || !this.knowledge.stable_files) return false;
+
+        // Normalize paths for comparison
+        const normalizedTarget = path.normalize(filePath).toLowerCase();
+
+        return this.knowledge.stable_files.some((f: string) => {
+            const normalizedStable = path.normalize(f).toLowerCase();
+            return normalizedTarget === normalizedStable || normalizedTarget.endsWith(normalizedStable);
+        });
+    }
+
+    /**
+     * STABILITY SHIELD: Lock a file to prevent autonomous modification
+     */
+    async lockFile(filePath: string) {
+        await this.load();
+        const normalized = path.normalize(filePath);
+        if (!this.knowledge.stable_files.includes(normalized)) {
+            this.knowledge.stable_files.push(normalized);
+            await this.save();
+            console.log(`🛡️ [STABILITY] File locked: ${normalized}`);
+        }
+    }
+
+    /**
+     * STABILITY SHIELD: Unlock a file
+     */
+    async unlockFile(filePath: string) {
+        await this.load();
+        const normalized = path.normalize(filePath);
+        this.knowledge.stable_files = this.knowledge.stable_files.filter((f: string) => path.normalize(f) !== normalized);
+        await this.save();
+        console.log(`🔓 [STABILITY] File unlocked: ${normalized}`);
+    }
+
+    /**
+     * Merge knowledge from a parallel branch (Singularity v2)
+     */
+    async mergeBranch(branchFilePath: string) {
+        await this.load();
+        console.log(`🧬 [RESONANCE] Merging knowledge from branch: ${branchFilePath}`);
+        try {
+            const data = await fs.readFile(branchFilePath, 'utf8');
+            const branchKnowledge = JSON.parse(data);
+
+            if (branchKnowledge.learnings && Array.isArray(branchKnowledge.learnings)) {
+                // Prevent duplicate IDs during merge
+                const existingIds = new Set(this.knowledge.learnings.map((l: any) => l.id));
+                const newLearnings = branchKnowledge.learnings.filter((l: any) => !existingIds.has(l.id));
+
+                this.knowledge.learnings.push(...newLearnings);
+                console.log(`   → Successfully merged ${newLearnings.length} new insights.`);
+
+                await this.save();
+                return true;
+            }
+        } catch (error: any) {
+            console.error(`   ❌ Failed to merge branch: ${error.message}`);
+        }
+        return false;
     }
 
     /**

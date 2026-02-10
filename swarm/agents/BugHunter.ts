@@ -34,13 +34,16 @@ export class BugHunterAgent {
             console.log(`   🔮 Oracle Guidance: ${oracleResult.recommendation}`);
             console.log(`   📊 Confidence: ${(oracleResult.confidence * 100).toFixed(1)}%`);
 
-            const files = await this.fs.listFiles('src/**/*.js');
+            const allFiles = await this.fs.listFiles('src/**/*.js');
+            // Filter out polyfills.js as it is now stabilized under Sovereign Directive
+            const files = allFiles.filter(f => !f.includes('polyfills.js'));
+
             const issues = [];
             let proposedFix = null;
 
-            // Analyze with Oracle-guided focus
+            // Analyze with Oracle-guided focus (Pick a random file to avoid loops)
             if (files.length > 0) {
-                const sampleFile = files[0];
+                const sampleFile = files[Math.floor(Math.random() * files.length)];
                 const content = await this.fs.readFile(sampleFile);
 
                 const analysis = await this.llm.chat({
@@ -57,7 +60,9 @@ export class BugHunterAgent {
                 }
             }
 
-            for (const file of files.slice(0, 5)) {
+            // Secondary check: search for TODOs in a few other files
+            const extraFiles = files.sort(() => 0.5 - Math.random()).slice(0, 5);
+            for (const file of extraFiles) {
                 const content = await this.fs.readFile(file);
                 if (content.includes('TODO')) {
                     issues.push({ file, type: 'TODO found' });

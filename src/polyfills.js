@@ -1,8 +1,12 @@
-import * as buffer from 'buffer';
-window.Buffer = window.Buffer || buffer;
+import { Buffer } from 'buffer';
 
 // Polyfill Buffer for Web3/Crypto libraries
-if (global && typeof global.window === 'object') {
-    window.Buffer = window.Buffer || Buffer;
-    window.global = window.global || window;
+if (typeof window !== 'undefined') {
+    window.Buffer = Buffer;
 }
+
+if (typeof global !== 'undefined') {
+    global.Buffer = Buffer;
+}
+
+export { Buffer };

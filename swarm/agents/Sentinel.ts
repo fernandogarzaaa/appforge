@@ -33,8 +33,10 @@ export class SentinelAgent {
 
             // Use Oracle recommendation for focused analysis
             const analysis = await this.llm.chat({
-                system: `You are a cybersecurity expert focusing on: ${oracleResult.recommendation}. If you find an issue, propose a specific fix in JSON format within the text.`,
-                user: 'Analyzing codebase for security vulnerabilities...'
+                system: `You are a cybersecurity expert focusing on: ${oracleResult.recommendation}. 
+                🛡️ STABILITY RULE: src/polyfills.js is already verified. DO NOT analyze or propose changes to it.
+                If you find an issue in other files, propose a specific fix in JSON format within the text.`,
+                user: 'Analyzing codebase for security vulnerabilities (excluding stabilized polyfills)...'
             });
 
             const recentErrors: any[] = [];

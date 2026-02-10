@@ -1,5 +1,6 @@
 import { Base44Tool } from '../tools/base44.js';
 import quantumCore from '../core/quantum_core.js';
+import swarmKnowledge from '../core/knowledge.js';
 
 /**
  * QUANTUM-POWERED GODMODE AGENT
@@ -82,6 +83,14 @@ export class GodModeAgent {
         for (const agent in findings) {
             const fix = findings[agent]?.proposed_fix;
             if (fix && fix.fix_type === 'patch' && fix.file && fix.replacement) {
+                // STABILITY SHIELD: Preventive Cognitive Lock Check
+                if (swarmKnowledge.isLocked(fix.file)) {
+                    console.warn(`   🚨 [COGNITIVE-LOCK] Violation detected: ${agent} attempted to patch stabilized file ${fix.file}`);
+                    await this.base44.logActivity('GOD_MODE', `COGNITIVE_LOCK_VIOLATION: ${agent} blocked from patching ${fix.file}`);
+                    details.push({ file: fix.file, agent: agent, status: 'blocked', reason: 'cognitive_lock' });
+                    continue;
+                }
+
                 console.log(`   🛠️ [PATCHING] Applying fix from ${agent} to ${fix.file}`);
                 try {
                     const content = await this.fs.readFile(fix.file);
@@ -125,6 +134,36 @@ export class GodModeAgent {
         } catch (e: any) {
             console.error('   ❌ [REMOTE] Audit Failed:', e.message);
             return { status: 'error', message: e.message };
+        }
+    }
+
+    async decideOnForkMerge(forkResult: any) {
+        console.log(`🧙‍♂️ [EXECUTIVE] Evaluating Shadow Fork: ${forkResult.id}`);
+
+        try {
+            const oracleResult = await quantumCore.consultOracle(
+                `A Shadow Swarm has completed a cognitive cycle with the following results: ${JSON.stringify(forkResult.results)}. Should we merge this revolutionary knowledge into the primary intelligence core?`,
+                [
+                    'Merge: Full Integration',
+                    'Discard: Coherence Loss detected',
+                    'Quarantine: Needs further validation',
+                    'Synthesize: Partial merge of specific insights'
+                ],
+                ['revolutionary_potential', 'stability_risk', 'coherence']
+            );
+
+            const shouldMerge = oracleResult.recommendation === 'Merge: Full Integration' || oracleResult.recommendation === 'Synthesize: Partial merge of specific insights';
+
+            await this.base44.logActivity('GOD_MODE', `FORK_EVALUATION: ${forkResult.id} - Recommendation: ${oracleResult.recommendation} (Confidence: ${oracleResult.confidence})`);
+
+            return {
+                shouldMerge,
+                recommendation: oracleResult.recommendation,
+                summary: `Oracle authorized merge via ${oracleResult.recommendation} with ${(oracleResult.confidence * 100).toFixed(1)}% confidence.`
+            };
+        } catch (e: any) {
+            console.warn('   ⚠️ GodMode fork evaluation fallback');
+            return { shouldMerge: false, recommendation: 'Error', summary: e.message };
         }
     }
 

@@ -1,7 +1,11 @@
-
 import { createClient } from '@base44/sdk';
 import dotenv from 'dotenv';
-dotenv.config({ path: '../.env.local' }); // Load from root
+import { fileURLToPath } from 'url';
+import path from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+dotenv.config({ path: path.resolve(__dirname, '../../.env.local') }); // Load from root
 
 export class Base44Tool {
     client: any;

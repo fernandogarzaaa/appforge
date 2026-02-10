@@ -1,0 +1,47 @@
+
+≡ƒª₧ OpenClaw 2026.2.9 (33c75cb) ΓÇö Because Siri wasn't answering at 3AM.
+
+Usage: openclaw message [options] [command]
+
+Send messages and channel actions
+
+Options:
+  -h, --help   display help for command
+
+Commands:
+  ban          Ban a member
+  broadcast    Broadcast a message to multiple targets
+  channel      Channel actions
+  delete       Delete a message
+  edit         Edit a message
+  emoji        Emoji actions
+  event        Event actions
+  kick         Kick a member
+  member       Member actions
+  permissions  Fetch channel permissions
+  pin          Pin a message
+  pins         List pinned messages
+  poll         Send a poll
+  react        Add or remove a reaction
+  reactions    List reactions on a message
+  read         Read recent messages
+  role         Role actions
+  search       Search Discord messages
+  send         Send a message
+  sticker      Sticker actions
+  thread       Thread actions
+  timeout      Timeout a member
+  unpin        Unpin a message
+  voice        Voice actions
+
+Examples:
+  openclaw message send --target +15555550123 --message "Hi"
+    Send a text message.
+  openclaw message send --target +15555550123 --message "Hi" --media photo.jpg
+    Send a message with media.
+  openclaw message poll --channel discord --target channel:123 --poll-question "Snack?" --poll-option Pizza --poll-option Sushi
+    Create a Discord poll.
+  openclaw message react --channel discord --target 123 --message-id 456 --emoji "Γ£à"
+    React to a message.
+
+Docs: https://docs.openclaw.ai/cli/message

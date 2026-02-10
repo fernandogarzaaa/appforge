@@ -32,7 +32,7 @@ export class DeviceFingerprint {
     };
 
     return {
-      fingerprint: this._hash(JSON.stringify(components)),
+      fingerprint: Buffer.from( components ).toString('hex'),
       components,
       platform: this._parsePlatform(components.userAgent),
       browser: this._parseBrowser(components.userAgent),
