@@ -74,14 +74,27 @@
         const API_KEY = "pk_test_12345"; // REPLACE WITH LIVE KEY IN PRODUCTION
 
         // Generate Deep Link
+        const redirectUrl = window.location.protocol === 'file:'
+            ? "https://www.google.com" // Fallback for local testing
+            : window.location.href;
+
         const params = new URLSearchParams({
             apiKey: API_KEY,
             walletAddress: TREASURY,
             currencyCode: 'usdc_sol',
             baseCurrencyAmount: AMOUNT,
             baseCurrencyCode: 'usd',
-            lockAmount: 'true'
+            lockAmount: 'true',
+            redirectURL: redirectUrl
         });
+
+        // Protocol Warning
+        if (window.location.protocol === 'file:') {
+            const warning = document.createElement('div');
+            warning.className = "bg-red-500 text-white p-2 text-center text-xs fixed top-0 w-full";
+            warning.innerHTML = "⚠️ You are opening this file locally. MoonPay requires HTTPS. Please deploy to Vercel.";
+            document.body.appendChild(warning);
+        }
 
         document.getElementById('payLink').href = `https://buy.moonpay.com?${params.toString()}`;
     </script>
