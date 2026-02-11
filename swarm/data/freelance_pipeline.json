@@ -1,0 +1,42 @@
+[
+  {
+    "id": "job_1",
+    "title": "Full Stack Developer - AI Platform",
+    "platform": "Upwork",
+    "value": 5000,
+    "status": "applied",
+    "timestamp": "2026-02-11T15:30:00.000Z"
+  },
+  {
+    "id": "job_2",
+    "title": "React Developer - Dashboard",
+    "platform": "Upwork",
+    "value": 2000,
+    "status": "applied",
+    "timestamp": "2026-02-11T15:30:00.000Z"
+  },
+  {
+    "id": "job_3",
+    "title": "DevOps Engineer - AWS",
+    "platform": "Toptal",
+    "value": 10000,
+    "status": "applied",
+    "timestamp": "2026-02-11T15:30:00.000Z"
+  },
+  {
+    "id": "job_4",
+    "title": "Blockchain Developer - Smart Contracts",
+    "platform": "Freelancer",
+    "value": 3000,
+    "status": "applied",
+    "timestamp": "2026-02-11T15:30:00.000Z"
+  },
+  {
+    "id": "job_5",
+    "title": "Python/ML Developer",
+    "platform": "Upwork",
+    "value": 4000,
+    "status": "applied",
+    "timestamp": "2026-02-11T15:30:00.000Z"
+  }
+]

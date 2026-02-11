@@ -6,17 +6,13 @@
  * Uses direct agent communication via signals.
  */
 
-import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { swarmCollaboration } from '../swarm/core/swarm_collaboration.js';
-import { QuantumSwarmCore } from '../swarm/core/quantum_core.js';
+import quantumCore from '../swarm/core/quantum_core.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-
-// Load environment
-dotenv.config({ path: path.resolve(__dirname, '../.env.local') });
 
 const COLORS = {
     reset: '\x1b[0m',
@@ -65,7 +61,10 @@ const AGENTS = [
     'Librarian',
     'RevenueHunter',
     'CryptoSwarm',
-    'MarketAnalyzer'
+    'MarketAnalyzer',
+    'WorkerSwarm',
+    'FreelanceSwarm',
+    'ConsultingSwarm'
 ];
 
 // Register a callback for receiving signals
@@ -79,11 +78,11 @@ swarmCollaboration.registerAgent('CLI', async (signal) => {
 
 async function handleCommand(args) {
     const [cmd, ...rest] = args;
-    const quantum = new QuantumSwarmCore();
+    const quantum = quantumCore;
 
     switch (cmd) {
         case 'status':
-            const qStats = quantum.getStats();
+            const qStats = quantumCore.getStats();
             console.log(`\n${COLORS.blue}📊 Quantum Core Status:${COLORS.reset}`);
             console.log(`   Coherence: ${(qStats.quantum_coherence * 100).toFixed(1)}%`);
             console.log(`   Engine Version: ${qStats.engineVersion}`);
@@ -242,7 +241,7 @@ async function main() {
     } else {
         // Interactive mode
         console.log(`${COLORS.yellow}Entering interactive mode... (type 'help' for commands, 'exit' to quit)${COLORS.reset}\n`);
-        
+
         const readline = (await import('readline')).createInterface({
             input: process.stdin,
             output: process.stdout

@@ -1,0 +1,14 @@
+[
+  {
+    "fromAgent": "CLI",
+    "toAgent": "GodMode",
+    "type": "TASK",
+    "payload": {
+      "message": "What is the current swarm status and recommendations?"
+    },
+    "priority": "MEDIUM",
+    "id": "sig_1770817303492_x1blyhmlq",
+    "timestamp": "2026-02-11T13:41:43.492Z",
+    "status": "PENDING"
+  }
+]

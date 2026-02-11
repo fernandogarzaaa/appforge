@@ -1,74 +1,74 @@
 {
   "Sentinel": {
     "name": "Sentinel",
-    "successRate": 0.9417953936979234,
+    "successRate": 0.9522020304654571,
     "revenue": 0,
-    "tasksCompleted": 2,
-    "lastActive": "2026-02-11T11:05:17.484Z",
-    "efficiency": 0.940841559941951
+    "tasksCompleted": 86,
+    "lastActive": "2026-02-11T14:58:16.594Z",
+    "efficiency": 0.8052141061437345
   },
   "BugHunter": {
     "name": "BugHunter",
-    "successRate": 0.9537902595803793,
+    "successRate": 0.9384489770254671,
     "revenue": 0,
-    "tasksCompleted": 9,
-    "lastActive": "2026-02-11T11:05:17.484Z",
-    "efficiency": 0.8781832169772084
+    "tasksCompleted": 31,
+    "lastActive": "2026-02-11T14:58:16.595Z",
+    "efficiency": 0.8576613084133536
   },
   "Optimizer": {
     "name": "Optimizer",
-    "successRate": 0.9845303701726885,
+    "successRate": 0.9497221113493597,
     "revenue": 0,
-    "tasksCompleted": 64,
-    "lastActive": "2026-02-11T11:05:17.484Z",
-    "efficiency": 0.9093435952735491
+    "tasksCompleted": 59,
+    "lastActive": "2026-02-11T14:58:16.595Z",
+    "efficiency": 0.8644318431841447
   },
   "ProductOwner": {
     "name": "ProductOwner",
-    "successRate": 0.905001368146863,
+    "successRate": 0.8696061239210027,
     "revenue": 0,
-    "tasksCompleted": 69,
-    "lastActive": "2026-02-11T11:05:17.484Z",
-    "efficiency": 0.8868860366113464
+    "tasksCompleted": 90,
+    "lastActive": "2026-02-11T14:58:16.595Z",
+    "efficiency": 0.8463155267329603
   },
   "Antigravity": {
     "name": "Antigravity",
-    "successRate": 0.860401746140582,
+    "successRate": 0.9485408804953859,
     "revenue": 0,
-    "tasksCompleted": 2,
-    "lastActive": "2026-02-11T11:05:17.484Z",
-    "efficiency": 0.9035677092539676
+    "tasksCompleted": 22,
+    "lastActive": "2026-02-11T14:58:16.595Z",
+    "efficiency": 0.8336825545260935
   },
   "Librarian": {
     "name": "Librarian",
-    "successRate": 0.9830493398517876,
+    "successRate": 0.8700008963245984,
     "revenue": 0,
-    "tasksCompleted": 32,
-    "lastActive": "2026-02-11T11:05:17.484Z",
-    "efficiency": 0.9055325321167956
+    "tasksCompleted": 30,
+    "lastActive": "2026-02-11T14:58:16.595Z",
+    "efficiency": 0.9294730135754457
   },
   "RevenueHunter": {
     "name": "RevenueHunter",
-    "successRate": 0.8788618903418677,
+    "successRate": 0.9521318544084321,
     "revenue": 0,
-    "tasksCompleted": 12,
-    "lastActive": "2026-02-11T11:05:17.484Z",
-    "efficiency": 0.9469925301357118
+    "tasksCompleted": 60,
+    "lastActive": "2026-02-11T14:58:16.595Z",
+    "efficiency": 0.9123922760178975
   },
   "CryptoSwarm": {
     "name": "CryptoSwarm",
-    "successRate": 0.9193927496500239,
+    "successRate": 0.8831809134490729,
     "revenue": 0,
-    "tasksCompleted": 88,
-    "lastActive": "2026-02-11T11:05:17.484Z",
-    "efficiency": 0.9168755056238581
+    "tasksCompleted": 17,
+    "lastActive": "2026-02-11T14:58:16.595Z",
+    "efficiency": 0.8415964157757045
   },
   "MarketAnalyzer": {
     "name": "MarketAnalyzer",
-    "successRate": 0.9375701347578986,
+    "successRate": 0.9821434254048729,
     "revenue": 0,
-    "tasksCompleted": 36,
-    "lastActive": "2026-02-11T11:05:17.484Z",
-    "efficiency": 0.9313988060793567
+    "tasksCompleted": 20,
+    "lastActive": "2026-02-11T14:58:16.595Z",
+    "efficiency": 0.9026872472539339
   }
 }

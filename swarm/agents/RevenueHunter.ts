@@ -67,6 +67,10 @@ export class RevenueHunter {
         const pendingPayments = await this.checkPendingPayments();
         opportunities.push(...pendingPayments);
 
+        // Generate pipeline opportunities from swarm activities
+        const pipelineOpportunities = await this.generatePipelineFromSwarm();
+        opportunities.push(...pipelineOpportunities);
+
         // Log activity
         await this.base44.logActivity('RevenueHunter', `Scanned for revenue opportunities. Found ${opportunities.length} pending.`);
 
@@ -114,6 +118,43 @@ export class RevenueHunter {
             console.log(`💰 [RevenueHunter] Found ${opportunities.length} pending payments`);
         } catch (error) {
             console.error('❌ [RevenueHunter] Error checking pending payments:', error);
+        }
+
+        return opportunities;
+    }
+
+    /**
+     * Generate revenue opportunities from swarm activities
+     */
+    private async generatePipelineFromSwarm(): Promise<RevenueOpportunity[]> {
+        const opportunities: RevenueOpportunity[] = [];
+
+        try {
+            // Read freelance applications from data files if available
+            const freelanceDataPath = path.join(this.dataDir, 'freelance_pipeline.json');
+            if (fs.existsSync(freelanceDataPath)) {
+                const data = fs.readFileSync(freelanceDataPath, 'utf8');
+                const applications = JSON.parse(data);
+
+                for (const app of applications) {
+                    if (app.status === 'pending' || app.status === 'applied') {
+                        opportunities.push({
+                            id: `pipeline_${app.id || Date.now()}`,
+                            type: 'upgrade',
+                            source: 'Freelance Pipeline',
+                            amount: app.value || 2500, // Estimated value
+                            currency: 'USD',
+                            status: 'pending',
+                            timestamp: new Date().toISOString(),
+                            metadata: app
+                        });
+                    }
+                }
+            }
+
+            console.log(`💰 [RevenueHunter] Generated ${opportunities.length} pipeline opportunities`);
+        } catch (error) {
+            console.error('❌ [RevenueHunter] Error generating pipeline:', error);
         }
 
         return opportunities;
@@ -212,6 +253,14 @@ export class RevenueHunter {
             // Save current stats
             fs.writeFileSync(dataPath, JSON.stringify(this.stats, null, 2));
 
+            // Calculate potential pipeline value
+            const pipelinePath = path.join(this.dataDir, 'freelance_pipeline.json');
+            if (fs.existsSync(pipelinePath)) {
+                const pipelineData = JSON.parse(fs.readFileSync(pipelinePath, 'utf8'));
+                const pipelineValue = pipelineData.reduce((sum: number, app: any) => sum + (app.value || 0), 0);
+                console.log(`💰 [RevenueHunter] Pipeline Value: $${pipelineValue.toLocaleString()} (pending)`);
+            }
+
             console.log(`💰 [RevenueHunter] Stats updated: ${this.stats.totalRevenue.toFixed(4)} SOL total revenue`);
         } catch (error) {
             console.error('❌ [RevenueHunter] Error updating stats:', error);
@@ -234,9 +283,21 @@ export class RevenueHunter {
      * Generate revenue report
      */
     generateReport(): string {
+        // Calculate pipeline value
+        let pipelineValue = 0;
+        let pipelineJobs = 0;
+        try {
+            const pipelinePath = path.join(this.dataDir, 'freelance_pipeline.json');
+            if (fs.existsSync(pipelinePath)) {
+                const pipelineData = JSON.parse(fs.readFileSync(pipelinePath, 'utf8'));
+                pipelineValue = pipelineData.reduce((sum: number, app: any) => sum + (app.value || 0), 0);
+                pipelineJobs = pipelineData.length;
+            }
+        } catch {}
+
         const report = `
 💰 **REVENUE HUNTER REPORT**
-═══════════════════════════════
+═══════════════════════════════════════
 
 📊 **Current Stats:**
    Total Revenue: ${this.stats.totalRevenue.toFixed(4)} SOL
@@ -246,6 +307,12 @@ export class RevenueHunter {
    Avg Transaction: ${this.stats.averageTransactionValue.toFixed(2)} SOL
    Last Payment: ${this.stats.lastPaymentTime || 'Never'}
 
+📈 **Pipeline Overview:**
+   💼 Active Applications: ${pipelineJobs}
+   🎯 Pipeline Value: $${pipelineValue.toLocaleString()}
+   📊 Est. Conversion: 20%
+   💰 Expected Revenue: $${(pipelineValue * 0.2).toLocaleString()}
+
 📈 **Wallet Address:**
    ${this.solanaAddress}
 
@@ -254,14 +321,16 @@ export class RevenueHunter {
    • Referral Commissions: 10% of referred revenue
    • Upgrade Opportunities: Tier upgrades
    • New Signups: First month revenue
+   • Freelance Contracts: $2K-$10K/project
 
 🚀 **Action Items:**
    1. Process pending payments
    2. Follow up on failed transactions
    3. Activate referral program
-   4. Optimize pricing tiers
+   4. Convert freelance applications
+   5. Optimize pricing tiers
 
-═══════════════════════════════
+═══════════════════════════════════════
         `;
         return report;
     }

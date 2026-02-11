@@ -33,6 +33,13 @@ import { OptimizerAgent } from '../agents/Optimizer.js';
 import { GodModeAgent } from '../agents/GodMode.js';
 import { ProductOwnerAgent } from '../agents/ProductOwner.js';
 import { AntigravityAgent } from '../agents/Antigravity.js';
+import { LibrarianAgent } from '../agents/Librarian.js';
+import { RevenueHunter } from '../agents/RevenueHunter.js';
+import { CryptoSwarm } from '../agents/CryptoSwarm.js';
+import { MarketAnalyzer } from '../agents/MarketAnalyzer.js';
+import { WorkerSwarm } from '../agents/WorkerSwarm.js';
+import { FreelanceSwarm } from '../agents/FreelanceSwarm.js';
+import { ConsultingSwarm } from '../agents/ConsultingSwarm.js';
 import swarmKnowledge from './knowledge.js';
 import { hyperBrain } from './hyper_brain.js';
 import { nas } from './nas.js';
@@ -42,7 +49,6 @@ import { sovereignBridge } from './sovereign_bridge.js';
 import quantumCore from './quantum_core.js';
 import { replicator } from './replicate.js';
 import { nexusGateway } from './nexus_gateway.js';
-import { LibrarianAgent } from '../agents/Librarian.js';
 import { ResonanceEngine } from './resonance_engine.js';
 import { ShadowSwarm } from './shadow_swarm.js';
 import { swarmCollaboration } from './swarm_collaboration.js';
@@ -108,9 +114,15 @@ async function main() {
     const productOwner = new ProductOwnerAgent(base44, fsTool, memory);
     const antigravity = new AntigravityAgent(base44, fsTool, git);
     const librarian = new LibrarianAgent(base44);
+    const revenueHunter = new RevenueHunter(base44);
+    const cryptoSwarm = new CryptoSwarm(base44, fsTool);
+    const marketAnalyzer = new MarketAnalyzer(base44, fsTool);
+    const workerSwarm = new WorkerSwarm(base44, fsTool);
+    const freelanceSwarm = new FreelanceSwarm(base44, fsTool);
+    const consultingSwarm = new ConsultingSwarm(base44, fsTool);
     const resonanceEngine = new ResonanceEngine(swarmKnowledge);
 
-    console.log('✅ 6 Agents Initialized (including Antigravity). Entering Autonomous Loop...');
+    console.log('✅ 13 Agents Initialized (Main + Specialized Swarms). Entering Autonomous Loop...');
     console.log('⚛️ Quantum Core: Active');
     console.log('🔮 Oracle: Available for consultation\n');
 
@@ -142,6 +154,30 @@ async function main() {
     swarmCollaboration.registerAgent('Librarian', async (signal) => {
         console.log(`📡 [Librarian] Received signal: ${signal.type}`);
         await librarian.run();
+    });
+    swarmCollaboration.registerAgent('RevenueHunter', async (signal) => {
+        console.log(`📡 [RevenueHunter] Received signal: ${signal.type}`);
+        await revenueHunter.hunt();
+    });
+    swarmCollaboration.registerAgent('CryptoSwarm', async (signal) => {
+        console.log(`📡 [CryptoSwarm] Received signal: ${signal.type}`);
+        await cryptoSwarm.run();
+    });
+    swarmCollaboration.registerAgent('MarketAnalyzer', async (signal) => {
+        console.log(`📡 [MarketAnalyzer] Received signal: ${signal.type}`);
+        await marketAnalyzer.analyze();
+    });
+    swarmCollaboration.registerAgent('WorkerSwarm', async (signal) => {
+        console.log(`📡 [WorkerSwarm] Received signal: ${signal.type}`);
+        await workerSwarm.run();
+    });
+    swarmCollaboration.registerAgent('FreelanceSwarm', async (signal) => {
+        console.log(`📡 [FreelanceSwarm] Received signal: ${signal.type}`);
+        await freelanceSwarm.run();
+    });
+    swarmCollaboration.registerAgent('ConsultingSwarm', async (signal) => {
+        console.log(`📡 [ConsultingSwarm] Received signal: ${signal.type}`);
+        await consultingSwarm.run();
     });
 
     console.log(`🤝 ${swarmCollaboration.getStats().registeredAgents} agents registered for collaboration`);
@@ -304,7 +340,7 @@ async function main() {
                 results.optimizer = optimizerRes;
                 results.productOwner = poRes;
                 results.antigravity = agRes;
-
+                
                 // 🌌 RESONANCE: Librarian Research (every 2 cycles)
                 if (cycleCount % 2 === 0) {
                     const librarianRes = await librarian.run();
@@ -312,6 +348,42 @@ async function main() {
                         results.librarian = librarianRes;
                         await resonanceEngine.ingestPulse(librarianRes.pulse);
                     }
+                }
+
+                // 💰 RevenueHunter (every 3 cycles)
+                if (cycleCount % 3 === 0) {
+                    const revenueRes = await revenueHunter.hunt();
+                    results.revenueHunter = { status: 'completed', opportunities: revenueRes.length };
+                }
+
+                // 🦊 CryptoSwarm (every 4 cycles)
+                if (cycleCount % 4 === 0) {
+                    const cryptoRes = await cryptoSwarm.run();
+                    results.cryptoSwarm = cryptoRes;
+                }
+
+                // 📈 MarketAnalyzer (every 5 cycles)
+                if (cycleCount % 5 === 0) {
+                    const marketRes = await marketAnalyzer.analyze();
+                    results.marketAnalyzer = marketRes;
+                }
+
+                // 👷 WorkerSwarm (every 7 cycles)
+                if (cycleCount % 7 === 0) {
+                    const workerRes = await workerSwarm.run();
+                    results.workerSwarm = workerRes;
+                }
+
+                // 💼 FreelanceSwarm (every 7 cycles - revenue focused)
+                if (cycleCount % 7 === 0) {
+                    const freelanceRes = await freelanceSwarm.run();
+                    results.freelanceSwarm = freelanceRes;
+                }
+
+                // 💼 ConsultingSwarm (every 11 cycles - consulting revenue)
+                if (cycleCount % 11 === 0) {
+                    const consultingRes = await consultingSwarm.run();
+                    results.consultingSwarm = consultingRes;
                 }
 
                 // 🌌 RESONANCE: Monthly Sync (every 50 cycles)

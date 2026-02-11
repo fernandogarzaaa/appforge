@@ -1,0 +1,21 @@
+{
+  "solBalance": 0.0969,
+  "usdcBalance": 0,
+  "positions": [
+    {
+      "id": "trade_1770830063759",
+      "pair": "JUP/USDC",
+      "direction": "LONG",
+      "entryPrice": 0.85,
+      "size": 0.0031,
+      "status": "open",
+      "confidence": 61,
+      "timestamp": "2026-02-11T17:14:23.759Z",
+      "reason": "BUY JUP/USDC - Strong buy signal, technical indicators bullish, RSI oversold"
+    }
+  ],
+  "totalTrades": 0,
+  "winningTrades": 0,
+  "totalPnl": 0,
+  "winRate": 0
+}
