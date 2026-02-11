@@ -1,7 +1,7 @@
 {
-  "temperature": 4995.086256925128,
-  "coolingRate": 0.9499910499795488,
-  "fitness": 99.94191254880006,
+  "temperature": 4326.0006755622235,
+  "coolingRate": 0.9489939458380077,
+  "fitness": 92.25395259362995,
   "generations": 19,
-  "timestamp": "2026-02-11T13:40:11.424Z"
+  "timestamp": "2026-02-11T15:03:24.966Z"
 }
