@@ -8,7 +8,7 @@ describe('useAPIKeys Hook', () => {
   });
 
   it('should initialize with default state', () => {
-    const { result } = renderHook(() => useAPIKeys());
+    const { result } = renderHook(() => useAPIKeys({ testAPIKey: 'some-test-key' }));
     expect(result.current.keys).toBeDefined();
     expect(result.current.loading).toBe(true);
     expect(result.current.error).toBeNull();

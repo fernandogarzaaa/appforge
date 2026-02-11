@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test'
+await page.goto('/login', { waitUntil: 'load' });import { test, expect } from '@playwright/test'
 
 test.describe('Authentication Flow', () => {
   test('should show login page when not authenticated', async ({ page }) => {

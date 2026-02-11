@@ -13,7 +13,7 @@ export async function initializeQuantumCore() {
   if (isInitialized) return quantumModule;
   
   try {
-    const { default: init, QuantumAnnealer, EntangledState, SuperpositionSynthesizer } = await import('../quantum-core/pkg/quantum_core');
+    try { const { default: init, QuantumAnnealer, EntangledState, SuperpositionSynthesizer } = await import('../quantum-core/pkg/quantum_core'); } catch (error) { console.error('❌ Failed to import quantum core:', error); throw error; }
     await init();
     
     quantumModule = {

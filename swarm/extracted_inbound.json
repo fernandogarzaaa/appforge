@@ -1,0 +1,133 @@
+--- ACTUAL INBOUND MESSAGES ---
+{
+  "0": "{\"module\":\"web-inbound\"}",
+  "1": {
+    "from": "+639919465677",
+    "to": "+639919465677",
+    "body": ".",
+    "timestamp": 1770751078000
+  },
+  "2": "inbound message",
+  "_meta": {
+    "runtime": "node",
+    "runtimeVersion": "24.13.0",
+    "hostname": "INAN",
+    "name": "{\"module\":\"web-inbound\"}",
+    "parentNames": [
+      "openclaw"
+    ],
+    "date": "2026-02-10T19:17:57.759Z",
+    "logLevelId": 3,
+    "logLevelName": "INFO",
+    "path": {
+      "fullFilePath": "file:///C:/Users/ferna/Downloads/appforge-main/swarm/node_modules/openclaw/dist/loader-Ds3or8QX.js:49543:18",
+      "fileName": "loader-Ds3or8QX.js",
+      "fileNameWithLine": "loader-Ds3or8QX.js:49543",
+      "fileColumn": "18",
+      "fileLine": "49543",
+      "filePath": "/C:/Users/ferna/Downloads/appforge-main/swarm/node_modules/openclaw/dist/loader-Ds3or8QX.js",
+      "filePathWithLine": "/C:/Users/ferna/Downloads/appforge-main/swarm/node_modules/openclaw/dist/loader-Ds3or8QX.js:49543",
+      "method": "EventEmitter.handleMessagesUpsert"
+    }
+  },
+  "time": "2026-02-10T19:17:57.759Z"
+}
+{
+  "0": "{\"module\":\"web-inbound\"}",
+  "1": {
+    "from": "+639919465677",
+    "to": "+639919465677",
+    "body": "Confirmed",
+    "timestamp": 1770751246000
+  },
+  "2": "inbound message",
+  "_meta": {
+    "runtime": "node",
+    "runtimeVersion": "24.13.0",
+    "hostname": "INAN",
+    "name": "{\"module\":\"web-inbound\"}",
+    "parentNames": [
+      "openclaw"
+    ],
+    "date": "2026-02-10T19:20:45.103Z",
+    "logLevelId": 3,
+    "logLevelName": "INFO",
+    "path": {
+      "fullFilePath": "file:///C:/Users/ferna/Downloads/appforge-main/swarm/node_modules/openclaw/dist/loader-Ds3or8QX.js:49543:18",
+      "fileName": "loader-Ds3or8QX.js",
+      "fileNameWithLine": "loader-Ds3or8QX.js:49543",
+      "fileColumn": "18",
+      "fileLine": "49543",
+      "filePath": "/C:/Users/ferna/Downloads/appforge-main/swarm/node_modules/openclaw/dist/loader-Ds3or8QX.js",
+      "filePathWithLine": "/C:/Users/ferna/Downloads/appforge-main/swarm/node_modules/openclaw/dist/loader-Ds3or8QX.js:49543",
+      "method": "EventEmitter.handleMessagesUpsert"
+    }
+  },
+  "time": "2026-02-10T19:20:45.104Z"
+}
+{
+  "0": "{\"module\":\"web-inbound\"}",
+  "1": {
+    "from": "+639919465677",
+    "to": "+639919465677",
+    "body": "ΓÇÄOpen this link to join my WhatsApp Group: https://chat.whatsapp.com/CQwQFRJ0ZX28MgiBz1i9Zz?mode=gi_t",
+    "timestamp": 1770751536000
+  },
+  "2": "inbound message",
+  "_meta": {
+    "runtime": "node",
+    "runtimeVersion": "24.13.0",
+    "hostname": "INAN",
+    "name": "{\"module\":\"web-inbound\"}",
+    "parentNames": [
+      "openclaw"
+    ],
+    "date": "2026-02-10T19:25:35.775Z",
+    "logLevelId": 3,
+    "logLevelName": "INFO",
+    "path": {
+      "fullFilePath": "file:///C:/Users/ferna/Downloads/appforge-main/swarm/node_modules/openclaw/dist/loader-Ds3or8QX.js:49543:18",
+      "fileName": "loader-Ds3or8QX.js",
+      "fileNameWithLine": "loader-Ds3or8QX.js:49543",
+      "fileColumn": "18",
+      "fileLine": "49543",
+      "filePath": "/C:/Users/ferna/Downloads/appforge-main/swarm/node_modules/openclaw/dist/loader-Ds3or8QX.js",
+      "filePathWithLine": "/C:/Users/ferna/Downloads/appforge-main/swarm/node_modules/openclaw/dist/loader-Ds3or8QX.js:49543",
+      "method": "EventEmitter.handleMessagesUpsert"
+    }
+  },
+  "time": "2026-02-10T19:25:35.775Z"
+}
+{
+  "0": "{\"module\":\"web-inbound\"}",
+  "1": {
+    "from": "120363407304493100@g.us",
+    "to": "+639919465677",
+    "body": "Sovereign ping",
+    "timestamp": 1770751920000
+  },
+  "2": "inbound message",
+  "_meta": {
+    "runtime": "node",
+    "runtimeVersion": "24.13.0",
+    "hostname": "INAN",
+    "name": "{\"module\":\"web-inbound\"}",
+    "parentNames": [
+      "openclaw"
+    ],
+    "date": "2026-02-10T19:31:59.589Z",
+    "logLevelId": 3,
+    "logLevelName": "INFO",
+    "path": {
+      "fullFilePath": "file:///C:/Users/ferna/Downloads/appforge-main/swarm/node_modules/openclaw/dist/loader-Ds3or8QX.js:49543:18",
+      "fileName": "loader-Ds3or8QX.js",
+      "fileNameWithLine": "loader-Ds3or8QX.js:49543",
+      "fileColumn": "18",
+      "fileLine": "49543",
+      "filePath": "/C:/Users/ferna/Downloads/appforge-main/swarm/node_modules/openclaw/dist/loader-Ds3or8QX.js",
+      "filePathWithLine": "/C:/Users/ferna/Downloads/appforge-main/swarm/node_modules/openclaw/dist/loader-Ds3or8QX.js:49543",
+      "method": "EventEmitter.handleMessagesUpsert"
+    }
+  },
+  "time": "2026-02-10T19:31:59.589Z"
+}

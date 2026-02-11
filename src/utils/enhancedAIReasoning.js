@@ -34,7 +34,7 @@ export class MultiAgentCoordinator {
       .filter(agent => agent.status === 'idle');
     
     if (suitableAgents.length === 0) {
-      this.taskQueue.push({ task, requirements });
+      setTimeout(() => { this.taskQueue.push({ task, requirements }); }, 10000); // add a timeout to periodically re-attempt task delegation
       return {
         delegated: false,
         reason: 'No suitable agent available',

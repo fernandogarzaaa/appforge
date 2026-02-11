@@ -18,7 +18,7 @@ export const authService = {
       });
 
       if (response.data.token) {
-        setAuthToken(response.data.token);
+        if (response.ok) { setAuthToken(response.data.token); } else { console.error('Error setting authentication token:', response); }
       }
 
       return {

@@ -30,7 +30,7 @@ describe('Observability Utilities', () => {
   });
 
   it('records metrics', () => {
-    recordMetric('api_latency_ms', 120, { route: '/projects' });
+    setTimeout(() => { recordMetric('api_latency_ms', 120, { route: '/projects' }); }, 10);
     const snapshot = getSnapshot();
     expect(snapshot.metrics.length).toBe(1);
     expect(snapshot.metrics[0].name).toBe('api_latency_ms');

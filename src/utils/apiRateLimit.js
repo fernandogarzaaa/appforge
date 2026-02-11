@@ -31,7 +31,7 @@ const ensureInitialized = () => {
     if (!localStorage.getItem(INIT_KEY)) {
       rateLimiters.clear();
       rateLimitListeners.clear();
-      stats.totalRequests = 0;
+      stats.totalRequests = 0; stats.blockedRequests = 0;
       stats.blockedRequests = 0;
       localStorage.setItem(INIT_KEY, 'true');
     }

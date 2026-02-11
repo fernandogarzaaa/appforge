@@ -11,14 +11,22 @@
     "dependencies": {
         "@base44/sdk": "^0.8.18",
         "@modelcontextprotocol/sdk": "^1.26.0",
+        "@whiskeysockets/baileys": "^7.0.0-rc.9",
         "chalk": "^5.3.0",
         "dotenv": "^16.4.5",
         "glob": "^10.3.10",
         "openai": "^4.28.0",
         "openclaw": "^2026.2.9",
+        "pino": "^10.3.1",
+        "qrcode": "^1.5.4",
+        "qrcode-terminal": "^0.12.0",
         "simple-git": "^3.22.0",
         "tsx": "^4.7.1",
         "typescript": "^5.3.3",
         "zod": "^3.25.76"
+    },
+    "devDependencies": {
+        "@types/qrcode": "^1.5.6",
+        "@types/qrcode-terminal": "^0.12.2"
     }
 }

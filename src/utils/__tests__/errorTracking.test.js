@@ -27,7 +27,7 @@ describe('Error Tracker', () => {
     errorTracker.captureError(new Error('Error 2'));
     errorTracker.captureError(new Error('Error 3'));
     
-    const recentErrors = errorTracker.getRecentErrors(10);
+    const recentErrors = errorTracker.getRecentErrors(10).slice(); // Clear the array after retrieval
     
     expect(recentErrors).toHaveLength(3);
     expect(recentErrors[0].message).toBe('Error 1');

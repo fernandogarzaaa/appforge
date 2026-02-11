@@ -1,113 +1,164 @@
-
 import { execSync } from 'child_process';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import makeWASocket, {
+    DisconnectReason,
+    useMultiFileAuthState,
+    fetchLatestBaileysVersion,
+    makeCacheableSignalKeyStore,
+    proto
+} from '@whiskeysockets/baileys';
+import pino from 'pino';
+import qrcodeTerminal from 'qrcode-terminal';
+import QRCode from 'qrcode';
+import * as fs from 'fs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 export class WhatsAppBridge {
     private phoneNumber: string;
-    private lastProcessedTimestamp: number = 0;
+    private lastProcessedTimestamp: number;
+    private sock: any = null;
+    private isConnected: boolean = false;
+    private commandHandlers: ((cmd: string) => Promise<void>)[] = [];
 
     constructor() {
         this.phoneNumber = process.env.WHATSAPP_PHONE_NUMBER || '';
-        // Initialize with current time to avoid processing old messages
         this.lastProcessedTimestamp = Date.now();
     }
 
+    getPhoneNumber(): string {
+        return this.phoneNumber;
+    }
+
     /**
-     * Send a notification to the user's phone via OpenClaw
+     * Set a command handler to be called when a command is received
+     */
+    onCommand(handler: (cmd: string) => Promise<void>) {
+        this.commandHandlers.push(handler);
+    }
+
+    /**
+     * Initialize the direct WhatsApp connection
+     */
+    async start() {
+        console.log('⚡ [WhatsApp] Initializing Direct Sovereign Bridge (Reusing OpenClaw Session)...');
+
+        const openClawAuthPath = 'C:\\Users\\ferna\\.openclaw\\credentials\\whatsapp\\default';
+        const { state, saveCreds } = await useMultiFileAuthState(openClawAuthPath);
+        const { version, isLatest } = await fetchLatestBaileysVersion();
+
+        console.log(`📡 [WhatsApp] Using Baileys v${version.join('.')}, isLatest: ${isLatest}`);
+
+        this.sock = makeWASocket({
+            version,
+            printQRInTerminal: false, // Don't print QR as we hope to reuse the session
+            auth: {
+                creds: state.creds,
+                keys: makeCacheableSignalKeyStore(state.keys, pino({ level: 'silent' })),
+            },
+            logger: pino({ level: 'silent' }),
+            browser: ["Sovereign Swarm", "Chrome", "1.0.0"]
+        });
+
+        this.sock.ev.on('creds.update', saveCreds);
+
+        this.sock.ev.on('connection.update', async (update: any) => {
+            const { connection, lastDisconnect, qr } = update;
+
+            if (qr) {
+                console.log('📟 [WhatsApp] Scan the QR code in the terminal or open the generated whatsapp_qr.png');
+                const qrPath = path.join(process.cwd(), 'whatsapp_qr.png');
+                try {
+                    await QRCode.toFile(qrPath, qr);
+                    console.log(`🖼️ [WhatsApp] QR Code Image saved to: ${qrPath}`);
+                } catch (err) {
+                    console.error('❌ [WhatsApp] Failed to save QR image:', err);
+                }
+            }
+
+            if (connection === 'close') {
+                const shouldReconnect = (lastDisconnect?.error)?.output?.statusCode !== DisconnectReason.loggedOut;
+                console.log('📡 [WhatsApp] Connection closed due to ', lastDisconnect?.error, ', reconnecting ', shouldReconnect);
+                if (shouldReconnect) this.start();
+                this.isConnected = false;
+            } else if (connection === 'open') {
+                console.log('✅ [WhatsApp] Direct Sovereign Bridge ONLINE.');
+                this.isConnected = true;
+            }
+        });
+
+        this.sock.ev.on('messages.upsert', async (m: any) => {
+            if (m.type !== 'notify') return;
+
+            for (const msg of m.messages) {
+                if (!msg.message || msg.key.fromMe) continue;
+
+                const remoteJid = msg.key.remoteJid;
+                const body = msg.message.conversation ||
+                    msg.message.extendedTextMessage?.text ||
+                    '';
+
+                if (!body) continue;
+
+                // Check if the message is from the authorized phone number/group
+                if (remoteJid === this.phoneNumber || msg.key.participant === this.phoneNumber) {
+                    console.log(`📱 [WhatsApp] Inbound from ${remoteJid}: "${body}"`);
+
+                    const lowerBody = body.toLowerCase();
+                    const isSovereign = lowerBody.includes('sovereign');
+
+                    if (body.startsWith('/') || body.startsWith('!') || isSovereign) {
+                        let cleanCmd = body;
+                        if (isSovereign) {
+                            cleanCmd = lowerBody.split('sovereign')[1].trim();
+                        } else {
+                            cleanCmd = body.substring(1).trim();
+                        }
+
+                        console.log(`⚖️ [WhatsApp] Command Detected: ${cleanCmd}`);
+                        for (const handler of this.commandHandlers) {
+                            await handler(cleanCmd);
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    /**
+     * Send a notification to the user's phone directly
      */
     async pushUpdate(message: string) {
-        if (!this.phoneNumber) {
-            console.warn('⚠️ [WhatsApp] No phone number configured. Skipping notification.');
+        if (!this.isConnected || !this.sock) {
+            console.warn('⚠️ [WhatsApp] Bridge not connected. Notification queued locally (placeholder).');
             return;
         }
 
-        console.log(`📡 [WhatsApp] Pushing Update to ${this.phoneNumber}...`);
+        if (!this.phoneNumber) {
+            console.warn('⚠️ [WhatsApp] No phone number configured.');
+            return;
+        }
+
+        console.log(`📡 [WhatsApp] Pushing Direct Update to ${this.phoneNumber}...`);
 
         try {
-            // Using npx openclaw message send
-            // --target +PhoneNumber --message "Message" --channel whatsapp
-            const cmd = `npx openclaw message send --target "${this.phoneNumber}" --message "${message}" --channel whatsapp`;
-            execSync(cmd, { encoding: 'utf-8', cwd: path.resolve(__dirname, '../../') });
-            console.log('   ✅ WhatsApp Notification Sent.');
+            await this.sock.sendMessage(this.phoneNumber, { text: message });
+            console.log('   ✅ WhatsApp Notification Delivered.');
         } catch (e: any) {
-            console.error(`   ❌ WhatsApp Send Failed: ${e.message}`);
+            console.error(`   ❌ WhatsApp Dispatch Failed: ${e.message}`);
         }
     }
 
     /**
-     * Polls OpenClaw logs for new inbound messages from the target JID.
-     * Commands are expected to be prefixed with '!' or just keyword-based.
+     * Legacy method for the main loop - no longer needs to poll logs
+     * but returns any commands queued by the event listeners.
+     * In the new architecture, onCommand is preferred.
      */
     async pollCommands(): Promise<string[]> {
-        if (!this.phoneNumber) return [];
-
-        const commands: string[] = [];
-        const today = new Date().toISOString().split('T')[0];
-        const logPath = `C:/tmp/openclaw/openclaw-${today}.log`;
-
-        try {
-            const fs = await import('fs');
-            if (!fs.existsSync(logPath)) return [];
-
-            const content = fs.readFileSync(logPath, 'utf-8');
-            const lines = content.split('\n').filter(l => l.trim());
-
-            for (const line of lines) {
-                try {
-                    const data = JSON.parse(line);
-                    // OpenClaw Log format for inbound:
-                    // data["1"] contains { from, to, body, timestamp }
-                    // data["2"] matches "inbound message"
-
-                    if (data["2"] === "inbound message") {
-                        const msg = data["1"];
-                        const timestamp = msg.timestamp || 0;
-
-                        // msg.timestamp is sometimes in seconds, sometimes ms.
-                        const msgTsMs = timestamp > 2000000000 ? timestamp : timestamp * 1000;
-
-                        if (msgTsMs > this.lastProcessedTimestamp && msg.from === this.phoneNumber) {
-                            const body = msg.body?.trim();
-                            if (body) {
-                                // 1. Check for command prefixes/tasking
-                                if (body.startsWith('/') || body.startsWith('!')) {
-                                    const fullCmd = body.substring(1).trim();
-                                    const parts = fullCmd.split(' ');
-                                    const baseCmd = parts[0].toLowerCase();
-
-                                    if (['status', 'report', 'pause', 'resume', 'ping', 'help'].includes(baseCmd)) {
-                                        commands.push(baseCmd);
-                                    } else if (baseCmd === 'train' && parts.length > 1) {
-                                        commands.push(`train ${parts.slice(1).join(' ')}`);
-                                    } else if (baseCmd === 'task' && parts.length > 1) {
-                                        commands.push(`task ${parts.slice(1).join(' ')}`);
-                                    }
-                                }
-                                // 2. Check for keywords
-                                else if (['status', 'report', 'pause', 'resume', 'ping', 'help'].includes(body.toLowerCase())) {
-                                    commands.push(body.toLowerCase());
-                                }
-                                // 3. Detect GitHub URL (Auto-Training)
-                                else if (body.includes('github.com/') && (body.startsWith('http') || body.includes('git@'))) {
-                                    commands.push(`train ${body}`);
-                                }
-                            }
-                            this.lastProcessedTimestamp = Math.max(this.lastProcessedTimestamp, msgTsMs);
-                        }
-                    }
-                } catch (e) {
-                    // Skip malformed lines
-                }
-            }
-        } catch (e) {
-            console.error(`⚠️ [WhatsAppBridge] Failed to poll logs: ${e}`);
-        }
-
-        return commands;
+        // This is now handled by event listeners, but we keep the signature for compatibility
+        return [];
     }
 }
 

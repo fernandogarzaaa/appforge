@@ -7,7 +7,7 @@ import { base44 } from '../base44Client';
 const authService = {
   async register() {
     // Base44 handles registration through its login flow
-    base44.auth.redirectToLogin(window.location.href);
+    window.location.href = base44.auth.getLoginUrl();
     return null;
   },
 

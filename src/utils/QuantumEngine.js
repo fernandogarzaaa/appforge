@@ -26,7 +26,7 @@ export class QuantumErrorCorrection {
 
     encode(data) {
         // Simple repetition code
-        const encoded = [];
+        const encoded = new Array(data.length);
         for (let i = 0; i < data.length; i++) {
             const qubits = [];
             for (let r = 0; r < this.redundancy; r++) {

@@ -28,3 +28,18 @@ Error data: {
   "traceback": null,
   "extra_data": null
 }
+[Base44 SDK Error] undefined: connect EHOSTUNREACH 216.24.57.1:443
+[Base44 SDK Error] undefined: getaddrinfo ENOTFOUND appforge.fun
+[Base44 SDK Error] undefined: getaddrinfo ENOTFOUND appforge.fun
+[Base44 SDK Error] undefined: getaddrinfo ENOTFOUND appforge.fun
+[Base44 SDK Error] undefined: getaddrinfo ENOTFOUND appforge.fun
+[Base44 SDK Error] undefined: getaddrinfo ENOTFOUND appforge.fun
+[Base44 SDK Error] undefined: getaddrinfo ENOTFOUND appforge.fun
+[Base44 SDK Error] undefined: getaddrinfo ENOTFOUND appforge.fun
+[Base44 SDK Error] undefined: getaddrinfo ENOTFOUND appforge.fun
+[Base44 SDK Error] undefined: getaddrinfo ENOTFOUND appforge.fun
+[Base44 SDK Error] undefined: getaddrinfo ENOTFOUND appforge.fun
+[Base44 SDK Error] undefined: getaddrinfo ENOTFOUND appforge.fun
+[Base44 SDK Error] undefined: connect ETIMEDOUT 216.24.57.1:443
+[Base44 SDK Error] undefined: getaddrinfo ENOTFOUND appforge.fun
+[Base44 SDK Error] undefined: getaddrinfo ENOTFOUND appforge.fun
