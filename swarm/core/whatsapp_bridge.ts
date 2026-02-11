@@ -16,6 +16,8 @@ import * as fs from 'fs';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+const QUANTUM_CHANNEL_PATH = path.join(__dirname, '..', '..', 'swarm', 'quantum_channel.json');
+
 export class WhatsAppBridge {
     private phoneNumber: string;
     private lastProcessedTimestamp: number;
@@ -33,10 +35,74 @@ export class WhatsAppBridge {
     }
 
     /**
+     * Get JID format for WhatsApp
+     */
+    private getJID(phone: string): string {
+        // Remove any existing JID suffix
+        const cleanPhone = phone.replace(/@s\.whatsapp\.net|@g\.us$/, '');
+        // Remove non-digits
+        const digits = cleanPhone.replace(/\D/g, '');
+        return `${digits}@s.whatsapp.net`;
+    }
+
+    /**
      * Set a command handler to be called when a command is received
      */
     onCommand(handler: (cmd: string) => Promise<void>) {
         this.commandHandlers.push(handler);
+    }
+
+    /**
+     * Process quantum channel for outbound messages
+     */
+    private async processQuantumChannel(): Promise<void> {
+        try {
+            if (!fs.existsSync(QUANTUM_CHANNEL_PATH)) return;
+
+            const content = fs.readFileSync(QUANTUM_CHANNEL_PATH, 'utf8');
+            const channel = JSON.parse(content);
+
+            const outbound = channel.outbound || [];
+            if (outbound.length === 0) return;
+
+            // Skip if already processing recently
+            const now = Date.now();
+            if (now - this.lastProcessedTimestamp < 5000) return;
+            this.lastProcessedTimestamp = now;
+
+            console.log(`📤 [WhatsApp] Processing ${outbound.length} outbound messages from quantum channel...`);
+
+            let messagesSent = 0;
+            for (const msg of outbound) {
+                if (msg.status === 'pending' && msg.type === 'whatsapp_push') {
+                    const target = msg.to || this.phoneNumber;
+                    const targetJID = this.getJID(target);
+
+                    console.log(`📱 [WhatsApp] Sending to ${targetJID}: "${msg.message.substring(0, 30)}..."`);
+
+                    try {
+                        await this.sock.sendMessage(targetJID, { text: msg.message });
+                        console.log(`✅ [WhatsApp] Message delivered to ${targetJID}`);
+                        msg.status = 'sent';
+                        msg.sentAt = new Date().toISOString();
+                        messagesSent++;
+                    } catch (e: any) {
+                        console.error(`❌ [WhatsApp] Failed to send: ${e.message}`);
+                        msg.status = 'failed';
+                        msg.error = e.message;
+                    }
+                }
+            }
+
+            if (messagesSent > 0) {
+                // Update channel
+                channel.lastUpdated = new Date().toISOString();
+                fs.writeFileSync(QUANTUM_CHANNEL_PATH, JSON.stringify(channel, null, 2));
+            }
+
+        } catch (e: any) {
+            // Silent fail for channel processing
+        }
     }
 
     /**
@@ -53,7 +119,7 @@ export class WhatsAppBridge {
 
         this.sock = makeWASocket({
             version,
-            printQRInTerminal: false, // Don't print QR as we hope to reuse the session
+            printQRInTerminal: false,
             auth: {
                 creds: state.creds,
                 keys: makeCacheableSignalKeyStore(state.keys, pino({ level: 'silent' })),
@@ -125,6 +191,20 @@ export class WhatsAppBridge {
                 }
             }
         });
+
+        // Start quantum channel polling
+        this.startQuantumPolling();
+    }
+
+    /**
+     * Start polling quantum channel for outbound messages
+     */
+    private startQuantumPolling() {
+        setInterval(async () => {
+            if (this.isConnected && this.sock) {
+                await this.processQuantumChannel();
+            }
+        }, 3000); // Poll every 3 seconds
     }
 
     /**
@@ -141,10 +221,11 @@ export class WhatsAppBridge {
             return;
         }
 
-        console.log(`📡 [WhatsApp] Pushing Direct Update to ${this.phoneNumber}...`);
+        const targetJID = this.getJID(this.phoneNumber);
+        console.log(`📡 [WhatsApp] Pushing Direct Update to ${targetJID}...`);
 
         try {
-            await this.sock.sendMessage(this.phoneNumber, { text: message });
+            await this.sock.sendMessage(targetJID, { text: message });
             console.log('   ✅ WhatsApp Notification Delivered.');
         } catch (e: any) {
             console.error(`   ❌ WhatsApp Dispatch Failed: ${e.message}`);
@@ -152,12 +233,9 @@ export class WhatsAppBridge {
     }
 
     /**
-     * Legacy method for the main loop - no longer needs to poll logs
-     * but returns any commands queued by the event listeners.
-     * In the new architecture, onCommand is preferred.
+     * Legacy method for the main loop
      */
     async pollCommands(): Promise<string[]> {
-        // This is now handled by event listeners, but we keep the signature for compatibility
         return [];
     }
 }

@@ -1,0 +1,541 @@
+{
+  "knowledge": [
+    {
+      "id": "repo_openclaw_multi-agent_1770803067261",
+      "source": "OpenClaw",
+      "type": "architecture",
+      "content": "Knowledge extracted from OpenClaw for focus area: multi-agent",
+      "relevance": 0.9,
+      "timestamp": "2026-02-11T09:44:27.261Z"
+    },
+    {
+      "id": "repo_openclaw_orchestration_1770803067263",
+      "source": "OpenClaw",
+      "type": "architecture",
+      "content": "Knowledge extracted from OpenClaw for focus area: orchestration",
+      "relevance": 0.9,
+      "timestamp": "2026-02-11T09:44:27.263Z"
+    },
+    {
+      "id": "repo_openclaw_messaging_1770803067263",
+      "source": "OpenClaw",
+      "type": "architecture",
+      "content": "Knowledge extracted from OpenClaw for focus area: messaging",
+      "relevance": 0.9,
+      "timestamp": "2026-02-11T09:44:27.263Z"
+    },
+    {
+      "id": "repo_openclaw_whatsapp_1770803067263",
+      "source": "OpenClaw",
+      "type": "architecture",
+      "content": "Knowledge extracted from OpenClaw for focus area: whatsapp",
+      "relevance": 0.9,
+      "timestamp": "2026-02-11T09:44:27.263Z"
+    },
+    {
+      "id": "repo_openclaw_plugins_1770803067263",
+      "source": "OpenClaw",
+      "type": "architecture",
+      "content": "Knowledge extracted from OpenClaw for focus area: plugins",
+      "relevance": 0.9,
+      "timestamp": "2026-02-11T09:44:27.263Z"
+    },
+    {
+      "id": "repo_superagi_agent-framework_1770803067263",
+      "source": "SuperAGI",
+      "type": "architecture",
+      "content": "Knowledge extracted from SuperAGI for focus area: agent-framework",
+      "relevance": 0.9,
+      "timestamp": "2026-02-11T09:44:27.263Z"
+    },
+    {
+      "id": "repo_superagi_workflows_1770803067263",
+      "source": "SuperAGI",
+      "type": "architecture",
+      "content": "Knowledge extracted from SuperAGI for focus area: workflows",
+      "relevance": 0.9,
+      "timestamp": "2026-02-11T09:44:27.263Z"
+    },
+    {
+      "id": "repo_superagi_llm-integration_1770803067263",
+      "source": "SuperAGI",
+      "type": "architecture",
+      "content": "Knowledge extracted from SuperAGI for focus area: llm-integration",
+      "relevance": 0.9,
+      "timestamp": "2026-02-11T09:44:27.263Z"
+    },
+    {
+      "id": "repo_superagi_tool-execution_1770803067263",
+      "source": "SuperAGI",
+      "type": "architecture",
+      "content": "Knowledge extracted from SuperAGI for focus area: tool-execution",
+      "relevance": 0.9,
+      "timestamp": "2026-02-11T09:44:27.263Z"
+    },
+    {
+      "id": "repo_casibase_knowledge-base_1770803067263",
+      "source": "Casibase",
+      "type": "architecture",
+      "content": "Knowledge extracted from Casibase for focus area: knowledge-base",
+      "relevance": 0.9,
+      "timestamp": "2026-02-11T09:44:27.263Z"
+    },
+    {
+      "id": "repo_casibase_data-management_1770803067263",
+      "source": "Casibase",
+      "type": "architecture",
+      "content": "Knowledge extracted from Casibase for focus area: data-management",
+      "relevance": 0.9,
+      "timestamp": "2026-02-11T09:44:27.263Z"
+    },
+    {
+      "id": "repo_casibase_ embeddings_1770803067263",
+      "source": "Casibase",
+      "type": "architecture",
+      "content": "Knowledge extracted from Casibase for focus area:  embeddings",
+      "relevance": 0.9,
+      "timestamp": "2026-02-11T09:44:27.263Z"
+    },
+    {
+      "id": "repo_casibase_search_1770803067263",
+      "source": "Casibase",
+      "type": "architecture",
+      "content": "Knowledge extracted from Casibase for focus area: search",
+      "relevance": 0.9,
+      "timestamp": "2026-02-11T09:44:27.263Z"
+    },
+    {
+      "id": "repo_localai_local-llm_1770803067263",
+      "source": "LocalAI",
+      "type": "architecture",
+      "content": "Knowledge extracted from LocalAI for focus area: local-llm",
+      "relevance": 0.9,
+      "timestamp": "2026-02-11T09:44:27.263Z"
+    },
+    {
+      "id": "repo_localai_inference_1770803067263",
+      "source": "LocalAI",
+      "type": "architecture",
+      "content": "Knowledge extracted from LocalAI for focus area: inference",
+      "relevance": 0.9,
+      "timestamp": "2026-02-11T09:44:27.263Z"
+    },
+    {
+      "id": "repo_localai_optimization_1770803067263",
+      "source": "LocalAI",
+      "type": "architecture",
+      "content": "Knowledge extracted from LocalAI for focus area: optimization",
+      "relevance": 0.9,
+      "timestamp": "2026-02-11T09:44:27.263Z"
+    },
+    {
+      "id": "repo_localai_deployment_1770803067263",
+      "source": "LocalAI",
+      "type": "architecture",
+      "content": "Knowledge extracted from LocalAI for focus area: deployment",
+      "relevance": 0.9,
+      "timestamp": "2026-02-11T09:44:27.263Z"
+    },
+    {
+      "id": "llm_openai_gpt-patterns_completion_1770803067264",
+      "source": "openai",
+      "type": "pattern",
+      "content": "openai pattern: gpt-patterns - completion",
+      "relevance": 0.85,
+      "timestamp": "2026-02-11T09:44:27.264Z"
+    },
+    {
+      "id": "llm_openai_gpt-patterns_embedding_1770803067264",
+      "source": "openai",
+      "type": "pattern",
+      "content": "openai pattern: gpt-patterns - embedding",
+      "relevance": 0.85,
+      "timestamp": "2026-02-11T09:44:27.264Z"
+    },
+    {
+      "id": "llm_openai_gpt-patterns_fine-tuning_1770803067264",
+      "source": "openai",
+      "type": "pattern",
+      "content": "openai pattern: gpt-patterns - fine-tuning",
+      "relevance": 0.85,
+      "timestamp": "2026-02-11T09:44:27.264Z"
+    },
+    {
+      "id": "llm_openai_gpt-patterns_assistant_1770803067264",
+      "source": "openai",
+      "type": "pattern",
+      "content": "openai pattern: gpt-patterns - assistant",
+      "relevance": 0.85,
+      "timestamp": "2026-02-11T09:44:27.264Z"
+    },
+    {
+      "id": "llm_openai_function-calling_completion_1770803067264",
+      "source": "openai",
+      "type": "pattern",
+      "content": "openai pattern: function-calling - completion",
+      "relevance": 0.85,
+      "timestamp": "2026-02-11T09:44:27.264Z"
+    },
+    {
+      "id": "llm_openai_function-calling_embedding_1770803067264",
+      "source": "openai",
+      "type": "pattern",
+      "content": "openai pattern: function-calling - embedding",
+      "relevance": 0.85,
+      "timestamp": "2026-02-11T09:44:27.264Z"
+    },
+    {
+      "id": "llm_openai_function-calling_fine-tuning_1770803067264",
+      "source": "openai",
+      "type": "pattern",
+      "content": "openai pattern: function-calling - fine-tuning",
+      "relevance": 0.85,
+      "timestamp": "2026-02-11T09:44:27.264Z"
+    },
+    {
+      "id": "llm_openai_function-calling_assistant_1770803067264",
+      "source": "openai",
+      "type": "pattern",
+      "content": "openai pattern: function-calling - assistant",
+      "relevance": 0.85,
+      "timestamp": "2026-02-11T09:44:27.264Z"
+    },
+    {
+      "id": "llm_openai_prompt-engineering_completion_1770803067264",
+      "source": "openai",
+      "type": "pattern",
+      "content": "openai pattern: prompt-engineering - completion",
+      "relevance": 0.85,
+      "timestamp": "2026-02-11T09:44:27.264Z"
+    },
+    {
+      "id": "llm_openai_prompt-engineering_embedding_1770803067264",
+      "source": "openai",
+      "type": "pattern",
+      "content": "openai pattern: prompt-engineering - embedding",
+      "relevance": 0.85,
+      "timestamp": "2026-02-11T09:44:27.264Z"
+    },
+    {
+      "id": "llm_openai_prompt-engineering_fine-tuning_1770803067264",
+      "source": "openai",
+      "type": "pattern",
+      "content": "openai pattern: prompt-engineering - fine-tuning",
+      "relevance": 0.85,
+      "timestamp": "2026-02-11T09:44:27.264Z"
+    },
+    {
+      "id": "llm_openai_prompt-engineering_assistant_1770803067264",
+      "source": "openai",
+      "type": "pattern",
+      "content": "openai pattern: prompt-engineering - assistant",
+      "relevance": 0.85,
+      "timestamp": "2026-02-11T09:44:27.264Z"
+    },
+    {
+      "id": "llm_openai_api-usage_completion_1770803067264",
+      "source": "openai",
+      "type": "pattern",
+      "content": "openai pattern: api-usage - completion",
+      "relevance": 0.85,
+      "timestamp": "2026-02-11T09:44:27.264Z"
+    },
+    {
+      "id": "llm_openai_api-usage_embedding_1770803067264",
+      "source": "openai",
+      "type": "pattern",
+      "content": "openai pattern: api-usage - embedding",
+      "relevance": 0.85,
+      "timestamp": "2026-02-11T09:44:27.264Z"
+    },
+    {
+      "id": "llm_openai_api-usage_fine-tuning_1770803067264",
+      "source": "openai",
+      "type": "pattern",
+      "content": "openai pattern: api-usage - fine-tuning",
+      "relevance": 0.85,
+      "timestamp": "2026-02-11T09:44:27.264Z"
+    },
+    {
+      "id": "llm_openai_api-usage_assistant_1770803067264",
+      "source": "openai",
+      "type": "pattern",
+      "content": "openai pattern: api-usage - assistant",
+      "relevance": 0.85,
+      "timestamp": "2026-02-11T09:44:27.264Z"
+    },
+    {
+      "id": "llm_claude_claude-patterns_message_1770803067264",
+      "source": "claude",
+      "type": "pattern",
+      "content": "claude pattern: claude-patterns - message",
+      "relevance": 0.85,
+      "timestamp": "2026-02-11T09:44:27.264Z"
+    },
+    {
+      "id": "llm_claude_claude-patterns_tool-use_1770803067264",
+      "source": "claude",
+      "type": "pattern",
+      "content": "claude pattern: claude-patterns - tool-use",
+      "relevance": 0.85,
+      "timestamp": "2026-02-11T09:44:27.264Z"
+    },
+    {
+      "id": "llm_claude_claude-patterns_system-prompt_1770803067264",
+      "source": "claude",
+      "type": "pattern",
+      "content": "claude pattern: claude-patterns - system-prompt",
+      "relevance": 0.85,
+      "timestamp": "2026-02-11T09:44:27.264Z"
+    },
+    {
+      "id": "llm_claude_claude-patterns_response_1770803067264",
+      "source": "claude",
+      "type": "pattern",
+      "content": "claude pattern: claude-patterns - response",
+      "relevance": 0.85,
+      "timestamp": "2026-02-11T09:44:27.264Z"
+    },
+    {
+      "id": "llm_claude_reasoning_message_1770803067265",
+      "source": "claude",
+      "type": "pattern",
+      "content": "claude pattern: reasoning - message",
+      "relevance": 0.85,
+      "timestamp": "2026-02-11T09:44:27.265Z"
+    },
+    {
+      "id": "llm_claude_reasoning_tool-use_1770803067265",
+      "source": "claude",
+      "type": "pattern",
+      "content": "claude pattern: reasoning - tool-use",
+      "relevance": 0.85,
+      "timestamp": "2026-02-11T09:44:27.265Z"
+    },
+    {
+      "id": "llm_claude_reasoning_system-prompt_1770803067265",
+      "source": "claude",
+      "type": "pattern",
+      "content": "claude pattern: reasoning - system-prompt",
+      "relevance": 0.85,
+      "timestamp": "2026-02-11T09:44:27.265Z"
+    },
+    {
+      "id": "llm_claude_reasoning_response_1770803067265",
+      "source": "claude",
+      "type": "pattern",
+      "content": "claude pattern: reasoning - response",
+      "relevance": 0.85,
+      "timestamp": "2026-02-11T09:44:27.265Z"
+    },
+    {
+      "id": "llm_claude_tool-use_message_1770803067265",
+      "source": "claude",
+      "type": "pattern",
+      "content": "claude pattern: tool-use - message",
+      "relevance": 0.85,
+      "timestamp": "2026-02-11T09:44:27.265Z"
+    },
+    {
+      "id": "llm_claude_tool-use_tool-use_1770803067265",
+      "source": "claude",
+      "type": "pattern",
+      "content": "claude pattern: tool-use - tool-use",
+      "relevance": 0.85,
+      "timestamp": "2026-02-11T09:44:27.265Z"
+    },
+    {
+      "id": "llm_claude_tool-use_system-prompt_1770803067265",
+      "source": "claude",
+      "type": "pattern",
+      "content": "claude pattern: tool-use - system-prompt",
+      "relevance": 0.85,
+      "timestamp": "2026-02-11T09:44:27.265Z"
+    },
+    {
+      "id": "llm_claude_tool-use_response_1770803067265",
+      "source": "claude",
+      "type": "pattern",
+      "content": "claude pattern: tool-use - response",
+      "relevance": 0.85,
+      "timestamp": "2026-02-11T09:44:27.265Z"
+    },
+    {
+      "id": "llm_claude_context-window_message_1770803067265",
+      "source": "claude",
+      "type": "pattern",
+      "content": "claude pattern: context-window - message",
+      "relevance": 0.85,
+      "timestamp": "2026-02-11T09:44:27.265Z"
+    },
+    {
+      "id": "llm_claude_context-window_tool-use_1770803067265",
+      "source": "claude",
+      "type": "pattern",
+      "content": "claude pattern: context-window - tool-use",
+      "relevance": 0.85,
+      "timestamp": "2026-02-11T09:44:27.265Z"
+    },
+    {
+      "id": "llm_claude_context-window_system-prompt_1770803067265",
+      "source": "claude",
+      "type": "pattern",
+      "content": "claude pattern: context-window - system-prompt",
+      "relevance": 0.85,
+      "timestamp": "2026-02-11T09:44:27.265Z"
+    },
+    {
+      "id": "llm_claude_context-window_response_1770803067265",
+      "source": "claude",
+      "type": "pattern",
+      "content": "claude pattern: context-window - response",
+      "relevance": 0.85,
+      "timestamp": "2026-02-11T09:44:27.265Z"
+    },
+    {
+      "id": "llm_gemini_gemini-patterns_generate_1770803067265",
+      "source": "gemini",
+      "type": "pattern",
+      "content": "gemini pattern: gemini-patterns - generate",
+      "relevance": 0.85,
+      "timestamp": "2026-02-11T09:44:27.265Z"
+    },
+    {
+      "id": "llm_gemini_gemini-patterns_embed_1770803067265",
+      "source": "gemini",
+      "type": "pattern",
+      "content": "gemini pattern: gemini-patterns - embed",
+      "relevance": 0.85,
+      "timestamp": "2026-02-11T09:44:27.265Z"
+    },
+    {
+      "id": "llm_gemini_gemini-patterns_count-tokens_1770803067265",
+      "source": "gemini",
+      "type": "pattern",
+      "content": "gemini pattern: gemini-patterns - count-tokens",
+      "relevance": 0.85,
+      "timestamp": "2026-02-11T09:44:27.265Z"
+    },
+    {
+      "id": "llm_gemini_gemini-patterns_batch-embed_1770803067265",
+      "source": "gemini",
+      "type": "pattern",
+      "content": "gemini pattern: gemini-patterns - batch-embed",
+      "relevance": 0.85,
+      "timestamp": "2026-02-11T09:44:27.265Z"
+    },
+    {
+      "id": "llm_gemini_multimodal_generate_1770803067265",
+      "source": "gemini",
+      "type": "pattern",
+      "content": "gemini pattern: multimodal - generate",
+      "relevance": 0.85,
+      "timestamp": "2026-02-11T09:44:27.265Z"
+    },
+    {
+      "id": "llm_gemini_multimodal_embed_1770803067265",
+      "source": "gemini",
+      "type": "pattern",
+      "content": "gemini pattern: multimodal - embed",
+      "relevance": 0.85,
+      "timestamp": "2026-02-11T09:44:27.265Z"
+    },
+    {
+      "id": "llm_gemini_multimodal_count-tokens_1770803067265",
+      "source": "gemini",
+      "type": "pattern",
+      "content": "gemini pattern: multimodal - count-tokens",
+      "relevance": 0.85,
+      "timestamp": "2026-02-11T09:44:27.265Z"
+    },
+    {
+      "id": "llm_gemini_multimodal_batch-embed_1770803067265",
+      "source": "gemini",
+      "type": "pattern",
+      "content": "gemini pattern: multimodal - batch-embed",
+      "relevance": 0.85,
+      "timestamp": "2026-02-11T09:44:27.265Z"
+    },
+    {
+      "id": "llm_gemini_embedding_generate_1770803067265",
+      "source": "gemini",
+      "type": "pattern",
+      "content": "gemini pattern: embedding - generate",
+      "relevance": 0.85,
+      "timestamp": "2026-02-11T09:44:27.265Z"
+    },
+    {
+      "id": "llm_gemini_embedding_embed_1770803067265",
+      "source": "gemini",
+      "type": "pattern",
+      "content": "gemini pattern: embedding - embed",
+      "relevance": 0.85,
+      "timestamp": "2026-02-11T09:44:27.265Z"
+    },
+    {
+      "id": "llm_gemini_embedding_count-tokens_1770803067265",
+      "source": "gemini",
+      "type": "pattern",
+      "content": "gemini pattern: embedding - count-tokens",
+      "relevance": 0.85,
+      "timestamp": "2026-02-11T09:44:27.265Z"
+    },
+    {
+      "id": "llm_gemini_embedding_batch-embed_1770803067265",
+      "source": "gemini",
+      "type": "pattern",
+      "content": "gemini pattern: embedding - batch-embed",
+      "relevance": 0.85,
+      "timestamp": "2026-02-11T09:44:27.265Z"
+    },
+    {
+      "id": "llm_gemini_api_generate_1770803067265",
+      "source": "gemini",
+      "type": "pattern",
+      "content": "gemini pattern: api - generate",
+      "relevance": 0.85,
+      "timestamp": "2026-02-11T09:44:27.265Z"
+    },
+    {
+      "id": "llm_gemini_api_embed_1770803067265",
+      "source": "gemini",
+      "type": "pattern",
+      "content": "gemini pattern: api - embed",
+      "relevance": 0.85,
+      "timestamp": "2026-02-11T09:44:27.265Z"
+    },
+    {
+      "id": "llm_gemini_api_count-tokens_1770803067265",
+      "source": "gemini",
+      "type": "pattern",
+      "content": "gemini pattern: api - count-tokens",
+      "relevance": 0.85,
+      "timestamp": "2026-02-11T09:44:27.265Z"
+    },
+    {
+      "id": "llm_gemini_api_batch-embed_1770803067265",
+      "source": "gemini",
+      "type": "pattern",
+      "content": "gemini pattern: api - batch-embed",
+      "relevance": 0.85,
+      "timestamp": "2026-02-11T09:44:27.265Z"
+    }
+  ],
+  "metadata": {
+    "totalItems": 65,
+    "sources": [
+      "OpenClaw",
+      "SuperAGI",
+      "Casibase",
+      "LocalAI",
+      "openai",
+      "claude",
+      "gemini"
+    ],
+    "types": [
+      "architecture",
+      "pattern"
+    ],
+    "timestamp": "2026-02-11T09:44:27.266Z"
+  }
+}

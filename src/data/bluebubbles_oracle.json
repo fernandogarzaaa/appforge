@@ -1,0 +1,10 @@
+{
+  "timestamp": "2026-02-11T08:11:09.720Z",
+  "recommendation": "BlueBubbles Desktop App on macOS",
+  "confidence": 0.92,
+  "email": "fernandogarzaaa@gmail.com",
+  "setupMethod": "desktop_app",
+  "fallback": "whatsapp",
+  "port": 1234,
+  "apiPassword": "appforge_swarm_2024"
+}

@@ -24,7 +24,7 @@ export async function initializeSearchIndexes() {
     if (response.data?.functions) {
       // Index all functions
       const documents = response.data.functions.map(fn => ({
-        id: fn.id || fn.name,
+        id: fn.id ?? 'unknown_id' || fn.name,
         document: {
           name: fn.name,
           description: fn.description || '',

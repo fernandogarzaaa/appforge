@@ -19,7 +19,7 @@ export function generateTypeScriptInterface(entityName, schema) {
     else if (config.type === 'date' || config.type === 'datetime') tsType = 'Date';
     else if (config.type === 'reference') tsType = `string // ${config.entity} ID`;
     else if (config.type === 'text') tsType = 'string';
-    else if (config.enum) tsType = config.enum.map(v => `'${v}'`).join(' | ');
+    else if (config.enum) tsType = `enum ${config.enum.join('|')}`;
     
     const optional = config.required ? '' : '?';
     const comment = config.unique ? ' // unique' : config.default !== undefined ? ` // default: ${config.default}` : '';

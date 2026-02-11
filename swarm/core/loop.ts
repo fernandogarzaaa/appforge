@@ -45,6 +45,7 @@ import { nexusGateway } from './nexus_gateway.js';
 import { LibrarianAgent } from '../agents/Librarian.js';
 import { ResonanceEngine } from './resonance_engine.js';
 import { ShadowSwarm } from './shadow_swarm.js';
+import { swarmCollaboration } from './swarm_collaboration.js';
 
 const QUANTUM_CHANNEL = path.join(process.cwd(), 'src/data/quantum_channel.json');
 
@@ -113,6 +114,38 @@ async function main() {
     console.log('⚛️ Quantum Core: Active');
     console.log('🔮 Oracle: Available for consultation\n');
 
+    // Register agents with collaboration system
+    swarmCollaboration.registerAgent('Sentinel', async (signal) => {
+        console.log(`📡 [Sentinel] Received signal: ${signal.type}`);
+        await sentinel.run();
+    });
+    swarmCollaboration.registerAgent('BugHunter', async (signal) => {
+        console.log(`📡 [BugHunter] Received signal: ${signal.type}`);
+        await bugHunter.run();
+    });
+    swarmCollaboration.registerAgent('Optimizer', async (signal) => {
+        console.log(`📡 [Optimizer] Received signal: ${signal.type}`);
+        await optimizer.run();
+    });
+    swarmCollaboration.registerAgent('GodMode', async (signal) => {
+        console.log(`📡 [GodMode] Received signal: ${signal.type}`);
+        await godMode.run(signal.payload);
+    });
+    swarmCollaboration.registerAgent('ProductOwner', async (signal) => {
+        console.log(`📡 [ProductOwner] Received signal: ${signal.type}`);
+        await productOwner.run();
+    });
+    swarmCollaboration.registerAgent('Antigravity', async (signal) => {
+        console.log(`📡 [Antigravity] Received signal: ${signal.type}`);
+        await antigravity.run();
+    });
+    swarmCollaboration.registerAgent('Librarian', async (signal) => {
+        console.log(`📡 [Librarian] Received signal: ${signal.type}`);
+        await librarian.run();
+    });
+
+    console.log(`🤝 ${swarmCollaboration.getStats().registeredAgents} agents registered for collaboration`);
+
     // Test quantum core
     const qStats = quantumCore.getStats();
     console.log('📊 Quantum Stats:', qStats);
@@ -176,7 +209,26 @@ async function main() {
                 await sovereignBridge.pushUpdate(`❌ Replication Failed: ${err.message}`);
             }
         } else if (cmd === 'help') {
-            await sovereignBridge.pushUpdate(`🛠️ Swarm Commands:\n- status: Current health\n- train <url>: Learn from GitHub repo\n- replicate <name>: Autonomous cloning\n- pause: Halt autonomy\n- resume: Start autonomy\n- ping: Check latency\n- help: List commands`);
+            await sovereignBridge.pushUpdate(`🛠️ Swarm Commands:
+- status: Current health
+- train <url>: Learn from GitHub repo
+- replicate <name>: Autonomous cloning
+- pause: Halt autonomy
+- resume: Start autonomy
+- ping: Check latency
+- transport: Show current transport
+- imessage: Switch to iMessage
+- whatsapp: Switch to WhatsApp
+- help: List commands`);
+        } else if (cmd === 'transport') {
+            const status = sovereignBridge.getStatus();
+            await sovereignBridge.pushUpdate(`📡 Transport Status:
+- Transport: ${status.transport.toUpperCase()}
+- Status: ${status.status}
+- Note: ${status.message}`);
+        } else if (cmd === 'whatsapp') {
+            await sovereignBridge.switchTransport('whatsapp');
+            await sovereignBridge.pushUpdate('✅ WhatsApp is active');
         }
     });
 
@@ -311,10 +363,11 @@ async function main() {
                     await shadow.cleanup();
                 }
 
-                // Unified Status Update (every 10 cycles)
-                if (cycleCount % 10 === 0) {
-                    await sovereignBridge.pushUpdate(`🚀 Swarm Cycle #${cycleCount} Complete. Oracle Coherence: ${quantumCore.getStats().quantum_coherence.toFixed(2)}`);
-                }
+                // Generate Comprehensive Report
+                const report = await generateCycleReport(cycleCount, results, quantumCore.getStats());
+                
+                // Send Report via WhatsApp
+                await sovereignBridge.pushUpdate(report);
 
                 // GodMode decides if any action is needed
                 const context = { source: 'autonomous_cycle', cycle: cycleCount, findings: results };
@@ -338,6 +391,58 @@ async function main() {
         // Avoid tight loop
         await new Promise(resolve => setTimeout(resolve, 5000));
     }
+}
+
+/**
+ * Generate comprehensive cycle report
+ */
+async function generateCycleReport(cycleCount: number, results: any, quantumStats: any): Promise<string> {
+    const timestamp = new Date().toISOString();
+    
+    let report = `📊 *SWARM CYCLE REPORT #${cycleCount}*\n`;
+    report += `━━━━━━━━━━━━━━━━━━━━━━━━\n`;
+    report += `🕐 ${timestamp}\n\n`;
+
+    // Quantum Stats
+    report += `⚛️ *QUANTUM ENGINE*\n`;
+    report += `• Coherence: ${(quantumStats.quantum_coherence * 100).toFixed(1)}%\n`;
+    report += `• Integrity: ${quantumStats.swarm_integrity}\n`;
+    report += `• Version: ${quantumStats.version || '3.0'}\n\n`;
+
+    // Agent Results
+    report += `🤖 *AGENT STATUS*\n`;
+    const agents = ['sentinel', 'bugHunter', 'optimizer', 'productOwner', 'antigravity'];
+    agents.forEach(agent => {
+        const res = results[agent];
+        if (res) {
+            const status = res.status || 'completed';
+            report += `• ${agent.charAt(0).toUpperCase() + agent.slice(1)}: ${status}\n`;
+        }
+    });
+    
+    // GodMode decision
+    if (results.godMode) {
+        report += `\n🧙‍♂️ *GODMODE DECISION*\n`;
+        report += `• ${results.godMode.status || 'active'}\n`;
+    }
+
+    // Opportunities & Risks
+    if (results.sentinel?.opportunities) {
+        report += `\n💰 *OPPORTUNITIES*\n`;
+        results.sentinel.opportunities.slice(0, 3).forEach((opp: string) => {
+            report += `• ${opp.substring(0, 60)}...\n`;
+        });
+    }
+
+    // Recommendations
+    report += `\n🎯 *NEXT STEPS*\n`;
+    report += `• Awaiting Oracle guidance\n`;
+    report += `• Next cycle in 5 minutes\n`;
+    
+    report += `\n━━━━━━━━━━━━━━━━━━━━━━━━\n`;
+    report += `🤖 *Autonomous Swarm v1.0*`;
+    
+    return report;
 }
 
 main().catch(console.error);

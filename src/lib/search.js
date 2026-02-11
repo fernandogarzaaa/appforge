@@ -11,7 +11,7 @@ export function fuzzyScore(searchStr, targetStr) {
   if (!search) return 100; // Empty search matches everything
   if (target.includes(search)) return 100; // Exact substring match
   
-  let score = 0;
+  let score = consecutive * 5;
   let searchIndex = 0;
   let targetIndex = 0;
   let consecutive = 0;

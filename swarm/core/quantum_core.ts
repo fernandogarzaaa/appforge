@@ -1,4 +1,8 @@
 import QuantumEngine from '../../universal_quantum_dist/index.js';
+import * as fs from 'fs/promises';
+import path from 'path';
+
+const STATE_FILE = path.join(process.cwd(), 'src/data/quantum_state.json');
 
 /**
  * QUANTUM SWARM CORE
@@ -7,9 +11,82 @@ import QuantumEngine from '../../universal_quantum_dist/index.js';
 
 export class QuantumSwarmCore {
     engine: QuantumEngine;
+    savedStates: Map<string, any>;
 
     constructor() {
         this.engine = new QuantumEngine();
+        this.savedStates = new Map();
+        this.loadStates();
+    }
+
+    /**
+     * Quantum State Persistence - Save quantum state
+     */
+    async saveState(stateId: string, state: any): Promise<void> {
+        console.log(`💾 [Quantum] Saving state: ${stateId}`);
+        this.savedStates.set(stateId, {
+            state,
+            timestamp: new Date().toISOString(),
+            version: this.engine.getStats().engineVersion
+        });
+        await this.persistStates();
+    }
+
+    /**
+     * Quantum State Persistence - Load quantum state
+     */
+    async loadState(stateId: string): Promise<any | null> {
+        console.log(`📥 [Quantum] Loading state: ${stateId}`);
+        const saved = this.savedStates.get(stateId);
+        if (saved) {
+            console.log(`   ✅ State loaded from ${saved.timestamp}`);
+            return saved.state;
+        }
+        console.log(`   ⚠️ State not found: ${stateId}`);
+        return null;
+    }
+
+    /**
+     * Get list of all saved states
+     */
+    getSavedStates(): string[] {
+        return Array.from(this.savedStates.keys());
+    }
+
+    /**
+     * Delete a saved state
+     */
+    async deleteState(stateId: string): Promise<void> {
+        this.savedStates.delete(stateId);
+        await this.persistStates();
+    }
+
+    /**
+     * Persist states to file
+     */
+    private async persistStates(): Promise<void> {
+        try {
+            const data = Object.fromEntries(this.savedStates);
+            await fs.writeFile(STATE_FILE, JSON.stringify(data, null, 2));
+        } catch (error) {
+            console.error('❌ [Quantum] Failed to persist states:', error);
+        }
+    }
+
+    /**
+     * Load states from file
+     */
+    private async loadStates(): Promise<void> {
+        try {
+            const data = await fs.readFile(STATE_FILE, 'utf8');
+            const parsed = JSON.parse(data);
+            Object.entries(parsed).forEach(([key, value]) => {
+                this.savedStates.set(key, value);
+            });
+            console.log(`📚 [Quantum] Loaded ${this.savedStates.size} saved states`);
+        } catch (error) {
+            // File doesn't exist yet - that's OK
+        }
     }
 
     /**

@@ -1,78 +1,55 @@
-import { imessageBridge } from './imessage_bridge.js';
 import { whatsappBridge } from './whatsapp_bridge.js';
 
+/**
+ * Sovereign Bridge - WhatsApp Only
+ * Simplified for reliable messaging without iMessage
+ */
+
 export class UnifiedSovereignBridge {
-    private primaryTransport: 'imessage' | 'whatsapp' = 'whatsapp';
     private commandHandler: ((cmd: string) => Promise<void>) | null = null;
+    private useWhatsApp: boolean = true;
 
     constructor() {
-        // Decide primary transport based on environment
-        const mode = process.env.IMESSAGE_TRANSPORT_MODE || 'imsg';
-        const bhUrl = process.env.BLUEBUBBLES_SERVER_URL;
-
-        if (mode === 'bluebubbles' && bhUrl) {
-            this.primaryTransport = 'imessage';
-            console.log('🌌 [Bridge] Unified Interface: Primary Mode -> iMessage (BlueBubbles)');
-        } else if (mode === 'imsg' && process.platform === 'darwin') {
-            this.primaryTransport = 'imessage';
-            console.log('🌌 [Bridge] Unified Interface: Primary Mode -> iMessage (Native macOS)');
-        } else {
-            this.primaryTransport = 'whatsapp';
-            console.log('🌌 [Bridge] Unified Interface: Primary Mode -> WhatsApp (Direct Baileys)');
-        }
+        console.log('🌌 [Bridge] WhatsApp Only Mode - Simplified & Reliable');
     }
 
     async start() {
-        console.log(`📡 [Bridge] Starting Unified Sovereign Link via ${this.primaryTransport.toUpperCase()}...`);
-
+        console.log('📡 [Bridge] Starting WhatsApp Bridge...');
         try {
-            if (this.primaryTransport === 'imessage') {
-                await imessageBridge.start();
-            } else {
-                await whatsappBridge.start();
-            }
+            await whatsappBridge.start();
         } catch (err) {
-            console.error(`❌ [Bridge] Failed to start primary transport (${this.primaryTransport}):`, err);
-            if (this.primaryTransport === 'imessage') {
-                console.warn('⚠️ [Bridge] Falling back to WhatsApp...');
-                this.primaryTransport = 'whatsapp';
-                await whatsappBridge.start();
-            }
+            console.error('❌ [Bridge] WhatsApp failed to start:', err);
+            throw err;
         }
     }
 
     async stop() {
-        if (this.primaryTransport === 'imessage') {
-            await imessageBridge.stop();
-        }
-        // WhatsApp bridge stop is usually handled by process exit or sock cleanup
+        // WhatsApp cleanup handled by process exit
     }
 
     onCommand(handler: (cmd: string) => Promise<void>) {
         this.commandHandler = handler;
-        // Register with BOTH just in case, or just primary
-        imessageBridge.onCommand(handler);
         whatsappBridge.onCommand(handler);
     }
 
     async pushUpdate(text: string) {
-        try {
-            if (this.primaryTransport === 'imessage') {
-                const recipient = process.env.IMESSAGE_RECIPIENT;
-                if (!recipient) throw new Error('IMESSAGE_RECIPIENT not set');
-                await imessageBridge.pushUpdate(recipient, text);
-            } else {
-                // WhatsApp bridge handles its own phone number from env
-                await whatsappBridge.pushUpdate(text);
-            }
-        } catch (err) {
-            console.error(`❌ [Bridge] Push failed on ${this.primaryTransport}:`, err);
-            // Emergency fallback if sending fails
-            if (this.primaryTransport === 'imessage') {
-                console.warn('⚠️ [Bridge] Emergency switch to WhatsApp for delivery...');
-                this.primaryTransport = 'whatsapp';
-                await whatsappBridge.pushUpdate(`[FALLBACK] ${text}`);
-            }
+        await whatsappBridge.pushUpdate(text);
+    }
+
+    getStatus() {
+        return {
+            transport: 'whatsapp',
+            status: 'active',
+            message: 'WhatsApp is primary and only messaging channel'
+        };
+    }
+
+    async switchTransport(transport: string) {
+        if (transport === 'whatsapp') {
+            this.useWhatsApp = true;
+            console.log('✅ [Bridge] Switched to WhatsApp');
+        } else {
+            console.log('⚠️ [Bridge] Only WhatsApp is available');
         }
     }
 }

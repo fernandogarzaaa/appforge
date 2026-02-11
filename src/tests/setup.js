@@ -4,18 +4,8 @@
  * Runs before all tests
  */
 
-import { expect, afterEach, beforeAll, afterAll, vi } from 'vitest';
-import { cleanup } from '@testing-library/react';
+import { vi } from 'vitest';
 import '@testing-library/jest-dom/vitest';
-
-// ============================================================================
-// CLEANUP
-// ============================================================================
-
-// Cleanup after each test
-afterEach(() => {
-  cleanup();
-});
 
 // ============================================================================
 // FETCH & NETWORK MOCKS
@@ -169,28 +159,6 @@ vi.mock('@/quantum-core/pkg/quantum_core', () => ({
     synthesize: vi.fn(() => Promise.resolve({ superposition: 0.8 })),
   },
 }), { virtual: true });
-
-// ============================================================================
-// CONSOLE SUPPRESSION
-// ============================================================================
-
-// Suppress console errors in tests (optional)
-const originalError = console.error;
-beforeAll(() => {
-  console.error = (...args) => {
-    if (
-      typeof args[0] === 'string' &&
-      args[0].includes('Warning: ReactDOM.render')
-    ) {
-      return;
-    }
-    originalError.call(console, ...args);
-  };
-});
-
-afterAll(() => {
-  console.error = originalError;
-});
 
 // ============================================================================
 // CUSTOM MATCHERS

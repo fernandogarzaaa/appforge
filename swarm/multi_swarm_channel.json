@@ -1,0 +1,84 @@
+{
+  "messages": [
+    {
+      "id": "msg_1770803204686_dy1qo8666",
+      "from": "main",
+      "to": "god",
+      "type": "directive",
+      "payload": {
+        "task": "Upgrade all agents to v3.0",
+        "priority": "high"
+      },
+      "timestamp": "2026-02-11T09:46:44.686Z",
+      "priority": "high"
+    },
+    {
+      "id": "msg_1770803204688_481n0ween",
+      "from": "main",
+      "to": "finance",
+      "type": "status",
+      "payload": {
+        "request": "Get status report"
+      },
+      "timestamp": "2026-02-11T09:46:44.688Z",
+      "priority": "normal"
+    },
+    {
+      "id": "msg_1770803204689_yxz84koyu",
+      "from": "main",
+      "to": "crypto",
+      "type": "status",
+      "payload": {
+        "request": "Get status report"
+      },
+      "timestamp": "2026-02-11T09:46:44.689Z",
+      "priority": "normal"
+    },
+    {
+      "id": "msg_1770803204690_zpyejbycs",
+      "from": "main",
+      "to": "god",
+      "type": "status",
+      "payload": {
+        "request": "Get status report"
+      },
+      "timestamp": "2026-02-11T09:46:44.690Z",
+      "priority": "normal"
+    }
+  ],
+  "swarmStatuses": {
+    "main": {
+      "id": "main",
+      "name": "appforge-swarm-main",
+      "status": "online",
+      "uptime": 75,
+      "tasksCompleted": 13,
+      "lastUpdate": "2026-02-11T09:46:44.679Z"
+    },
+    "finance": {
+      "id": "finance",
+      "name": "appforge-swarm-finance",
+      "status": "offline",
+      "uptime": 498,
+      "tasksCompleted": 4,
+      "lastUpdate": "2026-02-11T09:46:44.681Z"
+    },
+    "crypto": {
+      "id": "crypto",
+      "name": "appforge-swarm-crypto",
+      "status": "offline",
+      "uptime": 31,
+      "tasksCompleted": 15,
+      "lastUpdate": "2026-02-11T09:46:44.683Z"
+    },
+    "god": {
+      "id": "god",
+      "name": "appforge-swarm-god",
+      "status": "offline",
+      "uptime": 923,
+      "tasksCompleted": 30,
+      "lastUpdate": "2026-02-11T09:46:44.685Z"
+    }
+  },
+  "lastUpdated": "2026-02-11T09:46:44.691Z"
+}

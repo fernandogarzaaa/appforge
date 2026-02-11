@@ -1,0 +1,188 @@
+{
+  "timestamp": "2026-02-11T11:10:20.855Z",
+  "totalPassed": 11,
+  "totalFailed": 0,
+  "confidence": 1,
+  "results": [
+    {
+      "name": "WorkerSwarm",
+      "passed": true,
+      "verifications": [
+        {
+          "passed": true,
+          "message": "File exists"
+        },
+        {
+          "passed": true,
+          "message": "Syntax valid"
+        },
+        {
+          "passed": true,
+          "message": "Has exports"
+        }
+      ]
+    },
+    {
+      "name": "CryptoSwarm",
+      "passed": true,
+      "verifications": [
+        {
+          "passed": true,
+          "message": "File exists"
+        },
+        {
+          "passed": true,
+          "message": "Syntax valid"
+        },
+        {
+          "passed": true,
+          "message": "Has exports"
+        }
+      ]
+    },
+    {
+      "name": "MarketAnalyzer",
+      "passed": true,
+      "verifications": [
+        {
+          "passed": true,
+          "message": "File exists"
+        },
+        {
+          "passed": true,
+          "message": "Syntax valid"
+        },
+        {
+          "passed": true,
+          "message": "Has exports"
+        }
+      ]
+    },
+    {
+      "name": "Enhanced GodMode",
+      "passed": true,
+      "verifications": [
+        {
+          "passed": true,
+          "message": "File exists"
+        },
+        {
+          "passed": true,
+          "message": "Syntax valid"
+        },
+        {
+          "passed": true,
+          "message": "Has exports"
+        }
+      ]
+    },
+    {
+      "name": "Oracle Enhanced",
+      "passed": true,
+      "verifications": [
+        {
+          "passed": true,
+          "message": "File exists"
+        },
+        {
+          "passed": true,
+          "message": "Syntax valid"
+        },
+        {
+          "passed": true,
+          "message": "Has exports"
+        }
+      ]
+    },
+    {
+      "name": "Revenue Pipeline",
+      "passed": true,
+      "verifications": [
+        {
+          "passed": true,
+          "message": "File exists"
+        },
+        {
+          "passed": true,
+          "message": "Syntax valid"
+        },
+        {
+          "passed": true,
+          "message": "Has exports"
+        }
+      ]
+    },
+    {
+      "name": "Swarm Collaboration",
+      "passed": true,
+      "verifications": [
+        {
+          "passed": true,
+          "message": "File exists"
+        },
+        {
+          "passed": true,
+          "message": "Syntax valid"
+        },
+        {
+          "passed": true,
+          "message": "Has exports"
+        }
+      ]
+    },
+    {
+      "name": "Swarm CLI",
+      "passed": true,
+      "verifications": [
+        {
+          "passed": true,
+          "message": "File exists"
+        },
+        {
+          "passed": true,
+          "message": "Syntax valid"
+        },
+        {
+          "passed": true,
+          "message": "Has CLI entry point"
+        }
+      ]
+    },
+    {
+      "name": "Loop Updated",
+      "passed": true,
+      "verifications": [
+        {
+          "passed": true,
+          "message": "File exists"
+        },
+        {
+          "passed": true,
+          "message": "Syntax valid"
+        },
+        {
+          "passed": true,
+          "message": "Has CLI entry point"
+        }
+      ]
+    },
+    {
+      "name": "Swarm Deployed",
+      "passed": true,
+      "verifications": [
+        {
+          "passed": true,
+          "message": "File exists"
+        },
+        {
+          "passed": true,
+          "message": "Syntax valid"
+        },
+        {
+          "passed": true,
+          "message": "Has exports"
+        }
+      ]
+    }
+  ]
+}
