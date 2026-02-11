@@ -1,17 +1,17 @@
 [
   {
     "component": "ComplexWidget.jsx",
-    "bugProbability": 0.5237403057454924,
+    "bugProbability": 0.425731375832995,
     "ghostBugs": 0
   },
   {
     "component": "SimpleButton.jsx",
-    "bugProbability": 0.49715518879879766,
+    "bugProbability": 0.4020803510924065,
     "ghostBugs": 0
   },
   {
     "component": "LegacyModule.js",
-    "bugProbability": 0.5090986897888944,
+    "bugProbability": 0.47063795269518455,
     "ghostBugs": 0
   }
 ]
