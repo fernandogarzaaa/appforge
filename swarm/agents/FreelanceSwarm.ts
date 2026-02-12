@@ -5,6 +5,7 @@
 
 import { Base44Tool } from '../tools/base44.js';
 import { FileSystemTool } from '../tools/filesystem.js';
+import { isRealityMode } from '../core/reality_mode.js';
 import fs from 'fs';
 import path from 'path';
 
@@ -12,16 +13,21 @@ interface FreelanceJob {
     id: string;
     title: string;
     platform: string;
+    url?: string;
     budget: number;
-    status: 'found' | 'applied' | 'interview' | 'won' | 'completed';
+    status: 'found' | 'drafted' | 'applied' | 'interview' | 'won' | 'completed';
 }
 
 interface FreelanceMetrics {
+    jobsPrepared: number;
     jobsApplied: number;
     interviews: number;
     jobsWon: number;
     totalEarned: number;
     successRate: number;
+    highTicketPrepared: number;
+    highTicketApplied: number;
+    highTicketPipelineValue: number;
 }
 
 export class FreelanceSwarm {
@@ -29,30 +35,37 @@ export class FreelanceSwarm {
     private fs: FileSystemTool;
     private jobs: Map<string, FreelanceJob>;
     private metrics: FreelanceMetrics;
+    private realityMode: boolean;
 
     constructor(base44: Base44Tool, fs: FileSystemTool) {
         this.base44 = base44;
         this.fs = fs;
         this.jobs = new Map();
+        this.realityMode = isRealityMode();
         this.metrics = {
+            jobsPrepared: 0,
             jobsApplied: 0,
             interviews: 0,
             jobsWon: 0,
             totalEarned: 0,
-            successRate: 0
+            successRate: 0,
+            highTicketPrepared: 0,
+            highTicketApplied: 0,
+            highTicketPipelineValue: 0
         };
     }
 
     async run(): Promise<{
         status: string;
         jobsFound: number;
+        jobsPrepared: number;
         jobsApplied: number;
         metrics: FreelanceMetrics;
     }> {
         console.log('💰 [FreelanceSwarm] Starting freelance income generation...');
 
         const jobsFound = await this.scanJobPlatforms();
-        const jobsApplied = await this.applyToJobs();
+        await this.applyToJobs();
 
         // Update metrics
         if (this.metrics.jobsApplied > 0) {
@@ -60,8 +73,17 @@ export class FreelanceSwarm {
         }
 
         // Report to Base44
-        await this.base44.logActivity('FREELANCE_SWARM', 
-            `Applied to ${jobsApplied} jobs, found ${jobsFound} opportunities`);
+        if (this.realityMode) {
+            await this.base44.logActivity(
+                'FREELANCE_SWARM_REALITY',
+                `Prepared ${this.metrics.jobsPrepared} application drafts (${this.metrics.highTicketPrepared} high-ticket), found ${jobsFound} opportunities`
+            );
+        } else {
+            await this.base44.logActivity(
+                'FREELANCE_SWARM',
+                `Applied to ${jobsApplied} jobs (${this.metrics.highTicketApplied} high-ticket), found ${jobsFound} opportunities`
+            );
+        }
 
         // Save pipeline for RevenueHunter
         await this.savePipeline();
@@ -71,7 +93,8 @@ export class FreelanceSwarm {
         return {
             status: 'completed',
             jobsFound,
-            jobsApplied,
+            jobsPrepared: this.metrics.jobsPrepared,
+            jobsApplied: this.metrics.jobsApplied,
             metrics: this.metrics
         };
     }
@@ -87,11 +110,15 @@ export class FreelanceSwarm {
         await this.fetchFromRemoteOK(jobs);
         await this.fetchFromWeWorkRemotely(jobs);
         
-        // If no real jobs found (APIs down), use REAL recent job market data
+        // If no real jobs found (APIs down), use market snapshot only outside strict reality mode
         if (jobs.length === 0) {
-            console.log('   ⚠️  Using current market data (APIs temporarily unavailable)');
-            const realMarketJobs = this.getRealMarketJobs();
-            jobs.push(...realMarketJobs);
+            if (this.realityMode) {
+                console.log('   ⚠️  No live freelance feeds available; fallback market dataset disabled in reality mode');
+            } else {
+                console.log('   ⚠️  Using current market data (APIs temporarily unavailable)');
+                const realMarketJobs = this.getRealMarketJobs();
+                jobs.push(...realMarketJobs);
+            }
         }
 
         for (const job of jobs) {
@@ -117,6 +144,7 @@ export class FreelanceSwarm {
                         id: `gh_${job.id}`,
                         title: job.title,
                         platform: 'GitHub Jobs',
+                        url: job.url,
                         budget: this.parseBudget(job.salary) || this.estimateBudget(job.title),
                         status: 'found'
                     });
@@ -141,6 +169,7 @@ export class FreelanceSwarm {
                         id: `remotive_${job.id}`,
                         title: job.title,
                         platform: 'Remotive',
+                        url: job.url,
                         budget: this.parseSalary(job.salary_range) || 5000,
                         status: 'found'
                     });
@@ -166,6 +195,7 @@ export class FreelanceSwarm {
                             id: `rok_${job.id}`,
                             title: job.position,
                             platform: 'RemoteOK',
+                            url: job.url || job.apply_url,
                             budget: this.parseSalary(job.salary) || 5000,
                             status: 'found'
                         });
@@ -259,21 +289,126 @@ export class FreelanceSwarm {
     }
 
     private async applyToJobs(): Promise<number> {
-        console.log('   📝 Applying to matching jobs...');
+        if (this.realityMode) {
+            return this.prepareApplicationDrafts();
+        }
+
+        console.log('   📝 Applying to matching jobs (high-ticket prioritized)...');
 
         let applied = 0;
-        for (const [id, job] of this.jobs) {
-            if (job.status === 'found') {
-                // Simulate application
-                console.log(`      → Applied to: ${job.title} ($${job.budget})`);
-                job.status = 'applied';
-                this.metrics.jobsApplied++;
-                applied++;
+
+        const HIGH_TICKET_THRESHOLD = 9000;
+        const MAX_APPLICATIONS_PER_CYCLE = 10;
+        const candidates = Array.from(this.jobs.values())
+            .filter((job) => job.status === 'found')
+            .sort((a, b) => b.budget - a.budget)
+            .slice(0, MAX_APPLICATIONS_PER_CYCLE);
+
+        for (const job of candidates) {
+            console.log(`      → Applied to: ${job.title} ($${job.budget})`);
+            job.status = 'applied';
+            this.metrics.jobsApplied++;
+            applied++;
+
+            if (job.budget >= HIGH_TICKET_THRESHOLD) {
+                this.metrics.highTicketApplied++;
+                this.metrics.highTicketPipelineValue += job.budget;
             }
         }
 
-        console.log(`   ✅ Applied to ${applied} jobs`);
+        console.log(`   ✅ Applied to ${applied} jobs (${this.metrics.highTicketApplied} high-ticket)`);
         return applied;
+    }
+
+    private async prepareApplicationDrafts(): Promise<number> {
+        console.log('   📝 Preparing application drafts (reality mode, no auto-apply)...');
+
+        const HIGH_TICKET_THRESHOLD = 9000;
+        const MAX_DRAFTS_PER_CYCLE = 8;
+        const candidates = Array.from(this.jobs.values())
+            .filter((job) => job.status === 'found')
+            .sort((a, b) => b.budget - a.budget)
+            .slice(0, MAX_DRAFTS_PER_CYCLE);
+
+        if (candidates.length === 0) {
+            console.log('   ✅ No new jobs to draft this cycle');
+            return 0;
+        }
+
+        const outboxDir = path.join(process.cwd(), 'swarm', 'data', 'freelance_outbox');
+        if (!fs.existsSync(outboxDir)) {
+            fs.mkdirSync(outboxDir, { recursive: true });
+        }
+
+        const draftedAt = new Date().toISOString();
+        const drafts = candidates.map((job) => {
+            const message = this.buildCoverLetterTemplate(job);
+            return {
+                draftId: `draft_${job.id}_${Date.now()}`,
+                jobId: job.id,
+                title: job.title,
+                platform: job.platform,
+                url: job.url || '',
+                budget: job.budget,
+                createdAt: draftedAt,
+                status: 'DRAFT',
+                suggestedMessage: message,
+                checklist: [
+                    'Review the draft for accuracy and your specific experience',
+                    'Confirm the job posting is still open',
+                    'Submit manually on the platform using your account',
+                    'Log the submission result (applied/interview/won) back into the pipeline'
+                ]
+            };
+        });
+
+        const outPath = path.join(outboxDir, `application_drafts_${draftedAt.replace(/[:.]/g, '-')}.json`);
+        fs.writeFileSync(outPath, JSON.stringify({ draftedAt, drafts }, null, 2));
+
+        let drafted = 0;
+        for (const job of candidates) {
+            console.log(`      → Drafted: ${job.title} ($${job.budget})`);
+            job.status = 'drafted';
+            drafted++;
+            this.metrics.jobsPrepared++;
+
+            if (job.budget >= HIGH_TICKET_THRESHOLD) {
+                this.metrics.highTicketPrepared++;
+                this.metrics.highTicketPipelineValue += job.budget;
+            }
+        }
+
+        console.log(`   ✅ Prepared ${drafted} drafts (${this.metrics.highTicketPrepared} high-ticket)`);
+        console.log(`   💾 Draft outbox: ${outPath}`);
+        return drafted;
+    }
+
+    private buildCoverLetterTemplate(job: FreelanceJob): string {
+        const budgetLine = job.budget >= 9000
+            ? `I can deliver at a high standard within a high-ticket scope (targeting ~$${job.budget}).`
+            : `I can deliver within the posted scope and budget (targeting ~$${job.budget}).`;
+
+        const linkLine = job.url ? `Job link: ${job.url}` : '';
+
+        return [
+            `Hi there,`,
+            ``,
+            `I saw your posting for "${job.title}" on ${job.platform}. ${budgetLine}`,
+            ``,
+            `Quick approach:`,
+            `1) Clarify requirements + success metrics`,
+            `2) Ship a first milestone within 48-72 hours`,
+            `3) Iterate with daily updates until done`,
+            ``,
+            `A couple questions:`,
+            `- What’s the #1 outcome you want in the first week?`,
+            `- Do you have an existing repo/stack I should align to?`,
+            ``,
+            `If you want, share a brief spec and I’ll reply with a concrete plan + timeline.`,
+            linkLine
+        ]
+            .filter(Boolean)
+            .join('\n');
     }
 
     getMetrics(): FreelanceMetrics {
@@ -300,7 +435,9 @@ export class FreelanceSwarm {
                 id: job.id,
                 title: job.title,
                 platform: job.platform,
+                url: job.url || '',
                 value: job.budget,
+                tier: job.budget >= 9000 ? 'high_ticket' : 'standard',
                 status: job.status,
                 timestamp: new Date().toISOString()
             }));
@@ -310,6 +447,20 @@ export class FreelanceSwarm {
         } catch (error) {
             console.error('   ❌ [FreelanceSwarm] Error saving pipeline:', error);
         }
+    }
+
+    getJobsApplied(): number {
+        return this.metrics.jobsApplied;
+    }
+
+    getJobsPrepared(): number {
+        return this.metrics.jobsPrepared;
+    }
+
+    getPipelineValue(): number {
+        return Array.from(this.jobs.values())
+            .filter((job) => job.status === 'found' || job.status === 'drafted' || job.status === 'applied' || job.status === 'interview')
+            .reduce((sum, job) => sum + job.budget, 0);
     }
 }
 

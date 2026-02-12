@@ -10,6 +10,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { swarmCollaboration } from '../swarm/core/swarm_collaboration.js';
 import quantumCore from '../swarm/core/quantum_core.js';
+import { getCollectiveMembers } from '../swarm/core/swarm_collectives.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -35,9 +36,9 @@ ${COLORS.reset}${COLORS.yellow}╚═══════════════�
 ${COLORS.reset}
 Available Commands:
   ${COLORS.green}status${COLORS.reset}          - Show swarm status
-  ${COLORS.green}list${COLORS.reset}            - List all agents
+  ${COLORS.green}list${COLORS.reset}            - List all agents and swarm collectives
   ${COLORS.green}signals${COLORS.reset}         - Show pending signals
-  ${COLORS.green}send <to> <msg>${COLORS.reset} - Send signal to agent
+  ${COLORS.green}send <to> <msg>${COLORS.reset} - Send signal to agent/collective
   ${COLORS.green}broadcast <msg>${COLORS.reset} - Broadcast to all agents
   ${COLORS.green}query <agent> <q>${COLORS.reset} - Query an agent
   ${COLORS.green}states${COLORS.reset}           - List saved quantum states
@@ -60,11 +61,34 @@ const AGENTS = [
     'Antigravity',
     'Librarian',
     'RevenueHunter',
-    'CryptoSwarm',
     'MarketAnalyzer',
+    'SalesBot',
+    'ReferralManager',
+    'PricingStrategist',
+    'ArbitrageHunter',
+    'YieldOptimizer',
+    'CodeGenerator',
+    'TrendAnalyzer'
+];
+
+const SWARM_COLLECTIVES = [
+    'CryptoSwarm',
     'WorkerSwarm',
     'FreelanceSwarm',
-    'ConsultingSwarm'
+    'ConsultingSwarm',
+    'FinanceSwarm',
+    'SocialMediaSwarm',
+    'AutomatedTradingSwarm',
+    'LearningSwarm',
+    'ResearchSwarm',
+    'VoiceAgentSwarm',
+    'QualityAssuranceSwarm',
+    'CustomerSuccessSwarm',
+    'DevOpsSwarm',
+    'KnowledgeGraphSwarm',
+    'ComplianceSwarm',
+    'ExperimentationSwarm',
+    'AIEconomySwarm'
 ];
 
 // Register a callback for receiving signals
@@ -91,9 +115,15 @@ async function handleCommand(args) {
             break;
 
         case 'list':
-            console.log(`\n${COLORS.blue}🤖 Available Agents:${COLORS.reset}`);
+            console.log(`\n${COLORS.blue}🤖 Individual Agents:${COLORS.reset}`);
             AGENTS.forEach((agent, i) => {
                 console.log(`   ${i + 1}. ${agent}`);
+            });
+
+            console.log(`\n${COLORS.blue}🐝 Swarm Collectives:${COLORS.reset}`);
+            SWARM_COLLECTIVES.forEach((swarm, i) => {
+                const members = getCollectiveMembers(swarm);
+                console.log(`   ${i + 1}. ${swarm} (${members.length} members: ${members.join(', ')})`);
             });
             break;
 
@@ -173,7 +203,8 @@ async function handleCommand(args) {
             await quantum.saveState(saveName, {
                 timestamp: Date.now(),
                 coherence: quantum.getStats().quantum_coherence,
-                agents: AGENTS
+                agents: AGENTS,
+                swarms: SWARM_COLLECTIVES
             });
             console.log(`${COLORS.green}✅ State saved: ${saveName}${COLORS.reset}`);
             break;
@@ -212,8 +243,12 @@ async function handleCommand(args) {
             console.log(`\n${COLORS.blue}📊 Collaboration Stats:${COLORS.reset}`);
             console.log(`   Total Signals: ${collabStats.totalSignals}`);
             console.log(`   Pending: ${collabStats.pendingSignals}`);
-            console.log(`   Registered Agents: ${collabStats.registeredAgents}`);
-            console.log(`   Agent Names: ${collabStats.agentNames.join(', ')}`);
+            console.log(`   Registered Nodes: ${collabStats.registeredAgents}`);
+            console.log(`   Individual Agents: ${collabStats.registeredIndividualAgents ?? 'n/a'}`);
+            console.log(`   Swarm Collectives: ${collabStats.registeredCollectives ?? 'n/a'}`);
+            if (Array.isArray(collabStats.collectiveNames) && collabStats.collectiveNames.length > 0) {
+                console.log(`   Collective Names: ${collabStats.collectiveNames.join(', ')}`);
+            }
             break;
 
         case 'help':

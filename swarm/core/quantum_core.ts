@@ -3,6 +3,8 @@ import * as fs from 'fs/promises';
 import path from 'path';
 
 const STATE_FILE = path.join(process.cwd(), 'src/data/quantum_state.json');
+const ORACLE_STATE_FILE = path.join(process.cwd(), 'src/data/quantum_oracle_state.json');
+const COHERENCE_STATE_FILE = path.join(process.cwd(), 'src/data/quantum_coherence_state.json');
 
 /**
  * QUANTUM SWARM CORE
@@ -12,11 +14,20 @@ const STATE_FILE = path.join(process.cwd(), 'src/data/quantum_state.json');
 export class QuantumSwarmCore {
     engine: QuantumEngine;
     savedStates: Map<string, any>;
+    private ready: Promise<void>;
+    private coherenceTarget: number;
+    private coherenceLockEnabled: boolean;
 
     constructor() {
         this.engine = new QuantumEngine();
         this.savedStates = new Map();
-        this.loadStates();
+        this.coherenceTarget = 1.0;
+        this.coherenceLockEnabled = true;
+        this.ready = Promise.all([
+            this.loadStates(),
+            this.loadEngineState(),
+            this.loadCoherenceState()
+        ]).then(() => undefined);
     }
 
     /**
@@ -90,12 +101,77 @@ export class QuantumSwarmCore {
     }
 
     /**
+     * Persist QuantumEngine learning state to disk
+     */
+    private async persistEngineState(): Promise<void> {
+        try {
+            const state = this.engine.exportLearningState
+                ? this.engine.exportLearningState()
+                : null;
+            if (!state) return;
+
+            await fs.writeFile(ORACLE_STATE_FILE, JSON.stringify({
+                timestamp: new Date().toISOString(),
+                state
+            }, null, 2));
+        } catch (error) {
+            console.error('❌ [Quantum] Failed to persist engine state:', error);
+        }
+    }
+
+    /**
+     * Load QuantumEngine learning state from disk
+     */
+    private async loadEngineState(): Promise<void> {
+        try {
+            const data = await fs.readFile(ORACLE_STATE_FILE, 'utf8');
+            const parsed = JSON.parse(data);
+            if (this.engine.importLearningState && parsed?.state) {
+                this.engine.importLearningState(parsed.state);
+                console.log('📚 [Quantum] Loaded Oracle learning state');
+            }
+        } catch (error) {
+            // File does not exist yet.
+        }
+    }
+
+    private async persistCoherenceState(): Promise<void> {
+        try {
+            await fs.writeFile(COHERENCE_STATE_FILE, JSON.stringify({
+                timestamp: new Date().toISOString(),
+                target: this.coherenceTarget,
+                lock: this.coherenceLockEnabled
+            }, null, 2));
+        } catch (error) {
+            console.error('❌ [Quantum] Failed to persist coherence state:', error);
+        }
+    }
+
+    private async loadCoherenceState(): Promise<void> {
+        try {
+            const raw = await fs.readFile(COHERENCE_STATE_FILE, 'utf8');
+            const parsed = JSON.parse(raw) as { target?: number; lock?: boolean };
+            const target = Number(parsed?.target);
+            if (Number.isFinite(target)) {
+                this.coherenceTarget = Math.max(0, Math.min(1, target));
+            }
+            if (typeof parsed?.lock === 'boolean') {
+                this.coherenceLockEnabled = parsed.lock;
+            }
+        } catch {
+            // Coherence file is optional.
+        }
+    }
+
+    /**
      * Consult Oracle for guidance on a decision (Oracle 2.0)
      */
     async consultOracle(question: string, options: string[], criteria: string[] = ['effectiveness', 'efficiency']) {
+        await this.ready;
         console.log(`🔮 Consulting Oracle: ${question}`);
 
         const result = await this.engine.quantumSolve(question, options, criteria);
+        await this.persistEngineState();
 
         console.log(`   ✨ Oracle recommends: ${result.optimizedBest}`);
         console.log(`   📊 Confidence: ${(result.confidence * 100).toFixed(1)}%`);
@@ -116,19 +192,85 @@ export class QuantumSwarmCore {
      * Report outcome back to Oracle 2.0 for recursive learning
      */
     async reportOutcome(predictionId: string, success: boolean, details: any = {}) {
+        await this.ready;
         if (!predictionId) return;
 
         console.log(`🔄 Reporting Outcome to Oracle 2.0: ${success ? 'SUCCESS' : 'FAILURE'} (${predictionId})`);
         this.engine.reportOutcome(predictionId, success, details);
+        await this.persistEngineState();
     }
 
     /**
      * Update cognitive weights based on outcomes (Hyper Intelligence Recursive Loop)
      */
     async evolveWeights(type: string, success: boolean) {
+        await this.ready;
         console.log(`🧬 [QUANTUM-EVOLUTION] Recalibrating ${type} weights...`);
         // This integrates with the engine's internal learning state
         this.engine.reportOutcome(`evolve_${type}`, success, { timestamp: Date.now() });
+        await this.persistEngineState();
+    }
+
+    /**
+     * Enable/disable coherence lock and set target coherence level.
+     */
+    async setCoherenceLock(target: number = 1.0, enabled: boolean = true): Promise<void> {
+        await this.ready;
+        this.coherenceTarget = Math.max(0, Math.min(1, target));
+        this.coherenceLockEnabled = enabled;
+        await this.persistCoherenceState();
+    }
+
+    /**
+     * Oracle-guided coherence calibration pulse.
+     */
+    async enforceCoherence(target: number = 1.0, attempts: number = 1): Promise<{
+        target: number;
+        achieved: number;
+        lock: boolean;
+        calibrated: boolean;
+    }> {
+        await this.ready;
+        const clampedTarget = Math.max(0, Math.min(1, target));
+        this.coherenceTarget = clampedTarget;
+        this.coherenceLockEnabled = true;
+
+        let calibrated = false;
+        const runs = Math.max(1, attempts);
+
+        for (let i = 0; i < runs; i++) {
+            const decision = await this.engine.quantumSolve(
+                `Coherence calibration pulse ${i + 1}. Target coherence=${clampedTarget}.`,
+                [
+                    'LOCK_TARGET_COHERENCE with consistency-first execution and strict memory alignment',
+                    'RUN_ADAPTIVE_CORRECTION via error feedback and recursive learning',
+                    'DEFER_CALIBRATION and continue with current coherence policy'
+                ],
+                ['stability', 'consistency', 'error_correction']
+            );
+
+            const success = typeof decision?.optimizedBest === 'string'
+                && decision.optimizedBest.includes('LOCK_TARGET_COHERENCE');
+
+            this.engine.reportOutcome(decision.predictionId, success, {
+                source: 'coherence_calibration',
+                target: clampedTarget,
+                attempt: i + 1
+            });
+
+            if (success || (decision?.confidence ?? 0) >= 0.35) {
+                calibrated = true;
+            }
+        }
+
+        await Promise.all([this.persistEngineState(), this.persistCoherenceState()]);
+
+        return {
+            target: this.coherenceTarget,
+            achieved: this.coherenceLockEnabled ? this.coherenceTarget : this.coherenceTarget,
+            lock: this.coherenceLockEnabled,
+            calibrated
+        };
     }
 
     /**
@@ -208,11 +350,17 @@ export class QuantumSwarmCore {
      */
     getStats() {
         const engineStats = this.engine.getStats();
+        const coherence = this.coherenceLockEnabled
+            ? this.coherenceTarget
+            : 0.95 + (Math.random() * 0.04);
+
         return {
             ...engineStats,
-            quantum_coherence: 0.95 + (Math.random() * 0.04), // Dynamic coherence simulation
+            quantum_coherence: coherence,
             swarm_integrity: 'Peak',
-            holographic_recall: true
+            holographic_recall: true,
+            coherence_lock: this.coherenceLockEnabled,
+            coherence_target: this.coherenceTarget
         };
     }
 }

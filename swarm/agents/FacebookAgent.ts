@@ -4,6 +4,7 @@
  */
 
 import { QuantumSwarmCore } from '../core/quantum_core.js';
+import { isRealityMode } from '../core/reality_mode.js';
 
 interface FacebookConfig {
     enabled: boolean;
@@ -185,6 +186,10 @@ export class FacebookAgent {
      */
     async upload(video: FacebookVideo): Promise<boolean> {
         console.log('👥 [FacebookAgent] Uploading video:', video.title);
+
+        if (isRealityMode()) {
+            throw new Error('[FacebookAgent] Reality mode active but Facebook live API connector is not implemented');
+        }
 
         // Placeholder for Facebook Graph API integration
         // In production, use Facebook Marketing API

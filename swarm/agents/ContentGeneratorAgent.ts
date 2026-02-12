@@ -1,6 +1,6 @@
 /**
  * ContentGeneratorAgent - AI-powered video content generation
- * Creates engaging videos for TikTok, YouTube, and Facebook
+ * Creates engaging content plans for TikTok, YouTube, Facebook, Instagram, and Twitter/X
  */
 
 import { QuantumSwarmCore } from '../core/quantum_core.js';
@@ -13,7 +13,7 @@ interface ContentConfig {
 
 interface ContentPlan {
     id: string;
-    platform: 'tiktok' | 'youtube' | 'facebook';
+    platform: 'tiktok' | 'youtube' | 'facebook' | 'instagram' | 'twitter';
     topic: string;
     style: string;
     hooks: string[];
@@ -84,7 +84,9 @@ export class ContentGeneratorAgent {
             optimalLength: {
                 tiktok: 30,
                 youtube: 600,
-                facebook: 180
+                facebook: 180,
+                instagram: 45,
+                twitter: 1
             },
             engagementTriggers: ['curiosity', 'emotion', 'value', 'urgency']
         };
@@ -132,11 +134,19 @@ export class ContentGeneratorAgent {
         const facebookPlan = await this.createPlanForPlatform('facebook', trends);
         if (facebookPlan) plans.push(facebookPlan);
 
+        // Generate Instagram plan
+        const instagramPlan = await this.createPlanForPlatform('instagram', trends);
+        if (instagramPlan) plans.push(instagramPlan);
+
+        // Generate Twitter/X plan
+        const twitterPlan = await this.createPlanForPlatform('twitter', trends);
+        if (twitterPlan) plans.push(twitterPlan);
+
         return plans;
     }
 
     private async createPlanForPlatform(
-        platform: 'tiktok' | 'youtube' | 'facebook',
+        platform: 'tiktok' | 'youtube' | 'facebook' | 'instagram' | 'twitter',
         trends: any
     ): Promise<ContentPlan | null> {
         const topic = this.selectTopic();
@@ -279,7 +289,9 @@ export class ContentGeneratorAgent {
         if (patterns?.optimalLength) {
             return patterns.optimalLength[platform] || 30;
         }
-        return platform === 'youtube' ? 600 : 30;
+        if (platform === 'youtube') return 600;
+        if (platform === 'twitter') return 1;
+        return 30;
     }
 
     private async generateVisualAssets(
@@ -316,6 +328,10 @@ export class ContentGeneratorAgent {
             return [...base, '#fyp', '#foryou', '#tiktok'];
         } else if (platform === 'youtube') {
             return [...base, '#youtube', '#tutorial', '#education'];
+        } else if (platform === 'instagram') {
+            return [...base, '#instagram', '#reels', '#creator'];
+        } else if (platform === 'twitter') {
+            return [...base, '#twitter', '#thread', '#buildinpublic'];
         } else {
             return [...base, '#facebook', '#video', '#content'];
         }

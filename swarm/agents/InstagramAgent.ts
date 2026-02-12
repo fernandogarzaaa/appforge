@@ -4,6 +4,7 @@
  */
 
 import { QuantumSwarmCore } from '../core/quantum_core.js';
+import { isRealityMode } from '../core/reality_mode.js';
 
 interface InstagramConfig {
     enabled: boolean;
@@ -131,6 +132,10 @@ export class InstagramAgent {
 
     async upload(post: InstagramPost): Promise<boolean> {
         console.log('📸 [InstagramAgent] Uploading:', post.type);
+
+        if (isRealityMode()) {
+            throw new Error('[InstagramAgent] Reality mode active but Instagram live API connector is not implemented');
+        }
 
         this.metrics.followers += Math.floor(Math.random() * 50) + 10;
         this.metrics.reach += Math.floor(Math.random() * 5000) + 1000;

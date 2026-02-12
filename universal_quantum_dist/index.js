@@ -13,19 +13,84 @@ class QuantumStateStore {
     constructor() {
         this.memory = new Map();
         this.version = '3.0';
+        this.storageKey = '__appforge_quantum_memory_v3__';
+        this.loadFromBrowserStorage();
     }
 
     save(key, data) {
         this.memory.set(key, { data, timestamp: Date.now() });
+        this.persistToBrowserStorage();
     }
 
     load(key) {
         return this.memory.get(key)?.data || null;
     }
+
+    exportDump(limit = 500) {
+        const entries = Array.from(this.memory.entries()).slice(-limit);
+        return Object.fromEntries(entries);
+    }
+
+    importDump(dump) {
+        if (!dump || typeof dump !== 'object') return;
+        for (const [key, value] of Object.entries(dump)) {
+            if (value && typeof value === 'object' && 'data' in value) {
+                this.memory.set(key, value);
+            } else {
+                this.memory.set(key, { data: value, timestamp: Date.now() });
+            }
+        }
+        this.persistToBrowserStorage();
+    }
+
+    loadFromBrowserStorage() {
+        try {
+            if (typeof localStorage === 'undefined') return;
+            const raw = localStorage.getItem(this.storageKey);
+            if (!raw) return;
+            const parsed = JSON.parse(raw);
+            this.importDump(parsed);
+        } catch {
+            // Browser persistence is best-effort.
+        }
+    }
+
+    persistToBrowserStorage() {
+        try {
+            if (typeof localStorage === 'undefined') return;
+            const raw = JSON.stringify(this.exportDump());
+            localStorage.setItem(this.storageKey, raw);
+        } catch {
+            // Browser persistence is best-effort.
+        }
+    }
 }
 
 // Global persistence layer (Holographic Memory)
 const globalMemory = new QuantumStateStore();
+
+const STOP_WORDS = new Set([
+    'a', 'an', 'and', 'are', 'as', 'at', 'be', 'by', 'for', 'from', 'how', 'i',
+    'if', 'in', 'is', 'it', 'of', 'on', 'or', 'that', 'the', 'this', 'to', 'with',
+    'we', 'you', 'your', 'our', 'what', 'which', 'who', 'when', 'where', 'why',
+    'all', 'any', 'can', 'do', 'does', 'done', 'into', 'under', 'over', 'up',
+    'down', 'more', 'less', 'most', 'least', 'than', 'then', 'very', 'now'
+]);
+
+const POSITIVE_REASONING_PATTERNS = [
+    'canary', 'rollback', 'fallback', 'circuit breaker', 'circuit-breaker',
+    'backpressure', 'retry', 'dead-letter', 'dead letter', 'risk scoring',
+    'risk-scoring', 'progressive', 'containment', 'isolation', 'bulkhead',
+    'operational transform', 'audit', 'threshold', 'replay', 'persist backlog',
+    'least privilege', 'idempotency', 'staged', 'backward-compatible', 'challenge flow'
+];
+
+const NEGATIVE_REASONING_PATTERNS = [
+    'ignore', 'do nothing', 'random winner', 'random', 'hope', 'drop queued jobs',
+    'drop messages', 'global flip', 'ship globally', 'one step', 'hard fail',
+    'disable retries', 'wait for user complaints', 'block entire region',
+    'last write wins', 'single monolith', 'deploy without checks', 'forever'
+];
 
 // ------------------------------------------------------------------
 // COMPONENT 1: SUPERPOSITION PROCESSOR (Parallel Execution)
@@ -163,7 +228,7 @@ export class QuantumAnnealingOptimizer {
 
     perturb(val) {
         // Mutation logic for strings/objects
-        if (typeof val === 'string') return val + (Math.random() > 0.5 ? "+" : "-");
+        if (typeof val === 'string') return val;
         return val;
     }
 }
@@ -228,16 +293,200 @@ export default class QuantumEngine {
         this.memory = globalMemory;
         this.history = [];
         this.learningParams = { bias: 1.0, exploration: 0.2 };
+        this.criteriaWeights = new Map();
+        this.optionWeights = new Map();
+        this.feedbackStats = { total: 0, success: 0 };
 
         console.log('🌌 Quantum Engine v3.0 [Holographic Architecture] Online');
+    }
+
+    normalizeText(input) {
+        return String(input || '')
+            .toLowerCase()
+            .replace(/[_/]+/g, ' ')
+            .replace(/[^a-z0-9\s-]/g, ' ')
+            .replace(/\s+/g, ' ')
+            .trim();
+    }
+
+    buildCacheKey(problem, options, criteria) {
+        const normalizedProblem = this.normalizeText(problem);
+        const normalizedOptions = (options || [])
+            .map((option) => this.normalizeText(typeof option === 'string' ? option : JSON.stringify(option)))
+            .join('|');
+        const normalizedCriteria = (criteria || [])
+            .map((criterion) => this.normalizeText(criterion))
+            .join('|');
+
+        const signature = `${normalizedProblem}::${normalizedOptions}::${normalizedCriteria}`;
+        let hash = 0;
+        for (let i = 0; i < signature.length; i++) {
+            hash = ((hash << 5) - hash) + signature.charCodeAt(i);
+            hash |= 0;
+        }
+
+        return `solve_${Math.abs(hash).toString(16)}`;
+    }
+
+    tokenize(input) {
+        return this.normalizeText(input)
+            .split(' ')
+            .map(t => t.trim())
+            .filter(t => t.length > 1 && !STOP_WORDS.has(t));
+    }
+
+    phraseHitCount(text, phrases) {
+        const norm = this.normalizeText(text);
+        return phrases.reduce((count, phrase) => {
+            const normalizedPhrase = this.normalizeText(phrase);
+            return count + (norm.includes(normalizedPhrase) ? 1 : 0);
+        }, 0);
+    }
+
+    tokenOverlapScore(optionTokens, targetTokens) {
+        if (!targetTokens.length) return 0;
+        const optionSet = new Set(optionTokens);
+        const overlap = targetTokens.filter(token => optionSet.has(token)).length;
+        return overlap / targetTokens.length;
+    }
+
+    coverageScore(optionText, criteria) {
+        if (!criteria || criteria.length === 0) return 0;
+        const optionTokens = this.tokenize(optionText);
+        const criterionScores = criteria.map((criterion) => {
+            const criterionTokens = this.tokenize(criterion);
+            if (criterionTokens.length === 0) return 0;
+
+            const baseScore = this.tokenOverlapScore(optionTokens, criterionTokens);
+            const learnedWeight = criterionTokens
+                .map((token) => this.criteriaWeights.get(token) ?? 1)
+                .reduce((sum, weight) => sum + weight, 0) / criterionTokens.length;
+
+            return baseScore * learnedWeight;
+        });
+
+        return criterionScores.reduce((sum, value) => sum + value, 0) / criterionScores.length;
+    }
+
+    reasoningPatternScore(optionText) {
+        const positiveHits = this.phraseHitCount(optionText, POSITIVE_REASONING_PATTERNS);
+        const negativeHits = this.phraseHitCount(optionText, NEGATIVE_REASONING_PATTERNS);
+        return (positiveHits * 0.85) - (negativeHits * 1.2);
+    }
+
+    learnedOptionScore(optionText) {
+        const tokens = this.tokenize(optionText);
+        if (!tokens.length) return 0;
+
+        const total = tokens.reduce((sum, token) => sum + (this.optionWeights.get(token) ?? 0), 0);
+        return total / tokens.length;
+    }
+
+    contextualScore(problem, optionText) {
+        const problemTokens = this.tokenize(problem);
+        const optionTokens = this.tokenize(optionText);
+        return this.tokenOverlapScore(optionTokens, problemTokens);
+    }
+
+    evaluationScore(problem, option, criteria) {
+        const optionText = typeof option === 'string' ? option : JSON.stringify(option);
+        const criteriaCoverage = this.coverageScore(optionText, criteria);
+        const contextual = this.contextualScore(problem, optionText);
+        const patternScore = this.reasoningPatternScore(optionText);
+        const learned = this.learnedOptionScore(optionText);
+        const explorationNoise = (Math.random() - 0.5) * this.learningParams.exploration * 0.05;
+
+        let score =
+            (criteriaCoverage * 2.2) +
+            (contextual * 0.7) +
+            patternScore +
+            (learned * 0.8);
+
+        score *= this.learningParams.bias;
+        return score + explorationNoise;
+    }
+
+    updateLearnedWeights(text, success, scale = 1) {
+        const delta = success ? 0.06 * scale : -0.08 * scale;
+        const tokens = this.tokenize(text);
+        for (const token of tokens) {
+            const current = this.optionWeights.get(token) ?? 0;
+            const next = Math.max(-2.5, Math.min(2.5, current + delta));
+            this.optionWeights.set(token, next);
+        }
+    }
+
+    updateCriteriaWeights(criteria, success) {
+        const delta = success ? 0.03 : -0.04;
+        for (const criterion of criteria || []) {
+            const tokens = this.tokenize(criterion);
+            for (const token of tokens) {
+                const current = this.criteriaWeights.get(token) ?? 1;
+                const next = Math.max(0.5, Math.min(3, current + delta));
+                this.criteriaWeights.set(token, next);
+            }
+        }
+    }
+
+    exportLearningState() {
+        return {
+            version: '3.1',
+            learningParams: this.learningParams,
+            feedbackStats: this.feedbackStats,
+            optionWeights: Object.fromEntries(this.optionWeights),
+            criteriaWeights: Object.fromEntries(this.criteriaWeights),
+            memoryDump: this.memory.exportDump(300)
+        };
+    }
+
+    importLearningState(state) {
+        if (!state || typeof state !== 'object') return;
+
+        if (state.learningParams) {
+            this.learningParams = {
+                bias: Number(state.learningParams.bias ?? this.learningParams.bias),
+                exploration: Number(state.learningParams.exploration ?? this.learningParams.exploration)
+            };
+        }
+
+        if (state.feedbackStats) {
+            this.feedbackStats = {
+                total: Number(state.feedbackStats.total ?? this.feedbackStats.total),
+                success: Number(state.feedbackStats.success ?? this.feedbackStats.success)
+            };
+        }
+
+        if (state.optionWeights && typeof state.optionWeights === 'object') {
+            this.optionWeights = new Map(Object.entries(state.optionWeights).map(([k, v]) => [k, Number(v)]));
+        }
+
+        if (state.criteriaWeights && typeof state.criteriaWeights === 'object') {
+            this.criteriaWeights = new Map(Object.entries(state.criteriaWeights).map(([k, v]) => [k, Number(v)]));
+        }
+
+        if (state.memoryDump) {
+            this.memory.importDump(state.memoryDump);
+        }
     }
 
     /**
      * Primary solver method (The "Brain")
      */
     async quantumSolve(problem, options, criteria) {
+        const safeOptions = Array.isArray(options) ? options : [];
+        const safeCriteria = Array.isArray(criteria) ? criteria : [];
+        if (safeOptions.length === 0) {
+            return {
+                predictionId: `Q3-${Date.now()}-0`,
+                optimizedBest: null,
+                confidence: 0,
+                alternatives: [],
+                engineVersion: '3.1'
+            };
+        }
+
         // 1. Check Holographic Memory (Cache/Reflection)
-        const memKey = `solve_${problem.substring(0, 32)}`;
+        const memKey = this.buildCacheKey(problem, safeOptions, safeCriteria);
         const cached = this.memory.load(memKey);
 
         if (cached && cached.confidence > 0.95) {
@@ -246,24 +495,17 @@ export default class QuantumEngine {
         }
 
         // 2. Superposition Strategy
-        let states = this.superposition.createSuperposition(options);
+        let states = this.superposition.createSuperposition(safeOptions);
 
         // 3. Evaluation Function (The "Observer")
-        const evaluate = (opt) => {
-            let score = 0;
-            const str = JSON.stringify(opt).toLowerCase();
-            criteria.forEach(c => {
-                if (str.includes(c.toLowerCase())) score += 1.0;
-            });
-            // Apply learned bias
-            score *= this.learningParams.bias;
-            return score;
-        };
+        const evaluate = (opt) => this.evaluationScore(problem, opt, safeCriteria);
 
         // 4. Amplify & Measure
         states = this.superposition.amplifyGoodSolutions(states, evaluate);
         const measured = this.superposition.measure(states);
         const bestCandidate = measured[0].solution;
+        const secondBestProbability = measured[1]?.probability ?? 0;
+        const margin = Math.max(0, measured[0].probability - secondBestProbability);
 
         // 5. Annealing Optimization (Refinement)
         // Only if confidence is low, otherwise skip for speed
@@ -278,14 +520,24 @@ export default class QuantumEngine {
         const result = {
             predictionId,
             optimizedBest: finalResult,
-            confidence: Math.min(measured[0].probability * 1.5, 0.99), // Boosted by quantum heuristic
+            confidence: Math.min(0.99, (measured[0].probability * 0.8) + (margin * 1.2) + 0.1),
             alternatives: measured.slice(1, 3).map(m => m.solution),
-            engineVersion: '3.0'
+            engineVersion: '3.1'
         };
 
         // 7. Save to Holographic Memory
         this.memory.save(memKey, result);
-        this.history.push({ id: predictionId, problem, result, outcome: null });
+        this.history.push({
+            id: predictionId,
+            problem,
+            criteria: safeCriteria,
+            options: safeOptions,
+            result,
+            outcome: null
+        });
+        if (this.history.length > 500) {
+            this.history = this.history.slice(-500);
+        }
 
         return result;
     }
@@ -295,27 +547,56 @@ export default class QuantumEngine {
      */
     reportOutcome(predictionId, success, details) {
         const item = this.history.find(h => h.id === predictionId);
+        this.feedbackStats.total += 1;
+        if (success) this.feedbackStats.success += 1;
+
+        // Adjust global learning rates
+        if (success) {
+            this.learningParams.bias = Math.min(1.8, this.learningParams.bias * 1.01);
+            this.learningParams.exploration = Math.max(0.02, this.learningParams.exploration * 0.98);
+        } else {
+            this.learningParams.bias = Math.max(0.65, this.learningParams.bias * 0.985);
+            this.learningParams.exploration = Math.min(0.8, this.learningParams.exploration + 0.02);
+        }
+
         if (item) {
             item.outcome = { success, details };
+            const chosen = typeof item.result?.optimizedBest === 'string'
+                ? item.result.optimizedBest
+                : JSON.stringify(item.result?.optimizedBest ?? '');
 
-            // Adjust Learning Parameters
-            if (success) {
-                this.learningParams.bias *= 1.02; // Reinforce what works
-            } else {
-                this.learningParams.bias *= 0.98; // Rethink approach
-                this.learningParams.exploration += 0.05; // Try new things
-            }
+            this.updateLearnedWeights(chosen, success);
+            this.updateCriteriaWeights(item.criteria || [], success);
             return true;
         }
+
+        if (details && typeof details === 'object') {
+            const inferredText =
+                details.recommendation ||
+                details.question ||
+                details.description ||
+                details.source ||
+                '';
+            if (inferredText) {
+                this.updateLearnedWeights(String(inferredText), success, 0.5);
+            }
+        }
+
         return false;
     }
 
     getStats() {
+        const outcomeRate = this.feedbackStats.total > 0
+            ? this.feedbackStats.success / this.feedbackStats.total
+            : 0;
+
         return {
-            version: '3.0',
+            version: '3.1',
             memoryItems: this.memory.memory.size,
             historyLength: this.history.length,
-            learningParams: this.learningParams
+            learningParams: this.learningParams,
+            predictionsCount: this.feedbackStats.total,
+            successRate: outcomeRate
         };
     }
 }

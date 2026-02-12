@@ -3,6 +3,9 @@
  * Provides long-term memory for swarm agents across sessions
  */
 
+import * as fs from 'fs/promises';
+import path from 'path';
+
 interface MemoryItem {
     key: string;
     value: any;
@@ -18,18 +21,20 @@ interface MemoryStats {
 
 export class PersistentMemory {
     private localStorage: Map<string, MemoryItem>;
-    private fileStorage: Map<string, any>;
+    private storageFile: string;
+    private loadPromise: Promise<void>;
 
     constructor() {
         this.localStorage = new Map();
-        this.fileStorage = new Map();
-        this.loadFromDisk();
+        this.storageFile = path.join(process.cwd(), 'swarm', 'data', 'persistent_memory.json');
+        this.loadPromise = this.loadFromDisk();
     }
 
     /**
      * Store a value with optional TTL
      */
     async set(key: string, value: any, ttlSeconds: number = 86400): Promise<void> {
+        await this.loadPromise;
         const item: MemoryItem = {
             key,
             value,
@@ -47,6 +52,7 @@ export class PersistentMemory {
      * Retrieve a value
      */
     async get<T>(key: string): Promise<T | null> {
+        await this.loadPromise;
         const item = this.localStorage.get(key);
 
         if (!item) {
@@ -56,6 +62,7 @@ export class PersistentMemory {
         // Check TTL
         if (Date.now() - item.timestamp > item.ttl * 1000) {
             this.localStorage.delete(key);
+            await this.saveToDisk();
             return null;
         }
 
@@ -66,6 +73,7 @@ export class PersistentMemory {
      * Delete a value
      */
     async delete(key: string): Promise<void> {
+        await this.loadPromise;
         this.localStorage.delete(key);
         await this.saveToDisk();
         console.log(`🗑️ [Memory] Deleted: ${key}`);
@@ -75,6 +83,7 @@ export class PersistentMemory {
      * Get all keys matching a pattern
      */
     async keys(pattern: string): Promise<string[]> {
+        await this.loadPromise;
         const regex = new RegExp(pattern.replace('*', '.*'));
         return Array.from(this.localStorage.keys()).filter(k => regex.test(k));
     }
@@ -83,6 +92,7 @@ export class PersistentMemory {
      * Get memory statistics
      */
     async stats(): Promise<MemoryStats> {
+        await this.loadPromise;
         return {
             totalItems: this.localStorage.size,
             keys: Array.from(this.localStorage.keys()),
@@ -94,6 +104,7 @@ export class PersistentMemory {
      * Clear all memory
      */
     async clear(): Promise<void> {
+        await this.loadPromise;
         this.localStorage.clear();
         await this.saveToDisk();
         console.log('💾 [Memory] Cleared all');
@@ -103,22 +114,27 @@ export class PersistentMemory {
      * Save to disk (simulated Redis)
      */
     private async saveToDisk(): Promise<void> {
-        const data: Record<string, MemoryItem> = {};
-        
-        for (const [key, item] of this.localStorage) {
-            data[key] = item;
-        }
-
-        // Store in memory.json for persistence
-        this.fileStorage.set('memory', data);
+        const data: Record<string, MemoryItem> = Object.fromEntries(this.localStorage);
+        await fs.mkdir(path.dirname(this.storageFile), { recursive: true });
+        await fs.writeFile(this.storageFile, JSON.stringify(data, null, 2), 'utf8');
     }
 
     /**
      * Load from disk
      */
-    private loadFromDisk(): void {
-        // In production, this would load from Redis
-        console.log('💾 [Memory] Loaded from disk');
+    private async loadFromDisk(): Promise<void> {
+        try {
+            const raw = await fs.readFile(this.storageFile, 'utf8');
+            const parsed = JSON.parse(raw) as Record<string, MemoryItem>;
+            for (const [key, value] of Object.entries(parsed)) {
+                if (value && typeof value === 'object') {
+                    this.localStorage.set(key, value);
+                }
+            }
+            console.log(`💾 [Memory] Loaded ${this.localStorage.size} items from disk`);
+        } catch {
+            console.log('💾 [Memory] No existing disk state found, starting fresh');
+        }
     }
 
     /**

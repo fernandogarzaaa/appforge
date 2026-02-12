@@ -1,17 +1,25 @@
 /**
- * 🚀 Binance Real Trading Integration
- * 
- * Setup:
- * 1. Create account at https://binance.com
- * 2. Go to API Management -> Create API
- * 3. Add keys to .env.local:
- *    BINANCE_API_KEY=your_api_key
- *    BINANCE_SECRET_KEY=your_secret_key
+ * 🚀 Binance Integration
+ *
+ * In SWARM_REALITY_MODE=true, simulation fallbacks are blocked.
  */
 
 import crypto from 'crypto';
+import { existsSync } from 'fs';
+import dotenv from 'dotenv';
+import { isRealityMode } from '../core/reality_mode.js';
 
-// Type for Binance config
+function loadEnv(): void {
+  if (existsSync('.env.local')) {
+    dotenv.config({ path: '.env.local', override: false });
+  }
+  if (existsSync('.env')) {
+    dotenv.config({ path: '.env', override: false });
+  }
+}
+
+loadEnv();
+
 interface BinanceConfig {
   apiKey: string;
   secretKey: string;
@@ -26,9 +34,12 @@ interface BinanceOrder {
   stopPrice?: number;
 }
 
+type BinanceMode = 'LIVE' | 'SIMULATION' | 'MISCONFIGURED';
+
 class BinanceIntegration {
   private baseUrl = 'https://api.binance.com';
   private config: BinanceConfig | null = null;
+  private realityMode = isRealityMode();
 
   constructor() {
     this.loadConfig();
@@ -37,12 +48,17 @@ class BinanceIntegration {
   private loadConfig() {
     const apiKey = process.env.BINANCE_API_KEY;
     const secretKey = process.env.BINANCE_SECRET_KEY;
-    
+
     if (apiKey && secretKey) {
       this.config = { apiKey, secretKey };
       console.log('✅ [Binance] Connected to Binance API');
+      return;
+    }
+
+    if (this.realityMode) {
+      console.error('❌ [Binance] Reality mode active: API keys missing for authenticated trading endpoints.');
     } else {
-      console.warn('⚠️ [Binance] API keys not configured - using simulation mode');
+      console.warn('⚠️ [Binance] API keys not configured - using simulation mode for authenticated endpoints');
     }
   }
 
@@ -50,23 +66,34 @@ class BinanceIntegration {
     return this.config !== null;
   }
 
+  private requireConfiguredForReality(scope: string): void {
+    if (this.realityMode && !this.isConfigured()) {
+      throw new Error(`[Binance] ${scope} requires BINANCE_API_KEY/BINANCE_SECRET_KEY in reality mode`);
+    }
+  }
+
   private getSignature(queryString: string): string {
-    if (!this.config) throw new Error('Binance not configured');
+    if (!this.config) {
+      throw new Error('Binance not configured');
+    }
+
     return crypto
       .createHmac('sha256', this.config.secretKey)
       .update(queryString)
       .digest('hex');
   }
 
-  private async request(method: string, endpoint: string, params?: Record<string, string | number>): Promise<any> {
+  private async requestSigned(method: string, endpoint: string, params?: Record<string, string | number>): Promise<any> {
+    this.requireConfiguredForReality(`Signed request ${endpoint}`);
+
     if (!this.isConfigured()) {
       return this.simulateResponse(method, params);
     }
 
-    const queryString = params 
+    const queryString = params
       ? new URLSearchParams(Object.entries(params).map(([k, v]) => [k, String(v)])).toString()
       : '';
-    
+
     const signature = queryString ? this.getSignature(queryString) : '';
     const url = `${this.baseUrl}${endpoint}?${queryString}${signature ? `&signature=${signature}` : ''}`;
 
@@ -80,25 +107,36 @@ class BinanceIntegration {
       });
 
       if (!response.ok) {
-        throw new Error(`Binance API error: ${response.statusText}`);
+        const body = await response.text();
+        throw new Error(`Binance API error (${response.status}): ${body.slice(0, 200)}`);
       }
 
       return response.json();
-    } catch (error) {
+    } catch (error: any) {
+      if (this.realityMode) {
+        throw new Error(`[Binance] Signed request failed: ${error.message || error}`);
+      }
+
       console.error('❌ [Binance] API request failed:', error);
       return this.simulateResponse(method, params);
     }
   }
 
   private simulateResponse(method: string, params?: Record<string, string | number>): any {
+    if (this.realityMode) {
+      throw new Error('[Binance] Simulation response requested while reality mode is enabled');
+    }
+
     if (method === 'GET' && params?.symbol) {
       const symbol = params.symbol as string;
       return {
-        price: symbol === 'BTCUSDT' ? '65000.00' : 
-               symbol === 'ETHUSDT' ? '3500.00' : '100.00',
+        price: symbol === 'BTCUSDT' ? '65000.00'
+          : symbol === 'ETHUSDT' ? '3500.00'
+            : '100.00',
         symbol
       };
     }
+
     if (method === 'POST' && params?.symbol) {
       return {
         symbol: params.symbol,
@@ -111,16 +149,35 @@ class BinanceIntegration {
         type: params.type
       };
     }
+
     return {};
   }
 
+  /**
+   * Public ticker endpoint (no API key required).
+   */
   async getPrice(symbol: string): Promise<number> {
-    const data = await this.request('GET', '/api/v3/ticker/price', { symbol });
-    return parseFloat(data.price || '0');
+    try {
+      const response = await fetch(`${this.baseUrl}/api/v3/ticker/price?symbol=${encodeURIComponent(symbol)}`);
+      if (!response.ok) {
+        const body = await response.text();
+        throw new Error(`Ticker price error (${response.status}): ${body.slice(0, 160)}`);
+      }
+
+      const data = await response.json() as { price?: string };
+      return parseFloat(data.price || '0');
+    } catch (error: any) {
+      if (this.realityMode) {
+        throw new Error(`[Binance] Failed to fetch live price for ${symbol}: ${error.message || error}`);
+      }
+
+      const data = this.simulateResponse('GET', { symbol });
+      return parseFloat(data.price || '0');
+    }
   }
 
   async getBalance(asset: string): Promise<number> {
-    const data = await this.request('GET', '/api/v3/account');
+    const data = await this.requestSigned('GET', '/api/v3/account', { timestamp: Date.now() });
     const balance = data.balances?.find((b: any) => b.asset === asset);
     return parseFloat(balance?.free || '0');
   }
@@ -136,7 +193,7 @@ class BinanceIntegration {
       timestamp: Date.now()
     };
 
-    return this.request('POST', '/api/v3/order', params);
+    return this.requestSigned('POST', '/api/v3/order', params);
   }
 
   async buyMarket(symbol: string, quantity: number): Promise<any> {
@@ -147,10 +204,10 @@ class BinanceIntegration {
     return this.placeOrder({ symbol, side: 'SELL', type: 'MARKET', quantity });
   }
 
-  getStatus(): { configured: boolean; mode: string } {
+  getStatus(): { configured: boolean; mode: BinanceMode } {
     return {
       configured: this.isConfigured(),
-      mode: this.isConfigured() ? 'LIVE' : 'SIMULATION'
+      mode: this.isConfigured() ? 'LIVE' : (this.realityMode ? 'MISCONFIGURED' : 'SIMULATION')
     };
   }
 }

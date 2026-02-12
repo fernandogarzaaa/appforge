@@ -4,6 +4,14 @@
 .env.*.local
 .env.production.local
 
+# Swarm Secrets / Wallets / Sessions (never commit)
+swarm/data/swarm_wallet.json
+swarm/data/swarm_wallet_backup.json
+swarm/data/finance_wallet.json
+auth_info_baileys*/
+whatsapp_qr*.png
+swarm/quantum_channel.json
+
 # Dependencies
 node_modules/
 /.pnp

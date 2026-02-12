@@ -4,271 +4,305 @@
     "title": "iOS Developer",
     "platform": "Remotive",
     "value": 5000,
+    "tier": "standard",
     "status": "applied",
-    "timestamp": "2026-02-12T13:13:07.789Z"
+    "timestamp": "2026-02-12T19:23:10.857Z"
   },
   {
     "id": "remotive_2086540",
     "title": "Inside Sales Contractor",
     "platform": "Remotive",
     "value": 5000,
+    "tier": "standard",
     "status": "applied",
-    "timestamp": "2026-02-12T13:13:07.789Z"
+    "timestamp": "2026-02-12T19:23:10.857Z"
   },
   {
     "id": "remotive_2088624",
     "title": "Senior Python Backend Developer",
     "platform": "Remotive",
     "value": 5000,
+    "tier": "standard",
     "status": "applied",
-    "timestamp": "2026-02-12T13:13:07.789Z"
+    "timestamp": "2026-02-12T19:23:10.857Z"
   },
   {
     "id": "remotive_2088622",
     "title": "Content Reviewer",
     "platform": "Remotive",
     "value": 5000,
+    "tier": "standard",
     "status": "applied",
-    "timestamp": "2026-02-12T13:13:07.789Z"
+    "timestamp": "2026-02-12T19:23:10.857Z"
   },
   {
     "id": "remotive_1185979",
     "title": "Freelance Writer",
     "platform": "Remotive",
     "value": 5000,
+    "tier": "standard",
     "status": "applied",
-    "timestamp": "2026-02-12T13:13:07.789Z"
+    "timestamp": "2026-02-12T19:23:10.857Z"
   },
   {
     "id": "remotive_2088618",
     "title": "AI Internet Rater",
     "platform": "Remotive",
     "value": 5000,
+    "tier": "standard",
     "status": "applied",
-    "timestamp": "2026-02-12T13:13:07.789Z"
+    "timestamp": "2026-02-12T19:23:10.857Z"
   },
   {
     "id": "remotive_1749306",
     "title": "Copywriter",
     "platform": "Remotive",
     "value": 5000,
+    "tier": "standard",
     "status": "applied",
-    "timestamp": "2026-02-12T13:13:07.789Z"
+    "timestamp": "2026-02-12T19:23:10.857Z"
   },
   {
     "id": "remotive_2082736",
     "title": "Senior Amazon Brand Manager",
     "platform": "Remotive",
     "value": 5000,
+    "tier": "standard",
     "status": "applied",
-    "timestamp": "2026-02-12T13:13:07.789Z"
+    "timestamp": "2026-02-12T19:23:10.857Z"
   },
   {
     "id": "remotive_2088612",
     "title": "Product, Platform & Enterprise Full Stack Sr/Staff Software Engineer",
     "platform": "Remotive",
     "value": 5000,
+    "tier": "standard",
     "status": "applied",
-    "timestamp": "2026-02-12T13:13:07.789Z"
+    "timestamp": "2026-02-12T19:23:10.857Z"
   },
   {
     "id": "remotive_2088611",
     "title": "Product, Platform & Enterprise Front End Sr/Staff Software Engineer",
     "platform": "Remotive",
     "value": 5000,
+    "tier": "standard",
     "status": "applied",
-    "timestamp": "2026-02-12T13:13:07.789Z"
+    "timestamp": "2026-02-12T19:23:10.857Z"
   },
   {
     "id": "remotive_2088613",
     "title": "Sr/Staff AI Engineer",
     "platform": "Remotive",
     "value": 5000,
-    "status": "applied",
-    "timestamp": "2026-02-12T13:13:07.789Z"
+    "tier": "standard",
+    "status": "found",
+    "timestamp": "2026-02-12T19:23:10.857Z"
   },
   {
     "id": "remotive_2070150",
     "title": "Senior DevOps Engineer",
     "platform": "Remotive",
     "value": 5000,
-    "status": "applied",
-    "timestamp": "2026-02-12T13:13:07.789Z"
+    "tier": "standard",
+    "status": "found",
+    "timestamp": "2026-02-12T19:23:10.857Z"
   },
   {
     "id": "remotive_2086826",
     "title": "Client Support Specialist",
     "platform": "Remotive",
     "value": 5000,
-    "status": "applied",
-    "timestamp": "2026-02-12T13:13:07.789Z"
+    "tier": "standard",
+    "status": "found",
+    "timestamp": "2026-02-12T19:23:10.857Z"
   },
   {
     "id": "remotive_1919265",
     "title": "Senior Independent Software Developer",
     "platform": "Remotive",
     "value": 5000,
-    "status": "applied",
-    "timestamp": "2026-02-12T13:13:07.789Z"
+    "tier": "standard",
+    "status": "found",
+    "timestamp": "2026-02-12T19:23:10.857Z"
   },
   {
     "id": "remotive_1919266",
     "title": "Senior Independent AI Engineer / Architect",
     "platform": "Remotive",
     "value": 5000,
-    "status": "applied",
-    "timestamp": "2026-02-12T13:13:07.789Z"
+    "tier": "standard",
+    "status": "found",
+    "timestamp": "2026-02-12T19:23:10.857Z"
   },
   {
     "id": "remotive_2069746",
     "title": "Tech Lead Full-Stack Rails Engineer",
     "platform": "Remotive",
     "value": 5000,
-    "status": "applied",
-    "timestamp": "2026-02-12T13:13:07.789Z"
+    "tier": "standard",
+    "status": "found",
+    "timestamp": "2026-02-12T19:23:10.857Z"
   },
   {
     "id": "remotive_2069747",
     "title": "Tech Lead Databricks Data Engineer",
     "platform": "Remotive",
     "value": 5000,
-    "status": "applied",
-    "timestamp": "2026-02-12T13:13:07.789Z"
+    "tier": "standard",
+    "status": "found",
+    "timestamp": "2026-02-12T19:23:10.857Z"
   },
   {
     "id": "remotive_2069728",
     "title": "Software Engineer C++ (Senior)",
     "platform": "Remotive",
     "value": 5000,
-    "status": "applied",
-    "timestamp": "2026-02-12T13:13:07.789Z"
+    "tier": "standard",
+    "status": "found",
+    "timestamp": "2026-02-12T19:23:10.857Z"
   },
   {
     "id": "remotive_2088537",
     "title": "Senior Front-End Developer- Analytics & UX Focused (Remote)",
     "platform": "Remotive",
     "value": 5000,
-    "status": "applied",
-    "timestamp": "2026-02-12T13:13:07.789Z"
+    "tier": "standard",
+    "status": "found",
+    "timestamp": "2026-02-12T19:23:10.857Z"
   },
   {
     "id": "remotive_2088534",
     "title": "Senior Software Engineer, Global Contractor",
     "platform": "Remotive",
     "value": 5000,
-    "status": "applied",
-    "timestamp": "2026-02-12T13:13:07.789Z"
+    "tier": "standard",
+    "status": "found",
+    "timestamp": "2026-02-12T19:23:10.857Z"
+  },
+  {
+    "id": "rok_1130201",
+    "title": "Fullstack Automation Engineer Delivery Automation Team",
+    "platform": "RemoteOK",
+    "value": 5000,
+    "tier": "standard",
+    "status": "found",
+    "timestamp": "2026-02-12T19:23:10.857Z"
+  },
+  {
+    "id": "rok_1130200",
+    "title": "Founding Marketer",
+    "platform": "RemoteOK",
+    "value": 5000,
+    "tier": "standard",
+    "status": "found",
+    "timestamp": "2026-02-12T19:23:10.857Z"
   },
   {
     "id": "rok_1130199",
     "title": "Software Development Engineer I",
     "platform": "RemoteOK",
     "value": 5000,
-    "status": "applied",
-    "timestamp": "2026-02-12T13:13:07.789Z"
+    "tier": "standard",
+    "status": "found",
+    "timestamp": "2026-02-12T19:23:10.857Z"
   },
   {
     "id": "rok_1130198",
     "title": "Business Development Representative UK EU",
     "platform": "RemoteOK",
     "value": 5000,
-    "status": "applied",
-    "timestamp": "2026-02-12T13:13:07.789Z"
+    "tier": "standard",
+    "status": "found",
+    "timestamp": "2026-02-12T19:23:10.857Z"
   },
   {
     "id": "rok_1130197",
     "title": "Senior Software Engineer Web",
     "platform": "RemoteOK",
     "value": 5000,
-    "status": "applied",
-    "timestamp": "2026-02-12T13:13:07.789Z"
+    "tier": "standard",
+    "status": "found",
+    "timestamp": "2026-02-12T19:23:10.857Z"
   },
   {
     "id": "rok_1130196",
     "title": "Data Analyst 3",
     "platform": "RemoteOK",
     "value": 5000,
-    "status": "applied",
-    "timestamp": "2026-02-12T13:13:07.789Z"
+    "tier": "standard",
+    "status": "found",
+    "timestamp": "2026-02-12T19:23:10.857Z"
   },
   {
     "id": "rok_1130195",
     "title": "Developer Relations Engineer",
     "platform": "RemoteOK",
     "value": 5000,
-    "status": "applied",
-    "timestamp": "2026-02-12T13:13:07.789Z"
+    "tier": "standard",
+    "status": "found",
+    "timestamp": "2026-02-12T19:23:10.857Z"
   },
   {
     "id": "rok_1130194",
     "title": "Forward Deployed Engineer DevOps",
     "platform": "RemoteOK",
     "value": 5000,
-    "status": "applied",
-    "timestamp": "2026-02-12T13:13:07.789Z"
+    "tier": "standard",
+    "status": "found",
+    "timestamp": "2026-02-12T19:23:10.857Z"
   },
   {
     "id": "rok_1130193",
     "title": "Business Development Representative",
     "platform": "RemoteOK",
     "value": 5000,
-    "status": "applied",
-    "timestamp": "2026-02-12T13:13:07.789Z"
+    "tier": "standard",
+    "status": "found",
+    "timestamp": "2026-02-12T19:23:10.857Z"
   },
   {
     "id": "rok_1130192",
     "title": "Senior Account Manager Feb 2026",
     "platform": "RemoteOK",
     "value": 5000,
-    "status": "applied",
-    "timestamp": "2026-02-12T13:13:07.789Z"
+    "tier": "standard",
+    "status": "found",
+    "timestamp": "2026-02-12T19:23:10.857Z"
   },
   {
     "id": "rok_1130191",
     "title": "VP National Accounts",
     "platform": "RemoteOK",
     "value": 5000,
-    "status": "applied",
-    "timestamp": "2026-02-12T13:13:07.789Z"
+    "tier": "standard",
+    "status": "found",
+    "timestamp": "2026-02-12T19:23:10.857Z"
   },
   {
     "id": "rok_1130190",
     "title": "Senior Talent Acquisition Manager",
     "platform": "RemoteOK",
     "value": 5000,
-    "status": "applied",
-    "timestamp": "2026-02-12T13:13:07.789Z"
+    "tier": "standard",
+    "status": "found",
+    "timestamp": "2026-02-12T19:23:10.857Z"
   },
   {
     "id": "rok_1130189",
     "title": "Senior Technical Program Manager Infrastructure",
     "platform": "RemoteOK",
     "value": 5000,
-    "status": "applied",
-    "timestamp": "2026-02-12T13:13:07.789Z"
+    "tier": "standard",
+    "status": "found",
+    "timestamp": "2026-02-12T19:23:10.857Z"
   },
   {
     "id": "rok_1130188",
     "title": "Web Program Manager",
     "platform": "RemoteOK",
     "value": 5000,
-    "status": "applied",
-    "timestamp": "2026-02-12T13:13:07.789Z"
-  },
-  {
-    "id": "rok_1130187",
-    "title": "Senior Program Manager Workforce Planning",
-    "platform": "RemoteOK",
-    "value": 5000,
-    "status": "applied",
-    "timestamp": "2026-02-12T13:13:07.789Z"
-  },
-  {
-    "id": "rok_1130186",
-    "title": "Senior Principal SEO GEO & Search Systems",
-    "platform": "RemoteOK",
-    "value": 5000,
-    "status": "applied",
-    "timestamp": "2026-02-12T13:13:07.789Z"
+    "tier": "standard",
+    "status": "found",
+    "timestamp": "2026-02-12T19:23:10.857Z"
   }
 ]

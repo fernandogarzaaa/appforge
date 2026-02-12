@@ -7,9 +7,10 @@
 
 import { Base44Tool } from '../tools/base44.js';
 import { FileSystemTool } from '../tools/filesystem.js';
-import quantumCore from '../core/quantum_core.js';
+import { isRealityMode } from '../core/reality_mode.js';
 import fs from 'fs';
 import path from 'path';
+import { fileURLToPath } from 'url';
 
 interface ArbitrageOpportunity {
     id: string;
@@ -39,12 +40,14 @@ export class ArbitrageHunter {
     private opportunities: ArbitrageOpportunity[];
     private exchanges: string[];
     private pairs: string[];
+    private realityMode: boolean;
     
     constructor(base44: Base44Tool, fsTool: FileSystemTool) {
         this.base44 = base44;
         this.fsTool = fsTool;
         this.dataDir = path.join(process.cwd(), 'swarm', 'data');
         this.opportunities = [];
+        this.realityMode = isRealityMode();
         this.exchanges = [
             'Raydium', 'Orca', 'Serum', 'Jupiter', 'Aldrin'
         ];
@@ -137,6 +140,10 @@ export class ArbitrageHunter {
                 console.log('[ArbitrageHunter] ✅ Fetched real prices from DexScreener');
             }
         } catch (error) {
+            if (this.realityMode) {
+                throw new Error('[ArbitrageHunter] Real price feed unavailable; fallback prices disabled in reality mode');
+            }
+
             console.log('[ArbitrageHunter] ⚠️ Using fallback prices (API unavailable)');
             this.setFallbackPrices(prices);
         }
@@ -209,6 +216,11 @@ export class ArbitrageHunter {
 
 
     private executeOpportunities(): number {
+        if (this.realityMode) {
+            console.log('[ArbitrageHunter] Reality mode: execution disabled unless wired to live order routers');
+            return 0;
+        }
+
         let executed = 0;
         
         for (const opp of this.opportunities) {
@@ -232,8 +244,7 @@ export class ArbitrageHunter {
             ? this.opportunities.reduce((sum, o) => sum + o.spread, 0) / this.opportunities.length
             : 0;
         
-        // Simulated profit: 0.002 SOL per successful execution
-        const totalProfit = executed.length * 0.002;
+        const totalProfit = this.realityMode ? 0 : executed.length * 0.002;
         
         return {
             opportunitiesFound: this.opportunities.length,
@@ -279,6 +290,12 @@ async function main() {
     await hunter.run();
 }
 
-main().catch(console.error);
+const isDirectRun = process.argv[1]
+    ? path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)
+    : false;
+
+if (isDirectRun) {
+    main().catch(console.error);
+}
 
 export default ArbitrageHunter;

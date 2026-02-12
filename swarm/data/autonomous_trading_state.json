@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "phase": "waiting_funding",
+  "startedAt": "2026-02-12T18:43:22.695Z",
+  "trackedUsdcBalance": 0,
+  "tradesToday": 0,
+  "tradesDayKey": "2026-02-12",
+  "totalTrades": 0,
+  "successfulTrades": 0,
+  "failedTrades": 0,
+  "consecutiveFailures": 0,
+  "priceHistory": [],
+  "ledger": [
+    {
+      "id": "autotrade_1770921805466_cd5b59",
+      "ts": "2026-02-12T18:43:25.466Z",
+      "action": "INFO",
+      "reason": "blocked:REAL_TRADING_ENABLED=true is required for autonomous execution.",
+      "success": true
+    }
+  ],
+  "blockedReason": "REAL_TRADING_ENABLED=true is required for autonomous execution."
+}

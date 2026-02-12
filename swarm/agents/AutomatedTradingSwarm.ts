@@ -1,9 +1,14 @@
 /**
  * AutomatedTradingSwarm - Crypto & Stock Trading Automation
  * Focus: Automated trading, portfolio management, market analysis
+ *
+ * In SWARM_REALITY_MODE=true:
+ * - Uses live market data only
+ * - Disables simulated PnL fabrication
  */
 
 import { QuantumSwarmCore } from '../core/quantum_core.js';
+import { isRealityMode } from '../core/reality_mode.js';
 
 interface TradingConfig {
     exchange: string;
@@ -48,13 +53,19 @@ export class AutomatedTradingSwarm {
     private portfolio: Portfolio;
     private tradeHistory: Trade[];
     private marketData: Map<string, MarketData>;
+    private realityMode: boolean;
 
     constructor(config?: Partial<TradingConfig>) {
         this.quantumCore = new QuantumSwarmCore();
-        
+        this.realityMode = isRealityMode();
+
+        const defaultPairs = this.realityMode
+            ? ['BTC/USDT', 'ETH/USDT', 'SOL/USDT']
+            : ['BTC/USDT', 'ETH/USDT', 'SOL/USDT', 'AAPL/USD', 'TSLA/USD'];
+
         this.config = {
             exchange: config?.exchange || 'binance',
-            tradingPairs: config?.tradingPairs || ['BTC/USDT', 'ETH/USDT', 'SOL/USDT'],
+            tradingPairs: config?.tradingPairs || defaultPairs,
             riskLevel: config?.riskLevel || 'medium',
             maxPositionSize: config?.maxPositionSize || 0.1,
             stopLoss: config?.stopLoss || 0.05,
@@ -62,7 +73,7 @@ export class AutomatedTradingSwarm {
         };
 
         this.portfolio = {
-            totalValue: 10000, // Starting with $10k
+            totalValue: 10000,
             holdings: {},
             pnl: 0,
             winRate: 0
@@ -78,59 +89,124 @@ export class AutomatedTradingSwarm {
     async runCycle(): Promise<void> {
         console.log('📈 [AutomatedTradingSwarm] Starting trading cycle...');
 
-        // Step 1: Fetch market data
         await this.fetchMarketData();
-
-        // Step 2: Analyze trends
         const signals = await this.analyzeMarket();
-
-        // Step 3: Execute trades based on signals
         await this.executeTrades(signals);
-
-        // Step 4: Update portfolio
         this.updatePortfolio();
-
-        // Step 5: Report to Oracle
         await this.reportPerformance();
 
         console.log('✅ [AutomatedTradingSwarm] Trading cycle complete');
     }
 
     /**
-     * Fetch real-time market data
+     * Fetch market data.
+     * Reality mode pulls from Binance public 24h ticker.
      */
     private async fetchMarketData(): Promise<void> {
         console.log('📊 [AutomatedTradingSwarm] Fetching market data...');
+        this.marketData.clear();
 
         for (const pair of this.config.tradingPairs) {
-            // Placeholder for exchange API integration
-            const data: MarketData = {
-                symbol: pair,
-                price: this.getSimulatedPrice(pair),
-                change24h: (Math.random() - 0.5) * 10,
-                volume: Math.random() * 1000000000,
-                trend: this.determineTrend()
-            };
+            try {
+                const live = await this.fetchLiveMarketData(pair);
+                if (live) {
+                    this.marketData.set(pair, live);
+                    continue;
+                }
 
-            this.marketData.set(pair, data);
+                if (this.realityMode) {
+                    console.warn(`⚠️ [AutomatedTradingSwarm] Skipping unsupported live pair in reality mode: ${pair}`);
+                    continue;
+                }
+
+                this.marketData.set(pair, {
+                    symbol: pair,
+                    price: this.getSimulatedPrice(pair),
+                    change24h: (Math.random() - 0.5) * 10,
+                    volume: Math.random() * 1_000_000_000,
+                    trend: this.determineTrend((Math.random() - 0.5) * 10)
+                });
+            } catch (error: any) {
+                if (this.realityMode) {
+                    throw new Error(`[AutomatedTradingSwarm] Live market fetch failed for ${pair}: ${error.message || error}`);
+                }
+
+                console.warn(`⚠️ [AutomatedTradingSwarm] Falling back to simulated data for ${pair}`);
+                this.marketData.set(pair, {
+                    symbol: pair,
+                    price: this.getSimulatedPrice(pair),
+                    change24h: (Math.random() - 0.5) * 10,
+                    volume: Math.random() * 1_000_000_000,
+                    trend: this.determineTrend((Math.random() - 0.5) * 10)
+                });
+            }
+        }
+
+        if (this.realityMode && this.marketData.size === 0) {
+            throw new Error('[AutomatedTradingSwarm] No live markets available in reality mode');
         }
 
         console.log(`✅ [AutomatedTradingSwarm] Fetched ${this.marketData.size} markets`);
+    }
+
+    private toBinanceSymbol(pair: string): string | null {
+        const [base, quote] = pair.split('/');
+        if (!base || !quote) return null;
+
+        if (quote !== 'USDT') {
+            return null;
+        }
+
+        return `${base}${quote}`;
+    }
+
+    private async fetchLiveMarketData(pair: string): Promise<MarketData | null> {
+        const symbol = this.toBinanceSymbol(pair);
+        if (!symbol) return null;
+
+        const response = await fetch(`https://api.binance.com/api/v3/ticker/24hr?symbol=${encodeURIComponent(symbol)}`);
+        if (!response.ok) {
+            const body = await response.text();
+            throw new Error(`HTTP ${response.status}: ${body.slice(0, 160)}`);
+        }
+
+        const data = await response.json() as {
+            lastPrice?: string;
+            priceChangePercent?: string;
+            quoteVolume?: string;
+        };
+
+        const price = Number(data.lastPrice || 0);
+        const change24h = Number(data.priceChangePercent || 0);
+        const volume = Number(data.quoteVolume || 0);
+
+        if (!Number.isFinite(price) || price <= 0) {
+            throw new Error(`Invalid live price payload for ${pair}`);
+        }
+
+        return {
+            symbol: pair,
+            price,
+            change24h,
+            volume,
+            trend: this.determineTrend(change24h)
+        };
     }
 
     private getSimulatedPrice(pair: string): number {
         const basePrices: Record<string, number> = {
             'BTC/USDT': 65000,
             'ETH/USDT': 3500,
-            'SOL/USDT': 145
+            'SOL/USDT': 145,
+            'AAPL/USD': 198,
+            'TSLA/USD': 225
         };
         return basePrices[pair] || 100;
     }
 
-    private determineTrend(): 'bullish' | 'bearish' | 'neutral' {
-        const rand = Math.random();
-        if (rand > 0.6) return 'bullish';
-        if (rand < 0.4) return 'bearish';
+    private determineTrend(change24h: number): 'bullish' | 'bearish' | 'neutral' {
+        if (change24h > 1) return 'bullish';
+        if (change24h < -1) return 'bearish';
         return 'neutral';
     }
 
@@ -143,7 +219,6 @@ export class AutomatedTradingSwarm {
         const signals: { symbol: string; signal: 'buy' | 'sell' | 'hold'; confidence: number }[] = [];
 
         for (const [symbol, data] of this.marketData) {
-            // Consult Oracle for trading decision
             const decision = await this.quantumCore.consultOracle(
                 `Should we trade ${symbol} at $${data.price}? Trend: ${data.trend}, 24h change: ${data.change24h.toFixed(2)}%`,
                 [
@@ -154,9 +229,9 @@ export class AutomatedTradingSwarm {
                 ['profit_potential', 'risk_level', 'timing']
             );
 
-            const signal = decision.recommendation.startsWith('BUY') ? 'buy' 
-                : decision.recommendation.startsWith('SELL') ? 'sell' 
-                : 'hold';
+            const signal = decision.recommendation.startsWith('BUY') ? 'buy'
+                : decision.recommendation.startsWith('SELL') ? 'sell'
+                    : 'hold';
 
             signals.push({
                 symbol,
@@ -169,13 +244,18 @@ export class AutomatedTradingSwarm {
     }
 
     /**
-     * Execute trades based on signals
+     * Execute trades based on signals.
+     * In reality mode this emits real-time trade intents and avoids fabricated PnL.
      */
     private async executeTrades(signals: { symbol: string; signal: 'buy' | 'sell' | 'hold'; confidence: number }[]): Promise<void> {
         console.log('💰 [AutomatedTradingSwarm] Executing trades...');
 
         for (const { symbol, signal, confidence } of signals) {
             if (signal === 'hold') continue;
+            if (confidence < 0.35) {
+                console.log(`⚠️ [AutomatedTradingSwarm] Skipping ${symbol} due to low confidence (${(confidence * 100).toFixed(1)}%)`);
+                continue;
+            }
 
             const marketData = this.marketData.get(symbol);
             if (!marketData) continue;
@@ -187,37 +267,39 @@ export class AutomatedTradingSwarm {
                 quantity: this.calculatePositionSize(symbol, confidence),
                 price: marketData.price,
                 timestamp: new Date(),
-                status: 'executed'
+                status: this.realityMode ? 'pending' : 'executed'
             };
 
             this.tradeHistory.push(trade);
 
-            // Calculate potential P&L
-            trade.pnl = signal === 'buy' 
-                ? (marketData.price * 0.1) // Simulate 10% gain
-                : (marketData.price * 0.05); // Simulate 5% gain
+            if (!this.realityMode) {
+                trade.pnl = signal === 'buy'
+                    ? marketData.price * 0.1
+                    : marketData.price * 0.05;
+            }
 
-            console.log(`✅ [AutomatedTradingSwarm] Executed ${signal.toUpperCase()} ${trade.quantity} ${symbol} at $${trade.price.toFixed(2)}`);
+            if (this.realityMode) {
+                console.log(`📡 [AutomatedTradingSwarm] Live signal ${signal.toUpperCase()} ${trade.quantity} ${symbol} at $${trade.price.toFixed(2)} (manual execution required)`);
+            } else {
+                console.log(`✅ [AutomatedTradingSwarm] Executed ${signal.toUpperCase()} ${trade.quantity} ${symbol} at $${trade.price.toFixed(2)}`);
+            }
         }
     }
 
     private calculatePositionSize(symbol: string, confidence: number): number {
         const marketData = this.marketData.get(symbol);
         if (!marketData) return 0;
-        
+
         const price = marketData.price;
         const portfolioValue = this.portfolio.totalValue;
         const maxPositionValue = portfolioValue * this.config.maxPositionSize;
-        
-        // Calculate quantity based on position value and price
+
         let quantity = (maxPositionValue * confidence) / price;
-        
-        // Ensure minimum trade size
+
         if (quantity < 0.0001) {
-            // For small positions, trade a fixed minimum
-            quantity = 0.001; // Minimum 0.001 BTC equivalent
+            quantity = 0.001;
         }
-        
+
         return parseFloat(quantity.toFixed(6));
     }
 
@@ -238,8 +320,8 @@ export class AutomatedTradingSwarm {
         }
 
         this.portfolio.pnl = totalPnl;
-        this.portfolio.winRate = this.tradeHistory.length > 0 
-            ? winningTrades / this.tradeHistory.length 
+        this.portfolio.winRate = this.tradeHistory.length > 0
+            ? winningTrades / this.tradeHistory.length
             : 0;
 
         console.log(`📈 Portfolio P&L: $${totalPnl.toFixed(2)} | Win Rate: ${(this.portfolio.winRate * 100).toFixed(1)}%`);
@@ -252,27 +334,19 @@ export class AutomatedTradingSwarm {
         await this.quantumCore.reportOutcome('trading_cycle', true, {
             portfolio: this.portfolio,
             tradesExecuted: this.tradeHistory.length,
+            mode: this.realityMode ? 'REAL_SIGNALING' : 'SIMULATION',
             timestamp: new Date().toISOString()
         });
     }
 
-    /**
-     * Get current portfolio status
-     */
     getPortfolio(): Portfolio {
         return this.portfolio;
     }
 
-    /**
-     * Get trade history
-     */
     getTradeHistory(): Trade[] {
         return this.tradeHistory;
     }
 
-    /**
-     * Train on trading patterns
-     */
     async train(): Promise<void> {
         console.log('📚 [AutomatedTradingSwarm] Training on trading patterns...');
 

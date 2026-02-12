@@ -1,0 +1,58 @@
+{
+  "timestamp": "2026-02-12T17:07:31.317Z",
+  "internalAgents": 4,
+  "experimentsEvaluated": 4,
+  "topRecommendation": "Promote quarterly_anchor for pricing_anchor_packaging_v2 with staged rollout (25% -> 50% -> 100%)",
+  "oracleRecommendation": "Prioritize activation_prompt_timing_v2 (activation) - winner=adaptive_nudge_timing, uplift=10.1%, consensus=54.7%",
+  "executedHandovers": 2,
+  "rankings": [
+    {
+      "experimentId": "pricing_anchor_packaging_v2",
+      "channel": "pricing",
+      "ownerSwarm": "ProductOwner",
+      "hypothesis": "Quarterly anchor pricing improves conversion-to-paid for pro accounts.",
+      "winner": "quarterly_anchor",
+      "upliftPct": 15.48,
+      "confidence": 0.877,
+      "priorityScore": 0.877,
+      "multiAgentConsensus": 0.855,
+      "recommendation": "Promote quarterly_anchor for pricing_anchor_packaging_v2 with staged rollout (25% -> 50% -> 100%)"
+    },
+    {
+      "experimentId": "content_offer_cta_mix_v4",
+      "channel": "content",
+      "ownerSwarm": "SocialMediaSwarm",
+      "hypothesis": "Offer-led CTAs outperform generic educational CTAs for inbound conversion.",
+      "winner": "offer_led_cta",
+      "upliftPct": 22.41,
+      "confidence": 0.689,
+      "priorityScore": 0.708,
+      "multiAgentConsensus": 0.771,
+      "recommendation": "Promote offer_led_cta for content_offer_cta_mix_v4 with staged rollout (25% -> 50% -> 100%)"
+    },
+    {
+      "experimentId": "onboarding_value_prop_v3",
+      "channel": "onboarding",
+      "ownerSwarm": "CustomerSuccessSwarm",
+      "hypothesis": "A tighter ROI-focused onboarding sequence increases week-1 activation.",
+      "winner": "roi_value_path",
+      "upliftPct": 15.71,
+      "confidence": 0.655,
+      "priorityScore": 0.706,
+      "multiAgentConsensus": 0.724,
+      "recommendation": "Promote roi_value_path for onboarding_value_prop_v3 with staged rollout (25% -> 50% -> 100%)"
+    },
+    {
+      "experimentId": "activation_prompt_timing_v2",
+      "channel": "activation",
+      "ownerSwarm": "CustomerSuccessSwarm",
+      "hypothesis": "Adaptive nudge timing increases feature adoption during first 72 hours.",
+      "winner": "adaptive_nudge_timing",
+      "upliftPct": 10.05,
+      "confidence": 0.678,
+      "priorityScore": 0.563,
+      "multiAgentConsensus": 0.547,
+      "recommendation": "Promote adaptive_nudge_timing for activation_prompt_timing_v2 with staged rollout (25% -> 50% -> 100%)"
+    }
+  ]
+}

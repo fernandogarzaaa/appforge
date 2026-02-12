@@ -4,6 +4,7 @@
  */
 
 import { QuantumSwarmCore } from '../core/quantum_core.js';
+import { isRealityMode } from '../core/reality_mode.js';
 
 interface FreelanceConfig {
     platforms: string[];
@@ -41,6 +42,7 @@ export class FreelanceHunterSwarm {
     private proposals: Proposal[];
     private wonContracts: number;
     private totalRevenue: number;
+    private realityMode: boolean;
 
     constructor(config?: Partial<FreelanceConfig>) {
         this.quantumCore = new QuantumSwarmCore();
@@ -57,12 +59,17 @@ export class FreelanceHunterSwarm {
         this.proposals = [];
         this.wonContracts = 0;
         this.totalRevenue = 0;
+        this.realityMode = isRealityMode();
     }
 
     /**
      * Run freelance hunting cycle
      */
     async runCycle(): Promise<void> {
+        if (this.realityMode) {
+            throw new Error('[FreelanceHunterSwarm] Reality mode active: mock opportunity pipeline disabled until live platform connectors are integrated.');
+        }
+
         console.log('🎯 [FreelanceHunterSwarm] Starting hunting cycle...');
 
         // Step 1: Find opportunities

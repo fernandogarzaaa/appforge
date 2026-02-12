@@ -20,8 +20,10 @@ if (fs.existsSync(envPath)) {
     envContent.split('\n').forEach(line => {
         const match = line.match(/^WHATSAPP_PHONE_NUMBER=(.+)$/);
         if (match) {
-            process.env.WHATSAPP_PHONE_NUMBER = match[1].trim();
-            console.log(`📱 [WhatsApp] Loaded phone number: ${process.env.WHATSAPP_PHONE_NUMBER}`);
+            const raw = match[1].trim();
+            process.env.WHATSAPP_PHONE_NUMBER = raw;
+            const masked = raw.replace(/\d(?=\d{2})/g, '*');
+            console.log(`📱 [WhatsApp] Loaded phone number: ${masked}`);
         }
     });
 }
@@ -53,6 +55,11 @@ export class WhatsAppBridge {
     private isReconnecting: boolean = false;
     private currentAuthPath: string = '';
     private keepaliveInterval: NodeJS.Timeout | null = null;
+    private quantumPollingInterval: NodeJS.Timeout | null = null;
+    private lastConnectionState: string | null = null;
+    private startInFlight: boolean = false;
+    private reconnectTimer: NodeJS.Timeout | null = null;
+    private socketGeneration: number = 0;
 
     constructor() {
         this.phoneNumber = process.env.WHATSAPP_PHONE_NUMBER || '';
@@ -100,7 +107,12 @@ export class WhatsAppBridge {
      * Get JID format for WhatsApp
      */
     private getJID(phone: string): string {
-        const cleanPhone = phone.replace(/@s\.whatsapp\.net|@g\.us$/, '');
+        const trimmed = (phone || '').trim();
+        if (trimmed.endsWith('@s.whatsapp.net') || trimmed.endsWith('@g.us')) {
+            return trimmed;
+        }
+
+        const cleanPhone = trimmed.replace(/@s\.whatsapp\.net|@g\.us$/, '');
         const digits = cleanPhone.replace(/\D/g, '');
         return `${digits}@s.whatsapp.net`;
     }
@@ -125,35 +137,41 @@ export class WhatsAppBridge {
             const outbound = channel.outbound || [];
             if (outbound.length === 0) return;
 
+            const pendingOutbound = outbound.filter(
+                (msg: any) => msg.status === 'pending' && msg.type === 'whatsapp_push'
+            );
+            if (pendingOutbound.length === 0) return;
+
             const now = Date.now();
             if (now - this.lastProcessedTimestamp < 5000) return;
             this.lastProcessedTimestamp = now;
 
-            console.log(`📤 [WhatsApp] Processing ${outbound.length} outbound messages...`);
+            console.log(`📤 [WhatsApp] Processing ${pendingOutbound.length} outbound messages...`);
 
             let messagesSent = 0;
-            for (const msg of outbound) {
-                if (msg.status === 'pending' && msg.type === 'whatsapp_push') {
-                    const target = msg.to || this.phoneNumber;
-                    const targetJID = this.getJID(target);
+            let messagesFailed = 0;
+            for (const msg of pendingOutbound) {
+                const target = msg.to || this.phoneNumber;
+                const targetJID = this.getJID(target);
 
-                    console.log(`📱 [WhatsApp] Sending to ${targetJID}...`);
+                console.log(`📱 [WhatsApp] Sending to ${targetJID}...`);
 
-                    try {
-                        await this.sock.sendMessage(targetJID, { text: msg.message });
-                        console.log(`✅ [WhatsApp] Message delivered`);
-                        msg.status = 'sent';
-                        msg.sentAt = new Date().toISOString();
-                        messagesSent++;
-                    } catch (e: any) {
-                        console.error(`❌ [WhatsApp] Failed: ${e.message}`);
-                        msg.status = 'failed';
-                        msg.error = e.message;
-                    }
+                try {
+                    await this.sock.sendMessage(targetJID, { text: msg.message });
+                    console.log(`✅ [WhatsApp] Message delivered`);
+                    msg.status = 'sent';
+                    msg.sentAt = new Date().toISOString();
+                    messagesSent++;
+                } catch (e: any) {
+                    console.error(`❌ [WhatsApp] Failed: ${e.message}`);
+                    msg.status = 'failed';
+                    msg.error = e.message;
+                    msg.failedAt = new Date().toISOString();
+                    messagesFailed++;
                 }
             }
 
-            if (messagesSent > 0) {
+            if (messagesSent > 0 || messagesFailed > 0) {
                 channel.lastUpdated = new Date().toISOString();
                 fs.writeFileSync(QUANTUM_CHANNEL_PATH, JSON.stringify(channel, null, 2));
             }
@@ -167,10 +185,37 @@ export class WhatsAppBridge {
      * Initialize the WhatsApp connection with exponential backoff
      */
     async start() {
+        if (this.startInFlight) {
+            return;
+        }
+        this.startInFlight = true;
         console.log('⚡ [WhatsApp] Initializing Bridge...');
 
-        // Always use local auth for stability
-        this.currentAuthPath = path.join(process.cwd(), 'auth_info_baileys');
+        // Use a dedicated auth profile to avoid credential conflicts with other clients.
+        const configuredAuthPath = (process.env.WHATSAPP_AUTH_PATH || '').trim();
+        this.currentAuthPath = configuredAuthPath
+            ? (path.isAbsolute(configuredAuthPath)
+                ? configuredAuthPath
+                : path.join(process.cwd(), configuredAuthPath))
+            : path.join(process.cwd(), 'auth_info_baileys_swarm');
+
+        if (this.reconnectTimer) {
+            clearTimeout(this.reconnectTimer);
+            this.reconnectTimer = null;
+        }
+
+        // Ensure there is only one active socket session.
+        if (this.sock) {
+            try {
+                this.sock.ev?.removeAllListeners?.('connection.update');
+                this.sock.ev?.removeAllListeners?.('messages.upsert');
+                this.sock.end?.();
+            } catch {
+                // Best-effort cleanup
+            }
+            this.sock = null;
+            this.isConnected = false;
+        }
 
         try {
             if (!fs.existsSync(this.currentAuthPath)) {
@@ -200,13 +245,19 @@ export class WhatsAppBridge {
                 browser: ["Sovereign Swarm", "Chrome", "1.0.0"]
             });
 
+            const generation = ++this.socketGeneration;
+
             this.sock.ev.on('creds.update', saveCreds);
 
             this.sock.ev.on('connection.update', async (update: any) => {
+                if (generation !== this.socketGeneration) return;
                 const { connection, lastDisconnect, qr } = update;
 
                 // Log connection state changes
-                console.log(`📡 [WhatsApp] State: ${connection}`);
+                if (connection && connection !== this.lastConnectionState) {
+                    this.lastConnectionState = connection;
+                    console.log(`📡 [WhatsApp] State: ${connection}`);
+                }
 
                 if (qr) {
                     console.log('📟 [WhatsApp] Scan QR code in terminal');
@@ -253,7 +304,7 @@ export class WhatsAppBridge {
                     if (statusCode === DisconnectReason.connectionLost) {
                         console.log('🔄 [WhatsApp] Network issue detected - reconnecting...');
                         this.stopKeepalive();
-                        setTimeout(() => this.start(), 2000);
+                        this.scheduleReconnect(2000);
                         this.isConnected = false;
                         return;
                     }
@@ -262,7 +313,7 @@ export class WhatsAppBridge {
                     if (statusCode === DisconnectReason.restartRequired) {
                         console.log('🔄 [WhatsApp] Restart required - reconnecting...');
                         this.stopKeepalive();
-                        setTimeout(() => this.start(), 3000);
+                        this.scheduleReconnect(3000);
                         this.isConnected = false;
                         return;
                     }
@@ -273,7 +324,7 @@ export class WhatsAppBridge {
                         console.log('💡 Tip: Close WhatsApp Web on other devices to maintain connection');
                         this.stopKeepalive();
                         // Wait longer since another session is active
-                        setTimeout(() => this.start(), 15000);
+                        this.scheduleReconnect(15000);
                         this.isConnected = false;
                         return;
                     }
@@ -283,7 +334,7 @@ export class WhatsAppBridge {
                         console.log('🔄 [WhatsApp] Bad session - clearing and reconnecting...');
                         this.stopKeepalive();
                         this.clearAuthFiles();
-                        setTimeout(() => this.start(), 3000);
+                        this.scheduleReconnect(3000);
                         this.isConnected = false;
                         return;
                     }
@@ -302,7 +353,7 @@ export class WhatsAppBridge {
                     console.log(`🔄 [WhatsApp] Reconnecting in ${delay / 1000}s (attempt ${this.reconnectAttempts}/${this.maxReconnectAttempts})`);
 
                     this.stopKeepalive();
-                    setTimeout(() => this.start(), delay);
+                    this.scheduleReconnect(delay);
                     this.isConnected = false;
 
                 } else if (connection === 'open') {
@@ -316,6 +367,7 @@ export class WhatsAppBridge {
             });
 
             this.sock.ev.on('messages.upsert', async (m: any) => {
+                if (generation !== this.socketGeneration) return;
                 if (m.type !== 'notify') return;
 
                 for (const msg of m.messages) {
@@ -327,7 +379,14 @@ export class WhatsAppBridge {
 
                     if (!body) continue;
 
-                    if (remoteJid === this.phoneNumber || msg.key.participant === this.phoneNumber) {
+                    const configuredJID = this.getJID(this.phoneNumber);
+                    const participantJID = msg.key.participant || '';
+                    if (
+                        remoteJid === configuredJID ||
+                        participantJID === configuredJID ||
+                        remoteJid === this.phoneNumber ||
+                        participantJID === this.phoneNumber
+                    ) {
                         console.log(`📱 [WhatsApp] Inbound: "${body}"`);
 
                         const lowerBody = body.toLowerCase();
@@ -356,6 +415,8 @@ export class WhatsAppBridge {
         } catch (err: any) {
             console.error('❌ [WhatsApp] Failed to start:', err.message);
             console.log('⚠️ [WhatsApp] Operating in degraded mode');
+        } finally {
+            this.startInFlight = false;
         }
     }
 
@@ -381,11 +442,27 @@ export class WhatsAppBridge {
      * Start polling quantum channel
      */
     private startQuantumPolling() {
-        setInterval(async () => {
+        if (this.quantumPollingInterval) {
+            clearInterval(this.quantumPollingInterval);
+        }
+
+        this.quantumPollingInterval = setInterval(async () => {
             if (this.isConnected && this.sock) {
                 await this.processQuantumChannel();
             }
         }, 5000); // Poll every 5 seconds
+    }
+
+    private scheduleReconnect(delayMs: number) {
+        if (this.reconnectTimer) {
+            clearTimeout(this.reconnectTimer);
+        }
+        this.reconnectTimer = setTimeout(() => {
+            this.reconnectTimer = null;
+            this.start().catch((e: any) => {
+                console.error(`❌ [WhatsApp] Reconnect failed: ${e?.message || e}`);
+            });
+        }, delayMs);
     }
 
     /**
@@ -394,6 +471,7 @@ export class WhatsAppBridge {
     async pushUpdate(message: string) {
         if (!this.isConnected || !this.sock) {
             console.warn('⚠️ [WhatsApp] Not connected. Message queued.');
+            this.queueOutboundMessage(message);
             return;
         }
 
@@ -403,13 +481,41 @@ export class WhatsAppBridge {
         }
 
         const targetJID = this.getJID(this.phoneNumber);
-        console.log(`📡 [WhatsApp] Sending to ${targetJID}...`);
+        const maskedJID = targetJID.replace(/\d(?=\d{2}@)/g, '*');
+        console.log(`📡 [WhatsApp] Sending to ${maskedJID}...`);
 
         try {
             await this.sock.sendMessage(targetJID, { text: message });
             console.log('✅ [WhatsApp] Notification delivered.');
         } catch (e: any) {
             console.error(`❌ [WhatsApp] Failed: ${e.message}`);
+            this.queueOutboundMessage(message);
+        }
+    }
+
+    private queueOutboundMessage(message: string) {
+        try {
+            const channel = fs.existsSync(QUANTUM_CHANNEL_PATH)
+                ? JSON.parse(fs.readFileSync(QUANTUM_CHANNEL_PATH, 'utf8'))
+                : { outbound: [] as any[] };
+
+            if (!Array.isArray(channel.outbound)) {
+                channel.outbound = [];
+            }
+
+            channel.outbound.push({
+                id: `wa_queue_${Date.now()}`,
+                type: 'whatsapp_push',
+                to: this.phoneNumber,
+                message,
+                status: 'pending',
+                createdAt: new Date().toISOString()
+            });
+
+            channel.lastUpdated = new Date().toISOString();
+            fs.writeFileSync(QUANTUM_CHANNEL_PATH, JSON.stringify(channel, null, 2));
+        } catch (error: any) {
+            console.warn(`⚠️ [WhatsApp] Failed to queue outbound message: ${error?.message || error}`);
         }
     }
 

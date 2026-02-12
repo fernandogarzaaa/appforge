@@ -40,11 +40,13 @@ export class SwarmCollaboration {
     private signals: Map<string, SwarmSignal>;
     private messages: Map<string, CollaborationMessage>;
     private agentCallbacks: Map<string, (signal: SwarmSignal) => void>;
+    private collectiveMembers: Map<string, string[]>;
 
     constructor() {
         this.signals = new Map();
         this.messages = new Map();
         this.agentCallbacks = new Map();
+        this.collectiveMembers = new Map();
         this.loadFromDisk();
     }
 
@@ -54,6 +56,28 @@ export class SwarmCollaboration {
     registerAgent(agentName: string, callback: (signal: SwarmSignal) => void): void {
         this.agentCallbacks.set(agentName, callback);
         console.log(`🤝 [Collab] Agent registered: ${agentName}`);
+    }
+
+    /**
+     * Register a swarm collective (multi-agent team) to receive signals.
+     */
+    registerCollective(collectiveName: string, members: string[], callback: (signal: SwarmSignal) => void): void {
+        const normalizedMembers = Array.from(
+            new Set(
+                members
+                    .map((member) => String(member || '').trim())
+                    .filter((member) => member.length > 0)
+            )
+        );
+
+        const effectiveMembers = normalizedMembers.length >= 2
+            ? normalizedMembers
+            : ['coordinator_cell', 'execution_cell'];
+
+        this.collectiveMembers.set(collectiveName, effectiveMembers);
+        this.agentCallbacks.set(collectiveName, callback);
+
+        console.log(`🤝 [Collab] Collective registered: ${collectiveName} (${effectiveMembers.length} members)`);
     }
 
     /**
@@ -103,11 +127,11 @@ export class SwarmCollaboration {
             priority: 'MEDIUM'
         });
 
-        // For now, return a simulated response (in production, would wait for response)
+        // Return delivery confirmation only. Query responses arrive asynchronously via RESPONSE signals.
         return {
             signalId,
-            response: `Query sent to ${toAgent}. Awaiting response...`,
-            note: 'This is a token-free collaboration query.'
+            response: `Query dispatched to ${toAgent}. Awaiting asynchronous RESPONSE signal.`,
+            note: 'Token-free collaboration query queued (no simulated response body).'
         };
     }
 
@@ -191,11 +215,23 @@ export class SwarmCollaboration {
      */
     getStats(): any {
         const pending = Array.from(this.signals.values()).filter(s => s.status === 'PENDING');
+        const agentNames = Array.from(this.agentCallbacks.keys());
+        const collectiveNames = Array.from(this.collectiveMembers.keys());
+        const individualAgentNames = agentNames.filter((name) => !this.collectiveMembers.has(name));
+
         return {
             totalSignals: this.signals.size,
             pendingSignals: pending.length,
             registeredAgents: this.agentCallbacks.size,
-            agentNames: Array.from(this.agentCallbacks.keys())
+            agentNames,
+            registeredCollectives: collectiveNames.length,
+            collectiveNames,
+            collectiveMembers: collectiveNames.reduce<Record<string, string[]>>((acc, name) => {
+                acc[name] = [...(this.collectiveMembers.get(name) || [])];
+                return acc;
+            }, {}),
+            registeredIndividualAgents: individualAgentNames.length,
+            individualAgentNames
         };
     }
 

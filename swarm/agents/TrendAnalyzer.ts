@@ -11,6 +11,7 @@ import { apiKeys } from '../core/api_keys.js';
 import quantumCore from '../core/quantum_core.js';
 import fs from 'fs';
 import path from 'path';
+import { fileURLToPath } from 'url';
 
 interface Trend {
     id: string;
@@ -318,6 +319,12 @@ async function main() {
     await analyzer.run();
 }
 
-main().catch(console.error);
+const isDirectRun = process.argv[1]
+    ? path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)
+    : false;
+
+if (isDirectRun) {
+    main().catch(console.error);
+}
 
 export default TrendAnalyzer;

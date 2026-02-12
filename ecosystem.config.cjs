@@ -5,8 +5,8 @@ module.exports = {
         script: "./swarm/core/loop.ts",
         interpreter: "node",
         interpreter_args: "--import tsx",
-        watch: ["swarm"],
-        // Ignore changes to memory/logs to prevent infinite restart loops
+        // Run as a stable daemon in production. Swarm writes data frequently.
+        watch: false,
         ignore_watch: ["swarm_memory.json", "node_modules", "logs"],
         env: {
             NODE_ENV: "production",

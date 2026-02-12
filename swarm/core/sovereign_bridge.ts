@@ -13,6 +13,7 @@ export class UnifiedSovereignBridge {
     private commandHandler: ((cmd: string) => Promise<void>) | null = null;
     private useWhatsApp: boolean = true;
     private isInitialized: boolean = false;
+    private commandBound: boolean = false;
 
     constructor() {
         console.log('🌌 [Bridge] Initializing Sovereign Bridge...');
@@ -27,6 +28,7 @@ export class UnifiedSovereignBridge {
             await whatsappBridge.start();
             this.isInitialized = true;
             this.useWhatsApp = true;
+            await this.bindCommandHandler();
             console.log('✅ [Bridge] WhatsApp connected successfully');
         } catch (err: any) {
             console.warn('⚠️ [Bridge] WhatsApp failed:', err.message);
@@ -42,6 +44,8 @@ export class UnifiedSovereignBridge {
 
     onCommand(handler: (cmd: string) => Promise<void>) {
         this.commandHandler = handler;
+        this.commandBound = false;
+        void this.bindCommandHandler();
     }
 
     async pushUpdate(text: string) {
@@ -75,10 +79,27 @@ export class UnifiedSovereignBridge {
     async switchTransport(transport: string) {
         if (transport === 'whatsapp') {
             this.useWhatsApp = true;
+            this.commandBound = false;
+            await this.bindCommandHandler();
             console.log('✅ [Bridge] Switched to WhatsApp');
         } else {
             console.log('⚠️ [Bridge] Only WhatsApp is available');
             this.useWhatsApp = true;
+        }
+    }
+
+    private async bindCommandHandler() {
+        if (!this.commandHandler || !this.useWhatsApp || this.commandBound) {
+            return;
+        }
+
+        try {
+            const { whatsappBridge } = await import('./whatsapp_bridge.js');
+            whatsappBridge.onCommand(this.commandHandler);
+            this.commandBound = true;
+            console.log('✅ [Bridge] Command handler bound to WhatsApp bridge');
+        } catch (err: any) {
+            console.warn('⚠️ [Bridge] Failed to bind command handler:', err.message);
         }
     }
 }

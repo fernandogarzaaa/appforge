@@ -13,8 +13,9 @@ const WALLET = '7q4QCFxP99PbosKx4NnMJddhhoYNazpXitRDXsEpXo5S';
 const RPC_URL = 'https://api.mainnet-beta.solana.com';
 
 // Token mints
-const SOL_MINT = 'So11111111111111111111111111111111111111111112';
+const SOL_MINT = 'So11111111111111111111111111111111111111112';
 const USDC_MINT = 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v';
+const JUPITER_BASE = 'https://lite-api.jup.ag';
 
 async function rpc(method: string, params: any[] = []): Promise<any> {
   return new Promise((resolve, reject) => {
@@ -47,22 +48,22 @@ async function getBalance(): Promise<number> {
 
 async function getSOLPrice(): Promise<number> {
   try {
-    const response = await fetch('https://price.jup.ag/v4/price?ids=SOL');
+    const response = await fetch(`${JUPITER_BASE}/price/v3?ids=${SOL_MINT}`);
     const data = await response.json();
-    return data?.data?.SOL?.price || 165;
+    return data?.[SOL_MINT]?.usdPrice || 165;
   } catch {
     return 165;
   }
 }
 
 async function getQuote(inputMint: string, outputMint: string, amount: number): Promise<any> {
-  const url = `https://api.jup.ag/v1/quote?inputMint=${inputMint}&outputMint=${outputMint}&amount=${amount}&slippage=1`;
+  const url = `${JUPITER_BASE}/swap/v1/quote?inputMint=${inputMint}&outputMint=${outputMint}&amount=${amount}&slippageBps=100`;
   const response = await fetch(url);
   return response.json();
 }
 
 async function createSwap(quoteResponse: any): Promise<any> {
-  const response = await fetch('https://api.jup.ag/v1/swap', {
+  const response = await fetch(`${JUPITER_BASE}/swap/v1/swap`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
@@ -96,7 +97,9 @@ async function simulateTrade(direction: 'BUY' | 'SELL', amount: number): Promise
 
   const inputMint = direction === 'BUY' ? USDC_MINT : SOL_MINT;
   const outputMint = direction === 'BUY' ? SOL_MINT : USDC_MINT;
-  const amountLamports = Math.floor(amount * 1e9);
+  const amountLamports = direction === 'BUY'
+    ? Math.floor(amount * 1e6)
+    : Math.floor(amount * 1e9);
 
   console.log(`\n📋 Trade Details:`);
   console.log(`   ${direction}: ${amount} SOL`);
@@ -115,7 +118,8 @@ async function simulateTrade(direction: 'BUY' | 'SELL', amount: number): Promise
 
   console.log(`   ✅ Quote received:`);
   console.log(`   Output: ${(quote.outAmount / (outputMint === SOL_MINT ? 1e9 : 1e6)).toFixed(4)} ${outputMint === SOL_MINT ? 'SOL' : 'USDC'}`);
-  console.log(`   Price impact: ${quote.priceImpactPct?.toFixed(4)}%`);
+  const priceImpact = Number(quote?.priceImpactPct || 0);
+  console.log(`   Price impact: ${priceImpact.toFixed(4)}%`);
   console.log(`   Route: ${quote.route}`);
 
   // Create swap transaction

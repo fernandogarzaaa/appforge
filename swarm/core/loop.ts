@@ -2,8 +2,9 @@ import dotenv from 'dotenv';
 import path from 'path';
 import * as fs from 'fs/promises';
 import { fileURLToPath } from 'url';
-import { Keypair } from '@solana/web3.js';
+import { Connection, Keypair, PublicKey } from '@solana/web3.js';
 import bs58 from 'bs58';
+import { realityStatusSummary, requireRealityMode } from './reality_mode.js';
 
 // Resolve .env.local from project root
 const __filename = fileURLToPath(import.meta.url);
@@ -24,51 +25,123 @@ if (!process.env.OPENAI_API_KEY) {
     process.exit(1);
 }
 
+try {
+    requireRealityMode('swarm/core/loop.ts startup');
+    console.log(`🌍 Reality Lock: ${realityStatusSummary()}`);
+} catch (error: any) {
+    console.error(`❌ FATAL: ${error.message}`);
+    process.exit(1);
+}
+
 /**
  * 🛡️ WALLET VALIDATION PROTOCOL
- * Run before any trading operations
+ * Guard execution when real trading / auto execution is enabled.
  */
+function parseBoolean(value: string | undefined, fallback = false): boolean {
+    if (!value) return fallback;
+    const normalized = value.trim().toLowerCase();
+    return ['1', 'true', 'yes', 'on'].includes(normalized);
+}
+
+function resolveSecretKey(privateKey: string): Keypair {
+    const trimmed = (privateKey || '').trim();
+    if (!trimmed) {
+        throw new Error('SOLANA_PRIVATE_KEY is empty');
+    }
+
+    if (trimmed.startsWith('[') && trimmed.endsWith(']')) {
+        const parsed = JSON.parse(trimmed) as number[];
+        if (!Array.isArray(parsed) || parsed.length < 32) {
+            throw new Error('Invalid JSON private key format');
+        }
+
+        const secret = Uint8Array.from(parsed);
+        if (secret.length >= 64) {
+            return Keypair.fromSecretKey(secret.slice(0, 64));
+        }
+        return Keypair.fromSeed(secret.slice(0, 32));
+    }
+
+    const decoded = bs58.decode(trimmed);
+    if (decoded.length === 64) {
+        return Keypair.fromSecretKey(decoded);
+    }
+    if (decoded.length === 32) {
+        return Keypair.fromSeed(decoded);
+    }
+
+    throw new Error(`Unsupported SOLANA_PRIVATE_KEY length: ${decoded.length}`);
+}
+
 async function validateWalletForTrading(): Promise<boolean> {
-    const walletPath = path.resolve(__dirname, '../../swarm/data/swarm_wallet.json');
-    
     try {
-        // Check file exists
-        const walletExists = await fs.access(walletPath).then(() => true).catch(() => false);
-        if (!walletExists) {
-            console.error('❌ WALLET ERROR: swarm_wallet.json not found');
+        const rpcUrl = process.env.SOLANA_RPC_URL || 'https://api.mainnet-beta.solana.com';
+        const walletAddress = (process.env.SOLANA_WALLET_ADDRESS || '').trim();
+        const privateKey = (process.env.SOLANA_PRIVATE_KEY || '').trim();
+
+        const liveTradingEnabled = parseBoolean(process.env.REAL_TRADING_ENABLED, false);
+        const autoExecuteTrades = parseBoolean(process.env.SWARM_AUTO_EXECUTE_TRADES, false);
+        const autonomousTradingEnabled = parseBoolean(process.env.SWARM_AUTONOMOUS_TRADING_ENABLED, false);
+
+        const requiresSigning = autonomousTradingEnabled || (liveTradingEnabled && autoExecuteTrades);
+
+        if (!walletAddress) {
+            if (requiresSigning) {
+                console.error('❌ WALLET ERROR: SOLANA_WALLET_ADDRESS is missing (required for auto-signing).');
+                return false;
+            }
+
+            console.warn('⚠️ WALLET WARNING: SOLANA_WALLET_ADDRESS not set. Trading features will be unavailable.');
+            return true;
+        }
+
+        // Validate Solana public key format.
+        try {
+            new PublicKey(walletAddress);
+        } catch {
+            console.error('❌ WALLET ERROR: Invalid SOLANA_WALLET_ADDRESS format');
             return false;
         }
-        
-        // Read and parse
-        const content = await fs.readFile(walletPath, 'utf8');
-        const wallet = JSON.parse(content);
-        
-        // Check for corruption patterns first
-        if (content.includes('der mansion')) {
-            console.error('❌ WALLET ERROR: Corruption detected in wallet file');
-            return false;
+
+        // If we are going to auto-sign, require a valid key that matches the address.
+        if (requiresSigning) {
+            let signer: Keypair;
+            try {
+                signer = resolveSecretKey(privateKey);
+            } catch (e: any) {
+                console.error(`❌ WALLET ERROR: ${e?.message || e}`);
+                return false;
+            }
+
+            if (signer.publicKey.toBase58() !== walletAddress) {
+                console.error('❌ WALLET ERROR: SOLANA_PRIVATE_KEY does not match SOLANA_WALLET_ADDRESS');
+                return false;
+            }
         }
-        
-        // Validate required fields
-        if (!wallet.address || !wallet.privateKey?.value) {
-            console.error('❌ WALLET ERROR: Missing address or private key');
-            return false;
+
+        // On-chain sanity check (detect nonce/program accounts).
+        if (requiresSigning) {
+            try {
+                const connection = new Connection(rpcUrl, 'confirmed');
+                const info = await connection.getAccountInfo(new PublicKey(walletAddress), 'confirmed');
+                if (info) {
+                    if (info.data && info.data.length > 0) {
+                        console.error('❌ WALLET ERROR: Wallet account has data (likely NONCE or program account).');
+                        console.error('Rotate to a fresh wallet address before enabling auto-signing.');
+                        return false;
+                    }
+                } else {
+                    console.warn('⚠️ WALLET WARNING: Account not found on-chain yet (funding may still be pending).');
+                }
+            } catch (e: any) {
+                console.error(`❌ WALLET ERROR: Failed to verify wallet account on-chain: ${e?.message || e}`);
+                return false;
+            }
         }
-        
-        // Verify key format (base58, 32 bytes = 44 chars)
-        const privateKeyBase58 = wallet.privateKey.value;
-        if (privateKeyBase58.length !== 44) {
-            console.error('❌ WALLET ERROR: Invalid private key length');
-            return false;
-        }
-        
-        // Validate base58 address format
-        if (!wallet.address.startsWith('1') && !wallet.address.startsWith('E')) {
-            console.error('❌ WALLET ERROR: Invalid Solana address format');
-            return false;
-        }
-        
-        console.log('✅ WALLET VALIDATED:', wallet.address.slice(0, 8) + '...' + wallet.address.slice(-8));
+
+        console.log('✅ WALLET VALIDATED:', walletAddress.slice(0, 8) + '...' + walletAddress.slice(-8));
+        console.log(`   - RPC: ${rpcUrl}`);
+        console.log(`   - Requires signing: ${requiresSigning}`);
         return true;
         
     } catch (e: any) {
@@ -116,6 +189,18 @@ import { ArbitrageHunter } from '../agents/ArbitrageHunter.js';
 import { YieldOptimizer } from '../agents/YieldOptimizer.js';
 import { CodeGenerator } from '../agents/CodeGenerator.js';
 import { TrendAnalyzer } from '../agents/TrendAnalyzer.js';
+import { SocialMediaSwarm } from '../agents/SocialMediaSwarm.js';
+import { AutomatedTradingSwarm } from '../agents/AutomatedTradingSwarm.js';
+import { LearningSwarm } from '../agents/LearningSwarm.js';
+import { ResearchSwarm } from '../agents/ResearchSwarm.js';
+import { VoiceAgentSwarm } from '../agents/VoiceAgentSwarm.js';
+import { QualityAssuranceSwarm } from '../agents/QualityAssuranceSwarm.js';
+import { CustomerSuccessSwarm } from '../agents/CustomerSuccessSwarm.js';
+import { DevOpsSwarm } from '../agents/DevOpsSwarm.js';
+import { KnowledgeGraphSwarm } from '../agents/KnowledgeGraphSwarm.js';
+import { ComplianceSwarm } from '../agents/ComplianceSwarm.js';
+import { ExperimentationSwarm } from '../agents/ExperimentationSwarm.js';
+import { AIEconomySwarm } from '../agents/AIEconomySwarm.js';
 import swarmKnowledge from './knowledge.js';
 import { hyperBrain } from './hyper_brain.js';
 import { nas } from './nas.js';
@@ -129,8 +214,38 @@ import { ResonanceEngine } from './resonance_engine.js';
 import { ShadowSwarm } from './shadow_swarm.js';
 import { swarmCollaboration } from './swarm_collaboration.js';
 import { SwarmReporter } from './swarm_reporter.js';
+import { getCollectiveMembers } from './swarm_collectives.js';
+import { AutonomousTradingController } from './autonomous_trading_controller.js';
 
 const QUANTUM_CHANNEL = path.join(process.cwd(), 'src/data/quantum_channel.json');
+
+function hasKeyword(input: string, keywords: string[]): boolean {
+    const normalized = input.toLowerCase();
+    return keywords.some((keyword) => normalized.includes(keyword));
+}
+
+async function consultAutonomousOracleGuidance(cycleCount: number, coherence: number) {
+    const guidance = await quantumCore.consultOracle(
+        `Autonomous cycle ${cycleCount} planning. Current quantum coherence ${(coherence * 100).toFixed(1)}%. All swarms in this system are multi-agent collectives (not singular entities). Which strategic swarm collective should execute now?`,
+        [
+            'Prioritize revenue and expansion swarms (SocialMediaSwarm, ResearchSwarm, CustomerSuccessSwarm, ExperimentationSwarm, AIEconomySwarm)',
+            'Prioritize reliability and quality swarms (LearningSwarm, QualityAssuranceSwarm)',
+            'Prioritize trading and market swarms (AutomatedTradingSwarm, CryptoSwarm, MarketAnalyzer)',
+            'Prioritize platform and product swarms (VoiceAgentSwarm, CodeGenerator, ProductOwner)',
+            'Prioritize experimentation and conversion swarms (ExperimentationSwarm, CustomerSuccessSwarm, ProductOwner)',
+            'Prioritize autonomous economy swarms (AIEconomySwarm, RevenueHunter, FinanceSwarm, ExperimentationSwarm)'
+        ],
+        ['strategic_value', 'execution_speed', 'risk_reduction', 'revenue_impact']
+    );
+
+    await quantumCore.reportOutcome(guidance.predictionId, true, {
+        source: 'autonomous_oracle_guidance',
+        cycle: cycleCount,
+        coherence
+    });
+
+    return guidance;
+}
 
 /**
  * Check quantum channel for Antigravity messages
@@ -225,16 +340,36 @@ async function main() {
     
     // Other Swarms
     const consultingSwarm = new ConsultingSwarm(base44, fsTool);
+    const socialMediaSwarm = new SocialMediaSwarm();
+    const automatedTradingSwarm = new AutomatedTradingSwarm();
+    const learningSwarm = new LearningSwarm();
+    const researchSwarm = new ResearchSwarm();
+    const voiceAgentSwarm = new VoiceAgentSwarm();
+    const qualityAssuranceSwarm = new QualityAssuranceSwarm();
+    const customerSuccessSwarm = new CustomerSuccessSwarm();
+    const devOpsSwarm = new DevOpsSwarm();
+    const knowledgeGraphSwarm = new KnowledgeGraphSwarm();
+    const complianceSwarm = new ComplianceSwarm();
+    const experimentationSwarm = new ExperimentationSwarm();
+    const aiEconomySwarm = new AIEconomySwarm();
     const resonanceEngine = new ResonanceEngine(swarmKnowledge);
 
     // Initialize SwarmReporter
     const swarmReporter = new SwarmReporter();
+    const autonomousTradingController = new AutonomousTradingController();
+    await autonomousTradingController.initialize();
     
-    console.log('✅ 21 Agents Initialized (Main + Multi-Swarm Architecture). Entering Autonomous Loop...');
+    console.log('✅ 33 Collaboration Nodes Initialized (Agents + Swarm Collectives). Entering Autonomous Loop...');
     console.log('⚛️ Quantum Core: Active');
     console.log('🔮 Oracle: Available for consultation\n');
+    console.log('🤖 Autonomous Trading Controller:', autonomousTradingController.getStatus());
 
     // Register agents with collaboration system
+    const registerSwarmCollective = (swarmName: string, callback: (signal: any) => Promise<void>) => {
+        const members = getCollectiveMembers(swarmName);
+        swarmCollaboration.registerCollective(swarmName, members, callback);
+    };
+
     swarmCollaboration.registerAgent('Sentinel', async (signal) => {
         console.log(`📡 [Sentinel] Received signal: ${signal.type}`);
         await sentinel.run();
@@ -267,7 +402,7 @@ async function main() {
         console.log(`📡 [RevenueHunter] Received signal: ${signal.type}`);
         await revenueHunter.hunt();
     });
-    swarmCollaboration.registerAgent('CryptoSwarm', async (signal) => {
+    registerSwarmCollective('CryptoSwarm', async (signal) => {
         console.log(`📡 [CryptoSwarm] Received signal: ${signal.type}`);
         await cryptoSwarm.run();
     });
@@ -275,15 +410,15 @@ async function main() {
         console.log(`📡 [MarketAnalyzer] Received signal: ${signal.type}`);
         await marketAnalyzer.analyze();
     });
-    swarmCollaboration.registerAgent('WorkerSwarm', async (signal) => {
+    registerSwarmCollective('WorkerSwarm', async (signal) => {
         console.log(`📡 [WorkerSwarm] Received signal: ${signal.type}`);
         await workerSwarm.run();
     });
-    swarmCollaboration.registerAgent('FreelanceSwarm', async (signal) => {
+    registerSwarmCollective('FreelanceSwarm', async (signal) => {
         console.log(`📡 [FreelanceSwarm] Received signal: ${signal.type}`);
         await freelanceSwarm.run();
     });
-    swarmCollaboration.registerAgent('ConsultingSwarm', async (signal) => {
+    registerSwarmCollective('ConsultingSwarm', async (signal) => {
         console.log(`📡 [ConsultingSwarm] Received signal: ${signal.type}`);
         await consultingSwarm.run();
     });
@@ -303,7 +438,7 @@ async function main() {
     });
     
     // NEW: Trading Swarm Agents
-    swarmCollaboration.registerAgent('FinanceSwarm', async (signal) => {
+    registerSwarmCollective('FinanceSwarm', async (signal) => {
         console.log(`📡 [FinanceSwarm] Received signal: ${signal.type}`);
         await financeSwarm.run();
     });
@@ -327,18 +462,73 @@ async function main() {
         console.log(`📡 [TrendAnalyzer] Received signal: ${signal.type}`);
         await trendAnalyzer.run();
     });
+    registerSwarmCollective('SocialMediaSwarm', async (signal) => {
+        console.log(`📡 [SocialMediaSwarm] Received signal: ${signal.type}`);
+        await socialMediaSwarm.runCycle();
+    });
+    registerSwarmCollective('AutomatedTradingSwarm', async (signal) => {
+        console.log(`📡 [AutomatedTradingSwarm] Received signal: ${signal.type}`);
+        await automatedTradingSwarm.runCycle();
+    });
+    registerSwarmCollective('LearningSwarm', async (signal) => {
+        console.log(`📡 [LearningSwarm] Received signal: ${signal.type}`);
+        await learningSwarm.runCycle();
+    });
+    registerSwarmCollective('ResearchSwarm', async (signal) => {
+        console.log(`📡 [ResearchSwarm] Received signal: ${signal.type}`);
+        await researchSwarm.runCycle();
+    });
+    registerSwarmCollective('VoiceAgentSwarm', async (signal) => {
+        console.log(`📡 [VoiceAgentSwarm] Received signal: ${signal.type}`);
+        await voiceAgentSwarm.runCycle();
+    });
+    registerSwarmCollective('QualityAssuranceSwarm', async (signal) => {
+        console.log(`📡 [QualityAssuranceSwarm] Received signal: ${signal.type}`);
+        await qualityAssuranceSwarm.runCycle();
+    });
+    registerSwarmCollective('CustomerSuccessSwarm', async (signal) => {
+        console.log(`📡 [CustomerSuccessSwarm] Received signal: ${signal.type}`);
+        await customerSuccessSwarm.runCycle();
+    });
+    registerSwarmCollective('DevOpsSwarm', async (signal) => {
+        console.log(`📡 [DevOpsSwarm] Received signal: ${signal.type}`);
+        await devOpsSwarm.runCycle();
+    });
+    registerSwarmCollective('KnowledgeGraphSwarm', async (signal) => {
+        console.log(`📡 [KnowledgeGraphSwarm] Received signal: ${signal.type}`);
+        await knowledgeGraphSwarm.runCycle();
+    });
+    registerSwarmCollective('ComplianceSwarm', async (signal) => {
+        console.log(`📡 [ComplianceSwarm] Received signal: ${signal.type}`);
+        await complianceSwarm.runCycle();
+    });
+    registerSwarmCollective('ExperimentationSwarm', async (signal) => {
+        console.log(`📡 [ExperimentationSwarm] Received signal: ${signal.type}`);
+        await experimentationSwarm.runCycle();
+    });
+    registerSwarmCollective('AIEconomySwarm', async (signal) => {
+        console.log(`📡 [AIEconomySwarm] Received signal: ${signal.type}`);
+        await aiEconomySwarm.runCycle();
+    });
 
-    console.log(`🤝 ${swarmCollaboration.getStats().registeredAgents} agents registered for collaboration`);
+    const collabStats = swarmCollaboration.getStats();
+    console.log(
+        `🤝 Collaboration registry: ${collabStats.registeredAgents} nodes ` +
+        `(${collabStats.registeredIndividualAgents} individual agents, ${collabStats.registeredCollectives} swarm collectives)`
+    );
 
     // Test quantum core
     const qStats = quantumCore.getStats();
     console.log('📊 Quantum Stats:', qStats);
+    const bootCoherence = await quantumCore.enforceCoherence(1.0, 2);
+    console.log(`🎯 Quantum Coherence Lock: ${(bootCoherence.achieved * 100).toFixed(1)}%`);
 
     // Autonomous run tracking
     let cycleCount = 0;
     let isPaused = false;
     const AUTONOMOUS_INTERVAL_MS = 5 * 60 * 1000; // 5 minutes
-    let lastAutonomousRun = Date.now();
+    // Run one autonomous cycle immediately on startup, then every interval.
+    let lastAutonomousRun = Date.now() - AUTONOMOUS_INTERVAL_MS;
 
     // Start Sovereign Bridge (Auto-selects WhatsApp/iMessage)
     await sovereignBridge.start();
@@ -346,6 +536,7 @@ async function main() {
     // Register Command Handlers
     sovereignBridge.onCommand(async (cmd) => {
         console.log(`📨 [Bridge] Executing command: ${cmd}`);
+        const normalizedCmd = cmd.trim().toLowerCase();
 
         const target = process.env.IMESSAGE_RECIPIENT || process.env.WHATSAPP_PHONE_NUMBER;
         if (!target) {
@@ -353,20 +544,26 @@ async function main() {
             return;
         }
 
-        if (cmd === 'status') {
+        if (normalizedCmd === 'status') {
             const stats = quantumCore.getStats();
-            await sovereignBridge.pushUpdate(`📊 Swarm Status\n- Coherence: ${(stats.quantum_coherence * 100).toFixed(1)}%\n- Mode: ${isPaused ? '⏸️ PAUSED' : '🚀 ACTIVE'}`);
-        } else if (cmd === 'pause') {
+            const tradeStatus = autonomousTradingController.getStatus();
+            await sovereignBridge.pushUpdate(
+                `📊 Swarm Status\n` +
+                `- Coherence: ${(stats.quantum_coherence * 100).toFixed(1)}%\n` +
+                `- Mode: ${isPaused ? '⏸️ PAUSED' : '🚀 ACTIVE'}\n` +
+                `- AutoTrade: ${tradeStatus.phase} (balance ${tradeStatus.latestBalanceSol ?? 0} SOL)`
+            );
+        } else if (normalizedCmd === 'pause') {
             isPaused = true;
             await sovereignBridge.pushUpdate('⏸️ Swarm Paused. Standing by for resume command.');
-        } else if (cmd === 'resume') {
+        } else if (normalizedCmd === 'resume') {
             isPaused = false;
             await sovereignBridge.pushUpdate('🚀 Swarm Resumed. Autonomous cycles continuing.');
-        } else if (cmd === 'ping') {
+        } else if (normalizedCmd === 'ping') {
             await sovereignBridge.pushUpdate('🌌 PONG. Sovereign Bridge Latency: < 1s');
-        } else if (cmd === 'report') {
+        } else if (normalizedCmd === 'report') {
             await sovereignBridge.pushUpdate(`📑 Latest Executive Report: Available on next autonomous pulse.`);
-        } else if (cmd.startsWith('train ')) {
+        } else if (normalizedCmd.startsWith('train ')) {
             const repoUrl = cmd.replace('train ', '').trim();
             await sovereignBridge.pushUpdate(`📚 Librarian Initializing Training Pulse for: ${repoUrl}`);
             const trainRes = await librarian.trainOnRepo(repoUrl);
@@ -376,7 +573,7 @@ async function main() {
             } else {
                 await sovereignBridge.pushUpdate(`❌ Training Failed: ${trainRes.error}`);
             }
-        } else if (cmd.startsWith('replicate')) {
+        } else if (normalizedCmd.startsWith('replicate')) {
             const parts = cmd.split(' ');
             const nodeName = parts[1] || 'swarm_spawn';
             await sovereignBridge.pushUpdate(`🧬 Initiating Self-Replication Sequence for node: ${nodeName}...`);
@@ -392,25 +589,44 @@ async function main() {
             } catch (err: any) {
                 await sovereignBridge.pushUpdate(`❌ Replication Failed: ${err.message}`);
             }
-        } else if (cmd === 'help') {
+        } else if (normalizedCmd === 'help') {
             await sovereignBridge.pushUpdate(`🛠️ Swarm Commands:
 - status: Current health
 - train <url>: Learn from GitHub repo
 - replicate <name>: Autonomous cloning
 - pause: Halt autonomy
 - resume: Start autonomy
+- autotrade status: Autonomous trading challenge status
+- autotrade reset: Reset autonomous trading challenge state
 - ping: Check latency
 - transport: Show current transport
 - imessage: Switch to iMessage
 - whatsapp: Switch to WhatsApp
 - help: List commands`);
-        } else if (cmd === 'transport') {
+        } else if (normalizedCmd === 'transport') {
             const status = sovereignBridge.getStatus();
             await sovereignBridge.pushUpdate(`📡 Transport Status:
 - Transport: ${status.transport.toUpperCase()}
 - Status: ${status.status}
 - Note: ${status.message}`);
-        } else if (cmd === 'whatsapp') {
+        } else if (normalizedCmd === 'autotrade status') {
+            const tradeStatus = autonomousTradingController.getStatus();
+            await sovereignBridge.pushUpdate(
+                `🤖 AutoTrade Status:\n` +
+                `- Phase: ${tradeStatus.phase}\n` +
+                `- Trigger: ${tradeStatus.triggerSol} SOL\n` +
+                `- Target: ${tradeStatus.targetSol} SOL\n` +
+                `- Balance: ${tradeStatus.latestBalanceSol ?? 0} SOL\n` +
+                `- Tracked USDC: ${tradeStatus.trackedUsdcBalance}\n` +
+                `- Trades today: ${tradeStatus.tradesToday}\n` +
+                `- Total trades: ${tradeStatus.totalTrades}\n` +
+                `- Success: ${tradeStatus.successfulTrades}\n` +
+                `- Failed: ${tradeStatus.failedTrades}`
+            );
+        } else if (normalizedCmd === 'autotrade reset') {
+            await autonomousTradingController.reset('bridge_command');
+            await sovereignBridge.pushUpdate('♻️ AutoTrade challenge state reset.');
+        } else if (normalizedCmd === 'whatsapp') {
             await sovereignBridge.switchTransport('whatsapp');
             await sovereignBridge.pushUpdate('✅ WhatsApp is active');
         }
@@ -421,12 +637,19 @@ async function main() {
         try {
             // ⚛️ QUANTUM ENHANCEMENT: Check quantum channel for Antigravity messages
             await checkQuantumChannel();
+            await autonomousTradingController.tick({ isPaused, cycleCount });
 
             const now = Date.now();
             const shouldRunAutonomous = (now - lastAutonomousRun) >= AUTONOMOUS_INTERVAL_MS;
 
             // 1. Check for Reactive Signals
-            const tasks = await base44.getPendingTasks();
+            let tasks: any[] = [];
+            try {
+                tasks = await base44.getPendingTasks();
+            } catch (error: any) {
+                console.warn(`⚠️ [REACTIVE] Failed to fetch pending tasks: ${error?.message || error}`);
+                tasks = [];
+            }
 
             if (tasks.length > 0) {
                 console.log(`📥 [REACTIVE] Received ${tasks.length} tasks.`);
@@ -473,6 +696,11 @@ async function main() {
                 lastAutonomousRun = now;
 
                 const results: any = { mode: 'AUTONOMOUS', cycle: cycleCount };
+                const coherencePulse = await quantumCore.enforceCoherence(1.0, 1);
+                results.coherencePulse = coherencePulse;
+                const oracleGuidance = await consultAutonomousOracleGuidance(cycleCount, coherencePulse.achieved);
+                results.oracleGuidance = oracleGuidance;
+                const guidanceText = String(oracleGuidance.recommendation || '').toLowerCase();
 
                 // Run all agents proactively
                 const [sentinelRes, bugHunterRes, optimizerRes, poRes, agRes] = await Promise.all([
@@ -534,6 +762,143 @@ async function main() {
                     results.consultingSwarm = consultingRes;
                 }
 
+                // 📱 SocialMediaSwarm (every 6 cycles - expanded platform revenue)
+                if (cycleCount % 6 === 0) {
+                    await socialMediaSwarm.runCycle();
+                    results.socialMediaSwarm = await socialMediaSwarm.getRevenueReport();
+                }
+
+                // 📈 AutomatedTradingSwarm (every 8 cycles - crypto + stock automation)
+                if (cycleCount % 8 === 0) {
+                    await automatedTradingSwarm.runCycle();
+                    results.automatedTradingSwarm = automatedTradingSwarm.getPortfolio();
+                }
+
+                // 🧠 LearningSwarm (every 9 cycles - reasoning hardening and feedback learning)
+                if (cycleCount % 9 === 0) {
+                    results.learningSwarm = await learningSwarm.runCycle();
+                }
+
+                // 🔎 ResearchSwarm (every 12 cycles - market/competitor intelligence + SaaS opportunities)
+                if (cycleCount % 12 === 0) {
+                    results.researchSwarm = await researchSwarm.runCycle();
+                }
+
+                // 🎙️ VoiceAgentSwarm (every 13 cycles - voice support triage + revenue handoffs)
+                if (cycleCount % 13 === 0) {
+                    results.voiceAgentSwarm = await voiceAgentSwarm.runCycle();
+                }
+
+                // 🤝 CustomerSuccessSwarm (every 14 cycles - churn prevention + expansion automation)
+                if (cycleCount % 14 === 0) {
+                    results.customerSuccessSwarm = await customerSuccessSwarm.runCycle();
+                }
+
+                // 🧪 QualityAssuranceSwarm (every 20 cycles - benchmark/oracle/report reliability gates)
+                if (cycleCount % 20 === 0) {
+                    results.qualityAssuranceSwarm = await qualityAssuranceSwarm.runCycle();
+                }
+
+                // 🛠️ DevOpsSwarm (every 15 cycles - CI/CD and deployment readiness)
+                if (cycleCount % 15 === 0) {
+                    results.devOpsSwarm = await devOpsSwarm.runCycle();
+                }
+
+                // 🕸️ KnowledgeGraphSwarm (every 16 cycles - cross-domain intelligence synthesis)
+                if (cycleCount % 16 === 0) {
+                    results.knowledgeGraphSwarm = await knowledgeGraphSwarm.runCycle();
+                }
+
+                // 🛡️ ComplianceSwarm (every 17 cycles - policy, legal, and security governance)
+                if (cycleCount % 17 === 0) {
+                    results.complianceSwarm = await complianceSwarm.runCycle();
+                }
+
+                // 🧬 ExperimentationSwarm (every 18 cycles - multi-agent A/B testing and growth loops)
+                if (cycleCount % 18 === 0) {
+                    results.experimentationSwarm = await experimentationSwarm.runCycle();
+                }
+
+                // 🏛️ AIEconomySwarm (every 19 cycles - treasury and reinvestment flywheel)
+                if (cycleCount % 19 === 0) {
+                    results.aiEconomySwarm = await aiEconomySwarm.runCycle();
+                }
+
+                // 🔮 ORACLE PRIORITY OVERRIDE: Always act on oracle guidance every autonomous cycle.
+                if (hasKeyword(guidanceText, ['revenue', 'social', 'expansion', 'customer', 'saas'])) {
+                    if (!results.socialMediaSwarm) {
+                        await socialMediaSwarm.runCycle();
+                        results.socialMediaSwarm = await socialMediaSwarm.getRevenueReport();
+                    }
+                    if (!results.researchSwarm) {
+                        results.researchSwarm = await researchSwarm.runCycle();
+                    }
+                    if (!results.customerSuccessSwarm) {
+                        results.customerSuccessSwarm = await customerSuccessSwarm.runCycle();
+                    }
+                    if (!results.experimentationSwarm) {
+                        results.experimentationSwarm = await experimentationSwarm.runCycle();
+                    }
+                    if (!results.aiEconomySwarm) {
+                        results.aiEconomySwarm = await aiEconomySwarm.runCycle();
+                    }
+                }
+
+                if (hasKeyword(guidanceText, ['reliability', 'quality', 'learning', 'qa', 'stability'])) {
+                    if (!results.learningSwarm) {
+                        results.learningSwarm = await learningSwarm.runCycle();
+                    }
+                    if (!results.qualityAssuranceSwarm && cycleCount % 5 === 0) {
+                        results.qualityAssuranceSwarm = await qualityAssuranceSwarm.runCycle();
+                    }
+                }
+
+                if (hasKeyword(guidanceText, ['trading', 'market', 'crypto', 'risk'])) {
+                    if (!results.automatedTradingSwarm) {
+                        await automatedTradingSwarm.runCycle();
+                        results.automatedTradingSwarm = automatedTradingSwarm.getPortfolio();
+                    }
+                    if (!results.marketAnalyzer) {
+                        results.marketAnalyzer = await marketAnalyzer.analyze();
+                    }
+                }
+
+                if (hasKeyword(guidanceText, ['platform', 'product', 'voice', 'code', 'devops', 'infrastructure', 'deployment'])) {
+                    if (!results.voiceAgentSwarm) {
+                        results.voiceAgentSwarm = await voiceAgentSwarm.runCycle();
+                    }
+                    if (!results.codeGenerator) {
+                        results.codeGenerator = await codeGenerator.run();
+                    }
+                    if (!results.devOpsSwarm) {
+                        results.devOpsSwarm = await devOpsSwarm.runCycle();
+                    }
+                }
+
+                if (hasKeyword(guidanceText, ['knowledge', 'cross-domain', 'synthesis', 'graph'])) {
+                    if (!results.knowledgeGraphSwarm) {
+                        results.knowledgeGraphSwarm = await knowledgeGraphSwarm.runCycle();
+                    }
+                }
+
+                if (hasKeyword(guidanceText, ['compliance', 'policy', 'legal', 'security', 'governance'])) {
+                    if (!results.complianceSwarm) {
+                        results.complianceSwarm = await complianceSwarm.runCycle();
+                    }
+                }
+
+                if (hasKeyword(guidanceText, ['experiment', 'experimentation', 'a/b', 'ab test', 'conversion', 'uplift', 'growth'])) {
+                    if (!results.experimentationSwarm) {
+                        results.experimentationSwarm = await experimentationSwarm.runCycle();
+                    }
+                }
+
+                if (hasKeyword(guidanceText, ['economy', 'treasury', 'reinvest', 'self-sustaining', 'allocation', 'flywheel'])) {
+                    if (!results.aiEconomySwarm) {
+                        results.aiEconomySwarm = await aiEconomySwarm.runCycle();
+                    }
+                }
+
                 // 🌌 RESONANCE: Monthly Sync (every 50 cycles)
                 if (cycleCount % 50 === 0) {
                     await resonanceEngine.performSync();
@@ -553,7 +918,11 @@ async function main() {
                 // 🦀 TRANSCENDENCE: Rust-Quantum Bridge Decision
                 const agentPriorities = Object.entries(results)
                     .filter(([_, v]) => v)
-                    .map(([id, _]) => ({ id, score: Math.random() * 10 }));
+                    .map(([id, value]) => {
+                        const footprint = JSON.stringify(value).length;
+                        const score = Math.max(0.1, Math.min(10, footprint / 120));
+                        return { id, score };
+                    });
 
                 if (agentPriorities.length > 1) {
                     const bridgeResult = resolveQuantumGate(agentPriorities);
@@ -588,22 +957,24 @@ async function main() {
                 const freelance = freelanceSwarm as any;
                 
                 const tradingMetrics = {
-                    balance: finance.getBalance ? finance.getBalance() : 0.1,
+                    balance: finance.getBalance ? finance.getBalance() : 0,
                     totalPnL: finance.getTotalPnL ? finance.getTotalPnL() : 0,
                     openPositions: finance.getOpenPositions ? finance.getOpenPositions().length : 0,
-                    winRate: 0.75
+                    winRate: finance.getWinRate ? finance.getWinRate() : 0
                 };
                 
                 const freelanceMetrics = {
                     jobsApplied: freelance.getJobsApplied ? freelance.getJobsApplied() : 0,
-                    pipelineValue: freelance.getPipelineValue ? freelance.getPipelineValue() : 18500
+                    pipelineValue: freelance.getPipelineValue ? freelance.getPipelineValue() : 0
                 };
                 
                 const revenueMetrics = {
-                    totalRevenue: results.revenueHunter?.opportunities?.length ? results.revenueHunter.opportunities.length * 150 : 450,
-                    pendingRevenue: 300,
-                    subscriptions: 3,
-                    referrals: 8
+                    totalRevenue: results.revenueHunter?.opportunities?.length
+                        ? results.revenueHunter.opportunities.length * 150
+                        : 0,
+                    pendingRevenue: 0,
+                    subscriptions: 0,
+                    referrals: 0
                 };
                 
                 const fullReport = await swarmReporter.generateComprehensiveReport(
@@ -692,4 +1063,3 @@ async function generateCycleReport(cycleCount: number, results: any, quantumStat
 }
 
 main().catch(console.error);
-

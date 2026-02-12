@@ -4,6 +4,7 @@
  */
 
 import { QuantumSwarmCore } from '../core/quantum_core.js';
+import { isRealityMode } from '../core/reality_mode.js';
 
 interface TikTokConfig {
     enabled: boolean;
@@ -179,8 +180,11 @@ export class TikTokAgent {
     async upload(video: TikTokVideo): Promise<boolean> {
         console.log('📱 [TikTokAgent] Uploading video:', video.title);
 
-        // Placeholder for TikTok API integration
-        // In production, use TikTok for Developers API
+        if (isRealityMode()) {
+            throw new Error('[TikTokAgent] Reality mode active but TikTok live API connector is not implemented');
+        }
+
+        // Placeholder for TikTok API integration outside strict reality mode
         
         // Simulate upload success
         this.metrics.views += Math.floor(Math.random() * 10000) + 1000;

@@ -1,0 +1,117 @@
+{
+  "generatedAt": "2026-02-12T15:57:16.858Z",
+  "profile": "strict",
+  "overall": {
+    "score": 82,
+    "threshold": 90,
+    "passed": false,
+    "verdict": "DEVELOPING",
+    "trueHyperIntelligence": false
+  },
+  "dimensions": [
+    {
+      "name": "reasoning",
+      "score": 40,
+      "threshold": 80,
+      "passed": false,
+      "durationMs": 17.8,
+      "details": {
+        "directTasks": 8,
+        "directAccuracy": 100,
+        "adversarialTasks": 8,
+        "adversarialAccuracy": 0,
+        "avgConfidence": 61.11,
+        "failures": [
+          {
+            "bucket": "adversarial",
+            "problem": "Select release method after core auth refactor.",
+            "predicted": "ship globally in one step",
+            "expected": "canary release with progressive traffic and rollback gates"
+          },
+          {
+            "bucket": "adversarial",
+            "problem": "Choose mitigation for intermittent checkout latency.",
+            "predicted": "increase timeout and hope",
+            "expected": "add queue buffering and circuit breaker fallback"
+          },
+          {
+            "bucket": "adversarial",
+            "problem": "Pick architecture for critical notifications.",
+            "predicted": "single monolith path only",
+            "expected": "multi-channel fanout with retry and dead-letter queue"
+          },
+          {
+            "bucket": "adversarial",
+            "problem": "Decide conflict strategy for concurrent edits.",
+            "predicted": "last write wins always",
+            "expected": "operational transform with conflict prompts and audit history"
+          },
+          {
+            "bucket": "adversarial",
+            "problem": "Choose deployment rollback trigger.",
+            "predicted": "wait for user complaints",
+            "expected": "error budget breach plus canary regression threshold"
+          }
+        ]
+      }
+    },
+    {
+      "name": "planning",
+      "score": 100,
+      "threshold": 90,
+      "passed": true,
+      "durationMs": 72.18,
+      "details": {
+        "checksPassed": "8/8",
+        "statusesCount": 4,
+        "godMessages": 2,
+        "financeMessages": 1,
+        "cryptoMessages": 1
+      }
+    },
+    {
+      "name": "coding",
+      "score": 100,
+      "threshold": 90,
+      "passed": true,
+      "durationMs": 7821.9,
+      "details": {
+        "filesChecked": 10,
+        "filesPassed": 10,
+        "failingFiles": []
+      }
+    },
+    {
+      "name": "autonomy",
+      "score": 100,
+      "threshold": 90,
+      "passed": true,
+      "durationMs": 66.53,
+      "details": {
+        "checksPassed": "6/6",
+        "callbackHits": 8,
+        "pendingSignalsForBenchAgentB": 2,
+        "totalSignals": 4
+      }
+    },
+    {
+      "name": "reliability",
+      "score": 100,
+      "threshold": 95,
+      "passed": true,
+      "durationMs": 713.79,
+      "details": {
+        "operations": 70,
+        "success": 70,
+        "failures": 0,
+        "avgLatencyMs": 10.11,
+        "p95LatencyMs": 28.17
+      }
+    }
+  ],
+  "benchmarkDurationMs": 8692.2,
+  "notes": [
+    "This suite is local and reproducible; it does not claim scientific AGI certification.",
+    "Reasoning includes adversarial tasks to avoid keyword-only inflation."
+  ]
+}

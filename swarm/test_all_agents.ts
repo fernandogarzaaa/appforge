@@ -160,15 +160,11 @@ async function main(): Promise<void> {
 
     // Wallet Status
     console.log('\n💰 WALLET STATUS:');
-    try {
-        const walletData = await fs.readFile('swarm/data/swarm_wallet.json');
-        if (walletData) {
-            const wallet = JSON.parse(walletData);
-            console.log('   ✅ Wallet Address: ' + wallet.publicKey);
-            console.log('   📝 Type: ' + wallet.type);
-        }
-    } catch (e) {
-        console.log('   ⚠️ Wallet file not found');
+    const solWallet = process.env.SOLANA_WALLET_ADDRESS;
+    if (solWallet) {
+        console.log('   ✅ Wallet Address: ' + solWallet);
+    } else {
+        console.log('   ⚠️ SOLANA_WALLET_ADDRESS not set');
     }
 
     console.log('\n═══════════════════════════════════════════════════════════');

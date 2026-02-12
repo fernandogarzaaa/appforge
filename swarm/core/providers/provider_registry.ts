@@ -30,6 +30,7 @@ import { CodexProvider } from './codex_provider.js';
 import { OllamaProvider } from './ollama_provider.js';
 import { LlamaCppProvider } from './llamacpp_provider.js';
 import { SyntheticProvider } from './synthetic_provider.js';
+import { isRealityMode } from '../reality_mode.js';
 
 // ============================================================================
 // Environment Configuration
@@ -250,13 +251,17 @@ export class ProviderRegistry {
       console.log('[ProviderRegistry] ✅ Ollama registered');
     } catch (e: any) {
       console.warn(`[ProviderRegistry] Ollama initialization failed: ${e.message}`);
-      // Add synthetic provider as fallback
-      const synthetic = new SyntheticProvider({
-        provider: 'synthetic',
-        model: 'synthetic-local-v1',
-      });
-      this.register(synthetic);
-      console.log('[ProviderRegistry] ✅ Synthetic provider registered as Ollama fallback');
+      if (isRealityMode()) {
+        console.warn('[ProviderRegistry] ⚠️ Reality mode active: synthetic fallback provider disabled.');
+      } else {
+        // Add synthetic provider as fallback
+        const synthetic = new SyntheticProvider({
+          provider: 'synthetic',
+          model: 'synthetic-local-v1',
+        });
+        this.register(synthetic);
+        console.log('[ProviderRegistry] ✅ Synthetic provider registered as Ollama fallback');
+      }
     }
 
     // Initialize LlamaCpp

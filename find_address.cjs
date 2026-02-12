@@ -2,28 +2,46 @@ const { Keypair } = require('@solana/web3.js');
 const { mnemonicToSeedSync } = require('bip39');
 const hdkey = require('hdkey');
 
-const mnemonic = 'resist paper social learn chimney globe traffic possible mansion grocery test picnic';
+// SECURITY:
+// - Do not hardcode mnemonics in this repo.
+// - Provide via SOLANA_MNEMONIC env var.
+
+const mnemonic = (process.env.SOLANA_MNEMONIC || '').trim();
+const targetAddress = (process.env.TARGET_ADDRESS || process.argv[2] || '').trim();
+
+if (!mnemonic || !targetAddress) {
+  console.error('Missing SOLANA_MNEMONIC or TARGET_ADDRESS.');
+  console.error('Usage: SOLANA_MNEMONIC=\"...\" node find_address.cjs <TARGET_ADDRESS>');
+  process.exit(1);
+}
+
 const seed = mnemonicToSeedSync(mnemonic);
 const hd = hdkey.fromMasterSeed(seed);
-
-const targetAddress = '2ZeBAFtHq5vNThXMjbZ7E59Msgv6xPpBFn7cw4KMxmot';
 
 console.log('Searching for address:', targetAddress);
 console.log('');
 
-// Try different derivation paths
 const paths = [
-    "m/44'/501'/0'/0'",      // Standard Solana
-    "m/44'/501'/0'/0'",      // Alternative
-    "m/501'/0'/0'/0'",       // No coin type
-    "m/44'/60'/0'/0'",       // Ethereum
-    "m/0'/0'/0'",             // Simple
-    "m/0'/0'/0'",             // Simple 2
+  { path: "m/44'/501'/0'/0'", name: 'Solana (0)' },
+  { path: "m/44'/501'/1'/0'", name: 'Solana (1)' },
+  { path: "m/44'/501'/2'/0'", name: 'Solana (2)' },
+  { path: "m/44'/501'/0'/1'", name: 'Solana change 1' }
 ];
 
 let found = false;
-for (const path of paths) {
-    try {
-        const derived = hd.derive(path);
-        const keypair = Keypair.fromSeed(derived.privateKey);
-       {
+for (const { path, name } of paths) {
+  try {
+    const derived = hd.derive(path);
+    const keypair = Keypair.fromSeed(derived.privateKey);
+    const addr = keypair.publicKey.toString();
+    const match = addr === targetAddress ? ' <-- MATCH' : '';
+    console.log(`${name.padEnd(16)} ${path.padEnd(18)} ${addr}${match}`);
+    if (addr === targetAddress) found = true;
+  } catch (e) {
+    console.log(`${name.padEnd(16)} ERROR: ${e.message}`);
+  }
+}
+
+console.log('');
+console.log(found ? '✅ FOUND' : '❌ NOT FOUND');
+

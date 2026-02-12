@@ -16,13 +16,13 @@ async function consultNextSteps() {
     console.log('');
 
     const focusResult = await quantumCore.consultOracle(
-        'The Social Media Swarm is now operational. What should we focus on next to maximize revenue and system capabilities?',
+        'SocialMediaSwarm, AutomatedTradingSwarm, LearningSwarm, ResearchSwarm, VoiceAgentSwarm, QualityAssuranceSwarm, CustomerSuccessSwarm, DevOpsSwarm, KnowledgeGraphSwarm, ComplianceSwarm, and ExperimentationSwarm are now operational. Each swarm is a multi-agent collective (not a singular entity). What should we focus on next to maximize revenue and system capabilities?',
         [
             'Scale Social Media Swarm with more platforms (Instagram, Twitter/X)',
             'Integrate real API connections for TikTok, YouTube, Facebook',
-            'Create AutomatedTradingSwarm for crypto/stock automation',
-            'Build LearningSwarm that studies and improves other swarms',
-            'Implement voice/video AI agents for customer support'
+            'Optimize AutomatedTradingSwarm with stronger execution/risk controls',
+            'Scale LearningSwarm with more adversarial drills and cross-swarm postmortems',
+            'Scale ExperimentationSwarm with broader A/B testing and growth loop automation'
         ],
         ['revenue_impact', 'technical_feasibility', 'strategic_value']
     );
@@ -88,13 +88,13 @@ async function consultNextSteps() {
     console.log('');
 
     const swarmResult = await quantumCore.consultOracle(
-        'What new specialized swarms would be most valuable?',
+        'What new specialized multi-agent swarms would be most valuable beyond the current stack? (Reminder: each swarm is composed of multiple collaborating agents.)',
         [
-            'AutomatedTradingSwarm - Crypto/stock automation',
-            'LearningSwarm - Improves other swarms autonomously',
-            'VoiceAgentSwarm - Voice AI for customer service',
-            'ResearchSwarm - Automated market research',
-            'DevOpsSwarm - Infrastructure automation'
+            'PartnershipSwarm - Business development and strategic alliances',
+            'DataNetworkSwarm - Unified data ingestion, quality, and feature pipelines',
+            'RevenueOpsSwarm - Pipeline forecasting and conversion optimization',
+            'SecuritySwarm - Continuous threat detection and response automation',
+            'FinOpsSwarm - Infrastructure cost governance and budget automation'
         ],
         ['innovation', 'market_demand', 'technical_challenge']
     );

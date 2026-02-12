@@ -4,6 +4,8 @@
  */
 
 import { QuantumSwarmCore } from '../core/quantum_core.js';
+import { isRealityMode } from '../core/reality_mode.js';
+import { getTwitterStats, postTweet as postTweetApi } from '../integrations/twitter.js';
 
 interface TwitterConfig {
     enabled: boolean;
@@ -33,6 +35,7 @@ export class TwitterAgent {
     private config: TwitterConfig;
     private metrics: TwitterMetrics;
     private trainedData: Map<string, any>;
+    private realityMode: boolean;
 
     constructor(config?: TwitterConfig) {
         this.quantumCore = new QuantumSwarmCore();
@@ -50,6 +53,7 @@ export class TwitterAgent {
             replies: 0
         };
         this.trainedData = new Map();
+        this.realityMode = isRealityMode();
     }
 
     async train(): Promise<void> {
@@ -114,7 +118,8 @@ export class TwitterAgent {
                 '🚀 Prediction:',
                 '📝 Thread 🧵:'
             ];
-            text = hooks[Math.floor(Math.random() * hooks.length)] + ' ' + text;
+            const selectedHook = this.realityMode ? hooks[0] : hooks[Math.floor(Math.random() * hooks.length)];
+            text = selectedHook + ' ' + text;
         }
 
         return text;
@@ -130,12 +135,17 @@ export class TwitterAgent {
 
     async post(tweet: Tweet): Promise<boolean> {
         console.log('🐦 [TwitterAgent] Posting:', tweet.type);
-
-        this.metrics.impressions += Math.floor(Math.random() * 10000) + 1000;
-        this.metrics.likes += Math.floor(Math.random() * 500) + 50;
-        this.metrics.retweets += Math.floor(Math.random() * 100) + 10;
-
-        return true;
+        try {
+            const response = await postTweetApi(tweet.text);
+            if (!response?.data?.id) {
+                return false;
+            }
+            await this.refreshMetricsFromApi();
+            return true;
+        } catch (error) {
+            console.error('❌ [TwitterAgent] Post failed:', error);
+            return false;
+        }
     }
 
     async createThread(topic: string): Promise<Tweet[]> {
@@ -145,7 +155,7 @@ export class TwitterAgent {
         const thread: Tweet[] = [];
         
         const structures = [
-            `🧵 THREAD: Everything you need to know about ${topic}\n\n1/${Math.floor(Math.random() * 10)}`,
+            `🧵 THREAD: Everything you need to know about ${topic}\n\n1/6`,
             `Let's talk about ${topic} 👇\n\n1/`,
             `I spent 100+ hours researching ${topic}. Here are my findings:\n\n1/`
         ];
@@ -168,6 +178,26 @@ export class TwitterAgent {
     }
 
     async getMetrics(): Promise<TwitterMetrics> {
+        await this.refreshMetricsFromApi();
         return this.metrics;
+    }
+
+    private async refreshMetricsFromApi(): Promise<void> {
+        try {
+            const stats = await getTwitterStats();
+            const metrics = stats?.data?.public_metrics || {};
+
+            this.metrics.followers = Number(metrics.followers_count || this.metrics.followers || 0);
+            this.metrics.impressions = Number(metrics.tweet_count || this.metrics.impressions || 0);
+            this.metrics.likes = Number(metrics.listed_count || this.metrics.likes || 0);
+            this.metrics.retweets = Number(metrics.following_count || this.metrics.retweets || 0);
+            this.metrics.engagement = this.metrics.impressions > 0
+                ? ((this.metrics.likes + this.metrics.retweets + this.metrics.replies) / this.metrics.impressions) * 100
+                : 0;
+        } catch (error) {
+            if (this.realityMode) {
+                throw error;
+            }
+        }
     }
 }

@@ -4,6 +4,8 @@
  */
 
 import { QuantumSwarmCore } from '../core/quantum_core.js';
+import { isRealityMode } from '../core/reality_mode.js';
+import { getYouTubeChannelStats, postYouTubeVideo } from '../integrations/youtube.js';
 
 interface YouTubeConfig {
     enabled: boolean;
@@ -37,6 +39,7 @@ export class YouTubeAgent {
     private config: YouTubeConfig;
     private metrics: YouTubeMetrics;
     private trainedData: Map<string, any>;
+    private realityMode: boolean;
 
     constructor(config?: YouTubeConfig) {
         this.quantumCore = new QuantumSwarmCore();
@@ -54,6 +57,7 @@ export class YouTubeAgent {
             ctr: 0
         };
         this.trainedData = new Map();
+        this.realityMode = isRealityMode();
     }
 
     /**
@@ -194,16 +198,27 @@ export class YouTubeAgent {
      */
     async upload(video: YouTubeVideo): Promise<boolean> {
         console.log('🎥 [YouTubeAgent] Uploading video:', video.title);
+        try {
+            const response = await postYouTubeVideo({
+                id: video.id || `video_${Date.now()}`,
+                title: video.title,
+                description: video.description,
+                tags: video.tags,
+                categoryId: video.categoryId,
+                privacyStatus: 'public'
+            });
 
-        // Placeholder for YouTube Data API integration
-        // In production, use googleapis YouTube Data API v3
+            if (!response?.id && !response?.kind) {
+                return false;
+            }
 
-        this.metrics.views += Math.floor(Math.random() * 50000) + 5000;
-        this.metrics.subscribers += Math.floor(Math.random() * 500) + 50;
-        this.metrics.watchTime += Math.floor(Math.random() * 100000) + 10000;
-
-        console.log('✅ [YouTubeAgent] Video uploaded successfully');
-        return true;
+            await this.refreshMetricsFromApi();
+            console.log('✅ [YouTubeAgent] Video upload request submitted');
+            return true;
+        } catch (error) {
+            console.error('❌ [YouTubeAgent] Upload failed:', error);
+            return false;
+        }
     }
 
     /**
@@ -232,10 +247,28 @@ export class YouTubeAgent {
      * Get current metrics
      */
     async getMetrics(): Promise<YouTubeMetrics> {
+        await this.refreshMetricsFromApi();
         this.metrics.ctr = this.metrics.views > 0 
             ? (this.metrics.likes / this.metrics.views) * 100 
             : 0;
         return this.metrics;
+    }
+
+    private async refreshMetricsFromApi(): Promise<void> {
+        try {
+            const data = await getYouTubeChannelStats();
+            const stats = data?.items?.[0]?.statistics || {};
+
+            this.metrics.views = Number(stats.viewCount || this.metrics.views || 0);
+            this.metrics.subscribers = Number(stats.subscriberCount || this.metrics.subscribers || 0);
+            this.metrics.comments = Number(stats.commentCount || this.metrics.comments || 0);
+            this.metrics.likes = Number(stats.likeCount || this.metrics.likes || 0);
+            this.metrics.watchTime = Number(stats.videoCount || this.metrics.watchTime || 0);
+        } catch (error) {
+            if (this.realityMode) {
+                throw error;
+            }
+        }
     }
 
     /**

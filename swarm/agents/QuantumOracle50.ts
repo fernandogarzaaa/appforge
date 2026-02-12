@@ -611,16 +611,12 @@ export class QuantumOracle50 {
         let solEarned = 0;
 
         // Check for trading capital
-        try {
-            const walletData = await this.fs.readFile('swarm/data/swarm_wallet.json');
-            if (walletData) {
-                const wallet = JSON.parse(walletData);
-                // Trading requires SOL balance
-                console.log('   Wallet: ' + wallet.publicKey);
-                console.log('   ⚠️  Trading requires initial SOL deposit');
-            }
-        } catch (e) {
-            console.log('   ⚠️  No wallet found - skipping trading');
+        const walletAddress = (process.env.SOLANA_WALLET_ADDRESS || '').trim();
+        if (walletAddress) {
+            console.log('   Wallet: ' + walletAddress);
+            console.log('   ⚠️  Trading requires initial SOL deposit');
+        } else {
+            console.log('   ⚠️  SOLANA_WALLET_ADDRESS not set - skipping trading');
         }
 
         console.log('   Trades Executed: ' + trades);

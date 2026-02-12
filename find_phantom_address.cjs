@@ -2,8 +2,14 @@ const { Keypair } = require('@solana/web3.js');
 const { mnemonicToSeedSync } = require('bip39');
 const hdkey = require('hdkey');
 
-const mnemonic = 'resist paper social learn chimney globe traffic possible mansion grocery test picnic';
-const targetAddress = '2ZeBAFtHq5vNThXMjbZ7E59Msgv6xPpBFn7cw4KMxmot';
+const mnemonic = (process.env.SOLANA_MNEMONIC || '').trim();
+const targetAddress = (process.env.TARGET_ADDRESS || process.argv[2] || '').trim();
+
+if (!mnemonic || !targetAddress) {
+    console.error('Missing SOLANA_MNEMONIC or TARGET_ADDRESS.');
+    console.error('Usage: SOLANA_MNEMONIC=\"...\" node find_phantom_address.cjs <TARGET_ADDRESS>');
+    process.exit(1);
+}
 
 const seed = mnemonicToSeedSync(mnemonic);
 const hd = hdkey.fromMasterSeed(seed);

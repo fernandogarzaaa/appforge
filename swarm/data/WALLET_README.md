@@ -1,65 +1,35 @@
-# ⚡ ANTIGRAVITY SWARM WALLET
+# Swarm Wallet (Local Only)
 
-## 🚨 CRITICAL - REAL FUNDS WALLET 🚨
+## Critical Security Warning
 
-**DO NOT SHARE THIS FILE OR THE SEED PHRASE**
+- Never commit seed phrases or private keys to git.
+- Any wallet material that has ever been committed (even once) must be treated as compromised.
+- Use a dedicated hot wallet with small funds if you insist on auto-signing trades.
 
----
+## Configuration (Recommended)
 
-## 📋 WALLET DETAILS
+This project is configured via `.env.local` (ignored by git):
 
-| Field | Value |
-|-------|-------|
-| **Type** | Solana Mainnet |
-| **Address** | `58w7ZDRttAroqhmE8TnV2YWpwSkNHCfXdfUVAxh11LX3` |
-| **Seed Phrase** | `resist paper social learn chimney globe traffic possible mansion grocery test picnic` |
-| **Derivation Path** | `m/44'/501'/0'/0'` |
+- `SOLANA_RPC_URL`
+- `SOLANA_WALLET_ADDRESS`
+- `SOLANA_PRIVATE_KEY` (required only if you enable auto-signing)
 
----
+Suggested safety defaults:
 
-## 🔐 BACKUP LOCATIONS
+- `SWARM_REALITY_MODE=false` until you finish key rotation + security hardening
+- `REAL_TRADING_ENABLED=false`
+- `SWARM_AUTO_EXECUTE_TRADES=false`
+- `SWARM_AUTONOMOUS_TRADING_ENABLED=false`
 
-1. `swarm/data/swarm_wallet.json` (Primary)
-2. `swarm/data/swarm_wallet_backup.json` (Backup)
+## Wallet Files
 
----
+- `swarm/data/swarm_wallet.example.json` is a template (safe to commit).
+- Do not create or commit `swarm/data/swarm_wallet.json` or `swarm/data/swarm_wallet_backup.json`.
 
-## 📁 FILES USING THIS WALLET
+## Key Rotation Checklist
 
-- `.env.local` - SOLANA_WALLET_ADDRESS & SOLANA_PRIVATE_KEY
-- `swarm/data/finance_wallet.json` - Trading config
-- `swarm/agents/CryptoSwarm.ts` - Crypto trading agent
-- `swarm/agents/RevenueHunter.ts` - Revenue tracking
+1. Create a brand new Solana wallet (Phantom or hardware wallet).
+2. Fund the new wallet only after confirming the address in your wallet UI.
+3. Update `.env.local` with the new address.
+4. Only set `SOLANA_PRIVATE_KEY` if you accept the risk of a hot wallet and auto-signing.
 
----
-
-## ⚠️ SECURITY RULES
-
-1. **NEVER** share this seed phrase
-2. **ALWAYS** use encrypted storage
-3. **BACKUP** offline in secure location
-4. **VERIFY** address before sending funds
-
----
-
-## 💰 FUNDING
-
-Send **SOL** to: `58w7ZDRttAroqhmE8TnV2YWpwSkNHCfXdfUVAxh11LX3`
-
-Once funded, the swarm will automatically:
-- Monitor Jupiter DEX for opportunities
-- Execute token swaps
-- Track revenue in real-time
-
----
-
-## 🔗 USEFUL LINKS
-
-- [Solana Explorer](https://explorer.solana.com/address/58w7ZDRttAroqhmE8TnV2YWpwSkNHCfXdfUVAxh11LX3)
-- [Jupiter DEX](https://jup.ag)
-- [DexScreener](https://dexscreener.com/solana)
-
----
-
-**Created:** 2026-02-12
-**Version:** 1.0

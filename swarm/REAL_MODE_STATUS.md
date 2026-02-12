@@ -81,7 +81,7 @@ This document tracks which agents use REAL data vs simulation.
 
 ### Wallet Funding Required
 ```
-Wallet Address: 58w7ZDRttAroqhmE8TnV2YWpwSkNHCfXdfUVAxh11LX3
+Wallet Address: $SOLANA_WALLET_ADDRESS
 
 Minimum for trading: 0.1 SOL
 Recommended for yield: 1.0+ SOL
@@ -145,7 +145,7 @@ Recommended for yield: 1.0+ SOL
 │                             ▼                                     │
 │              ┌─────────────────────────────┐                      │
 │              │    SOLANA WALLET (TRADE)    │                      │
-│              │  58w7ZDRttAroqhmE8...3LX3  │                      │
+│              │  $SOLANA_WALLET_ADDRESS     │                      │
 │              └─────────────────────────────┘                      │
 │                                                                      │
 └─────────────────────────────────────────────────────────────────────┘
@@ -172,7 +172,7 @@ Recommended for yield: 1.0+ SOL
 
 ```bash
 # Check wallet balance
-npx tsx -e "const {Connection,PublicKey}=require('@solana/web3.js');new Connection('https://api.mainnet-beta.solana.com').getBalance(new PublicKey('58w7ZDRttAroqhmE8TnV2YWpwSkNHCfXdfUVAxh11LX3')).then(b=>console.log((b/1e9).toFixed(4),'SOL'))"
+npx tsx -e "const {Connection,PublicKey}=require('@solana/web3.js');const a=process.env.SOLANA_WALLET_ADDRESS; if(!a) throw new Error('SOLANA_WALLET_ADDRESS missing'); new Connection('https://api.mainnet-beta.solana.com').getBalance(new PublicKey(a)).then(b=>console.log((b/1e9).toFixed(4),'SOL'))"
 
 # Run the swarm
 npx tsx swarm/core/loop.ts
