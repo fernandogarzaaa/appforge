@@ -13,10 +13,33 @@ import qrcodeTerminal from 'qrcode-terminal';
 import QRCode from 'qrcode';
 import * as fs from 'fs';
 
+// Load .env.local manually
+const envPath = path.join(process.cwd(), '.env.local');
+if (fs.existsSync(envPath)) {
+    const envContent = fs.readFileSync(envPath, 'utf8');
+    envContent.split('\n').forEach(line => {
+        const match = line.match(/^WHATSAPP_PHONE_NUMBER=(.+)$/);
+        if (match) {
+            process.env.WHATSAPP_PHONE_NUMBER = match[1].trim();
+            console.log(`📱 [WhatsApp] Loaded phone number: ${process.env.WHATSAPP_PHONE_NUMBER}`);
+        }
+    });
+}
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const QUANTUM_CHANNEL_PATH = path.join(__dirname, '..', '..', 'swarm', 'quantum_channel.json');
+
+// Disconnect reason mapping for diagnostics
+const DISCONNECT_REASONS: Record<number, string> = {
+    [DisconnectReason.connectionClosed]: 'Connection closed by server',
+    [DisconnectReason.connectionLost]: 'Connection lost (network issue)',
+    [DisconnectReason.connectionReplaced]: 'Connection replaced by another session',
+    [DisconnectReason.loggedOut]: 'Session logged out (needs re-auth)',
+    [DisconnectReason.restartRequired]: 'Restart required',
+    [DisconnectReason.badSession]: 'Bad session (corrupted)'
+};
 
 export class WhatsAppBridge {
     private phoneNumber: string;
@@ -24,10 +47,49 @@ export class WhatsAppBridge {
     private sock: any = null;
     private isConnected: boolean = false;
     private commandHandlers: ((cmd: string) => Promise<void>)[] = [];
+    private reconnectAttempts: number = 0;
+    private maxReconnectAttempts: number = 5;
+    private reconnectDelay: number = 10000; // Start with 10 seconds
+    private isReconnecting: boolean = false;
+    private currentAuthPath: string = '';
+    private keepaliveInterval: NodeJS.Timeout | null = null;
 
     constructor() {
         this.phoneNumber = process.env.WHATSAPP_PHONE_NUMBER || '';
         this.lastProcessedTimestamp = Date.now();
+    }
+
+    /**
+     * Start keepalive ping to maintain connection
+     */
+    private startKeepalive() {
+        // Stop any existing keepalive
+        if (this.keepaliveInterval) {
+            clearInterval(this.keepaliveInterval);
+        }
+
+        // Ping every 30 seconds to keep connection alive
+        this.keepaliveInterval = setInterval(async () => {
+            if (this.isConnected && this.sock) {
+                try {
+                    // Send a ping to keep connection alive
+                    await this.sock.sendPresenceUpdate('available');
+                    console.log('📡 [WhatsApp] Keepalive ping sent');
+                } catch (e: any) {
+                    console.log('⚠️ [WhatsApp] Keepalive failed:', e.message);
+                }
+            }
+        }, 30000);
+    }
+
+    /**
+     * Stop keepalive ping
+     */
+    private stopKeepalive() {
+        if (this.keepaliveInterval) {
+            clearInterval(this.keepaliveInterval);
+            this.keepaliveInterval = null;
+        }
     }
 
     getPhoneNumber(): string {
@@ -38,15 +100,13 @@ export class WhatsAppBridge {
      * Get JID format for WhatsApp
      */
     private getJID(phone: string): string {
-        // Remove any existing JID suffix
         const cleanPhone = phone.replace(/@s\.whatsapp\.net|@g\.us$/, '');
-        // Remove non-digits
         const digits = cleanPhone.replace(/\D/g, '');
         return `${digits}@s.whatsapp.net`;
     }
 
     /**
-     * Set a command handler to be called when a command is received
+     * Set a command handler
      */
     onCommand(handler: (cmd: string) => Promise<void>) {
         this.commandHandlers.push(handler);
@@ -65,12 +125,11 @@ export class WhatsAppBridge {
             const outbound = channel.outbound || [];
             if (outbound.length === 0) return;
 
-            // Skip if already processing recently
             const now = Date.now();
             if (now - this.lastProcessedTimestamp < 5000) return;
             this.lastProcessedTimestamp = now;
 
-            console.log(`📤 [WhatsApp] Processing ${outbound.length} outbound messages from quantum channel...`);
+            console.log(`📤 [WhatsApp] Processing ${outbound.length} outbound messages...`);
 
             let messagesSent = 0;
             for (const msg of outbound) {
@@ -78,16 +137,16 @@ export class WhatsAppBridge {
                     const target = msg.to || this.phoneNumber;
                     const targetJID = this.getJID(target);
 
-                    console.log(`📱 [WhatsApp] Sending to ${targetJID}: "${msg.message.substring(0, 30)}..."`);
+                    console.log(`📱 [WhatsApp] Sending to ${targetJID}...`);
 
                     try {
                         await this.sock.sendMessage(targetJID, { text: msg.message });
-                        console.log(`✅ [WhatsApp] Message delivered to ${targetJID}`);
+                        console.log(`✅ [WhatsApp] Message delivered`);
                         msg.status = 'sent';
                         msg.sentAt = new Date().toISOString();
                         messagesSent++;
                     } catch (e: any) {
-                        console.error(`❌ [WhatsApp] Failed to send: ${e.message}`);
+                        console.error(`❌ [WhatsApp] Failed: ${e.message}`);
                         msg.status = 'failed';
                         msg.error = e.message;
                     }
@@ -95,44 +154,40 @@ export class WhatsAppBridge {
             }
 
             if (messagesSent > 0) {
-                // Update channel
                 channel.lastUpdated = new Date().toISOString();
                 fs.writeFileSync(QUANTUM_CHANNEL_PATH, JSON.stringify(channel, null, 2));
             }
 
         } catch (e: any) {
-            // Silent fail for channel processing
+            // Silent fail
         }
     }
 
     /**
-     * Initialize the direct WhatsApp connection
+     * Initialize the WhatsApp connection with exponential backoff
      */
     async start() {
-        console.log('⚡ [WhatsApp] Initializing WhatsApp Bridge...');
+        console.log('⚡ [WhatsApp] Initializing Bridge...');
 
-        // Try OpenClaw auth first, then fallback to local auth
-        let authPath = 'C:\\Users\\ferna\\.openclaw\\credentials\\whatsapp\\default';
-        let useOpenClawAuth = true;
-        
+        // Always use local auth for stability
+        this.currentAuthPath = path.join(process.cwd(), 'auth_info_baileys');
+
         try {
-            if (!fs.existsSync(authPath)) {
-                console.log('⚠️ [WhatsApp] OpenClaw credentials not found, using local auth');
-                useOpenClawAuth = false;
-                authPath = path.join(process.cwd(), 'auth_info_baileys');
+            if (!fs.existsSync(this.currentAuthPath)) {
+                fs.mkdirSync(this.currentAuthPath, { recursive: true });
+                console.log('📁 [WhatsApp] Created local auth directory');
             }
         } catch (e) {
-            useOpenClawAuth = false;
-            authPath = path.join(process.cwd(), 'auth_info_baileys');
+            console.error('❌ [WhatsApp] Failed to create auth dir:', e);
         }
 
-        console.log(`📁 [WhatsApp] Using auth from: ${authPath}`);
+        console.log(`📁 [WhatsApp] Using auth from: ${this.currentAuthPath}`);
 
         try {
-            const { state, saveCreds } = await useMultiFileAuthState(authPath);
+            const { state, saveCreds } = await useMultiFileAuthState(this.currentAuthPath);
             const { version, isLatest } = await fetchLatestBaileysVersion();
 
-            console.log(`📡 [WhatsApp] Using Baileys v${version.join('.')}, isLatest: ${isLatest}`);
+            console.log(`📡 [WhatsApp] Baileys v${version.join('.')}, isLatest: ${isLatest}`);
 
             this.sock = makeWASocket({
                 version,
@@ -150,26 +205,113 @@ export class WhatsAppBridge {
             this.sock.ev.on('connection.update', async (update: any) => {
                 const { connection, lastDisconnect, qr } = update;
 
+                // Log connection state changes
+                console.log(`📡 [WhatsApp] State: ${connection}`);
+
                 if (qr) {
-                    console.log('📟 [WhatsApp] Scan the QR code in the terminal');
+                    console.log('📟 [WhatsApp] Scan QR code in terminal');
                     const qrPath = path.join(process.cwd(), 'whatsapp_qr.png');
                     try {
                         await QRCode.toFile(qrPath, qr);
                         console.log(`🖼️ [WhatsApp] QR saved to: ${qrPath}`);
                     } catch (err) {
-                        console.error('❌ [WhatsApp] QR save failed:', err);
+                        console.error('❌ [WhatsApp] QR save failed');
                     }
                 }
 
                 if (connection === 'close') {
-                    const statusCode = (lastDisconnect?.error as any)?.output?.statusCode;
-                    const shouldReconnect = statusCode !== DisconnectReason.loggedOut;
-                    console.log(`📡 [WhatsApp] Connection closed (${statusCode}), reconnecting: ${shouldReconnect}`);
-                    if (shouldReconnect) this.start();
+                    // Extract status code from disconnect error
+                    const statusCode = (lastDisconnect?.error as any)?.statusCode ||
+                        (lastDisconnect?.error as any)?.output?.statusCode ||
+                        0;
+
+                    // Get human-readable disconnect reason
+                    const reasonName = DISCONNECT_REASONS[statusCode] || `Unknown (${statusCode})`;
+                    console.log(`📡 [WhatsApp] Disconnected: ${reasonName}`);
+
+                    // Log the actual error for debugging
+                    if (lastDisconnect?.error) {
+                        console.log(`📡 [WhatsApp] Error details: ${JSON.stringify(lastDisconnect.error)}`);
+                    }
+
+                    // Reset reconnect counter if connection was successful before
+                    if (this.isConnected) {
+                        this.reconnectAttempts = 0;
+                        this.reconnectDelay = 5000; // Faster reconnection initially
+                    }
+
+                    // Handle different disconnect reasons
+                    if (statusCode === DisconnectReason.loggedOut) {
+                        console.log('❌ [WhatsApp] Session logged out - please scan new QR');
+                        this.stopKeepalive();
+                        this.clearAuthFiles();
+                        this.isConnected = false;
+                        return;
+                    }
+
+                    // Handle connection lost - try to reconnect immediately
+                    if (statusCode === DisconnectReason.connectionLost) {
+                        console.log('🔄 [WhatsApp] Network issue detected - reconnecting...');
+                        this.stopKeepalive();
+                        setTimeout(() => this.start(), 2000);
+                        this.isConnected = false;
+                        return;
+                    }
+
+                    // Handle session expired - might need to refresh
+                    if (statusCode === DisconnectReason.restartRequired) {
+                        console.log('🔄 [WhatsApp] Restart required - reconnecting...');
+                        this.stopKeepalive();
+                        setTimeout(() => this.start(), 3000);
+                        this.isConnected = false;
+                        return;
+                    }
+
+                    // Handle connection replaced - wait longer before retry
+                    if (statusCode === DisconnectReason.connectionReplaced) {
+                        console.log('⚠️ [WhatsApp] Connection replaced by another session');
+                        console.log('💡 Tip: Close WhatsApp Web on other devices to maintain connection');
+                        this.stopKeepalive();
+                        // Wait longer since another session is active
+                        setTimeout(() => this.start(), 15000);
+                        this.isConnected = false;
+                        return;
+                    }
+
+                    // Handle bad session - clear and reconnect
+                    if (statusCode === DisconnectReason.badSession) {
+                        console.log('🔄 [WhatsApp] Bad session - clearing and reconnecting...');
+                        this.stopKeepalive();
+                        this.clearAuthFiles();
+                        setTimeout(() => this.start(), 3000);
+                        this.isConnected = false;
+                        return;
+                    }
+
+                    // Don't reconnect too frequently
+                    if (this.reconnectAttempts >= this.maxReconnectAttempts) {
+                        console.log('❌ [WhatsApp] Max reconnection attempts reached');
+                        this.stopKeepalive();
+                        this.isConnected = false;
+                        return;
+                    }
+
+                    this.reconnectAttempts++;
+                    const delay = Math.min(this.reconnectDelay * Math.pow(1.3, this.reconnectAttempts - 1), 60000);
+
+                    console.log(`🔄 [WhatsApp] Reconnecting in ${delay / 1000}s (attempt ${this.reconnectAttempts}/${this.maxReconnectAttempts})`);
+
+                    this.stopKeepalive();
+                    setTimeout(() => this.start(), delay);
                     this.isConnected = false;
+
                 } else if (connection === 'open') {
                     console.log('✅ [WhatsApp] Connected and ready');
                     this.isConnected = true;
+                    this.reconnectAttempts = 0;
+
+                    // Start keepalive ping
+                    this.startKeepalive();
                 }
             });
 
@@ -181,8 +323,7 @@ export class WhatsAppBridge {
 
                     const remoteJid = msg.key.remoteJid;
                     const body = msg.message.conversation ||
-                        msg.message.extendedTextMessage?.text ||
-                        '';
+                        msg.message.extendedTextMessage?.text || '';
 
                     if (!body) continue;
 
@@ -200,7 +341,6 @@ export class WhatsAppBridge {
                                 cleanCmd = body.substring(1).trim();
                             }
 
-                            console.log(`⚖️ [WhatsApp] Command: ${cleanCmd}`);
                             for (const handler of this.commandHandlers) {
                                 await handler(cleanCmd);
                             }
@@ -211,31 +351,49 @@ export class WhatsAppBridge {
 
             // Start quantum channel polling
             this.startQuantumPolling();
-            console.log('✅ [WhatsApp] Bridge initialized successfully');
+            console.log('✅ [WhatsApp] Bridge initialized');
 
         } catch (err: any) {
             console.error('❌ [WhatsApp] Failed to start:', err.message);
-            console.log('⚠️ [WhatsApp] Bridge will operate in degraded mode');
+            console.log('⚠️ [WhatsApp] Operating in degraded mode');
         }
     }
 
     /**
-     * Start polling quantum channel for outbound messages
+     * Clear authentication files
+     */
+    private clearAuthFiles() {
+        try {
+            if (fs.existsSync(this.currentAuthPath)) {
+                const files = fs.readdirSync(this.currentAuthPath);
+                for (const file of files) {
+                    const filePath = path.join(this.currentAuthPath, file);
+                    fs.unlinkSync(filePath);
+                    console.log(`🗑️ [WhatsApp] Deleted: ${file}`);
+                }
+            }
+        } catch (e) {
+            console.error('❌ [WhatsApp] Failed to clear auth:', e);
+        }
+    }
+
+    /**
+     * Start polling quantum channel
      */
     private startQuantumPolling() {
         setInterval(async () => {
             if (this.isConnected && this.sock) {
                 await this.processQuantumChannel();
             }
-        }, 3000); // Poll every 3 seconds
+        }, 5000); // Poll every 5 seconds
     }
 
     /**
-     * Send a notification to the user's phone directly
+     * Send a notification
      */
     async pushUpdate(message: string) {
         if (!this.isConnected || !this.sock) {
-            console.warn('⚠️ [WhatsApp] Bridge not connected. Notification queued locally (placeholder).');
+            console.warn('⚠️ [WhatsApp] Not connected. Message queued.');
             return;
         }
 
@@ -245,21 +403,32 @@ export class WhatsAppBridge {
         }
 
         const targetJID = this.getJID(this.phoneNumber);
-        console.log(`📡 [WhatsApp] Pushing Direct Update to ${targetJID}...`);
+        console.log(`📡 [WhatsApp] Sending to ${targetJID}...`);
 
         try {
             await this.sock.sendMessage(targetJID, { text: message });
-            console.log('   ✅ WhatsApp Notification Delivered.');
+            console.log('✅ [WhatsApp] Notification delivered.');
         } catch (e: any) {
-            console.error(`   ❌ WhatsApp Dispatch Failed: ${e.message}`);
+            console.error(`❌ [WhatsApp] Failed: ${e.message}`);
         }
     }
 
     /**
-     * Legacy method for the main loop
+     * Legacy method
      */
     async pollCommands(): Promise<string[]> {
         return [];
+    }
+
+    /**
+     * Get connection status
+     */
+    getStatus() {
+        return {
+            transport: 'whatsapp',
+            status: this.isConnected ? 'connected' : 'disconnected',
+            message: this.isConnected ? 'WhatsApp bridge active' : 'Reconnecting...'
+        };
     }
 }
 

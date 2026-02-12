@@ -83,17 +83,149 @@ export class MarketAnalyzer {
      * Fetch market data for watchlist
      */
     private async fetchMarketData(): Promise<void> {
-        // Simulated market data (in production, would fetch from APIs)
-        this.watchlist.forEach(asset => {
-            this.marketData.set(asset, {
-                asset,
-                price: Math.random() * 100 + 1,
-                volume: Math.random() * 1000000,
-                timestamp: new Date().toISOString(),
-                trends: this.generateTrends(),
-                signals: this.generateSignals()
-            });
-        });
+        console.log('📈 [MarketAnalyzer] Fetching REAL market data...');
+        
+        // Fetch from DexScreener for crypto
+        await this.fetchFromDexScreener();
+        
+        // Fetch from CoinGecko for broader market
+        await this.fetchFromCoinGecko();
+        
+        console.log(`📈 [MarketAnalyzer] Loaded ${this.marketData.size} real market data points`);
+    }
+
+    /**
+     * Fetch from DexScreener
+     */
+    private async fetchFromDexScreener(): Promise<void> {
+        try {
+            const response = await fetch('https://api.dexscreener.com/latest/dex/tokens');
+            if (response.ok) {
+                const data = await response.json();
+                
+                for (const pair of data.pairs || []) {
+                    const symbol = pair.baseToken.symbol;
+                    if (this.watchlist.includes(symbol)) {
+                        const trends = this.analyzeTrendsFromData(pair);
+                        
+                        this.marketData.set(symbol, {
+                            asset: symbol,
+                            price: parseFloat(pair.priceUsd) || 0,
+                            volume: parseFloat(pair.volume.h24) || 0,
+                            timestamp: new Date().toISOString(),
+                            trends,
+                            signals: this.generateSignalsFromData(pair)
+                        });
+                    }
+                }
+            }
+        } catch (error) {
+            console.log('📈 [MarketAnalyzer] ⚠️ DexScreener API unavailable');
+        }
+    }
+
+    /**
+     * Fetch from CoinGecko
+     */
+    private async fetchFromCoinGecko(): Promise<void> {
+        try {
+            const ids = ['solana', 'bitcoin', 'ethereum', 'raydium', 'bonk'];
+            const response = await fetch(
+                `https://api.coingecko.com/api/v3/simple/price?ids=${ids.join(',')}&vs_currencies=usd&include_24hr_change=true&include_24hr_vol=true`
+            );
+            if (response.ok) {
+                const data = await response.json();
+                
+                const symbolMap: Record<string, string> = {
+                    'solana': 'SOL',
+                    'bitcoin': 'BTC',
+                    'ethereum': 'ETH',
+                    'raydium': 'RAY',
+                    'bonk': 'BONK'
+                };
+                
+                for (const [id, priceData] of Object.entries(data)) {
+                    const symbol = symbolMap[id] || id.toUpperCase();
+                    if (this.watchlist.includes(symbol)) {
+                        const priceInfo = priceData as any;
+                        const trends = this.analyzeTrendsFromPriceData(priceInfo);
+                        
+                        this.marketData.set(symbol, {
+                            asset: symbol,
+                            price: priceInfo.usd || 0,
+                            volume: priceInfo.usd_24h_vol || 0,
+                            timestamp: new Date().toISOString(),
+                            trends,
+                            signals: this.generateSignalsFromPriceData(priceInfo)
+                        });
+                    }
+                }
+            }
+        } catch (error) {
+            console.log('📈 [MarketAnalyzer] ⚠️ CoinGecko API unavailable');
+        }
+    }
+
+    /**
+     * Analyze trends from DexScreener data
+     */
+    private analyzeTrendsFromData(pair: any): string[] {
+        const trends: string[] = [];
+        const change24h = parseFloat(pair.priceChange.h24) || 0;
+        
+        if (change24h > 10) trends.push('bullish', 'momentum');
+        else if (change24h > 3) trends.push('bullish');
+        else if (change24h < -10) trends.push('bearish', 'downtrend');
+        else if (change24h < -3) trends.push('bearish');
+        else trends.push('neutral', 'consolidating');
+        
+        return trends;
+    }
+
+    /**
+     * Analyze trends from price data
+     */
+    private analyzeTrendsFromPriceData(priceData: any): string[] {
+        const trends: string[] = [];
+        const change24h = priceData.usd_24h_change || 0;
+        
+        if (change24h > 5) trends.push('bullish');
+        else if (change24h > 2) trends.push('slightly_bullish');
+        else if (change24h < -5) trends.push('bearish');
+        else if (change24h < -2) trends.push('slightly_bearish');
+        else trends.push('neutral');
+        
+        return trends;
+    }
+
+    /**
+     * Generate signals from DexScreener data
+     */
+    private generateSignalsFromData(pair: any): string[] {
+        const signals: string[] = [];
+        const change24h = parseFloat(pair.priceChange.h24) || 0;
+        const liquidity = parseFloat(pair.liquidity.usd) || 0;
+        
+        if (change24h > 15 && liquidity > 100000) signals.push('BUY_STRONG');
+        else if (change24h > 5 && liquidity > 50000) signals.push('BUY');
+        else if (change24h < -15) signals.push('SELL');
+        else if (change24h < -5) signals.push('SELL_WEAK');
+        else signals.push('HOLD');
+        
+        return signals;
+    }
+
+    /**
+     * Generate signals from price data
+     */
+    private generateSignalsFromPriceData(priceData: any): string[] {
+        const change24h = priceData.usd_24h_change || 0;
+        
+        if (change24h > 10) return ['BUY', 'momentum'];
+        if (change24h > 3) return ['BUY', 'accumulate'];
+        if (change24h < -10) return ['SELL', 'stop_loss'];
+        if (change24h < -3) return ['SELL', 'caution'];
+        return ['HOLD', 'watch'];
     }
 
     /**
@@ -129,23 +261,7 @@ export class MarketAnalyzer {
         return result;
     }
 
-    /**
-     * Generate trends for asset
-     */
-    private generateTrends(): string[] {
-        const trends = ['neutral', 'bullish', 'bearish', 'consolidating'];
-        const selected = trends[Math.floor(Math.random() * trends.length)];
-        return [selected];
-    }
 
-    /**
-     * Generate signals for asset
-     */
-    private generateSignals(): string[] {
-        const signals = ['buy', 'sell', 'hold', 'watch'];
-        const selected = signals[Math.floor(Math.random() * signals.length)];
-        return [selected];
-    }
 
     /**
      * Generate analysis summary

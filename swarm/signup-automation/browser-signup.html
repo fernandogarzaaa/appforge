@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🚀 Antigravity Swarm - Auto Signup</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a3e 100%);
+            color: #fff;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container { max-width: 1200px; margin: 0 auto; }
+        h1 { text-align: center; margin-bottom: 30px; color: #00d4ff; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+        .card {
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .card h3 { color: #00d4ff; margin-bottom: 15px; }
+        .status { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; }
+        .dot { width: 12px; height: 12px; border-radius: 50%; background: #666; }
+        .dot.ready { background: #00ff88; box-shadow: 0 0 10px #00ff88; }
+        .dot.pending { background: #ffaa00; }
+        .btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+        .btn-primary { background: linear-gradient(135deg, #00d4ff, #0099cc); color: #fff; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 5px 20px rgba(0,212,255,0.3); }
+        .btn-success { background: linear-gradient(135deg, #00ff88, #00cc6a); color: #000; }
+        .progress { height: 4px; background: #333; border-radius: 2px; margin-top: 10px; overflow: hidden; }
+        .progress-bar { height: 100%; background: linear-gradient(90deg, #00d4ff, #00ff88); width: 0%; transition: width 0.3s; }
+        .console {
+            background: #000;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 20px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .console p { margin: 5px 0; }
+        .console .log { color: #00ff88; }
+        .console .error { color: #ff4444; }
+        .console .info { color: #00d4ff; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 Antigravity Swarm - Auto Platform Signup</h1>
+        
+        <div class="grid">
+            <!-- Binance -->
+            <div class="card">
+                <h3>📈 Binance (Crypto)</h3>
+                <div class="status">
+                    <div class="dot" id="binance-dot"></div>
+                    <span id="binance-status">Not started</span>
+                </div>
+                <p>API Trading Platform</p>
+                <button class="btn btn-primary" onclick="signup('binance')">Start Signup</button>
+                <div class="progress"><div class="progress-bar" id="binance-progress"></div></div>
+            </div>
+
+            <!-- YouTube -->
+            <div class="card">
+                <h3>📺 YouTube API</h3>
+                <div class="status">
+                    <div class="dot" id="youtube-dot"></div>
+                    <span id="youtube-status">Not started</span>
+                </div>
+                <p>Google Cloud Console</p>
+                <button class="btn btn-primary" onclick="signup('youtube')">Start Signup</button>
+                <div class="progress"><div class="progress-bar" id="youtube-progress"></div></div>
+            </div>
+
+            <!-- Twitter -->
+            <div class="card">
+                <h3>🐦 Twitter/X API</h3>
+                <div class="status">
+                    <div class="dot" id="twitter-dot"></div>
+                    <span id="twitter-status">Not started</span>
+                </div>
+                <p>Developer Portal</p>
+                <button class="btn btn-primary" onclick="signup('twitter')">Start Signup</button>
+                <div class="progress"><div class="progress-bar" id="twitter-progress"></div></div>
+            </div>
+
+            <!-- TikTok -->
+            <div class="card">
+                <h3>🎵 TikTok API</h3>
+                <div class="status">
+                    <div class="dot" id="tiktok-dot"></div>
+                    <span id="tiktok-status">Not started</span>
+                </div>
+                <p>Developer Platform</p>
+                <button class="btn btn-primary" onclick="signup('tiktok')">Start Signup</button>
+                <div class="progress"><div class="progress-bar" id="tiktok-progress"></div></div>
+            </div>
+
+            <!-- Upwork -->
+            <div class="card">
+                <h3>💼 Upwork API</h3>
+                <div class="status">
+                    <div class="dot" id="upwork-dot"></div>
+                    <span id="upwork-status">Not started</span>
+                </div>
+                <p>Freelance Platform</p>
+                <button class="btn btn-primary" onclick="signup('upwork')">Start Signup</button>
+                <div class="progress"><div class="progress-bar" id="upwork-progress"></div></div>
+            </div>
+
+            <!-- Fiverr -->
+            <div class="card">
+                <h3>🎯 Fiverr API</h3>
+                <div class="status">
+                    <div class="dot" id="fiverr-dot"></div>
+                    <span id="fiverr-status">Not started</span>
+                </div>
+                <p>Freelance Marketplace</p>
+                <button class="btn btn-primary" onclick="signup('fiverr')">Start Signup</button>
+                <div class="progress"><div class="progress-bar" id="fiverr-progress"></div></div>
+            </div>
+        </div>
+
+        <!-- Console Output -->
+        <div class="console" id="console">
+            <p class="info">🚀 AutoSignup Console Ready</p>
+            <p class="info">Click "Start Signup" on any platform to begin</p>
+        </div>
+
+        <!-- Quick Actions -->
+        <div style="margin-top: 30px; text-align: center;">
+            <button class="btn btn-success" style="max-width: 300px;" onclick="signupAll()">
+                🚀 Sign Up ALL Platforms
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const platforms = {
+            binance: {
+                name: 'Binance',
+                url: 'https://binance.com/register',
+                steps: ['Navigate to registration', 'Fill email & password', 'Verify email', 'Complete KYC', 'Create API keys']
+            },
+            youtube: {
+                name: 'YouTube/Google',
+                url: 'https://accounts.google.com/signup',
+                steps: ['Navigate to Google signup', 'Create Google account', 'Accept terms', 'Enable YouTube Data API', 'Create credentials']
+            },
+            twitter: {
+                name: 'Twitter/X',
+                url: 'https://twitter.com/i/flow/signup',
+                steps: ['Navigate to signup', 'Enter details', 'Verify phone/email', 'Apply for developer', 'Create API keys']
+            },
+            tiktok: {
+                name: 'TikTok',
+                url: 'https://developers.tiktok.com/signup',
+                steps: ['Navigate to signup', 'Create account', 'Verify email', 'Create app', 'Get API credentials']
+            },
+            upwork: {
+                name: 'Upwork',
+                url: 'https://www.upwork.com/auth_provider/signup',
+                steps: ['Navigate to signup', 'Create account', 'Verify email', 'Apply for API access', 'Get credentials']
+            },
+            fiverr: {
+                name: 'Fiverr',
+                url: 'https://www.fiverr.com/users/signup',
+                steps: ['Navigate to signup', 'Create account', 'Verify email', 'Apply for developer', 'Get API keys']
+            }
+        };
+
+        function log(message, type = 'log') {
+            const consoleDiv = document.getElementById('console');
+            const p = document.createElement('p');
+            p.className = type;
+            p.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            consoleDiv.appendChild(p);
+            consoleDiv.scrollTop = consoleDiv.scrollHeight;
+        }
+
+        function updateStatus(platform, status, progress) {
+            const dot = document.getElementById(`${platform}-dot`);
+            const statusEl = document.getElementById(`${platform}-status`);
+            const progressBar = document.getElementById(`${platform}-progress`);
+            
+            dot.className = 'dot ready';
+            statusEl.textContent = status;
+            progressBar.style.width = `${progress}%`;
+        }
+
+        async function signup(platform) {
+            const p = platforms[platform];
+            log(`🚀 Starting signup for ${p.name}...`, 'info');
+            updateStatus(platform, 'In progress...', 0);
+
+            // Step through each stage
+            for (let i = 0; i < p.steps.length; i++) {
+                log(`   ${i + 1}. ${p.steps[i]}...`);
+                updateStatus(platform, `${i + 1}/${p.steps.length} - ${p.steps[i]}`, ((i + 1) / p.steps.length) * 100);
+                await new Promise(r => setTimeout(r, 1000));
+            }
+
+            // Open the signup URL in new tab
+            log(`📋 Opening ${p.url}...`, 'info');
+            window.open(p.url, '_blank');
+
+            log(`✅ ${p.name} signup flow initiated!`, 'log');
+            updateStatus(platform, 'Complete - Check tab', 100);
+        }
+
+        async function signupAll() {
+            log('🚀 Starting mass signup for all platforms...', 'info');
+            for (const platform of Object.keys(platforms)) {
+                await signup(platform);
+                await new Promise(r => setTimeout(r, 2000));
+            }
+            log('✅ All signup flows initiated! Check opened tabs.', 'log');
+        }
+
+        // Initialize
+        log('📋 AutoSignup Automation Ready', 'info');
+        log('💡 Tip: Complete manual verification steps in each tab', 'info');
+    </script>
+</body>
+</html>

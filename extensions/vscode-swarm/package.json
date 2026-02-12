@@ -1,0 +1,157 @@
+{
+  "name": "appforge-swarm",
+  "displayName": "AppForge Swarm",
+  "description": "Private AI-powered coding assistant with autonomous agents",
+  "version": "1.0.0",
+  "publisher": "appforge",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Other",
+    "Machine Learning",
+    "SCM Providers"
+  ],
+  "activationEvents": [
+    "onCommand:appforgeSwarm.activate",
+    "onStartupFinished"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "appforgeSwarm.activate",
+        "title": "🧠 Activate Swarm",
+        "category": "AppForge"
+      },
+      {
+        "command": "appforgeSwarm.generateCode",
+        "title": "Generate Code",
+        "category": "AppForge"
+      },
+      {
+        "command": "appforgeSwarm.analyzeCode",
+        "title": "Analyze Code",
+        "category": "AppForge"
+      },
+      {
+        "command": "appforgeSwarm.runAgent",
+        "title": "Run Agent",
+        "category": "AppForge"
+      },
+      {
+        "command": "appforgeSwarm.chat",
+        "title": "Chat with Swarm",
+        "category": "AppForge"
+      },
+      {
+        "command": "appforgeSwarm.deploy",
+        "title": "Deploy to Solana",
+        "category": "AppForge"
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "command": "appforgeSwarm.generateCode",
+          "when": "editor.hasSelection",
+          "group": "navigation"
+        },
+        {
+          "command": "appforgeSwarm.analyzeCode",
+          "when": "editor.hasSelection",
+          "group": "navigation"
+        }
+      ],
+      "commandPalette": [
+        {
+          "command": "appforgeSwarm.activate",
+          "when": "false"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "AppForge Swarm",
+      "properties": {
+        "appforgeSwarm.apiKey": {
+          "type": "string",
+          "description": "OpenAI API Key for Swarm intelligence"
+        },
+        "appforgeSwarm.primaryModel": {
+          "type": "string",
+          "enum": ["gpt-4o", "claude-sonnet-4", "gemini-2.0"],
+          "default": "gpt-4o",
+          "description": "Primary LLM model to use"
+        },
+        "appforgeSwarm.localModel": {
+          "type": "string",
+          "enum": ["ollama", "llamacpp", "none"],
+          "default": "ollama",
+          "description": "Local model provider for offline mode"
+        },
+        "appforgeSwarm.autoActivate": {
+          "type": "boolean",
+          "default": true,
+          "description": "Automatically activate Swarm on workspace open"
+        },
+        "appforgeSwarm.agents": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "CryptoSwarm",
+              "RevenueHunter",
+              "FreelanceSwarm",
+              "GodMode",
+              "TrendAnalyzer",
+              "MarketAnalyzer",
+              "CodeGenerator"
+            ]
+          },
+          "default": ["CryptoSwarm", "GodMode", "CodeGenerator"],
+          "description": "Active swarm agents"
+        }
+      }
+    },
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "appforge-swarm",
+          "title": "AppForge Swarm",
+          "icon": "resources/swarm-icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "appforge-swarm": [
+        {
+          "type": "webview",
+          "id": "appforgeSwarm.dashboard",
+          "name": "Dashboard"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "node ./out/test/runTest.js"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.85.0",
+    "@types/node": "18.x",
+    "@typescript-eslint/eslint-plugin": "^6.19.1",
+    "@typescript-eslint/parser": "^6.19.1",
+    "eslint": "^8.56.0",
+    "glob": "^8.1.0",
+    "mocha": "^10.3.0",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "axios": "^1.6.7",
+    "ws": "^8.16.0"
+  }
+}

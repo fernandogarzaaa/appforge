@@ -33,7 +33,7 @@ export class RevenueHunter {
     private base44: Base44Tool;
     private revenueHistory: RevenueOpportunity[];
     private stats: PaymentStats;
-    private solanaAddress: string = 'DFrYV3rd6hNdT3jmQ5Z3Xx1Nm3Gmr4JZ2x6zN1Xyj3B4'; // Main wallet
+    private solanaAddress: string = process.env.SOLANA_WALLET_ADDRESS || 'DFrYV3rd6hNdT3jmQ5Z3Xx1Nm3Gmr4JZ2x6zN1Xyj3B4'; // Main wallet from .env.local
     private dataDir: string;
 
     constructor(base44: Base44Tool) {

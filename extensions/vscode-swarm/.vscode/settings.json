@@ -1,0 +1,13 @@
+{
+  "files.exclude": {
+    "out": false,
+    "dist": false,
+    "src": false,
+    "**/*.vsix": false
+  },
+  "search.exclude": {
+    "out": true,
+    "dist": true
+  },
+  "typescript.preferences.importModuleSpecifier": "non-relative"
+}

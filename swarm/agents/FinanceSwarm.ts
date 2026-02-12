@@ -13,6 +13,7 @@ import { FileSystemTool } from '../tools/filesystem.js';
 import quantumCore from '../core/quantum_core.js';
 import fs from 'fs';
 import path from 'path';
+import crypto from 'crypto';
 
 interface Trade {
     id: string;
@@ -50,18 +51,44 @@ interface TradeSignal {
     reasoning: string;
 }
 
+// Simple base58 encoding for Solana-like addresses
+function base58Encode(buffer: Buffer): string {
+    const alphabet = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
+    let result = '';
+    let num = BigInt('0x' + buffer.toString('hex'));
+    
+    while (num > 0n) {
+        const remainder = Number(num % 58n);
+        result = alphabet[remainder] + result;
+        num = num / 58n;
+    }
+    
+    // Handle leading zeros
+    for (const byte of buffer) {
+        if (byte === 0) {
+            result = '1' + result;
+        } else {
+            break;
+        }
+    }
+    
+    return result || '1';
+}
+
 export class FinanceSwarm {
     private base44: Base44Tool;
     private fsTool: FileSystemTool;
-    private portfolio: Portfolio;
+    private portfolio!: Portfolio;
     private dataDir: string;
-    private walletAddress: string = 'DFrYV3rd6hNdT3jmQ5Z3Xx1Nm3Gmr4JZ2x6zN1Xyj3B4';
+    private walletAddress!: string;
+    private privateKey!: string;
+    private keypairPath: string;
     
     // Risk management settings
-    private minConfidence: number = 50; // Lower threshold for more trades
-    private maxPositionSize: number = 0.05; // Max 5% per trade
-    private stopLossPercent: number = 0.05; // 5% stop loss
-    private takeProfitPercent: number = 0.15; // 15% take profit
+    private minConfidence: number = 50;
+    private maxPositionSize: number = 0.05;
+    private stopLossPercent: number = 0.05;
+    private takeProfitPercent: number = 0.15;
     
     // Trading pairs
     private pairs: string[] = [
@@ -75,8 +102,20 @@ export class FinanceSwarm {
     constructor(base44: Base44Tool, fsTool: FileSystemTool) {
         this.base44 = base44;
         this.fsTool = fsTool;
+        this.dataDir = path.join(process.cwd(), 'swarm', 'data');
+        this.keypairPath = path.join(this.dataDir, 'finance_wallet.json');
+        
+        // Initialize data directory
+        if (!fs.existsSync(this.dataDir)) {
+            fs.mkdirSync(this.dataDir, { recursive: true });
+        }
+        
+        // Initialize wallet
+        this.initializeWallet();
+        
+        // Initialize portfolio
         this.portfolio = {
-            solBalance: 0.1, // Starting with 0.1 SOL
+            solBalance: 0.1,
             usdcBalance: 0,
             positions: [],
             totalTrades: 0,
@@ -84,13 +123,37 @@ export class FinanceSwarm {
             totalPnl: 0,
             winRate: 0
         };
-        this.dataDir = path.join(process.cwd(), 'swarm', 'data');
-        
-        if (!fs.existsSync(this.dataDir)) {
-            fs.mkdirSync(this.dataDir, { recursive: true });
-        }
         
         this.loadPortfolio();
+    }
+    
+    private initializeWallet(): void {
+        const revenueHunterWallet = 'DFrYV3rd6hNdT3jmQ5Z3Xx1Nm3Gmr4JZ2x6zN1Xyj3B4';
+        
+        if (fs.existsSync(this.keypairPath)) {
+            const walletData = JSON.parse(fs.readFileSync(this.keypairPath, 'utf8'));
+            this.walletAddress = walletData.publicKey;
+            this.privateKey = walletData.privateKey;
+            console.log('[FinanceSwarm] Loaded wallet: ' + this.walletAddress);
+        } else {
+            // Generate new trading wallet
+            const privateKeyBytes = crypto.randomBytes(32);
+            this.walletAddress = base58Encode(privateKeyBytes);
+            this.privateKey = '[' + base58Encode(privateKeyBytes) + ']';
+            
+            fs.writeFileSync(this.keypairPath, JSON.stringify({
+                publicKey: this.walletAddress,
+                privateKey: this.privateKey,
+                createdAt: new Date().toISOString(),
+                type: 'FinanceSwarmTradingWallet'
+            }, null, 2));
+            
+            console.log('[FinanceSwarm] 🎉 NEW TRADING WALLET CREATED: ' + this.walletAddress);
+            console.log('[FinanceSwarm] 💰 Key saved to: ' + this.keypairPath);
+            console.log('[FinanceSwarm] ⚠️ BACKUP YOUR KEY: ' + this.privateKey);
+        }
+        
+        console.log('[FinanceSwarm] RevenueHunter wallet: ' + revenueHunterWallet);
     }
 
     async run(): Promise<{ status: string; portfolio: Portfolio; tradesExecuted: number }> {
@@ -136,11 +199,8 @@ export class FinanceSwarm {
             const pair = this.pairs[Math.floor(Math.random() * this.pairs.length)];
             
             const oracleResult = await quantumCore.consultOracle(
-                'Analyze ' + pair + ' price. Give a specific BUY or SELL recommendation with reasoning:',
-                [
-                    'BUY ' + pair + ' - Strong buy signal, technical indicators bullish, RSI oversold',
-                    'SELL ' + pair + ' - Overbought conditions, resistance level, bearish divergence'
-                ],
+                'Analyze ' + pair + ' price. Give a specific BUY or SELL recommendation:',
+                ['BUY ' + pair + ' - Technical indicators bullish', 'SELL ' + pair + ' - Overbought conditions'],
                 ['profit_potential', 'risk_level', 'timing']
             );
 
@@ -156,7 +216,7 @@ export class FinanceSwarm {
                 entryZone: { min: basePrice * 0.99, max: basePrice * 1.01 },
                 takeProfit: basePrice * (direction === 'buy' ? 1.15 : 0.85),
                 stopLoss: basePrice * (direction === 'buy' ? 0.95 : 1.05),
-                confidence: 50 + Math.floor(Math.random() * 40), // 50-90%
+                confidence: 50 + Math.floor(Math.random() * 40),
                 reasoning: recommendation
             };
 
@@ -319,13 +379,13 @@ Open Pos:    ${openPositions}
 
 Performance:
   Trades:       ${this.portfolio.totalTrades}
-  Wins:        ${this.portfolio.winningTrades}
-  Win Rate:    ${winRate}%
-  Avg PnL:     ${avgPnl} SOL
+  Wins:         ${this.portfolio.winningTrades}
+  Win Rate:     ${winRate}%
+  Avg PnL:      ${avgPnl} SOL
 
 Risk Control:
   Max Position: ${(this.maxPositionSize * 100).toFixed(0)}%
-  Stop Loss:    ${(this.stopLossPercent * 100).toFixed(0)}%
+  Stop Loss:     ${(this.stopLossPercent * 100).toFixed(0)}%
   Take Profit:  ${(this.takeProfitPercent * 100).toFixed(0)}%
 ================================
         `.trim();

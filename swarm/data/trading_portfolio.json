@@ -1,5 +1,5 @@
 {
-  "solBalance": 0.0969,
+  "solBalance": 0.05989999999999999,
   "usdcBalance": 0,
   "positions": [
     {
@@ -12,6 +12,149 @@
       "confidence": 61,
       "timestamp": "2026-02-11T17:14:23.759Z",
       "reason": "BUY JUP/USDC - Strong buy signal, technical indicators bullish, RSI oversold"
+    },
+    {
+      "id": "trade_1770831879238",
+      "pair": "JUP/USDC",
+      "direction": "LONG",
+      "entryPrice": 0.85,
+      "size": 0.0035,
+      "status": "open",
+      "confidence": 73,
+      "timestamp": "2026-02-11T17:44:39.238Z",
+      "reason": "BUY JUP/USDC - Technical indicators bullish"
+    },
+    {
+      "id": "trade_1770834962615",
+      "pair": "JUP/USDC",
+      "direction": "LONG",
+      "entryPrice": 0.85,
+      "size": 0.0036,
+      "status": "open",
+      "confidence": 78,
+      "timestamp": "2026-02-11T18:36:02.615Z",
+      "reason": "BUY JUP/USDC - Technical indicators bullish"
+    },
+    {
+      "id": "trade_1770836219120",
+      "pair": "JUP/USDC",
+      "direction": "LONG",
+      "entryPrice": 0.85,
+      "size": 0.0027,
+      "status": "open",
+      "confidence": 60,
+      "timestamp": "2026-02-11T18:56:59.120Z",
+      "reason": "BUY JUP/USDC - Technical indicators bullish"
+    },
+    {
+      "id": "trade_1770836227568",
+      "pair": "SOL/USDC",
+      "direction": "LONG",
+      "entryPrice": 98.5,
+      "size": 0.0034,
+      "status": "open",
+      "confidence": 77,
+      "timestamp": "2026-02-11T18:57:07.568Z",
+      "reason": "BUY SOL/USDC - Technical indicators bullish"
+    },
+    {
+      "id": "trade_1770836244077",
+      "pair": "BONK/USDC",
+      "direction": "LONG",
+      "entryPrice": 0.0000125,
+      "size": 0.0026,
+      "status": "open",
+      "confidence": 62,
+      "timestamp": "2026-02-11T18:57:24.077Z",
+      "reason": "BUY BONK/USDC - Technical indicators bullish"
+    },
+    {
+      "id": "trade_1770836285496",
+      "pair": "JUP/USDC",
+      "direction": "LONG",
+      "entryPrice": 0.85,
+      "size": 0.0028,
+      "status": "open",
+      "confidence": 70,
+      "timestamp": "2026-02-11T18:58:05.496Z",
+      "reason": "BUY JUP/USDC - Technical indicators bullish"
+    },
+    {
+      "id": "trade_1770836289058",
+      "pair": "BTC/USDC",
+      "direction": "LONG",
+      "entryPrice": 43250,
+      "size": 0.0029,
+      "status": "open",
+      "confidence": 73,
+      "timestamp": "2026-02-11T18:58:09.058Z",
+      "reason": "BUY BTC/USDC - Technical indicators bullish"
+    },
+    {
+      "id": "trade_1770836320861",
+      "pair": "BONK/USDC",
+      "direction": "LONG",
+      "entryPrice": 0.0000125,
+      "size": 0.0021,
+      "status": "open",
+      "confidence": 57,
+      "timestamp": "2026-02-11T18:58:40.861Z",
+      "reason": "BUY BONK/USDC - Technical indicators bullish"
+    },
+    {
+      "id": "trade_1770836339665",
+      "pair": "JUP/USDC",
+      "direction": "LONG",
+      "entryPrice": 0.85,
+      "size": 0.0033,
+      "status": "open",
+      "confidence": 89,
+      "timestamp": "2026-02-11T18:58:59.665Z",
+      "reason": "BUY JUP/USDC - Technical indicators bullish"
+    },
+    {
+      "id": "trade_1770836353334",
+      "pair": "BTC/USDC",
+      "direction": "LONG",
+      "entryPrice": 43250,
+      "size": 0.003,
+      "status": "open",
+      "confidence": 86,
+      "timestamp": "2026-02-11T18:59:13.334Z",
+      "reason": "BUY BTC/USDC - Technical indicators bullish"
+    },
+    {
+      "id": "trade_1770837304776",
+      "pair": "SOL/USDC",
+      "direction": "LONG",
+      "entryPrice": 98.5,
+      "size": 0.0028,
+      "status": "open",
+      "confidence": 84,
+      "timestamp": "2026-02-11T19:15:04.776Z",
+      "reason": "BUY SOL/USDC - Technical indicators bullish"
+    },
+    {
+      "id": "trade_1770837573224",
+      "pair": "JUP/USDC",
+      "direction": "LONG",
+      "entryPrice": 0.85,
+      "size": 0.0025,
+      "status": "open",
+      "confidence": 78,
+      "timestamp": "2026-02-11T19:19:33.224Z",
+      "reason": "BUY JUP/USDC - Technical indicators bullish"
+    },
+    {
+      "id": "trade_1770837663879",
+      "pair": "SOL/USDC",
+      "direction": "LONG",
+      "entryPrice": 98.5,
+      "size": 0.0018,
+      "status": "open",
+      "confidence": 57,
+      "timestamp": "2026-02-11T19:21:03.879Z",
+      "reason": "BUY SOL/USDC - Technical indicators bullish"
     }
   ],
   "totalTrades": 0,

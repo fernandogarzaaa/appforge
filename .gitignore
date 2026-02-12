@@ -128,3 +128,4 @@ docker-compose.override.yml
 !QuantumEnginePortable.js
 
 swarm/core/quantum_bridge/target/
+whatsapp_qr.png

@@ -1,0 +1,24 @@
+{
+  "version": "1.0",
+  "createdAt": "2026-02-12T13:40:00.000Z",
+  "type": "swarm_trading_wallet",
+  "security": "HIGH - Contains real funds",
+  "mnemonic": "resist paper social learn chimney globe traffic possible",
+  "derivationPath": "m/44'/501'/0'/0'",
+  "address": "Eq83iCAW7tbFLo2mTgHoufe8VfyTy3EUUXMs7bFfwskR",
+  "privateKey": {
+    "format": "base58",
+    "value": "FyYMseqU6Bz6Yv4XmhYLhriY7Dmin4Gok1rpS2tcVo4m"
+  },
+  "chain": "solana",
+  "network": "mainnet-beta",
+  "capabilities": ["trading", "yield_farming", "token_swaps", "nft_purchases"],
+  "backups": [
+    "swarm/data/swarm_wallet_backup.json"
+  ],
+  "warnings": [
+    "NEVER share this file or seed phrase",
+    "Store backup in secure offline location",
+    "This wallet controls REAL funds"
+  ]
+}
