@@ -7,7 +7,7 @@ import QuantumEngine from '../universal_quantum_dist/index.js';
 
 // ⚡ SERVER CONFIGURATION
 const PORT = process.env.PORT || 3000;
-const TREASURY_WALLET = "2ZeBAFtHq5vNThXMjbZ7E59Msgv6xPpBFn7cw4KMxmot";
+const TREASURY_WALLET = "CT1Ud6MvZ4NeACuF1x1EsnGpynLW6s7dWCx7C2LXJwsJ";
 const PRICE_USDC = 80000;
 const USDC_MINT = "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v";
 

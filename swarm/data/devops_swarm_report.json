@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-02-12T17:24:52.108Z",
+  "timestamp": "2026-02-12T23:55:48.962Z",
   "checks": [
     {
       "name": "ci_workflows",
@@ -13,8 +13,8 @@
     },
     {
       "name": "qa_gate",
-      "status": "healthy",
-      "details": "QA gate passed=true (4 passed / 0 failed)"
+      "status": "warning",
+      "details": "No QA gate report available yet"
     }
   ],
   "action": {

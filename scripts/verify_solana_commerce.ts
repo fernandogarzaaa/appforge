@@ -1,7 +1,7 @@
 
 import fs from 'fs';
 
-const EXPECTED_WALLET = "2ZeBAFtHq5vNThXMjbZ7E59Msgv6xPpBFn7cw4KMxmot";
+const EXPECTED_WALLET = "CT1Ud6MvZ4NeACuF1x1EsnGpynLW6s7dWCx7C2LXJwsJ";
 
 async function verifySolanaSetup() {
     console.log('🔍 VERIFYING: Solana Subscription Setup...');

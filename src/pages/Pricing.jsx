@@ -17,6 +17,15 @@ export default function PricingPage() {
     // Load plans from centralized config
     const productionPlans = getAllPlans().sort((a, b) => (a.tier_level || 0) - (b.tier_level || 0));
     setPlans(productionPlans);
+    
+    // Check for plan in URL
+    const params = new URLSearchParams(window.location.search);
+    const planId = params.get('plan');
+    if (planId) {
+      const plan = productionPlans.find(p => p.id === planId);
+      if (plan) setSelectedPlan(plan);
+    }
+    
     setIsLoading(false);
   }, []);
 

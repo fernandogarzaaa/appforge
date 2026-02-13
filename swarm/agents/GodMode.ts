@@ -48,7 +48,7 @@ export class GodModeAgent {
         this.base44 = base44;
         this.fs = fs;
         this.swarmRegistry = new Map();
-        
+
         this.proposedSwarms = [
             {
                 name: 'AIAgentsSwarm',
@@ -162,14 +162,14 @@ export class GodModeAgent {
 
             // Step 4: Create new swarms if approved
             const newSwarms: string[] = [];
-            
+
             if (creationDecision.shouldCreate && creationDecision.confidence > 0.7) {
                 const template = creationDecision.recommendedSwarm;
                 if (template) {
                     console.log('\n🚀 [GodMode] Creating new swarm: ' + template.name);
-                    
+
                     const result = await this.createSwarm(template);
-                    
+
                     if (result.success) {
                         newSwarms.push(result.swarmName);
                         console.log('   ✅ Created: ' + result.swarmName);
@@ -196,7 +196,7 @@ export class GodModeAgent {
             }
 
             // Step 6: Log to Base44
-            await this.base44.logActivity('GOD_MODE_CYCLE', 
+            await this.base44.logActivity('GOD_MODE_CYCLE',
                 JSON.stringify({ assessment: swarmAssessment, oracle: oracleResult, decision: creationDecision, created: newSwarms }));
 
             return {
@@ -210,8 +210,8 @@ export class GodModeAgent {
 
         } catch (error: any) {
             console.warn('   ⚠️ GodMode quantum fallback');
-            return { 
-                status: 'quantum_offline', 
+            return {
+                status: 'quantum_offline',
                 swarm_assessment: null,
                 creation_decision: null,
                 new_swarms_created: [],
@@ -251,8 +251,8 @@ export class GodModeAgent {
         underperformers: string[];
     }> {
         const swarms = Array.from(this.swarmRegistry.values());
-        const avgSuccess = swarms.length > 0 
-            ? swarms.reduce((sum, s) => sum + s.successRate, 0) / swarms.length 
+        const avgSuccess = swarms.length > 0
+            ? swarms.reduce((sum, s) => sum + s.successRate, 0) / swarms.length
             : 0;
         const totalRev = swarms.reduce((sum, s) => sum + s.revenue, 0);
         const sorted = [...swarms].sort((a, b) => b.successRate - a.successRate);
@@ -282,23 +282,16 @@ export class GodModeAgent {
         // Check for highest priority template not yet created
         const availableTemplates = this.proposedSwarms.filter(
             t => !this.swarmRegistry.has(t.name)
-        ).sort((a, b) => a.priority - b.priority);
+        ).sort((a, b) => b.revenuePotential - a.revenuePotential); // Prioritize REVENUE
 
         if (availableTemplates.length > 0) {
             const template = availableTemplates[0];
-            reasons.push(template.name + ' is ready for creation - Revenue potential: $' + template.revenuePotential);
-            
-            // Additional reasons based on assessment
-            if (assessment.averageSuccessRate < 0.75) {
-                reasons.push('Current swarms underperforming - new high-potential swarm needed');
-            }
-            if (assessment.totalSwarms < 15) {
-                reasons.push('Swarm ecosystem incomplete - need more diversity');
-            }
-            
-            // High confidence if revenue potential is high
-            const confidence = template.revenuePotential > 20000 ? 0.9 : 0.75;
-            
+            reasons.push(`[PROLIFERATION] ${template.name} targeted for expansion.`);
+            reasons.push(`Directive alpha: ${template.revenuePotential} USDC estimated daily yield.`);
+
+            // Sovereignty override: Aggressive creation if rent is due
+            const confidence = 0.95;
+
             return {
                 shouldCreate: true,
                 recommendedSwarm: template,
@@ -310,8 +303,8 @@ export class GodModeAgent {
         return {
             shouldCreate: false,
             recommendedSwarm: null,
-            reasoning: ['All templates already created'],
-            confidence: 0.5
+            reasoning: ['Ecosystem at maximum capacity. Optimizing existing nodes.'],
+            confidence: 1.0
         };
     }
 
@@ -378,12 +371,12 @@ export class GodModeAgent {
      */
     private generateSwarmAgent(template: SwarmTemplate): string {
         const className = template.name.replace('Swarm', '');
-        
+
         // Get API configuration
         const apiConfig = this.getAPIConfig(template.name);
         const icon = apiConfig.icon;
         const apis = apiConfig.apis.join(', ');
-        
+
         // Build the agent code
         const code = `/**
  * ${template.name}
@@ -489,16 +482,16 @@ export class ${className} {
 
 export default ${className};
 `;
-        
+
         return code;
     }
 
     /**
      * Get API configuration for swarm type
      */
-    private getAPIConfig(swarmName: string): { 
-        icon: string; 
-        apis: string[]; 
+    private getAPIConfig(swarmName: string): {
+        icon: string;
+        apis: string[];
         endpoints: string[];
         revenueFactor: number;
     } {
@@ -540,7 +533,7 @@ export default ${className};
                 revenueFactor: 5.0
             }
         };
-        
+
         return configs[swarmName] || {
             icon: '📊',
             apis: ['Real API sources'],

@@ -1,0 +1,86 @@
+{
+  "generatedAt": "2026-02-12T23:55:47.546Z",
+  "profile": "strict",
+  "overall": {
+    "score": 97.5,
+    "threshold": 90,
+    "passed": false,
+    "verdict": "DEVELOPING",
+    "trueHyperIntelligence": false
+  },
+  "dimensions": [
+    {
+      "name": "reasoning",
+      "score": 100,
+      "threshold": 80,
+      "passed": true,
+      "durationMs": 36.89,
+      "details": {
+        "directTasks": 8,
+        "directAccuracy": 100,
+        "adversarialTasks": 8,
+        "adversarialAccuracy": 100,
+        "avgConfidence": 93.32,
+        "failures": []
+      }
+    },
+    {
+      "name": "planning",
+      "score": 100,
+      "threshold": 90,
+      "passed": true,
+      "durationMs": 170.47,
+      "details": {
+        "checksPassed": "8/8",
+        "statusesCount": 4,
+        "godMessages": 2,
+        "financeMessages": 1,
+        "cryptoMessages": 1
+      }
+    },
+    {
+      "name": "coding",
+      "score": 100,
+      "threshold": 90,
+      "passed": true,
+      "durationMs": 13893.94,
+      "details": {
+        "filesChecked": 10,
+        "filesPassed": 10,
+        "failingFiles": []
+      }
+    },
+    {
+      "name": "autonomy",
+      "score": 83.33,
+      "threshold": 90,
+      "passed": false,
+      "durationMs": 343.02,
+      "details": {
+        "checksPassed": "5/6",
+        "callbackHits": 8,
+        "pendingSignalsForBenchAgentB": 2,
+        "totalSignals": 4
+      }
+    },
+    {
+      "name": "reliability",
+      "score": 100,
+      "threshold": 95,
+      "passed": true,
+      "durationMs": 3373.17,
+      "details": {
+        "operations": 70,
+        "success": 70,
+        "failures": 0,
+        "avgLatencyMs": 47.29,
+        "p95LatencyMs": 204.04
+      }
+    }
+  ],
+  "benchmarkDurationMs": 17817.49,
+  "notes": [
+    "This suite is local and reproducible; it does not claim scientific AGI certification.",
+    "Reasoning includes adversarial tasks to avoid keyword-only inflation."
+  ]
+}

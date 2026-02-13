@@ -3,7 +3,7 @@ import { Connection, PublicKey } from '@solana/web3.js';
 import QuantumEngine from '../universal_quantum_dist/index.js';
 
 // 🏦 QUANTUM TREASURY CONFIGURATION
-const TREASURY_WALLET = "2ZeBAFtHq5vNThXMjbZ7E59Msgv6xPpBFn7cw4KMxmot";
+const TREASURY_WALLET = "CT1Ud6MvZ4NeACuF1x1EsnGpynLW6s7dWCx7C2LXJwsJ";
 const PRICE_USDC = 80000;
 const SUBSCRIPTION_PERIOD = "Monthly";
 const MOONPAY_API_KEY = "pk_test_12345";

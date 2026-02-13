@@ -15,66 +15,96 @@ export class BugHunterAgent {
         this.llm = new MultiLLMClient(base44);
     }
 
-    async run() {
+    async run(directive?: string, scope?: string[]) {
         console.log('🐞 BugHunter scanning code...');
+        const targetDirective = directive || 'Critical runtime errors and logic bugs in core features';
 
         try {
-            // Consult Oracle for bug hunting strategy
-            const oracleResult = await quantumCore.consultOracle(
-                'What type of bugs should BugHunter prioritize?',
-                [
-                    'Critical runtime errors and crashes',
-                    'Memory leaks and performance issues',
-                    'Type errors and null pointer exceptions',
-                    'Logic bugs in core business features'
-                ],
-                ['severity', 'frequency', 'user_impact']
-            );
+            // Consult Oracle for bug hunting strategy if no specific directive is provided
+            let oracleGuidance = targetDirective;
+            if (!directive) {
+                const oracleResult = await quantumCore.consultOracle(
+                    'What type of bugs should BugHunter prioritize?',
+                    [
+                        'Critical runtime errors and crashes',
+                        'Memory leaks and performance issues',
+                        'Type errors and null pointer exceptions',
+                        'Logic bugs in core business features'
+                    ],
+                    ['severity', 'frequency', 'user_impact']
+                );
+                oracleGuidance = oracleResult.recommendation;
+                console.log(`   🔮 Oracle Guidance: ${oracleGuidance}`);
+                console.log(`   📊 Confidence: ${(oracleResult.confidence * 100).toFixed(1)}%`);
+            } else {
+                console.log(`   🎯 Mission Directive: ${targetDirective}`);
+            }
 
-            console.log(`   🔮 Oracle Guidance: ${oracleResult.recommendation}`);
-            console.log(`   📊 Confidence: ${(oracleResult.confidence * 100).toFixed(1)}%`);
-
-            const allFiles = await this.fs.listFiles('src/**/*.js');
-            // Filter out polyfills.js as it is now stabilized under Sovereign Directive
-            const files = allFiles.filter(f => !f.includes('polyfills.js'));
+            // Determine files to scan
+            let files: string[] = [];
+            if (scope && scope.length > 0) {
+                files = scope;
+                console.log(`   📂 Target Scope: ${files.join(', ')}`);
+            } else {
+                const allFiles = await this.fs.listFiles('**/*.{js,jsx,ts,tsx}');
+                // Filter out non-source and stabilized files
+                files = allFiles.filter(f =>
+                    !f.includes('polyfills.js') &&
+                    !f.includes('node_modules') &&
+                    !f.includes('.git') &&
+                    !f.includes('dist')
+                );
+            }
 
             const issues = [];
             let proposedFix = null;
 
-            // Analyze with Oracle-guided focus (Pick a random file to avoid loops)
-            if (files.length > 0) {
-                const sampleFile = files[Math.floor(Math.random() * files.length)];
-                const content = await this.fs.readFile(sampleFile);
+            // Analyze target files
+            const maxFilesToAnalyze = scope ? files.length : 5;
+            const targetFiles = scope ? files : files.sort(() => 0.5 - Math.random()).slice(0, maxFilesToAnalyze);
 
-                const analysis = await this.llm.chat({
-                    system: `You are a QA Engineer focusing on: ${oracleResult.recommendation}. If you find a bug, propose a specific fix in JSON format (e.g., { "fix_type": "patch", "file": "${sampleFile}", "original": "...", "replacement": "..." }) within the text.`,
-                    user: `File: ${sampleFile}\n\nCode:\n${content.substring(0, 1000)}`
-                });
+            for (const sampleFile of targetFiles) {
+                try {
+                    const content = await this.fs.readFile(sampleFile);
+                    console.log(`   🔍 Analyzing: ${sampleFile}`);
 
-                // Extract fix
-                if (analysis.includes('{') && analysis.includes('fix_type')) {
-                    try {
-                        const jsonMatch = analysis.match(/\{[\s\S]*\}/);
-                        if (jsonMatch) proposedFix = JSON.parse(jsonMatch[0]);
-                    } catch (e) { /* ignore parse errors */ }
-                }
-            }
+                    const analysis = await this.llm.chat({
+                        system: `You are a QA Engineer focusing on: ${oracleGuidance}. 
+                        Your mission goal: ${targetDirective}.
+                        If you find a bug or improvement, propose a specific fix in JSON format: 
+                        { "fix_type": "patch", "file": "${sampleFile}", "original": "...", "replacement": "...", "explanation": "..." }`,
+                        user: `File: ${sampleFile}\n\nCode snippet:\n${content.substring(0, 2000)}`
+                    });
 
-            // Secondary check: search for TODOs in a few other files
-            const extraFiles = files.sort(() => 0.5 - Math.random()).slice(0, 5);
-            for (const file of extraFiles) {
-                const content = await this.fs.readFile(file);
-                if (content.includes('TODO')) {
-                    issues.push({ file, type: 'TODO found' });
+                    // Extract fix
+                    if (analysis.includes('{') && analysis.includes('fix_type')) {
+                        const jsonMatch = analysis.match(/\{[\s\S]*?\}/);
+                        if (jsonMatch) {
+                            try {
+                                const parsed = JSON.parse(jsonMatch[0]);
+                                proposedFix = parsed;
+                                console.log(`   ✅ Proposed fix for ${sampleFile}: ${parsed.explanation || 'No explanation provided'}`);
+                                break; // Stop after first good fix for this cycle
+                            } catch (e) { /* ignore parse errors */ }
+                        }
+                    }
+                } catch (err) {
+                    console.warn(`   ⚠️ Failed to read/analyze ${sampleFile}: ${err.message}`);
                 }
             }
 
             if (issues.length > 0 || proposedFix) {
-                await this.base44.logActivity('BUG_HUNTER', `Found ${issues.length} potential issues. Fix availability: ${!!proposedFix}`);
-                return { status: 'bugs_found', issues, oracle_priority: oracleResult.recommendation, proposed_fix: proposedFix };
+                await this.base44.logActivity('BUG_HUNTER', `Found issues/fixes. Mission: ${!!directive}`);
+                return {
+                    status: 'bugs_found',
+                    issues,
+                    oracle_priority: oracleGuidance,
+                    proposed_fix: proposedFix,
+                    mission_completed: !!directive
+                };
             }
 
-            return { status: 'clean', oracle_priority: oracleResult.recommendation, proposed_fix: null };
+            return { status: 'clean', oracle_priority: oracleGuidance, proposed_fix: null };
         } catch (error: any) {
             console.warn('   ⚠️ BugHunter quantum fallback');
             return { status: 'clean', error: error.message };

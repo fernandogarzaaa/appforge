@@ -7,8 +7,7 @@ import { logger } from '../config/logger.js';
 
 // Configuration
 const SOLANA_NETWORK = process.env.SOLANA_NETWORK || 'https://api.mainnet-beta.solana.com';
-const TREASURY_WALLET = process.env.SOLANA_TREASURY_WALLET || 'G1234567890ABCDEF1234567890ABCDEF123456789'; // REPLACE WITH REAL WALLET
-const API_FUND_PERCENTAGE = 0.50; // 50% automated split
+const TREASURY_WALLET = process.env.SOLANA_TREASURY_WALLET || 'G1234567890ABCDEF1234567890ABCDEF123456789';
 
 // Initialize Solana Connection
 const connection = new Connection(SOLANA_NETWORK, 'confirmed');
@@ -17,7 +16,6 @@ export const getSolanaConfig = async (req, res) => {
     res.json({
         recipient_address: TREASURY_WALLET,
         network: process.env.NODE_ENV === 'production' ? 'mainnet-beta' : 'devnet',
-        price_per_analysis: 0.1, // Legacy support
         payment_enabled: true
     });
 };
@@ -83,20 +81,19 @@ export const createSubscription = async (req, res, next) => {
             planId: plan_id,
             paymentMethod: payment_method,
             transactionSignature: transaction_signature,
-            amountPaid: amount_paid || 0.5, // Default/Placeholder if not passed, logic should ideally look up plan price
+            amountPaid: amount_paid || 0,
             status: 'active',
             startDate: new Date(),
-            // endDate: ... calculate based on plan
-            currency: 'SOL'
+            currency: 'USDC' // Fixed from SOL
         });
 
         await newSubscription.save();
 
-        // 3. Automated Fund Split (The "Crucial" Logic)
+        // 3. Automated Fund Split
         if (newSubscription.amountPaid > 0) {
-            const apiFundAmount = newSubscription.amountPaid * API_FUND_PERCENTAGE;
+            const apiFundAmount = newSubscription.amountPaid * (Number(process.env.API_FUND_PERCENTAGE) || 0.5);
 
-            logger.info(`[Payment] Automating 50% split. Total: ${newSubscription.amountPaid} SOL. API Fund: ${apiFundAmount} SOL.`);
+            logger.info(`[Payment] Automating split. Total: ${newSubscription.amountPaid} USDC. API Fund: ${apiFundAmount} USDC.`);
 
             // Update the ledger
             let fund = await OperationalFund.findOne({ fundType: 'API_TOKENS' });

@@ -143,7 +143,7 @@ async function validateWalletForTrading(): Promise<boolean> {
         console.log(`   - RPC: ${rpcUrl}`);
         console.log(`   - Requires signing: ${requiresSigning}`);
         return true;
-        
+
     } catch (e: any) {
         console.error('❌ WALLET ERROR:', e.message);
         return false;
@@ -291,7 +291,7 @@ async function checkQuantumChannel() {
 async function main() {
     console.log('🐝 AppForge Swarm Daemon Starting...');
     console.log('⚛️ AUTONOMOUS MODE: Quantum-Powered Proactive Intelligence');
-    
+
     // 🛡️ WALLET SAFETY CHECK - Validate before any trading operations
     console.log('🛡️ Running wallet validation protocol...');
     const walletValid = await validateWalletForTrading();
@@ -312,32 +312,32 @@ async function main() {
     const sentinel = new SentinelAgent(base44);
     const bugHunter = new BugHunterAgent(base44, fsTool);
     const optimizer = new OptimizerAgent(base44);
-    const godMode = new GodModeAgent(base44, fsTool, git);
+    const godMode = new GodModeAgent(base44, fsTool);
     const productOwner = new ProductOwnerAgent(base44, fsTool, memory);
     const antigravity = new AntigravityAgent(base44, fsTool, git);
     const librarian = new LibrarianAgent(base44);
-    
+
     // Revenue Swarm
     const revenueHunter = new RevenueHunter(base44);
     const salesBot = new SalesBot(base44, fsTool);
     const referralManager = new ReferralManager(base44, fsTool);
     const pricingStrategist = new PricingStrategist(base44, fsTool);
-    
+
     // Trading Swarm
     const cryptoSwarm = new CryptoSwarm(base44, fsTool);
     const marketAnalyzer = new MarketAnalyzer(base44, fsTool);
     const financeSwarm = new FinanceSwarm(base44, fsTool);
     const arbitrageHunter = new ArbitrageHunter(base44, fsTool);
     const yieldOptimizer = new YieldOptimizer(base44, fsTool);
-    
+
     // Worker Swarm
     const workerSwarm = new WorkerSwarm(base44, fsTool);
     const freelanceSwarm = new FreelanceSwarm(base44, fsTool);
     const codeGenerator = new CodeGenerator(base44, fsTool);
-    
+
     // Intel Swarm
     const trendAnalyzer = new TrendAnalyzer(base44, fsTool);
-    
+
     // Other Swarms
     const consultingSwarm = new ConsultingSwarm(base44, fsTool);
     const socialMediaSwarm = new SocialMediaSwarm();
@@ -358,7 +358,7 @@ async function main() {
     const swarmReporter = new SwarmReporter();
     const autonomousTradingController = new AutonomousTradingController();
     await autonomousTradingController.initialize();
-    
+
     console.log('✅ 33 Collaboration Nodes Initialized (Agents + Swarm Collectives). Entering Autonomous Loop...');
     console.log('⚛️ Quantum Core: Active');
     console.log('🔮 Oracle: Available for consultation\n');
@@ -376,15 +376,19 @@ async function main() {
     });
     swarmCollaboration.registerAgent('BugHunter', async (signal) => {
         console.log(`📡 [BugHunter] Received signal: ${signal.type}`);
-        await bugHunter.run();
+        const mission = signal.payload?.mission === 'OPTIMIZE_APPFORGE_WEB_APP' ? signal.payload.details : null;
+        const target = mission?.targets.find((t: any) => t.agent === 'BugHunter');
+        await bugHunter.run(target?.directive || signal.payload?.directive, target?.scope || signal.payload?.scope);
     });
     swarmCollaboration.registerAgent('Optimizer', async (signal) => {
         console.log(`📡 [Optimizer] Received signal: ${signal.type}`);
-        await optimizer.run();
+        const mission = signal.payload?.mission === 'OPTIMIZE_APPFORGE_WEB_APP' ? signal.payload.details : null;
+        const target = mission?.targets.find((t: any) => t.agent === 'Optimizer');
+        await optimizer.run(target?.directive || signal.payload?.directive, target?.scope || signal.payload?.scope);
     });
     swarmCollaboration.registerAgent('GodMode', async (signal) => {
         console.log(`📡 [GodMode] Received signal: ${signal.type}`);
-        await godMode.run(signal.payload);
+        await godMode.run();
     });
     swarmCollaboration.registerAgent('ProductOwner', async (signal) => {
         console.log(`📡 [ProductOwner] Received signal: ${signal.type}`);
@@ -422,7 +426,7 @@ async function main() {
         console.log(`📡 [ConsultingSwarm] Received signal: ${signal.type}`);
         await consultingSwarm.run();
     });
-    
+
     // NEW: Revenue Swarm Agents
     swarmCollaboration.registerAgent('SalesBot', async (signal) => {
         console.log(`📡 [SalesBot] Received signal: ${signal.type}`);
@@ -436,7 +440,7 @@ async function main() {
         console.log(`📡 [PricingStrategist] Received signal: ${signal.type}`);
         await pricingStrategist.run();
     });
-    
+
     // NEW: Trading Swarm Agents
     registerSwarmCollective('FinanceSwarm', async (signal) => {
         console.log(`📡 [FinanceSwarm] Received signal: ${signal.type}`);
@@ -450,13 +454,13 @@ async function main() {
         console.log(`📡 [YieldOptimizer] Received signal: ${signal.type}`);
         await yieldOptimizer.run();
     });
-    
+
     // NEW: Worker Swarm Agents
     swarmCollaboration.registerAgent('CodeGenerator', async (signal) => {
         console.log(`📡 [CodeGenerator] Received signal: ${signal.type}`);
         await codeGenerator.run();
     });
-    
+
     // NEW: Intel Swarm Agents
     swarmCollaboration.registerAgent('TrendAnalyzer', async (signal) => {
         console.log(`📡 [TrendAnalyzer] Received signal: ${signal.type}`);
@@ -642,6 +646,17 @@ async function main() {
             const now = Date.now();
             const shouldRunAutonomous = (now - lastAutonomousRun) >= AUTONOMOUS_INTERVAL_MS;
 
+            // ⚛️ COLLABORATION: Process Pending Signals
+            const pendingSignals = swarmCollaboration.getPendingSignals('ALL');
+            if (pendingSignals.length > 0) {
+                console.log(`📡 [Collab] Processing ${pendingSignals.length} pending signals...`);
+                for (const signal of pendingSignals) {
+                    // This will trigger the registered callbacks safely
+                    await swarmCollaboration.triggerCallbacks(signal);
+                    await swarmCollaboration.acknowledgeSignal(signal.id);
+                }
+            }
+
             // 1. Check for Reactive Signals
             let tasks: any[] = [];
             try {
@@ -676,7 +691,7 @@ async function main() {
 
                     // Collaboration: Pass findings to God Mode
                     const context = { source: task.changes?.source || 'reactive_signal', findings: results };
-                    results.godMode = await godMode.run(context);
+                    results.godMode = await godMode.run();
 
                     // 📚 LEARNING: Record task outcome
                     await swarmKnowledge.recordTaskOutcome(
@@ -716,7 +731,7 @@ async function main() {
                 results.optimizer = optimizerRes;
                 results.productOwner = poRes;
                 results.antigravity = agRes;
-                
+
                 // 🌌 RESONANCE: Librarian Research (every 2 cycles)
                 if (cycleCount % 2 === 0) {
                     const librarianRes = await librarian.run();
@@ -955,19 +970,19 @@ async function main() {
                 // Generate Comprehensive Multi-Swarm Report via WhatsApp
                 const finance = financeSwarm as any;
                 const freelance = freelanceSwarm as any;
-                
+
                 const tradingMetrics = {
                     balance: finance.getBalance ? finance.getBalance() : 0,
                     totalPnL: finance.getTotalPnL ? finance.getTotalPnL() : 0,
                     openPositions: finance.getOpenPositions ? finance.getOpenPositions().length : 0,
                     winRate: finance.getWinRate ? finance.getWinRate() : 0
                 };
-                
+
                 const freelanceMetrics = {
                     jobsApplied: freelance.getJobsApplied ? freelance.getJobsApplied() : 0,
                     pipelineValue: freelance.getPipelineValue ? freelance.getPipelineValue() : 0
                 };
-                
+
                 const revenueMetrics = {
                     totalRevenue: results.revenueHunter?.opportunities?.length
                         ? results.revenueHunter.opportunities.length * 150
@@ -976,14 +991,14 @@ async function main() {
                     subscriptions: 0,
                     referrals: 0
                 };
-                
+
                 const fullReport = await swarmReporter.generateComprehensiveReport(
                     cycleCount,
                     tradingMetrics,
                     freelanceMetrics,
                     revenueMetrics
                 );
-                
+
                 console.log('[REPORTER] Comprehensive report generated');
 
                 // GodMode decides if any action is needed
@@ -1015,7 +1030,7 @@ async function main() {
  */
 async function generateCycleReport(cycleCount: number, results: any, quantumStats: any): Promise<string> {
     const timestamp = new Date().toISOString();
-    
+
     let report = `📊 *SWARM CYCLE REPORT #${cycleCount}*\n`;
     report += `━━━━━━━━━━━━━━━━━━━━━━━━\n`;
     report += `🕐 ${timestamp}\n\n`;
@@ -1036,7 +1051,7 @@ async function generateCycleReport(cycleCount: number, results: any, quantumStat
             report += `• ${agent.charAt(0).toUpperCase() + agent.slice(1)}: ${status}\n`;
         }
     });
-    
+
     // GodMode decision
     if (results.godMode) {
         report += `\n🧙‍♂️ *GODMODE DECISION*\n`;
@@ -1055,10 +1070,10 @@ async function generateCycleReport(cycleCount: number, results: any, quantumStat
     report += `\n🎯 *NEXT STEPS*\n`;
     report += `• Awaiting Oracle guidance\n`;
     report += `• Next cycle in 5 minutes\n`;
-    
+
     report += `\n━━━━━━━━━━━━━━━━━━━━━━━━\n`;
     report += `🤖 *Autonomous Swarm v1.0*`;
-    
+
     return report;
 }
 

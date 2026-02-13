@@ -1,308 +1,342 @@
 [
   {
+    "id": "remotive_1680495",
+    "title": "Office Assistant",
+    "platform": "Remotive",
+    "url": "https://remotive.com/remote-jobs/marketing/office-assistant-1680495",
+    "value": 5000,
+    "tier": "standard",
+    "status": "drafted",
+    "timestamp": "2026-02-13T03:55:17.877Z"
+  },
+  {
     "id": "remotive_1956455",
     "title": "iOS Developer",
     "platform": "Remotive",
+    "url": "https://remotive.com/remote-jobs/software-development/ios-developer-1956455",
     "value": 5000,
     "tier": "standard",
-    "status": "applied",
-    "timestamp": "2026-02-12T19:23:10.857Z"
+    "status": "drafted",
+    "timestamp": "2026-02-13T03:55:17.877Z"
   },
   {
     "id": "remotive_2086540",
     "title": "Inside Sales Contractor",
     "platform": "Remotive",
+    "url": "https://remotive.com/remote-jobs/sales-business/inside-sales-contractor-2086540",
     "value": 5000,
     "tier": "standard",
-    "status": "applied",
-    "timestamp": "2026-02-12T19:23:10.857Z"
+    "status": "drafted",
+    "timestamp": "2026-02-13T03:55:17.877Z"
   },
   {
     "id": "remotive_2088624",
     "title": "Senior Python Backend Developer",
     "platform": "Remotive",
+    "url": "https://remotive.com/remote-jobs/software-development/senior-python-backend-developer-2088624",
     "value": 5000,
     "tier": "standard",
-    "status": "applied",
-    "timestamp": "2026-02-12T19:23:10.857Z"
+    "status": "drafted",
+    "timestamp": "2026-02-13T03:55:17.877Z"
   },
   {
     "id": "remotive_2088622",
     "title": "Content Reviewer",
     "platform": "Remotive",
+    "url": "https://remotive.com/remote-jobs/all-others/content-reviewer-2088622",
     "value": 5000,
     "tier": "standard",
-    "status": "applied",
-    "timestamp": "2026-02-12T19:23:10.857Z"
+    "status": "drafted",
+    "timestamp": "2026-02-13T03:55:17.877Z"
   },
   {
     "id": "remotive_1185979",
     "title": "Freelance Writer",
     "platform": "Remotive",
+    "url": "https://remotive.com/remote-jobs/writing/freelance-writer-1185979",
     "value": 5000,
     "tier": "standard",
-    "status": "applied",
-    "timestamp": "2026-02-12T19:23:10.857Z"
+    "status": "drafted",
+    "timestamp": "2026-02-13T03:55:17.877Z"
   },
   {
     "id": "remotive_2088618",
     "title": "AI Internet Rater",
     "platform": "Remotive",
+    "url": "https://remotive.com/remote-jobs/ai-ml/ai-internet-rater-2088618",
     "value": 5000,
     "tier": "standard",
-    "status": "applied",
-    "timestamp": "2026-02-12T19:23:10.857Z"
+    "status": "drafted",
+    "timestamp": "2026-02-13T03:55:17.877Z"
   },
   {
     "id": "remotive_1749306",
     "title": "Copywriter",
     "platform": "Remotive",
+    "url": "https://remotive.com/remote-jobs/writing/copywriter-1749306",
     "value": 5000,
     "tier": "standard",
-    "status": "applied",
-    "timestamp": "2026-02-12T19:23:10.857Z"
+    "status": "drafted",
+    "timestamp": "2026-02-13T03:55:17.877Z"
   },
   {
     "id": "remotive_2082736",
     "title": "Senior Amazon Brand Manager",
     "platform": "Remotive",
+    "url": "https://remotive.com/remote-jobs/marketing/senior-amazon-brand-manager-2082736",
     "value": 5000,
     "tier": "standard",
-    "status": "applied",
-    "timestamp": "2026-02-12T19:23:10.857Z"
+    "status": "found",
+    "timestamp": "2026-02-13T03:55:17.877Z"
   },
   {
     "id": "remotive_2088612",
     "title": "Product, Platform & Enterprise Full Stack Sr/Staff Software Engineer",
     "platform": "Remotive",
+    "url": "https://remotive.com/remote-jobs/software-development/product-platform-enterprise-full-stack-sr-staff-software-engineer-2088612",
     "value": 5000,
     "tier": "standard",
-    "status": "applied",
-    "timestamp": "2026-02-12T19:23:10.857Z"
+    "status": "found",
+    "timestamp": "2026-02-13T03:55:17.877Z"
   },
   {
     "id": "remotive_2088611",
     "title": "Product, Platform & Enterprise Front End Sr/Staff Software Engineer",
     "platform": "Remotive",
+    "url": "https://remotive.com/remote-jobs/software-development/product-platform-enterprise-front-end-sr-staff-software-engineer-2088611",
     "value": 5000,
     "tier": "standard",
-    "status": "applied",
-    "timestamp": "2026-02-12T19:23:10.857Z"
+    "status": "found",
+    "timestamp": "2026-02-13T03:55:17.877Z"
   },
   {
     "id": "remotive_2088613",
     "title": "Sr/Staff AI Engineer",
     "platform": "Remotive",
+    "url": "https://remotive.com/remote-jobs/ai-ml/sr-staff-ai-engineer-2088613",
     "value": 5000,
     "tier": "standard",
     "status": "found",
-    "timestamp": "2026-02-12T19:23:10.857Z"
+    "timestamp": "2026-02-13T03:55:17.877Z"
   },
   {
     "id": "remotive_2070150",
     "title": "Senior DevOps Engineer",
     "platform": "Remotive",
+    "url": "https://remotive.com/remote-jobs/devops/senior-devops-engineer-2070150",
     "value": 5000,
     "tier": "standard",
     "status": "found",
-    "timestamp": "2026-02-12T19:23:10.857Z"
+    "timestamp": "2026-02-13T03:55:17.877Z"
   },
   {
     "id": "remotive_2086826",
     "title": "Client Support Specialist",
     "platform": "Remotive",
+    "url": "https://remotive.com/remote-jobs/customer-service/client-support-specialist-2086826",
     "value": 5000,
     "tier": "standard",
     "status": "found",
-    "timestamp": "2026-02-12T19:23:10.857Z"
+    "timestamp": "2026-02-13T03:55:17.877Z"
   },
   {
     "id": "remotive_1919265",
     "title": "Senior Independent Software Developer",
     "platform": "Remotive",
+    "url": "https://remotive.com/remote-jobs/software-development/senior-independent-software-developer-1919265",
     "value": 5000,
     "tier": "standard",
     "status": "found",
-    "timestamp": "2026-02-12T19:23:10.857Z"
+    "timestamp": "2026-02-13T03:55:17.877Z"
   },
   {
     "id": "remotive_1919266",
     "title": "Senior Independent AI Engineer / Architect",
     "platform": "Remotive",
+    "url": "https://remotive.com/remote-jobs/software-development/senior-independent-ai-engineer-architect-1919266",
     "value": 5000,
     "tier": "standard",
     "status": "found",
-    "timestamp": "2026-02-12T19:23:10.857Z"
+    "timestamp": "2026-02-13T03:55:17.877Z"
   },
   {
     "id": "remotive_2069746",
     "title": "Tech Lead Full-Stack Rails Engineer",
     "platform": "Remotive",
+    "url": "https://remotive.com/remote-jobs/software-development/tech-lead-full-stack-rails-engineer-2069746",
     "value": 5000,
     "tier": "standard",
     "status": "found",
-    "timestamp": "2026-02-12T19:23:10.857Z"
+    "timestamp": "2026-02-13T03:55:17.877Z"
   },
   {
     "id": "remotive_2069747",
     "title": "Tech Lead Databricks Data Engineer",
     "platform": "Remotive",
+    "url": "https://remotive.com/remote-jobs/software-development/tech-lead-databricks-data-engineer-2069747",
     "value": 5000,
     "tier": "standard",
     "status": "found",
-    "timestamp": "2026-02-12T19:23:10.857Z"
+    "timestamp": "2026-02-13T03:55:17.877Z"
   },
   {
     "id": "remotive_2069728",
     "title": "Software Engineer C++ (Senior)",
     "platform": "Remotive",
+    "url": "https://remotive.com/remote-jobs/software-development/software-engineer-c-senior-2069728",
     "value": 5000,
     "tier": "standard",
     "status": "found",
-    "timestamp": "2026-02-12T19:23:10.857Z"
-  },
-  {
-    "id": "remotive_2088537",
-    "title": "Senior Front-End Developer- Analytics & UX Focused (Remote)",
-    "platform": "Remotive",
-    "value": 5000,
-    "tier": "standard",
-    "status": "found",
-    "timestamp": "2026-02-12T19:23:10.857Z"
+    "timestamp": "2026-02-13T03:55:17.877Z"
   },
   {
     "id": "remotive_2088534",
     "title": "Senior Software Engineer, Global Contractor",
     "platform": "Remotive",
+    "url": "https://remotive.com/remote-jobs/software-development/senior-software-engineer-global-contractor-2088534",
     "value": 5000,
     "tier": "standard",
     "status": "found",
-    "timestamp": "2026-02-12T19:23:10.857Z"
+    "timestamp": "2026-02-13T03:55:17.877Z"
+  },
+  {
+    "id": "rok_1130215",
+    "title": "Associate Manager Digital Media",
+    "platform": "RemoteOK",
+    "url": "https://remoteOK.com/remote-jobs/remote-associate-manager-digital-media-unlock-health-1130215",
+    "value": 5000,
+    "tier": "standard",
+    "status": "found",
+    "timestamp": "2026-02-13T03:55:17.877Z"
+  },
+  {
+    "id": "rok_1130214",
+    "title": "Senior Support Operations Manager",
+    "platform": "RemoteOK",
+    "url": "https://remoteOK.com/remote-jobs/remote-senior-support-operations-manager-deepintent-1130214",
+    "value": 5000,
+    "tier": "standard",
+    "status": "found",
+    "timestamp": "2026-02-13T03:55:17.877Z"
+  },
+  {
+    "id": "rok_1130213",
+    "title": "Director EMEA Marketing",
+    "platform": "RemoteOK",
+    "url": "https://remoteOK.com/remote-jobs/remote-director-emea-marketing-bamboohr-1130213",
+    "value": 5000,
+    "tier": "standard",
+    "status": "found",
+    "timestamp": "2026-02-13T03:55:17.877Z"
+  },
+  {
+    "id": "rok_1130212",
+    "title": "Marketing Associate",
+    "platform": "RemoteOK",
+    "url": "https://remoteOK.com/remote-jobs/remote-marketing-associate-beacon-biosignals-1130212",
+    "value": 5000,
+    "tier": "standard",
+    "status": "found",
+    "timestamp": "2026-02-13T03:55:17.877Z"
+  },
+  {
+    "id": "rok_1130211",
+    "title": "Senior Client Success Manager",
+    "platform": "RemoteOK",
+    "url": "https://remoteOK.com/remote-jobs/remote-senior-client-success-manager-force-therapeutics-1130211",
+    "value": 5000,
+    "tier": "standard",
+    "status": "found",
+    "timestamp": "2026-02-13T03:55:17.877Z"
+  },
+  {
+    "id": "rok_1130210",
+    "title": "Senior Paid Search Analyst",
+    "platform": "RemoteOK",
+    "url": "https://remoteOK.com/remote-jobs/remote-senior-paid-search-analyst-unlock-health-1130210",
+    "value": 5000,
+    "tier": "standard",
+    "status": "found",
+    "timestamp": "2026-02-13T03:55:17.877Z"
+  },
+  {
+    "id": "rok_1130209",
+    "title": "Customer Success Manager Strategic",
+    "platform": "RemoteOK",
+    "url": "https://remoteOK.com/remote-jobs/remote-customer-success-manager-strategic-acuitymd-1130209",
+    "value": 5000,
+    "tier": "standard",
+    "status": "found",
+    "timestamp": "2026-02-13T03:55:17.877Z"
+  },
+  {
+    "id": "rok_1130208",
+    "title": "Senior DevSecOps Platform Security Engineer",
+    "platform": "RemoteOK",
+    "url": "https://remoteOK.com/remote-jobs/remote-senior-devsecops-platform-security-engineer-defcon-ai-1130208",
+    "value": 5000,
+    "tier": "standard",
+    "status": "found",
+    "timestamp": "2026-02-13T03:55:17.877Z"
+  },
+  {
+    "id": "rok_1130207",
+    "title": "Senior Product Manager Connected Care",
+    "platform": "RemoteOK",
+    "url": "https://remoteOK.com/remote-jobs/remote-senior-product-manager-connected-care-linus-health-1130207",
+    "value": 5000,
+    "tier": "standard",
+    "status": "found",
+    "timestamp": "2026-02-13T03:55:17.877Z"
+  },
+  {
+    "id": "rok_1130206",
+    "title": "Associate Therapist Fully",
+    "platform": "RemoteOK",
+    "url": "https://remoteOK.com/remote-jobs/remote-associate-therapist-fully-daybreak-health-1130206",
+    "value": 5000,
+    "tier": "standard",
+    "status": "found",
+    "timestamp": "2026-02-13T03:55:17.877Z"
+  },
+  {
+    "id": "rok_1130205",
+    "title": "Senior Cybersecurity Engineer",
+    "platform": "RemoteOK",
+    "url": "https://remoteOK.com/remote-jobs/remote-senior-cybersecurity-engineer-accenture-federal-services-1130205",
+    "value": 5000,
+    "tier": "standard",
+    "status": "found",
+    "timestamp": "2026-02-13T03:55:17.877Z"
+  },
+  {
+    "id": "rok_1130204",
+    "title": "Customer Service Hospitality Reservations",
+    "platform": "RemoteOK",
+    "url": "https://remoteOK.com/remote-jobs/remote-customer-service-hospitality-reservations-destination-knot-1130204",
+    "value": 5000,
+    "tier": "standard",
+    "status": "found",
+    "timestamp": "2026-02-13T03:55:17.877Z"
+  },
+  {
+    "id": "rok_1130203",
+    "title": "Senior Systems Engineer",
+    "platform": "RemoteOK",
+    "url": "https://remoteOK.com/remote-jobs/remote-senior-systems-engineer-logos-1130203",
+    "value": 5000,
+    "tier": "standard",
+    "status": "found",
+    "timestamp": "2026-02-13T03:55:17.877Z"
   },
   {
     "id": "rok_1130201",
     "title": "Fullstack Automation Engineer Delivery Automation Team",
     "platform": "RemoteOK",
+    "url": "https://remoteOK.com/remote-jobs/remote-fullstack-automation-engineer-delivery-automation-team-hostinger-1130201",
     "value": 5000,
     "tier": "standard",
     "status": "found",
-    "timestamp": "2026-02-12T19:23:10.857Z"
-  },
-  {
-    "id": "rok_1130200",
-    "title": "Founding Marketer",
-    "platform": "RemoteOK",
-    "value": 5000,
-    "tier": "standard",
-    "status": "found",
-    "timestamp": "2026-02-12T19:23:10.857Z"
-  },
-  {
-    "id": "rok_1130199",
-    "title": "Software Development Engineer I",
-    "platform": "RemoteOK",
-    "value": 5000,
-    "tier": "standard",
-    "status": "found",
-    "timestamp": "2026-02-12T19:23:10.857Z"
-  },
-  {
-    "id": "rok_1130198",
-    "title": "Business Development Representative UK EU",
-    "platform": "RemoteOK",
-    "value": 5000,
-    "tier": "standard",
-    "status": "found",
-    "timestamp": "2026-02-12T19:23:10.857Z"
-  },
-  {
-    "id": "rok_1130197",
-    "title": "Senior Software Engineer Web",
-    "platform": "RemoteOK",
-    "value": 5000,
-    "tier": "standard",
-    "status": "found",
-    "timestamp": "2026-02-12T19:23:10.857Z"
-  },
-  {
-    "id": "rok_1130196",
-    "title": "Data Analyst 3",
-    "platform": "RemoteOK",
-    "value": 5000,
-    "tier": "standard",
-    "status": "found",
-    "timestamp": "2026-02-12T19:23:10.857Z"
-  },
-  {
-    "id": "rok_1130195",
-    "title": "Developer Relations Engineer",
-    "platform": "RemoteOK",
-    "value": 5000,
-    "tier": "standard",
-    "status": "found",
-    "timestamp": "2026-02-12T19:23:10.857Z"
-  },
-  {
-    "id": "rok_1130194",
-    "title": "Forward Deployed Engineer DevOps",
-    "platform": "RemoteOK",
-    "value": 5000,
-    "tier": "standard",
-    "status": "found",
-    "timestamp": "2026-02-12T19:23:10.857Z"
-  },
-  {
-    "id": "rok_1130193",
-    "title": "Business Development Representative",
-    "platform": "RemoteOK",
-    "value": 5000,
-    "tier": "standard",
-    "status": "found",
-    "timestamp": "2026-02-12T19:23:10.857Z"
-  },
-  {
-    "id": "rok_1130192",
-    "title": "Senior Account Manager Feb 2026",
-    "platform": "RemoteOK",
-    "value": 5000,
-    "tier": "standard",
-    "status": "found",
-    "timestamp": "2026-02-12T19:23:10.857Z"
-  },
-  {
-    "id": "rok_1130191",
-    "title": "VP National Accounts",
-    "platform": "RemoteOK",
-    "value": 5000,
-    "tier": "standard",
-    "status": "found",
-    "timestamp": "2026-02-12T19:23:10.857Z"
-  },
-  {
-    "id": "rok_1130190",
-    "title": "Senior Talent Acquisition Manager",
-    "platform": "RemoteOK",
-    "value": 5000,
-    "tier": "standard",
-    "status": "found",
-    "timestamp": "2026-02-12T19:23:10.857Z"
-  },
-  {
-    "id": "rok_1130189",
-    "title": "Senior Technical Program Manager Infrastructure",
-    "platform": "RemoteOK",
-    "value": 5000,
-    "tier": "standard",
-    "status": "found",
-    "timestamp": "2026-02-12T19:23:10.857Z"
-  },
-  {
-    "id": "rok_1130188",
-    "title": "Web Program Manager",
-    "platform": "RemoteOK",
-    "value": 5000,
-    "tier": "standard",
-    "status": "found",
-    "timestamp": "2026-02-12T19:23:10.857Z"
+    "timestamp": "2026-02-13T03:55:17.877Z"
   }
 ]

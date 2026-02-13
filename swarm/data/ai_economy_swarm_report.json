@@ -1,35 +1,35 @@
 {
-  "timestamp": "2026-02-12T17:53:28.688Z",
-  "grossInflow": 58120,
+  "timestamp": "2026-02-12T23:56:19.926Z",
+  "grossInflow": 61120,
   "operatingCost": 900,
-  "netInflow": 57220,
-  "reserveBefore": 60650.8,
-  "reserveAfter": 85904.8,
+  "netInflow": 60220,
+  "reserveBefore": 11324,
+  "reserveAfter": 22648,
   "activeSources": 3,
-  "strategy": "defensive_compounding",
-  "strategySource": "fallback_policy",
-  "oracleRecommendation": "BALANCED_FLYWHEEL - balance reserve, growth reinvestment, and reliability",
-  "oracleConfidence": 0.427,
+  "strategy": "aggressive_expansion",
+  "strategySource": "oracle",
+  "oracleRecommendation": "AGGRESSIVE_EXPANSION - maximize growth and experimentation despite lower reserve",
+  "oracleConfidence": 0.876,
   "oracleMinConfidence": 0.55,
-  "oracleAccepted": false,
-  "sustainabilityScore": 0.73,
+  "oracleAccepted": true,
+  "sustainabilityScore": 0.82,
   "allocation": {
-    "strategy": "defensive_compounding",
-    "reserveAmount": 26154,
-    "growthAmount": 11624,
-    "experimentationAmount": 8718,
-    "infrastructureAmount": 11624,
+    "strategy": "aggressive_expansion",
+    "reserveAmount": 12224,
+    "growthAmount": 24448,
+    "experimentationAmount": 15280,
+    "infrastructureAmount": 9168,
     "percentages": {
-      "reserve": 0.45,
-      "growth": 0.2,
-      "experimentation": 0.15,
-      "infrastructure": 0.2
+      "reserve": 0.2,
+      "growth": 0.4,
+      "experimentation": 0.25,
+      "infrastructure": 0.15
     }
   },
   "milestones": [
-    "Reserve treasury to +$26154.00 for runway extension",
-    "Fund retention and upsell execution with $11624.00",
-    "Fund experiment velocity with $8718.00",
-    "Harden reliability and deployment with $11624.00"
+    "Reserve treasury to +$12224.00 for runway extension",
+    "Fund retention and upsell execution with $24448.00",
+    "Fund experiment velocity with $15280.00",
+    "Harden reliability and deployment with $9168.00"
   ]
 }

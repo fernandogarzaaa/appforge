@@ -21,8 +21,7 @@ export class Base44Tool {
         // Assuming { apiKey } is correct for now, or fallback to simple arg.
 
         this.client = createClient({
-            key: apiKey,
-            secret: apiKey,
+            token: apiKey,
             appId: process.env.BASE44_APP_ID,
             serverUrl: process.env.BASE44_API_URL || 'https://appforge.fun'
         } as any);

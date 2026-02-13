@@ -9,6 +9,7 @@ import {
 import { createPageUrl } from '@/utils';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { getAllPlans } from '@/config/payment.config';
 
 const fadeIn = {
   initial: { opacity: 0, y: 20 },
@@ -29,13 +30,24 @@ export default function LandingNew() {
   const navigate = useNavigate();
   const { isAuthenticated, navigateToLogin } = useAuth();
 
-  const handleGetStarted = () => {
+  const handleGetStarted = (planId) => {
+    if (planId === 'free') {
+      if (isAuthenticated) {
+        navigate(createPageUrl('Dashboard'));
+      } else {
+        navigate(createPageUrl('Register'));
+      }
+      return;
+    }
+
     if (isAuthenticated) {
-      navigate(createPageUrl('Dashboard'));
+      navigate(`${createPageUrl('Pricing')}?plan=${planId}`);
     } else {
-      navigateToLogin();
+      navigateToLogin(`${createPageUrl('Pricing')}?plan=${planId}`);
     }
   };
+
+  const plans = getAllPlans().sort((a, b) => (a.tier_level || 0) - (b.tier_level || 0));
 
   return (
     <div className="min-h-screen bg-white dark:bg-gray-950">
@@ -252,48 +264,7 @@ export default function LandingNew() {
 
           {/* Pricing Grid */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-            {[
-              {
-                name: 'Free',
-                price: '$0',
-                period: 'forever',
-                description: 'Perfect for trying out AppForge',
-                features: [
-                  '3 projects',
-                  'Basic AI features',
-                  'Community support',
-                  '1GB storage'
-                ]
-              },
-              {
-                name: 'Pro',
-                price: '$29',
-                period: 'per month',
-                description: 'For professional developers',
-                features: [
-                  'Unlimited projects',
-                  'Advanced AI features',
-                  'Priority support',
-                  '50GB storage',
-                  'Custom domains',
-                  'Team collaboration'
-                ],
-                popular: true
-              },
-              {
-                name: 'Enterprise',
-                price: 'Custom',
-                period: 'contact us',
-                description: 'For large organizations',
-                features: [
-                  'Everything in Pro',
-                  'Dedicated support',
-                  'Custom integrations',
-                  'SLA guarantee',
-                  'Advanced security'
-                ]
-              }
-            ].map((plan, index) => (
+            {plans.map((plan, index) => (
               <motion.div
                 key={plan.name}
                 initial={{ opacity: 0, y: 20 }}
@@ -316,13 +287,13 @@ export default function LandingNew() {
                     </h3>
                     <div className="flex items-baseline gap-1 mb-2">
                       <span className="text-4xl font-bold text-gray-900 dark:text-white">
-                        {plan.price}
+                        ${plan.price}
                       </span>
                       <span className="text-sm text-gray-600 dark:text-gray-400">
-                        {plan.period}
+                        /month
                       </span>
                     </div>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                    <p className="text-sm text-gray-600 dark:text-gray-400 h-10">
                       {plan.description}
                     </p>
                   </div>
@@ -330,9 +301,9 @@ export default function LandingNew() {
                   <Button
                     className="w-full mb-6"
                     variant={plan.popular ? 'default' : 'secondary'}
-                    onClick={handleGetStarted}
+                    onClick={() => handleGetStarted(plan.id)}
                   >
-                    {plan.name === 'Enterprise' ? 'Contact Sales' : 'Get Started'}
+                    {plan.id === 'free' ? 'Get Started Free' : 'Get Started'}
                   </Button>
 
                   <ul className="space-y-3">

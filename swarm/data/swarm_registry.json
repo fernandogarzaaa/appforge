@@ -5,7 +5,7 @@
     "revenue": 15000,
     "tasksCompleted": 150,
     "efficiency": 0.88,
-    "lastActive": "2026-02-12T18:43:22.637Z"
+    "lastActive": "2026-02-13T03:55:12.569Z"
   },
   "RevenueHunter": {
     "name": "RevenueHunter",
@@ -13,7 +13,7 @@
     "revenue": 12000,
     "tasksCompleted": 89,
     "efficiency": 0.82,
-    "lastActive": "2026-02-12T18:43:22.639Z"
+    "lastActive": "2026-02-13T03:55:12.569Z"
   },
   "FreelanceSwarm": {
     "name": "FreelanceSwarm",
@@ -21,7 +21,7 @@
     "revenue": 8500,
     "tasksCompleted": 45,
     "efficiency": 0.75,
-    "lastActive": "2026-02-12T18:43:22.639Z"
+    "lastActive": "2026-02-13T03:55:12.569Z"
   },
   "TrendAnalyzer": {
     "name": "TrendAnalyzer",
@@ -29,7 +29,7 @@
     "revenue": 0,
     "tasksCompleted": 200,
     "efficiency": 0.85,
-    "lastActive": "2026-02-12T18:43:22.639Z"
+    "lastActive": "2026-02-13T03:55:12.569Z"
   },
   "ArbitrageHunter": {
     "name": "ArbitrageHunter",
@@ -37,7 +37,7 @@
     "revenue": 2500,
     "tasksCompleted": 30,
     "efficiency": 0.7,
-    "lastActive": "2026-02-12T18:43:22.639Z"
+    "lastActive": "2026-02-13T03:55:12.569Z"
   },
   "YieldOptimizer": {
     "name": "YieldOptimizer",
@@ -45,7 +45,7 @@
     "revenue": 1800,
     "tasksCompleted": 25,
     "efficiency": 0.72,
-    "lastActive": "2026-02-12T18:43:22.639Z"
+    "lastActive": "2026-02-13T03:55:12.569Z"
   },
   "MarketAnalyzer": {
     "name": "MarketAnalyzer",
@@ -53,7 +53,7 @@
     "revenue": 0,
     "tasksCompleted": 120,
     "efficiency": 0.78,
-    "lastActive": "2026-02-12T18:43:22.639Z"
+    "lastActive": "2026-02-13T03:55:12.569Z"
   },
   "SalesBot": {
     "name": "SalesBot",
@@ -61,7 +61,7 @@
     "revenue": 5000,
     "tasksCompleted": 35,
     "efficiency": 0.85,
-    "lastActive": "2026-02-12T18:43:22.639Z"
+    "lastActive": "2026-02-13T03:55:12.569Z"
   },
   "ReferralManager": {
     "name": "ReferralManager",
@@ -69,14 +69,14 @@
     "revenue": 3200,
     "tasksCompleted": 60,
     "efficiency": 0.71,
-    "lastActive": "2026-02-12T18:43:22.639Z"
+    "lastActive": "2026-02-13T03:55:12.569Z"
   },
-  "AIAgentsSwarm": {
-    "name": "AIAgentsSwarm",
+  "SolanaDeFiSwarm": {
+    "name": "SolanaDeFiSwarm",
     "successRate": 0.5,
     "revenue": 0,
     "tasksCompleted": 0,
-    "lastActive": "2026-02-12T19:33:15.402Z",
+    "lastActive": "2026-02-13T03:55:12.627Z",
     "efficiency": 0.5
   }
 }

@@ -5,7 +5,6 @@ import __Layout from './Layout.jsx';
 // Core pages - loaded eagerly (small, frequently used)
 import Dashboard from './pages/DashboardNew';
 import Projects from './pages/ProjectsNew';
-import Landing from './pages/Landing';
 import Login from './pages/Login';
 import Register from './pages/Register';
 
@@ -236,7 +235,7 @@ const PAGES = {
   "IntegrationEcosystem": withSuspense(IntegrationEcosystem),
   "Integrations": withSuspense(Integrations),
   "LLMSettings": withSuspense(LLMSettings),
-  "Landing": Landing, // Core - eager load
+  "Landing": withSuspense(LandingNew),
   "LandingNew": withSuspense(LandingNew),
   "Login": Login, // Auth - eager load
   "Register": Register, // Auth - eager load
@@ -299,5 +298,5 @@ export const pagesConfig = {
   mainPage: "Dashboard",
   Pages: PAGES,
   Layout: __Layout,
-  publicPages: ['Landing', 'Login', 'Register', 'Pricing', 'Guide']
+  publicPages: ['LandingNew', 'Login', 'Register', 'Pricing', 'Guide']
 };

@@ -29,15 +29,15 @@ const SOLANA_PREMIUM_PLAN_ID = (typeof process !== 'undefined' && process.env?.S
  * Available subscription plans (Solana)
  */
 export const PLAN_CONFIGS: Record<string, PlanConfig> = {
-  [SOLANA_BASIC_PLAN_ID]: {
-    id: SOLANA_BASIC_PLAN_ID,
-    name: 'Starter',
-    price: 45,
-    description: 'Perfect for small projects',
+  'free': {
+    id: 'free',
+    name: 'Free',
+    price: 0,
+    description: 'Perfect for getting started',
     features: [
-      'Up to 5 projects',
-      'Basic analytics',
-      'Email support',
+      '3 projects',
+      'Basic AI features',
+      'Community support',
       '1GB storage'
     ],
     interval: 'MONTH',
@@ -47,14 +47,15 @@ export const PLAN_CONFIGS: Record<string, PlanConfig> = {
   [SOLANA_PRO_PLAN_ID]: {
     id: SOLANA_PRO_PLAN_ID,
     name: 'Pro',
-    price: 90,
-    description: 'For growing teams',
+    price: 29, // Matched to Landing Page
+    description: 'For professional developers',
     features: [
-      'Up to 20 projects',
-      'Advanced analytics',
-      'Priority email support',
-      '10GB storage',
-      'Team collaboration'
+      'Unlimited projects',
+      'Advanced AI features',
+      'Priority support',
+      '50GB storage',
+      'Custom domains',
+      'GitHub integration'
     ],
     interval: 'MONTH',
     intervalCount: 1,
@@ -64,16 +65,15 @@ export const PLAN_CONFIGS: Record<string, PlanConfig> = {
   [SOLANA_PREMIUM_PLAN_ID]: {
     id: SOLANA_PREMIUM_PLAN_ID,
     name: 'Enterprise',
-    price: 900,
+    price: 499, // Competitive Enterprise pricing
     description: 'For large organizations',
     features: [
-      'Unlimited projects',
-      'Enterprise analytics',
-      '24/7 phone support',
-      'Unlimited storage',
-      'Team collaboration',
+      'Everything in Pro',
+      'Dedicated support',
       'Custom integrations',
-      'SLA guarantee'
+      'SLA guarantee',
+      'Advanced security',
+      'Advanced analytics'
     ],
     interval: 'MONTH',
     intervalCount: 1,

@@ -83,8 +83,38 @@ export class SwarmCollaboration {
     /**
      * Send a signal to another agent
      */
+    /**
+     * Trigger callbacks for a signal safely
+     */
+    async triggerCallbacks(signal: SwarmSignal): Promise<void> {
+        if (signal.toAgent === 'ALL') {
+            const promises = Array.from(this.agentCallbacks.entries())
+                .filter(([agentName]) => agentName !== signal.fromAgent)
+                .map(async ([agentName, callback]) => {
+                    try {
+                        await callback(signal);
+                    } catch (error: any) {
+                        console.error(`❌ [Collab] Callback failed for agent ${agentName}:`, error.message);
+                    }
+                });
+            await Promise.all(promises);
+        } else {
+            const callback = this.agentCallbacks.get(signal.toAgent);
+            if (callback) {
+                try {
+                    await callback(signal);
+                } catch (error: any) {
+                    console.error(`❌ [Collab] Callback failed for agent ${signal.toAgent}:`, error.message);
+                }
+            }
+        }
+    }
+
+    /**
+     * Send a new signal and trigger its callbacks
+     */
     async sendSignal(signal: Omit<SwarmSignal, 'id' | 'timestamp' | 'status'>): Promise<string> {
-        const id = `sig_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+        const id = `sig_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`;
         const fullSignal: SwarmSignal = {
             ...signal,
             id,
@@ -97,20 +127,10 @@ export class SwarmCollaboration {
 
         console.log(`📡 [Collab] Signal sent: ${signal.fromAgent} → ${signal.toAgent} (${signal.type})`);
 
-        // If target is 'ALL', notify all registered agents
-        if (signal.toAgent === 'ALL') {
-            this.agentCallbacks.forEach((callback, agentName) => {
-                if (agentName !== signal.fromAgent) {
-                    callback(fullSignal);
-                }
-            });
-        } else {
-            // Notify specific agent
-            const callback = this.agentCallbacks.get(signal.toAgent);
-            if (callback) {
-                callback(fullSignal);
-            }
-        }
+        // Trigger callbacks asynchronously
+        this.triggerCallbacks(fullSignal).catch(err =>
+            console.error('❌ [Collab] Fatal error in triggerCallbacks:', err.message)
+        );
 
         return id;
     }

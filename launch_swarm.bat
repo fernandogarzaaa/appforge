@@ -7,7 +7,7 @@ echo ═════════════════════════
 echo    🚀 ANTIGRAVITY SWARM - FULL DEPLOYMENT
 echo ════════════════════════════════════════════════════════════════════════
 echo.
-echo Primary Directive: Make Admin money 💰
+echo Primary Directive: Make money in reality no simulation 💰
 echo Secondary Directive: Autonomous evolution 🧬
 echo Objective: Superior intelligence ⚡
 echo.

@@ -1,8 +1,8 @@
 {
-  "timestamp": "2026-02-12T18:18:46.080Z",
+  "timestamp": "2026-02-12T23:57:37.142Z",
   "reportPath": "C:\\Users\\ferna\\Downloads\\appforge-main\\swarm\\benchmarks\\latest_intelligence_report.json",
   "benchmark": {
-    "overallScore": 97.5,
+    "overallScore": 97.29,
     "verdict": "DEVELOPING",
     "weakestDimension": "autonomy",
     "weakestScore": 83.33,
@@ -12,7 +12,7 @@
         "score": 83.33,
         "threshold": 90,
         "passed": false,
-        "durationMs": 57.26,
+        "durationMs": 668.93,
         "details": {
           "checksPassed": "5/6",
           "callbackHits": 8,
@@ -21,11 +21,25 @@
         }
       },
       {
+        "name": "reliability",
+        "score": 98.57,
+        "threshold": 95,
+        "passed": true,
+        "durationMs": 5019.06,
+        "details": {
+          "operations": 70,
+          "success": 69,
+          "failures": 1,
+          "avgLatencyMs": 70.56,
+          "p95LatencyMs": 291.37
+        }
+      },
+      {
         "name": "reasoning",
         "score": 100,
         "threshold": 80,
         "passed": true,
-        "durationMs": 69.02,
+        "durationMs": 503.3,
         "details": {
           "directTasks": 8,
           "directAccuracy": 100,
@@ -40,7 +54,7 @@
         "score": 100,
         "threshold": 90,
         "passed": true,
-        "durationMs": 109.04,
+        "durationMs": 327.68,
         "details": {
           "checksPassed": "8/8",
           "statusesCount": 4,
@@ -54,32 +68,18 @@
         "score": 100,
         "threshold": 90,
         "passed": true,
-        "durationMs": 6420.61,
+        "durationMs": 29835.58,
         "details": {
           "filesChecked": 10,
           "filesPassed": 10,
           "failingFiles": []
-        }
-      },
-      {
-        "name": "reliability",
-        "score": 100,
-        "threshold": 95,
-        "passed": true,
-        "durationMs": 186.55,
-        "details": {
-          "operations": 70,
-          "success": 70,
-          "failures": 0,
-          "avgLatencyMs": 2.62,
-          "p95LatencyMs": 5.33
         }
       }
     ]
   },
   "oracle": {
     "recommendation": "Harden reasoning with adversarial decision tasks and outcome-based learning",
-    "confidence": 0.4927272727272728,
+    "confidence": 0.99,
     "alternatives": [
       "Scale planning/autonomy capabilities and swarm orchestration features",
       "Expand coding quality automation and static verification pipeline",

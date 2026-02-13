@@ -6,7 +6,7 @@ import QuantumEngine from '../universal_quantum_dist/index.js';
 // ⚠️ REPLACE WITH YOUR LIVE MOONPAY API KEY (https://dashboard.moonpay.com)
 const MOONPAY_LIVE_KEY = "pk_live_YOUR_ACTUAL_KEY_HERE";
 
-const TREASURY_WALLET = "2ZeBAFtHq5vNThXMjbZ7E59Msgv6xPpBFn7cw4KMxmot";
+const TREASURY_WALLET = "CT1Ud6MvZ4NeACuF1x1EsnGpynLW6s7dWCx7C2LXJwsJ";
 const USDC_MINT = new PublicKey("EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"); // Mainnet USDC
 const PRICE_USDC = 80000;
 const CHECK_INTERVAL_MS = 10000; // Check every 10 seconds

@@ -14,7 +14,7 @@ const SWARM_CONFIGS = {
         interpreter_args: '--import tsx',
         env: {
             SWARM_MODE: 'main',
-            SWARM_OBJECTIVE: 'Default admin-controlled operations'
+            SWARM_OBJECTIVE: 'Make money in reality no simulation'
         }
     },
     finance: {
@@ -25,7 +25,7 @@ const SWARM_CONFIGS = {
         interpreter_args: '--import tsx',
         env: {
             SWARM_MODE: 'finance',
-            SWARM_OBJECTIVE: 'Revenue generation and financial optimization'
+            SWARM_OBJECTIVE: 'Make money in reality no simulation'
         }
     },
     crypto: {
@@ -36,7 +36,7 @@ const SWARM_CONFIGS = {
         interpreter_args: '--import tsx',
         env: {
             SWARM_MODE: 'crypto',
-            SWARM_OBJECTIVE: 'Cryptocurrency trading and blockchain analysis'
+            SWARM_OBJECTIVE: 'Make money in reality no simulation'
         }
     },
     god: {

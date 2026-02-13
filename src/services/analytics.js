@@ -3,7 +3,7 @@
  * Centralized event tracking for models, sidebar interactions, and performance metrics
  */
 
-import { persistenceService } from '@/main/api/services';
+import { persistenceService } from '@/api/services';
 
 const STORAGE_KEY = 'appforge_analytics';
 const PERFORMANCE_KEY = 'appforge_performance';

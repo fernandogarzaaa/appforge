@@ -24,7 +24,7 @@ export async function initializeSearchIndexes() {
     if (response.data?.functions) {
       // Index all functions
       const documents = response.data.functions.map(fn => ({
-        id: fn.id ?? 'unknown_id' || fn.name,
+        id: fn.id ?? (fn.name || 'unknown_id'),
         document: {
           name: fn.name,
           description: fn.description || '',
@@ -81,7 +81,7 @@ export function clearSearchIndexes() {
  */
 export function getSearchIndexStats() {
   const stats = {};
-  
+
   ['functions', 'projects', 'entities'].forEach(indexName => {
     const index = searchIndexManager.getIndex(indexName);
     stats[indexName] = index.getStats();

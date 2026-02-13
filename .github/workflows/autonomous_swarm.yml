@@ -75,6 +75,15 @@ jobs:
           cargo build --release
           echo "🦀 Quantum Bridge compiled for cloud execution"
 
+      # ⚛️ INTELLIGENCE PULSE: Unify Singularity, Brain, and Oracle
+      - name: Run Intelligence Pulse
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          cd swarm
+          npx tsx intelligence_pulse.ts
+
       - name: Run Swarm (One-Shot)
         env:
           # AI Keys
@@ -86,6 +95,14 @@ jobs:
           # App Config
           BASE44_API_KEY: ${{ secrets.BASE44_API_KEY }}
           BASE44_APP_ID: ${{ secrets.BASE44_APP_ID }}
+
+          # 🏦 SOLANA REALITY MODE (Requires GitHub Secrets)
+          SOLANA_WALLET_ADDRESS: ${{ secrets.SOLANA_WALLET_ADDRESS }}
+          SOLANA_PRIVATE_KEY: ${{ secrets.SOLANA_PRIVATE_KEY }}
+          SOLANA_RPC_URL: ${{ secrets.SOLANA_RPC_URL }}
+          REAL_TRADING_ENABLED: "true"
+          SWARM_REALITY_MODE: "true"
+          SWARM_AUTONOMOUS_TRADING_ENABLED: "true"
 
           # Mode
           ONE_SHOT: "true"

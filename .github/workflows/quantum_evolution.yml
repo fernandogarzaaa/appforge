@@ -42,12 +42,14 @@ jobs:
                   restore-keys: |
                       quantum-evolution-
 
-            - name: Run Quantum Evolution
+            - name: Run Unified Intelligence Pulse
               run: |
                   npm install
-                  node scripts/train_quantum_brain.js
-                  node scripts/evolve_quantum_parameters.js
+                  cd swarm && npm install
+                  npx tsx swarm/intelligence_pulse.ts
               env:
+                  OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+                  GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
                   # Optimization Parameters (Hourly Cycle)
                   QUANTUM_GENERATIONS: "50"
                   QUANTUM_EPOCHS: "100"

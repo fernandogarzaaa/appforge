@@ -1,58 +1,10 @@
 {
-  "timestamp": "2026-02-12T17:24:54.307Z",
-  "signalsAnalyzed": 20,
+  "timestamp": "2026-02-12T23:53:11.930Z",
+  "signalsAnalyzed": 0,
   "competitorsTracked": 8,
   "topFocus": "Creator Revenue Studio",
-  "oracleRecommendation": "Creator Revenue Studio (73.8)",
+  "oracleRecommendation": "Creator Revenue Studio (38.0)",
   "opportunities": [
-    {
-      "id": "creator_revenue_studio",
-      "name": "Creator Revenue Studio",
-      "theme": "creator",
-      "problem": "Creators struggle to plan, publish, and monetize across channels consistently.",
-      "solution": "Unified AI workflow for topic ideation, multi-platform scheduling, and revenue optimization.",
-      "monetization": "$99-$299/month plus performance tier",
-      "score": 73.75,
-      "priority": "medium",
-      "rationale": "Demand=100.0 | CompetitorPressure=75.0 | MoatBonus=25.0",
-      "oracleSelected": true
-    },
-    {
-      "id": "swarm_ops_command_center",
-      "name": "SwarmOps Command Center",
-      "theme": "agent_ops",
-      "problem": "Teams lack governance and visibility over autonomous agent operations.",
-      "solution": "Control plane for agent orchestration, guardrails, incident rollback, and execution analytics.",
-      "monetization": "$249-$999/month B2B SaaS",
-      "score": 61.59,
-      "priority": "medium",
-      "rationale": "Demand=88.3 | CompetitorPressure=88.0 | MoatBonus=12.0",
-      "oracleSelected": false
-    },
-    {
-      "id": "competitor_pulse_radar",
-      "name": "Competitor Pulse Radar",
-      "theme": "research",
-      "problem": "Founders lack continuous intelligence on competitor moves and product gaps.",
-      "solution": "Automated competitor monitoring, feature-gap alerts, and weekly strategy briefs.",
-      "monetization": "$149-$499/month",
-      "score": 54.25,
-      "priority": "low",
-      "rationale": "Demand=77.0 | CompetitorPressure=88.0 | MoatBonus=12.0",
-      "oracleSelected": false
-    },
-    {
-      "id": "autonomous_risk_desk",
-      "name": "Autonomous Risk Desk",
-      "theme": "trading_risk",
-      "problem": "Automated trading setups often miss strict risk controls and post-trade learning.",
-      "solution": "Portfolio guardrails with confidence gating, stop logic, and strategy quality reporting.",
-      "monetization": "$199/month plus usage",
-      "score": 49.81,
-      "priority": "low",
-      "rationale": "Demand=61.6 | CompetitorPressure=72.0 | MoatBonus=28.0",
-      "oracleSelected": false
-    },
     {
       "id": "freelance_pipeline_iq",
       "name": "Freelance Pipeline IQ",
@@ -63,6 +15,54 @@
       "score": 39.75,
       "priority": "low",
       "rationale": "Demand=45.0 | CompetitorPressure=70.0 | MoatBonus=30.0",
+      "oracleSelected": false
+    },
+    {
+      "id": "autonomous_risk_desk",
+      "name": "Autonomous Risk Desk",
+      "theme": "trading_risk",
+      "problem": "Automated trading setups often miss strict risk controls and post-trade learning.",
+      "solution": "Portfolio guardrails with confidence gating, stop logic, and strategy quality reporting.",
+      "monetization": "$199/month plus usage",
+      "score": 39.05,
+      "priority": "low",
+      "rationale": "Demand=45.0 | CompetitorPressure=72.0 | MoatBonus=28.0",
+      "oracleSelected": false
+    },
+    {
+      "id": "creator_revenue_studio",
+      "name": "Creator Revenue Studio",
+      "theme": "creator",
+      "problem": "Creators struggle to plan, publish, and monetize across channels consistently.",
+      "solution": "Unified AI workflow for topic ideation, multi-platform scheduling, and revenue optimization.",
+      "monetization": "$99-$299/month plus performance tier",
+      "score": 38,
+      "priority": "low",
+      "rationale": "Demand=45.0 | CompetitorPressure=75.0 | MoatBonus=25.0",
+      "oracleSelected": true
+    },
+    {
+      "id": "swarm_ops_command_center",
+      "name": "SwarmOps Command Center",
+      "theme": "agent_ops",
+      "problem": "Teams lack governance and visibility over autonomous agent operations.",
+      "solution": "Control plane for agent orchestration, guardrails, incident rollback, and execution analytics.",
+      "monetization": "$249-$999/month B2B SaaS",
+      "score": 33.45,
+      "priority": "low",
+      "rationale": "Demand=45.0 | CompetitorPressure=88.0 | MoatBonus=12.0",
+      "oracleSelected": false
+    },
+    {
+      "id": "competitor_pulse_radar",
+      "name": "Competitor Pulse Radar",
+      "theme": "research",
+      "problem": "Founders lack continuous intelligence on competitor moves and product gaps.",
+      "solution": "Automated competitor monitoring, feature-gap alerts, and weekly strategy briefs.",
+      "monetization": "$149-$499/month",
+      "score": 33.45,
+      "priority": "low",
+      "rationale": "Demand=45.0 | CompetitorPressure=88.0 | MoatBonus=12.0",
       "oracleSelected": false
     }
   ]
