@@ -4,6 +4,7 @@
   "version": "0.0.0",
   "license": "Apache-2.0",
   "type": "module",
+  "main": "scripts/electron-main.cjs",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -49,7 +50,8 @@
     "build:analyzer": "cd static-analyzer-core && wasm-pack build --target web --out-dir ../src/static-analyzer-core/pkg",
     "build:analyzer:release": "cd static-analyzer-core && wasm-pack build --release --target web --out-dir ../src/static-analyzer-core/pkg",
     "start:server": "node server.js",
-    "deploy": "node scripts/deploy_swarm.js"
+    "deploy": "node scripts/deploy_swarm.js",
+    "app:desktop": "electron ."
   },
   "dependencies": {
     "@apollo/client": "latest",
@@ -94,6 +96,8 @@
     "@tanstack/query-sync-storage-persister": "^5.90.22",
     "@tanstack/react-query": "^5.84.1",
     "@tanstack/react-query-persist-client": "^5.90.22",
+    "@types/express": "^5.0.6",
+    "@types/socket.io": "^3.0.1",
     "@uiw/react-codemirror": "^4.23.6",
     "axios": "^1.7.9",
     "bip39": "^3.1.0",
@@ -140,6 +144,8 @@
     "react-syntax-highlighter": "^15.5.0",
     "recharts": "^2.15.0",
     "redis": "^4.7.1",
+    "socket.io": "^4.8.3",
+    "socket.io-client": "^4.8.3",
     "sonner": "^2.0.1",
     "tailwind-merge": "^3.0.2",
     "tailwindcss-animate": "^1.0.7",
@@ -172,6 +178,8 @@
     "babel-jest": "^29.7.0",
     "babel-plugin-transform-react-remove-prop-types": "^0.4.24",
     "baseline-browser-mapping": "^2.8.32",
+    "electron": "^40.4.0",
+    "electron-builder": "^26.7.0",
     "eslint": "^9.19.0",
     "eslint-plugin-react": "^7.37.4",
     "eslint-plugin-react-hooks": "^5.0.0",

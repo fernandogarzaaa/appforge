@@ -2200,6 +2200,116 @@
     "timestamp": "2026-02-13T03:55:19.656Z"
   },
   {
+    "id": "gh_132750724",
+    "category": "Technology",
+    "name": "codecrafters-io/build-your-own-x",
+    "description": "Master programming by recreating your favorite technologies from scratch.",
+    "impact": "high",
+    "growthRate": 100,
+    "adoptionSpeed": "fast",
+    "relevance": 100,
+    "timestamp": "2026-02-13T05:29:44.642Z"
+  },
+  {
+    "id": "gh_21737465",
+    "category": "Technology",
+    "name": "sindresorhus/awesome",
+    "description": "😎 Awesome lists about all kinds of interesting topics",
+    "impact": "high",
+    "growthRate": 100,
+    "adoptionSpeed": "fast",
+    "relevance": 100,
+    "timestamp": "2026-02-13T05:29:44.643Z"
+  },
+  {
+    "id": "gh_28457823",
+    "category": "Technology",
+    "name": "freeCodeCamp/freeCodeCamp",
+    "description": "freeCodeCamp.org's open-source codebase and curriculum. Learn math, programming, and computer science for free.",
+    "impact": "high",
+    "growthRate": 100,
+    "adoptionSpeed": "fast",
+    "relevance": 100,
+    "timestamp": "2026-02-13T05:29:44.643Z"
+  },
+  {
+    "id": "gh_54346799",
+    "category": "Technology",
+    "name": "public-apis/public-apis",
+    "description": "A collective list of free APIs",
+    "impact": "high",
+    "growthRate": 100,
+    "adoptionSpeed": "fast",
+    "relevance": 100,
+    "timestamp": "2026-02-13T05:29:44.643Z"
+  },
+  {
+    "id": "gh_13491895",
+    "category": "AI/ML",
+    "name": "EbookFoundation/free-programming-books",
+    "description": ":books: Freely available programming books",
+    "impact": "high",
+    "growthRate": 100,
+    "adoptionSpeed": "fast",
+    "relevance": 100,
+    "timestamp": "2026-02-13T05:29:44.643Z"
+  },
+  {
+    "id": "gh_85077558",
+    "category": "Technology",
+    "name": "kamranahmedse/developer-roadmap",
+    "description": "Interactive roadmaps, guides and other educational content to help developers grow in their careers.",
+    "impact": "high",
+    "growthRate": 100,
+    "adoptionSpeed": "fast",
+    "relevance": 100,
+    "timestamp": "2026-02-13T05:29:44.643Z"
+  },
+  {
+    "id": "gh_60493101",
+    "category": "Technology",
+    "name": "jwasham/coding-interview-university",
+    "description": "A complete computer science study plan to become a software engineer.",
+    "impact": "high",
+    "growthRate": 100,
+    "adoptionSpeed": "fast",
+    "relevance": 100,
+    "timestamp": "2026-02-13T05:29:44.643Z"
+  },
+  {
+    "id": "gh_83222441",
+    "category": "Technology",
+    "name": "donnemartin/system-design-primer",
+    "description": "Learn how to design large-scale systems. Prep for the system design interview.  Includes Anki flashcards.",
+    "impact": "high",
+    "growthRate": 100,
+    "adoptionSpeed": "fast",
+    "relevance": 100,
+    "timestamp": "2026-02-13T05:29:44.643Z"
+  },
+  {
+    "id": "gh_21289110",
+    "category": "Technology",
+    "name": "vinta/awesome-python",
+    "description": "An opinionated list of awesome Python frameworks, libraries, software and resources.",
+    "impact": "high",
+    "growthRate": 100,
+    "adoptionSpeed": "fast",
+    "relevance": 100,
+    "timestamp": "2026-02-13T05:29:44.643Z"
+  },
+  {
+    "id": "gh_177736533",
+    "category": "Technology",
+    "name": "996icu/996.ICU",
+    "description": "Repo for counting stars and contributing. Press F to pay respect to glorious developers.",
+    "impact": "high",
+    "growthRate": 100,
+    "adoptionSpeed": "fast",
+    "relevance": 100,
+    "timestamp": "2026-02-13T05:29:44.643Z"
+  },
+  {
     "id": "trend_1770833180680_Cloud Computing_0",
     "category": "Cloud Computing",
     "name": "Serverless Architecture",
@@ -13583,6 +13693,61 @@
     "adoptionSpeed": "fast",
     "relevance": 90,
     "timestamp": "2026-02-13T03:55:20.187Z"
+  },
+  {
+    "id": "gt_Claude_Code",
+    "category": "AI/ML",
+    "name": "Claude Code",
+    "description": "Anthropic's CLI for Claude",
+    "impact": "high",
+    "growthRate": 500,
+    "adoptionSpeed": "fast",
+    "relevance": 90,
+    "timestamp": "2026-02-13T05:29:45.306Z"
+  },
+  {
+    "id": "gt_Claude_Agent",
+    "category": "AI/ML",
+    "name": "Claude Agent",
+    "description": "Autonomous AI agents",
+    "impact": "high",
+    "growthRate": 400,
+    "adoptionSpeed": "fast",
+    "relevance": 90,
+    "timestamp": "2026-02-13T05:29:45.306Z"
+  },
+  {
+    "id": "gt_v0.dev",
+    "category": "AI/ML",
+    "name": "v0.dev",
+    "description": "Vercel's UI generator",
+    "impact": "high",
+    "growthRate": 350,
+    "adoptionSpeed": "fast",
+    "relevance": 90,
+    "timestamp": "2026-02-13T05:29:45.306Z"
+  },
+  {
+    "id": "gt_bolt.new",
+    "category": "AI/ML",
+    "name": "bolt.new",
+    "description": "AI-powered full-stack dev",
+    "impact": "high",
+    "growthRate": 300,
+    "adoptionSpeed": "fast",
+    "relevance": 90,
+    "timestamp": "2026-02-13T05:29:45.306Z"
+  },
+  {
+    "id": "gt_Windsurf",
+    "category": "AI/ML",
+    "name": "Windsurf",
+    "description": "AI IDE with flow mode",
+    "impact": "high",
+    "growthRate": 280,
+    "adoptionSpeed": "fast",
+    "relevance": 90,
+    "timestamp": "2026-02-13T05:29:45.306Z"
   },
   {
     "id": "trend_1770833180678_AI/ML_1",

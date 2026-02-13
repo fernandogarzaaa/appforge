@@ -13,6 +13,7 @@ import { FileSystemTool } from '../tools/filesystem.js';
 import quantumCore from './quantum_core.js';
 import { enhancedOracle } from './oracle_enhanced.js';
 import { swarmCollaboration } from './swarm_collaboration.js';
+import { secureRandom, secureRandomInt } from './secure_entropy.js';
 
 interface RevenueStream {
     source: string;
@@ -163,7 +164,7 @@ export class RevenuePipeline {
 
         return {
             streams,
-            applicationsSent: Math.floor(Math.random() * 3) + 1 // 1-3 applications
+            applicationsSent: secureRandomInt(1, 3) // 1-3 applications
         };
     }
 
@@ -203,8 +204,8 @@ export class RevenuePipeline {
     }> {
         // Simulated crypto processing
         return {
-            signalsGenerated: Math.floor(Math.random() * 5) + 1,
-            projectedRevenue: Math.random() * 500 // $0-500 projected
+            signalsGenerated: secureRandomInt(1, 5),
+            projectedRevenue: secureRandom() * 500 // $0-500 projected with secure entropy
         };
     }
 

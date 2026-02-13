@@ -19,9 +19,17 @@ if (result.error) {
     console.error('Error loading .env.local:', result.error);
 }
 
-if (!process.env.OPENAI_API_KEY) {
+const isTrueIndependence = process.env.TRUE_AI_INDEPENDENCE === 'true';
+
+// TRUE AI INDEPENDENCE MODE: Use local Ollama, no external APIs required
+if (isTrueIndependence) {
+    console.log('🧠 [TRUE INDEPENDENCE] Running without external AI APIs...');
+    console.log('   📡 Checking local Ollama at http://localhost:11434...');
+    // Ollama health check happens in quantum hyper intelligence orchestrator
+} else if (!process.env.OPENAI_API_KEY) {
     console.error('❌ FATAL: OPENAI_API_KEY not found in environment.');
     console.error('Please ensure .env.local exists in the project root and mimics the structure of .env.example');
+    console.error('Or set TRUE_AI_INDEPENDENCE=true to use local Ollama models only.');
     process.exit(1);
 }
 
@@ -203,6 +211,7 @@ import { ExperimentationSwarm } from '../agents/ExperimentationSwarm.js';
 import { AIEconomySwarm } from '../agents/AIEconomySwarm.js';
 import swarmKnowledge from './knowledge.js';
 import { hyperBrain } from './hyper_brain.js';
+import { hyperIntelligence, HyperIntelligence } from './hyper/index.js';
 import { nas } from './nas.js';
 import { p2pResonance } from './p2p_resonance.js';
 import { resolveQuantumGate, bridgeVersion } from './quantum_bridge_ts.js';
@@ -216,6 +225,7 @@ import { swarmCollaboration } from './swarm_collaboration.js';
 import { SwarmReporter } from './swarm_reporter.js';
 import { getCollectiveMembers } from './swarm_collectives.js';
 import { AutonomousTradingController } from './autonomous_trading_controller.js';
+import { MaintenanceGuard } from './maintenance_guard.js';
 
 const QUANTUM_CHANNEL = path.join(process.cwd(), 'src/data/quantum_channel.json');
 
@@ -358,6 +368,13 @@ async function main() {
     const swarmReporter = new SwarmReporter();
     const autonomousTradingController = new AutonomousTradingController();
     await autonomousTradingController.initialize();
+
+    // Initialize Hyper Intelligence
+    const hyperStatus = hyperIntelligence.getStatus();
+    console.log(`🧠 Hyper Intelligence Initialized:`);
+    console.log(`   - Router models: ${hyperStatus.router.availableModels}`);
+    console.log(`   - Accelerator fidelity: ${hyperStatus.accelerator.fidelity.toFixed(2)}`);
+    console.log(`   - Safety principles: ${hyperStatus.safety.principlesLoaded}`);
 
     console.log('✅ 33 Collaboration Nodes Initialized (Agents + Swarm Collectives). Entering Autonomous Loop...');
     console.log('⚛️ Quantum Core: Active');
@@ -638,6 +655,15 @@ async function main() {
 
     // Swarm Loop
     while (true) {
+        // 🛑 [Maintenance Check] Warm-restart protocol
+        if (await MaintenanceGuard.isMaintenanceActive()) {
+            console.log('🛑 [Loop] Maintenance signal detected. Powering down for warm-restart...');
+            await sovereignBridge.pushUpdate('🚨 Swarm is entering Maintenance Mode for updates/maintenance. Standby for warm-restart.');
+            // Allow logs to flush and bridge to send message
+            await new Promise(r => setTimeout(r, 2000));
+            process.exit(0);
+        }
+
         try {
             // ⚛️ QUANTUM ENHANCEMENT: Check quantum channel for Antigravity messages
             await checkQuantumChannel();

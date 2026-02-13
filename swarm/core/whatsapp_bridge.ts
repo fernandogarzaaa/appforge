@@ -12,6 +12,7 @@ import pino from 'pino';
 import qrcodeTerminal from 'qrcode-terminal';
 import QRCode from 'qrcode';
 import * as fs from 'fs';
+import { MaintenanceGuard } from './maintenance_guard.js';
 
 // Load .env.local manually
 const envPath = path.join(process.cwd(), '.env.local');
@@ -447,6 +448,15 @@ export class WhatsAppBridge {
         }
 
         this.quantumPollingInterval = setInterval(async () => {
+            // 🛑 [Maintenance Check] Warm-restart protocol
+            if (await MaintenanceGuard.isMaintenanceActive()) {
+                console.log('🛑 [WhatsApp] Maintenance signal detected. Powering down...');
+                this.stopKeepalive();
+                if (this.sock) {
+                    this.sock.end?.();
+                }
+                process.exit(0);
+            }
             if (this.isConnected && this.sock) {
                 await this.processQuantumChannel();
             }
@@ -539,3 +549,13 @@ export class WhatsAppBridge {
 }
 
 export const whatsappBridge = new WhatsAppBridge();
+
+// Run if called directly
+const isMain = process.argv[1] && (
+    process.argv[1].endsWith('whatsapp_bridge.ts') ||
+    process.argv[1].endsWith('whatsapp_bridge.js')
+);
+
+if (isMain) {
+    whatsappBridge.start().catch(console.error);
+}

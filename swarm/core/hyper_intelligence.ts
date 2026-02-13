@@ -9,6 +9,7 @@ import { Base44Tool } from '../tools/base44.js';
 import { FileSystemTool } from '../tools/filesystem.js';
 import { GitTool } from '../tools/git.js';
 import quantumCore from './quantum_core.js';
+import { secureRandom, secureRandomInt } from './secure_entropy.js';
 
 interface TrainingDataset {
     name: string;
@@ -176,7 +177,7 @@ export class HyperIntelligenceTrainer {
 
         for (const ds of codeDatasets) {
             // Simulated learning
-            insights.push(`Learned from ${ds.name}: ${Math.floor(Math.random() * 100)} patterns`);
+            insights.push(`Learned from ${ds.name}: ${secureRandomInt(0, 99)} patterns`);
             ds.status = 'completed';
             this.datasets.set(ds.name, ds);
         }
@@ -193,7 +194,7 @@ export class HyperIntelligenceTrainer {
 
         for (const ds of paperDatasets) {
             // Simulated learning
-            insights.push(`Analyzed ${ds.name}: ${Math.floor(Math.random() * 50)} concepts`);
+            insights.push(`Analyzed ${ds.name}: ${secureRandomInt(0, 49)} concepts`);
             ds.status = 'completed';
             this.datasets.set(ds.name, ds);
         }
@@ -209,7 +210,7 @@ export class HyperIntelligenceTrainer {
         const financialDatasets = Array.from(this.datasets.values()).filter(d => d.type === 'financial');
 
         for (const ds of financialDatasets) {
-            insights.push(`Processed ${ds.name}: ${Math.floor(Math.random() * 100)} market patterns`);
+            insights.push(`Processed ${ds.name}: ${secureRandomInt(0, 99)} market patterns`);
             ds.status = 'completed';
             this.datasets.set(ds.name, ds);
         }
@@ -236,7 +237,7 @@ export class HyperIntelligenceTrainer {
                 domain,
                 concepts: this.generateConcepts(domain),
                 relationships: this.generateRelationships(domain),
-                confidence: 0.8 + Math.random() * 0.2
+                confidence: 0.8 + secureRandom() * 0.2
             });
         });
 

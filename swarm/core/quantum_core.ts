@@ -1,6 +1,7 @@
 import QuantumEngine from '../../universal_quantum_dist/index.js';
 import * as fs from 'fs/promises';
 import path from 'path';
+import { secureRandom, secureRandomRange } from './secure_entropy.js';
 
 const STATE_FILE = path.join(process.cwd(), 'src/data/quantum_state.json');
 const ORACLE_STATE_FILE = path.join(process.cwd(), 'src/data/quantum_oracle_state.json');
@@ -281,7 +282,7 @@ export class QuantumSwarmCore {
         const scores = options.map(opt => ({
             option: opt,
             score: scoringFn(opt),
-            quantum_boost: Math.random() * 0.1 // Quantum uncertainty
+            quantum_boost: secureRandom() * 0.1 // Cryptographically secure quantum uncertainty
         }));
 
         // Sort by quantum-adjusted score
@@ -297,7 +298,7 @@ export class QuantumSwarmCore {
         const matches = candidates.map(candidate => ({
             candidate,
             similarity: similarityFn(target, candidate),
-            quantum_correlation: Math.random() * 0.2 // Quantum entanglement effect
+            quantum_correlation: secureRandom() * 0.2 // Cryptographically secure quantum entanglement effect
         }));
 
         matches.sort((a, b) => (b.similarity + b.quantum_correlation) - (a.similarity + a.quantum_correlation));
@@ -332,9 +333,9 @@ export class QuantumSwarmCore {
     async optimize(initialValue: number, constraints: any): Promise<number> {
         let optimized = initialValue;
 
-        // Simulate quantum annealing
+        // Simulate quantum annealing with secure random
         for (let i = 0; i < 10; i++) {
-            const perturbation = (Math.random() - 0.5) * 0.1;
+            const perturbation = (secureRandom() - 0.5) * 0.1;
             const candidate = optimized * (1 + perturbation);
 
             if (constraints.min <= candidate && candidate <= constraints.max) {
@@ -352,7 +353,7 @@ export class QuantumSwarmCore {
         const engineStats = this.engine.getStats();
         const coherence = this.coherenceLockEnabled
             ? this.coherenceTarget
-            : 0.95 + (Math.random() * 0.04);
+            : 0.95 + (secureRandom() * 0.04);
 
         return {
             ...engineStats,

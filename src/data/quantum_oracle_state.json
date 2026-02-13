@@ -1,14 +1,14 @@
 {
-  "timestamp": "2026-02-13T04:21:21.185Z",
+  "timestamp": "2026-02-13T11:48:49.762Z",
   "state": {
     "version": "3.1",
     "learningParams": {
-      "bias": 1.6931311184289641,
-      "exploration": 0.16502500960511998
+      "bias": 1.6008515991760428,
+      "exploration": 0.2794839891821877
     },
     "feedbackStats": {
-      "total": 782,
-      "success": 771
+      "total": 794,
+      "success": 776
     },
     "optionWeights": {
       "run": -0.24,
@@ -70,11 +70,11 @@
       "expand": 2.5,
       "failure-mode": 2.5,
       "coverage": 2.5,
-      "coherence": -0.32,
-      "calibration": -0.32,
-      "autonomous": 0.03,
-      "oracle": 0.03,
-      "guidance": 0.03
+      "coherence": -0.6,
+      "calibration": -0.6,
+      "autonomous": 0.18,
+      "oracle": 0.18,
+      "guidance": 0.18
     },
     "criteriaWeights": {
       "stability": 3,
@@ -164,7 +164,7 @@
       },
       "solve_2b0170a6": {
         "data": {
-          "predictionId": "Q3-1770956481175-115",
+          "predictionId": "Q3-1770981610232-777",
           "optimizedBest": "Process High Priority requests first",
           "confidence": 0.4951219512195122,
           "alternatives": [
@@ -173,11 +173,11 @@
           ],
           "engineVersion": "3.1"
         },
-        "timestamp": 1770956481175
+        "timestamp": 1770981610232
       },
       "solve_58172bf4": {
         "data": {
-          "predictionId": "Q3-1770956481184-516",
+          "predictionId": "Q3-1770981610197-85",
           "optimizedBest": "Type errors and null pointer exceptions",
           "confidence": 0.4951219512195122,
           "alternatives": [
@@ -186,7 +186,7 @@
           ],
           "engineVersion": "3.1"
         },
-        "timestamp": 1770956481184
+        "timestamp": 1770981610197
       },
       "solve_1be3b147": {
         "data": {
@@ -333,7 +333,7 @@
       },
       "solve_6dc19742": {
         "data": {
-          "predictionId": "Q3-1770955998534-418",
+          "predictionId": "Q3-1770981454381-946",
           "optimizedBest": "Latest Node.js security vulnerabilities",
           "confidence": 0.4951219512195122,
           "alternatives": [
@@ -342,7 +342,7 @@
           ],
           "engineVersion": "3.1"
         },
-        "timestamp": 1770955998534
+        "timestamp": 1770981454381
       },
       "solve_13526a9c": {
         "data": {
@@ -736,7 +736,7 @@
       },
       "solve_8e3bb25": {
         "data": {
-          "predictionId": "Q3-1770933199387-894",
+          "predictionId": "Q3-1770980428406-538",
           "optimizedBest": "Focus on system integrity and stability.",
           "confidence": 0.3655737704918033,
           "alternatives": [
@@ -745,7 +745,7 @@
           ],
           "engineVersion": "3.1"
         },
-        "timestamp": 1770933199387
+        "timestamp": 1770980428406
       },
       "solve_df09ceb": {
         "data": {
@@ -1773,6 +1773,45 @@
           "engineVersion": "3.1"
         },
         "timestamp": 1770956481087
+      },
+      "solve_52385d98": {
+        "data": {
+          "predictionId": "Q3-1770964850986-813",
+          "optimizedBest": "Prioritize dependency resolution and vulnerability scanning.",
+          "confidence": 0.99,
+          "alternatives": [
+            "Focus on system integrity and stability.",
+            "Optimize cognitive coherence across all agents."
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1770964850986
+      },
+      "solve_12f40907": {
+        "data": {
+          "predictionId": "Q3-1770968390876-927",
+          "optimizedBest": "Prioritize dependency resolution and vulnerability scanning.",
+          "confidence": 0.99,
+          "alternatives": [
+            "Focus on system integrity and stability.",
+            "Optimize cognitive coherence across all agents."
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1770968390876
+      },
+      "solve_2aa3bfc7": {
+        "data": {
+          "predictionId": "Q3-1770983329761-55",
+          "optimizedBest": "repos_first",
+          "confidence": 0.49754601226993866,
+          "alternatives": [
+            "patterns_first",
+            "architecture_first"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1770983329761
       }
     }
   }

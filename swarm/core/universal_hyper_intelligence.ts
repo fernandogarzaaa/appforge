@@ -17,6 +17,7 @@
 
 import https from 'https';
 import http from 'http';
+import { MaintenanceGuard } from './maintenance_guard.js';
 
 interface UniversalMetrics {
     reasoning: number;
@@ -50,7 +51,7 @@ async function httpsGet(url: string, timeout = 15000): Promise<{ success: boolea
             let data = '';
             res.on('data', chunk => data += chunk);
             res.on('end', () => {
-                try { resolve({ success: true, data: JSON.parse(data), time: 0 }); } 
+                try { resolve({ success: true, data: JSON.parse(data), time: 0 }); }
                 catch { resolve({ success: false, time: 0 }); }
             });
         });
@@ -71,55 +72,55 @@ export class UniversalHyperIntelligence {
             math: 0.5, language: 0.5, philosophy: 0.5, medicine: 0.5,
             environment: 0.5, arts: 0.5, social: 0.5, overall: 0.5
         };
-        
+
         this.domains = new Map([
-            ['science', { 
-                name: 'Science & Research', 
+            ['science', {
+                name: 'Science & Research',
                 sources: ['arXiv', 'NASA', 'PubMed', 'Crossref'],
                 capabilities: ['Research papers', 'Space data', 'Medical data', 'Physics']
             }],
-            ['code', { 
-                name: 'Open Source & Code', 
+            ['code', {
+                name: 'Open Source & Code',
                 sources: ['GitHub', 'NPM', 'Packagist', 'Sourcegraph'],
                 capabilities: ['Code patterns', 'Libraries', 'Frameworks', 'Best practices']
             }],
-            ['math', { 
-                name: 'Mathematics', 
+            ['math', {
+                name: 'Mathematics',
                 sources: ['OEIS', 'Wolfram', 'MathStackExchange'],
                 capabilities: ['Sequences', 'Formulas', 'Proofs', 'Algorithms']
             }],
-            ['language', { 
-                name: 'Languages & Encyclopedia', 
+            ['language', {
+                name: 'Languages & Encyclopedia',
                 sources: ['Wikipedia', 'Wikidata', 'Wiktionary'],
                 capabilities: ['Knowledge', 'Definitions', 'Facts', 'Languages']
             }],
-            ['philosophy', { 
-                name: 'Philosophy & Knowledge', 
+            ['philosophy', {
+                name: 'Philosophy & Knowledge',
                 sources: ['Stanford Encyclopedia', 'Internet Encyclopedia of Philosophy'],
                 capabilities: ['Logic', 'Ethics', 'Metaphysics', 'Epistemology']
             }],
-            ['medicine', { 
-                name: 'Medicine & Health', 
+            ['medicine', {
+                name: 'Medicine & Health',
                 sources: ['PubMed', 'ClinicalTrials', 'WHO'],
                 capabilities: ['Diseases', 'Treatments', 'Drugs', 'Research']
             }],
-            ['environment', { 
-                name: 'Environment & Climate', 
+            ['environment', {
+                name: 'Environment & Climate',
                 sources: ['NOAA', 'OpenWeather', 'NASA Earth'],
                 capabilities: ['Climate', 'Weather', 'Satellite', 'Environmental']
             }],
-            ['arts', { 
-                name: 'Arts & Culture', 
+            ['arts', {
+                name: 'Arts & Culture',
                 sources: ['Met Museum', 'Europeana', 'Creative Commons'],
                 capabilities: ['Art history', 'Music', 'Culture', 'Design']
             }],
-            ['social', { 
-                name: 'Social & Psychology', 
+            ['social', {
+                name: 'Social & Psychology',
                 sources: ['Reddit', 'Stack Exchange', 'Quora'],
                 capabilities: ['Behavior', 'Sociology', 'Psychology', 'Communities']
             }]
         ]);
-        
+
         this.iteration = 0;
     }
 
@@ -129,7 +130,7 @@ export class UniversalHyperIntelligence {
     async learnScience(): Promise<number> {
         console.log('   🔬 Science & Research...');
         let gain = 0;
-        
+
         // arXiv - Research papers
         const arxiv = await httpsGet('https://export.arxiv.org/api/query?search_query=all:AI&start=0&max_results=5');
         if (arxiv.success) gain += 0.03;
@@ -152,7 +153,7 @@ export class UniversalHyperIntelligence {
     async learnCode(): Promise<number> {
         console.log('   💻 Open Source & Code...');
         let gain = 0;
-        
+
         // GitHub trending
         const github = await httpsGet('https://api.github.com/repositories?since=weekly');
         if (github.success && github.data?.length > 0) gain += 0.04;
@@ -175,7 +176,7 @@ export class UniversalHyperIntelligence {
     async learnMath(): Promise<number> {
         console.log('   🔢 Mathematics...');
         let gain = 0;
-        
+
         // OEIS - Integer sequences
         const oeis = await httpsGet('https://oeis.org/');
         if (oeis.success) gain += 0.02;
@@ -194,7 +195,7 @@ export class UniversalHyperIntelligence {
     async learnLanguage(): Promise<number> {
         console.log('   📚 Languages & Encyclopedia...');
         let gain = 0;
-        
+
         // Wikipedia random
         const wiki = await httpsGet('https://en.wikipedia.org/api/rest_v1/page/random/summary');
         if (wiki.success) gain += 0.03;
@@ -213,7 +214,7 @@ export class UniversalHyperIntelligence {
     async learnPhilosophy(): Promise<number> {
         console.log('   🎭 Philosophy & Knowledge...');
         let gain = 0;
-        
+
         // Stanford Encyclopedia
         const stanford = await httpsGet('https://plato.stanford.edu/api/v1/entries?format=json');
         if (stanford.success) gain += 0.02;
@@ -232,7 +233,7 @@ export class UniversalHyperIntelligence {
     async learnMedicine(): Promise<number> {
         console.log('   🏥 Medicine & Health...');
         let gain = 0;
-        
+
         // PubMed
         const pubmed = await httpsGet('https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=AI+medicine&retmode=json&rettype=count');
         if (pubmed.success) gain += 0.02;
@@ -251,7 +252,7 @@ export class UniversalHyperIntelligence {
     async learnEnvironment(): Promise<number> {
         console.log('   🌍 Environment & Climate...');
         let gain = 0;
-        
+
         // NOAA
         const noaa = await httpsGet('https://www.ncdc.noaa.gov/cdo-web/api/v2/data');
         if (noaa.success) gain += 0.02;
@@ -270,7 +271,7 @@ export class UniversalHyperIntelligence {
     async learnArts(): Promise<number> {
         console.log('   🎨 Arts & Culture...');
         let gain = 0;
-        
+
         // Met Museum
         const met = await httpsGet('https://collectionapi.metmuseum.org/public/collection/v1/search?hasImages=true&q=art');
         if (met.success) gain += 0.02;
@@ -289,7 +290,7 @@ export class UniversalHyperIntelligence {
     async learnSocial(): Promise<number> {
         console.log('   👥 Social & Psychology...');
         let gain = 0;
-        
+
         // Reddit - Multiple subreddits
         const reddit = await httpsGet('https://www.reddit.com/r/science.json');
         if (reddit.success) gain += 0.03;
@@ -331,7 +332,7 @@ export class UniversalHyperIntelligence {
         // Calculate overall
         const domainValues = Object.values(this.metrics).slice(0, 14);
         this.metrics.overall = domainValues.reduce((a, b) => a + b, 0) / 14;
-        
+
         this.iteration++;
     }
 
@@ -357,8 +358,13 @@ export class UniversalHyperIntelligence {
         console.log('═══════════════════════════════════════════════════════════════════════\n');
 
         while (true) {
+            // 🛑 [Maintenance Check] Warm-restart protocol
+            if (await MaintenanceGuard.isMaintenanceActive()) {
+                console.log('🛑 [Universal] Maintenance signal detected. Powering down...');
+                process.exit(0);
+            }
             const status = this.getStatus();
-            
+
             console.log('─'.repeat(76));
             console.log('ITERATION ' + status.iteration + ' | ' + status.phase + ' | ' + status.overall.toFixed(4) + ' overall');
             console.log('─'.repeat(76));

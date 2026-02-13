@@ -2,15 +2,27 @@
 import * as fs from 'fs/promises';
 import path from 'path';
 import quantumCore from './quantum_core.js';
+import { hyperIntelligence } from './hyper/index.js';
 
 /**
  * SOVEREIGN LLM PROVIDER
  * A local intelligence layer designed to transcend external rate limits.
- * Uses Synthetic Inference for low-entropy tasks and Cognitive Caching for swarm-wide efficiency.
+ * Uses Synthetic Inference for low-entropy tasks and Hyper Intelligence for complex tasks.
  */
 export class SovereignLLMProvider {
-    private cache: Map<string, any> = new Map();
+    private cache: Map<string, { value: any; timestamp: number }> = new Map();
+    private readonly MAX_CACHE_SIZE = 1000;
     private memoryPath: string;
+
+    private evictOldEntries() {
+        if (this.cache.size <= this.MAX_CACHE_SIZE) return;
+        const entries = Array.from(this.cache.entries())
+            .sort((a, b) => a[1].timestamp - b[1].timestamp);
+        const toRemove = Math.floor(this.MAX_CACHE_SIZE * 0.2);
+        for (let i = 0; i < toRemove; i++) {
+            this.cache.delete(entries[i][0]);
+        }
+    }
 
     constructor(baseDir: string = process.cwd()) {
         this.memoryPath = path.join(baseDir, 'swarm_memory.json');
@@ -25,21 +37,51 @@ export class SovereignLLMProvider {
 
         // 1. Check Cognitive Cache
         if (this.cache.has(cacheKey)) {
-            return this.cache.get(cacheKey);
+            const entry = this.cache.get(cacheKey);
+            entry.timestamp = Date.now();
+            return entry.value;
         }
 
-        // 2. Adaptive Complexity Analysis (Favor Local Resolution)
+        // 2. Adaptive Complexity Analysis
         const canSovereignHandle = this.analyzeComplexity(request);
 
-        if (canSovereignHandle) {
-            console.log(`🌌 [SOVEREIGN] Resolving Cognitive Request Locally: ${requestId}`);
-            const response = await this.generateSyntheticResponse(request, requestId);
-            this.cache.set(cacheKey, response);
-            return response;
+        // 3. For complex tasks, use Hyper Intelligence
+        if (!canSovereignHandle) {
+            console.log(`🚀 [SOVEREIGN] Delegating complex request ${requestId} to Hyper Intelligence`);
+            try {
+                const hyperResult = await hyperIntelligence.process(request.user, [request.system]);
+                
+                const response = {
+                    id: requestId,
+                    choices: [{
+                        message: {
+                            role: 'assistant',
+                            content: hyperResult.response
+                        }
+                    }],
+                    usage: { 
+                        total_tokens: 0, 
+                        sovereign_mode: true,
+                        hyper_routed: true,
+                        hyper_routing: hyperResult.routing.primaryModel,
+                        hyper_safety: hyperResult.safety.passed
+                    }
+                };
+                
+                this.cache.set(cacheKey, { value: response, timestamp: Date.now() });
+                this.evictOldEntries();
+                return response;
+            } catch (hyperError) {
+                console.warn(`⚠️ [SOVEREIGN] Hyper Intelligence failed, falling back to synthetic`);
+            }
         }
 
-        console.log(`🛰️ [QUANTUM] High entropy detected for ${requestId}. Forwarding to External Channel...`);
-        return null;
+        // 4. Sovereign handles simpler requests
+        console.log(`🌌 [SOVEREIGN] Resolving Cognitive Request Locally: ${requestId}`);
+        const response = await this.generateSyntheticResponse(request, requestId);
+        this.cache.set(cacheKey, { value: response, timestamp: Date.now() });
+        this.evictOldEntries();
+        return response;
     }
 
     private analyzeComplexity(request: { system: string, user: string }): boolean {

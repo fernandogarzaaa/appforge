@@ -1,0 +1,9 @@
+{
+  "totalConsultations": 1,
+  "successfulPredictions": 0,
+  "coherenceHistory": [
+    0.85
+  ],
+  "lastUpdated": "2026-02-13T14:03:59.346Z",
+  "confidenceCalibration": 1
+}

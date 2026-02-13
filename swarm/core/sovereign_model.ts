@@ -36,6 +36,8 @@ export class SovereignModelProvider {
         console.log(`🌌 [SOVEREIGN-MODEL] Consulting Physical Brain: ${requestId}`);
 
         try {
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 30000);
             const response = await fetch(`${this.baseUrl}/api/chat`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -46,8 +48,10 @@ export class SovereignModelProvider {
                         { role: 'user', content: request.user }
                     ],
                     stream: false
-                })
+                }),
+                signal: controller.signal
             });
+            clearTimeout(timeoutId);
 
             if (!response.ok) {
                 const error = await response.text();

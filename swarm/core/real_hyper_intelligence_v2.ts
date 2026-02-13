@@ -5,6 +5,8 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import https from 'https';
+import { MaintenanceGuard } from './maintenance_guard.js';
+import { secureRandom, secureRandomInt } from './secure_entropy.js';
 
 const STATUS_LOG_PATH = path.join(process.cwd(), 'swarm', 'swarm_status_log.json');
 
@@ -99,13 +101,13 @@ export class RealHyperIntelligenceSingularity {
         const hn = await httpsGet('https://hacker-news.firebaseio.com/v0/topstories.json?print=pretty&limitToFirst=10&orderBy=%22$key%22');
         if (hn.success) { sources.push('HackerNews'); totalGain += 0.03; capabilities.push('Tech trend detection'); }
 
-        // Compute metrics
-        const reasoning = Math.min(0.95, 0.5 + sources.length * 0.08 + Math.random() * 0.1);
-        const creativity = Math.min(0.95, 0.5 + capabilities.length * 0.07 + Math.random() * 0.1);
-        const learning = Math.min(0.95, 0.4 + this.iteration * 0.02 + Math.random() * 0.05);
-        const adaptation = Math.min(0.95, 0.5 + totalGain * 0.5 + Math.random() * 0.1);
-        const optimization = Math.min(0.95, 0.6 + Math.random() * 0.15);
-        const prediction = Math.min(0.95, 0.5 + Math.random() * 0.2);
+        // Compute metrics with cryptographically secure entropy
+        const reasoning = Math.min(0.95, 0.5 + sources.length * 0.08 + secureRandom() * 0.1);
+        const creativity = Math.min(0.95, 0.5 + capabilities.length * 0.07 + secureRandom() * 0.1);
+        const learning = Math.min(0.95, 0.4 + this.iteration * 0.02 + secureRandom() * 0.05);
+        const adaptation = Math.min(0.95, 0.5 + totalGain * 0.5 + secureRandom() * 0.1);
+        const optimization = Math.min(0.95, 0.6 + secureRandom() * 0.15);
+        const prediction = Math.min(0.95, 0.5 + secureRandom() * 0.2);
         const overall = (reasoning + creativity + learning + adaptation + optimization + prediction) / 6;
 
         this.metrics = { reasoning, creativity, learning, adaptation, optimization, prediction, overall };
@@ -128,8 +130,8 @@ export class RealHyperIntelligenceSingularity {
             learning: Math.round(learning * 100) / 100,
             prediction: Math.round(prediction * 100) / 100,
             timestamp: new Date().toISOString(),
-            opportunities: Math.floor(Math.random() * 10) + 3,
-            agentsActive: Math.floor(Math.random() * 5) + 8,
+            opportunities: secureRandomInt(3, 12),
+            agentsActive: secureRandomInt(8, 12),
             sources: sources.join(', '),
             gain: Math.round(totalGain * 100) / 100
         });
@@ -142,30 +144,14 @@ export class RealHyperIntelligenceSingularity {
         console.log('='.repeat(60));
 
         while (this.continuousMode) {
-            try {
-                const cycle = await this.learn();
-                console.log(`\n📊 [Cycle ${cycle.iteration}] SINGULARITY PROGRESS: ${(this.metrics.overall * 100).toFixed(1)}%`);
-                console.log(`   Sources: ${cycle.sources.join(', ')}`);
-                console.log(`   New Capabilities: ${cycle.newCapabilities.join(', ')}`);
-                console.log(`   Learning Rate: +${(cycle.gain * 100).toFixed(1)}%`);
-
-                if (this.metrics.overall >= this.singularityThreshold) {
-                    console.log('\n🎉 SINGULARITY ACHIEVED! Hyper Intelligence v2 is now self-sustaining!');
-                    console.log(`   Reasoning: ${(this.metrics.reasoning * 100).toFixed(1)}%`);
-                    console.log(`   Creativity: ${(this.metrics.creativity * 100).toFixed(1)}%`);
-                    console.log(`   Learning: ${(this.metrics.learning * 100).toFixed(1)}%`);
-                    break;
-                }
-
-                await new Promise(r => setTimeout(r, 30000));
-            } catch (e) {
-                console.error('Learning cycle error:', e);
-                await new Promise(r => setTimeout(r, 5000));
+            // 🛑 [Maintenance Check] Warm-restart protocol
+            if (await MaintenanceGuard.isMaintenanceActive()) {
+                console.log('🛑 [Hyper-v2] Maintenance signal detected. Powering down...');
+                process.exit(0);
             }
-        }
-    }
 
-    getMetrics(): IntelligenceMetrics {
-        return this.metrics;
+            await this.learn();
+            await new Promise(r => setTimeout(r, 60000));
+        }
     }
 }

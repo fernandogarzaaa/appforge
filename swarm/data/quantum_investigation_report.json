@@ -1,0 +1,21 @@
+{
+  "timestamp": "2026-02-13T06:27:52.549Z",
+  "investigation": "Analyze current swarm coherence and identify cognitive bottlenecks in the Sovereign Prompt interface.",
+  "results": {
+    "ob": {
+      "vector": "Alignment",
+      "score": 0.85,
+      "bottleneck": "Dependency on central heuristics"
+    },
+    "conf": 0.2967032967032967,
+    "pm": {
+      "match": "",
+      "conf": 0
+    },
+    "ad": false,
+    "coh": 0.29670329670329676,
+    "ents": 0.6,
+    "mem": 0
+  },
+  "swarm_context": "{\"overall\":0.58,\"phase\":\"LEARNING\",\"reasoning\":0.6,\"creativity\":0.58,\"learning\":0.44,\"prediction\":0.52,\"timestamp\":\"2026-02-12T21:24:41.345Z\",\"opportunities\":4,\"agentsActive\":10,\"sources\":\"HackerNews\",\"gain\":0.03}"
+}

@@ -12,8 +12,33 @@
  * - Enhanced Swarm Intelligence
  */
 
+import { willowPatterns } from './willow_patterns.js';
+import { 
+    secureRandom, 
+    secureRandomRange, 
+    secureRandomInt, 
+    secureRandomElement,
+    configureSecureEntropy,
+    validateEntropySource,
+    getEntropyStats
+} from './secure_entropy.js';
+import path from 'path';
+
 type QuantumState = { solution: any; amplitude: number; phase: number; index: number };
 type Agent = { name: string; role: string; confidence: number; state: string; proposals?: any[] };
+
+/**
+ * Initialize secure entropy on module load
+ */
+console.log('[EnhancedQuantumEngine] Initializing cryptographically secure entropy...');
+const validation = validateEntropySource();
+if (validation.valid) {
+    console.log('[EnhancedQuantumEngine] ✅ Entropy source validated');
+} else {
+    console.warn('[EnhancedQuantumEngine] ⚠️ Entropy validation warning:', validation.message);
+}
+const entropyStats = getEntropyStats();
+console.log(`[EnhancedQuantumEngine] Entropy mode: ${entropyStats.mode}, variance: ${entropyStats.variance.toFixed(6)}`);
 
 /** Quantum Error Correction Manager */
 export class QuantumErrorCorrection {
@@ -22,9 +47,9 @@ export class QuantumErrorCorrection {
 
     correctErrors(stateVector: QuantumState[]): QuantumState[] {
         return stateVector.map(state => {
-            const errorDetected = Math.random() < this.errorRate;
+            const errorDetected = secureRandom() < this.errorRate;
             if (errorDetected) {
-                stateVector[state.index].amplitude = Math.max(-1, Math.min(1, state.amplitude + (Math.random() - 0.5) * 0.01));
+                stateVector[state.index].amplitude = Math.max(-1, Math.min(1, state.amplitude + (secureRandom() - 0.5) * 0.01));
                 stateVector[state.index].phase = (state.phase + Math.PI) % (2 * Math.PI);
             }
             return state;
@@ -46,7 +71,7 @@ export class EnhancedSuperpositionProcessor {
         this.stateVector = possibleSolutions.map((solution, index) => ({
             solution,
             amplitude: 1 / Math.sqrt(possibleSolutions.length),
-            phase: Math.random() * 2 * Math.PI,
+            phase: secureRandom() * 2 * Math.PI,
             index
         }));
         return this.stateVector;
@@ -55,7 +80,7 @@ export class EnhancedSuperpositionProcessor {
     applyAttention(): void {
         const numStates = this.stateVector.length;
         this.attentionWeights = [];
-        
+
         for (let head = 0; head < this.numHeads; head++) {
             const headWeights: number[] = [];
             for (let i = 0; i < numStates; i++) {
@@ -72,13 +97,13 @@ export class EnhancedSuperpositionProcessor {
 
     amplifyGoodSolutions(evaluationFunction: (sol: any) => number): QuantumState[] {
         this.applyAttention();
-        
+
         this.stateVector.forEach(state => {
             const quality = evaluationFunction(state.solution);
             const headIndex = state.index % this.numHeads;
             const attention = this.attentionWeights[headIndex]?.[state.index] || 0.5;
             state.amplitude *= (1 + quality) * (1 + attention);
-            
+
             const total = this.stateVector.reduce((sum, s) => sum + s.amplitude ** 2, 0);
             state.amplitude /= Math.sqrt(total || 1);
         });
@@ -139,7 +164,7 @@ export class QuantumAnnealingOptimizer {
             const neighbor = this.generateNeighbor(current);
             const neighborE = energyFn(neighbor);
             const delta = neighborE - currentE;
-            if (delta < 0 || Math.random() < Math.exp(-delta / temp)) {
+            if (delta < 0 || secureRandom() < Math.exp(-delta / temp)) {
                 current = neighbor;
                 currentE = neighborE;
                 if (currentE < bestE) { best = current; bestE = currentE; }
@@ -150,12 +175,12 @@ export class QuantumAnnealingOptimizer {
     }
 
     private generateNeighbor(solution: any): any {
-        if (typeof solution === 'string') return Math.random() > 0.5 ? solution + '_opt' : solution;
+        if (typeof solution === 'string') return secureRandom() > 0.5 ? solution + '_opt' : solution;
         const n = { ...solution };
         const keys = Object.keys(n);
         if (keys.length === 0) return n;
-        const key = keys[Math.floor(Math.random() * keys.length)];
-        if (typeof n[key] === 'number') n[key] += (Math.random() - 0.5) * 2;
+        const key = keys[secureRandomInt(0, keys.length - 1)];
+        if (typeof n[key] === 'number') n[key] += (secureRandom() - 0.5) * 2;
         else if (typeof n[key] === 'string') n[key] += '_mut';
         return n;
     }
@@ -178,7 +203,7 @@ export class IslandModelGA {
 
     private createPopulation(): any[] {
         return Array(this.populationSize).fill(0).map(() => ({
-            genes: Array(10).fill(0).map(() => Math.random()),
+            genes: Array(10).fill(0).map(() => secureRandom()),
             fitness: 0
         }));
     }
@@ -206,20 +231,20 @@ export class IslandModelGA {
     private tournamentSelect(pop: any[], size = 3): any {
         let best: any = null;
         for (let i = 0; i < size; i++) {
-            const ind = pop[Math.floor(Math.random() * pop.length)];
+            const ind = pop[secureRandomInt(0, pop.length - 1)];
             if (!best || ind.fitness > best.fitness) best = ind;
         }
         return best;
     }
 
     private crossover(p1: any, p2: any): any {
-        const pt = Math.floor(Math.random() * p1.genes.length);
+        const pt = secureRandomInt(0, p1.genes.length - 1);
         return { genes: [...p1.genes.slice(0, pt), ...p2.genes.slice(pt)], fitness: 0 };
     }
 
     private mutate(ind: any, rate = 0.1): void {
         const mr = rate * (1 + (1 - ind.fitness));
-        ind.genes = ind.genes.map((g: number) => Math.random() < mr ? Math.random() : g);
+        ind.genes = ind.genes.map((g: number) => secureRandom() < mr ? secureRandom() : g);
     }
 
     migrate(): void {
@@ -264,11 +289,11 @@ export class QuantumRLAgent {
 
     chooseAction(state: number[]): number {
         const ds = this.discretize(state);
-        if (Math.random() < this.epsilon) return Math.floor(Math.random() * this.actionSpace);
+        if (secureRandom() < this.epsilon) return secureRandomInt(0, this.actionSpace - 1);
         const qs = this.qTable[ds];
         const m = Math.max(...qs);
         const best = qs.map((q, i) => q === m ? i : -1).filter(i => i !== -1);
-        return best[Math.floor(Math.random() * best.length)];
+        return best[secureRandomInt(0, best.length - 1)];
     }
 
     update(state: number[], action: number, reward: number, nextState: number[]): void {
@@ -348,7 +373,7 @@ export class QuantumPredictiveEngine {
 
     add(key: string, data: number[]): void {
         const o = Math.min(5, Math.floor(data.length / 3));
-        const c = Array(o).fill(0).map(() => 0.1 * (1 + Math.random()));
+        const c = Array(o).fill(0).map(() => 0.1 * (1 + secureRandom()));
         this.models.set(key, { data, mod: { o, c } });
     }
 
@@ -360,7 +385,7 @@ export class QuantumPredictiveEngine {
         for (let i = 0; i < steps; i++) {
             let p = 0;
             for (let j = 0; j < cur.length; j++) p += cur[j] * m.mod.c[j];
-            p += (Math.random() - 0.5) * 0.1 * Math.abs(p);
+            p += (secureRandom() - 0.5) * 0.1 * Math.abs(p);
             res.push(p);
             cur = [...cur.slice(1), p];
         }
@@ -431,7 +456,7 @@ export class EnhancedQuantumSwarm {
     async process(task: string): Promise<any> {
         const st: any[] = [];
         for (const [n, a] of this.agents) {
-            const prop = { act: `${a.role.toLowerCase()}_act`, sc: Math.random() + (a.confidence > 0.6 ? 0.2 : 0) };
+            const prop = { act: `${a.role.toLowerCase()}_act`, sc: secureRandom() + (a.confidence > 0.6 ? 0.2 : 0) };
             (a as Agent & { proposals: any[] }).proposals = [prop];
             a.state = 'active';
             st.push({ n: a.name, r: a.role, p: prop, c: a.confidence });
@@ -475,29 +500,71 @@ export class EnhancedQuantumEngine {
     entStr = 0;
 
     async solve(prob: string, sols: any[], crit: string[]): Promise<any> {
+        // Willow Acceleration Pulse
+        const pulse = await willowPatterns.processPulse(sols);
+
         const pm = this.pat.recognize(sols);
         this.sup.createSuperposition(sols);
-        const ef = (s: any) => { 
+        
+        // Enhanced evaluation function that properly extracts values from solution objects
+        const ef = (s: any) => {
             if (!s) return 0;
-            const str = JSON.stringify(s || '');
-            let sc = 0; 
-            for (const c of crit) if (str.includes(c)) sc++; 
-            return sc; 
+            let sc = 0;
+            for (const c of crit) {
+                // Extract value for criterion from solution
+                const val = s[c];
+                if (val !== undefined) {
+                    // Normalize: for metrics we want to MAXIMIZE (coherence, scalability), use value directly
+                    // For costs we want to MINIMIZE, invert
+                    if (['latency', 'cost', 'resourceUsage', 'complexity', 'error'].includes(c.toLowerCase())) {
+                        sc += Math.max(0, 1 - val);
+                    } else {
+                        sc += Math.min(1, Math.max(0, val));
+                    }
+                }
+            }
+            return sc / crit.length;
         };
+
         this.sup.amplifyGoodSolutions(ef);
-        this.sup.stateVector = this.err.correctErrors(this.sup.stateVector);
-        const m = this.sup.measure();
-        const opt = await this.anne.optimize(m.bestSolution, (s: any) => -ef(s));
-        this.mem.store({ prob, sol: opt.sol || m.bestSolution, q: ef(opt.sol || m.bestSolution), nov: pm.conf });
-        const ad = this.ano.detect(ef(m.bestSolution));
-        this.entStr = this.ent.findEntanglements(sols).length / 10;
-        this.coh = 1 - (1 - m.probability) - (ad.anom ? 0.2 : 0);
-        return { ob: m.bestSolution, osb: opt.sol, conf: m.probability, pm, ad: ad.anom, coh: this.coh, ents: this.entStr, mem: this.mem.long.size };
+        this.err.correctErrors(this.sup.stateVector);
+        this.coh = this.sup.stateVector.reduce((acc, s) => acc + s.amplitude ** 2, 0) / this.sup.stateVector.length;
+        this.entStr = this.ent.findEntanglements(sols).length;
+
+        const ms = this.sup.measure();
+        
+        // Run genetic algorithm for optimization
+        const gaResult = this.ga.evolve();
+        
+        // Use GA best solution if available
+        const osb = ms.bestSolution || gaResult.bestSolution;
+        
+        return {
+            ob: ms.bestSolution,
+            osb: osb,
+            coh: this.coh,
+            entStr: this.entStr,
+            pulse,
+            willowBoost: pulse.speedup,
+            patternMatch: pm,
+            gaEvolution: gaResult
+        };
     }
 
-    status(): any {
-        return { coh: this.coh, ents: this.entStr, mem: this.mem.long.size, ano: this.ano.history.filter((a: any) => a.anom).length, ag: this.sw.agents.size };
+    /**
+     * Configure secure entropy (for testing)
+     */
+    configureEntropy(config: { deterministic?: boolean; seed?: string }): void {
+        configureSecureEntropy(config);
+        if (config.deterministic) {
+            console.log('[EnhancedQuantumEngine] ⚠️  Deterministic mode enabled for testing');
+        }
+    }
+
+    /**
+     * Get entropy statistics
+     */
+    getEntropyStats() {
+        return getEntropyStats();
     }
 }
-
-export default EnhancedQuantumEngine;

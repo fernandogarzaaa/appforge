@@ -12,6 +12,7 @@ export * from './llm_provider_interface.js';
 
 // Providers
 export { OllamaProvider } from './ollama_provider.js';
+export { OllamaModelRouter, TaskType, MODEL_REGISTRY } from './ollama_model_router.js';
 export { SyntheticProvider } from './synthetic_provider.js';
 export { ClaudeProvider } from './claude_provider.js';
 export { GeminiProvider } from './gemini_provider.js';
@@ -22,3 +23,6 @@ export { LlamaCppProvider } from './llamacpp_provider.js';
 
 // Registry
 export { ProviderRegistry, getProviderRegistry } from './provider_registry.js';
+
+// Quantum Optimized Router
+export { QuantumOptimizedRouter, getQuantumOptimizedRouter, createQuantumOptimizedRouter, TaskType, Task, CodeTask, ReasoningTask, ModelResponse, ModelStatus, OptimizationStats } from './quantum_optimized_router.js';

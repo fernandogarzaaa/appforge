@@ -6,6 +6,7 @@
  */
 
 import quantumCore from './quantum_core.js';
+import { secureRandom } from './secure_entropy.js';
 
 interface SelfImprovementCycle {
     iteration: number;
@@ -259,7 +260,7 @@ export class SingularityEngine {
                 iteration: track.improvements.length + 1,
                 focusArea: name,
                 changes: this.generateTrackImprovements(name),
-                improvements: 0.05 + Math.random() * 0.1,
+                improvements: 0.05 + secureRandom() * 0.1,
                 coherence: this.singularityState.coherence
             };
 

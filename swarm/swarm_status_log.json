@@ -37,5 +37,70 @@
     "agentsActive": 10,
     "sources": "HackerNews",
     "gain": 0.03
+  },
+  {
+    "overall": 0.59,
+    "phase": "LEARNING",
+    "reasoning": 0.68,
+    "creativity": 0.6,
+    "learning": 0.44,
+    "prediction": 0.53,
+    "timestamp": "2026-02-13T11:53:27.317Z",
+    "opportunities": 7,
+    "agentsActive": 10,
+    "sources": "HackerNews",
+    "gain": 0.03
+  },
+  {
+    "overall": 0.58,
+    "phase": "LEARNING",
+    "reasoning": 0.65,
+    "creativity": 0.65,
+    "learning": 0.43,
+    "prediction": 0.53,
+    "timestamp": "2026-02-13T11:53:58.879Z",
+    "opportunities": 5,
+    "agentsActive": 8,
+    "sources": "HackerNews",
+    "gain": 0.03
+  },
+  {
+    "overall": 0.58,
+    "phase": "LEARNING",
+    "reasoning": 0.67,
+    "creativity": 0.57,
+    "learning": 0.4,
+    "prediction": 0.56,
+    "timestamp": "2026-02-13T11:54:30.622Z",
+    "opportunities": 9,
+    "agentsActive": 12,
+    "sources": "HackerNews",
+    "gain": 0.03
+  },
+  {
+    "overall": 0.62,
+    "phase": "LEARNING",
+    "reasoning": 0.63,
+    "creativity": 0.64,
+    "learning": 0.43,
+    "prediction": 0.68,
+    "timestamp": "2026-02-13T11:55:02.061Z",
+    "opportunities": 8,
+    "agentsActive": 10,
+    "sources": "HackerNews",
+    "gain": 0.03
+  },
+  {
+    "overall": 0.59,
+    "phase": "LEARNING",
+    "reasoning": 0.66,
+    "creativity": 0.59,
+    "learning": 0.48,
+    "prediction": 0.6,
+    "timestamp": "2026-02-13T11:55:33.601Z",
+    "opportunities": 5,
+    "agentsActive": 8,
+    "sources": "HackerNews",
+    "gain": 0.03
   }
 ]

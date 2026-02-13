@@ -50,6 +50,7 @@ const AdminSystemConfig = lazy(() => import('@/pages/AdminSystemConfig'));
 const AdminTemplates = lazy(() => import('@/pages/AdminTemplates'));
 const AdminUserManagement = lazy(() => import('@/pages/AdminUserManagement'));
 const AdminMonitoring = lazy(() => import('@/pages/AdminMonitoring'));
+const AdminSovereign = lazy(() => import('@/pages/AdminSovereign'));
 
 const { Pages, Layout, mainPage, publicPages = [] } = pagesConfig;
 const mainPageKey = mainPage ?? Object.keys(Pages)[0];
@@ -183,6 +184,11 @@ const AuthenticatedApp = ({ onSearchOpen }) => {
       <Route path="/admin/monitoring" element={
         <AdminRoute>
           {renderAdmin(AdminMonitoring)}
+        </AdminRoute>
+      } />
+      <Route path="/admin/sovereign" element={
+        <AdminRoute>
+          {renderAdmin(AdminSovereign)}
         </AdminRoute>
       } />
       <Route path="/admin/terminal" element={
