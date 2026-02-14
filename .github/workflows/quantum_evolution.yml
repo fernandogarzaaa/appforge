@@ -16,10 +16,10 @@ jobs:
               with:
                   token: ${{ secrets.GITHUB_TOKEN }}
 
-            - name: Setup Node.js
+            - name: Setup Node.js (v22 Required)
               uses: actions/setup-node@v4
               with:
-                  node-version: "20"
+                  node-version: "22"
 
             # ⚡ CACHE: Node.js dependencies
             - name: Cache Node Modules
@@ -42,11 +42,13 @@ jobs:
                   restore-keys: |
                       quantum-evolution-
 
-            - name: Run Unified Intelligence Pulse
-              run: |
-                  npm install
-                  cd swarm && npm install
-                  npx tsx swarm/intelligence_pulse.ts
+            - name: Install Dependencies
+              working-directory: ./swarm
+              run: npm install
+
+            - name: Run Quantum Evolution
+              working-directory: ./swarm
+              run: npx tsx intelligence_pulse.ts
               env:
                   OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
                   GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
