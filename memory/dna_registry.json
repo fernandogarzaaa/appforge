@@ -1,0 +1,60 @@
+{
+  "Build a self-regulating solar energy grid simulator on the Moon": {
+    "timestamp": "2026-02-14T17:20:47.951Z",
+    "agents": [
+      {
+        "role": "PhysicsEngine",
+        "description": "Simulates physical laws and energy transfer.",
+        "directives": [
+          "Ensure conservation of energy",
+          "Model solar radiation accurately"
+        ]
+      },
+      {
+        "role": "GridArchitect",
+        "description": "Designs the electrical grid topology.",
+        "directives": [
+          "Optimize for load balancing",
+          "Ensure redundancy"
+        ]
+      },
+      {
+        "role": "ComplianceOfficer",
+        "description": "Ensures safety and regulatory compliance.",
+        "directives": [
+          "Check against lunar treaties",
+          "Verify radiation shielding"
+        ]
+      }
+    ]
+  },
+  "Build a Self-Correcting City Planner with Real-Time Traffic Optimization": {
+    "timestamp": "2026-02-14T17:29:38.414Z",
+    "agents": [
+      {
+        "role": "SpatialArchitect",
+        "description": "Designs 3D environments and resource grids.",
+        "directives": [
+          "Optimize spatial layout",
+          "Ensure efficient resource flow"
+        ]
+      },
+      {
+        "role": "PhysicsEngine",
+        "description": "Simulates physical constraints.",
+        "directives": [
+          "Enforce gravity/thermodynamics",
+          "Calculate structural integrity"
+        ]
+      },
+      {
+        "role": "InterfaceDesigner",
+        "description": "Creates user controls for the simulation.",
+        "directives": [
+          "Intuitive camera controls",
+          "Real-time data visualization"
+        ]
+      }
+    ]
+  }
+}

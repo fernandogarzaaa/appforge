@@ -1,0 +1,5301 @@
+{
+  "build": 600,
+  "timestamp": "2026-02-14T19:38:43.941Z",
+  "files": [
+    {
+      "path": "src\\api\\ai.js",
+      "hash": "73de60034b418a6b7c5370899db5c8f1c8dcab0ea87cbcf325b3f3c6fe7c7750",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\api\\apiKeyService.js",
+      "hash": "9346ddf165f43eb4cb319cab268bf19a914f600ad3a2c05c4c62a3d66df5f9ca",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\api\\appforge\\authService.js",
+      "hash": "38c17c3097bd11ded188c63f6917aef3234ec560e917359717479dfb420c9235",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\api\\appforge\\collaborationService.js",
+      "hash": "41a44a5d085550955db5e73bb35a8919a47dace9c21cc37432dbb3c8940813b3",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\api\\appforge\\index.js",
+      "hash": "3ac7fe1287e765c62bbd70596a3b0556da98d6a71ed65355d47163dbf86fe830",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\api\\appforge\\quantumService.js",
+      "hash": "2793e816ca921c0bb20ab58fd522f0e653ef431a41db827545c0dcd0c2482b4c",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\api\\appforge\\securityService.js",
+      "hash": "ef024c4cb2c616f81982cbf0b0024366e1faa2608bd5dc051f45c1952c9e6900",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\api\\appforge\\userService.js",
+      "hash": "cf56c3565e584ab8d725a282ec0fe5a4013c947a0af6dac9ff1696beb09bc8bf",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\api\\appforgeClient.js",
+      "hash": "cd2a074461ac0418530c484b05ebe7293c37646d2c9a4a2baf6c0d6385d6af83",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\api\\base44Client.js",
+      "hash": "c5f49c19174383e070144fe8aa7ecc3e90cb4ebf30aa154dc35fe650c5341ce3",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\api\\base44Integration.backup.js",
+      "hash": "80d0d280cd48e154bcced8d8cca1fda447fcd509ad534b4d17923db16862c56c",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\api\\deploymentService.js",
+      "hash": "f1e7964f67cbb0fb8c745672da42c96455bcf65cd5a8952928e55393c2ac58f2",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\api\\environmentVariableService.js",
+      "hash": "1612274f6285d0e6d60fe532d117f7bea43035cb6ef5efd736c95ee0a21fb4f8",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\api\\favoriteService.js",
+      "hash": "d188fad809768e7bfa362fe696264f90a61a1fe107f1e8b90f521e99041340ee",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\api\\llmApi.js",
+      "hash": "1abc63e0dcb0a6b3ab84c3722e75d4e0e00caeb04a0508b2cc883ffc6913bfbd",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\api\\projectCloningService.js",
+      "hash": "dfdccb84be7114b75c546f32887b7c79f2850cac73d0707dcfcbf919ad966159",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\api\\services\\apiKeys.js",
+      "hash": "be15da750cdf3325d12c2171daed06878657241aeaa57f7547e95d04dbf93f99",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\api\\services\\authService.js",
+      "hash": "9982c3dba90f2fabce2e918903edda7c68f59d0ade1ed50c984ecd9b7550568f",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\api\\services\\deployments.js",
+      "hash": "874b8f0f11ebdf104acc77475654c6ede2e5e6bd515ffa17078f84bb4f889f42",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\api\\services\\entityService.js",
+      "hash": "25fb9c40105e42ec600d4ea72843f4bcbe1243b3960278956eb48015d416ebcf",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\api\\services\\environmentVariables.js",
+      "hash": "6532c21ef69ccafa735038b07d63422e3632c8f0dc9d12fea4b67f55d631594d",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\api\\services\\index.js",
+      "hash": "f17d73fde50657d3733a67debdc2eaff36be380d1ee639be00f1b5dd1e605bc4",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\api\\services\\persistenceService.js",
+      "hash": "b39e7707db2d3a45f1655344fc803330a65b52136e8375b611dd2a633c594cd8",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\api\\services\\projects.js",
+      "hash": "4718064bce6a0a24f5b81a6a2443a9eb7cb49469e92f453170f7c04bdd3232fe",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\api\\services\\projectService.js",
+      "hash": "3353871fbad4e22d0fd889a4050b88237729a48832ef3089f42b9467e3c5c18f",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\api\\services\\team.js",
+      "hash": "8c52da91d34e053e15dcb2555be65f8af30a8f15a6ad8ffd507690dff1cd7068",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\api\\services\\teamService.js",
+      "hash": "7aed552c67112aa6b7814449a644897e33e661b3cac7ca71f5a41bc1f540d55f",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\api\\services\\websocketService.js",
+      "hash": "8f9e5b22f7fbb90fc4d1dc096e9d148b3aed9385a96e06727d975ea0b59ae9fc",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\api\\swagger.config.ts",
+      "hash": "7160d11e3ea90958c3494e97a2577c28e5dc3f8218cb7d80646a6962c51bb8ec",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\api\\swaggerIntegration.js",
+      "hash": "e5a58a4f70332d21f45215497e44bcf50d1141b716ca6897e8d94c1dfa99801e",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\api\\teamService.js",
+      "hash": "7826b02130a353b4d39ba38c82f89c06a3f6a1f7d4377d4735f95152dac5b262",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\App.jsx",
+      "hash": "69f614881e3a9c35ea8ace14fbad75304d3f83d3017053f13913613e06b8133b",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ActivityCard.jsx",
+      "hash": "e1773b7b7f8bfe301186ba11f109c5e553d26d07af050f8916600765ddd7cc48",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ActivityFeed.jsx",
+      "hash": "717514216ce4d2b37f9b9f4dbeadac2f28ba9950eabd41393a5a10019b3e896c",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\admin\\AdminAuditViewer.jsx",
+      "hash": "784448c851dfee2d39ab4c976854660581bb46e6a6667de32d1734a5f4c7b916",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\admin\\AdminDeveloperTools.jsx",
+      "hash": "6cf6830a5ce16f3a3b9dabb7dd2e9ec234c4ba6588e526b41bdf44d62a472e97",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\admin\\AdminLayout.jsx",
+      "hash": "088f430b06d90fb6a943fd5cccaa1eca14b4725c9cf718d6d5f06cd2f3a8a394",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\admin\\AdminNavigation.jsx",
+      "hash": "42db81ceaf4f852f48102b2ff1af25af2b7f902c778b595aad3a3ddc029ee035",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\admin\\AdminPermissionsManager.jsx",
+      "hash": "dafd5ef79503bef4f3de72af0fd65d11bc8aab3cb7a9f725fbee0bea9ce57a07",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\admin\\AdminSettings.jsx",
+      "hash": "936d518977ad70478a15a620fa1940b068bba52c40142ad387e3327f820558e9",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\admin\\AgentManagementHub.jsx",
+      "hash": "85f3ea4c9f21e9bd64ef5c189c0c4f1f6b53794543348d18ca8126e2c03ef378",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\admin\\AgentPermissionsAdmin.jsx",
+      "hash": "cf10497f232dfde8c93d8f1847461b20f4006dd41ddb180b53b0b16dab6316d6",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\admin\\AIAgentControl.jsx",
+      "hash": "0ccd1dee945e4c133d349f125dc2836d4181959bad9ac709af466fd686d5035a",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\admin\\AICapabilitiesControl.jsx",
+      "hash": "9eea1359ef30058422731b9adddc0c122767648eb4727bae3f7d22901910e8dd",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\admin\\APIConfiguration.jsx",
+      "hash": "4b6f6a5dec2e80e58d4098b3559e3a46aa0205e48cf389d5da451ed9708cef5f",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\admin\\APIKeyManagement.jsx",
+      "hash": "7e70c52d90339f0e1f29b282fc8d8851a15db8ca4df8135fb9c731dc991b8484",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\admin\\AuditLog.jsx",
+      "hash": "62ae0ef996345629c74a7b81ecd4a4954b6b906ec7824241cd468526b7563088",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\admin\\AutonomousTrigger.jsx",
+      "hash": "2fa61cf9351a2b44d679b1cc66fd396a5f09c7845dd9546f4013ccd990c0899f",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\admin\\CancelSubscriptionModal.jsx",
+      "hash": "986a95981181410a6b65898c715d4aa05f8ea3fb79e61a1a1e0d6170557449d7",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\admin\\CoachingSystemAdmin.jsx",
+      "hash": "d7aacb17a44a8d86c2adb122c150badcd5e912ce9708d51509246f52a49155bd",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\admin\\ConfigEditor.jsx",
+      "hash": "022c3b5abdfb83703734d76d379f4da0f314611b1cc2df90b24e2a095e0760b3",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\admin\\DangerZone.jsx",
+      "hash": "ed23a4001d0923ff68a68bf5ae130de9ea97afdc7c8fa7540243878be899a316",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\admin\\DeploymentMonitor.jsx",
+      "hash": "2a81e3bdebdafa05f5156f5658adcc4a5c8a9afd065c9bb1c044f6d1b98b4202",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\admin\\GitHubAutomationMonitor.jsx",
+      "hash": "a2def8b1a11b5c55022ba58b3b1384c3daecd1f32af550de8fb9594718dc0a3d",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\admin\\GitHubIntegrationSetup.jsx",
+      "hash": "cc6f54b2df48dc94ee512a583312f949ecbe49f886c554bc7a4a01ef0c47b1d3",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\admin\\GlobalInsightsPanel.jsx",
+      "hash": "ccf4af51d1fd8761e80c37524d2bd872d369b765935628d75a4b0bbee1b51a22",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\admin\\KeyManager.jsx",
+      "hash": "43220290b89b98f3b2773698facd410cb3161b49365fb8a505356937f43e6dcb",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\admin\\MarketingBotPanel.jsx",
+      "hash": "1b08763fbdffc7035c28bea4c799b33323547e9350ab749a99c4764374e6c383",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\admin\\OnboardingSystemConfig.jsx",
+      "hash": "ef1f16ed28bf9cda7566e3d42ef7ca6e5bc4df5fdb65e77f0efc0a034a512b98",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\admin\\PlanChangeModal.jsx",
+      "hash": "c2021440327309b9cabc12225ccfbfe193068011bdacad3eae50595f3ab39cda",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\admin\\ProactiveAIAdmin.jsx",
+      "hash": "bfb3a81a4272ef112f02ab9db87e99e90b7f97d5024b35db13586469a3f2a1f9",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\admin\\QuantumAIBadge.jsx",
+      "hash": "9d62231ee0fb7c3441db651b038e32c844445ab0282ab434c1e5607f600534f2",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\admin\\QuantumAIInsightsPanel.jsx",
+      "hash": "01af93798a89cd3c5a8d5ca228291b9fae927250b62d3153332be7608f80f284",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\admin\\QuantumBackendAdmin.jsx",
+      "hash": "d37f087c28252c035660609b334517442c6fe6568265088b0bbba14ad128c29c",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\admin\\QuantumLLMSettings.jsx",
+      "hash": "8ecbc267cebbf6c261e93728fdfabdbe73ca31cd32cd7e03220eaca044165d89",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\admin\\QuantumSystemHealthPanel.jsx",
+      "hash": "387cfb391a31a9dce0fc6d12c3201aa32bf193eedb0f3e0e5bc3fbb909aca104",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\admin\\SearchBar.jsx",
+      "hash": "728dd54eda835da9d44b9266c53efbd3c25572b24be4236951f7070f86d67a80",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\admin\\SolanaWalletManager.jsx",
+      "hash": "653624e9821a52809e22a1282bffaa15e39131e1f91c00727dc0d01f6be5182d",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\admin\\StatsCard.jsx",
+      "hash": "c49d9a90a9dd9ef3ef38fb86a6269c4bfd84fb82e18effd5e76cc2f637f3905d",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\admin\\SubscriberTable.jsx",
+      "hash": "6ebbf58d53b42cff444de3222ba42c153ce36bdef4b85a0123d331f582b72dd3",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\admin\\SubscriptionMetrics.jsx",
+      "hash": "6a950da48c9c70e0ccf81b8cd92498b97a76f1322cafc0b87e9767297d1a2a8d",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\admin\\SubscriptionPlanManager.jsx",
+      "hash": "faf8ac69b059f83c196c6249b48599dc4d78f2d78a5de1a5a0d8a792086c8e41",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\admin\\SubscriptionTierManager.jsx",
+      "hash": "feaf278dc5248e74af3251c9e3a9db50bb3a031f83b0faf8aa9d12fdfb13cc52",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\admin\\SystemHealthDashboard.jsx",
+      "hash": "9482be3b19e2e7012a87f8a54c03f2df02ce9e530060090a1812f08eef09cb77",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\admin\\SystemMonitor.jsx",
+      "hash": "8052cb43e2f929a01d01e41d6733c373a7bb32fcdcce7f44ec300991f2e88d9d",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\admin\\TemplateManagement.jsx",
+      "hash": "f1a6d44ee1493b38fef02cc19882c40252d92934a8f5c87b5d0398343bd29e90",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\agents\\FunctionValidator.jsx",
+      "hash": "b7c7fa52515088d2a4780a186b9673dcd9e099c5149a36380a7ec4494cee6707",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ai\\AdvancedAIFunctions.jsx",
+      "hash": "cb0a311ef37edfdea498d83bb7db01cc3aff20ff4247c09a3c87cea1eb799d40",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ai\\AdvancedAITools.jsx",
+      "hash": "9070bf9bc0945823a0df5baa601b8372b927222b284f39346b2b4dcfcde9ceff",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ai\\AgentCoachingPanel.jsx",
+      "hash": "36acaf746cb0c424c88780460d69821dfd725b6cf71621590b457b9a955f7efb",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ai\\AgentCoachingPanelWithPayment.jsx",
+      "hash": "2111a839ed23aed55fffc2d27719f9a153b284d12f3cfaf96cf54aa714cd7636",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ai\\AgentCollaborationBuilder.jsx",
+      "hash": "ed738e030365cccc72c77cd429314fc2ff5120840820f125a66c5058ab714b4c",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ai\\AgentCollaborationDashboard.jsx",
+      "hash": "27510a3c5362a73142a70d4eaca0e0f04d37e14fcba61e9a61cf9fca2bb5d4cd",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ai\\AgentDeploymentPanel.jsx",
+      "hash": "a86990be0f91c976e49dc8c257e9f3cfd022894c1ac6d3f0a720e15237034ccd",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ai\\AgentFeedbackCollector.jsx",
+      "hash": "3b70484038e1311e4a1afbfd17daa5671ba56b0e966395a9d1b701873d0af49c",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ai\\AICodeAssistant.jsx",
+      "hash": "3a1c562c940abcb634787d166b35582d0fc468e26d4f3fb11a5356b10efe61ee",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ai\\AICodeCompletion.jsx",
+      "hash": "3a1807e6ce0f93a55d7693f38e155d55dc1540d3720c09ea11e16ef1c5b3c208",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ai\\AIComponentGenerator.jsx",
+      "hash": "54d06090b49e229d4d5d7bbfe8688b1f108b066e63b3f476c60fc15bce5b799a",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ai\\AIProjectGenerator.jsx",
+      "hash": "bd460df288d51005097fa1ad2d5d9710a7273003d75858c399d35486281b53ee",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ai\\AITestingDebugger.jsx",
+      "hash": "ddaae07a66d8ee955e1d5423ce1fc8d2494a69cb276a0ac4f2c6960bbe110a8f",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ai\\AIUsagePanel.jsx",
+      "hash": "80153a2a7b9fbcc212f1c2d33309184f126dc8f90a2f0ac93c7dd10a3c59a768",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ai\\AIUXSuggestions.jsx",
+      "hash": "25fbf1e0656e40be19dd3d88d95a99efc9c4c7b2f02d025f315f0dc1f9bd1584",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ai\\APIDiscoveryPanel.jsx",
+      "hash": "d21844caf266a420fa9ad60311de0771b421659334c8e00d768fbb0236a17024",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ai\\AutoAgentDeployer.jsx",
+      "hash": "67796ca585eb518ad5cd3eba78dcbfe400b29e7e8af8ee557a662bb76cd7c712",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ai\\AutomationBuilder.jsx",
+      "hash": "982263a00a80f620aaf647cb1aee54c8114dd10d4e54a64437cbb6a43a77f8ba",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ai\\ClawdBotBuilder.jsx",
+      "hash": "0ae4c9d078dce9039e2b72e4fc3eef9008ea27794c7d07161f67cfb8b0d72b0e",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ai\\CodeEditorWithCompletion.jsx",
+      "hash": "3dd29d6186848db9bdc46205c0c5bbe8544689f7be8cbf7690e08ddf9720f1f5",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ai\\CodeGeneratorPanel.jsx",
+      "hash": "7dcd56d02898ebbb982bbb655747da346059d3236442dde63b6f0824262fef4f",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ai\\CodeReview.jsx",
+      "hash": "b55f52bd6de402cb2075e4552d5cb86fe4530edf269c6f3f5c082559efa1c348",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ai\\CodeReviewPanel.jsx",
+      "hash": "7faf78f766000da5c034f9bbd8907205c75e04b2acd8c54c684761aaf2221222",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ai\\CodeReviewSuggestions.jsx",
+      "hash": "bd0a3b9a48f340eb47617ed771476d7af69fe57f8a846a0b523e5fd86f3c568d",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ai\\CodeSnippetLibrary.jsx",
+      "hash": "784b42bb1b783a7c81fa218dbf6686ba8f21f0e29a987378eb295e07b805a967",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ai\\CommandPalette.jsx",
+      "hash": "6bec512a9bed0fee4ba2cb2d33f8934eb6c2145e0dcabe39c7fab343866e4f6f",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ai\\CustomAgentBuilder.jsx",
+      "hash": "9e23531bae4fdb9ba11189d43ba94aaa10fbf446b47eabf9a8c665302d421615",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ai\\CustomAgentTrainer.jsx",
+      "hash": "2c391df65b5a9a856beef80be23ec8eeb1da4bb7302c5731cee14fd2e6a38438",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ai\\DocumentationGenerator.jsx",
+      "hash": "a7b53f3e5c085d1b06a91b015f32ef762c9f193e34405c6f957661ba5170175c",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ai\\DocumentUpload.jsx",
+      "hash": "d76128e0afa1390b24cdaaf843e41bedf0f9bc9a5902cedc91fdf054c884b76f",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ai\\GitHubIntegration.jsx",
+      "hash": "14fda7d6e5ba031f69466ff3720b7b9fa7dd78039130af65885002d95403f564",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ai\\GuidedProjectWizard.jsx",
+      "hash": "1859368d26ffca1882080dfdf44c6143af758724d7812ee1065821bea8a29cae",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ai\\GuidedWorkflowPlayer.jsx",
+      "hash": "caeedd020e13bbcf7f7bf68654ad9fabbb3592e5d479f19f472354ae164e3693",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ai\\HyperparameterTuningPanel.jsx",
+      "hash": "87d38255396cf8dbb90ffed27680c92b1b7029edf7a457dd5b7d67776a8f464d",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ai\\InlineCompletion.jsx",
+      "hash": "28386c9c1ac04b2c3b0cb4eaec06f6cafae9bd0f364d82b51fd46310ade76cc6",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ai\\MobileAppBuilder.jsx",
+      "hash": "fcc0f38ef43b29f1e407a0849a4b35dc7a92c5ab1a0b57dd440fb5cec4deb5b0",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ai\\ModelSelector.jsx",
+      "hash": "6ca65b563c2f8c2cce8405a3486ab536c4da72611214b85f70cd593dfeb01ac6",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ai\\OfflineAgentExporter.jsx",
+      "hash": "66e985f76c87dfa746c56352d4542636021ea6a2352bd4fecec92a723e79b5cb",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ai\\OptimizationSuggestions.jsx",
+      "hash": "2b27726d665557b6132017b7f25d30d336b3c23a01aef1f67654260042ab41f6",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ai\\PersonalizationEngine.jsx",
+      "hash": "0883182d6e0e3759fe66ba1b72910ddd11815c3f842527a5416378e6bbf5d2e0",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ai\\PredictiveModels.jsx",
+      "hash": "8cc3da5284e1269de16acf6ced4cae8da54c27ddfe89af7165576783d5683caa",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ai\\ProactiveAIAssistant.jsx",
+      "hash": "d7bed4ba713f0e8931b01736a9eca35b0ff1880f68ebcc9d7b7e98334e4a27c3",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ai\\ProactiveAnticipationEngine.jsx",
+      "hash": "ec930fb23991253a4f7b896402a8c7d92d5c8731bdace93f18ef3a6fe87cea57",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ai\\ProactiveBugDetection.jsx",
+      "hash": "235c6842b2525348810071e4467ca719f55ec296ff5cdd4e18cee8152393ecfd",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ai\\ProactiveQuantumSuggestions.jsx",
+      "hash": "b9d40f58931b974b65f60605ca94bda32afd1cb64419cae12df0bef6233af190",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ai\\ProactiveSuggestions.jsx",
+      "hash": "c0ebd87b2b51fca57458504d2c71dcc457e84c36654580493897d4623d6fcc5d",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ai\\ProjectAuditorEnhanced.jsx",
+      "hash": "e178ab1c3936e909761fa14dcb7c1764991754a74b89d1874550febb160add52",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ai\\ProjectAuditorPanel.jsx",
+      "hash": "06a28612a0f56b6766ff75db4f20b5d5cb21fb9429dcbeb56b378fd87f3def4c",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ai\\ProjectScaffolder.jsx",
+      "hash": "972ef3caf6a0e2cf136be2a6ede2ce58e849278ec30d5acfaea62517d9912c22",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ai\\QuantumLearningEngine.jsx",
+      "hash": "2ff6b28f1999a31e88c117fd9f012b6063f5864bebd88f84714d438d5addac93",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ai\\QuantumQueryAnalyzer.jsx",
+      "hash": "35a84d89d2790e4773832f9218cf6e9bd49a5ed457c5891c70be3b11594e9918",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ai\\QuantumReportGenerator.jsx",
+      "hash": "49dccae3d9ca74eaa14fd41ca39e523a6045e8dda6e3cc5a0aefc3d75c98763c",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ai\\ResourceMonitoringPanel.jsx",
+      "hash": "645ad4d72bfe1ae1287278f001747e14ac6023c8dc9cd932fa56c5d5f4a9977e",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ai\\SuperIntelligenceDashboard.jsx",
+      "hash": "5cf57f660064a91e623808bc54500260a57fc21ca6ba8f100e02d7f4afc4e7f6",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ai\\SuperiorAIStudio.jsx",
+      "hash": "d164f8faea61de502addb56d59b266febe5c3bc217bfe559c5e9d71d07738f70",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ai\\VoiceInput.jsx",
+      "hash": "c5880fd24960867c2ad7323e9d613fe2bd36655c0c28399705a6d6438666d1bb",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\alerts\\AlertAcknowledgement.jsx",
+      "hash": "67f406e036d13ade895e00642e3dc35e15faee8527d0e06c47347ed8664baa10",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\alerts\\AlertConfigManager.jsx",
+      "hash": "ef7af27f49b2e28cda62f1392641b4a2d8320617d9a3b0d6f49b9d84d61ddd99",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\alerts\\AlertService.jsx",
+      "hash": "4b706e55640a9bb48e658f2f90f7c758633deaa7226e1e099d6cddb3bbd4d379",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\alerts\\AlertSilencing.jsx",
+      "hash": "856fb7a4a356ab5df064969c59a898c143631e01178f49c93b380ed89c11ecd3",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\alerts\\IncidentIntegrationManager.jsx",
+      "hash": "50b48e7459fda70d263e3ba78002470a889e98e974f91179fe01eddf0f532c64",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\alerts\\ScheduledDowntimeManager.jsx",
+      "hash": "e17a9372ce5e0d8631c17d2818af709fe104fc5b0a5ef31365c32ca5aeb3d8a8",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\alerts\\UserAlertPreferences.jsx",
+      "hash": "dfeab05ce8d1937bab1d736b33b38165075043bb6a32fa5f3fd511c7e12605ee",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\analytics\\AnalyticsDashboard.jsx",
+      "hash": "9b77c3f459004d82a5f6d05732d94c4157e18bdbeb7fb5e98d8153a19337dc40",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\analytics\\AnomalyDetection.jsx",
+      "hash": "77adac5bd33a7d07cc003071e494d4f822277bfb62fbef163a256a0d1b3c68e9",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\analytics\\AnomalyForecast.jsx",
+      "hash": "b9c3c775c70716f57a9cc83dcd72d59d88dd257cd3e9a87bd061b2318772e781",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\analytics\\DataAnalysisFunctions.jsx",
+      "hash": "75f72f8231b1afc2bad0e8f2047dbd57f7f4cdd6b8cd3a6eb8df9acbd8e9d83f",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\analytics\\ErrorTracker.jsx",
+      "hash": "4ce4d9ea7e9f8e384070ed7acab3c2afbb554e88012b9f575951ce7e881ab9e6",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\analytics\\PerformanceForecast.jsx",
+      "hash": "922762b0b17d6eb2501ccb0007ccee7cfe4e283ec174023a3a5b1c34c1715004",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\analytics\\PerformanceMonitor.jsx",
+      "hash": "b96b844c4f63a2582cc6123e604f09f142c652bc319a53708d57b9673a32cb56",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\analytics\\PredictionChart.jsx",
+      "hash": "6390d7d3790a3cd891cca71aee2e8daf501d45872b44a4aa76d4829958cad50e",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\analytics\\PredictiveAnalytics.jsx",
+      "hash": "ba82032fbf49468aedd4aca3cc883d65726084a9d8efa140a7c8103f3122a031",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\analytics\\TrendAnalysis.jsx",
+      "hash": "8a3fc5635e93e59a783b7ff1cc4dcd2412859f27cad2d075bda432dcc1b26d78",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\analytics\\UsageInsights.jsx",
+      "hash": "b3c5944f0f72458e0f8cbef35239e1eeaa24ef30bb85d3703a0752359ff9afb7",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\analytics\\UsageStatistics.jsx",
+      "hash": "ce6d7ad7300a24f6fc032cddc9548094be2599504a614704b0991b2c622dafdd",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\anomalies\\AnomalyTimelinePredictor.jsx",
+      "hash": "494846ed7a368eadc65ab14c9a58a28ed956c14696221bd2e0f2f16e72def9a4",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\anomalies\\CausalInferenceViewer.jsx",
+      "hash": "b6b9aed2d1846ee1633fb8a7fcbcf0f0ec07fb68a60742600d8cba8a3fef2efb",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\anomalies\\ImpactScoringDashboard.jsx",
+      "hash": "cf7a4898312dd824b4e122338ef624fc654f91c85baecf688115e0a1dec829eb",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\anomalies\\MultiDimensionalDetector.jsx",
+      "hash": "b17cd7500551bef1f8452d27630612156047f003aa525ae28fa6ef88d13dfaa2",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\anomalies\\QuantumDashboard.jsx",
+      "hash": "08c9786ff3eda47ab63863591632c13c803431e7dfb99366345b62cbe3bf49f6",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\anomalies\\TopologyTimeline.jsx",
+      "hash": "70f26557474bc1cf5a9ef9ac9f54be5ec1d58db4d2eebdf517a78059c161bdf6",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\APIErrorBoundary.jsx",
+      "hash": "73e8407923cd0b78c41786e471284eeeb554343181521df5116933f8c0cecbe8",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\APIKeysList.jsx",
+      "hash": "c8c5029b8460dcce3b4e9bc947595c0b3dac584558788b1a236a3125feb12770",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ArtGallery.tsx",
+      "hash": "088b74cf78c741a859c59cbc78b01edd5ee24850018ec70eef73405ca7e23157",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\auth\\AuthGuard.jsx",
+      "hash": "9c5f57fdb2a64e7bc0f5df080e01ac2a66b9910c263f167da0d7fb91f907beb9",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\auth\\AuthSettings.jsx",
+      "hash": "19b2d6056c02f3a1fed98360af8b2e99a37cbdd9ec223d2f51fe40b30f7ff8a5",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\auth\\PermissionManager.jsx",
+      "hash": "49171f2918914bc8b956e6992579864177aa0a8a35aa555c018196ac426d523f",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\auth\\SovereignWallet.tsx",
+      "hash": "19e2a445bdaaaf2f042b62e73fbbcd3420670cbea7cd4a098ac41937688dfb45",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\blog\\BlogPostGenerator.jsx",
+      "hash": "013e57590ed4855c8f19576a26ed92b3131371203ba9a287c47f8e71cd6cc0a2",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\bots\\CollaborationPanel.jsx",
+      "hash": "c82ab25f21af957a69b02b9a49e71ea554d5b3d6f240d607b26d3244d7255f7e",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\bots\\CryptoTradingBotBuilder.jsx",
+      "hash": "32ef791833f881ff96c729c8296a5084dff1221737111187b750f031186bc2d6",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\bots\\IntegrationDetailsPanel.jsx",
+      "hash": "484fb222dfb566d60800143b5873d101218df598df2bba3e925f6a0ad50bcb52",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\bots\\IntegrationSetupModal.jsx",
+      "hash": "196d8333001f5e737772ac943ce49a19dfead7c76dec5edb2220c65c62dd7224",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\bots\\NodeCommentThread.jsx",
+      "hash": "2ea33808ddf3c76aadf8520e3903e6d59d52ad4f797d14826d7a9aa501a4c1ed",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\bots\\TriggerConfiguration.jsx",
+      "hash": "d70654348aa3eafb835cc13c7bdaf68c6ed5e49985cf3ae674369d4b76b51dbc",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\chatbots\\ChatbotBuilder.jsx",
+      "hash": "37f94b74243394bdf634b231d2571d877dc39e6d921e0aeb519fa70c36cc2224",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\chatbots\\ChatbotChannelConfig.jsx",
+      "hash": "e28ff91744cc4f772791296ba9fcb7c3abd6970d8f3ea690aa1f21aeeac64a1b",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\chatbots\\ChatbotKnowledgeConfig.jsx",
+      "hash": "aaa74aada0b2148e366df6d7062fd90b8c12ff179ae4922a787ffea5c03b1475",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\chatbots\\ChatbotPersonalityConfig.jsx",
+      "hash": "ad55bc22d9bf5218325302ca26c14a0116ac1fbdc728a8924346f26021841b7f",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\cicd\\PipelineBuilder.jsx",
+      "hash": "0865b06ae97ce7ae54275385373b7382cb27aa8bf03ce7eb772f3e2fe53ea474",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\cicd\\PipelineRunsViewer.jsx",
+      "hash": "fbfbaf895c492d7c6f8a56c7efdeacf4cd93aec4df0f5aad3fb9b1fcf2ba1b6e",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\CloneProjectModal.jsx",
+      "hash": "a77ed857c9c0a0db4aada688afc22863a3259dd2c9dc9c979aca5466d6427038",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\CodeVendingMachine.tsx",
+      "hash": "2f79b47ad2ce2948ede69d6c9f6fe281480453c38ad5ef3af7af9a6e609461fc",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\collaboration\\ActivityLog.jsx",
+      "hash": "4e341649cd160fed44ad9f4ec7b37b1b78728cdab13cb724c5ecf6087e86fa49",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\collaboration\\CollaborationChat.jsx",
+      "hash": "ea0527f97955a3b79e4ffbf97da7f182f47738c169ab899af03a099b1e246dbd",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\collaboration\\CollaborativeEditor.jsx",
+      "hash": "ae1c4e61df9ba856c0c48275605477b6fcfee84ef5548a4ec7daae057a0b4ae6",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\collaboration\\CollaboratorManager.jsx",
+      "hash": "e00a79b7fbdb4df7d0618f5fc40df80a77772ab5c90062129fc812cd59b05914",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\collaboration\\NodeCommentSection.jsx",
+      "hash": "9b6c2ac941d1456c7e410571850c0cbb15ad60b967692e25ef227430e89d9f96",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\collaboration\\PresenceIndicator.jsx",
+      "hash": "8aa48a106271042f6fe86dfe76a1d4af37a43ae2734722f8fa67dc5b3428809a",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\CommandPalette.jsx",
+      "hash": "4b1d2b58adcc6a5aa32c11b878ce4033cc2a14a086ebeb3c73aa61a695fe94f7",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\CommandStream.tsx",
+      "hash": "38b79c29572ab965d0ba3748a954397105aac6efa5b8fb46d58d5e0ad3a87e12",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\common\\EmptyState.jsx",
+      "hash": "63f0c91084035b573bba026f984ec0b0ff371adddb0c3df6f5afc6e16f2f2209",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\common\\FeatureFlagProvider.jsx",
+      "hash": "c644880762928000262c3d212ded590889a62334889ca3ecb8fff67e6ed0b125",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\common\\FeatureGate.jsx",
+      "hash": "2b619eb4be20bfd808042082063eb2055fb0a10d5116cad9b55dfe5895962f72",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\common\\OptimizedImage.jsx",
+      "hash": "ad4aa86bf33e9363d826559c3e11b3878b67546f97e943f02cd11660c3710f5e",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\common\\PageLoader.jsx",
+      "hash": "9d795412b2296c9435420da4deaf4fe05c631bb95cd69564b7a0e7e4ff885704",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\common\\PaginationControls.jsx",
+      "hash": "7a58c93254d6e394ddff1395bf61f3b04f9f723b3d869ce99b02cb41bdb35d61",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\common\\SignalDensityDisplay.jsx",
+      "hash": "763d6bd402eb29d207b3991709bbdbde76c4c8ad1d50c1abe8b368ca4fdb53ec",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\common\\Skeletons.jsx",
+      "hash": "db0e65e256b5c108a37279a93daeba39eb7e045ab24463b6e8799072c3fe977a",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\CreateAPIKeyModal.jsx",
+      "hash": "8d801e3c62a39581860d787dc331ebd39cd35ab864fc47d986586340c7fda8fb",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\DarkModeToggle.jsx",
+      "hash": "258843f6e2b6439f10417479007d5ae0058de70917aa92159a6ae24715cf95ab",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\dashboard\\ProjectCard.jsx",
+      "hash": "c747fb7ffd026d013f111d21fea39a6d6a96e942852234f72eba0728d0256c7f",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\dashboard\\ProjectListWithFavorites.jsx",
+      "hash": "9edc7a0da72d52fbc95202a6603104cd1b6f1efd8ca1212e229deafd31b18ace",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\dashboard\\StatCard.jsx",
+      "hash": "865237ca90bcb2dd216e818b4af4a5faa587ee911d96ea14ddfa9d8a202ddfce",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\deployment\\AIDeploymentWizard.jsx",
+      "hash": "d0f2f2032e3cad9117656fcf37f399bb255d072ee6c09383f17df6a978b2a6b2",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\deployment\\DeploymentChecklist.jsx",
+      "hash": "325ba3c7bd7b45269068fa1b3be33478e95cb4b9842920750ea78633fd6e2a0a",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\deployment\\DeploymentFilters.jsx",
+      "hash": "af89302e1541fd98dc5ca2d0520c2b0da981e54b462a49e848df4b1be7972cca",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\deployment\\DeploymentsTable.jsx",
+      "hash": "6424286c932fe0e4482cf9dcacc2966ab62a570e0c14c417aa7e05620acb0b56",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\diagnostics\\ProjectHealthReport.jsx",
+      "hash": "480e01228926396dc9dd799ce94b6e4d7c5e2e3093cc0294a7425c62cea532d0",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\diagnostics\\SystemDiagnostics.jsx",
+      "hash": "22a7bf49ba35bd125d256f25b34075acf64eb6cd66cb3486e6c3a798b9a93d0d",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\enterprise\\AnalyticsPanel.jsx",
+      "hash": "d07fef7822bd1beb46d4888da59a5199ede77d4a629e04508698c6a9ed466415",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\enterprise\\CodeRefactoringEngine.jsx",
+      "hash": "e1351c8fdc876ee6c2924448a6a6e7fe786478cde66df3e5f1ec410f77eb3c84",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\enterprise\\ComplianceDashboard.jsx",
+      "hash": "3526dcea97cd9b688be7ef5515e274dfe8973f0468f637c923f379deb4918cf5",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\enterprise\\DataPrivacyDashboard.jsx",
+      "hash": "303a7ff01e842dfd4ba9ab9a722315c1a842c5667eb17dd9e8290b7f44049488",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\enterprise\\DomainSpecializationPanel.jsx",
+      "hash": "00d44316cdf9e8dbc9399a87c884601cf0da1ffe54081111673d6318afd27c56",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\enterprise\\MLDashboard.jsx",
+      "hash": "15fee43b3bf2522c6197b0470bbd64efc74fa9ceeaac9badb6792b008f50e207",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\enterprise\\ObservabilityDashboard.jsx",
+      "hash": "502254dc28b639c17b9edfa65bc77d52efe1881dd60eadc0ee1144c76c9c2528",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\enterprise\\PermissionsManager.jsx",
+      "hash": "523840676014f90059c75b0abd1054fa8a2f24e7e36c6a6c51e1ebbcc456ae0e",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\enterprise\\QuantumCircuitBuilder.jsx",
+      "hash": "27e79934bfb9b400033c628dcb75a39ecc78b34f6887d9131f575e154b543028",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\enterprise\\RateLimitDashboard.jsx",
+      "hash": "e9fa323130323d237ef2e3b3b579688e2d49f42371c8da5fa4cd351a06d3e2c5",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\enterprise\\ScalabilityMetricsPanel.jsx",
+      "hash": "90442713b49fcc2587419333f967d5d9107a182bd66bc365bb2f35a8edffe5f8",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\enterprise\\SearchAnalyticsDashboard.jsx",
+      "hash": "4ac7ac989461f4b59f8bc62438a0e270528e3383b06b0c746dab99c755822236",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\enterprise\\SecurityDashboard.jsx",
+      "hash": "ec8e7a233a27e2b5c633d506839ae398cfcd5703da04de421e25b0539af06789",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\enterprise\\TeamCollaborationDashboard.jsx",
+      "hash": "5fce60406e7a274eb84998823baa04c4f4486ad54f772b12dda6a9e1323a9d44",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\enterprise\\TeamManager.jsx",
+      "hash": "5e51864b4548d689dc671e3605453470f66e306a416eb50dfc14ccdf75d4cf28",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\enterprise\\WebhookManager.jsx",
+      "hash": "29de98ec520d4f7bd31626b68ec1c0de38e3ecabab3b896da686754108ac2ea7",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\entity\\FieldEditor.jsx",
+      "hash": "7c871c308b97374046d5ba7c67e3ab7f05e2a908d288f904fb1794dae337fbfb",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\EnvironmentVariablesForm.jsx",
+      "hash": "8eb66ac6be16a360e4890b9dca6e131ded573bcfbd87de426b1f1441059a8191",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\EnvironmentVariablesTable.jsx",
+      "hash": "18fda85f7258b44bbbd07d79924c1e05d5cccf837ae1ed3f94f3b027b3229c80",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ErrorBoundary.jsx",
+      "hash": "e37e26858b64f264486bfa97a2139bb05a920f8c0113aac4355889f42bcb2b8b",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\EvolutionMap.tsx",
+      "hash": "a9065f696078be472e70b56aba600eeb3925a86ab01461416c8eeed7bece7db7",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\FavoriteButton.jsx",
+      "hash": "7a0e6665fb5b2c3c61373b33d0ecdce3e1679500358e4fb0ccf53b10841b562d",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\feedback\\FeedbackSummary.jsx",
+      "hash": "1e84dd05b93f8ca0bef01eacb43b92035fbc09f5f0135023fb3a4d774ab9097a",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\feedback\\FeedbackWidget.jsx",
+      "hash": "2a841c600f84ea6caca91eb833fd43ed116b142147f0ad9786bd9a97a540ca7a",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\government\\GovernmentAITools.jsx",
+      "hash": "1a1e79c4fe72a067768f69f9909cdf67fb031607ca836c0b1628f2da01abe6b1",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\help\\ContextualHelp.jsx",
+      "hash": "677a50ce92602226afc9e9e16f71b2752e02b6c1770eb5a01129b80615e90c5d",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\help\\HelpSidebar.jsx",
+      "hash": "23b8316af6371a7e6685c81be3ec6a8df7afbf1447c7673afd508ca99c9237b3",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\help\\HelpTooltip.jsx",
+      "hash": "4876a4eb465671a275f00d040eac4fc5546cf19b84df8a5b827a5085a46c63ff",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\help\\KnowledgeBaseSearch.jsx",
+      "hash": "54aa6533331126f8da9152664312c8f21fff3b4eb769cbd14df484000cb7e9e6",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ide\\ProjectCanvas.jsx",
+      "hash": "97dd643efb99013ceafa45feec47251587cc395160bd0b01753e0b77488330d4",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ide\\SwarmConsole.jsx",
+      "hash": "783867111dd5bf9ee1302476c2e903191a5a9ed3c45ae3b87cb5244dbece158b",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\integrations\\ChatOpsInterface.jsx",
+      "hash": "ca72bb3df238f129ec1715d72abf368505576d604e8ffef20afc7f2ccbe5c45d",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\integrations\\ExternalSyncDashboard.jsx",
+      "hash": "12596c2c7c81bbfd0360a40a875e9b89cf0c09af442a5287e7520282b300cf74",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\integrations\\IntegrationTriggerManager.jsx",
+      "hash": "7882fe976837fe93369b4c70bc68a896a0d13fe103ca01c981e6cc9d76ad24d0",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\intelligence\\AutomatedActionManager.jsx",
+      "hash": "c93d66250dc2ff4c98b439106360e4d4cc6895dd380759a44a5188bd75420695",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\intelligence\\BusinessImpactCard.jsx",
+      "hash": "6605382ab90c248465c01abc8582ebdd6bbde47fad1e4072dbbd972ee0286091",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\intelligence\\ResponsePlaybookLibrary.jsx",
+      "hash": "6f283267fc23ca314d95c145693d19fabf160879cfd20c9ab777e9bd0728fd3a",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\intelligence\\RootCauseAnalysis.jsx",
+      "hash": "9b12dfd90632511d22ccfb0f33263783e62b87c98f54e23bd9c089d3c1321bf0",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\intelligence\\SLAMonitoringDashboard.jsx",
+      "hash": "0642f3e899c9cf8d166d2518873bc5836b4c5b12d5300a03ae54ce89dec1a7c8",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\InviteHistoryTable.jsx",
+      "hash": "a74c22f334b0dc9b64c59a02e0237b0deff5da220ebca8261a4379017ace729b",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\InviteTeamMemberForm.jsx",
+      "hash": "17c0b7483bf729920c4eceb9461378cc249c1e755e236eebe9735090da4a608e",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\layout\\Header.jsx",
+      "hash": "a33ccb2917e593910e5d6c21d3c77a2eaef324b462e940a80ffccb6aafa64b3f",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\layout\\Sidebar.jsx",
+      "hash": "57f80d43fcfa69d945cbcbf29614a1c3911d6aeb34cde3eefebf951e54f0a3fb",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\layout\\SidebarNew.jsx",
+      "hash": "0d38d4d950cf39028925d06752dcc3d0ebaad67fa62521c1419ec01db4e2676c",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\marketplace\\AssetReviewCard.jsx",
+      "hash": "3405602956d334ee7b29c805855d9de5c52c792ebc0352a1b8275287ea0d329d",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\marketplace\\MarketplaceExplorer.jsx",
+      "hash": "830dc42ef98b07d9a2f9a6955166dd06a01b9036edbb424c97f7be1bc0ef39f9",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\marketplace\\PublishAssetModal.jsx",
+      "hash": "004c5def19dc89ee0e5029660cc225f0eddb44e02dfcb7c13a46d8482e39ca7a",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\medical\\MedicalAITools.jsx",
+      "hash": "cf3374ffdacf137864f664b9296243147bd30ffb3150144befd7cf4d51d81d6e",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\mobile\\AccessibilityChecker.jsx",
+      "hash": "c6aa7d25f27a36746a0995bfa6112ec9b05da5d843c4681b965e9717588a765f",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\mobile\\AIDesignSuggestions.jsx",
+      "hash": "c85d99692b58d1b9c5d67d7ba704e7757c8f19e2fe654c4c17372dc8f7aa3146",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\mobile\\CodeExport.jsx",
+      "hash": "11cfabeb8b5ffd1d71bcb94bedf22fd7a5249bb0a6c9bf6a898204935f1e91f6",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\mobile\\CreateMobileAppModal.jsx",
+      "hash": "f9c93c8bb8cac4ada94947958bf2ea7c166cdb06eff6edb3f5d738f1d5343078",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\mobile\\MobileAppEditor.jsx",
+      "hash": "ed46da21209bfe54f023a4c810a6cfb4af8a0e9b9fc65ac2862499ee1e4ec30a",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\mobile\\MobilePreview.jsx",
+      "hash": "20edd14b5f4fadc2b22e71227cd67a88d7f070471fbf2f0266420252c45e9fe1",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\mobile\\ScreenEditor.jsx",
+      "hash": "2c8f83031bf61b73212d574df2fdf32e41c219fedcdb3a0db4e8de110f231c04",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\mobile\\ThemeEditor.jsx",
+      "hash": "25cca8d4e816b1e46d7d07aa813147411eac1e722c2f0379857c9c6ca17b6e35",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\monitoring\\DataSourceConnectorManager.jsx",
+      "hash": "84eabe8d08c365bfb9225fcda198d8fa908d5485bc5e05608d236be674cf2bd9",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\monitoring\\InsightsChart.jsx",
+      "hash": "28ee79a2b9859cb858690955d69799e76c4d01d5462a38c4de4be3b8837c492d",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\monitoring\\RuleActivityChart.jsx",
+      "hash": "523342bc0964d531648e24ed9491cdaf12cbeb2b2883f9bc7e914325e196a27a",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\monitoring\\TaskAnalyticsChart.jsx",
+      "hash": "959d7532e10ca15b122217183776142d60a06867fa5b8094646465a3f2a80e75",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\monitoring\\TriggerBuilder.jsx",
+      "hash": "2da12b4f6a2e51c724c32c75b093d5eaca7a8f3a35a6167c421369e415dc2797",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\navigation\\Breadcrumbs.jsx",
+      "hash": "6e9453fba5d86d52f17b5102ed671460192c0918fd94ac460d9db3a3c28d317a",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\navigation\\ContextualNav.jsx",
+      "hash": "a8898dfa1fd825a9a78b8c47fc37aa3a5f3dd28026d6a23ece1fea2104300488",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\navigation\\GlobalTopNav.jsx",
+      "hash": "4c938a2dda41dd1aeb9b8e4ce1ab0dc8896fed990d4fec35288c5e7f250760c0",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\navigation\\SearchBar.jsx",
+      "hash": "cedee9cc1bf09e92e330162b3049bb4f26677bfdf6e12290109f1df8013b3a73",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\navigation\\ViewModeToggle.jsx",
+      "hash": "ea583da29db04bbe1749a316c7133baaf1f673e1eabcd8b0b0d081c4437327cd",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\NotificationBell.jsx",
+      "hash": "5065cf64dee4f6e80f5cecdc25728298e7c474dec97ad8a1654951c873e90d2f",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\notifications\\NotificationBell.jsx",
+      "hash": "012755e2f6b87d5536bec48d7d9dc9ba31e52ac4ba65e9123276c644c0721697",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\onboarding\\AIOnboardingWizard.jsx",
+      "hash": "0610fee6836f1dafd6f528420223919e98d0b5bc32a596efb2b7ecb8649a7df1",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\onboarding\\TutorialModal.jsx",
+      "hash": "ab56fee10239b3e3741711e240b24b2ef37ef7e73bff1049b4c2466db0856d14",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\payments\\PhantomWalletConnect.jsx",
+      "hash": "7bb5dc04f273b7d97933742453ef9f81cf575d6f08fd321e918545cde4af3d6d",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\payments\\SolanaPaymentModal.jsx",
+      "hash": "2ad05b772d7d38ea3107bada644699535fe2f430fa764cf447bc2d7729f7ff39",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\payments\\SolanaPaymentProcessor.jsx",
+      "hash": "f2a14ad4906388afd242e5a63b7ef9bcc4e96b69765ef19b81d5524058d9a644",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\performance\\WebVitalsMonitor.jsx",
+      "hash": "5eaa1bd284499a929a8bb5e324e1f195b3f97513d94d8320e0f9c2f542a48d17",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\preview\\LivePreview.jsx",
+      "hash": "203c31b8807340dd2c9f5cf98b5c8789e25a1f26840fda9ce27b05de3f94fde0",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\PrivateRoute.jsx",
+      "hash": "2c29c88eb7e2d4fc4d931a43991c16fcf0202c54e9a77d7461b32cc3176e3aca",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\proactive\\ProactiveAnomalyCard.jsx",
+      "hash": "2dfb2040481cca1f1bbff8a877040c429be40629e0c127486a034a2d1a0d7a80",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\proactive\\ProactiveMonitoringPanel.jsx",
+      "hash": "2fb80f87e2b973133678317473c6a198b468d15902008239e8fbfbc427dbf684",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\projects\\KanbanBoard.jsx",
+      "hash": "a9f884a07a7692d0322d7d2c7b3e585a1c536f98f01f7eb7f638987e8e898e20",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\projects\\ProjectTemplates.jsx",
+      "hash": "94bb5d56a6b2cd325c9a285b7cad7ece8ded1862474b8831682a22d31189e045",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ProjectWizard.jsx",
+      "hash": "7c112eeafceff342581a4c0759c0257f5ba61dc72a47b8a5d95cb2de14207360",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\pwa\\PWAInstallBanner.jsx",
+      "hash": "02513a052f41f468f8af3aa029a26fba44e9cda66c5d277b5842348a718f1ff8",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\pwa\\ServiceWorkerUpdateNotice.jsx",
+      "hash": "a08c11a24044a1af5bea1881bd9977976afe89238b6cc2fab6fbb3ae3f6e38f2",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\QCoreVisualizer.tsx",
+      "hash": "fa0fe3ed2fc21f7cd28a47a4408a70c7a04f29d5289fc92887ffcea50669ce89",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\quantum\\MultiverseViewer.jsx",
+      "hash": "f05df26b659eaf49638028fd91b8322a51a21ecf6c8f0dd8e77b88cdea9308bf",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\quantum\\QuantumCircuitDebugger.jsx",
+      "hash": "66e05acceb4e0ce0c30824b8af3d1e18cfb0dd7766ffe0f50f0efb89d0f5ec78",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\quantum\\QuantumCircuitGenerator.jsx",
+      "hash": "33b0d983a398e72fe4e05726786c5ad34817beb19000d5dba8750b13a954817f",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\quantum\\QuantumCircuitOptimizer.jsx",
+      "hash": "7f1ffd974b52a93199b3f8af505addff1059cd506007c46ce404d99ca44c5b1f",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\quantum\\QuantumErrorPredictor.jsx",
+      "hash": "efbb7630cc0ba004fcf0dc33e907a1f1095b5ce8cb9e044e1fc77ce0a6c7d87a",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\quantum\\QuantumHardwareConnect.jsx",
+      "hash": "b52ca0990c914883a65508c71f47e180c44ec81faff6ae7839aded378d19539d",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\quantum\\QuantumHardwareJobManager.jsx",
+      "hash": "54bcd3206fc2bc2cafda180f513ba9cede6b22cfb16852c201904c8a2bd67bf0",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\quantum\\QuantumIntegrationStatus.jsx",
+      "hash": "6e18283b3c0c2aec879bd34dd7f6703054827fcd01a415faaca514ff67dce8d3",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\quantum\\QuantumMetricsDashboard.jsx",
+      "hash": "017c38d28d7145eec75ab9c14855c258480894a79a84e2a0edbd4f7d9bf1a3ce",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\quantum\\QuantumModelSelector.jsx",
+      "hash": "dc39d640c607e6ba536046b8767d96d979307353a11e7b6dd7f312fd7251b81c",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\quantum\\QuantumProfile.jsx",
+      "hash": "49a18067a4c6acab305e8f5dace13b9078f569089519de70e65b0a164dbad6d4",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\quantum\\ReversibleDebugger.jsx",
+      "hash": "b833d07bede354fbcbb0ad439e9e1399a4814717b7345fb5dde91d1ee84e437f",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\quantum\\TimeSlider.jsx",
+      "hash": "d242a98d73e63484f671bdb1b7f78ecc72b375643549c7b0be7aaf1539919892",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\quantum\\useQuantumMultiverse.jsx",
+      "hash": "8bc8c24f07a7d93c750e53fae8d1b3aefec9f9914e869255ad2d1dce388e1039",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\QuantumCircuitDisplay.jsx",
+      "hash": "ac30968701a820b1aaf77e52511fa7f5be903eb8372d4d54ac3a9487caf939b0",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\QuantumCircuitEducation.jsx",
+      "hash": "ed35720c6aa9b8ea5071c50b48960f8d9164b7f61bbd787f7fef0e6cca6dbed8",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\QuantumCircuitVisualizer.jsx",
+      "hash": "cd3a02a794fea5a2ca0b82fcc1edad292fbfc2ac38ae47ca81339b3eb2eb3234",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\QuantumDashboard.jsx",
+      "hash": "f206046306032229a06212ec1bce2d756863f114e12cc6553c5a8f5b61b4d0bd",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\rbac\\AuditLog.tsx",
+      "hash": "d7ccdc19dd1e3f5b6c0889866bc2cfcb725f21b9d43165dd7de0e0196a3303f6",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\rbac\\PermissionGuard.jsx",
+      "hash": "6a0f1e11b84c2f36083fb19f42c43164a27d3f17a85216e26c27c4a6ba18bb64",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\rbac\\PermissionMatrix.tsx",
+      "hash": "92d998585ca820cc6093187ee32968d120d862ae9d172a44fcf9a1261fc17ed9",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\rbac\\RoleGuard.tsx",
+      "hash": "2d5060fbe1e64aa6c878ee57c9d43e9af2c68244aecb6e1c9344e690b9209d6e",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\rbac\\RoleSelector.jsx",
+      "hash": "063751304f118b6e32032927ed4db3a2755973616f16a4542a2d0c5b940ba0cf",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\RecordsVault.tsx",
+      "hash": "4148f67831c6106d36234c1ea61be95ecf1d9ea473ef12501f3b1978374ad70b",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\referral\\ReferralLinkGenerator.jsx",
+      "hash": "fce8b4223b53e053bf41d0ca7a600307717e3329e5f2abdcfce7da70ee7f609b",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\referral\\ReferralStats.jsx",
+      "hash": "3301d3d7c5fa40166f34043a988ca8da900a0525d5fdf6f80aa4c04f3bed3657",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\SafetyAudit.tsx",
+      "hash": "5e5591f81d7071a1656c638cf61fe0d32f048e893b36eb744074df437eee933f",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\SearchModal.jsx",
+      "hash": "5c3b4736ea3ca35c97688ba7bf6be3caee0338115e3942387d02532c14658a3b",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\SecurityAudit.tsx",
+      "hash": "68c381030afc53a98c0a1f585845b094b4c197ca77dc89addc0fb852c150143a",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\SentryErrorBoundary.jsx",
+      "hash": "b96c546163aa92dc66740293b3d4af8d9f34fe84751dc0de54a97df2931fd019",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\settings\\AIPreferences.jsx",
+      "hash": "877de5b7f824aed9748c7ab0eafce76d60bc8168503ff0ec35b79a5e76c6819a",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\settings\\SettingsDashboard.jsx",
+      "hash": "4e0cce421fc18948aee366291d5aa530f739d77cf3939dbc245b33ca435c5283",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\sidebar\\AIModelRouter.jsx",
+      "hash": "b6ff45a18ad03b03b8dbb9a609d9c45ce6a88c323ed5eef28e2c54938559efa1",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\sidebar\\AIModelRouter.test.jsx",
+      "hash": "28efbdba8f4ac77ee52aa0d552da09dc19d78ca5a40de3a882dcad4fcdbd5c23",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\sidebar\\ConsolidatedAISidebar.jsx",
+      "hash": "bd3349248347a5f86c4670a4e425d1a0c77ff62dfa521695c318aedfc9259bb3",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\sidebar\\ConsolidatedAISidebar.test.jsx",
+      "hash": "caec869f8e4694c1afb6f6c461615d13bb21bfe926aa692fe40b1765622845a2",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\sidebar\\MobileDrawerSidebar.jsx",
+      "hash": "b2c287bc1a497f657108377ebe7bff2b4271b2d8d88402091bd4191e8b155e71",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\sidebar\\MobileDrawerSidebar.test.jsx",
+      "hash": "fea56e148e0dc27db5bf8de2f0715aa5bf390b2a2b18068c7460eb5070e1568c",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\SovereignStatus.tsx",
+      "hash": "e54352ef8e0813d0e126be23ffacd3307a42ee69994784f1457ce979be268f7d",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\subscription\\SubscriptionCard.jsx",
+      "hash": "8c8de233b30ab54403ed3ddfb4ffb64027e17d461e53416c0184e6003039d14e",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\subscriptions\\SubscriptionManager.jsx",
+      "hash": "19624f09ff90ca20ea544f66a23ac8bc0826473767305de5d31ae83a9279a567",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\subscriptions\\SubscriptionPlansCard.jsx",
+      "hash": "41b02294fd470cba9d268cd54d89ef4b6303f7d986ceae151d0b5fa6b87bd8a3",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\suggestions\\FeatureSuggestions.jsx",
+      "hash": "13387be0dec012e4afb70bb9779b766bb956fa24757a45e231cebd96f34ca36f",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\support\\SupportChatbot.jsx",
+      "hash": "c45bd6c0f4a64518c1dc811df801314385a27d926cfa42faebae9dc8690a29fc",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\team\\TeamWorkflowsManager.jsx",
+      "hash": "8b0a1283132514aff8e5781b16759d27baf99229a556df6287a59321312597b6",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\TeamMembersList.jsx",
+      "hash": "2c2ba61ef892fcccc4f68b60e2b6590333caa131b83c238ceee5c152af5acd32",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\templates\\AITemplateGenerator.jsx",
+      "hash": "42f6a23fd6faa08baf1088fb9acb5e86cdb71e33766ba77c0bb947c509e2a584",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\templates\\CreateTemplateModal.jsx",
+      "hash": "53ca8b4d8c91f874f51769e5f21201d9f41bac3e0e9ad4ce47a9ff8be8ba8c64",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\templates\\TemplateReviews.jsx",
+      "hash": "f07b8f6cfe9a6d703a49f12f8467a72425a80e44f65bce79c1ac1a9071f96eed",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\testing\\BotTestBuilder.jsx",
+      "hash": "6962fe83b6a332358334d5d0915c59bfd86c71dabb5a28f61bce626720f9b334",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\testing\\BotTestReport.jsx",
+      "hash": "12c626cf0fb2cdf4e5274b193b348fdca8842fe96d045cb305840ae6d87516c4",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\testing\\BotTestRunner.jsx",
+      "hash": "9fadc4e041b51116f9b31bbccdb8bd1a8c6a5432966b0dc3f2467bdb1021cd7a",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ui\\accordion.jsx",
+      "hash": "478490060e2a3d511e1b5d1a7d65439bbb992e4e1e99d5f0709f325173453156",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ui\\alert-dialog.jsx",
+      "hash": "5b7909be47688d0c0c8057c1f469c5ebcb98f881bad064b1ffdf0f1d6d277be8",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ui\\alert.jsx",
+      "hash": "c2238bb3b93c6590f803433f2573eeb490d9890431fc2cd976b6c609d50b85f3",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ui\\aspect-ratio.jsx",
+      "hash": "62f29cd87c19f52d403dc2d17823849db2c8cbd541c9f96de20ef13e58d379db",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ui\\avatar.jsx",
+      "hash": "9439196219d33dff8562912552c59e878dbb6cf7aa32f5d17bccdb9bb90efaa5",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ui\\badge.jsx",
+      "hash": "9051f49542f4908d4bdfa9c3671d17915064752a9774c980ec14e45edaa17626",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ui\\breadcrumb.jsx",
+      "hash": "51bbb35125c05ef01517d866cc9d79dfd5d63355da68d3bfb4121d97fec8ddeb",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ui\\button.jsx",
+      "hash": "9bb02bc5ecff4aea7b34ede37af1a456665ddf4b91c32aaf04784e2c4cab18cd",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ui\\calendar.jsx",
+      "hash": "a64221b7b0b3bfd4d08cf5f9026d620cb6b4e84718ded755e67a59aa6ea0d24e",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ui\\card.jsx",
+      "hash": "e26f8f78ec3f5817ef0390fae655c3ec7d01361da730f724175c3886d16cc621",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ui\\carousel.jsx",
+      "hash": "caf08f7734405a1ab1aef53134108aea75c747c3c22c888789beeb47cd83594c",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ui\\chart.jsx",
+      "hash": "02950e47ad8c44b41e823887774cb8088becceaf542f68965cf375dfc9eb2cce",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ui\\checkbox.jsx",
+      "hash": "b2b6819b326af045bedca84f081de6e49c7bf086110835b5b893d903ef0ec44b",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ui\\collapsible.jsx",
+      "hash": "bc854800960ef4129d4679a7c4a6b5091e7038adc03698e4529d0c9b5af0d831",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ui\\command.jsx",
+      "hash": "85bde4762ddfcb0daef8c24bf899d3b4cb270e5a55d635a4c8852ee786bbbe2f",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ui\\context-menu.jsx",
+      "hash": "9f2f66eea8cc632fac137b0ef47841c6fa81ebc7d7afbd8064605b444998569a",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ui\\DesignSystemShowcase.jsx",
+      "hash": "ebf3829aa418d7e34c5756ae3710d0bd0e78f6882b47df2728021652c72fbe9f",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ui\\dialog.jsx",
+      "hash": "7947282627a2b9f4bf0ea34c9a7c7eaaf1f0bfa2275a439a62ef56c2e635a8dd",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ui\\drawer.jsx",
+      "hash": "ef7864b5bef151b48d8c2a480a9dbf91a0bf0c5a9b3d29d27dd2912bf64afd12",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ui\\dropdown-menu.jsx",
+      "hash": "5888a783e926273b78f8e69399e2b1d31d966230cafa52f21764266158d31c92",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ui\\ErrorBoundary.tsx",
+      "hash": "43c7ff8073ef1fdb570944a8bae03a7a2944ac0d75f8ef92e9dbe48fba3b8125",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ui\\form.jsx",
+      "hash": "6fb5b37dd37b719ebdc7ee5d4a2b8995fe7ece1296646508ec98af0d992f3080",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ui\\hover-card.jsx",
+      "hash": "b0b8f53c1fc20f4c410c1949b1abe612489da7b34374e7f3ec876d5285b33e33",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ui\\index.ts",
+      "hash": "bdf9c8b31307e82deec792fc7020cd23f026ec6af4103ea6f92a3e471e5feb34",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ui\\input-otp.jsx",
+      "hash": "9cb80ea26ca7fe046dd336b75f875b7baed2a285753f4ff18b9442ba8843ec52",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ui\\input.jsx",
+      "hash": "02932b64ab7b05099d42aaf8a733622dfe1d3abec681a299f68fdbdf7ce09ac0",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ui\\label.jsx",
+      "hash": "f606aed4a7e7c84fbb0e7439dc22f6c356f66163dd5e62239f7003a69692af9c",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ui\\menubar.jsx",
+      "hash": "dd0235a15a65cc36c763e613d05ddfe26e2977bb28c84f98e90c865ca1474937",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ui\\navigation-menu.jsx",
+      "hash": "e3ae735c975f2d046bedde7c0428fc32d8c7e7e43a8e4605e120e8ef5a6244b5",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ui\\pagination.jsx",
+      "hash": "30c62c8579e0661792bdfec1967bd815be4a70af3d45ec5e507275f9dbe34a4e",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ui\\popover.jsx",
+      "hash": "6da6b28bd13c1a07889320c2baf8657f2a0cb9c210851e144d4a063e4a9b6bae",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ui\\progress.jsx",
+      "hash": "448ad8bcd959da9a8ee1c3b1a01467d995f3ff6b085e61dd9d633bd2f7116c97",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ui\\radio-group.jsx",
+      "hash": "58b832a7a8842ec8ec1bcd5115b4fa19487fbc1ff8a5ebd9a6c00b746668f9d2",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ui\\resizable.jsx",
+      "hash": "329ee38682a0a54b2b2d3f50e9a5148fcaf013d6739791d27ca6bb4a04769a2a",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ui\\scroll-area.jsx",
+      "hash": "deac8e89bafcdedeb795ed43a524e70cef654978102b0c854b75f9826f524520",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ui\\select.jsx",
+      "hash": "14c2c9b0ebf78400aa54e290d6f84619c04abd4900232ec1c740a7e6ca8407ea",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ui\\separator.jsx",
+      "hash": "0e01021eb735c6f4f8c0c6b3a9f99dd8428fe837c1a12b7d8be441e5a7d53030",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ui\\sheet.jsx",
+      "hash": "7688a90ad9e29e63e7f920686616571a88abd5e84743a0182a34ec16b64447eb",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ui\\sidebar.jsx",
+      "hash": "fbc50e3d08df813d10094953469d56acfe9608997f1520ab9fa9dec67202c948",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ui\\skeleton.jsx",
+      "hash": "b5cbabb0e4b7c98654c527fc33ea501ecd708c9ea2079458945a85ef3416cf7c",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ui\\slider.jsx",
+      "hash": "13a9ab62370c58be57848de7100de3e5bbfcdf4a669bbfb635b7ccb11c6b1de1",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ui\\sonner.jsx",
+      "hash": "4edac370e264c541f354b9651f578e4f7e2394ea4ad6a471e0a36a5ae4560395",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ui\\switch.jsx",
+      "hash": "d3692433ca2fcb3bd74b587cd096942c5582452a6a95ddaf1806dceda899d592",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ui\\table.jsx",
+      "hash": "5a64292b865d5fc40675f65c5a84122f17e0719602f5737fbda01a4d529a9a2d",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ui\\tabs.jsx",
+      "hash": "e2ca9e1c9f53cec496f8f5d7ed32b9cb5fc0f02f48cff733e92e94282d9b6ff2",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ui\\textarea.jsx",
+      "hash": "6f3185e51b3496a17a97a41ce577ea03e9525c3ece24a890c9f783e1c9833774",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ui\\toast.jsx",
+      "hash": "fe43f2d5ec322666b49432d4611336ede6f4276811a631faa9c63423bf2deab2",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ui\\toaster.jsx",
+      "hash": "a00ceffa66fb276095cf6a2f5d052927e529d77b777db36d5b5703acf484146d",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ui\\toggle-group.jsx",
+      "hash": "34c31985d46f4e1c85b98d2db879f8c89c245cac7fd8e0c0030efaf769d0af0b",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ui\\toggle.jsx",
+      "hash": "1a4d7a483e843c69a2cd65f189a66f31dfd5660846d64100ed74b78fb99d493b",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ui\\tooltip.jsx",
+      "hash": "5c4e99fe6b80e658d165cb01e0204b67ab944ab53ce438d8b411705744bfb58f",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ui\\use-toast.jsx",
+      "hash": "94b77bb2a4ee2d9c126f318685a3e1ab0dc746ceb568ff26a1bb57494cc62d51",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ui\\__tests__\\button.test.jsx",
+      "hash": "7bc9b54c9754bb992a7a56b04673c9c4dfd473f64b5527651d96774d09a17837",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\ui\\__tests__\\card.test.jsx",
+      "hash": "770ed903f44e684c651245da37fc9a667989fa691499b4fe432ad60acc15e304",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\UserNotRegisteredError.jsx",
+      "hash": "04e9c07eb9006000d70a78e55ab508dd5805af9f05d525be24c3338844a6ec35",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\versioning\\AgentVersionHistory.jsx",
+      "hash": "63f1cd79f2267b9ff12af1db4cb427f474d4cedc0e2e4a28e253fdd710fb932f",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\versioning\\WorkflowVersionHistory.jsx",
+      "hash": "6e0c536bef5e8f9ab6f61e637c16aaa40e6f33e348c05e915f2ea5eed88b1193",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\VibeGuide.tsx",
+      "hash": "416abbbad18c5741cbba073d0dc43430312a981c71bbc525dcba0a84d3ae30eb",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\web3\\ContractCard.jsx",
+      "hash": "058cb242a2ed7bda71dc8c689a7ab8594a28e905381ef4e7fcacb82a645d972c",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\web3\\DeploymentModal.jsx",
+      "hash": "811a0b5a9ec2477347c78f50cad722aaf17858716107facf68a579c1204ee8a5",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\web3\\MarginTradingPanel.jsx",
+      "hash": "348863c94440ac41ec9c236fded8f3e912551688556b1c4e47299438be520f6c",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\web3\\NetworkBadge.jsx",
+      "hash": "127c714f9c6e11634090d1a3217ff3cb1732e0dfadd88a9fac7a4012d7d9e24e",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\web3\\NFTCollectionCard.jsx",
+      "hash": "6483e216d18ef11eeec8be594cb56077afa6952c3d38e5888666f1ac2b5314be",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\web3\\StakingPanel.jsx",
+      "hash": "5b94f2031ab4f25efebe92bade9c863f99113ec42b59fb2371e4cdbabf875789",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\web3\\TokenCard.jsx",
+      "hash": "9858e203e797425de06d687e90bc5595930c883e1f8373b6220c209a819c7543",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\web3\\TradingChart.jsx",
+      "hash": "097d7917b60372aaec513ee917995041f75446b50ad6de8f02b96a8904dd77f1",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\web3\\WalletConnect.jsx",
+      "hash": "0325e7ad76754d596bc35e9dcc50a3d8cfa67e23f7400564e0dfcbbe429c17ef",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\webhook\\WebhookCreate.jsx",
+      "hash": "c1713c6674b07027c40efbecfffe72c6b94f84b17944189eafc6f05448648f2c",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\workflow\\AdvancedNodeConfigurator.jsx",
+      "hash": "20ecc26870ccf75ea8a69c95ea5ead61dfa777682a79d225b5de9c4463b35e8d",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\workflow\\AdvancedNodePalette.jsx",
+      "hash": "69f9cc8b11838c5436b6fc0c85338fe0ef6b8c2444a508533ddc6cf6986986b0",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\workflow\\EnhancedVisualEditor.jsx",
+      "hash": "e58abbdf4565c6faf562e4babda12bab2f3f6220ea47d559a3a506ccea65ab76",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\workflow\\nodeTypes.jsx",
+      "hash": "5b4e8600dc4a54698948f88f422838de5ce9f144ea1c832b71ca8641d8c1d03f",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\workflow\\VisualWorkflowEditor.jsx",
+      "hash": "7fcbabe8c5a85b6a40ef1252df169cbd6a1d1448ec6174f52b2dce29456abdaf",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\workflow\\WorkflowCanvas.jsx",
+      "hash": "76ba60efb3d10bc49a47cc724ce22fac094631bb3ed0190e3a095254bbeb6897",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\workflow\\WorkflowNode.jsx",
+      "hash": "929d3ce141e9d4b5c2cc94cdb37c7626bb6b10d57bb24d22220fb552c18cb7a6",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\components\\workflow\\WorkflowNodePalette.jsx",
+      "hash": "d9ece8794db09b8aac1903718a9d11fa3065a778c22a18428dd58aa084a9a968",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\config\\payment.config.ts",
+      "hash": "a0773501ab8a2bb499cb364efc4ffd81ed36ebd606e90d1d3abf72e6a81d353c",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\config\\securityConfig.ts",
+      "hash": "2c1d2383721eed4ae558e2ed7da7699d991e2035de30b06b19a2ee405c64142e",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\context\\ThemeContext.jsx",
+      "hash": "91f37bf2c0575134f024108aad4771020309bc27ac15de5b450227809e4d5655",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\contexts\\ActivityContext.jsx",
+      "hash": "fd49cac19f6718bb86237a072538f45b6dd37c9507367d5a9f0c8f040f51aa47",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\contexts\\BackendAuthContext.jsx",
+      "hash": "6390df5c28be3c1b855aad6f3fa34dfd06e8fc6a5d47d0e78b23e391368b706d",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\contexts\\CollaborationContext.jsx",
+      "hash": "980d3281bc3f52498656ba52172551893363ca1076de4d395737d6f510ce7682",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\contexts\\LLMContext.jsx",
+      "hash": "2ec34b65ec242344aff5d7d21bd3057f21cf3bcf9c6d5fad7feb103e146b4c3b",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\contexts\\NavigationContext.jsx",
+      "hash": "67986f52ac429618ac7b9dd28cae1f54e5cc9a2455637c23c754e3731870f55b",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\contexts\\ViewModeContext.jsx",
+      "hash": "f4f251e03aa1482c26c385d12c060e7cc8096c310f0752d69bcf99bd9d07ad87",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\core\\Bridge.ts",
+      "hash": "a9ec54708a7c962a88955912bdf477da6ec90df050fbdaca9bb75ce512c66013",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\core\\objective\\Optimizer.ts",
+      "hash": "4c0de68d14d4a8359c622449f72c7e0ff22c74b1acac257bafe52e21f5daa181",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\admin\\AdminDashboard.jsx",
+      "hash": "a49f3bef59abaa9300542315658e175c0d1d1f9c4e378c6eb5ab525f46a2f30d",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\admin\\useAdminDashboard.js",
+      "hash": "ffc14fa2b95820400661b462ede7abacd65853e582687f5495935613bd773682",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\advanced\\index.js",
+      "hash": "f583536cb4919b8c30634455c7c6006e636e9e9885b041d3119166996a523488",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\aiAutomation\\useCodeSmellDetector.js",
+      "hash": "cb00808955a490cca870c7e37de07cc03a1d4bdd6060b3098e53a7ac3659ff12",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\aiAutomation\\useDocumentationGenerator.js",
+      "hash": "8d6e43205b864feb01e7176a1cdd174c58bcc5b7f983b1d553cceeb38e0edff9",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\aiAutomation\\useIntelligentRecovery.js",
+      "hash": "6413ae8084b1c1d17524c2cc72f7f5b62211e74cabc254d496f6188a04ff9232",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\aiAutomation\\useLearningMemory.js",
+      "hash": "5afc95edde08ea0471d05a9c14049d2e675e544c594e24267ce72477498dae9b",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\aiAutomation\\useResourceAllocator.js",
+      "hash": "a64cfc5f182daa4c230e9238979fd23ff79fad2a36f809a7b4846d997a0db110",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\aiCodeComments\\AICommentGenerator.js",
+      "hash": "ad76e9cf2780920357b0f57439f4038d65c2119d7444e6336eb17c6a4cc5c81d",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\aiCodeGeneration\\AICodeGenerator.jsx",
+      "hash": "a3f518bde3fefa434fcda47c48aee40e2e60bcd871afbd1385006beea010c1a5",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\aiCodeGeneration\\useAIGeneration.js",
+      "hash": "c923f2baf40c4acc45d3fbfb08bfe3f8845b8b12e0625179638c9102de78cfa9",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\analytics\\AnalyticsDashboard.jsx",
+      "hash": "8909ba7801bc8a76527f54b5ece2805ed1584d3775e4a148df4af0577e75c03d",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\analytics\\useFeatureAnalytics.js",
+      "hash": "72d0c3f8007ae434757e1273f59389e268f87b6f3896b018cc5c8076143f628f",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\analyticsInsights\\useAnalyticsInsights.js",
+      "hash": "749d3944d2db83d62ba97de861d6f8ba0ca2324a61fcf3f7ab91fcc59dfbdfc5",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\codeReviewGamification\\CodeReviewGamification.jsx",
+      "hash": "189c410edb795fab162d161b68a9360ed9001754ee5819023efdb057cbb5f7b9",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\codeReviewGamification\\useCodeReviewGamification.js",
+      "hash": "6019e75e28a11ccf0b216ad489fd2f0f7ed0a65919fdc92ce348b5e6f4e6be26",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\commandPalette\\CommandPalette.jsx",
+      "hash": "96004c495e81ae79b9ba8de78f56169bbe4940ebb1eae3e19563f45020325296",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\commandPalette\\COMMAND_PRESETS.js",
+      "hash": "03e694050ba524d18430a3ce81740bfb54e20ece5045de8b07a6c0821d31800d",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\commandPalette\\useCommandPalette.js",
+      "hash": "d49fb83d35c37f27a726f1d9be32c516a4e398bfe00cc0fd1a8b2c7c18555021",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\enterpriseDevOps\\useAuditLogger.js",
+      "hash": "2c507c44e2305b29023805cd6500bb4172a227f94f29dc0e60a86fd33634c02b",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\enterpriseDevOps\\useBlueGreenDeployments.js",
+      "hash": "c288400ee891031dea236bf4982100bdad41b9f2eafbb73653ea1d88a977e10d",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\enterpriseDevOps\\useCostOptimization.js",
+      "hash": "7345483d4945a722e593022d6ea9dd5bdc2a0476dc4f5981bb08ac784ac3b7f7",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\enterpriseDevOps\\useEnvironmentManager.js",
+      "hash": "9fbca006c7ba43b594bac21df1d501cb59e2f4143719e66685d8a35ae913dfa6",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\enterpriseDevOps\\useSecretsManager.js",
+      "hash": "5618ef4ed58d79dcae8877725a662ffe44035840094dc878c29ce9b87bc210c4",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\export\\AdvancedExportManager.js",
+      "hash": "23eb247cd3cc0d3c08da0566c19c1f2f5e23b5b4bdf71c845e16e5c57e532605",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\export\\ExportManager.js",
+      "hash": "1d8a975c490246a9f79d46b4c688605a26066065b0af32010e9d5b9533b60fe4",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\gitWorkflows\\GitWorkflowsManager.jsx",
+      "hash": "f3186dad999469be93eecb8b3648618e16bb2382ecf5ec53f412a487c0e102ba",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\gitWorkflows\\useGitWorkflows.js",
+      "hash": "679d21f00e34bf740e716a9bf060c1475155896868ce08f1fcc2137ff97d9fcc",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\index.js",
+      "hash": "33c93ed98528fe3412918677069931839604ba47cb3bd6f8a18e822680ab916e",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\keyboardShortcuts\\KeyboardShortcutsManager.jsx",
+      "hash": "b4bae36f3cd10916a0551676f9b7279038c65627bf164bbcacc4c1261be89010",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\keyboardShortcuts\\KEYBOARD_MACROS.js",
+      "hash": "49eb97a087c44a606cc46598da818ea69e6751172a95b8f5b2b0444bbb507bc3",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\keyboardShortcuts\\useKeyboardShortcuts.js",
+      "hash": "af2669fbdbcad8b9f338f7f495ee1afd5990d57b4164a57efa140b32ec7d38e2",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\localSync\\LocalSyncManager.jsx",
+      "hash": "0ffc9e5cd06fb7f94e7ba519eecaec0eeb420765f827d08bc162af7c324311e9",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\localSync\\useLocalSync.js",
+      "hash": "817844396fd694c5a6404c32b8e374c821682af38891f0ce22f6fd1769f160e8",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\marketplace\\useMarketplace.js",
+      "hash": "6809a2c19dd2e6245718d75b8ed2d95e2f8b7435606e6a8be156882e4911f2a4",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\monitoring\\useMonitoring.js",
+      "hash": "2ac64b423eaed5f53423ff729854b8f6ccf53942a3f24fd55a45037513be44ab",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\onboarding\\OnboardingFlow.jsx",
+      "hash": "4343e041947d2dc4ab6796204228ca16639df43a6c32bd0b8966334750d75a7d",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\onboarding\\useOnboarding.js",
+      "hash": "0bef721c1d52c93b37d02abc45fee5705f8a26f19a098963921900108ca600c0",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\pairProgramming\\PairProgrammingManager.jsx",
+      "hash": "1f85bc5664a1075b9c1fec54ffb088fecb9da7bea93d58ce8129380b9f7e25ff",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\pairProgramming\\usePairProgramming.js",
+      "hash": "b136598591cd7e3e79d4785e449f2e7d78e8cd72c8736c5a7238812e372bb3f8",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\performance\\PerformanceBenchmark.js",
+      "hash": "ef317762c05fa3b1689a45e77e44e21606be704eba15bd224d5db9816ae3e7fa",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\performanceProfiler\\usePerformanceProfiler.js",
+      "hash": "f5110bdec6c309fbc62b27c2fc7dcb3cc8b109267f201ce89d3dcb2485f9c146",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\performanceProfilerDashboard\\PerformanceProfilerDashboard.jsx",
+      "hash": "b90ae0f6857c6b1b495048414d1f71a13afce20bb0ce261b902835e3851256d1",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\phase10\\ComplianceReports.jsx",
+      "hash": "17ba8819635587613d6ed26bd5f4301fa6bc097fef7403afb6d1fcf866cbc99c",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\phase10\\index.js",
+      "hash": "5e8a4c118c77ee27b1fad4b68f0746a10697432ba6e0b62c54b44d0b552900e2",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\phase10\\SecurityAuditDashboard.jsx",
+      "hash": "0abe315b93635b5efd3af2f6c2ffd71a8dad796aa60e6cbaae52771ef23dfe32",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\phase10\\useAdvancedEncryption.js",
+      "hash": "7f371181a9541e7e8e67cf1f7d9054ee152c797fbdfeb87317bac87b3b9d18e0",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\phase10\\useComplianceChecker.js",
+      "hash": "cf196b9cf9bf49e4e70d7ad83bd9090ed04485485c05b70271dfbe9a3454ec1d",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\phase10\\usePenetrationTesting.js",
+      "hash": "375a3a0f0ca31705a9a23f724e5d2f93b7cdc6f2e76f269e0f7ca12f9ef0b399",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\phase11\\index.js",
+      "hash": "0745ce008f219f66548b62e20924a56e708c2d1022b89991d06667e3c0ecb936",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\phase11\\OrganizationDashboard.jsx",
+      "hash": "21c5af9811674b2b0a062cc1aa5030b0cd1a698df6423a581fb99e34aad63d8b",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\phase11\\TenantIsolation.jsx",
+      "hash": "e345ec3f8d5f08bc49b32e3bad7bec27d7477b14c1607d83bcb26364f522ea35",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\phase11\\useOrganizationManager.js",
+      "hash": "d78092d357ec5dc47c7796238cea7d5f6ff1aadc9212e31d1bb2a455e162bd30",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\phase11\\useRoleBasedAccess.js",
+      "hash": "25cb283635567e7c355db5462167c0085aa34d6c8c2885b735f6300aa4142431",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\phase11\\useTenantBranding.js",
+      "hash": "7b4d269a8c5432c0baf5957f4d59096df92e3ddc52b851d67e42636cb324544c",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\phase12\\GlobalScaleDashboard.jsx",
+      "hash": "f8e9bae6dfe462256bf97348d3f774ecb842003cbda883e6b359a757465e051b",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\phase12\\index.js",
+      "hash": "f366b2708212351e489b07e3ba11cfa819799eb11846c2b86ff30f392c667822",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\phase12\\LoadBalancerConfig.jsx",
+      "hash": "e997f1689c839d90126b823fd38e0bb9463cd3c86d32cbbd6cad88dc2e5b2f8f",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\phase12\\useAutoScaling.js",
+      "hash": "511c8cdf9a88f52c6282615dd30ea8d249cba7f6e7e5b2e516745f99db9eb9d4",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\phase12\\useCDNIntegration.js",
+      "hash": "84804f5a45f0703357f5ee7d7ac993f35eb0a649c54043a9d228706f3549c1a8",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\phase12\\useMultiRegion.js",
+      "hash": "ee06018efb21affb8bb80b7c3b204fff5f5b565d68f88a239879241e71ef3030",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\phase13\\AnomalyAlerts.jsx",
+      "hash": "3d5a50442b57f9340db3b2a276872582481020a87a23653e10c9334ded2d597a",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\phase13\\index.js",
+      "hash": "1ee083c8fbcfbaf8263b8a1bb6b92390095ff36ae076cafbcbb2fb2da54f0939",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\phase13\\MLDashboard.jsx",
+      "hash": "9e562f28ed28eee7c078384c4c250dad94d9116703ab9a23f0a31783385e0f1c",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\phase13\\useAnomalyDetection.js",
+      "hash": "4b771a586100127e82d5c8cc3cfada4054104df1030c6a5d18a0f5e84ab45d51",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\phase13\\useBehavioralPrediction.js",
+      "hash": "9e7c7dacb9b9337125da0739a93ae707d58a25efa31446e576ae29377b1445a5",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\phase13\\useCodeQualityPrediction.js",
+      "hash": "501eee22d790c253034d89f01d8ebc9c0078f9f1e42e97471e827e7b80ae146d",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\phase13\\useResourceForecasting.js",
+      "hash": "33f961b8299474bdccaee7a6ffa53b8bdc688e0d56be5aa674573fba2c98f6f7",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\phase14\\BlockchainDashboard.jsx",
+      "hash": "fb0a9caaf03633e270f912de48abf959b52b458404d92a92d8835906f46fb6c3",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\phase14\\index.js",
+      "hash": "a1ccb5a6a9ed4ff11b28f03c14eab8cddef8f580d8d734bd3e452cef8e625e79",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\phase14\\useCryptoPayments.js",
+      "hash": "4730c1178a96d733b4443bc13bff2768683ba9eb1e293fc7596f3b54d68d02e5",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\phase14\\useNFTTemplates.js",
+      "hash": "69e49525e8eabf8754c14c52801e12bc69436c23cfd3405f253437e78fab489a",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\phase14\\useSmartContracts.js",
+      "hash": "39e91699a671e0c9fe4fa42b2738243ed6deec67a91e6b532fa5ae83db86c324",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\phase15\\index.js",
+      "hash": "fdfe2714055f04ecf8cbcbde8a3b1dee599d2e66e812e827ec8b5c685ff23b15",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\phase15\\PluginDevelopmentStudio.jsx",
+      "hash": "b59c904adb2aaf64f10b9b9d62fa52b381c80262bd784354a88547838d835ffb",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\phase15\\usePluginAnalytics.js",
+      "hash": "d3be9ebca8b6035de1d64a31748a4e15f1636c059b25ab2c3ce58fc7a7728283",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\phase15\\usePluginSDK.js",
+      "hash": "3defb549920e1701bb2b85ee8e0e25cd01e7d85512f7cf47963f0750429108ad",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\phase16\\EnterpriseAdminPanel.jsx",
+      "hash": "3bf0c0951bc0b4a729655213671084c6067e47f885662b634568833fb7f532e8",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\phase16\\index.js",
+      "hash": "fdbcf248c41b75b4f33ae09b2d18c2b7e84e858b0d0d6d05649a9056f62c6a46",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\phase16\\useAdvancedAnalytics.js",
+      "hash": "7f5c1325bbd26e37460e987531ccebf15ebcdb3327227b6c13daeaf8f3e26019",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\phase16\\useCustomWorkflows.js",
+      "hash": "b2d43c33eb76e9d2a712e1c8d3bf2b7901d87e7bda15d135d4996c41d217f322",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\phase17\\index.js",
+      "hash": "dd92c7ce393a7c3e3ac09aff4d28d0b7a949d5d894f330f097bb44df8285a8f4",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\phase17\\MonitoringDashboard.jsx",
+      "hash": "58bfe63b51e96f65dd3dd73f913b7736553ffbbc1ec0b4559a5876b7c63b5b35",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\phase17\\useDistributedTracing.js",
+      "hash": "06ad03e3207a2c276709e3d9602048343deadab5cfdfeefb57e2350106659bce",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\phase17\\useIncidentManagement.js",
+      "hash": "f9ae9cc7309b14b1d6af390ac553ba1327123dda90f2b093fa7e31c80bc73a49",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\phase18\\index.js",
+      "hash": "fa86b57215932b32463528b134148886ad1946795cebac0eb5be97b735dd4239",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\phase18\\PlatformExpansionDashboard.jsx",
+      "hash": "b4deda1f3c231f3a1118213b5ece55d93d4c59c29b77d4ac1e768fd830383978",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\phase18\\useCLITools.js",
+      "hash": "66737c8a803a6c113cf63dcdec8dc6bfcccc66c7229093388c1646f73108b5f5",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\phase18\\useDesktopApp.js",
+      "hash": "45a26179457c41c2995358c5b3813d928a57d9ebe3d461dcfd19b57aca11ba98",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\phase18\\useMobileApp.js",
+      "hash": "b90079d8906b160102e4075f5b11210108b6c97668693f371dae54ec2c4b3d91",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\phase2\\index.js",
+      "hash": "8aca3a8184d6f644e6659cdd8c4d6a17255e0c9da1203ff39d5f6cc44d6cd7e8",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\phase4\\index.js",
+      "hash": "1e0c3da544970a87bea9b63683e4ed1a4c0b9ed6d2533d25e8145de02171184c",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\phase5\\accessibility\\useAccessibility.js",
+      "hash": "a0998525516a107503720f6da4b561b3af362c7001602cb60ea4e45156c68c1b",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\phase5\\animations\\AnimatedAdminDashboard.jsx",
+      "hash": "14ffbd021818759175de926246fea5235a54767e2ba57b1b2d3c20e177920f40",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\phase5\\animations\\AnimatedAnalyticsDashboard.jsx",
+      "hash": "b6389e51e2795e335423ed9676290b4df2e70e5ee9650fbc75e415bb2543355b",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\phase5\\animations\\AnimatedComponents.jsx",
+      "hash": "915a682a0f6a4180c5735e03a348513f0a8fa56e8e2233c1c189f7675c044a83",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\phase5\\animations\\AnimatedOnboardingFlow.jsx",
+      "hash": "ae422c0cfa989224e60b7dfbac804b8168159c6d014651a6af618d9029a08151",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\phase5\\animations\\AnimatedSettingsPanel.jsx",
+      "hash": "afa3c9099729dd40c31cac490b75a01b63b62555f36ce3385a4af59b06fa9ed1",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\phase5\\animations\\useAnimations.js",
+      "hash": "77325ed9dc79d2c703c9f6c16a9a1de32f25bd4ef05bcf2300ee0b8feb11bcab",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\phase5\\index.js",
+      "hash": "3b81219f9e478e150921dccf7edb294aab477ca28acc04d8aebaaf8255845e7e",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\phase5\\responsive\\useResponsive.js",
+      "hash": "f66ffa987343e417145192b7fc5be13f06e11535e9cbe5fec378b49ce399bdbd",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\phase7\\FeatureUsageDashboard.jsx",
+      "hash": "5d502862fe0514bb70f3c15204f8f6d084e6a0c211cf25499750089b9b1deb1c",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\phase7\\index.js",
+      "hash": "630d32df5a70ce3582e03d2c911e7f6ecb01e8abbe249528fbe7cae152b3b7ef",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\phase7\\PredictiveAnalyticsPanel.jsx",
+      "hash": "480db2663bfff43d96ed7fb316d892bc2fd772b8797d97372774c8563e82dda4",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\phase7\\ReportBuilder.jsx",
+      "hash": "5789da0e6c0625efe3dd60102b597037d881e7364f220522801e52b7fd12ca1d",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\phase7\\TeamProductivityDashboard.jsx",
+      "hash": "d71f8bb436a7493feb80b7e19eddd580545c0169dd05ab1180505fa8f8abc380",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\phase7\\useFeatureUsageAnalytics.js",
+      "hash": "0ba90de440a7fbcc7574ee144fe277f3a731d82eeddb2c92d762123168d4a3ce",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\phase7\\usePredictiveAnalytics.js",
+      "hash": "00130e6e993040384fbc53d462b7da3de21ab7f4bebc5f4d65dc40cbe70f49fb",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\phase7\\useTeamProductivity.js",
+      "hash": "98b6bcfb95a08637c262475293776f06a6a96d376c651056ce74ad0302bc0300",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\phase8\\index.js",
+      "hash": "304042db8c3a539cb95a0622af021f782938b327639dab83a3afc87083d721c0",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\phase8\\IntegrationBuilder.jsx",
+      "hash": "3578c9976b36b838ba82b5100c179e8cc9efe622bd12ae0aa438dd0bfd11bb86",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\phase8\\PluginMarketplace.jsx",
+      "hash": "d0c354bf1bbf28c0d9fdd27a546423371ceee5b3b3464afa5e219bdd47b818ba",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\phase8\\ScheduledTaskBuilder.jsx",
+      "hash": "cc11950ebb8506438b06c8c8bd49707610f77bafd224bc012153132626a07dc9",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\phase8\\useIntegrationBuilder.js",
+      "hash": "9c989a42b98f8fff97b074a3305e6b9de51fc2d78d205595675fbfa8f8073515",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\phase8\\usePluginMarketplace.js",
+      "hash": "74c5421d8661eda1138339338af6f29a9e6dc603e806a041d584b4044153a14c",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\phase8\\useScheduledTasks.js",
+      "hash": "2c89a67273d3a487178b916416880a3dc5ae107fbe3200f185c04cc631312e95",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\phase9\\CacheManager.jsx",
+      "hash": "f381e2a8b7c4d955ec3de4229475305287c5dc827766d52bcc124d941d3a9a44",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\phase9\\index.js",
+      "hash": "1805bdcc50f77ecc360f8e769e9f35fcb5fa74f6ba0f6253205ed58a8810815c",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\phase9\\PerformanceDashboard.jsx",
+      "hash": "b9d1cc0a0405d238be55e05d4350898fa9030e31c3cc8f173d70ecf98d644296",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\phase9\\useCacheStrategy.js",
+      "hash": "00ab000bcb71a3ed95b007e52a430f2df372df505746436c98dc21bfe3cd11b5",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\phase9\\useCodeSplitting.js",
+      "hash": "7a41d9397b91d51f418281fafa6aceb6a1e88c01bcca251e2a576904fb026474",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\phase9\\useDatabaseOptimization.js",
+      "hash": "ae04aa5137578591388e0c2986553487d482945b0143d62425fe195f6423ad5f",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\qualityTesting\\CodeQualityTrends.jsx",
+      "hash": "c856ec8b235d5d89a5404317c0c1a60dcfee79a7824931718a150233bba55fa3",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\qualityTesting\\ComplianceRuleBuilder.jsx",
+      "hash": "ed72298018317b326ec5c2dd04b7c02919ea0bf2e98ff6311c25fba2ad164621",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\qualityTesting\\useDeploymentTesting.js",
+      "hash": "8d13980e748c2835d4aefdaedc6319b432767a33495ec575c5add77da34ae6f2",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\qualityTesting\\usePerformanceRegression.js",
+      "hash": "9f771fef4b9924efaca986537daf69875784dbfa01656b5bc4a3f6ef5d3fe097",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\qualityTesting\\useSecurityScanner.js",
+      "hash": "2fc92bae7b55d374d26c6aaf34fb39838daee072d0a4ed49e4d2819dce61816c",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\quickActions\\ContextMenu.jsx",
+      "hash": "c7b93f6e46a2f89f7b18ae9988766431d184417547f4f3877bcbaded6dd4212f",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\quickActions\\useQuickActions.js",
+      "hash": "39623f63a29f68884c449dbebc35808b9da7ab6da0103707308cb55f9ae6e1d3",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\security\\SecurityScanner.js",
+      "hash": "5efe474e643c0a9a60a8d96651b84c279f0e66aa927774465310becc80a6edee",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\security\\useSecurityScanner.js",
+      "hash": "5f7066e0a0aed2de623f5f7a5731d768393b33115a8ff7f4c80078928da9c906",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\settings\\SettingsPanel.jsx",
+      "hash": "662f52c521603166143b98838cf810df4de815c185b6c5ba0ba314a0cb681044",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\settings\\useAdvancedSettings.js",
+      "hash": "e51b894974ac0b9f1501046a1b74e7191647f9247876d6ff0f5ad90ea5a4ba69",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\standupReports\\StandupReportGenerator.jsx",
+      "hash": "1126d8eaadd79b7b93b6431f49ada4dd6aba949125feefdb21c12674b7e4b733",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\teamWorkflows\\TeamWorkflowsManager.jsx",
+      "hash": "d84775e1b26bd5913cb5aa5b74b37685378f0908b6176896d8a9e90be642890f",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\teamWorkflows\\useTeamWorkflows.js",
+      "hash": "247591508bc1b22add3473aed05247f3af95949c5655733c73f9fd5db758ade8",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\testGeneration\\TestGenerator.js",
+      "hash": "6ed5e68b30a8c579baf468f78f2a6b095544ba8a831dc184fb50b1027ec876c4",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\themes\\ThemeManager.jsx",
+      "hash": "7db55a21775537200be31a5588a6cd01a8e20d9c8dfb547f87e9f8256d10c1a8",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\themes\\THEME_PRESETS.js",
+      "hash": "d35f30ac1fefca9db418149dd00cfb4772be0a41f20d985917a78417ff76d7b0",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\themes\\useThemeManager.js",
+      "hash": "88897471ef8084e62f3b13ebb61f3a3467b265ceec6472852d5686c2d7dc6b13",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\features\\workflow\\WorkflowBuilder.js",
+      "hash": "e7d13a4214fe48fceb39c0e6e5f344f9029c28ca9beaeba77a14ec47dfca970b",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\functions\\advancedSearch.ts",
+      "hash": "7d1e095359326a32fdd2406eac4c58bcd14a564cb3ee25a0a0a61a82b8a758bc",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\functions\\aggregateAnalytics.ts",
+      "hash": "30c9a74a0e34b74ac7ab47086af46cb58c049169c4b43ac71582c211693ed564",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\functions\\aiCodeRefactoring.ts",
+      "hash": "cf2ee048d7da52d3084d135c862e05db01c8901104cf8037ea4415eefde47992",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\functions\\aiCodeReview.ts",
+      "hash": "a9a3c6dbf6e9f406421fe3cd0476586ca3b196853fe337377fad4f1ba684524a",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\functions\\aiPerformanceAnalysis.ts",
+      "hash": "6353f24eaf78497f39f1f2642f014a447c6f5e8a15bc5a67001297e2796c0389",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\functions\\aiSentimentAnalysis.ts",
+      "hash": "2d9b88dd05597707e71929ecafdb6e85b9afd1a9639b694fcf4f7f26483e6dc3",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\functions\\aiTestGeneration.ts",
+      "hash": "757b5643980629bc7b6ae7510d96ea37145abb2b9c3bed4a75e51845d23d7aaf",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\functions\\analyzeBugsProactively.ts",
+      "hash": "8e89bbd166ee0d38041721286fee438b196ed66a258a5dd0783f0bec3b5c6307",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\functions\\auditProject.ts",
+      "hash": "033da1e237be527780607326964a3262d4f589132876bd8e475ad4d0a492a53d",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\functions\\autoFixCode.ts",
+      "hash": "f758282708713997878a0a02563fae3eeffaf6e774a2a02fdd7d09daed44478b",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\functions\\autoFixCodeErrors.ts",
+      "hash": "5f5ee621103235bf0504801addc62d0d4f9646cdec24c3a3ddac5d34128d8c59",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\functions\\autoFixIssues.ts",
+      "hash": "20f293a2422a236c68898577233f450c63d5f14db4201782ea716d3e707519ab",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\functions\\autoFixProject.ts",
+      "hash": "1903cff01667c023037b9e6fdff28660fc7bdde1269f3da1fa454afbeb9870cd",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\functions\\autonomousCycle.ts",
+      "hash": "e3f46921d18a7ac895642a1cceb0a892b5d4088a77d74ba4f6e565643ca360fd",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\functions\\buildMobileApp.ts",
+      "hash": "6e9baa0164fad8e2c68ea7d2b47a73136ba3ef64c1b15f1b4887e1af5bc41289",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\functions\\cacheManager.ts",
+      "hash": "3ae49670c39917f640f7c3e3bae6a563fbebb2f7b1747eda24585f06f578ed47",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\functions\\checkBotPermissions.ts",
+      "hash": "186c5c0271a1f91ed13fe093ab5c9686d4e05ca3fabeaf8f8ed2f579378e6889",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\functions\\checkFeatureFlag.ts",
+      "hash": "93130cb45089cb4e2dcd2083e05a783f6f5b2722f90e89de98ac4158442053d0",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\functions\\checkSystemHealth.ts",
+      "hash": "736eb43cc9d7b0de1c6bf862ccb246569c306864125679f6d96dadb6fe9f9085",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\functions\\comprehensiveDiagnostics.ts",
+      "hash": "857e9ade03b04668fc7ae69670357bea158643075b653be4ecd201759516b972",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\functions\\continuousProjectMonitoring.ts",
+      "hash": "13b344fc04befd7a09ed57290f0a7a2382e317092e450a0c2ea009b509dbbc33",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\functions\\createBugTickets.ts",
+      "hash": "10eb5774bc395c87eac019a90372dc5a9591d9c7ce29a07d5a4bb59f187649f9",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\functions\\createChatbotAgent.ts",
+      "hash": "55ef046c1e45e9fc4e5951f9fa8fa32bfd396d105e897807d038eef9118e286f",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\functions\\createExternalIntegration.ts",
+      "hash": "102e860e9e0decce7de1d770645ade25e7da6553678ce59a503e1a27bb3cd1dc",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\functions\\createSubscription.ts",
+      "hash": "b102bdc79a11663c209776de4eb4c85601f26881fde86f9eb4a2f05e4a147756",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\functions\\databaseChangeTrigger.ts",
+      "hash": "05997c6af20f797ef55bf0406872794b923d6be63da37c19e16e5d69202618ec",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\functions\\databaseOptimization.ts",
+      "hash": "caa9011b31a594fb34c0c90c2586b6d9d477c5e2830683f4b4253bad9d454131",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\functions\\decryptAPIKey.ts",
+      "hash": "bcbb8a4cb06c5897cf09d457d64461d94e61733a6d67062be2790f967a9865f0",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\functions\\deployBot.ts",
+      "hash": "299c3e2040e064465380ddc5e1c1b044f323290ccbfd3d2bc30f47839aac4cfd",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\functions\\detectRealTimeErrors.ts",
+      "hash": "bdea0f4fbe02521a51efb9f0300d3c50b56036ebe989b58cf144f2062ca254d7",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\functions\\emailTriggerHandler.ts",
+      "hash": "9f052fa03926f31268ed3c6b04bf961500a935e6e33597eadb1a9468de0d0783",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\functions\\executeAdvancedWorkflow.ts",
+      "hash": "3b5322afbb1d46706b14bce5ba2cb163100b50641d076437a9e8c8680e476cb8",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\functions\\executeBotPipeline.ts",
+      "hash": "9e65134e96fa6e49b438520c3527eed90a6c23002451d6dad95154e015adf491",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\functions\\executeBotWorkflow.ts",
+      "hash": "ff491e05b47257f114bdf419add1ad22ed173f22de2dadf4456c3260f589e528",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\functions\\executePlugin.ts",
+      "hash": "3b561dd96ae70a7f0335cd5dcb5e01268054ddb5622cecbfdcb54e3c4500e6c6",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\functions\\executeTeamWorkflow.ts",
+      "hash": "aabf5b124e22a9caf7b0d9557a4cc36cc8b24c780fd628afc90643618a709841",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\functions\\fileUploadTrigger.ts",
+      "hash": "13548ac2681df5a118700a888874a068bf6b3c570fad38db5c09f12c5b087289",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\functions\\generateAPIKey.ts",
+      "hash": "fd3cf094723ab8db6376979afd8df938ec3bb715f80caf71358db8c7e0204279",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\functions\\generateEmbedding.ts",
+      "hash": "e5f08645959d9f3b65c1f17f584168f403b956cfd4949ee375f058a943f79a76",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\functions\\generateWebhookUrl.ts",
+      "hash": "265f82aa2318696ddf283c4ab17eaf305e1f08451d8891feb47bdbce26eaf71a",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\functions\\getAllSubscribers.ts",
+      "hash": "b39c9872de0b5e36dec81563102316dca253d1e7201ae3cc6b7a5a7372d01a9b",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\functions\\getBotExecutionHistory.ts",
+      "hash": "39bea022435ff8c2b1d8884116c20c8e3c39d86d705f263757e51b41093bdc20",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\functions\\getIntegrationLogs.ts",
+      "hash": "df8d9f8c283f51c9dfe5300015d91f20860e267079e64e677146daff980670f2",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\functions\\getPluginStats.ts",
+      "hash": "9c61345dd52efcf46e7feac433e0ba5d061caa018230c522f5fe01ccb45f74da",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\functions\\getSolanaConfig.ts",
+      "hash": "61498d82b9c72d799587ec1d0d0b72d016234aea8d9e23beb9de348118334bdd",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\functions\\getSolanaReceipt.ts",
+      "hash": "8468a1a7927b23cd034e6524968a78f2d86aa2a0181b6e44a8d16e53b6fc6e1e",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\functions\\getSubscriptionMetrics.ts",
+      "hash": "3f0218c3b6d641f9d6096edc1fda489c082502d56ede82fb6f823347373cf447",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\functions\\gitWorkflow.ts",
+      "hash": "0487d5f8c96967e1a4121fc2b2f889d07e277aad57f87f5e0c83ba95e2f3b687",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\functions\\handleExternalWebhook.ts",
+      "hash": "f18e2227ec435e3f224b5935a2fbe6dfbd2a16128fd265fef94fa3100db41ac4",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\functions\\handleGitWebhook.ts",
+      "hash": "780faf27a299aa50b547ef21f4fc97e18c359f0ffb9474ae66ce116c64766776",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\functions\\logBotActivity.ts",
+      "hash": "ac9c79256acefcbf4d9e769f47429077cf0ecc7372425844258da128228daf43",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\functions\\monitorResourceUsage.ts",
+      "hash": "b3a5c3a80d73baccdd965b8dfef548d772d24eaa97fa465da48c85c433a2152b",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\functions\\pauseBot.ts",
+      "hash": "e03b45890dc56234f4e19f0662ec1254b35bd70f9b04f1b3163483d2e3f3a7e7",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\functions\\permissionCheck.ts",
+      "hash": "654fb58e5b8b6bf3cdc5f86005fd14b461ee604abb1be19653782156b9c825cf",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\functions\\predictResourceSpikes.ts",
+      "hash": "c4be36c0d577867572f93d5146fd44532562d1ded1524f64195f125644aceec8",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\functions\\processSolanaPayment.ts",
+      "hash": "ff1f570a8ba91c6c7c0eb18d7354117f5974b1137fe7f8cd19ee4a57f3d72c30",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\functions\\processWebhookDelivery.ts",
+      "hash": "000551003759a0242b2db09c56d3f892f810873ea1e741c78466fab707fc2d10",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\functions\\purchaseTemplate.ts",
+      "hash": "2ee55325086f854f93eba1a58781014bad205d9d040350727b8a2bc29e293769",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\functions\\quantumAnalysis.ts",
+      "hash": "476100336a66324cd68349a15e119207c7a132802cb0e850c93c3cfb68b9de1c",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\functions\\reportAuditFindings.ts",
+      "hash": "63e7f5b5c7d4c248ebfc3e3e011b760d5dc3ed603dc5aa78881cbc85144fcc25",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\functions\\resumeBot.ts",
+      "hash": "bbe9f2a0a1f055b7cff8eb6968ef234715637c2b535ecc7a3a7cfead58199ebc",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\functions\\revokeAPIKey.ts",
+      "hash": "e8c27116bd8b04c2480711a9656471b696d7a366d7dbb61bbcaa9723bac00180",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\functions\\runBotTests.ts",
+      "hash": "dc55a68d8388c97a5cc4c11ef64a371e7554bfa717d4b7caa4e4229c1ad93396",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\functions\\runProjectDiagnostics.ts",
+      "hash": "87d56bb9e4fae05361d486f1b7434a56e4ca8135ea0b96265b09cf4026e9f1c8",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\functions\\runProjectIntegrityCheck.ts",
+      "hash": "9f43ff0f0227f9979e25cb84f99888c051738e2c335b01922347cfec94cd2f77",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\functions\\sendSubscriptionConfirmation.ts",
+      "hash": "97de78b8052938274104fea7affcd1dd49659ccadaeaae3c0a76beb63c56fb4d",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\functions\\suggestCodeImprovements.ts",
+      "hash": "aaaa23fb7db6dfd72d0c961395f2c0e5381be7f73fbd2f6701483910ce092eb2",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\functions\\testBotWorkflow.ts",
+      "hash": "e20b1ea1a7562ea00d75a3f35b810966ebc0e99ab91d12fd8c2424da32c86799",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\functions\\testExternalIntegration.ts",
+      "hash": "803414f9864579fb41a4f30675e9ab614a3f6ddee424d0e61fccdbfe662e5047",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\functions\\triggerIntegrationSync.ts",
+      "hash": "fac2cffa41ff73cada74dbee759fafa777578dd2aedb3f1338618f33d1f04efe",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\functions\\upsertSolanaConfig.ts",
+      "hash": "25f4d9867ab1027190b3119ea5adcfd56ae86eac9c9a07c514a140f72a59f83d",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\functions\\useIntegrationTemplate.ts",
+      "hash": "61f1aa0a61b21a274aac9ea472e79dcced9ea4f5fd2ee789151f4e8d8231b48e",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\functions\\utils\\logger.ts",
+      "hash": "15acf98f074e09b99677299a321f470f76f60d0287fbb826ba227c73c747cdb6",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\functions\\validateBotConfig.ts",
+      "hash": "889405a7d7008130214d9c1935ef2b6f350ef97e1b57713f80ee90e0166b6abd",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\functions\\webhookTrigger.ts",
+      "hash": "61846b645f95f26cf713e6eb973ec5d08d8b887b7ddabe564cfa1412ddac7e1a",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\hooks\\use-mobile.jsx",
+      "hash": "45f02b034691fc6fcd9761106f521464bd81c139bc7f122811590fb22e1a3c42",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\hooks\\useAICompletion.js",
+      "hash": "99fec6f420a4d404e81c776fdff2c9024902871b1e250e7a17da9a4f305b25d7",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\hooks\\useAICompletion.test.js",
+      "hash": "2c10a6ee447550a33f922ffd709a520cc4075e8eb50615ea0db91947f4e7bdd9",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\hooks\\useAIRouter.ts",
+      "hash": "175ef14b66f89858dda586cdcb056815d07725c67b20ee1849774ceb0d283e86",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\hooks\\useAnalytics.js",
+      "hash": "698cd8985d79db4a50dbd3047f24b22b39c2ddc6de476d25fc4ba3c542799b72",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\hooks\\useAnalytics.test.js",
+      "hash": "1b9bfa6bee709388692b072a90bf522973c48b90ad552aa7bce608798c27d7e5",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\hooks\\useAPI.js",
+      "hash": "ee64b6006eda022e0e88bf9e4c2fc20fc618c53389acb8f158180d776f852cae",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\hooks\\useAPIKeys.js",
+      "hash": "9b415e9ea912ca077e58765917cd418878348f51fab4554094908bba0b98143d",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\hooks\\useAPIKeys.test.js",
+      "hash": "c9088ebb85e7575c1f775b69a6268860da5653b460659c56731319522d17d76d",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\hooks\\useDeployments.js",
+      "hash": "49f1e5d0f9b70cb8da06dfc48899547a7811835600438e5d4d82fc3d0a0d5267",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\hooks\\useDeployments.test.js",
+      "hash": "e21a314d9b9973c9b1063c35a1dedf42585b8e2f606fabcacd4a0df42735e16d",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\hooks\\useEnvironmentVariables.js",
+      "hash": "c67f8cb48676e8f73e32013162fab8dad1aba2dbc304783ec97928b505f57134",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\hooks\\useEnvironmentVariables.test.js",
+      "hash": "492635137240e66ca0f5343b7a0700e9a3e699e84693edeb3a1c84429177d644",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\hooks\\useFavorites.js",
+      "hash": "148ea4ed52399e2306f7c522a348369e3d7270e4f0d11dc97e6846cf8eedfcc0",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\hooks\\useFavorites.test.js",
+      "hash": "3a83662c9cce1aa615da2ce18293cc3f7f710c838d34587cca105847a731586b",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\hooks\\useOfflineDetection.jsx",
+      "hash": "b73548b6fb33481aecc475e0d07e74127286685af714762c85b3b908f97ef068",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\hooks\\useProjectCloning.js",
+      "hash": "9dfbf1b0dd094213b1c5b836aec0cdffcfff914c160ba3da8bfdd2b0b82a5300",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\hooks\\useProjectCloning.test.js",
+      "hash": "a8d1838bd5a38161a4122388f9c3b09a3a4ca8fcc28aaf0d5aace9b184520c4a",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\hooks\\usePWA.js",
+      "hash": "8ed8a7b9ede44bfbd08d522cb6c12180496f9f5cd22ae60997630c0b63ee49a6",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\hooks\\useQuantum.js",
+      "hash": "b96adaa976853579b04c7a2407db80cddc8f04a034bf0841e5e3554110071cc0",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\hooks\\useQuantumModelSelector.ts",
+      "hash": "806c380076640062cbf445a5e2b0de3985d04998b537aa63fd3eda009140b045",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\hooks\\useQuantumMultiverse.js",
+      "hash": "17c253c07036cd49dfe2100d9348dfa32512a6620fe2a88d7d4f3641280988cd",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\hooks\\useQuantumOracle.ts",
+      "hash": "4b7cdb8d058c4c776d9dc8c8951c1e506ff1b0afe3dc594748e2409f66a63812",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\hooks\\useReversibleComputing.ts",
+      "hash": "98c77028aef5586a1ec3440be6f581982fd0cefa696697741a0ca6b32016055c",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\hooks\\useSearch.js",
+      "hash": "57e42f73ca5e3eb01f246f396ca19288d54243a2b6c94de0e88f36fd422e0a80",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\hooks\\useSearch.test.js",
+      "hash": "001ac653349560c6a594d82662b8900a9ed55361e34c50510f00f652c3cd5dee",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\hooks\\useSovereignStatus.ts",
+      "hash": "6f89ed0e9887879dc07a3035bbf428ab4b5967fd9a502e3987ca99e9f3a92021",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\hooks\\useStaticAnalyzer.ts",
+      "hash": "acb40de3f82312706229f7fec4113b394d054d3aaf975a7043b89ebead64bf60",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\hooks\\useTeamInvites.js",
+      "hash": "6d50a576947f8708a4c48fb6769b1f768ee5e1406f147936a9849c26b7cbca3b",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\hooks\\useTeamInvites.test.js",
+      "hash": "851e44a06e93deb062776d1727d0e4f1fad6c4be6ce8c4ebec93bc48f614f25f",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\Layout.jsx",
+      "hash": "16c76ff54b4d37428468d68e87c98c043d48cefd0f4317f71f9939241613cf3e",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\lib\\aiRouter.ts",
+      "hash": "cbc31c87f395d55710e971e13324779d727c8f7a0e5e8a2e3d7aaad91eba598c",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\lib\\apiKeyUtils.js",
+      "hash": "aeba46dd936b2e1ecd10b867c23cee5bdcded0337366f53d3ed38d44e4139057",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\lib\\apiKeyUtils.test.js",
+      "hash": "ca9886663275dcf4b42d97bbcb42818c065f792ab5fda41e1e46dd2864faabdf",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\lib\\app-params.js",
+      "hash": "e9b0223739321705fa152fa7359f444090e385acdbd179848e56858c95d3ddb2",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\lib\\AuthContext.jsx",
+      "hash": "48f906ba14cf4fc82289e6f09d71cd1303e6a64d27944ba41603ce1cccc2401f",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\lib\\cacheIntegration.js",
+      "hash": "959b223a37418f639fb873c708a6b1607f91012ddf76b2b2106654d2f2103b73",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\lib\\crossPlatformExporter.ts",
+      "hash": "b586d3912c53490d4c984db08903f892533ca87120c3334e7f9c33c3e379e418",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\lib\\cryptoUtils.js",
+      "hash": "2278aabf55193b39169442ee15336ea8b422b73807c1714f0ce8358daffae6ea",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\lib\\deploymentHistory.js",
+      "hash": "2569108c2e1003350cfb7603c35dae5fe91f99f8577cb3d4cba40ad0231331ef",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\lib\\deploymentHistory.test.js",
+      "hash": "6795a7a6a6704a42fb1073ecd71674203f3144512b3d5b7c3a37822edcabfc9a",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\lib\\environmentVariables.js",
+      "hash": "e80ac3f6cbc87fc330f8f28ae69dbd2b618c15bac48a4f025505160a577db5eb",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\lib\\environmentVariables.test.js",
+      "hash": "7025d27b99884f1ec6fcb19f98c3393e1858faa963cb65cd469c6906e134a3a2",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\lib\\favorites.js",
+      "hash": "428fb5eb48abf79e8a2085c493af0fbfec9b6241369f7286e6b4d271d2910877",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\lib\\favorites.test.js",
+      "hash": "0d98b758fa923fdd16d7f9cdda4be56af3c9e55d07dec4bdf283451a8fe1edbb",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\lib\\govtechMedicalAI.ts",
+      "hash": "4613d2a53f1a2314119119d083870c0e7724a156e6b42c873892f3b3f9cb07ad",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\lib\\holographicConsensus.ts",
+      "hash": "61f5a29b531d5916700ba1df4e03c383a1525a6c8973930d216eb4693b47c8d3",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\lib\\holographicExamples.ts",
+      "hash": "78db41d7cb9c0bc317083558ff1d5ed8b1ccc2e25af4bea7f333797baceb3e26",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\lib\\integrations.ts",
+      "hash": "50af8d966fac03d294de1171c644f271df945a3f2fa55d122eb82e798e3b13c5",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\lib\\NavigationTracker.jsx",
+      "hash": "64f3e763ab1c577e2b5cea69aaf02495b4faf31f381d24b6202cb451c0664846",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\lib\\openAPIGenerator.ts",
+      "hash": "1cf1cd1039f7a56772abeeb86be3be3cbf0314c3dcdeb93ca78583cc20c9b71b",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\lib\\PageNotFound.jsx",
+      "hash": "0ec626e020214047d844df6f178aae6f731f45e237cf1f420a90e40159aadc20",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\lib\\projectCloning.js",
+      "hash": "e500ef051ae48ae9e2288260a3fbcc4ecd44b4a56d6363952ad9540477c43221",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\lib\\projectCloning.test.js",
+      "hash": "1b809ca44ed4a811f5aa34f5b3d46a92b8ed56b4a6101c0939a6e598de41347d",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\lib\\QScript.ts",
+      "hash": "7466ef2601938a417862ff3604085496912032f1356af340b36f025042718dd6",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\lib\\quantumAIOrchestrator.ts",
+      "hash": "b07e8888fa4dc8d96435e0054a9ad6be14ae5ec708386bb8935ef87d2572b228",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\lib\\QuantumEngine.js",
+      "hash": "0057d97be54177d46ae758e364e363716fe4082a5a94f5668c02c182a2062871",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\lib\\quantumImportReference.ts",
+      "hash": "d076ef1dfddc73ea3f820d8238e4775a8f12b4f9e8ac7c7d4ec123abbda6f317",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\lib\\quantumIntegration.js",
+      "hash": "43bcaf749cca606319971d12409b41f3281bf838cc87d3240708b40512e11006",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\lib\\quantumIntegrationExamples.ts",
+      "hash": "7dbf0b19844b8031ccc7e3d49ea6a06636e98dc06d9707aa89259289d0838773",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\lib\\quantumRenormalization.ts",
+      "hash": "2d507e6583d7a1f36633655c6d4b535e3a9d0b71b58fbd0855b0151813df096d",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\lib\\quantumTunneling.ts",
+      "hash": "cc021669de9e9b4471fa581c0474cd3f49d05f7bc7c226d43a551b95e54c182a",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\lib\\quantumZeno.ts",
+      "hash": "43a241ef736267ab48e7cbbb82870a32e0d508956aa475fc85a4551ccb9a0da9",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\lib\\query-client.js",
+      "hash": "0da46e5c7c7de5328764af1cea0dd7cd62a6782438d0678c3acb1cd8e0acfb42",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\lib\\rateLimiting.js",
+      "hash": "17b688ccc778ddb8b158a089c6be5e2ad39dd2814362fea1d72cdf24e3a4ac20",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\lib\\redisCache.js",
+      "hash": "d8abc4be72224e1935bee46255e8edb4b0498382eddb7f1f5afad181b5062798",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\lib\\ReversibleComputing.ts",
+      "hash": "a2dc39dde4aa446ef9d4d5924a3659545a3cebb5a23c2af0f783f692335d8d77",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\lib\\search.js",
+      "hash": "2754199a4e4ca31b310f9e3fffd93c709c24b574f75fd85cf45d2f6237f3daca",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\lib\\search.test.js",
+      "hash": "264c7f5b04d6057a7cf02ef09f02f0a61a0abcac6564288c0416ead3de7c385a",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\lib\\sentryConfig.js",
+      "hash": "f703db47660a915bb31f791ed5e42fe5286790cea6611c5158b8e8355b263704",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\lib\\sentryConfig.jsx",
+      "hash": "cf6639845c5d48e9daf94a1ed75c25138937087f64e3be17c3f808cd73cf7beb",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\lib\\teamInvites.js",
+      "hash": "23eedcb804dfa693790871d8b4e56d5aee1dd76cd9eed54358b36138bc0235aa",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\lib\\teamInvites.test.js",
+      "hash": "82f3aa5f442c48f626352523ac562bbba8100a174b50a014039fcda80ac47b7e",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\lib\\tracing.js",
+      "hash": "1b9d7002074166eba5e4d04df0893908201e4ef79bcbb26b455f62f9cbe036d7",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\lib\\uiGenerator.ts",
+      "hash": "5bf901387454e5c13a9babc439818a46c1951b609f0b76be120640390f4bd98a",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\lib\\unifiedQuantumSystem.ts",
+      "hash": "196b593de9f75d92b27bd62312489062e949e6053b5cf76acabd8334f59d5485",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\lib\\utils.js",
+      "hash": "917f1465a64346f1b76178074a09ac5cd63e96fe12eb740311a73f0f27d8487e",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\lib\\vitals.js",
+      "hash": "6c17d7f2b5972334f4943b00cb3b5d297f667106162f4e737df05cd460952a25",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\lib\\wasmLoader.ts",
+      "hash": "81b9a488900c6a5e81672c3dfcddebe0fd3b9a98fcca3aa2d663e77a29e7a5f3",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\lib\\WebSocketManager.js",
+      "hash": "5bb5d28db04a545b853a810171c674f525d126fbb255a88319da9e4846c53501",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\lib\\zeroConfigDevOps.ts",
+      "hash": "1a989dd3c1ce03545b5c1b105dcaf6cdd6ac2bfa9a3e2c515ba999084d9c28f5",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\lib\\__tests__\\holographicConsensus.test.ts",
+      "hash": "297ec22cb367d1c087c2e9054622797633a95e76fe82d6f30f210268d1a4e803",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\lib\\__tests__\\quantumIntegration.e2e.test.js",
+      "hash": "3d89f43c09d55748f1413092a5b8d39751ae039e5d1bd0b5bec21382b2f49986",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\lib\\__tests__\\quantumIntegration.test.js",
+      "hash": "59d92a12db9b2ad9e46676abd21e8cc30e7f88797a79de7adb87ea6b042bd517",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\lib\\__tests__\\quantumRenormalization.test.ts",
+      "hash": "7628098d8fff92d2c0afa965e41903909f845b47a3f7a4a8dda47f5fdad69b3f",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\lib\\__tests__\\quantumTunneling.test.ts",
+      "hash": "37bb1f6093211df1996dd64ec8c7e24b538caf0ef00180fc33817f70dc5e98d6",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\lib\\__tests__\\quantumZeno.test.ts",
+      "hash": "def07d459751d4b69ee2501f9e7b01909fd013407968348952c52f61843792d6",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\lib\\__tests__\\wasmLoader.test.ts",
+      "hash": "280c7dd47927cdd36f0da00e1234c5968fd5b5102bc06eab364c44f6e4228bf6",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\main.jsx",
+      "hash": "a02d129bf1e11597699d3f5f78e4fc8958cf47fca84a3c5c0ed1a9b4eb124337",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\middleware\\rateLimiter.ts",
+      "hash": "9943d1f6ea104af8d534e079d78d0df16a4d2f9240252866d472ae9435d69855",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\middleware\\securityMiddleware.ts",
+      "hash": "2edae0494849d08d96f88f8077167b67cdd0870f9eeb2f8bc39d97a680884ca3",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\Account.jsx",
+      "hash": "5daf4c24b034247f0be624256bc416a995257c5fe5a1c8a62a65b9ce115aafd3",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\AdminAgentControl.jsx",
+      "hash": "a0dbba3ff22f3e85857181a7247461eb8c0c94acd839448c09d6c3430386b5b9",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\AdminAgents.jsx",
+      "hash": "b9ed3b0bce2dd98f2b97f0c9d85d78f5b7d8942e54e396600dc480280fb9bbc5",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\AdminAIControl.jsx",
+      "hash": "05ad416e72cf843b776dfa03fd7da9f17acd0e11ca86cb42db41a9f5eea0db1a",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\AdminAnalytics.jsx",
+      "hash": "8f79ed0ca50d8abfbfaf93349d3dab008ea285e419f502633b270656f5f41682",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\AdminAPIKeys.jsx",
+      "hash": "520746863e2e43382f5ea689f6e5e069d727cebb0ec12a947486dc2484e9e221",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\AdminCoaching.jsx",
+      "hash": "85ba937fa58051c138222468c3610c1f0e0b73aa3f8aec4750bd7185373bee00",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\AdminDashboard.jsx",
+      "hash": "bf545bf1db37c2dcdde95406a05148048d7966016e6b621363f67c32c7d5b265",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\AdminDeployments.jsx",
+      "hash": "1cf80bdb589d28d3267ffbac0d839700b988e8ad4097762cdd7b48474a694b01",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\AdminMonitoring.jsx",
+      "hash": "58cf1cd2e9b3c86d734e9e56e53867bc34033b9db8ac0b87f9e8f7c7dc95995d",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\AdminQuantumBackends.jsx",
+      "hash": "f06bf27072acd7efd81e22d06a569cd8435438b9206f6b66dcef5bd44283e8b3",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\AdminSecrets.jsx",
+      "hash": "0d4d3844d4b3aabeb59e8c545d78ff0af4b783205d364ee3625a5d94ecfcd3a8",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\AdminSovereign.tsx",
+      "hash": "62303c6450e54232efa540c850b3c90a3b4b9c2d6c35f3deefd19ad4af1b34ff",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\AdminSubscriptions.jsx",
+      "hash": "52a0608533c391b1c7fbf7f5cef4d8d73db66ba7ef73c371d7bec59450c790e9",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\AdminSystemConfig.jsx",
+      "hash": "b0eb84b12309504740eb3ac19a70754b77d9b965f06b2972e1d86add0c5612ba",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\AdminTemplates.jsx",
+      "hash": "49c31dec496f4996c02f2999b7830e9610d648ce9d3037e68614ea6743371868",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\AdminUserManagement.jsx",
+      "hash": "4d23fbce2ddca57535a58592b4a7b5af8e545bdf4d8f9b3ed23053034e383015",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\AdvancedAnomalyDetection.jsx",
+      "hash": "d882d1c58d391aa6e7cda4291aff6721d6cbf556893f1ca3753140056ba3e3ee",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\AdvancedSearch.jsx",
+      "hash": "696c50745d316c67dfcae0488fad3ac84f89fd8f76843656f21a8ac7352a1495",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\AGIStudio.jsx",
+      "hash": "b88392367cef750617147c16ec958cb3268a97358d9bef928c68209afb154462",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\AIAgentControl.jsx",
+      "hash": "641ac006dba22ececbc4fc1d6485a0b0f32a13d72ed475afc278e8c66f02c3d7",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\AIAssistant.jsx",
+      "hash": "ac30ca822980b5b7a80adcb0afd979076ed836353cfcb0ac7a4bbd8b8c226d42",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\AIDeployment.jsx",
+      "hash": "2fb32992cf5205cbbae121d8b47ae5a2c6d82bb1bc0b9a35ba37bd37f6ea5148",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\AIMonitoring.jsx",
+      "hash": "fe9e2c71294f4da51d9e3196a5be26a147298ec42583baba1a3b91cf5fd1b811",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\AITemplates.jsx",
+      "hash": "c5b16baf8c5d3f1db6a84d5b9f12fb0235bef2032c462bf4afe595322a12b987",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\Analytics.jsx",
+      "hash": "2b77ac13e3c68ad3488f6b6c4388a2c106eb55d40d64bedb8691fa1f1c1fbf8b",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\AnalyticsPage.jsx",
+      "hash": "085f16189387c688d7c92364bed9ef0facb7b505a2c3342a615e3568e0840b93",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\APIExplorer.jsx",
+      "hash": "4a597115eea44388394296e3c0368a8470d14f754826ac108275ebd2c9105477",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\APIKeyManager.jsx",
+      "hash": "547eda7cbec240cbc9c35cd4092ed15bda0cb51741256519ee9f0fc8ea8d9df7",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\APIKeys.jsx",
+      "hash": "8b8d53bf850b6b9ba1ed1eaa2a6ee5cf08f9a6502ce9a5e1c35eaf17548ba533",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\APIManagement.jsx",
+      "hash": "6ef8e388a16127191c1d12505c24714d9de9b9de40bde47c9f48baf0e0dc4076",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\AuditLog.jsx",
+      "hash": "db916457d3125bc5207a498bb2d2aec29a31d900d0a04332ec507e9de75ef3a4",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\BotBuilder.jsx",
+      "hash": "c15732c2a196839168be7532e593edf90fdedf2426b47b6b233b12a2583713fc",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\CentralAnalytics.jsx",
+      "hash": "1d9e35f8a345217e720973747491eee5f7c61a3582b54586d32361d0fb7a7a94",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\ChatbotManager.jsx",
+      "hash": "80257b6ec474d69a1e30b9f0ffbcb9f6cba51e179e2d753aa23b8a9a4ac99e01",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\CodeGenerator.jsx",
+      "hash": "71df854a51d1c8caa7c70365ea49c19d9f01cf5dd9e012824040b1d5fd4c0a8a",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\CodePlayground.jsx",
+      "hash": "fc609f68cada44f5470b4d3183388dffa2f0d1ea68051c1724f7472612c3047d",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\CodeRefactoring.jsx",
+      "hash": "942d34221fb1532aa4d64237723687ca6dee0df43f190354d07ec5a1b47b5bce",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\CodeReview.jsx",
+      "hash": "de9ba88b9960de08c7d993de36240a99d34d23c6add2073faf26534d0bd68c1e",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\Collaboration.jsx",
+      "hash": "00ae443ceb323df4f58c43bf7bb6cdcb98808177fe154bae36e2da41c0986732",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\CollaborationHub.jsx",
+      "hash": "d217111faded004859afe3f929e6d773d1798e9fb4aca1c887f2caf872323401",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\CommandCenter.tsx",
+      "hash": "d658f50f078ddb55225c333e4c4c4ab6354a2326d43f7868c5cb7eb76391f58b",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\ComponentBuilder.jsx",
+      "hash": "a64203af1e2c3226b6a264b87806d02d0c18adc3042f8823a7e507265b50b62d",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\Components.jsx",
+      "hash": "f55ea4b99c6b43ff07e3701f03cab97be755fc5640bc5700b766e63d8060fefc",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\ContentStudio.jsx",
+      "hash": "7b72e6c285a7a9d58c091c397862b17bd723e2535cb773083552b3e9436668cd",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\ContractBuilder.jsx",
+      "hash": "3eeedc718e97280086fe513088900a32253942ebbb5afb6ead7785df0ef3c0ff",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\CryptoExchange.jsx",
+      "hash": "b0112e030a479f44d34166d14659ff706780f246aa836dc0e8a86654d2221656",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\CryptoGambling.jsx",
+      "hash": "9c8e39fa163f8395d013e12eeef34451a30d525129c1ddb261f988be00e9278c",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\CustomAgentStudio.jsx",
+      "hash": "6dec645c6efa0de4e1c800a5081500b49475098f305e1ce976aaf851fb3fa5ae",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\DAOGovernance.jsx",
+      "hash": "fb281365099dd70a9af759afbd24b4e99567ca249db276f2e47176b6809df935",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\Dashboard.jsx",
+      "hash": "88f420284bca87fe20fa6ee36d1982b8526b67b037c0cde9cc7e2c910e9f7529",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\DashboardNew.jsx",
+      "hash": "d5eec58005c5fee429d53df6ba7b614ecb1e815c66ce2a658d5c77aa255b354a",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\DataAnalytics.jsx",
+      "hash": "45de0bd15a7b68dff054c1f1e0f503bd2451dbe2734c4637ae787ae4ab719577",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\DataPipeline.jsx",
+      "hash": "55dcaf3bff6678ed6a10abf8965f9bc6337e9a9e8fd87ab88de66b765b830dca",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\DataPrivacy.jsx",
+      "hash": "62f4ee125184521b71aa41414ec15ab529d7776fc8162d9a20b87b32c3a8ba42",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\DeFiHub.jsx",
+      "hash": "a6e4ffda2c3650632db17af27864e56fbdf2424240bc669f652267c34025834d",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\Deployments.jsx",
+      "hash": "c4a6457c9abf5b509e91cadad8caf54fbf98f874e7bfbdeb142e1a49ee377093",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\DesignSystem.jsx",
+      "hash": "97e9df6aef386ed7a6aa57bcdb7affaddbc5c0c8e9f09ae0fdac95f7104e47da",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\DeveloperExperience.jsx",
+      "hash": "d0f4fea0581d3b2aa9db5fd5531b1820f402bafaa2fff3f3643d6e7a0d3c48e2",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\EmailAssistant.jsx",
+      "hash": "ee594a182c53d67e55b929802905f1382e17be98a819c383a6b1e5977fbcc682",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\EmailCampaigns.jsx",
+      "hash": "fb4e38738abd87e76c689a9fad18a526f7251fcef8f61351392124e20efd9511",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\EnterpriseIntelligence.jsx",
+      "hash": "b14e569ba8be2842b65ed8a7e76c2ae02314cdcfeda1454171c2e8099739bde2",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\EnterpriseSecurity.jsx",
+      "hash": "14f2f2e77a6bc0d14b267c7c8b82f04d00a1c99648d9d7b38636f76e36243202",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\EnterpriseValuation.jsx",
+      "hash": "0eabcaee71e3c1dfbc354a4738316ddb0094ea3be5f7c8eb60db429ea15b9e95",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\EntityDesigner.jsx",
+      "hash": "f25e5306636f936e57fba0e25968e18185d13d4d8250406962bf0ae53e529112",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\EnvironmentVariables.jsx",
+      "hash": "bc920f58f07f71a69b369f8053fd9e2cc57a18cbe3db57c09d60aca9376b979a",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\ExternalBotIntegrations.jsx",
+      "hash": "7c0f76c2e340bea1e2d134c6de263758fccea58eb29c5796d5a0129205a0de61",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\FeatureFlags.jsx",
+      "hash": "4af6e384cb7fc24a7b5c201f0dd1973f184403625e5ba820146bee3493bf1030",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\FeedbackAnalytics.jsx",
+      "hash": "542b69e66fe68517288e112b7771da0b958967339b7d05b4bd1d03985a7cdca1",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\FunctionBuilder.jsx",
+      "hash": "9d315f6a33dd58f80911eff4d84ff76f50b3f135e33c6aec306b411ebe8b9e95",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\FunctionValidator.jsx",
+      "hash": "78d93a78ae027fd5bc9d6d40994f9fc48e5633aac4c1420dbe136efa6ec39da9",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\GamingPlatform.jsx",
+      "hash": "0f06d3fc490d2142aa1aea1b14638c4b745c3813642396cc70889f1c3be4b3fb",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\GitHubConnect.jsx",
+      "hash": "8e8833d1d0c9482eea1f412acb5f92419d646bb9ca82a17647478f122f2794d3",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\GodModeTerminal.jsx",
+      "hash": "c1b56305b054d70353b3c6107e30295f26733fd9f2d832e6a17b401ab4cfd05c",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\GovernmentTools.jsx",
+      "hash": "bc568bbca2d9e98b6ccc88c0f9fb9a87774e12451abba27553da1cea3bbae442",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\Guide.jsx",
+      "hash": "d3f2fb46fdaf07dfa68e1b6ba0e4801f0f1ed73bb4fee5726a63fadc9c6284ef",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\IncidentIntelligence.jsx",
+      "hash": "552384283c18dbc74694f5ce92909d7cb023254a76b8306f831ff3af931d6f27",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\IntegrationAnalytics.jsx",
+      "hash": "cf25a79d5f9bfe0ee6f2c0903114c4e2f9e26d622f25e9a1be7d7ea7e5826582",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\IntegrationEcosystem.jsx",
+      "hash": "1680529c534b9d03a2c85eb4c0dee2d1e5b2cd0ff53b7884625f27e09b7eaba0",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\IntegrationHub.jsx",
+      "hash": "2ed2e7b4bc83580b2461d427a319fd1b482881655173ead9df4d7bd2ea0ca494",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\Integrations.jsx",
+      "hash": "a9af98d736e90dbc15597b1b004acada4a4bba2a0d3b73e05fc9b2b1228b6811",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\IntegrationTemplates.jsx",
+      "hash": "da112deaa5dcfdfeadd4eb5ee5f30f263baca551725d51e7f7619c07daaa8175",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\IntelligentAutomation.jsx",
+      "hash": "324ab50bf5dd5bed4d5f9722350905e387ef36026ee35ea0ccae083ae7e7a1ce",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\IntelligentInterface.jsx",
+      "hash": "291f345737f4eab33afcfcb3f8d561a4ffcc229ca0d9f0e10fb06467d035151e",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\Landing.jsx",
+      "hash": "cfb8fed3b9aee2e412cfa1710f764551c69ba1c44300cc9c9c9931e2405f8f84",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\LandingNew.jsx",
+      "hash": "9781f3b7dfcdd2a77b8c99028eba906237b83bf9e5b193ce61fdc2775056e570",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\LLMSettings.jsx",
+      "hash": "86dc8fa58d61d978cfab6513dcc463a0bfce1406c73bfe706825e5017e2a8d0f",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\Login.jsx",
+      "hash": "912faaf20ef056f42f3c752b29b3bc51084436ad67803cc58f98ccff24fdf911",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\Marketplace.jsx",
+      "hash": "0af57914123c37a4fd564a83fb04e66f0b4acd203cadf6b837cc370fac00222e",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\MarketplaceExtensions.jsx",
+      "hash": "dac23b2d8342a2cd4decf2b23025d38e337acbbdada0af299318e0164d7766b3",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\MediaStudio.jsx",
+      "hash": "cfe15d780771c07486d0a7dffe3fae45340b5017e67edfeae9b7dcee88aa9732",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\MedicalAI.jsx",
+      "hash": "acc675e846dc219ee63899e9697c4f451c0a53dbbbef2ab5ed0cbef041d894a8",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\MLIntegration.jsx",
+      "hash": "69f090a2de760cd9aded22e47634e49ba7b958a1f195ffb112daacb65ad550b5",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\MobileStudio.jsx",
+      "hash": "9801cd21a70dbda84cc6d469040ea17a96e2cf253a228f31134cac03a3e26579",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\Monetization.jsx",
+      "hash": "96b4a278e0d8e03d0d022aa51414bb52e3baa3e45fea74b764b126cc54524432",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\Monitoring.jsx",
+      "hash": "d0fd14537a8c1d8f1b196f7bc936b4ae49760d3e482326012d5336ed9df34b20",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\NFTMarketplace.jsx",
+      "hash": "1ff9d730e84479c07ea03da79da17298a31f53f21ec240fb23a726a821e0b832",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\NFTStudio.jsx",
+      "hash": "d6615184f53b6bf5675a6c0e0dd8cf8b3d88d14d062bb0b6bfe7207a0f037318",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\Notifications.jsx",
+      "hash": "15fe9b06db70319b0ece06f05eddc8d889bee4eac138cbe6a90eddded7f31131",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\Observability.jsx",
+      "hash": "9b55aef73d04f60e8ab614bf6c24cbf4f56c406be40e65436a3dade1f76ccd43",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\PageEditor.jsx",
+      "hash": "71d9a1d7d69094e7a6a80648d88e9b2ce2c7b5a7a5f501565c54f0caf507332f",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\PerformanceScalability.jsx",
+      "hash": "1cd6d919111fc2549b610f5ce705f49bc1945defdddc5596e5ef04bda7f44108",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\PredictiveAnalytics.jsx",
+      "hash": "92d960f1e6a4d483828735a4bd7205ed98e70356274c7463227fb8c6649a456b",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\Pricing.jsx",
+      "hash": "23f69b62260bd93db5a2e4ef245f4968071d72395c16fd9f5ea5ded330eacd03",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\ProductAnalytics.jsx",
+      "hash": "7badd62090bae4d15a61548507c4f378df14d9c1584ef1c795b53001ea215870",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\Profile.jsx",
+      "hash": "9666247ba9ad822c53434cb7bcd568c6e0b58052f11aadf0524705535b01ad51",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\ProjectDiagnostics.jsx",
+      "hash": "e9d52bf350ad7099dce1317b4f2e870d281ac710855ec4c78fda63a60661a0bf",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\ProjectExport.jsx",
+      "hash": "8947b8e6e8bafe6f0eb0aa1f3e3a62ef333206a959b71e4b42f83caf4858fda9",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\Projects.jsx",
+      "hash": "32b2434854dffb730199c26258363c329d0b1bb56e88179bba323fb7b0950aa9",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\ProjectScaffolder.jsx",
+      "hash": "961f827e55f1ebd6dfe37cd53dfa486a66f856d60592d92bdc7c45a3a2714ab1",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\ProjectSettings.jsx",
+      "hash": "d375c1e32083a13b06a57d68b21d834d22715b7006e2975b10c779421bd69a46",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\ProjectsNew.jsx",
+      "hash": "5642a274e249643a822039beb61abff342b55664f487fbe2ce26ec9adbf6d7b2",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\ProjectTasks.jsx",
+      "hash": "43ef132bce8a2c518dd13f43c505eb9f245a6d038aa625fd9a01995596f7c7f3",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\ProjectViewer.jsx",
+      "hash": "d772775e00b65c6d2d0ce9182cf5647e544e836912a44153f288674be2567663",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\QuantumLab.jsx",
+      "hash": "fab2f912854c77a1636feccd34a9e2b56e07f84f4b1337054d6ddeede89d1ea0",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\RateLimits.jsx",
+      "hash": "23cd60bbf2d6f331e05fa29d3759b6b108e253854f01e0570178b991e57fe624",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\RbacTenancy.jsx",
+      "hash": "6c99d1691fc015da00b9d3b0d26582f14619b5d0f9ce1f355c4446cb4159b1e9",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\RealtimeCollaboration.jsx",
+      "hash": "21bf1242b366feab09dcea8e113fc41e23c86d24ba1d59359fb6399a454e559f",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\ReferralProgram.jsx",
+      "hash": "703589e283355d80099cf4532a46cf8ae80c3513e6ef0332265baeac685f99e8",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\Register.jsx",
+      "hash": "40781834c0568feaba96a03ab873ecc94895bd24bd0a2cc5e1e37f265d13e93c",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\ReportingAnalytics.jsx",
+      "hash": "012b5f04cfb931a410b045d367b1b46bd78a630b5e2ec774a63035d1e5ba8bfd",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\Roadmap.jsx",
+      "hash": "9ad8c8a86a7ec78aaff37072226dca5acee671925f83bc7a6efcefb123463da8",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\RoleManagement.jsx",
+      "hash": "12068911e0deb3dc7ff79467100a32acf223f2a522cb1cd5256dd08519d65969",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\SearchAnalytics.jsx",
+      "hash": "4e489f7491784f518e9a0add9fde73dc39cc356dfb0af312dcf506bfb1db7f54",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\Security.jsx",
+      "hash": "68ff3de6febb1ce1e30ce8c2a604f780f11a4d4024907f094c5b5d4d82b93d81",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\SecurityCenter.jsx",
+      "hash": "545681bf055dedc6faf9058b655c05d751b55ecd6f0e881fc29208e02f654565",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\SecurityFeatures.jsx",
+      "hash": "c2c8836d3932a2dea4b80ef770a672ea72ffdc707664805a8c144aef6eb2c6ad",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\Settings.jsx",
+      "hash": "527ac98473483e91f1c34c195e6ec973091a03c2668533c310cda008daef2d43",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\SmartDeployment.jsx",
+      "hash": "6f4e61e8cbebc94759dbe3495a66d912e491e25978c9bf158925b1849b4e3669",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\SocialMediaHub.jsx",
+      "hash": "840cf76f1b2f9917c7de8be804f70c7aa8246d9f4803fa270f25032464672220",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\Subscriptions.jsx",
+      "hash": "4652366c9f82f6d7a59f6903c4266204cec171ce7ce31fc4fcd993b84201cdee",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\SubscriptionSuccess.jsx",
+      "hash": "393983ed06e44f1c516925692dfbb7e8313f715337b243404ac77fe29aa769ea",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\SuperIntelligenceDashboard.jsx",
+      "hash": "0cb7fb6cc31064e79127546f03f7ade7e4f36639279568fea5fd0ab325565205",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\SuperiorAIStudio.jsx",
+      "hash": "463ead6ee1ad0cefe09c0b16e971ab8cf97def1f29d34eca31b63bc636b09981",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\Support.jsx",
+      "hash": "ef6f1c965d80b4b90ebf5d009220fdb58c1d0fdfaf4d6e891ed63af46d71a52c",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\SwarmDashboard.jsx",
+      "hash": "df45a4ed593fcc35d5edba4d6e6a45d1d9af0a3d26f0d72dd5669e8395a5fd24",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\SystemHealth.jsx",
+      "hash": "a06dcce1ff7baafb872362c2869aad5af878cdda09c54026260d340b3debd361",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\SystemStatus.jsx",
+      "hash": "e02b44a42be47ba2635a713aa33e60c3873de860da31a0e912fb81ed55cc3ebc",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\TeamCollaboration.jsx",
+      "hash": "b840d951e5988372b5674a8c26580a9e4396f822eb45ca2619112c66e97a2816",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\TeamManagement.jsx",
+      "hash": "cd85a0353e01cd72dc6b9c33a8539b097b2e91461019bc0d5c2e7bc9bfba6f32",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\TemplateMarketplace.jsx",
+      "hash": "ebe01d6c5c01e0e02fc44cf75f1f6fc627f3543680c45a1f6257b65f645f5987",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\TokenCreator.jsx",
+      "hash": "8e96a7e1ae77b0036b92e9f56bd0f6beafa0b46782cd4073aaf6042eae90bae0",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\TwoFactorAuth.jsx",
+      "hash": "0e643196e3e7a7d87d992ed6d123750a0f0fa0f77fee0a51d98e96133f5a392a",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\VisualizationStudio.jsx",
+      "hash": "92343b8e1f2514becade6d240eccd80c26b7a1e3ba97619f3809f685059ffe76",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\VSCodeIntegration.jsx",
+      "hash": "3313a80ad8fa33f5dd734798bccd8c036c72f6262af95dc6ea64a50416b52128",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\Web3Dashboard.jsx",
+      "hash": "3a9e91af9a74bacd4a8213be45e7c46d0d1e2680c62a372890147dd106417568",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\WebhookMonitor.jsx",
+      "hash": "38bee46b6e51bb066bf1762df7b5c3d23868c94727e96b2db63828a083810e39",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages\\WorkflowBuilder.jsx",
+      "hash": "0f1a6c366c21eb9d8600550569ef0a8008648e12f7b3102052936df08bd3bbdf",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages.config.js",
+      "hash": "5516ef5a0bebeb01cb6e6726abc471c0f7dd7f8827d5e71be39d76d14e9e506f",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\pages.config.jsx",
+      "hash": "1a95b4e3396e0136e0dab33a6d8f8e4bf30cd62ef63a4ae5e4bfd477e0ab3a7a",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\plugins\\solana\\raydium_scanner.ts",
+      "hash": "d181ea61cb1b7579f75bac78959a82949c11b487e72e34ca346bff1530bfc818",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\plugins\\solana\\ui\\RaydiumScout.tsx",
+      "hash": "7a38e3aeb8f49400a4d7dea9e4bff9968a0c4eac004a5a94ce212c77ab170264",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\plugins\\solana\\ui\\SolanaMerchant.tsx",
+      "hash": "6eb0577c25bde1e51c32bbd03508a057229e445fab1c8bd1606c141cc9565f94",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\plugins\\solana\\ui\\TokenMinter.tsx",
+      "hash": "014c76db0cb98f50929de3c29928df7cd7006816b3821cd12441922fb227ec87",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\plugins\\solana\\ui\\WalletBalance.tsx",
+      "hash": "e385e97ac8312adab4c5c8c5f5b38e87a3241b1bb1420e5ee3db5ecce8571921",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\polyfills.js",
+      "hash": "a9db5b789876eea5bf1383bf41db48f030846f43762397dbdb43eae9d8a54394",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\quantum-core\\pkg\\quantum_core.d.ts",
+      "hash": "16cf51d5bdccb57b7b302d5411451de0c63d59aea43c70a538593fbe743340d8",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\quantum-core\\pkg\\quantum_core.js",
+      "hash": "2c69ef4a35273ea8bf3aed68ff522942d95e32d9d010e9106ec7065c9f71aeca",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\quantum-core\\pkg\\quantum_core_bg.wasm.d.ts",
+      "hash": "88dee7751c05d2d949adb3d3a276d11d125c48276ec82c709688d23226dd32f8",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\server.ts",
+      "hash": "8d132c2a7d05d940ad2430af68708a393aa760da0446c1e78e01f4fcb5617742",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\services\\abTestingService.ts",
+      "hash": "bf3a5a3ca94008297e6a63390d935df6db2b4b8704527063b5130699a4a3332e",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\services\\activityService.js",
+      "hash": "cc90005ca4b5a9580960a3146e5aa18fd25821d9957de0a078c57b80d1d2c5e9",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\services\\advancedMonitoring.ts",
+      "hash": "089641850127e6983775442fb382d29b671d2da7cb5cf44661782bac830e9691",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\services\\aiCodeCompletion.js",
+      "hash": "58ab698b49644af02710b0f41f775ba98d9399b2f9c863ad860d850aea4b2d32",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\services\\analytics.js",
+      "hash": "8967ed6bef92c89ca1a1663559624c68cd2b914c7faac7f4ebf8d98c298b8d43",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\services\\analytics.test.js",
+      "hash": "1e5385647b24e37453ae3d4ce982f251f08a66ce3434e166bd4bf6e0f877b44d",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\services\\analyticsDashboard.ts",
+      "hash": "888e0c2c8f46fc63bc0e5b94b9b8becc6d0aa7d25f5a83ae6012977e6bae71df",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\services\\collaborationHub.js",
+      "hash": "a871977a579cee897e41b90b98675739b68f68a062074b6ac89b4a7fba962aff",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\services\\complianceManager.ts",
+      "hash": "51e0bfcd9cb27e828d064d1813fe7a3695a705927068ba81e6a43ff9024a3e3b",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\services\\databaseOptimization.ts",
+      "hash": "e689cd16c33ab2415f1986308b6d78fa85bcfa5b6468df3fa18458944d63a5f0",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\services\\dataPipeline.js",
+      "hash": "a08c4aeb0e3c97e6bef9f1de6df770d473445e053ce5504dd1ed1a2aec228e2d",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\services\\ddosProtection.ts",
+      "hash": "692f21179f179200bcb24590cefa67217854c143b3e3452062d59cab19e4d5f9",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\services\\developerExperience.js",
+      "hash": "862a50afba328be91bde12c607a77406405124cc02365beb719c253dcd2bef68",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\services\\enterpriseSecurity.js",
+      "hash": "223d5d41484a2bac3dba7b90493bd039cfecdd6d565526bdf89fb49934ec221b",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\services\\errorTracking.js",
+      "hash": "61825ff16fa4af80175d76c57cc3a43d528be17973168974fadc5bce6f03e456",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\services\\featureFlagService.ts",
+      "hash": "20898c6f6194d442cfed3ca50e590f29c723c3858f99d0138e3e1a4dcc7c0f16",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\services\\incidentIntelligence.js",
+      "hash": "cb03fe030ee0770668023e23dd24e230f41e58486ea201518c08b3fe5462f636",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\services\\integrationEcosystem.js",
+      "hash": "cfde86c199bbd356b8b6537a64789b56d074feb5eefc6028b4afa5dcd56e2e4e",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\services\\intelligentAutomation.js",
+      "hash": "12f3f4136cd731fdd69d3a2a4d8fbfc1470c0679f0fb11c8cc4df9ddf6ad98c2",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\services\\intelligentInterface.js",
+      "hash": "835d358159f46441da730096e31df1008c68666607ff66bbfe848ec1659d984d",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\services\\marketplaceExtensions.js",
+      "hash": "2d6e95d5b850718608a147be2ce37be06ffa396703ac35c4305441d4bee33403",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\services\\monetization.js",
+      "hash": "97a9f495712416a5c133bf8f9b70a8f975f97cf8f29da8587520117349de4bcc",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\services\\performanceScalability.js",
+      "hash": "365318aa79137a22396e17a176581d3ce37aeb29ee9f90bf4622aa6f47282596",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\services\\persistenceStore.js",
+      "hash": "eea98af638cbde6b7b33166a7423c56cbd7c3ec100b39b827c07e5249128c370",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\services\\productAnalytics.js",
+      "hash": "920837b51f6c8ed4c26e2efc2fbe25ca6877ee935c1595622f1e8da39291550c",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\services\\QuantumCollapse.js",
+      "hash": "06b0963e75aa3a2194966b05cb8577aa7fc2f2863348433a1313eb5b68c811a8",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\services\\QuantumStream.js",
+      "hash": "3d0aec71a2038c8089b8109f7e46ff853430e0e9ebf1e024c4ee1efd6fbfe99c",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\services\\rateLimiter.ts",
+      "hash": "72b0e65ffec274eef1e4c20db04db619e543defdc3c4fcc0fb1a4856227eb2b6",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\services\\rateLimitStore.ts",
+      "hash": "fecd978e2ee2c5ca3ed405af9cead9a65b7ef6d81c24375f2a214e279144065f",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\services\\rbacTenancy.js",
+      "hash": "f2029375a284e283fbfe92dc04b87c5e0c842897e918d95d3f238d2e08a58cf8",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\services\\realtimeCollaboration.js",
+      "hash": "934d44d9233b47a9e5d140763098de0f1024e0b98add6d2de54885c3fb5776e6",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\services\\redisCache.ts",
+      "hash": "88623901d450afb8de6c746a067ee38598bb42cdb774b64012635eadc6e00f71",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\services\\reportingAnalytics.js",
+      "hash": "509080f8fddf37f3d72cbcaaaf67642db9c69ec883612df90594e75e6d45ab66",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\services\\visualizationStudio.js",
+      "hash": "177d3274c5349387d279a8b3274f524e74b9b0c7b4e56216085fed34b8ea37ff",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\services\\webhooksManager.ts",
+      "hash": "4cc6d60aaa3e9f9d2782da5c12e211ef0a7366505e7fb40d6e66ed398d039ce1",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\services\\websocket.js",
+      "hash": "59b11b2823a10036a2dfe3b1375f752aaef390275effd2e84023d16c505ac8d4",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\services\\webSocketService.js",
+      "hash": "c3966327cc9cabf3a4157968a1a3b94ad61aed05d5bca7660b03d3b5a087be19",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\static-analyzer-core\\pkg\\static_analyzer_core.d.ts",
+      "hash": "4d8ab831ea54bb0c4c473238ecd99f0c4b6cc00aee65c363de8350303dd0ec5f",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\static-analyzer-core\\pkg\\static_analyzer_core.js",
+      "hash": "c1d1d8303731397fc378d3869c7ebab62f80ad1b497294d075ac6950e8cc3971",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\static-analyzer-core\\pkg\\static_analyzer_core_bg.wasm.d.ts",
+      "hash": "5d9fcf5428a70b4999adeb290b832586eea5e664f2ab9a079f0acbfc978323fb",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\store\\auditStore.ts",
+      "hash": "6b028628d2d20cb8121b8a0bf33dd316582e7dbb890d69764c2387ad27b7ee10",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\store\\useCausalStore.test.ts",
+      "hash": "2a47b8d17e6aa9b40d87cd003820bd6623883b705bf6500be03c466f0088b1ce",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\store\\useCausalStore.ts",
+      "hash": "a93ef6193bc2ef869b84b6fdc344c79c932f4b74d1bd35d5ac49c282cfdbec79",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\store\\usePermissionStore.test.ts",
+      "hash": "495927040b46b30d9aef5329ddffa1d28d4b3169a117492d90a2771988c100e7",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\store\\usePermissionStore.ts",
+      "hash": "c0b0dbd4fd7a7c121c2e7efc4e079b63274200cc6457a73a6e71a789feb22856",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\swarm\\agents\\Architect.ts",
+      "hash": "833dae7c580261e1131b17cbb2504814485f369e85d63077b644c4194397d772",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\swarm\\agents\\Distiller.ts",
+      "hash": "6b17bc2b6c7d6602a7bb91c4c8e7ee97c2e59b2f5e66dadbf4b3137c839b6e03",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\swarm\\agents\\LogicMapper.ts",
+      "hash": "052d997c9689afed39d8387e0ad1f53410055f8bba8f941b562c0fddd0d65935",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\swarm\\agents\\Refiner.ts",
+      "hash": "a3919e2ea7bab60b260ad2ee1693ea3c4508b16c5344e5a89f34c20c09980ef0",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\swarm\\agents\\Sentinel.ts",
+      "hash": "7bcf401cf84fc258771aa9cb28c64bf227fab60c587e502c99794e5ff11d7b3c",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\swarm\\agents\\Teacher.ts",
+      "hash": "6c4143af6e644f96e8492139d13eefae973ad37cce8cd2bf575debf489ca0ce6",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\swarm\\comms.ts",
+      "hash": "12e98117b2c7d71fe2255ae6b00603cb2e8b1b77da285c6b6f1ac98d79341b8b",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\swarm\\core\\Adapter.ts",
+      "hash": "4a2aa7222d214af56c40967f69c953ed03526406c4b7e556be3f482a2c906c95",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\swarm\\core\\Fractal.ts",
+      "hash": "173b7bc4785ff6b05d7a6a398dc48e5fdf143a218460fcd76fd8e9a9705d8369",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\swarm\\core\\ImmuneSystem.ts",
+      "hash": "0c2e2b20d64dc7bb6a12103634220688939ae7bb2acc8d8754a328df8771c64e",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\swarm\\core\\Inference.ts",
+      "hash": "44e090a92d9be9f3c4402f3714d2fd530d387ebe1184e86a29280ea9a79309cf",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\swarm\\core\\src\\oracle\\validators\\UniversalValidators.ts",
+      "hash": "672808be4a66a47db0ddc1699b954adf5c58da445352e538f55ed2ee62cb6c01",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\swarm\\factory.ts",
+      "hash": "815bb5bf4bd2ef692ecf80e8745298a811ce3506c05a682ad15a3184333739ae",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\swarm\\factory_core\\Evolution.ts",
+      "hash": "7aa6b2cd8facc42cb84652ec9f7c8571423e0e07dcc677339509cc35e7107f04",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\swarm\\factory_core\\Handoff.ts",
+      "hash": "f482600a1d63e12cfa3b8f7b6d06671b7bcadc05c7535c0e7f82c8793aa422ea",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\swarm\\factory_core\\Spawner.ts",
+      "hash": "ec109bce548944509aa5b7abfcc261b11a878e86dc2813d841027ee1dfde0ee2",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\swarm\\git_manager.ts",
+      "hash": "8ff08e716f3c3f737b2b5804e5b68abe4e24025b9dabdf65caedc36630918d5d",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\swarm\\god_mode.ts",
+      "hash": "df03017041be125989878eb0d9e02733ca280a7e0000f98d0dd540025f96998a",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\swarm\\llm_client.ts",
+      "hash": "4fea8ab0e7e46f8c9162b5bc307c1f2cc240ac4d96589030b1c986543ceb2565",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\swarm\\memory_manager.ts",
+      "hash": "bfddd57a66da3e56571ded706a4bcd5fdf4cf20ebc3e5a7c5f7cbc08d9574fe0",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\swarm\\oracle\\test_gen.ts",
+      "hash": "7480cc1a2effcc186a430f83e6dbea1b657b7ef28bb2d11473ade733f97ef7f0",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\swarm\\orchestrator.ts",
+      "hash": "1f1e7462ef41694bc7c01f88c2bcd3f111b40164d70d847df30e58df6fd78aea",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\swarm\\production_lockdown_test.ts",
+      "hash": "6f195bebd1a320554479c9663d1dcc702c77594c5df682515d5abee99f016dd5",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\swarm\\universal_decoupling_test.ts",
+      "hash": "00a526976ce28613ad5c3a0a2f4d2ec490313ae537203bd4109c127360e0bbb0",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\swarm\\verify_convergence.ts",
+      "hash": "720263d27aaa6214a11cf6ed579291af04acd36d8d15ef4a149e3c84b27b9dac",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\test\\utils.jsx",
+      "hash": "e6c111e1bad05d922d1875b7939efeb56450b915477d43ba5ac916503f471e49",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\tests\\App.test.jsx",
+      "hash": "c5ef89d1414fd75ac81b093893a435795796d009c51be015f73db82e7d245e89",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\tests\\e2e\\auth.spec.js",
+      "hash": "a1f101f072ce19573de2d38c51490a93d28651e90b8004482883ee617f778633",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\tests\\e2e\\navigation.spec.js",
+      "hash": "df3cad18acbabb64327e1f389a8022b4b037bf06bbdaeebfdf293e41b6f02b21",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\tests\\mocks\\ui-components.jsx",
+      "hash": "948ac31e15384fa274a0703b543d792468f4dc6af39d555683fcb1d8a1bb16f6",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\tests\\setup.js",
+      "hash": "6fc68998fb1787c9b8de313808aa179ce8baecf5a660a1f879597192b2d2e637",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\tests\\unit\\components\\CommandPalette.test.jsx",
+      "hash": "50ccefdf3a5ae1d6c0fceb1573967f19dc1beffe3d21d299cc6c32206cd88538",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\tests\\unit\\components\\PrivateRoute.test.jsx",
+      "hash": "cabc0d7c4d232975fb71cb2d2634cb1b13ef332f6618a6f6895abe5552b917b4",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\tests\\unit\\hooks\\useOfflineDetection.test.jsx",
+      "hash": "2804f3fd442044d11d76e553a78f30fccac6fd217eedeca53777ac0fc855731c",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\tests\\unit\\integration\\apiIntegration.test.js",
+      "hash": "addaceccbc897f7f96b0337f9f82279360589c7131a2e989504435ae18eeed96",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\tests\\unit\\utils\\env.test.js",
+      "hash": "d80a728674fddae52a28a53777d87d600e22053c5aeba2ee584d00d983c90f41",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\tests\\unit\\utils\\slackIntegration.test.js",
+      "hash": "3da9686be1acabd328f9dfc7a7dbd1f2f162efdc93d06022c7ebf76f7f5dad99",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\test_violation.ts",
+      "hash": "9df7ffda21a70fb9e3409714cd0ee8edac70b3cd6a1fbc4e07254bc40a5884c7",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\types\\handshake.ts",
+      "hash": "6e226a86a8043854661cc682f2d9e34977fad7c0d69702b166bc9b42f9edf192",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\utils\\accessibility.js",
+      "hash": "41a304cb22307a4679bba0a7ca3c24385a4d60045ba792214130d587da1ff104",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\utils\\accessibility.test.js",
+      "hash": "fe519eaa633a40da940b8a73c3cb40b6cb424d8d7209e230b2d6c32be1766350",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\utils\\advancedAICapabilities.js",
+      "hash": "7d195add52a8df6254fc6d97e463aab33ffec0246922fc27f1934b37b5c44b47",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\utils\\advancedPermissions.js",
+      "hash": "48efe802a90fa9fa41bc40bfd035e62aa02f4cd3f2c4b443872ef1629a55c5a2",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\utils\\aiAgentCore.js",
+      "hash": "47ed17e630038967d1116b72f00c7fca1d3819a0c1f37324b9a9b54f1ef23c98",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\utils\\analytics.js",
+      "hash": "a6b13f1e26c8b5bf4917c23803b6963773750f36e0e83d1fcc3e5587eb1d1005",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\utils\\api.js",
+      "hash": "b06f4d5f82caaca4b59ef5e8c61e70e7b6c5a4499bcbbd42bc064085ad840bcb",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\utils\\apiRateLimit.js",
+      "hash": "ebd806b24afcdc8f8f9990c085c9c72ba62faf8a4db94f8e51d946b59ebab1bc",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\utils\\appforge_bridge.ts",
+      "hash": "55bfc5f1e7f58f9e15d7e9f25f12113ba6adbe25e7125946ef5960493dbeb847",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\utils\\codeGeneration.js",
+      "hash": "7e65045788dd2bc55b79b14d3d702515f16ff001c7ec8218e41e13ecbeb161a1",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\utils\\collaboration.js",
+      "hash": "8402771c3154d0b654f11de9db77c260765c4744a16d4c1de4e5d8d3917ef722",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\utils\\databaseConnectors.js",
+      "hash": "08f1ab6e5ffd23b60b52de242ce9408f5cdb628c0a977f8ca97b2cb3438cd375",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\utils\\dataSecurity.js",
+      "hash": "4a4310e13b12995779f8947d213bc6e80c2678fc8c7b9efd6c798ee4cd285d75",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\utils\\DeployAdapter.ts",
+      "hash": "e08742311643808a9ba97fda62277d82f5dc005675e3b63ab2c6966d72c2c0a7",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\utils\\domainContextExtractor.js",
+      "hash": "bf7e85543c284ee6a732b294bbb6e822bbc6b9f83fc08dd2a9398d91b8bb8716",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\utils\\embeddingSDK.js",
+      "hash": "5e38c22ccad41d6e81f84cb141345a3e234c0adc667605edb4b35ba8705b58ed",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\utils\\enhancedAIReasoning.js",
+      "hash": "99d1532df9de342df5476a3974ca10ce480425b298b040700be4e40fa9256ae1",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\utils\\enhancedEntityGeneration.js",
+      "hash": "7a97349dba1b6a2d6ba6aa457293c382ee03a7be6abc2e8bc418d8bf2a00a336",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\utils\\enhancedGitIntegration.js",
+      "hash": "7401ba8412f05cb56eeb59e4d70f84d495aea86f1778eb6e31e399d317f10c9c",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\utils\\env.js",
+      "hash": "d5dfcf79287e0e49cd8f971d708f2255b7bd212313b7999bedf2fe829fb92294",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\utils\\environmentManager.js",
+      "hash": "7bf34778792c96e080279e02c19230e4b35b3b470d0d05da69623a59b3189381",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\utils\\errorTracking.js",
+      "hash": "19e8ffad70b833c346c23850befb5643b91b2ac752d7a9c4b0306aa222cdb251",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\utils\\featureFlags.js",
+      "hash": "bde643180d41f2020d96d3b7bb8030d27adb3b77fc40ee07861eaf5048ca1b57",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\utils\\healthCheck.js",
+      "hash": "fd1fec27d2afff412dd787aba02cf4a033f98742c1838704aab39c084c42ec8a",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\utils\\index.ts",
+      "hash": "c27c1dc47b24693f410767b6b99f89d544195cdd9c1d349212436476b73a3065",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\utils\\integrations\\slack.js",
+      "hash": "562600ac595332313377610aa83b49921cb82c150c64876b06f66d78aaf872a6",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\utils\\intelligentContentGenerator.js",
+      "hash": "f71dea68f7352bb169fad3d60c3ca2be9b0e4b2e067a451df9631b6b88f0f3ca",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\utils\\mfaManager.js",
+      "hash": "7fad98432085ee1ceb1a40c3f0394a2d9f3f746924f853f1ecabd38180c3b52f",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\utils\\mlIntegration.js",
+      "hash": "71c5a4817052a25930456920c9f806d4f31678d1012cc9454fef8db78cb6060c",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\utils\\multiLanguageSupport.js",
+      "hash": "c03b95d415340539d5730776d7678a405d196e24aace04576c190de21bb465ed",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\utils\\observability.js",
+      "hash": "62cf1299d1e926fd1bfad40587046f6d95ff56b59771a652988e854ce47b38ed",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\utils\\oidcAuth.js",
+      "hash": "1dd8d16d110108f33d54328ea13da117b231b15cc23ce512701e7956668009a5",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\utils\\performance.js",
+      "hash": "ac8bf54966824d33571944f82361eec4993f87ec768d238299acfab821badeba",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\utils\\pluginSystem.js",
+      "hash": "120dc8283fa8f333f56009bb17f3a5425f62f33d28a34948cb43757c3b6f9981",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\utils\\projectGenerator.js",
+      "hash": "3b84eebf0efbd8e2048a81034191098fd62dab8b7aaa05d62b19c4743df3e951",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\utils\\quantum\\rustBridge.ts",
+      "hash": "f12539668bfc88c0b107881a3e8aa539d1756747595728e8060f5ae147308775",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\utils\\QuantumChannel.js",
+      "hash": "5055e070b85e42780ec885971b28f1377671b4781992e13739445fbe18327ed1",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\utils\\quantumComputing.js",
+      "hash": "4a5b8a7031e1a4720cd18911ef0bf119d433f19dbbf7aa62ce5253a5e35ede94",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\utils\\QuantumCryptographer.js",
+      "hash": "f0808aa514d84a2863507266cd97709a4fe03903e4566b4dec036f913edb8a81",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\utils\\QuantumEngine.js",
+      "hash": "c1df5147373bfb502c44294b389489b74a452811b5376b3281de25495e53eb18",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\utils\\quantumSimulator.js",
+      "hash": "15c960c82622f6eb369cfcd3d33f074b75dae896ee9bf284742780e385cb46b3",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\utils\\realtimeSync.js",
+      "hash": "08d319e458cdcc8be4eae774204094bfaab1621d8036d1f8cbb7755dc456d9d4",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\utils\\refactoringEngine.js",
+      "hash": "cee2a7612be529dbfdf6c02597b8e4fa4833642206ea0aefe45542f261c67171",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\utils\\samlAuth.js",
+      "hash": "9f613a9fd0082b34df82b2bec9be298ee093f5dab88ea57940d1a1916fcdd262",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\utils\\scimProvisioning.js",
+      "hash": "62f8098208e6d44deda16437134d83f5c7cdb09b48d62ea1660eaac7fa8153cd",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\utils\\searchAnalytics.js",
+      "hash": "4385828fb1245df918239cd9ba37f8a1511edc0d6544c7b9aa263c930cf923f4",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\utils\\searchIndexing.js",
+      "hash": "b87a6f92b7debfe2c2475e72136f1c81291d0d95846e56500281f9a94c5137c7",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\utils\\searchIndexInit.js",
+      "hash": "47b6844fe29cedfef8227c0138690d9d414ec07ec9ee01824d62091689de3ddd",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\utils\\security.js",
+      "hash": "c3ae699b3a7579cac10debfc34598d369c776ed5a60c229ff9457b629533d5c9",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\utils\\seoOptimizer.js",
+      "hash": "4a781287fde530b482881f8e6fca4649450ef7b428887ca518ebce4ff3fd6c62",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\utils\\sessionManager.js",
+      "hash": "838e282dc28ad42e56b2d46824f69b13d7886c551bb772d6ccf0573bccb89da2",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\utils\\staticAnalyzerBridge.ts",
+      "hash": "f0a9b5a2ddcd88bcda0e1a6c58446bd84963d6356c0a00254feb70efceb3b63b",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\utils\\swarm_utils.ts",
+      "hash": "a351fbc054efafcba57302db31275c2b07216279c0eba195c4d5fe2fc7a13da0",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\utils\\teamCollaboration.js",
+      "hash": "0e0e9c23b0f4f3e3ae81c29b7d4f2fa4fc622296557b47883c2cc519df53fc5a",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\utils\\wasmBridge.js",
+      "hash": "30edcb041f232f415d03e7cae579f466c2f31c621411f26c6ea996398262eb9a",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\utils\\webhooks.js",
+      "hash": "c23a24896edd5897882244cb322c60103c2060dfc9205c0d3f2d5826087ff51d",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\utils\\workflowAutomation.js",
+      "hash": "8da6c3f1f8dddfb5cd824d95b90ec111888bdfb606e8db240f428475cdc280f4",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\utils\\__tests__\\advancedPermissions.test.js",
+      "hash": "0f8148d970663f6f97a25c1387034eef617c61111934390a0a3c8cac9287639c",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\utils\\__tests__\\analytics.test.js",
+      "hash": "ee3473d66de1f8a78a63afc8b6424313757521d17586986d661c9560c6b20170",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\utils\\__tests__\\apiRateLimit.test.js",
+      "hash": "5adf2760ab926930dc3a49000ee6d0f79379563823f2c61d145848204796a418",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\utils\\__tests__\\collaboration.test.js",
+      "hash": "f491bdb3a59e1bfbb081e9fe4db2c27e352eecf8178583ac5b45266ecf445b48",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\utils\\__tests__\\dataSecurity.test.js",
+      "hash": "619ba2ca531a9194e1eb74c96b8c2f22e20ee93c0db43366cf8398ecb739c01b",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\utils\\__tests__\\env.test.js",
+      "hash": "63eaa19e02ecbdf2d9fb69973b3022cdfa65ab67211d31e44361b6d0d66485dc",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\utils\\__tests__\\errorTracking.test.js",
+      "hash": "fedcc86365a55b0488d8ab67835914eed6254bffb133f6850b65268040d31e23",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\utils\\__tests__\\mlIntegration.test.js",
+      "hash": "5f78e6b0fb90f74e9d52af4ddd94a58861621929420342b38c3d0737b94da4f8",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\utils\\__tests__\\observability.test.js",
+      "hash": "f117c170ac226f204930c82f38d99adb20eaff135b45f879ab7e3b4801df0be5",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\utils\\__tests__\\performance.test.js",
+      "hash": "4393ab961c4e39cf3edfdf333173ff8f148f5517666bb6d7492ce210c494160d",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\utils\\__tests__\\quantumComputing.test.js",
+      "hash": "61ed267e7d48d7636c3be4da9a1414989d5efbef6a644d8653ee5b19791a9092",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\utils\\__tests__\\refactoringEngine.test.js",
+      "hash": "04ef006b5234c9c35d3af3f5bbe1dfaa86200b1d3a0fb1f11bfd4bdcfbad108c",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\utils\\__tests__\\searchAnalytics.test.js",
+      "hash": "f688f8abe9c80b76e5f0f6b562cf4b7630645b18c08c2b5b4e9bae1dc523fb8b",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\utils\\__tests__\\searchIndexing.test.js",
+      "hash": "ace05fdffc965184707ca68ea7bedb3999a49922a11602bd0df2fb25f00a42db",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\utils\\__tests__\\security.test.js",
+      "hash": "400c17aa71abff56173f038117d7bd0c0b8208f5cb5bd72cd177c0b258f97540",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\utils\\__tests__\\teamCollaboration.test.js",
+      "hash": "7a3d93df09a4a70030395b0cdb9593d4a474b8f3f44e09dd7ac178d35d826286",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\utils\\__tests__\\webhooks.test.js",
+      "hash": "94f58e9611a85b8576023ac86406a047e55c1490e90d75bf747aa30c435c1ba9",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\vite-env.d.ts",
+      "hash": "3796c80d9c8a74bd31234546fe361a4a07543d9e49ddc46dfca13b677b645c3b",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\wasm\\quantum_core.d.ts",
+      "hash": "9c6a0f6a1bbc1ff5e2173747ce9845b8ab97ea393bae5254ef587d619f5a2e6c",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\wasm\\quantum_core.js",
+      "hash": "55eedc58c391a22bdcbda882cf54c2cdd2e2b5010cf1f7a618cdb80991c3e1c0",
+      "status": "BLESSED"
+    },
+    {
+      "path": "src\\wasm\\quantum_core_bg.wasm.d.ts",
+      "hash": "c47a162e28ceb7bd8ecf110a0c4ca424fa699659ec2d30d2480344ace9c563b5",
+      "status": "BLESSED"
+    }
+  ]
+}

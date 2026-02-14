@@ -257,9 +257,9 @@ export default function SwarmDashboard() {
                                 <div className="text-gray-500">No active directives found in TODO.md</div>
                             )}
                             <div className="text-center pt-4">
-                                <a href="vscode://file/c:/Users/ferna/Downloads/appforge-main/TODO.md" className="text-xs text-green-600 hover:text-green-400 underline">
-                                    View Full Manifest
-                                </a>
+                                <span className="text-xs text-green-600">
+                                    View Full Manifest in Repo
+                                </span>
                             </div>
                         </div>
                     </div>

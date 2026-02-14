@@ -110,7 +110,7 @@ export const env = {
 
     // Development
     dev: {
-      debug: import.meta.env.VITE_DEBUG === 'true',
+      debug: false, // FORCE PRODUCTION MODE
       mockApi: false, // Deployment ready: No mocks
       showPerfMetrics: import.meta.env.VITE_SHOW_PERF_METRICS === 'true',
     },

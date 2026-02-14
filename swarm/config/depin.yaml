@@ -1,0 +1,38 @@
+# AppForge Decentralized Compute Configuration
+# This file defines how the Swarm offloads heavy tasks when local resources are constrained.
+
+providers:
+  - name: "Akash Network"
+    enabled: true
+    endpoint: "https://api.akash.net/v1"
+    bid_price_usd: 0.05
+    container: "appforge/rust-builder:latest"
+
+  - name: "Render Network"
+    enabled: true
+    endpoint: "https://api.render.x"
+    usage: "Heavy 3D/Blender Processing"
+
+  - name: "IO.net"
+    enabled: true
+    endpoint: "https://api.io.net/v1/cluster/launch"
+    gpu_type: "A100"
+
+  - name: "Golem Network"
+    enabled: true
+    endpoint: "https://api.golem.network"
+    usage: "Python/AI Model Training"
+
+  - name: "Phala Network"
+    enabled: true
+    endpoint: "https://api.phala.network"
+    usage: "Secure Enclave / TEE Execution"
+
+policy:
+  auto_scale: true
+  budget_cap_daily_usd: 5.0
+  fallback_strategy: "LOCAL_ONLY"
+
+telemetry:
+  report_savings: true
+  node_reputation_check: true

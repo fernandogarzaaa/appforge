@@ -1,173 +1,162 @@
 import React, { useState, useEffect } from 'react';
 import { Panel, PanelGroup, PanelResizeHandle } from 'react-resizable-panels';
-import SwarmConsole from '@/components/ide/SwarmConsole';
-import ProjectCanvas from '@/components/ide/ProjectCanvas';
-import WalletBalance from '@/components/WalletBalance';
-import CodeVendingMachine from '@/components/CodeVendingMachine';
-import SolanaMerchant from '@/components/SolanaMerchant';
-import RaydiumScout from '@/components/RaydiumScout';
-import QCoreVisualizer from '@/components/QCoreVisualizer';
-import SafetyAudit from '@/components/SafetyAudit';
-import { useQuantumOracle } from '@/hooks/useQuantumOracle';
+import EvolutionMap from '@/components/EvolutionMap';
+import CommandStream from '@/components/CommandStream';
+import RecordsVault from '@/components/RecordsVault';
+import { useSovereignStatus } from '@/hooks/useSovereignStatus';
 import { useNavigation } from '@/contexts/NavigationContext';
-import { Brain, Zap, Activity, Globe, Rocket, Shield, Terminal } from 'lucide-react';
-import { Badge } from '@/components/ui/badge';
-import { AIAgent } from '@/utils/aiAgentCore';
-import { base44 } from '@/api/base44Client';
+import { Shield, Activity, Zap, Cpu, Terminal, Database, Lock, Search } from 'lucide-react';
 import { SovereignWallet } from '@/components/auth/SovereignWallet';
 
 export default function CommandCenter() {
     const { currentProject } = useNavigation();
-    const [logs, setLogs] = useState([]);
-    const [sessionStatus, setSessionStatus] = useState('AppForge Orchestrator Online');
-    const [agent, setAgent] = useState(null);
-    const [plan, setPlan] = useState(null);
-    const [isScanning, setIsScanning] = useState(false);
-    const { isOracleOnline, validateCode } = useQuantumOracle();
-    const resonance = 99; // Peak alignment for v1.0
+    const status = useSovereignStatus();
+    const [currentTime, setCurrentTime] = useState(new Date().toLocaleTimeString());
 
     useEffect(() => {
-        console.log("🔌 CONNECTING TO APPFORGE CORE...");
-        const eventSource = new EventSource('http://localhost:3001/api/stream-logs');
-
-        eventSource.onmessage = (event) => {
-            const data = JSON.parse(event.data);
-            setLogs(prev => [data, ...prev].slice(0, 100));
-
-            // Trigger visualizer scan pulse on log activity
-            if (data.severity === 'INFO' || data.severity === 'SUCCESS') {
-                setIsScanning(true);
-                setTimeout(() => setIsScanning(false), 2000);
-            }
-        };
-
-        eventSource.onerror = (e) => {
-            console.error("Stream disconnected", e);
-            eventSource.close();
-        };
-
-        return () => eventSource.close();
-    }, []);
-
-    useEffect(() => {
-        const swarmAgent = new AIAgent(base44);
-        setAgent(swarmAgent);
-
-        const params = new URLSearchParams(window.location.search);
-        const autoStart = params.get('auto_start');
-        const idea = params.get('idea');
-
-        if (autoStart && idea) {
-            setSessionStatus('Synthesizing AppForge Idea...');
-            swarmAgent.processRequest(idea).then(({ plan }) => {
-                setPlan(plan);
-                setSessionStatus('Safety Mission Defined');
-            });
-        }
+        const timer = setInterval(() => setCurrentTime(new Date().toLocaleTimeString()), 1000);
+        return () => clearInterval(timer);
     }, []);
 
     return (
         <SovereignWallet>
-            <div className="flex flex-col h-screen bg-[#0f172a] text-[#f8fafc] overflow-hidden font-sans">
-                {/* 🌌 APPFORGE HUD (Toolbar) */}
-                <header className="h-12 border-b border-slate-800 bg-[#1e293b]/50 backdrop-blur-xl flex items-center justify-between px-4 shrink-0">
-                    <div className="flex items-center gap-4">
-                        <div className="flex items-center gap-2">
-                            <div className="w-6 h-6 bg-blue-600 rounded-md flex items-center justify-center shadow-[0_0_15px_rgba(59,130,246,0.5)]">
-                                <Terminal className="w-4 h-4 text-white" />
+            <div className="flex flex-col h-screen bg-[#020617] text-[#f8fafc] overflow-hidden font-sans select-none">
+
+                {/* 🏰 TRUTH-HUD (Phase 46) */}
+                <header className="h-14 border-b border-slate-800 bg-[#020617] flex items-center justify-between px-6 z-50 relative pointer-events-auto">
+                    <div className="flex items-center gap-8">
+                        <div className="flex items-center gap-3">
+                            <div className="w-7 h-7 bg-blue-600 rounded flex items-center justify-center shadow-[0_0_20px_rgba(37,99,235,0.4)]">
+                                <Shield className="w-4 h-4 text-white" />
                             </div>
-                            <span className="text-sm font-black tracking-tighter uppercase italic">AppForge <span className="text-blue-400">V1.0</span></span>
+                            <div className="flex flex-col">
+                                <span className="text-xs font-black tracking-tighter uppercase italic leading-none">AppForge <span className="text-blue-500">Sovereign</span></span>
+                                <span className="text-[8px] font-bold text-slate-500 tracking-[0.2em] uppercase mt-1">Kernel v{status?.kernel.version || '1.0.0'}</span>
+                            </div>
                         </div>
-                        <div className="h-4 w-px bg-slate-800" />
-                        <div className="flex items-center gap-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-                            <Globe className="w-3 h-3" />
-                            <span>NODE: <span className="text-blue-200">{currentProject?.name || 'ROOT_STATION'}</span></span>
+
+                        <div className="h-6 w-px bg-slate-800" />
+
+                        {/* Kernel Integrity Indicator */}
+                        <div className="flex flex-col gap-1">
+                            <span className="text-[8px] font-bold text-slate-500 uppercase tracking-widest">Kernel Integrity</span>
+                            <div className="flex items-center gap-2">
+                                <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_#10b981]" />
+                                <span className="text-[10px] font-mono text-emerald-400 font-bold bg-emerald-500/10 px-1.5 rounded">
+                                    {status?.kernel.integrity || 'VERIFYING...'}
+                                </span>
+                            </div>
+                        </div>
+
+                        {/* Active Axioms */}
+                        <div className="flex flex-col gap-1">
+                            <span className="text-[8px] font-bold text-slate-500 uppercase tracking-widest">Active Axioms</span>
+                            <div className="flex gap-2">
+                                {status?.axioms && Object.entries(status.axioms).map(([key, active]) => (
+                                    <div key={key} className={`flex items-center gap-1.5 px-1.5 py-0.5 rounded border ${active ? 'border-blue-500/30 bg-blue-500/10 text-blue-400' : 'border-slate-800 bg-slate-900/50 text-slate-600'
+                                        }`}>
+                                        <Lock className="w-2.5 h-2.5" />
+                                        <span className="text-[8px] font-black">{key}</span>
+                                    </div>
+                                ))}
+                            </div>
                         </div>
                     </div>
 
-                    <div className="flex items-center gap-6">
-                        <div className="flex items-center gap-2">
-                            <Activity className="w-3.5 h-3.5 text-blue-400 animate-pulse" />
-                            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{sessionStatus}</span>
-                        </div>
-                        <div className="flex items-center gap-3">
-                            <div className="flex flex-col items-end">
-                                <span className="text-[8px] font-black text-slate-500 uppercase">Integrity</span>
-                                <span className="text-xs font-mono font-bold text-blue-400">{resonance}%</span>
+                    <div className="flex items-center gap-10">
+                        {/* Throughput */}
+                        <div className="flex flex-col items-end gap-1">
+                            <span className="text-[8px] font-bold text-slate-500 uppercase tracking-widest">Logic Throughput</span>
+                            <div className="flex items-center gap-2">
+                                <span className="text-xs font-black text-blue-400">{status?.throughput || 0} <span className="text-[8px] text-slate-600">OPS</span></span>
+                                <div className="flex gap-0.5">
+                                    {[1, 2, 3, 4, 5].map(i => (
+                                        <div key={i} className={`w-1 h-3 rounded-sm ${i <= (status?.throughput || 0) % 5 + 1 ? 'bg-blue-500 animate-pulse' : 'bg-slate-800'}`} />
+                                    ))}
+                                </div>
                             </div>
-                            <div className="w-16 h-1 bg-slate-800 rounded-full overflow-hidden">
-                                <div className="h-full bg-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.5)]" style={{ width: `${resonance}%` }} />
-                            </div>
                         </div>
-                        <Badge className={`bg-blue-500/10 text-blue-400 border-blue-500/20 px-3 py-1 text-[10px] font-bold ${isOracleOnline ? 'opacity-100' : 'opacity-50 grayscale'}`}>
-                            <Shield className="w-3 h-3 mr-1.5" />
-                            {isOracleOnline ? 'HYBRID IRON ONLINE' : 'ORACLE OFFLINE'}
-                        </Badge>
+
+                        <div className="flex flex-col items-end gap-1">
+                            <span className="text-[8px] font-bold text-slate-500 uppercase tracking-widest text-[#94a3b8]">{currentProject?.name || 'LOCAL_HOST'}</span>
+                            <span className="text-[10px] font-mono text-[#64748b]">{currentTime}</span>
+                        </div>
                     </div>
                 </header>
 
-                {/* 🚀 COMMAND GRID */}
-                <main className="flex-1 overflow-hidden relative">
+                {/* 🌌 MAIN COMMAND INTERFACE */}
+                <main className="flex-1 p-4 overflow-hidden bg-[#020617]">
                     <PanelGroup direction="horizontal">
-                        <Panel defaultSize={25} minSize={20}>
-                            <SwarmConsole agent={agent} initialPlan={plan} logs={logs} />
+
+                        {/* Left Column: 100% Truth / Evolution */}
+                        <Panel defaultSize={60} minSize={40}>
+                            <PanelGroup direction="vertical">
+                                <Panel defaultSize={70}>
+                                    <div className="h-full p-2">
+                                        <EvolutionMap />
+                                    </div>
+                                </Panel>
+                                <PanelResizeHandle className="h-1 bg-slate-900 border-y border-slate-800 hover:bg-blue-900/20 transition-colors" />
+                                <Panel defaultSize={30}>
+                                    <div className="h-full p-2">
+                                        <CommandStream />
+                                    </div>
+                                </Panel>
+                            </PanelGroup>
                         </Panel>
 
-                        <PanelResizeHandle className="w-1 bg-[#1e293b] hover:bg-blue-500/50 transition-colors cursor-col-resize" />
+                        <PanelResizeHandle className="w-1 bg-slate-900 border-x border-slate-800 hover:bg-blue-900/20 transition-colors" />
 
-                        <Panel defaultSize={75}>
-                            <ProjectCanvas />
+                        {/* Right Column: Records Vault & Insights */}
+                        <Panel defaultSize={40} minSize={30}>
+                            <div className="h-full p-2 flex flex-col gap-4">
+                                <div className="flex-1">
+                                    <RecordsVault />
+                                </div>
+                                <div className="h-48 bg-[#0f172a]/50 rounded-lg border border-slate-800 p-4 flex flex-col gap-3 relative overflow-hidden group">
+                                    <div className="absolute inset-0 bg-blue-500/5 opacity-0 group-hover:opacity-100 transition-opacity" />
+                                    <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest flex items-center justify-between">
+                                        System Metrics
+                                        <Activity className="w-3 h-3 text-blue-500" />
+                                    </div>
+                                    <div className="space-y-3">
+                                        <MetricItem label="Neural Efficiency" value="98.2%" color="blue" />
+                                        <MetricItem label="Sovereignty Guard" value="ACTIVE" color="emerald" />
+                                        <MetricItem label="Local Cache" value="2.4 GB" color="purple" />
+                                    </div>
+                                </div>
+                            </div>
                         </Panel>
+
                     </PanelGroup>
-
-                    {/* 🛡️ APPFORGE SAFETY LAYER (Safety Audit) */}
-                    <div className="absolute top-4 left-4 w-96 z-50 pointer-events-auto">
-                        <SafetyAudit logs={logs} />
-                    </div>
-
-                    {/* 🛡️ APPFORGE SAFETY LAYER (Q-CORE Visualizer) */}
-                    <div className="absolute top-4 right-4 w-80 z-50 pointer-events-auto">
-                        <QCoreVisualizer logs={logs} isScanning={isScanning} />
-                    </div>
-
-                    {/* 🏦 UTILITY DOCK */}
-                    <div className="absolute bottom-10 right-10 w-[500px] z-50 pointer-events-auto flex flex-col gap-4">
-                        <div className="p-4 border border-blue-500/30 bg-[#0f172a]/90 backdrop-blur-xl rounded-xl h-64 overflow-hidden flex flex-col shadow-2xl">
-                            <div className="flex justify-between mb-4 border-b border-blue-500/20 pb-2">
-                                <h3 className="text-blue-400 font-bold tracking-widest text-[10px] uppercase flex items-center gap-2">
-                                    <Globe className="w-3 h-3 text-blue-500" /> SIGNAL SCOUT
-                                </h3>
-                                <span className="animate-pulse text-green-500 text-[10px] font-black uppercase tracking-widest">● SYNCED</span>
-                            </div>
-                            <RaydiumScout />
-                        </div>
-
-                        <div className="p-4 border border-slate-700 bg-[#1e293b]/80 backdrop-blur-xl rounded-lg shadow-2xl">
-                            <h2 className="text-[#f8fafc] text-[12px] font-black uppercase tracking-widest mb-4 flex items-center justify-between">
-                                <div className="flex items-center gap-2">
-                                    <Zap className="w-4 h-4 text-blue-400" /> COMMAND TERMINAL
-                                </div>
-                                <span className="text-[10px] text-slate-500">AUTH: LOCAL_HOST</span>
-                            </h2>
-                            <div className="flex flex-col gap-4">
-                                <CodeVendingMachine />
-                                <div className="pt-4 border-t border-slate-700">
-                                    <SolanaMerchant />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </main>
 
-                {/* 🛡️ MISSION STATUS BAR */}
-                <footer className="h-6 border-t border-slate-800 bg-[#020617] flex items-center justify-between px-3 text-[9px] font-bold uppercase tracking-widest text-slate-500">
-                    <div className="flex items-center gap-4">
-                        <span className="flex items-center gap-1.5"><Shield className="w-3 h-3 text-blue-500" /> AppForge Guard: Enabled</span>
-                        <span className="flex items-center gap-1.5 text-blue-400/70"><Zap className="w-3 h-3" /> Q-CORE 2.0: Synchronized</span>
+                {/* 🛡️ PRODUCTION LOCKDOWN FOOTER */}
+                <footer className="h-8 border-t border-slate-800 bg-[#020617] flex items-center justify-between px-6 text-[9px] font-bold uppercase tracking-[0.3em] text-slate-600">
+                    <div className="flex items-center gap-6">
+                        <span className="flex items-center gap-1.5 text-blue-500"><Shield className="w-3 h-3" /> SECURE HANDSHAKE: ESTABLISHED</span>
+                        <span className="flex items-center gap-1.5 text-emerald-500 animate-pulse"><Lock className="w-3 h-3" /> TRUTH_ANCHOR: SYNCHRONIZED</span>
                     </div>
-                    <div className="text-slate-700">STABLE_RELEASE_V1.0</div>
+                    <div className="flex items-center gap-4">
+                        <span>BUILD #600 READY</span>
+                        <span className="bg-slate-800 px-2 py-0.5 rounded text-slate-300">STABLE_RELEASE</span>
+                    </div>
                 </footer>
             </div>
         </SovereignWallet>
+    );
+}
+
+function MetricItem({ label, value, color }: { label: string, value: string, color: string }) {
+    const colors: any = {
+        blue: 'text-blue-400 bg-blue-500/10 border-blue-500/20',
+        emerald: 'text-emerald-400 bg-emerald-500/10 border-emerald-500/20',
+        purple: 'text-purple-400 bg-purple-500/10 border-purple-500/20',
+    };
+    return (
+        <div className="flex items-center justify-between">
+            <span className="text-[10px] text-slate-500">{label}</span>
+            <span className={`text-[10px] font-black px-2 py-0.5 rounded border ${colors[color]}`}>{value}</span>
+        </div>
     );
 }

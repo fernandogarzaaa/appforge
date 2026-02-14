@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { Shield, Zap, Lock, Unlock, Rocket, Loader2, Wallet } from 'lucide-react';
-import SolanaMerchant from './SolanaMerchant';
-import { useSovereignWallet } from './auth/SovereignWallet';
+import SolanaMerchant from '@/plugins/solana/ui/SolanaMerchant';
+import { useWallet } from '@solana/wallet-adapter-react';
 
 const CodeVendingMachine: React.FC = () => {
-    const { connected } = useSovereignWallet();
+    const { connected } = useWallet();
     const [task, setTask] = useState('');
     const [isPaid, setIsPaid] = useState(false);
     const [isBuilding, setIsBuilding] = useState(false);

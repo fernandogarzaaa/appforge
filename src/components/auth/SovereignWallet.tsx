@@ -1,57 +1,40 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { useMemo } from 'react';
+import { ConnectionProvider, WalletProvider } from '@solana/wallet-adapter-react';
+import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
+import { PhantomWalletAdapter, SolflareWalletAdapter } from '@solana/wallet-adapter-wallets';
+import { WalletModalProvider, WalletMultiButton } from '@solana/wallet-adapter-react-ui';
+import { clusterApiUrl } from '@solana/web3.js';
 
-interface WalletContextType {
-    connected: boolean;
-    publicKey: string | null;
-    connect: () => void;
-    disconnect: () => void;
-}
-
-const WalletContext = createContext<WalletContextType | undefined>(undefined);
+// Default styles that can be overridden by your app
+import '@solana/wallet-adapter-react-ui/styles.css';
 
 export const SovereignWallet: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    const [connected, setConnected] = useState(false);
-    const [publicKey, setPublicKey] = useState<string | null>(null);
+    // The network can be set to 'devnet', 'testnet', or 'mainnet-beta'.
+    const network = WalletAdapterNetwork.Mainnet;
 
-    const connect = () => {
-        // Simulated connection to Admin Wallet
-        setConnected(true);
-        setPublicKey('CT1Ud6MvZ4NeACuF1x1EsnGpynLW6s7dWCx7C2LXJwsJ');
-    };
+    // You can also provide a custom RPC endpoint.
+    const endpoint = useMemo(() => clusterApiUrl(network), [network]);
 
-    const disconnect = () => {
-        setConnected(false);
-        setPublicKey(null);
-    };
+    const wallets = useMemo(
+        () => [
+            new PhantomWalletAdapter(),
+            new SolflareWalletAdapter(),
+        ],
+        [network]
+    );
 
     return (
-        <WalletContext.Provider value={{ connected, publicKey, connect, disconnect }}>
-            <div className="sovereign-wallet-provider relative">
-                <div className="absolute top-4 right-4 z-[100]">
-                    {!connected ? (
-                        <button
-                            onClick={connect}
-                            className="bg-indigo-600 hover:bg-indigo-500 text-white px-6 py-2 rounded-full text-[10px] font-black uppercase tracking-[0.2em] shadow-[0_0_20px_rgba(79,70,229,0.4)] transition-all active:scale-95"
-                        >
-                            Connect Wallet
-                        </button>
-                    ) : (
-                        <button
-                            onClick={disconnect}
-                            className="bg-slate-800 hover:bg-slate-700 text-indigo-400 border border-indigo-500/30 px-6 py-2 rounded-full text-[10px] font-black uppercase tracking-[0.2em] shadow-xl transition-all"
-                        >
-                            {publicKey?.slice(0, 4)}...{publicKey?.slice(-4)} [DISCONNECT]
-                        </button>
-                    )}
-                </div>
-                {children}
-            </div>
-        </WalletContext.Provider>
+        <ConnectionProvider endpoint={endpoint}>
+            <WalletProvider wallets={wallets} autoConnect>
+                <WalletModalProvider>
+                    <div className="sovereign-wallet-provider relative">
+                        <div className="absolute top-4 right-4 z-[100]">
+                            <WalletMultiButton className="!bg-indigo-600 hover:!bg-indigo-500 !font-black !uppercase !text-[10px] !tracking-widest !rounded-full !h-8 !px-4" />
+                        </div>
+                        {children}
+                    </div>
+                </WalletModalProvider>
+            </WalletProvider>
+        </ConnectionProvider>
     );
-};
-
-export const useSovereignWallet = () => {
-    const context = useContext(WalletContext);
-    if (!context) throw new Error('useSovereignWallet must be used within SovereignWallet');
-    return context;
 };

@@ -38,6 +38,8 @@ import { SovereignWallet } from './components/auth/SovereignWallet';
 import { CommandPalette } from '@/features/commandPalette/CommandPalette';
 import { ContextMenu } from '@/features/quickActions/ContextMenu';
 import { ThemeManager } from '@/features/themes/ThemeManager';
+import { SovereignStatus } from './components/SovereignStatus';
+import VibeGuide from './components/VibeGuide';
 
 const AdminDashboard = lazy(() => import('@/pages/AdminDashboard'));
 const AdminAPIKeys = lazy(() => import('@/pages/AdminAPIKeys'));
@@ -56,7 +58,9 @@ const AdminSovereign = lazy(() => import('@/pages/AdminSovereign'));
 
 const { Pages, Layout, mainPage, publicPages = [] } = pagesConfig;
 const mainPageKey = mainPage ?? Object.keys(Pages)[0];
-const MainPage = mainPageKey ? Pages[mainPageKey] : <></>;
+// If Vibe Mode is active, we don't default to the complex dashboard
+const CommandCenter = lazy(() => import('@/pages/CommandCenter'));
+const MainPage = CommandCenter;
 
 const LayoutWrapper = ({ children, currentPageName, onSearchOpen }) => Layout ?
   <Layout currentPageName={currentPageName} onSearchOpen={onSearchOpen}>{children}</Layout>
@@ -198,10 +202,9 @@ const AuthenticatedApp = ({ onSearchOpen }) => {
           {renderAdmin(React.lazy(() => import('@/pages/CommandCenter')))}
         </AdminRoute>
       } />
+      {/* VIBE MODE ROOT */}
       <Route path="/" element={
-        <LayoutWrapper currentPageName={mainPageKey} onSearchOpen={onSearchOpen}>
-          <MainPage />
-        </LayoutWrapper>
+        <MainPage />
       } />
       <Route path="/swarm" element={
         <LayoutWrapper currentPageName="Swarm" onSearchOpen={onSearchOpen}>
@@ -247,6 +250,9 @@ const AppShell = () => {
       {/* Phase 1 Features */}
       <CommandPalette />
       <ContextMenu />
+      <div className="fixed top-4 right-20 z-50">
+        <SovereignStatus />
+      </div>
       <AuthenticatedApp onSearchOpen={openSearch} />
       <SearchModal isOpen={isSearchOpen} onClose={closeSearch} />
       <ViewModeToggle />

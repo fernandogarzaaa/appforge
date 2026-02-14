@@ -25,6 +25,10 @@ echo 🚜 [Phase 3/5] Starting Real Swarm Executor...
 start "🚜 Swarm Executor" /b cmd /c "npx tsx scripts/real_swarm_executor.ts >> data/logs/executor.log 2>&1"
 timeout /t 2 /nobreak >nul
 
+echo 🛡️ [Phase 3.5/5] Starting Sovereign Kernel (Rust Oracle)...
+start "🛡️ Rust Oracle" /b cmd /c "cd swarm/core/quantum_bridge && cargo run --bin quantum_bridge >> ..\..\..\data\logs\rust_oracle.log 2>&1"
+timeout /t 5 /nobreak >nul
+
 :: ══════════════════════════════════════════════════════════════════════════════════
 :: PHASE 2: TELEMETRY & UI (Ecosystem Bridge)
 :: ══════════════════════════════════════════════════════════════════════════════════
