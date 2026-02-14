@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Panel, PanelGroup, PanelResizeHandle } from 'react-resizable-panels';
 import SwarmConsole from '@/components/ide/SwarmConsole';
 import ProjectCanvas from '@/components/ide/ProjectCanvas';
+import WalletBalance from '@/components/WalletBalance';
+import CodeVendingMachine from '@/components/CodeVendingMachine';
 import { useNavigation } from '@/contexts/NavigationContext';
 import { Brain, Zap, Activity, Globe, Rocket, Shield } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
@@ -103,6 +105,26 @@ export default function SovereignIDE() {
                         <ProjectCanvas />
                     </Panel>
                 </PanelGroup>
+
+                {/* 🏦 THE CODE VENDING MACHINE (Phase 9.5) */}
+                <div className="absolute bottom-10 right-10 w-[500px] z-50 pointer-events-auto flex flex-col gap-4">
+                    <div className="p-4 border border-green-500/30 bg-green-900/20 backdrop-blur-md rounded shadow-2xl">
+                        <h3 className="text-green-400 text-[10px] font-black uppercase tracking-widest mb-2 flex items-center gap-2">
+                            <Shield className="w-3 h-3" /> MY VAULT
+                        </h3>
+                        <WalletBalance endpoint="https://api.mainnet-beta.solana.com" />
+                    </div>
+
+                    <div className="p-4 border border-indigo-500/30 bg-slate-900/80 backdrop-blur-xl rounded-lg shadow-2xl">
+                        <h2 className="text-indigo-400 text-[12px] font-black uppercase tracking-widest mb-4 flex items-center justify-between">
+                            <div className="flex items-center gap-2">
+                                <Zap className="w-4 h-4" /> SWARM VENDING MACHINE
+                            </div>
+                            <span className="text-[10px] text-slate-500">PAY-PER-LABOR</span>
+                        </h2>
+                        <CodeVendingMachine />
+                    </div>
+                </div>
             </main>
 
             {/* 🛡️ REALITY STATUS BAR */}

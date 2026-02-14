@@ -1,7 +1,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import QuantumEngine from '../../QuantumEnginePortable.js';
+import QuantumEngine from '../../scripts/lib/QuantumEnginePortable.js';
 
 const engine = new QuantumEngine();
 

@@ -1,31 +1,16 @@
-import React, { useMemo } from 'react';
-import { ConnectionProvider, WalletProvider } from '@solana/wallet-adapter-react';
-import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
-import { PhantomWalletAdapter, SolflareWalletAdapter } from '@solana/wallet-adapter-wallets';
-import { WalletModalProvider, WalletMultiButton } from '@solana/wallet-adapter-react-ui';
-import { clusterApiUrl } from '@solana/web3.js';
+import React from 'react';
 
-// Default styles
-import '@solana/wallet-adapter-react-ui/styles.css';
-
-export const SovereignWallet = ({ children }) => {
-    // The network can be set to 'devnet', 'testnet', or 'mainnet-beta'.
-    const network = WalletAdapterNetwork.Mainnet;
-    const endpoint = useMemo(() => clusterApiUrl(network), [network]);
-    const wallets = useMemo(() => [new PhantomWalletAdapter(), new SolflareWalletAdapter()], [network]);
-
+// Unified Mock Wallet Context to bypass broken dependencies
+export const SovereignWallet: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     return (
-        <ConnectionProvider endpoint={endpoint}>
-            <WalletProvider wallets={wallets} autoConnect>
-                <WalletModalProvider>
-                    <div className="sovereign-auth-wrapper">
-                        <div className="absolute top-4 right-4 z-50">
-                            <WalletMultiButton />
-                        </div>
-                        {children}
-                    </div>
-                </WalletModalProvider>
-            </WalletProvider>
-        </ConnectionProvider>
+        <div className="sovereign-mock-wrapper">
+            {/* Mocking the WalletMultiButton position for visual consistency */}
+            <div className="absolute top-4 right-4 z-50">
+                <button className="bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded text-[10px] font-black uppercase tracking-widest shadow-xl">
+                    Wallet Connected (MOCK)
+                </button>
+            </div>
+            {children}
+        </div>
     );
 };

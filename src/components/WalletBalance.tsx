@@ -1,15 +1,12 @@
-```
 import React, { useState, useEffect } from 'react';
-import { WalletProvider } from '@solana/wallet-adapter-react';
-import { SolanaWalletAdapter } from '@solana/wallet-adapter-react';
-import { Connection } from '@solana/web3.js';
+import { Connection, PublicKey } from '@solana/web3.js';
 
 interface Props {
   endpoint: string;
 }
 
 const WalletBalance: React.FC<Props> = ({ endpoint }) => {
-  const [balance, setBalance] = useState(0);
+  const [balance, setBalance] = useState('0');
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -18,8 +15,11 @@ const WalletBalance: React.FC<Props> = ({ endpoint }) => {
     const connection = new Connection(endpoint);
     const getBalance = async () => {
       try {
-        const balance = await connection.getBalance('YourPublicAddress');
-        setBalance(balance.toString());
+        setLoading(true);
+        // Using a more realistic placeholder for demo
+        const publicKey = new PublicKey('vines1vzrY7tduFqyLo2X7st74nLq1z7L8mF66oQzLx');
+        const balanceNum = await connection.getBalance(publicKey);
+        setBalance((balanceNum / 1e9).toFixed(2));
         setLoading(false);
       } catch (error) {
         console.error(error);
@@ -31,17 +31,16 @@ const WalletBalance: React.FC<Props> = ({ endpoint }) => {
   }, [endpoint]);
 
   return (
-    <WalletProvider walletAdapter={SolanaWalletAdapter({ endpoint })}>
+    <div className="flex flex-col gap-1">
       {loading ? (
-        <div>Loading...</div>
+        <div className="text-slate-500 text-[10px] italic">Refreshing...</div>
       ) : (
-        <div style={{ fontSize: '48px', color: 'green' }}>
-          SOL Balance: {balance}
+        <div className="text-emerald-400 font-mono text-lg font-black">
+          {balance} SOL
         </div>
       )}
-    </WalletProvider>
+    </div>
   );
 };
 
 export default WalletBalance;
-```

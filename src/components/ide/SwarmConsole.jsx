@@ -6,10 +6,22 @@ import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { motion } from 'framer-motion';
 
-export default function SwarmConsole({ agent, initialPlan }) {
+export default function SwarmConsole({ agent, initialPlan, logs = [] }) {
     const [messages, setMessages] = useState([
         { role: 'assistant', text: "Swarm initialized. I'm ready to begin architectural synthesis for your project. What should we build first?", agent: 'Architect' }
     ]);
+
+    // Integrate live logs into message history
+    useEffect(() => {
+        if (logs.length > 0) {
+            const latestLog = logs[0];
+            setMessages(prev => [{
+                role: 'assistant',
+                text: latestLog.message,
+                agent: latestLog.agent || 'SYSTEM'
+            }, ...prev].slice(0, 100));
+        }
+    }, [logs]);
 
     useEffect(() => {
         if (initialPlan) {

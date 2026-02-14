@@ -13,10 +13,13 @@ export async function runSwarmTask(taskDescription: string) {
 
     try {
         // 1. GENERATE CODE (Ollama/LLM)
-        const code = await generateText({
+        let code = await generateText({
             system: "You are a Senior Engineer. Write code. Return ONLY the code. Do not include markdown blocks.",
             prompt: taskDescription
         });
+
+        // Clean markdown if present
+        code = code.replace(/```[a-z]*\n?/g, '').replace(/```/g, '').trim();
 
         broadcastLog('PRODUCT_OWNER', "Code generated. verifying...", 'INFO');
 
@@ -27,8 +30,8 @@ export async function runSwarmTask(taskDescription: string) {
 
         // 3. PERSISTENCE: Write file to disk
         // Extract filename from task (e.g., 'src/components/WalletBalance.tsx')
-        const fileMatch = taskDescription.match(/(src\/[^\s'"]+)/);
-        const filePath = fileMatch ? fileMatch[0] : 'src/swarm/output.txt';
+        const fileMatch = taskDescription.match(/(src\/[^\s'"]+?)(?=[.,\s]|$)/);
+        const filePath = fileMatch ? fileMatch[1] : 'src/swarm/output.txt';
 
         const absolutePath = path.resolve(process.cwd(), filePath);
         const dir = path.dirname(absolutePath);
