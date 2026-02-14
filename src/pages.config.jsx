@@ -142,7 +142,7 @@ const VisualizationStudio = lazy(() => import('./pages/VisualizationStudio'));
 const Web3Dashboard = lazy(() => import('./pages/Web3Dashboard'));
 const WebhookMonitor = lazy(() => import('./pages/WebhookMonitor'));
 const WorkflowBuilder = lazy(() => import('./pages/WorkflowBuilder'));
-const SovereignIDE = lazy(() => import('./pages/SovereignIDE'));
+const CommandCenter = lazy(() => import('./pages/CommandCenter'));
 
 // Helper to wrap lazy components with Suspense
 const withSuspense = (Component) => {
@@ -293,7 +293,7 @@ const PAGES = {
   "Web3Dashboard": withSuspense(Web3Dashboard),
   "WebhookMonitor": withSuspense(WebhookMonitor),
   "WorkflowBuilder": withSuspense(WorkflowBuilder),
-  "SovereignIDE": withSuspense(SovereignIDE),
+  "CommandCenter": withSuspense(CommandCenter),
 }
 
 export const pagesConfig = {

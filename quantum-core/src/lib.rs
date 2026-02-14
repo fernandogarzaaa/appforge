@@ -1,10 +1,10 @@
-use wasm_bindgen::prelude::*;
 use num_complex::Complex;
 use std::f64::consts::PI;
+use wasm_bindgen::prelude::*;
 
 // Expose quantum annealer for AI model selection
 pub mod annealer_model_selection;
-pub use annealer_model_selection::{QuantumAnnealer, ModelMetrics};
+pub use annealer_model_selection::{ModelMetrics, QuantumAnnealer};
 
 // Expose holographic consensus engine for multi-model AI consensus
 pub mod holographic;
@@ -24,11 +24,11 @@ pub use renormalization::RenormalizationEngine;
 
 // Expose entanglement for team collaboration
 pub mod entanglement;
-pub use entanglement::{EntangledState, CollaborationSync};
+pub use entanglement::{CollaborationSync, EntangledState};
 
 // Expose superposition synthesizer for code generation
 pub mod superposition;
-pub use superposition::{SuperpositionSynthesizer, QuantumCodeGenerator};
+pub use superposition::{QuantumCodeGenerator, SuperpositionSynthesizer};
 
 // Expose probabilistic types for Q-Script
 pub mod probabilistic_types;
@@ -41,6 +41,10 @@ pub use multiverse::MultiverseEngine;
 // Expose reversible computing for time-reversed debugging
 pub mod reversible_computing;
 pub use reversible_computing::{ReversibleState, StateHistory};
+
+// Expose the Oracle Logic Validator
+pub mod oracle;
+pub use oracle::QuantumOracle;
 
 /// QuantumState represents a semantic confidence state.
 #[wasm_bindgen]
@@ -92,36 +96,36 @@ impl QuantumState {
     }
 }
 
-    #[cfg(test)]
-    mod tests {
-        use super::*;
-        use proptest::prelude::*;
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use proptest::prelude::*;
 
-        proptest! {
-            #[test]
-            fn probability_is_clamped(conf in -10.0f64..10.0) {
-                let state = QuantumState::new(conf);
-                let p = state.measure_probability();
-                prop_assert!(p >= 0.0 && p <= 1.0);
-            }
-        }
-
-        proptest! {
-            #[test]
-            fn high_agreement_never_worse(base_conf in 0.0f64..1.0, other_conf in 0.0f64..1.0) {
-                let mut high_agree = QuantumState::new(base_conf);
-                high_agree.apply_interference(other_conf, 1.0);
-
-                let mut low_agree = QuantumState::new(base_conf);
-                low_agree.apply_interference(other_conf, 0.0);
-
-                prop_assert!(high_agree.measure_probability() + 1e-9 >= low_agree.measure_probability());
-            }
-        }
-
+    proptest! {
         #[test]
-        fn zero_confidence_stays_zero() {
-            let state = QuantumState::new(0.0);
-            assert_eq!(state.measure_probability(), 0.0);
+        fn probability_is_clamped(conf in -10.0f64..10.0) {
+            let state = QuantumState::new(conf);
+            let p = state.measure_probability();
+            prop_assert!(p >= 0.0 && p <= 1.0);
         }
     }
+
+    proptest! {
+        #[test]
+        fn high_agreement_never_worse(base_conf in 0.0f64..1.0, other_conf in 0.0f64..1.0) {
+            let mut high_agree = QuantumState::new(base_conf);
+            high_agree.apply_interference(other_conf, 1.0);
+
+            let mut low_agree = QuantumState::new(base_conf);
+            low_agree.apply_interference(other_conf, 0.0);
+
+            prop_assert!(high_agree.measure_probability() + 1e-9 >= low_agree.measure_probability());
+        }
+    }
+
+    #[test]
+    fn zero_confidence_stays_zero() {
+        let state = QuantumState::new(0.0);
+        assert_eq!(state.measure_probability(), 0.0);
+    }
+}

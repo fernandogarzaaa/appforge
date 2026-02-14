@@ -1,16 +1,14 @@
 import { exec } from 'child_process';
-import { broadcastLog } from '../server';
+import { broadcastLog } from '../server.js';
 
 export class GitManager {
-    async commitAndPush(taskDescription: string): Promise<boolean> {
-        const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-        const commitMsg = `feat(swarm): ${taskDescription}`;
-
+    async commitAndPush(message: string, files: string[] = ['.']): Promise<boolean> {
         return new Promise((resolve) => {
             broadcastLog('GIT_KEEPER', `Saving progress to GitHub...`, 'INFO');
 
             // 1. Add -> 2. Commit -> 3. Push
-            const cmd = `git add . && git commit -m "${commitMsg}" && git push origin main`;
+            const filesToAdd = files.join(' ');
+            const cmd = `git add ${filesToAdd} && git commit -m "${message}" && git push origin main`;
 
             exec(cmd, (error, stdout, stderr) => {
                 if (error) {
@@ -19,7 +17,7 @@ export class GitManager {
                     resolve(false);
                     return;
                 }
-                broadcastLog('GIT_KEEPER', `✅ Code Saved: ${commitMsg}`, 'SUCCESS');
+                broadcastLog('GIT_KEEPER', `✅ Code Saved: ${message}`, 'SUCCESS');
                 resolve(true);
             });
         });

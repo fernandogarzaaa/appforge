@@ -1,10 +1,9 @@
-mod lib;
 use std::env;
 
 fn main() {
     let args: Vec<String> = env::args().collect();
     if args.len() < 2 {
-        println!("{}", lib::version());
+        println!("{}", quantum_bridge::version());
         return;
     }
 
@@ -19,14 +18,14 @@ fn main() {
                 let kv: Vec<&str> = part.split(':').collect();
                 if kv.len() == 2 {
                     if let Ok(score) = kv[1].parse::<f64>() {
-                        options.push(lib::DecisionOption {
+                        options.push(quantum_bridge::DecisionOption {
                             id: kv[0].to_string(),
                             score,
                         });
                     }
                 }
             }
-            let res = lib::resolve_quantum_gate(options);
+            let res = quantum_bridge::resolve_quantum_gate(options);
             println!(
                 "BEST:{} CONF:{} LATENCY:{}",
                 res.best_option_id, res.confidence, res.latency_ns

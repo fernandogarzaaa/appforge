@@ -195,7 +195,7 @@ const AuthenticatedApp = ({ onSearchOpen }) => {
       } />
       <Route path="/admin/terminal" element={
         <AdminRoute>
-          {renderAdmin(React.lazy(() => import('@/pages/GodModeTerminal')))}
+          {renderAdmin(React.lazy(() => import('@/pages/CommandCenter')))}
         </AdminRoute>
       } />
       <Route path="/" element={

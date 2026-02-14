@@ -1,0 +1,16 @@
+[
+    {
+        "id": "token-gen",
+        "name": "Sovereign Token Mint",
+        "description": "A React component that allows users to create their own Solana SPL Token with one click. It must use @solana/spl-token and @solana/web3.js.",
+        "price_sol": 0.1,
+        "filename": "TokenMinter.tsx"
+    },
+    {
+        "id": "img-gen",
+        "name": "AI Art Gallery",
+        "description": "A React gallery component that fetches random AI art placeholders. Simple but visual.",
+        "price_sol": 0.05,
+        "filename": "ArtGallery.tsx"
+    }
+]

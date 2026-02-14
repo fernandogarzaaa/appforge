@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { Shield, Zap, Lock, Unlock, Rocket, Loader2 } from 'lucide-react';
+import { Shield, Zap, Lock, Unlock, Rocket, Loader2, Wallet } from 'lucide-react';
 import SolanaMerchant from './SolanaMerchant';
+import { useSovereignWallet } from './auth/SovereignWallet';
 
 const CodeVendingMachine: React.FC = () => {
+    const { connected } = useSovereignWallet();
     const [task, setTask] = useState('');
     const [isPaid, setIsPaid] = useState(false);
     const [isBuilding, setIsBuilding] = useState(false);
@@ -43,10 +45,10 @@ const CodeVendingMachine: React.FC = () => {
                 {!price && (
                     <button
                         onClick={handleGeneratePrice}
-                        disabled={!task}
+                        disabled={!task || !connected}
                         className="absolute bottom-3 right-3 px-3 py-1 bg-indigo-600 hover:bg-indigo-500 disabled:bg-slate-800 text-white text-[10px] font-black rounded uppercase transition-all"
                     >
-                        Estimate Labor
+                        {!connected ? 'Wallet Required' : 'Estimate Labor'}
                     </button>
                 )}
             </div>
