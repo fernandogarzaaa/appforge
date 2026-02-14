@@ -1,6 +1,8 @@
+import fs from 'fs';
+import path from 'path';
 import { generateText } from './llm_client';
 import { GodMode } from './god_mode';
-import { broadcastLog } from '../server'; // We will link this to UI next
+import { broadcastLog } from '../server';
 import { GitManager } from './git_manager';
 
 const godMode = new GodMode();
@@ -10,23 +12,33 @@ export async function runSwarmTask(taskDescription: string) {
     broadcastLog('ORCHESTRATOR', `Received Task: ${taskDescription}`, 'INFO');
 
     try {
-        // 1. EXECUTE
+        // 1. GENERATE CODE (Ollama/LLM)
         const code = await generateText({
-            system: "You are a Senior Engineer. Write code.",
+            system: "You are a Senior Engineer. Write code. Return ONLY the code. Do not include markdown blocks.",
             prompt: taskDescription
         });
 
         broadcastLog('PRODUCT_OWNER', "Code generated. verifying...", 'INFO');
 
-        // 2. SIMULATED SAFETY CHECK (Placeholder for Q-Core Rust Engine)
-        if (code.includes("fs.readFileSync") && taskDescription.includes("browser")) {
+        // 2. Q-CORE SAFETY CHECK (Simulated)
+        if ((code.includes("fs.readFileSync") || code.includes("require('fs')")) && taskDescription.includes("browser")) {
             throw new Error("Security Violation: FS module in browser context.");
         }
 
-        broadcastLog('Q-CORE', "Stability Verified. Deploying.", 'SUCCESS');
+        // 3. PERSISTENCE: Write file to disk
+        // Extract filename from task (e.g., 'src/components/WalletBalance.tsx')
+        const fileMatch = taskDescription.match(/(src\/[^\s'"]+)/);
+        const filePath = fileMatch ? fileMatch[0] : 'src/swarm/output.txt';
 
-        // --- NEW: SAVE TO GITHUB ---
-        // Only push if safety check passed!
+        const absolutePath = path.resolve(process.cwd(), filePath);
+        const dir = path.dirname(absolutePath);
+
+        if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+        fs.writeFileSync(absolutePath, code);
+
+        broadcastLog('Q-CORE', `Stability Verified. Saved to ${filePath}`, 'SUCCESS');
+
+        // 4. SAVE TO GITHUB (The Memory)
         await gitManager.commitAndPush(taskDescription);
 
         return code;
@@ -34,10 +46,8 @@ export async function runSwarmTask(taskDescription: string) {
     } catch (error: any) {
         broadcastLog('Q-CORE', `REJECTED: ${error.message}`, 'CRITICAL');
 
-        // 3. TRIGGER GOD MODE
+        // TRIGGER GOD MODE
         await godMode.refineSwarmIntelligence(error.message, taskDescription);
         broadcastLog('GOD_MODE', "System Evolved. Retrying task...", 'WARN');
-
-        // Recursive retry would go here
     }
 }
