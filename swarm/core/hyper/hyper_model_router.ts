@@ -254,6 +254,8 @@ export class HyperModelRouter {
 
     let decision: RoutingDecision;
 
+    const isTrueIndependence = process.env.TRUE_AI_INDEPENDENCE === 'true';
+
     switch (analysis.type) {
       case 'safety':
         // Safety-critical tasks use consensus ensemble
@@ -261,6 +263,18 @@ export class HyperModelRouter {
         break;
       default:
         decision = await this.routeByComplexity(analysis, prompt);
+    }
+
+    // --- SOVEREIGN OVERRIDE ---
+    if (isTrueIndependence) {
+      const cloudModels = ['gpt4', 'claude', 'gemini'];
+      if (cloudModels.includes(decision.primaryModel)) {
+        console.log(`🛡️ [SOVEREIGN ROUTER] Overriding cloud model ${decision.primaryModel} with local alternative.`);
+        decision.primaryModel = 'willow';
+        decision.rationale = `[SOVEREIGN REDIRECT] ${decision.rationale} (Cloud models disabled by TRUE_AI_INDEPENDENCE)`;
+      }
+      decision.fallbackModels = decision.fallbackModels.filter(m => !cloudModels.includes(m));
+      if (decision.fallbackModels.length === 0) decision.fallbackModels = ['sovereign', 'ollama_local'];
     }
 
     // Cache decision

@@ -1,84 +1,85 @@
 name: Quantum Self-Evolution
 
 on:
-    schedule:
-        - cron: "0 * * * *" # Run every hour on the hour
-    workflow_dispatch: # Manual trigger
+  schedule:
+    - cron: "0 * * * *" # Run every hour on the hour
+  workflow_dispatch: # Manual trigger
 
 jobs:
-    quantum-evolution:
-        runs-on: ubuntu-latest
-        permissions:
-            contents: write
-        steps:
-            - name: Checkout Code
-              uses: actions/checkout@v4
-              with:
-                  token: ${{ secrets.GITHUB_TOKEN }}
+  quantum-evolution:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
 
-            - name: Setup Node.js (v22 Required)
-              uses: actions/setup-node@v4
-              with:
-                  node-version: "22"
+      - name: Setup Node.js (v22 Required)
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
 
-            # ⚡ CACHE: Node.js dependencies
-            - name: Cache Node Modules
-              uses: actions/cache@v4
-              with:
-                  path: node_modules
-                  key: ${{ runner.os }}-node-root-${{ hashFiles('package-lock.json') }}
-                  restore-keys: |
-                      ${{ runner.os }}-node-root-
+      # ⚡ CACHE: Node.js dependencies
+      - name: Cache Node Modules
+        uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-root-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-root-
 
-            # 📦 CACHE: Quantum evolution state
-            - name: Cache Evolution State
-              uses: actions/cache@v4
-              with:
-                  path: |
-                      src/data/quantum_state.json
-                      src/data/quantum_predictions.json
-                      src/data/quantum_weights.json
-                  key: quantum-evolution-${{ github.run_number }}
-                  restore-keys: |
-                      quantum-evolution-
+      # 📦 CACHE: Quantum evolution state
+      - name: Cache Evolution State
+        uses: actions/cache@v4
+        with:
+          path: |
+            src/data/quantum_state.json
+            src/data/quantum_predictions.json
+            src/data/quantum_weights.json
+          key: quantum-evolution-${{ github.run_number }}
+          restore-keys: |
+            quantum-evolution-
 
-            - name: Setup Rust (Latest)
-              uses: dtolnay/rust-toolchain@stable
+      - name: Setup Rust (Latest)
+        uses: dtolnay/rust-toolchain@stable
 
-            - name: Build Quantum Bridge
-              working-directory: ./swarm/core/quantum_bridge
-              run: cargo build --release
+      - name: Build Quantum Bridge
+        working-directory: ./swarm/core/quantum_bridge
+        run: cargo build --release
 
-            - name: Install Dependencies
-              working-directory: ./swarm
-              run: npm install
+      - name: Install Dependencies
+        working-directory: ./swarm
+        run: npm install
 
-            - name: Run Quantum Evolution
-              working-directory: ./swarm
-              run: npx tsx intelligence_pulse.ts
-              env:
-                  OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-                  GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-                  QCORE_PATH: "./core/quantum_bridge/target/release/quantum_bridge"
-                  # Optimization Parameters (Hourly Cycle)
-                  QUANTUM_GENERATIONS: "50"
-                  QUANTUM_EPOCHS: "100"
+      - name: Run Quantum Evolution
+        working-directory: ./swarm
+        run: npx tsx intelligence_pulse.ts
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          TRUE_AI_INDEPENDENCE: "true"
+          QCORE_PATH: "./core/quantum_bridge/target/release/quantum_bridge"
+          # Optimization Parameters (Hourly Cycle)
+          QUANTUM_GENERATIONS: "50"
+          QUANTUM_EPOCHS: "100"
 
-            # 📡 Upload evolution artifacts
-            - name: Upload Evolution Artifacts
-              uses: actions/upload-artifact@v4
-              if: always()
-              with:
-                  name: quantum-evolution-${{ github.run_number }}
-                  path: |
-                      src/data/quantum_state.json
-                      src/data/quantum_predictions.json
-                  retention-days: 30
+      # 📡 Upload evolution artifacts
+      - name: Upload Evolution Artifacts
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: quantum-evolution-${{ github.run_number }}
+          path: |
+            src/data/quantum_state.json
+            src/data/quantum_predictions.json
+          retention-days: 30
 
-            - name: Commit Evolution Results
-              run: |
-                  git config --global user.name "Quantum Engine"
-                  git config --global user.email "quantum@appforge.bot"
-                  git add src/data/quantum_*.json
-                  git commit -m "chore: quantum self-evolution update [Transcendence Era] [skip ci]" || echo "No changes to commit"
-                  git push
+      - name: Commit Evolution Results
+        run: |
+          git config --global user.name "Quantum Engine"
+          git config --global user.email "quantum@appforge.bot"
+          git add src/data/quantum_*.json
+          git commit -m "chore: quantum self-evolution update [Transcendence Era] [skip ci]" || echo "No changes to commit"
+          git push

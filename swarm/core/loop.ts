@@ -26,11 +26,13 @@ if (isTrueIndependence) {
     console.log('🧠 [TRUE INDEPENDENCE] Running without external AI APIs...');
     console.log('   📡 Checking local Ollama at http://localhost:11434...');
     // Ollama health check happens in quantum hyper intelligence orchestrator
-} else if (!process.env.OPENAI_API_KEY) {
+} else if (!process.env.OPENAI_API_KEY && !isTrueIndependence) {
     console.error('❌ FATAL: OPENAI_API_KEY not found in environment.');
     console.error('Please ensure .env.local exists in the project root and mimics the structure of .env.example');
     console.error('Or set TRUE_AI_INDEPENDENCE=true to use local Ollama models only.');
     process.exit(1);
+} else if (!process.env.OPENAI_API_KEY && isTrueIndependence) {
+    console.log('⚠️ [SOVEREIGN MODE] OPENAI_API_KEY is missing, but TRUE_AI_INDEPENDENCE is enabled. Overriding fatal exit.');
 }
 
 try {

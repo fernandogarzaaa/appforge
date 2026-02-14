@@ -33,19 +33,19 @@
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\functions\\comprehensiveDiagnostics.ts",
     "metric": "COMPLEXITY",
     "timestamp": "2026-02-14T18:44:57.404Z",
-    "status": "IN_PROGRESS"
+    "status": "FAILED"
   },
   {
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\functions\\databaseChangeTrigger.ts",
     "metric": "COMPLEXITY",
     "timestamp": "2026-02-14T18:44:57.407Z",
-    "status": "FAILED"
+    "status": "IN_PROGRESS"
   },
   {
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\functions\\executeAdvancedWorkflow.ts",
     "metric": "COMPLEXITY",
     "timestamp": "2026-02-14T18:44:57.410Z",
-    "status": "IN_PROGRESS"
+    "status": "FAILED"
   },
   {
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\functions\\executeBotPipeline.ts",
@@ -81,7 +81,7 @@
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\functions\\permissionCheck.ts",
     "metric": "COMPLEXITY",
     "timestamp": "2026-02-14T18:44:57.421Z",
-    "status": "IN_PROGRESS"
+    "status": "FAILED"
   },
   {
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\functions\\runBotTests.ts",
@@ -93,13 +93,13 @@
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\functions\\runProjectDiagnostics.ts",
     "metric": "COMPLEXITY",
     "timestamp": "2026-02-14T18:44:57.437Z",
-    "status": "IN_PROGRESS"
+    "status": "FAILED"
   },
   {
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\functions\\validateBotConfig.ts",
     "metric": "COMPLEXITY",
     "timestamp": "2026-02-14T18:44:57.440Z",
-    "status": "PENDING_REVIEW"
+    "status": "IN_PROGRESS"
   },
   {
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\hooks\\useAIRouter.ts",

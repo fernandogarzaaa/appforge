@@ -80,6 +80,7 @@ jobs:
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          TRUE_AI_INDEPENDENCE: "true"
         run: |
           cd swarm
           npx tsx intelligence_pulse.ts
@@ -106,6 +107,7 @@ jobs:
 
           # Mode
           ONE_SHOT: "true"
+          TRUE_AI_INDEPENDENCE: "true"
         run: |
           # Configure Git for potential commits
           git config --global user.name "AppForge Swarm"
