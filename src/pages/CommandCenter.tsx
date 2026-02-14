@@ -4,9 +4,11 @@ import SwarmConsole from '@/components/ide/SwarmConsole';
 import ProjectCanvas from '@/components/ide/ProjectCanvas';
 import WalletBalance from '@/components/WalletBalance';
 import CodeVendingMachine from '@/components/CodeVendingMachine';
+import SolanaMerchant from '@/components/SolanaMerchant';
 import RaydiumScout from '@/components/RaydiumScout';
 import QCoreVisualizer from '@/components/QCoreVisualizer';
 import SafetyAudit from '@/components/SafetyAudit';
+import { useQuantumOracle } from '@/hooks/useQuantumOracle';
 import { useNavigation } from '@/contexts/NavigationContext';
 import { Brain, Zap, Activity, Globe, Rocket, Shield, Terminal } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
@@ -21,6 +23,7 @@ export default function CommandCenter() {
     const [agent, setAgent] = useState(null);
     const [plan, setPlan] = useState(null);
     const [isScanning, setIsScanning] = useState(false);
+    const { isOracleOnline, validateCode } = useQuantumOracle();
     const resonance = 99; // Peak alignment for v1.0
 
     useEffect(() => {
@@ -96,9 +99,9 @@ export default function CommandCenter() {
                                 <div className="h-full bg-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.5)]" style={{ width: `${resonance}%` }} />
                             </div>
                         </div>
-                        <Badge className="bg-blue-500/10 text-blue-400 border-blue-500/20 hover:bg-blue-500/20 px-3 py-1 text-[10px] font-bold">
+                        <Badge className={`bg-blue-500/10 text-blue-400 border-blue-500/20 px-3 py-1 text-[10px] font-bold ${isOracleOnline ? 'opacity-100' : 'opacity-50 grayscale'}`}>
                             <Shield className="w-3 h-3 mr-1.5" />
-                            Q-CORE ACTIVE
+                            {isOracleOnline ? 'HYBRID IRON ONLINE' : 'ORACLE OFFLINE'}
                         </Badge>
                     </div>
                 </header>
@@ -146,7 +149,12 @@ export default function CommandCenter() {
                                 </div>
                                 <span className="text-[10px] text-slate-500">AUTH: LOCAL_HOST</span>
                             </h2>
-                            <CodeVendingMachine />
+                            <div className="flex flex-col gap-4">
+                                <CodeVendingMachine />
+                                <div className="pt-4 border-t border-slate-700">
+                                    <SolanaMerchant />
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </main>
