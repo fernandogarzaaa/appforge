@@ -23,16 +23,10 @@ import {
     Brain
 } from 'lucide-react';
 import {
-    LineChart,
-    Line,
-    XAxis,
-    YAxis,
-    CartesianGrid,
-    Tooltip,
-    ResponsiveContainer,
     AreaChart,
     Area
 } from 'recharts';
+import SignalDensityDisplay from '@/components/common/SignalDensityDisplay';
 
 const SocketContext = React.createContext<any>(null);
 
@@ -42,9 +36,10 @@ const AdminSovereign = () => {
     const [maintenance, setMaintenance] = useState(false);
     const [isNative, setIsNative] = useState(false);
     const [prompt, setPrompt] = useState('');
-    const [isThinking, setIsThinking] = useState(false);
-    const [aiChat, setAiChat] = useState<{ id: string, role: 'user' | 'assistant', text: string }[]>([]);
     const [revenueData, setRevenueData] = useState<any[]>([]);
+    const [status, setStatus] = useState<any>({ overall: 0, reasoning: 0, learning: 0, creativity: 0, gain: 0, phase: 'IDLE', bridge: { online: true, latency: 0 } });
+    const [bridgeStatus, setBridgeStatus] = useState({ online: true, latency: 0 });
+    const [compressionRatio, setCompressionRatio] = useState(0.65);
     const scrollRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -71,6 +66,15 @@ const AdminSovereign = () => {
 
         newSocket.on('maintenance', (active) => {
             setMaintenance(active);
+        });
+
+        newSocket.on('bridge_update', (data) => {
+            setBridgeStatus({ online: data.online, latency: data.latency });
+            if (data.compression) setCompressionRatio(data.compression);
+        });
+
+        newSocket.on('swarm_state', (state) => {
+            if (state.bridge) setBridgeStatus(state.bridge);
         });
 
         newSocket.on('reply', (data) => {
@@ -150,6 +154,24 @@ const AdminSovereign = () => {
                             <StatBar label="Creativity" value={status.creativity * 100} color="bg-purple-500" />
                             <StatBar label="Gain Rate" value={status.gain * 100} color="bg-amber-500" />
                         </div>
+
+                        {/* 🛰️ BRIDGE RESONANCE */}
+                        <div className="pt-4 border-t border-slate-800">
+                            <div className="flex items-center justify-between mb-2">
+                                <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Bridge Resonance</span>
+                                <Badge variant="outline" className={`text-[8px] ${bridgeStatus.online ? 'border-indigo-500 text-indigo-400' : 'border-red-500 text-red-400'}`}>
+                                    {bridgeStatus.online ? 'STABLE' : 'UNSTABLE'}
+                                </Badge>
+                            </div>
+                            <div className="flex items-center gap-3">
+                                <div className={`w-2 h-2 rounded-full ${bridgeStatus.online ? 'bg-indigo-400 animate-pulse' : 'bg-red-500'}`} />
+                                <span className="text-xl font-mono font-bold text-white">{bridgeStatus.latency}ms</span>
+                                <span className="text-[8px] text-slate-600 font-bold">LATENCY</span>
+                            </div>
+                        </div>
+
+                        {/* ⚡ SIGNAL DENSITY */}
+                        <SignalDensityDisplay compressionRatio={compressionRatio} />
                     </CardContent>
                 </Card>
 

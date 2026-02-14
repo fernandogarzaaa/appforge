@@ -1,11 +1,10 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { io, Socket } from 'socket.io-client';
-import { realDataService, type SystemMetrics, type SwarmData } from './realDataService';
+import React, { useState, useEffect, useRef } from 'react';
+import { io } from 'socket.io-client';
+import { realDataService } from './realDataService';
 import {
   Activity,
   Terminal,
   Zap,
-  Shield,
   Lock,
   Unlock,
   TrendingUp,
@@ -28,6 +27,11 @@ import {
   ResponsiveContainer
 } from 'recharts';
 
+import MemoryGraph from './components/MemoryGraph';
+import QuantumParameterTuner from './components/QuantumParameterTuner';
+import LiveAgentStatus from './components/LiveAgentStatus';
+import SignalDensityMonitor from './components/SignalDensityMonitor';
+
 // --- Swarm Data Interface (now uses real data from quantum engine) ---
 interface Swarm {
   id: string;
@@ -45,7 +49,6 @@ interface Swarm {
 }
 
 // Initial empty state - data will be loaded from realDataService
-const INITIAL_SWARMS: Swarm[] = [];
 
 // --- Lightweight Standalone Components ---
 const Card = ({ children, className = "" }: { children: React.ReactNode, className?: string }) => (
@@ -102,8 +105,8 @@ const Input = ({ className = "", ...props }: React.InputHTMLAttributes<HTMLInput
 );
 
 // --- Swarm Card Component ---
-const SwarmCard: React.FC<{ 
-  swarm: Swarm; 
+const SwarmCard: React.FC<{
+  swarm: Swarm;
   onToggle: (id: string) => void;
   onSendCommand: (id: string, command: string) => void;
   command: string;
@@ -126,9 +129,8 @@ const SwarmCard: React.FC<{
   };
 
   return (
-    <div className={`bg-slate-900/30 border rounded-xl p-4 transition-all duration-200 ${
-      swarm.selected ? 'border-indigo-500/50 bg-indigo-500/5' : 'border-slate-800/50 hover:border-slate-700'
-    }`}>
+    <div className={`bg-slate-900/30 border rounded-xl p-4 transition-all duration-200 ${swarm.selected ? 'border-indigo-500/50 bg-indigo-500/5' : 'border-slate-800/50 hover:border-slate-700'
+      }`}>
       <div className="flex items-start justify-between mb-3">
         <div className="flex items-center gap-2">
           <input
@@ -171,17 +173,15 @@ const SwarmCard: React.FC<{
           <span className="text-[10px] text-slate-400 font-mono">{swarm.efficiency}%</span>
         </div>
         <div className="h-1.5 bg-slate-800 rounded-full overflow-hidden">
-          <div 
+          <div
             className="h-full bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full transition-all duration-500"
             style={{ width: `${swarm.efficiency}%` }}
           />
         </div>
       </div>
 
-      <div className="flex flex-wrap gap-1 mb-3">
-        {swarm.agents.slice(0, 3).map((agent, idx) => (
-          <Badge key={idx} variant="outline" className="text-[8px] px-1.5 py-0.5">{agent}</Badge>
-        ))}
+      <div className="mb-3">
+        <LiveAgentStatus agents={swarm.agents} />
       </div>
 
       {swarm.selected && (
@@ -194,8 +194,8 @@ const SwarmCard: React.FC<{
               className="text-xs h-8"
               onKeyDown={(e) => e.key === 'Enter' && onSendCommand(swarm.id, command)}
             />
-            <Button 
-              size="sm" 
+            <Button
+              size="sm"
               variant={swarm.executionStatus === 'executing' ? 'purple' : 'primary'}
               onClick={() => onSendCommand(swarm.id, command)}
               disabled={!command.trim() || swarm.executionStatus === 'executing'}
@@ -271,20 +271,12 @@ function App() {
   const [isThinking, setIsThinking] = useState(false);
   const [aiChat, setAiChat] = useState<{ id: string, role: 'user' | 'assistant', text: string }[]>([]);
   // Real-time data state
-  const [systemMetrics, setSystemMetrics] = useState<SystemMetrics>({
-    coherence: 0.96,
-    latency: 42,
-    scalability: 0.94,
-    throughput: 0.91,
-    activeNodes: 6,
-    totalNodes: 6,
-    memoryUsage: 0.48,
-    cpuUsage: 0.35
-  });
   const [revenueData] = useState<{ time: number; value: number }[]>(
     () => realDataService.getRevenueData()
   );
-  
+  const [bridgeStatus, setBridgeStatus] = useState<{ online: boolean; latency: number }>({ online: true, latency: 0 });
+  const [compressionRatio, setCompressionRatio] = useState(0.65);
+
   // Swarm Dashboard State - load from realDataService
   const [swarms, setSwarms] = useState<Swarm[]>(
     () => realDataService.getRealSwarmData().map(s => ({ ...s, selected: false }))
@@ -298,7 +290,7 @@ function App() {
     timestamp: Date;
   }>>([]);
   const [viewMode, setViewMode] = useState<'dashboard' | 'swarm'>('swarm');
-  
+
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -358,9 +350,16 @@ function App() {
   // Initialize real-time data updates
   useEffect(() => {
     const unsubscribe = realDataService.subscribe((data) => {
-      setSystemMetrics(data.systemMetrics);
+      if (data.bridgeStatus) setBridgeStatus(data.bridgeStatus);
+      if (data.systemMetrics.compressionRatio) setCompressionRatio(data.systemMetrics.compressionRatio);
+
       setSwarms(prev => {
         const newData = data.swarms;
+        // If the number of swarms changed, replace the whole list
+        if (newData.length !== prev.length) {
+          return newData.map(s => ({ ...s, selected: false }));
+        }
+        // Otherwise merge updates for existing swarms
         return prev.map(swarm => {
           const updated = newData.find(s => s.id === swarm.id);
           if (updated) {
@@ -370,9 +369,9 @@ function App() {
         });
       });
     });
-    
+
     realDataService.startRealTimeUpdates(5000);
-    
+
     return () => {
       unsubscribe();
     };
@@ -411,7 +410,7 @@ function App() {
 
   // Swarm Dashboard Functions
   const toggleSwarmSelection = (id: string) => {
-    setSwarms(prev => prev.map(s => 
+    setSwarms(prev => prev.map(s =>
       s.id === id ? { ...s, selected: !s.selected } : s
     ));
   };
@@ -421,7 +420,7 @@ function App() {
     if (!swarm || !command.trim()) return;
 
     const cmdId = `cmd_${Date.now()}`;
-    
+
     // Add to queue
     setCommandQueue(prev => [...prev, {
       id: cmdId,
@@ -433,14 +432,14 @@ function App() {
 
     // Simulate command execution
     setTimeout(() => {
-      setSwarms(prev => prev.map(s => 
-        s.id === id ? { 
-          ...s, 
+      setSwarms(prev => prev.map(s =>
+        s.id === id ? {
+          ...s,
           lastResponse: `Command "${command}" executed successfully`,
           executionStatus: 'completed' as const
         } : s
       ));
-      setCommandQueue(prev => prev.map(c => 
+      setCommandQueue(prev => prev.map(c =>
         c.id === cmdId ? { ...c, status: 'completed' as const } : c
       ));
     }, 1500 + Math.random() * 2000);
@@ -464,14 +463,14 @@ function App() {
       }]);
 
       setTimeout(() => {
-        setSwarms(prev => prev.map(s => 
-          s.id === swarm.id ? { 
-            ...s, 
+        setSwarms(prev => prev.map(s =>
+          s.id === swarm.id ? {
+            ...s,
             lastResponse: `Broadcast "${swarmCommand}" received`,
             executionStatus: 'completed' as const
           } : s
         ));
-        setCommandQueue(prev => prev.map(c => 
+        setCommandQueue(prev => prev.map(c =>
           c.id === cmdId ? { ...c, status: 'completed' as const } : c
         ));
       }, 1000 + Math.random() * 1500);
@@ -564,17 +563,15 @@ function App() {
         <div className="flex gap-2 bg-slate-900/40 border border-slate-800 rounded-lg p-1">
           <button
             onClick={() => setViewMode('dashboard')}
-            className={`px-4 py-1.5 rounded text-xs font-bold uppercase tracking-wider transition-all ${
-              viewMode === 'dashboard' ? 'bg-indigo-600 text-white' : 'text-slate-400 hover:text-white'
-            }`}
+            className={`px-4 py-1.5 rounded text-xs font-bold uppercase tracking-wider transition-all ${viewMode === 'dashboard' ? 'bg-indigo-600 text-white' : 'text-slate-400 hover:text-white'
+              }`}
           >
             Dashboard
           </button>
           <button
             onClick={() => setViewMode('swarm')}
-            className={`px-4 py-1.5 rounded text-xs font-bold uppercase tracking-wider transition-all ${
-              viewMode === 'swarm' ? 'bg-indigo-600 text-white' : 'text-slate-400 hover:text-white'
-            }`}
+            className={`px-4 py-1.5 rounded text-xs font-bold uppercase tracking-wider transition-all ${viewMode === 'swarm' ? 'bg-indigo-600 text-white' : 'text-slate-400 hover:text-white'
+              }`}
           >
             Swarm Command
           </button>
@@ -600,43 +597,27 @@ function App() {
           <>
             {/* LEFT COL: METRICS & CONTROLS */}
             <div className="col-span-4 flex flex-col gap-6 overflow-y-auto pr-2">
-              {/* SYSTEM HEALTH */}
-              <Card>
-                <div className="p-4 border-b border-slate-800/50 flex justify-between items-center">
-                  <h3 className="text-sm font-bold flex items-center gap-2">
-                    <Shield className="w-4 h-4 text-indigo-400" /> SYSTEM HEALTH
-                  </h3>
-                  <Activity className="w-4 h-4 text-emerald-500" />
-                </div>
-                <div className="p-4 grid grid-cols-2 gap-4">
-                  <div className="space-y-1">
-                    <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Coherence</p>
-                    <p className="text-xl font-mono text-white">98.4%</p>
-                  </div>
-                  <div className="space-y-1">
-                    <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Latency</p>
-                    <p className="text-xl font-mono text-emerald-400">42ms</p>
-                  </div>
-                  <div className="space-y-1">
-                    <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Active Nodes</p>
-                    <p className="text-xl font-mono text-white">4 / 4</p>
-                  </div>
-                  <div className="space-y-1">
-                    <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Swarm Gain</p>
-                    <p className="text-xl font-mono text-indigo-400">+12.4%</p>
-                  </div>
-                </div>
-              </Card>
+              {/* MEMORY RESONANCE */}
+              <MemoryGraph swarms={swarms} />
+
+              {/* QUANTUM TUNER */}
+              <QuantumParameterTuner
+                onUpdate={(params) => realDataService.tuneQuantum(params)}
+                bridgeStatus={bridgeStatus}
+              />
+
+              {/* SIGNAL DENSITY MONITOR */}
+              <SignalDensityMonitor compressionRatio={compressionRatio} />
 
               {/* REVENUE CHART */}
-              <Card className="flex-1 min-h-[200px]">
-                <div className="p-4 border-b border-slate-800/50 flex justify-between items-center">
+              <Card className="flex-1 min-h-[200px] flex flex-col">
+                <div className="p-4 border-b border-slate-800/50 flex justify-between items-center shrink-0">
                   <h3 className="text-sm font-bold flex items-center gap-2">
                     <TrendingUp className="w-4 h-4 text-emerald-400" /> PROFIT ASCENSION
                   </h3>
                 </div>
-                <div className="h-[150px] w-full p-2">
-                  <ResponsiveContainer width="100%" height="100%">
+                <div className="flex-1 min-h-0 w-full p-2">
+                  <ResponsiveContainer width="100%" height="100%" minHeight={150}>
                     <AreaChart data={revenueData}>
                       <defs>
                         <linearGradient id="colorValue" x1="0" y1="0" x2="0" y2="1">
@@ -817,15 +798,15 @@ function App() {
                     onKeyDown={(e) => e.key === 'Enter' && broadcastToSelected()}
                   />
                   <div className="flex gap-2">
-                    <Button 
-                      variant="outline" 
+                    <Button
+                      variant="outline"
                       size="sm"
                       onClick={selectAllSwarms}
                     >
                       Select All
                     </Button>
-                    <Button 
-                      variant="outline" 
+                    <Button
+                      variant="outline"
                       size="sm"
                       onClick={deselectAllSwarms}
                     >
@@ -866,7 +847,7 @@ function App() {
                 {/* Command Queue & Response Panel */}
                 <div className="col-span-4 flex flex-col gap-4 min-h-0">
                   <CommandQueue commands={commandQueue} />
-                  
+
                   <Card className="flex-1 flex flex-col">
                     <div className="p-4 border-b border-slate-800/50 flex justify-between items-center">
                       <h3 className="text-sm font-bold flex items-center gap-2">

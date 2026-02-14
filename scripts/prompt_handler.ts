@@ -1,5 +1,4 @@
 import { QuantumConsensusClient } from '../swarm/core/quantum_consensus.js';
-import { Base44Tool } from '../swarm/tools/base44.js';
 import * as fs from 'fs';
 import path from 'path';
 
@@ -8,9 +7,7 @@ export class PromptHandler {
     private history: { role: 'user' | 'assistant', content: string }[] = [];
 
     constructor() {
-        // Initialize Base44 and Quantum Consensus Client
-        const base44 = new Base44Tool();
-        this.llm = new QuantumConsensusClient(base44);
+        this.llm = new QuantumConsensusClient();
     }
 
     async handlePrompt(userPrompt: string): Promise<string> {

@@ -6,7 +6,7 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { RealHyperIntelligenceSingularity } from './core/real_hyper_intelligence_v2.js';
+import { SingularityEngine } from './core/singularity_engine.js';
 import { QuantumNeuralNetwork, QuantumGeneticAlgorithm } from '../src/utils/QuantumEngine.js';
 import quantumCore from './core/quantum_core.js';
 
@@ -20,10 +20,10 @@ async function runIntelligencePulse() {
     console.log('='.repeat(70));
 
     // 1. SINGULARITY LEARNING CYCLE
-    console.log('\n🌌 Step 1: Hyper Intelligence Singularity Learning...');
-    const singularity = new RealHyperIntelligenceSingularity(false); // Non-continuous for pulse
-    const learningCycle = await singularity.learn();
-    console.log(`   ✅ Cycle ${learningCycle.iteration} complete. Gain: +${(learningCycle.gain * 100).toFixed(1)}%`);
+    console.log('\n🌌 Step 1: Quantum Singularity Learning...');
+    const singularity = new SingularityEngine();
+    const learningCycle = await singularity.executeSelfImprovementCycle();
+    console.log(`   ✅ Cycle ${singularity.getState().recursiveDepth} complete. Progress: ${(learningCycle.singularityProgress * 100).toFixed(1)}%`);
 
     // 2. QUANTUM BRAIN TRAINING (Neural Network)
     console.log('\n🧠 Step 2: Recalibrating Quantum Neural Network...');

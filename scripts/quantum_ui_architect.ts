@@ -1,5 +1,5 @@
 
-import QuantumEngine from '../QuantumEnginePortable.js';
+import QuantumEngine from './lib/QuantumEnginePortable.js';
 
 async function architectUI() {
     console.log('📐 INIT: Quantum UI Architect...');

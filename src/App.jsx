@@ -32,6 +32,8 @@ import { initVitals } from '@/lib/vitals';
 import { ViewModeProvider } from '@/contexts/ViewModeContext';
 import { NavigationProvider, useNavigation } from '@/contexts/NavigationContext';
 import { ViewModeToggle } from '@/components/navigation/ViewModeToggle';
+import { SovereignWallet } from './components/auth/SovereignWallet';
+
 // Phase 1 Feature Imports
 import { CommandPalette } from '@/features/commandPalette/CommandPalette';
 import { ContextMenu } from '@/features/quickActions/ContextMenu';
@@ -284,11 +286,13 @@ function App() {
                 <CollaborationProvider>
                   <QueryClientProvider client={queryClientInstance}>
                     <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
-                      <NavigationProvider>
-                        <ViewModeProvider>
-                          <AppShell />
-                        </ViewModeProvider>
-                      </NavigationProvider>
+                      <SovereignWallet>
+                        <NavigationProvider>
+                          <ViewModeProvider>
+                            <AppShell />
+                          </ViewModeProvider>
+                        </NavigationProvider>
+                      </SovereignWallet>
                     </Router>
                     <Toaster />
                   </QueryClientProvider>

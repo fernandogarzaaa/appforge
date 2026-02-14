@@ -47,14 +47,14 @@ export class SovereignHyperBrain {
         const content = (request.system + request.user).toUpperCase();
 
         const experts = [
-            { name: 'ARCHITECT', specialty: 'System design and structural logic', keywords: ['ARCHITECTURE', 'DESIGN', 'STRUCTURE', 'CORE'], model: 'llama3' },
-            { name: 'SENTINEL', specialty: 'Security, integrity, and risk mitigation', keywords: ['SECURITY', 'VULNERABILITY', 'BUG', 'SAFETY'], model: 'llama3' },
-            { name: 'ALCHEMIST', specialty: 'Creative synthesis and brainstorming', keywords: ['CREATIVE', 'BRAINSTORM', 'IDEA', 'POSSIBILITY'], model: 'llama3' },
-            { name: 'OPTIMIZER', specialty: 'Performance Tuning and efficiency', keywords: ['OPTIMIZE', 'PERFORMANCE', 'SPEED', 'LATENCY'], model: 'llama3' }
+            { name: 'ARCHITECT', specialty: 'System design and structural logic', keywords: ['ARCHITECTURE', 'DESIGN', 'STRUCTURE', 'CORE'], model: 'phi3:mini' },
+            { name: 'SENTINEL', specialty: 'Security, integrity, and risk mitigation', keywords: ['SECURITY', 'VULNERABILITY', 'BUG', 'SAFETY'], model: 'phi3:mini' },
+            { name: 'ALCHEMIST', specialty: 'Creative synthesis and brainstorming', keywords: ['CREATIVE', 'BRAINSTORM', 'IDEA', 'POSSIBILITY'], model: 'phi3:mini' },
+            { name: 'OPTIMIZER', specialty: 'Performance Tuning and efficiency', keywords: ['OPTIMIZE', 'PERFORMANCE', 'SPEED', 'LATENCY'], model: 'phi3:mini' }
         ];
 
         const match = experts.find(e => e.keywords.some(kw => content.includes(kw)));
-        return match || { name: 'GENERALIST', specialty: 'Broad cognitive reasoning', model: 'llama3' };
+        return match || { name: 'GENERALIST', specialty: 'Broad cognitive reasoning', model: 'phi3:mini' };
     }
 }
 

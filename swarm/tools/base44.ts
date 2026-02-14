@@ -82,4 +82,28 @@ export class Base44Tool {
             performed_by: agent
         });
     }
+
+    /**
+     * Check Cloud Bridge Health
+     */
+    async checkHealth(): Promise<{ online: boolean, latency?: number, error?: string }> {
+        const start = Date.now();
+        try {
+            // Self-ping via AuditLog list
+            await this.client.entities.AuditLog.list({ limit: 1 });
+            return { online: true, latency: Date.now() - start };
+        } catch (error: any) {
+            return { online: false, error: error.message };
+        }
+    }
+
+    /**
+     * Quantum Heartbeat
+     * Periodically logs bridge status to ensure resonance.
+     */
+    async logHeartbeat() {
+        const health = await this.checkHealth();
+        await this.logActivity('Base44_Bridge', `Heartbeat: ${health.online ? 'RESONATING' : 'COLLAPSED'} (Latency: ${health.latency || 0}ms)`);
+        return health;
+    }
 }

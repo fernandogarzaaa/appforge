@@ -13,7 +13,7 @@ function createWindow() {
         minHeight: 700,
         title: "Sovereign Command Center",
         backgroundColor: '#020817',
-        icon: path.join(__dirname, '../public/favicon.ico'), // Temporary icon
+        icon: path.join(__dirname, '../public/favicon.ico'), // Will use default if not found
         webPreferences: {
             nodeIntegration: true,
             contextIsolation: false,
@@ -55,9 +55,20 @@ function createWindow() {
 }
 
 function createTray() {
+    // Use a simple icon or default tray icon
+    let icon;
     const iconPath = path.join(__dirname, '../public/favicon.ico');
-    const icon = nativeImage.createFromPath(iconPath);
-    tray = new Tray(icon.resize({ width: 16, height: 16 }));
+    try {
+        icon = nativeImage.createFromPath(iconPath);
+        if (icon.isEmpty()) {
+            icon = nativeImage.createEmpty();
+        } else {
+            icon = icon.resize({ width: 16, height: 16 });
+        }
+    } catch (e) {
+        icon = nativeImage.createEmpty();
+    }
+    tray = new Tray(icon);
 
     const contextMenu = Menu.buildFromTemplate([
         { label: 'Show Dashboard', click: () => mainWindow.show() },

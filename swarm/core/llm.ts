@@ -1,7 +1,9 @@
 import { Base44Tool } from '../tools/base44.js';
 import { sovereignLLM } from './sovereign_llm.js';
 import { sovereignModel } from './sovereign_model.js';
+import { geminiAdapter } from './gemini_skill_adapter.js';
 import swarmKnowledge from './knowledge.js';
+import { secureRandomInt } from './secure_entropy.js';
 
 /**
  * ANTIGRAVITY LLM PROVIDER
@@ -32,6 +34,32 @@ export class AntigravityLLMProvider {
             // Quantum Throttle: Prevent rapid-fire external signals (1s minimum cadence)
             await new Promise(resolve => setTimeout(resolve, 1000));
 
+            // --- SEMANTIC COMPRESSION ---
+            // If the prompt is too large, use Gemini 3 (Fidelity Layer) to compress it
+            // while preserving critical context.
+            let compressedSystem = request.system;
+            let compressedUser = request.user;
+
+            if (request.user.length > 3000 || request.system.length > 1000) {
+                console.log(`🌀 [LLM] Large prompt detected. Applying Semantic Compression via Gemini 3...`);
+                try {
+                    const compressionPrompt = `Compress the following AI request for a secondary processing layer. Preserve all technical constraints, key entities, and the core objective.\n\nSYSTEM: ${request.system}\n\nUSER: ${request.user}`;
+                    const compressionRes = await geminiAdapter.chat({
+                        system: "You are the Sovereign Signal Compressor. Output a highly dense, semantically rich summary of the request.",
+                        user: compressionPrompt,
+                        usePro: true
+                    });
+
+                    if (compressionRes && !compressionRes.text.includes('[Gemini-Sim]')) {
+                        compressedUser = `[COMPRESSED SIGNAL]: ${compressionRes.text}`;
+                        compressedSystem = "[CONTEXT-LOCKED] Original context has been semantically hashed for signal density.";
+                        console.log(`   ✅ Signal compressed by ${(((request.user.length + request.system.length) - (compressedUser.length + compressedSystem.length)) / (request.user.length + request.system.length) * 100).toFixed(1)}%`);
+                    }
+                } catch (e) {
+                    console.warn('   ⚠️ Compression failed, sending raw (truncated) signal.');
+                }
+            }
+
             // Dispatch to Antigravity via Base44 signal
             await this.base44.client.entities.AuditLog.create({
                 action_type: 'ANTIGRAVITY_SIGNAL',
@@ -43,8 +71,8 @@ export class AntigravityLLMProvider {
                     status: 'PENDING',
                     requestId: requestId,
                     prompt: {
-                        system: request.system.length > 500 ? request.system.slice(0, 500) + '... [Compressed]' : request.system,
-                        user: (request.user.length > 2000) ? request.user.slice(0, 2000) + '... [Semantic Truncation]' : request.user,
+                        system: compressedSystem.length > 500 ? compressedSystem.slice(0, 500) + '... [Compressed]' : compressedSystem,
+                        user: (compressedUser.length > 2000) ? compressedUser.slice(0, 2000) + '... [Semantic Truncation]' : compressedUser,
                         model: request.model || 'gemini-2.0-flash-thinking'
                     }
                 }
@@ -58,8 +86,8 @@ export class AntigravityLLMProvider {
             const maxAttempts = 60;
 
             for (let i = 0; i < maxAttempts; i++) {
-                // Polling Delay with Jitter
-                const jitter = Math.floor(Math.random() * 500);
+                // Polling Delay with Secure Jitter
+                const jitter = secureRandomInt(0, 499);
                 await new Promise(resolve => setTimeout(resolve, pollDelay + jitter));
 
                 const logs = await this.base44.client.entities.AuditLog.list({
@@ -123,7 +151,22 @@ export class MultiLLMClient {
 
         // --- COGNITIVE HIERARCHY ---
 
-        // 1. PHYSICAL LAYER: The Sovereign Model (Local AI Brain)
+        // 1. FIDELITY LAYER: Gemini 3 Pro/Flash (High Reasoning)
+        // Uses the new Gemini 3 models for complex synthesis and multimodal tasks.
+        try {
+            const geminiRes = await geminiAdapter.chat({
+                system: optimizedRequest.system,
+                user: optimizedRequest.user,
+                usePro: optimizedRequest.user.length > 2000 || optimizedRequest.system.includes('STRATEGIC')
+            });
+            if (geminiRes && !geminiRes.text.includes('[Gemini-Sim]')) {
+                return geminiRes.text;
+            }
+        } catch (e) {
+            // Fallback to local if Gemini fails
+        }
+
+        // 2. PHYSICAL LAYER: The Sovereign Model (Local AI Brain)
         // Highest priority: 0 API cost, absolute intelligence, 100% autonomy.
         try {
             const modRes = await sovereignModel.chat(optimizedRequest);

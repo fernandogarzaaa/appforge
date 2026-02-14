@@ -1,5 +1,5 @@
 
-import QuantumEngine from '../QuantumEnginePortable.js';
+import QuantumEngine from './lib/QuantumEnginePortable.js';
 
 async function consultTheOracle() {
     console.log('🔮 INIT: Consult Quantum Oracle...');

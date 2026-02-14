@@ -183,7 +183,6 @@ import { GodModeAgent } from '../agents/GodMode.js';
 import { ProductOwnerAgent } from '../agents/ProductOwner.js';
 import { AntigravityAgent } from '../agents/Antigravity.js';
 import { LibrarianAgent } from '../agents/Librarian.js';
-import { RevenueHunter } from '../agents/RevenueHunter.js';
 import { CryptoSwarm } from '../agents/CryptoSwarm.js';
 import { MarketAnalyzer } from '../agents/MarketAnalyzer.js';
 import { WorkerSwarm } from '../agents/WorkerSwarm.js';
@@ -327,8 +326,7 @@ async function main() {
     const antigravity = new AntigravityAgent(base44, fsTool, git);
     const librarian = new LibrarianAgent(base44);
 
-    // Revenue Swarm
-    const revenueHunter = new RevenueHunter(base44);
+    // Revenue Swarm Agents
     const salesBot = new SalesBot(base44, fsTool);
     const referralManager = new ReferralManager(base44, fsTool);
     const pricingStrategist = new PricingStrategist(base44, fsTool);
@@ -418,10 +416,6 @@ async function main() {
     swarmCollaboration.registerAgent('Librarian', async (signal) => {
         console.log(`📡 [Librarian] Received signal: ${signal.type}`);
         await librarian.run();
-    });
-    swarmCollaboration.registerAgent('RevenueHunter', async (signal) => {
-        console.log(`📡 [RevenueHunter] Received signal: ${signal.type}`);
-        await revenueHunter.hunt();
     });
     registerSwarmCollective('CryptoSwarm', async (signal) => {
         console.log(`📡 [CryptoSwarm] Received signal: ${signal.type}`);
@@ -767,10 +761,11 @@ async function main() {
                     }
                 }
 
-                // 💰 RevenueHunter (every 3 cycles)
+                // 🧬 Quantum Evolution Pulse (every 3 cycles)
                 if (cycleCount % 3 === 0) {
-                    const revenueRes = await revenueHunter.hunt();
-                    results.revenueHunter = { status: 'completed', opportunities: revenueRes.length };
+                    const singularity = new SingularityEngine();
+                    const evoRes = await singularity.executeSelfImprovementCycle();
+                    results.evolution = { status: 'completed', progress: evoRes.singularityProgress };
                 }
 
                 // 🦊 CryptoSwarm (every 4 cycles)

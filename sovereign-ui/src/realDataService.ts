@@ -17,6 +17,8 @@ export interface SystemMetrics {
   totalNodes: number;
   memoryUsage: number;
   cpuUsage: number;
+  bridgeStatus?: { online: boolean; latency: number };
+  compressionRatio?: number;
 }
 
 export interface SwarmData {
@@ -36,13 +38,14 @@ export interface RealTimeData {
   swarms: SwarmData[];
   lastUpdated: string;
   isDemo: boolean; // True when using simulated data
+  bridgeStatus?: { online: boolean; latency: number };
 }
 
 // Real data service that connects to swarm_telemetry_server
 class RealDataService {
   private socket: Socket | null = null;
   private callbacks: Set<(data: RealTimeData) => void> = new Set();
-  private intervalId: NodeJS.Timeout | null = null;
+  private intervalId: number | null = null;
   private currentMetrics: SystemMetrics;
   private realSwarms: SwarmData[] = [];
   private isConnected: boolean = false;
@@ -56,7 +59,9 @@ class RealDataService {
       activeNodes: 6,
       totalNodes: 6,
       memoryUsage: 0.48,
-      cpuUsage: 0.35
+      cpuUsage: 0.35,
+      bridgeStatus: { online: true, latency: 45 },
+      compressionRatio: 0.65
     };
   }
 
@@ -93,6 +98,13 @@ class RealDataService {
           this.notifyCallbacks();
         });
 
+        // Listen for specific bridge updates
+        this.socket.on('bridge_update', (data: { online: boolean, latency: number, compression?: number }) => {
+          this.currentMetrics.bridgeStatus = { online: data.online, latency: data.latency };
+          if (data.compression) this.currentMetrics.compressionRatio = data.compression;
+          this.notifyCallbacks();
+        });
+
         // Listen for swarm registry updates (REAL DATA FROM SERVER)
         this.socket.on('swarm_update', (swarms: SwarmData[]) => {
           console.log(`[RealDataService] Received ${swarms.length} swarms from server`);
@@ -101,9 +113,12 @@ class RealDataService {
         });
 
         // Listen for swarm_state updates
-        this.socket.on('swarm_state', (state: any) => {
+        this.socket.on('swarm_state', (state: { coherence?: number, bridge?: any }) => {
           if (state.coherence) {
             this.currentMetrics.coherence = state.coherence;
+          }
+          if (state.bridge) {
+            this.currentMetrics.bridgeStatus = state.bridge;
           }
           this.notifyCallbacks();
         });
@@ -143,11 +158,13 @@ class RealDataService {
 
   // Get current real-time data
   getRealTimeData(): RealTimeData {
+    const hasRealData = this.realSwarms.length > 0;
     return {
       systemMetrics: { ...this.currentMetrics },
-      swarms: this.realSwarms.length > 0 ? this.realSwarms : this.getDefaultSwarms(),
+      swarms: hasRealData ? this.realSwarms : this.getDefaultSwarms(),
       lastUpdated: new Date().toISOString(),
-      isDemo: !this.isConnected || this.realSwarms.length === 0
+      isDemo: !this.isConnected || !hasRealData,
+      bridgeStatus: this.currentMetrics.bridgeStatus
     };
   }
 
@@ -155,72 +172,17 @@ class RealDataService {
   private getDefaultSwarms(): SwarmData[] {
     const baseCoherence = this.currentMetrics.coherence;
     return [
-      {
-        id: 'crypto',
-        name: 'CryptoSwarm',
-        type: 'Trading & Finance',
-        status: 'online',
-        successRate: Math.round(baseCoherence * 100 - 3),
-        revenue: 15000,
-        tasks: 150,
-        efficiency: Math.round(baseCoherence * 96),
-        agents: ['Trader', 'BlockchainAnalyzer', 'MarketPredictor']
-      },
-      {
-        id: 'revenue',
-        name: 'RevenueHunter',
-        type: 'Trading & Finance',
-        status: 'online',
-        successRate: Math.round(baseCoherence * 100 - 8),
-        revenue: 12000,
-        tasks: 89,
-        efficiency: Math.round(baseCoherence * 92),
-        agents: ['Analyst', 'Strategist', 'OpportunityHunter']
-      },
-      {
-        id: 'freelance',
-        name: 'FreelanceSwarm',
-        type: 'Freelance & Revenue',
-        status: 'online',
-        successRate: Math.round(baseCoherence * 100 - 12),
-        revenue: 8500,
-        tasks: 45,
-        efficiency: Math.round(baseCoherence * 88),
-        agents: ['Freelancer', 'ClientHunter', 'Contractor']
-      },
-      {
-        id: 'trend',
-        name: 'TrendAnalyzer',
-        type: 'Marketing & Sales',
-        status: 'online',
-        successRate: Math.round(baseCoherence * 100 - 6),
-        revenue: 0,
-        tasks: 200,
-        efficiency: Math.round(baseCoherence * 94),
-        agents: ['TrendHunter', 'MarketScanner', 'DataMiner']
-      },
-      {
-        id: 'market',
-        name: 'MarketAnalyzer',
-        type: 'Marketing & Sales',
-        status: 'online',
-        successRate: Math.round(baseCoherence * 100 - 9),
-        revenue: 0,
-        tasks: 120,
-        efficiency: Math.round(baseCoherence * 90),
-        agents: ['MarketAnalyst', 'CompetitorTracker', 'SentimentMonitor']
-      },
-      {
-        id: 'sales',
-        name: 'SalesBot',
-        type: 'Marketing & Sales',
-        status: 'online',
-        successRate: Math.round(baseCoherence * 100 - 5),
-        revenue: 5000,
-        tasks: 35,
-        efficiency: Math.round(baseCoherence * 95),
-        agents: ['SalesAgent', 'LeadConverter', 'ClosingBot']
-      }
+      { id: 'CryptoSwarm', name: 'CryptoSwarm', type: 'Trading & Finance', status: 'online', successRate: Math.round(baseCoherence * 100 - 3), revenue: 15000, tasks: 150, efficiency: Math.round(baseCoherence * 96), agents: ['Trader', 'BlockchainAnalyzer', 'MarketPredictor'] },
+      { id: 'RevenueHunter', name: 'RevenueHunter', type: 'Trading & Finance', status: 'online', successRate: Math.round(baseCoherence * 100 - 8), revenue: 12000, tasks: 89, efficiency: Math.round(baseCoherence * 92), agents: ['Analyst', 'Strategist', 'OpportunityHunter'] },
+      { id: 'FreelanceSwarm', name: 'FreelanceSwarm', type: 'Freelance & Revenue', status: 'online', successRate: Math.round(baseCoherence * 100 - 12), revenue: 8500, tasks: 45, efficiency: Math.round(baseCoherence * 88), agents: ['Freelancer', 'ClientHunter', 'Contractor'] },
+      { id: 'TrendAnalyzer', name: 'TrendAnalyzer', type: 'Marketing & Sales', status: 'online', successRate: Math.round(baseCoherence * 100 - 6), revenue: 0, tasks: 200, efficiency: Math.round(baseCoherence * 94), agents: ['TrendHunter', 'MarketScanner', 'DataMiner'] },
+      { id: 'ArbitrageHunter', name: 'ArbitrageHunter', type: 'Trading & Finance', status: 'online', successRate: Math.round(baseCoherence * 100 - 1), revenue: 5000, tasks: 300, efficiency: Math.round(baseCoherence * 90), agents: ['PriceMonitor', 'ExecutionBot', 'RouteOptimizer'] },
+      { id: 'YieldOptimizer', name: 'YieldOptimizer', type: 'DeFi & Finance', status: 'online', successRate: Math.round(baseCoherence * 100 - 10), revenue: 3000, tasks: 150, efficiency: Math.round(baseCoherence * 85), agents: ['YieldFarmer', 'ProtocolAnalyst', 'RiskManager'] },
+      { id: 'MarketAnalyzer', name: 'MarketAnalyzer', type: 'Marketing & Sales', status: 'online', successRate: Math.round(baseCoherence * 100 - 9), revenue: 0, tasks: 120, efficiency: Math.round(baseCoherence * 90), agents: ['MarketAnalyst', 'CompetitorTracker', 'SentimentMonitor'] },
+      { id: 'SalesBot', name: 'SalesBot', type: 'Marketing & Sales', status: 'online', successRate: Math.round(baseCoherence * 100 - 5), revenue: 5000, tasks: 35, efficiency: Math.round(baseCoherence * 95), agents: ['SalesAgent', 'LeadConverter', 'ClosingBot'] },
+      { id: 'ReferralManager', name: 'ReferralManager', type: 'Marketing & Sales', status: 'online', successRate: Math.round(baseCoherence * 100 - 4), revenue: 1200, tasks: 80, efficiency: Math.round(baseCoherence * 89), agents: ['AdaptiveOptimization', 'FeedbackLearning'] },
+      { id: 'SolanaDeFiSwarm', name: 'SolanaDeFiSwarm', type: 'DeFi & Finance', status: 'online', successRate: Math.round(baseCoherence * 100 - 7), revenue: 2500, tasks: 110, efficiency: Math.round(baseCoherence * 82), agents: ['SolanaExpert', 'BridgeMonitor'] },
+      { id: 'GodSwarm', name: 'GodSwarm', type: 'General Intelligence', status: 'online', successRate: 99, revenue: 50000, tasks: 1000, efficiency: 100, agents: ['PrimeDirector', 'Architect', 'Overseer'] }
     ];
   }
 
@@ -229,19 +191,19 @@ class RealDataService {
     const baseValue = 10000;
     const data: { time: number; value: number }[] = [];
     let currentValue = baseValue;
-    
+
     for (let i = 0; i < 20; i++) {
       // Real growth pattern with quantum coherence influence
       const coherence = this.currentMetrics.coherence;
       const growth = (Math.random() * 100 + 50) * coherence;
       currentValue += growth;
-      
+
       data.push({
         time: i,
         value: Math.round(currentValue)
       });
     }
-    
+
     return data;
   }
 
@@ -265,12 +227,12 @@ class RealDataService {
     if (this.intervalId) {
       clearInterval(this.intervalId);
     }
-    
+
     this.intervalId = setInterval(() => {
       // Update metrics with slight variations based on quantum state
       const coherence = 0.94 + Math.random() * 0.04; // 94-98%
       const latency = 35 + Math.floor(Math.random() * 15); // 35-50ms
-      
+
       this.currentMetrics = {
         ...this.currentMetrics,
         coherence,
@@ -279,9 +241,24 @@ class RealDataService {
         memoryUsage: 0.42 + Math.random() * 0.12,
         cpuUsage: 0.28 + Math.random() * 0.18
       };
-      
+
       this.notifyCallbacks();
     }, intervalMs);
+  }
+
+  // Get swarm data directly (returns array of swarms)
+  getRealSwarmData(): SwarmData[] {
+    return this.realSwarms.length > 0 ? this.realSwarms : this.getDefaultSwarms();
+  }
+
+  // Tune quantum parameters
+  tuneQuantum(params: any): void {
+    if (this.socket && this.isConnected) {
+      console.log('[RealDataService] Sending tune request:', params);
+      this.socket.emit('tune_quantum', params);
+    } else {
+      console.warn('[RealDataService] Cannot tune: not connected to telemetry server');
+    }
   }
 }
 

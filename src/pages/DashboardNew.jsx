@@ -26,10 +26,12 @@ export default function DashboardNew() {
   const [ideaInput, setIdeaInput] = useState('');
   const { toast } = useToast();
 
-  const { data: projects = [], isLoading } = useQuery({
+  const { data: rawProjects = [], isLoading } = useQuery({
     queryKey: ['projects'],
-    queryFn: () => base44.entities.Project.list('-updated_date', 6)
+    queryFn: () => base44.entities.Project.list()
   });
+
+  const projects = Array.isArray(rawProjects) ? rawProjects : (rawProjects?.data || []);
 
   // Calculate stats
   const totalStats = projects.reduce(
@@ -43,7 +45,7 @@ export default function DashboardNew() {
 
   const handleGenerateApp = () => {
     if (ideaInput.trim()) {
-      window.location.href = createPageUrl('AIAssistant') + '?auto_start=true&idea=' + encodeURIComponent(ideaInput);
+      window.location.href = createPageUrl('SovereignIDE') + '?auto_start=true&idea=' + encodeURIComponent(ideaInput);
     } else {
       toast({
         title: "Please describe your idea",
@@ -215,20 +217,20 @@ export default function DashboardNew() {
               </Card>
             </Link>
 
-            {/* AI Assistant */}
-            <Link to={createPageUrl('AIAssistant')}>
-              <Card className="h-full border border-gray-200 hover:border-purple-300 hover:shadow-md transition-all cursor-pointer group">
+            {/* Sovereign IDE */}
+            <Link to={createPageUrl('SovereignIDE')}>
+              <Card className="h-full border border-gray-200 hover:border-indigo-300 hover:shadow-md transition-all cursor-pointer group">
                 <CardContent className="p-6">
                   <div className="space-y-4">
-                    <div className="w-12 h-12 rounded-lg bg-purple-500 flex items-center justify-center group-hover:scale-110 transition-transform">
+                    <div className="w-12 h-12 rounded-lg bg-indigo-600 flex items-center justify-center group-hover:scale-110 transition-transform shadow-lg shadow-indigo-200">
                       <Brain className="w-6 h-6 text-white" />
                     </div>
                     <div>
-                      <h3 className="font-semibold text-gray-900 mb-2 group-hover:text-purple-600 transition-colors">
-                        AI Assistant
+                      <h3 className="font-semibold text-gray-900 mb-2 group-hover:text-indigo-600 transition-colors uppercase tracking-tighter">
+                        Sovereign IDE
                       </h3>
                       <p className="text-sm text-gray-600">
-                        Let AI design and build your app
+                        Agentic building with Quantum Swarm
                       </p>
                     </div>
                   </div>
@@ -367,7 +369,7 @@ function ProjectCardMinimal({ project }) {
   const stats = project.stats || {};
 
   return (
-    <Link to={createPageUrl('ProjectDetail', { id: project.id })}>
+    <Link to={createPageUrl('ProjectDetail') + '?id=' + project.id}>
       <Card className="h-full border border-gray-200 hover:border-blue-300 hover:shadow-md transition-all cursor-pointer group">
         <CardContent className="p-6">
           <div className="space-y-4">
