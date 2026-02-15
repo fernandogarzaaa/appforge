@@ -2,7 +2,7 @@
  * Performance Monitoring Tests
  */
 
-import { describe, it, jest.expect, beforeEach, vi, afterEach } from 'vitest';
+import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest';
 import performanceMonitor from '@/utils/performance';
 
 // Mock env module

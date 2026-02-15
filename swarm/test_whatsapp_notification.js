@@ -70,3 +70,4 @@ if (sendWhatsAppMessage(testMessage)) {
     console.log('1. Start WhatsApp bridge: npx tsx swarm/core/whatsapp_bridge.ts');
     console.log('2. Scan QR code with WhatsApp');
     console.log('3. Messages will be delivered automatically!');
+}

@@ -11,7 +11,7 @@ import path from 'path';
 const CHANNEL_FILE = path.join(process.cwd(), 'src/data/quantum_channel.json');
 
 export class QuantumChannel {
-    engine: QuantumEngine;
+    engine;
 
     constructor() {
         this.engine = new QuantumEngine();
@@ -56,7 +56,7 @@ export class QuantumChannel {
     /**
      * Write to channel with quantum integrity check
      */
-    writeChannel(state: any) {
+    writeChannel(state) {
         state.quantum_state = {
             coherence: this.calculateCoherence(state),
             last_sync: new Date().toISOString()
@@ -146,7 +146,7 @@ export class QuantumChannel {
     /**
      * Mark message as processed
      */
-    markProcessed(messageId: string) {
+    markProcessed(messageId) {
         const state = this.readChannel();
 
         // Find in both inboxes

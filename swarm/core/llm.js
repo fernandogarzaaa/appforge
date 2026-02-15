@@ -6,10 +6,10 @@
 import { Base44Tool } from '../tools/base44.js';
 
 export class AntigravityLLMProvider {
-    base44: Base44Tool;
-    requestTimeout: number = 60000; // 60 seconds
+    base44;
+    requestTimeout = 60000; // 60 seconds
 
-    constructor(base44: Base44Tool) {
+    constructor(base44) {
         this.base44 = base44;
     }
 
@@ -17,7 +17,7 @@ export class AntigravityLLMProvider {
      * Chat completion using Antigravity as backend
      * Instead of calling OpenAI, we dispatch to Antigravity and wait for response
      */
-    async chat(params: { system: string; user: string; model?: string }): Promise<string> {
+    async chat(params) {
         const requestId = `llm_${Date.now()}`;
 
         // Dispatch to Antigravity
@@ -49,7 +49,7 @@ export class AntigravityLLMProvider {
             });
 
             const items = logs?.items || logs?.data || logs || [];
-            const response = items.find((l: any) =>
+            const response = items.find((l) =>
                 l?.changes?.requestId === requestId &&
                 l?.changes?.status === 'COMPLETED'
             );
@@ -64,16 +64,16 @@ export class AntigravityLLMProvider {
 }
 
 export class MultiLLMClient {
-    antigravity: AntigravityLLMProvider;
+    antigravity;
 
-    constructor(base44: Base44Tool) {
+    constructor(base44) {
         this.antigravity = new AntigravityLLMProvider(base44);
     }
 
     /**
      * Route all LLM requests to Antigravity
      */
-    async chat(params: { system: string; user: string; model?: string }): Promise<string> {
+    async chat(params) {
         console.log('   → Routing LLM request to Antigravity...');
         return await this.antigravity.chat(params);
     }

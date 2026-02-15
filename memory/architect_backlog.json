@@ -69,7 +69,7 @@
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\functions\\gitWorkflow.ts",
     "metric": "SECURITY",
     "timestamp": "2026-02-14T18:44:57.419Z",
-    "status": "FAILED"
+    "status": "IN_PROGRESS"
   },
   {
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\functions\\gitWorkflow.ts",
@@ -267,7 +267,7 @@
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\lib\\uiGenerator.ts",
     "metric": "COMPLEXITY",
     "timestamp": "2026-02-14T18:44:57.515Z",
-    "status": "IN_PROGRESS"
+    "status": "FAILED"
   },
   {
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\lib\\unifiedQuantumSystem.ts",
@@ -285,7 +285,7 @@
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\lib\\wasmLoader.ts",
     "metric": "COMPLEXITY",
     "timestamp": "2026-02-14T18:44:57.521Z",
-    "status": "FAILED"
+    "status": "IN_PROGRESS"
   },
   {
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\lib\\zeroConfigDevOps.ts",
@@ -297,7 +297,7 @@
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\lib\\__tests__\\holographicConsensus.test.ts",
     "metric": "COMPLEXITY",
     "timestamp": "2026-02-14T18:44:57.524Z",
-    "status": "IN_PROGRESS"
+    "status": "FAILED"
   },
   {
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\lib\\__tests__\\quantumRenormalization.test.ts",
@@ -315,7 +315,7 @@
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\lib\\__tests__\\quantumZeno.test.ts",
     "metric": "COMPLEXITY",
     "timestamp": "2026-02-14T18:44:57.529Z",
-    "status": "FAILED"
+    "status": "IN_PROGRESS"
   },
   {
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\lib\\__tests__\\wasmLoader.test.ts",
@@ -333,13 +333,13 @@
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\middleware\\rateLimiter.ts",
     "metric": "COMPLEXITY",
     "timestamp": "2026-02-14T18:44:57.533Z",
-    "status": "IN_PROGRESS"
+    "status": "FAILED"
   },
   {
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\quantum-core\\pkg\\quantum_core.d.ts",
     "metric": "COMPLEXITY",
     "timestamp": "2026-02-14T18:44:57.535Z",
-    "status": "IN_PROGRESS"
+    "status": "FAILED"
   },
   {
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\services\\abTestingService.ts",
@@ -351,7 +351,7 @@
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\services\\analyticsDashboard.ts",
     "metric": "SECURITY",
     "timestamp": "2026-02-14T18:44:57.544Z",
-    "status": "IN_PROGRESS"
+    "status": "FAILED"
   },
   {
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\services\\analyticsDashboard.ts",
@@ -363,13 +363,13 @@
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\services\\complianceManager.ts",
     "metric": "SECURITY",
     "timestamp": "2026-02-14T18:44:57.548Z",
-    "status": "FAILED"
+    "status": "IN_PROGRESS"
   },
   {
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\services\\complianceManager.ts",
     "metric": "COMPLEXITY",
     "timestamp": "2026-02-14T18:44:57.552Z",
-    "status": "FAILED"
+    "status": "IN_PROGRESS"
   },
   {
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\services\\databaseOptimization.ts",
@@ -381,7 +381,7 @@
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\services\\databaseOptimization.ts",
     "metric": "COMPLEXITY",
     "timestamp": "2026-02-14T18:44:57.556Z",
-    "status": "IN_PROGRESS"
+    "status": "FAILED"
   },
   {
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\services\\ddosProtection.ts",
@@ -393,7 +393,7 @@
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\services\\ddosProtection.ts",
     "metric": "COMPLEXITY",
     "timestamp": "2026-02-14T18:44:57.559Z",
-    "status": "IN_PROGRESS"
+    "status": "FAILED"
   },
   {
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\services\\rateLimiter.ts",
@@ -447,6 +447,4 @@
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\swarm\\orchestrator.ts",
     "metric": "COMPLEXITY",
     "timestamp": "2026-02-14T18:44:57.569Z",
-    "status": "IN_PROGRESS"
-  }
-]
+    "status": "FAILED"

@@ -53,17 +53,18 @@ AppForge is maintained by a **Local Swarm** of specialized AI agents that run 24
 - 🏗️ **Visual App Builder** - Drag-and-drop interface
 - 📊 **Advanced Analytics** - Real-time monitoring with Vector Memory
 - 🔐 **Enterprise Security** - Role-based access control
-- 💳 **Crypto Payments** - Solana (USDC) + MoonPay On-Ramp
+- 🛡️ **Sovereign Identity** - Verified via Communication Bridge (WhatsApp/iMessage)
 
 ### Developer Experience
 - 📝 **Code Playground** - Real-time code execution
 - 📦 **Template Marketplace** - Pre-built templates
-- 🔄 **Autonomous CI/CD** - Self-deploying workflows
+- 🔄 **Autonomous CI/CD** - Self-deploying workflows via `SovereignGit`
 
 ### Business Logic
-- **Subscription Management** - Tiered pricing ($45/$90/$900)
+- **Autonomic Governance** - Fully self-managed repository and version control
+- **Resource Auditing** - Automated compute cost calculation and ROI enforcement
 - **Admin Dashboard** - Live view of Swarm Activity (`/swarm`)
-- **Notifications** - Email, SMS, Slack, Discord
+- **Notifications** - WhatsApp, Email, SMS, Slack, Discord
 
 ---
 
@@ -83,10 +84,7 @@ AppForge is maintained by a **Local Swarm** of specialized AI agents that run 24
 - **Base44 Functions** (Serverless)
 - **Deno** Runtime
 - **Node.js** (Local Swarm)
-
-### Blockchain
-- **Solana Mainnet** (USDC)
-- **MoonPay** (Fiat-to-Crypto)
+- **Sovereign Kernel** - Logic anchored in Rust for immunity
 
 ---
 
@@ -95,7 +93,7 @@ AppForge is maintained by a **Local Swarm** of specialized AI agents that run 24
 ### Prerequisites
 - Node.js 18+
 - npm 9+
-- Phantom Wallet (for payments)
+- WhatsApp (for sovereign notifications)
 
 ### Installation
 
@@ -109,7 +107,7 @@ npm install
 
 # Setup Environment
 cp .env.example .env.local
-# Add your BASE44_APP_ID and GITHUB_PAT
+# Add your BASE44_APP_ID, WHATSAPP_PHONE_NUMBER, and GITHUB_PAT
 ```
 
 ### Running Locally
@@ -131,7 +129,7 @@ You can run the AI Swarm locally to let it improve the project while you sleep.
 Uses `pm2` to run the swarm in the background.
 
 ```bash
-# Start the Swarm
+# Start the Swarm (Reality Mode)
 npm run swarm:daemon
 
 # View Logs (Watch the AI think!)
@@ -146,22 +144,18 @@ Run a single iteration of the autonomous loop.
 npm run swarm
 ```
 
-### Option 3: GitHub Actions
-The swarm is configured to run automatically on `cron` schedules via `.github/workflows/autonomous_swarm.yml`.
-
 ---
 
-## 💳 Payment Integration (Solana)
+## 🛡️ Sovereignty & Security
 
-AppForge uses a **Direct-to-Contract** payment model on Solana Mainnet.
+AppForge has transitioned to a **Sovereign Production Asset**. 
 
-1. **User**: Selects "Pro Plan" ($90).
-2. **MoonPay**: User buys USDC with Credit Card (if needed).
-3. **Transfer**: Wallet sends USDC to the AppForge Treasury.
-4. **Verification**: Backend verifies on-chain signature.
-5. **Access**: Account creates instantly.
+1. **Legacy Purge**: 100% removal of Solana and other external crypto dependencies.
+2. **Reality Mode**: Enforced fail-closed behavior for production safety.
+3. **Autonomic Governance**: The system manages its own version control and deployments.
+4. **Efficiency Mandate**: Every code mutation is audited for compute cost and ROI.
 
-**Config**: `src/config/payment.config.ts`
+**Config**: `swarm/core/reality_mode.ts`
 
 ---
 

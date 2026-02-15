@@ -17,7 +17,7 @@ export default function BotTestRunner({ botId, botNodes }) {
     queryFn: () => base44.entities.BotTestCase.filter({ bot_id: botId, status: 'active' })
   });
 
-  const { data: testResults = [], isLoading } = useQuery({
+  const { data: testResults = [], isLoading: resultsLoading } = useQuery({
     queryKey: ['botTestResults', botId],
     queryFn: () => base44.entities.BotTestResult.filter({ bot_id: botId }, '-run_at', 50)
   });
