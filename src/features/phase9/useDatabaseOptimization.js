@@ -21,12 +21,6 @@ export const useDatabaseOptimization = () => {
    * Analyze slow queries
    */
   const analyzeSlowQueries = useCallback(async () => {
-  try {
-    ... (rest of the code)
-  } catch (err) {
-    setError(err);
-  }
-}, []);
     setLoading(true);
     setError(null);
 

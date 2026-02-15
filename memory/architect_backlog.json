@@ -333,7 +333,7 @@
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\middleware\\rateLimiter.ts",
     "metric": "COMPLEXITY",
     "timestamp": "2026-02-14T18:44:57.533Z",
-    "status": "IN_PROGRESS"
+    "status": "FAILED"
   },
   {
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\quantum-core\\pkg\\quantum_core.d.ts",
@@ -441,12 +441,12 @@
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\swarm\\orchestrator.ts",
     "metric": "SECURITY",
     "timestamp": "2026-02-14T18:44:57.568Z",
-    "status": "IN_PROGRESS"
+    "status": "FAILED"
   },
   {
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\swarm\\orchestrator.ts",
     "metric": "COMPLEXITY",
     "timestamp": "2026-02-14T18:44:57.569Z",
-    "status": "FAILED"
+    "status": "IN_PROGRESS"
   }
 ]
