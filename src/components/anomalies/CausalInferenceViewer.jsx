@@ -80,11 +80,8 @@ export default function CausalInferenceViewer() {
     }
   }, [relationships, setNodes, setEdges]); // nodes.length check avoids cyclic dependency if we used 'nodes'
 
-  if (!relationships || relationships.length === 0) {
-    return <div className="p-4 text-slate-600">No causal relationships identified</div>;
-  }
-
   // Filter based on Quantum Threshold - Optimized with useMemo
+  // Hooks MUST be at the top level, before any early returns.
   const strongRelationships = React.useMemo(() =>
     relationships ? relationships.filter(r => r.causal_strength >= threshold) : [],
     [relationships, threshold]
@@ -94,6 +91,10 @@ export default function CausalInferenceViewer() {
     relationships ? relationships.filter(r => r.is_validated) : [],
     [relationships]
   );
+
+  if (!relationships || relationships.length === 0) {
+    return <div className="p-4 text-slate-600">No causal relationships identified</div>;
+  }
 
   return (
     <div className="space-y-4">

@@ -39,7 +39,7 @@
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\functions\\databaseChangeTrigger.ts",
     "metric": "COMPLEXITY",
     "timestamp": "2026-02-14T18:44:57.407Z",
-    "status": "IN_PROGRESS"
+    "status": "FAILED"
   },
   {
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\functions\\executeAdvancedWorkflow.ts",
@@ -57,7 +57,7 @@
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\functions\\executeBotPipeline.ts",
     "metric": "COMPLEXITY",
     "timestamp": "2026-02-14T18:44:57.415Z",
-    "status": "IN_PROGRESS"
+    "status": "FAILED"
   },
   {
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\functions\\executeBotWorkflow.ts",
@@ -99,354 +99,354 @@
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\functions\\validateBotConfig.ts",
     "metric": "COMPLEXITY",
     "timestamp": "2026-02-14T18:44:57.440Z",
-    "status": "IN_PROGRESS"
+    "status": "FAILED"
   },
   {
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\hooks\\useAIRouter.ts",
     "metric": "COMPLEXITY",
     "timestamp": "2026-02-14T18:44:57.442Z",
-    "status": "PENDING_REVIEW"
+    "status": "FAILED"
   },
   {
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\hooks\\useQuantumModelSelector.ts",
     "metric": "SECURITY",
     "timestamp": "2026-02-14T18:44:57.445Z",
-    "status": "PENDING_REVIEW"
+    "status": "FAILED"
   },
   {
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\hooks\\useQuantumModelSelector.ts",
     "metric": "COMPLEXITY",
     "timestamp": "2026-02-14T18:44:57.446Z",
-    "status": "PENDING_REVIEW"
+    "status": "FAILED"
   },
   {
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\hooks\\useReversibleComputing.ts",
     "metric": "SECURITY",
     "timestamp": "2026-02-14T18:44:57.448Z",
-    "status": "PENDING_REVIEW"
+    "status": "FAILED"
   },
   {
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\hooks\\useReversibleComputing.ts",
     "metric": "COMPLEXITY",
     "timestamp": "2026-02-14T18:44:57.449Z",
-    "status": "PENDING_REVIEW"
+    "status": "FAILED"
   },
   {
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\lib\\aiRouter.ts",
     "metric": "SECURITY",
     "timestamp": "2026-02-14T18:44:57.452Z",
-    "status": "PENDING_REVIEW"
+    "status": "FAILED"
   },
   {
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\lib\\aiRouter.ts",
     "metric": "COMPLEXITY",
     "timestamp": "2026-02-14T18:44:57.453Z",
-    "status": "PENDING_REVIEW"
+    "status": "FAILED"
   },
   {
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\lib\\crossPlatformExporter.ts",
     "metric": "SECURITY",
     "timestamp": "2026-02-14T18:44:57.456Z",
-    "status": "PENDING_REVIEW"
+    "status": "FAILED"
   },
   {
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\lib\\crossPlatformExporter.ts",
     "metric": "COMPLEXITY",
     "timestamp": "2026-02-14T18:44:57.457Z",
-    "status": "PENDING_REVIEW"
+    "status": "FAILED"
   },
   {
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\lib\\govtechMedicalAI.ts",
     "metric": "SECURITY",
     "timestamp": "2026-02-14T18:44:57.460Z",
-    "status": "PENDING_REVIEW"
+    "status": "FAILED"
   },
   {
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\lib\\govtechMedicalAI.ts",
     "metric": "COMPLEXITY",
     "timestamp": "2026-02-14T18:44:57.463Z",
-    "status": "PENDING_REVIEW"
+    "status": "FAILED"
   },
   {
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\lib\\holographicConsensus.ts",
     "metric": "COMPLEXITY",
     "timestamp": "2026-02-14T18:44:57.469Z",
-    "status": "PENDING_REVIEW"
+    "status": "FAILED"
   },
   {
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\lib\\holographicExamples.ts",
     "metric": "SECURITY",
     "timestamp": "2026-02-14T18:44:57.476Z",
-    "status": "PENDING_REVIEW"
+    "status": "FAILED"
   },
   {
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\lib\\holographicExamples.ts",
     "metric": "COMPLEXITY",
     "timestamp": "2026-02-14T18:44:57.477Z",
-    "status": "PENDING_REVIEW"
+    "status": "FAILED"
   },
   {
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\lib\\integrations.ts",
     "metric": "COMPLEXITY",
     "timestamp": "2026-02-14T18:44:57.481Z",
-    "status": "PENDING_REVIEW"
+    "status": "FAILED"
   },
   {
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\lib\\openAPIGenerator.ts",
     "metric": "SECURITY",
     "timestamp": "2026-02-14T18:44:57.483Z",
-    "status": "PENDING_REVIEW"
+    "status": "FAILED"
   },
   {
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\lib\\openAPIGenerator.ts",
     "metric": "COMPLEXITY",
     "timestamp": "2026-02-14T18:44:57.484Z",
-    "status": "PENDING_REVIEW"
+    "status": "FAILED"
   },
   {
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\lib\\quantumAIOrchestrator.ts",
     "metric": "SECURITY",
     "timestamp": "2026-02-14T18:44:57.490Z",
-    "status": "PENDING_REVIEW"
+    "status": "FAILED"
   },
   {
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\lib\\quantumAIOrchestrator.ts",
     "metric": "COMPLEXITY",
     "timestamp": "2026-02-14T18:44:57.491Z",
-    "status": "PENDING_REVIEW"
+    "status": "FAILED"
   },
   {
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\lib\\quantumImportReference.ts",
     "metric": "COMPLEXITY",
     "timestamp": "2026-02-14T18:44:57.494Z",
-    "status": "PENDING_REVIEW"
+    "status": "FAILED"
   },
   {
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\lib\\quantumIntegrationExamples.ts",
     "metric": "COMPLEXITY",
     "timestamp": "2026-02-14T18:44:57.498Z",
-    "status": "PENDING_REVIEW"
+    "status": "FAILED"
   },
   {
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\lib\\quantumRenormalization.ts",
     "metric": "COMPLEXITY",
     "timestamp": "2026-02-14T18:44:57.501Z",
-    "status": "PENDING_REVIEW"
+    "status": "FAILED"
   },
   {
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\lib\\quantumTunneling.ts",
     "metric": "COMPLEXITY",
     "timestamp": "2026-02-14T18:44:57.504Z",
-    "status": "PENDING_REVIEW"
+    "status": "FAILED"
   },
   {
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\lib\\quantumZeno.ts",
     "metric": "COMPLEXITY",
     "timestamp": "2026-02-14T18:44:57.506Z",
-    "status": "PENDING_REVIEW"
+    "status": "FAILED"
   },
   {
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\lib\\ReversibleComputing.ts",
     "metric": "SECURITY",
     "timestamp": "2026-02-14T18:44:57.509Z",
-    "status": "PENDING_REVIEW"
+    "status": "FAILED"
   },
   {
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\lib\\ReversibleComputing.ts",
     "metric": "COMPLEXITY",
     "timestamp": "2026-02-14T18:44:57.510Z",
-    "status": "PENDING_REVIEW"
+    "status": "FAILED"
   },
   {
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\lib\\uiGenerator.ts",
     "metric": "SECURITY",
     "timestamp": "2026-02-14T18:44:57.514Z",
-    "status": "PENDING_REVIEW"
+    "status": "FAILED"
   },
   {
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\lib\\uiGenerator.ts",
     "metric": "COMPLEXITY",
     "timestamp": "2026-02-14T18:44:57.515Z",
-    "status": "PENDING_REVIEW"
+    "status": "IN_PROGRESS"
   },
   {
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\lib\\unifiedQuantumSystem.ts",
     "metric": "SECURITY",
     "timestamp": "2026-02-14T18:44:57.518Z",
-    "status": "PENDING_REVIEW"
+    "status": "FAILED"
   },
   {
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\lib\\unifiedQuantumSystem.ts",
     "metric": "COMPLEXITY",
     "timestamp": "2026-02-14T18:44:57.519Z",
-    "status": "PENDING_REVIEW"
+    "status": "IN_PROGRESS"
   },
   {
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\lib\\wasmLoader.ts",
     "metric": "COMPLEXITY",
     "timestamp": "2026-02-14T18:44:57.521Z",
-    "status": "PENDING_REVIEW"
+    "status": "FAILED"
   },
   {
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\lib\\zeroConfigDevOps.ts",
     "metric": "COMPLEXITY",
     "timestamp": "2026-02-14T18:44:57.523Z",
-    "status": "PENDING_REVIEW"
+    "status": "FAILED"
   },
   {
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\lib\\__tests__\\holographicConsensus.test.ts",
     "metric": "COMPLEXITY",
     "timestamp": "2026-02-14T18:44:57.524Z",
-    "status": "PENDING_REVIEW"
+    "status": "IN_PROGRESS"
   },
   {
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\lib\\__tests__\\quantumRenormalization.test.ts",
     "metric": "COMPLEXITY",
     "timestamp": "2026-02-14T18:44:57.526Z",
-    "status": "PENDING_REVIEW"
+    "status": "IN_PROGRESS"
   },
   {
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\lib\\__tests__\\quantumTunneling.test.ts",
     "metric": "COMPLEXITY",
     "timestamp": "2026-02-14T18:44:57.528Z",
-    "status": "PENDING_REVIEW"
+    "status": "FAILED"
   },
   {
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\lib\\__tests__\\quantumZeno.test.ts",
     "metric": "COMPLEXITY",
     "timestamp": "2026-02-14T18:44:57.529Z",
-    "status": "PENDING_REVIEW"
+    "status": "FAILED"
   },
   {
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\lib\\__tests__\\wasmLoader.test.ts",
     "metric": "COMPLEXITY",
     "timestamp": "2026-02-14T18:44:57.531Z",
-    "status": "PENDING_REVIEW"
+    "status": "FAILED"
   },
   {
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\middleware\\rateLimiter.ts",
     "metric": "SECURITY",
     "timestamp": "2026-02-14T18:44:57.532Z",
-    "status": "PENDING_REVIEW"
+    "status": "FAILED"
   },
   {
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\middleware\\rateLimiter.ts",
     "metric": "COMPLEXITY",
     "timestamp": "2026-02-14T18:44:57.533Z",
-    "status": "PENDING_REVIEW"
+    "status": "IN_PROGRESS"
   },
   {
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\quantum-core\\pkg\\quantum_core.d.ts",
     "metric": "COMPLEXITY",
     "timestamp": "2026-02-14T18:44:57.535Z",
-    "status": "PENDING_REVIEW"
+    "status": "IN_PROGRESS"
   },
   {
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\services\\abTestingService.ts",
     "metric": "COMPLEXITY",
     "timestamp": "2026-02-14T18:44:57.541Z",
-    "status": "PENDING_REVIEW"
+    "status": "IN_PROGRESS"
   },
   {
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\services\\analyticsDashboard.ts",
     "metric": "SECURITY",
     "timestamp": "2026-02-14T18:44:57.544Z",
-    "status": "PENDING_REVIEW"
+    "status": "IN_PROGRESS"
   },
   {
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\services\\analyticsDashboard.ts",
     "metric": "COMPLEXITY",
     "timestamp": "2026-02-14T18:44:57.546Z",
-    "status": "PENDING_REVIEW"
+    "status": "IN_PROGRESS"
   },
   {
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\services\\complianceManager.ts",
     "metric": "SECURITY",
     "timestamp": "2026-02-14T18:44:57.548Z",
-    "status": "PENDING_REVIEW"
+    "status": "FAILED"
   },
   {
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\services\\complianceManager.ts",
     "metric": "COMPLEXITY",
     "timestamp": "2026-02-14T18:44:57.552Z",
-    "status": "PENDING_REVIEW"
+    "status": "FAILED"
   },
   {
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\services\\databaseOptimization.ts",
     "metric": "SECURITY",
     "timestamp": "2026-02-14T18:44:57.554Z",
-    "status": "PENDING_REVIEW"
+    "status": "FAILED"
   },
   {
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\services\\databaseOptimization.ts",
     "metric": "COMPLEXITY",
     "timestamp": "2026-02-14T18:44:57.556Z",
-    "status": "PENDING_REVIEW"
+    "status": "IN_PROGRESS"
   },
   {
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\services\\ddosProtection.ts",
     "metric": "SECURITY",
     "timestamp": "2026-02-14T18:44:57.558Z",
-    "status": "PENDING_REVIEW"
+    "status": "FAILED"
   },
   {
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\services\\ddosProtection.ts",
     "metric": "COMPLEXITY",
     "timestamp": "2026-02-14T18:44:57.559Z",
-    "status": "PENDING_REVIEW"
+    "status": "IN_PROGRESS"
   },
   {
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\services\\rateLimiter.ts",
     "metric": "COMPLEXITY",
     "timestamp": "2026-02-14T18:44:57.561Z",
-    "status": "PENDING_REVIEW"
+    "status": "FAILED"
   },
   {
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\services\\redisCache.ts",
     "metric": "SECURITY",
     "timestamp": "2026-02-14T18:44:57.562Z",
-    "status": "PENDING_REVIEW"
+    "status": "IN_PROGRESS"
   },
   {
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\services\\redisCache.ts",
     "metric": "COMPLEXITY",
     "timestamp": "2026-02-14T18:44:57.563Z",
-    "status": "PENDING_REVIEW"
+    "status": "FAILED"
   },
   {
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\services\\webhooksManager.ts",
     "metric": "SECURITY",
     "timestamp": "2026-02-14T18:44:57.564Z",
-    "status": "PENDING_REVIEW"
+    "status": "IN_PROGRESS"
   },
   {
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\services\\webhooksManager.ts",
     "metric": "COMPLEXITY",
     "timestamp": "2026-02-14T18:44:57.565Z",
-    "status": "PENDING_REVIEW"
+    "status": "FAILED"
   },
   {
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\store\\useCausalStore.ts",
     "metric": "SECURITY",
     "timestamp": "2026-02-14T18:44:57.566Z",
-    "status": "PENDING_REVIEW"
+    "status": "IN_PROGRESS"
   },
   {
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\store\\useCausalStore.ts",
     "metric": "COMPLEXITY",
     "timestamp": "2026-02-14T18:44:57.567Z",
-    "status": "PENDING_REVIEW"
+    "status": "FAILED"
   },
   {
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\swarm\\orchestrator.ts",
     "metric": "SECURITY",
     "timestamp": "2026-02-14T18:44:57.568Z",
-    "status": "PENDING_REVIEW"
+    "status": "IN_PROGRESS"
   },
   {
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\swarm\\orchestrator.ts",
     "metric": "COMPLEXITY",
     "timestamp": "2026-02-14T18:44:57.569Z",
-    "status": "PENDING_REVIEW"
+    "status": "IN_PROGRESS"
   }
 ]

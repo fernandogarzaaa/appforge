@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import { encodeURL } from '@solana/pay';
 import { PublicKey, Transaction, SystemProgram, Connection, clusterApiUrl } from '@solana/web3.js';
-import { useWallet, useConnection } from '@solana/wallet-adapter-react';
+import { useWallet, useConnection, encodeURL } from '../../../stubs/solana-adapters';
 import BigNumber from 'bignumber.js';
 import { useQuantumOracle } from '@/hooks/useQuantumOracle';
 import { Buffer } from 'buffer';
@@ -81,15 +80,15 @@ const SolanaMerchant: React.FC<SolanaMerchantProps> = ({
 
             // PHASE 23: IRON GUARD KILL-SWITCH
             if (audit.risk_score > 0.7) {
-                setAuditStatus(`⛔ BLOCKED (RISK: ${audit.risk_score.toFixed(1)}): ${audit.details}`);
+                setAuditStatus(`⛔ BLOCKED(RISK: ${audit.risk_score.toFixed(1)}): ${audit.details} `);
                 setStatus('Security Alert');
                 return;
             }
 
             if (!audit.verified) {
-                setAuditStatus(`⚠️ WARNING: ${audit.details}`);
+                setAuditStatus(`⚠️ WARNING: ${audit.details} `);
             } else {
-                setAuditStatus(`✅ VERIFIED: ${audit.details}`);
+                setAuditStatus(`✅ VERIFIED: ${audit.details} `);
             }
             setStatus('Signing...');
 
@@ -111,7 +110,7 @@ const SolanaMerchant: React.FC<SolanaMerchantProps> = ({
         <div className="flex flex-col items-center gap-4 text-slate-300">
             <div className="w-full bg-slate-800/50 rounded flex flex-col items-center justify-center border border-slate-700 overflow-hidden p-4">
                 {auditStatus && (
-                    <div className={`w-full mb-3 p-2 rounded text-[10px] font-mono font-bold border ${auditStatus.includes('BLOCKED') ? 'bg-red-500/20 border-red-500 text-red-400' : 'bg-emerald-500/20 border-emerald-500 text-emerald-400'}`}>
+                    <div className={`w - full mb - 3 p - 2 rounded text - [10px] font - mono font - bold border ${auditStatus.includes('BLOCKED') ? 'bg-red-500/20 border-red-500 text-red-400' : 'bg-emerald-500/20 border-emerald-500 text-emerald-400'} `}>
                         {auditStatus}
                     </div>
                 )}
@@ -141,7 +140,7 @@ const SolanaMerchant: React.FC<SolanaMerchantProps> = ({
                 <button
                     onClick={handleDirectPay}
                     disabled={!isOracleOnline}
-                    className={`flex-1 py-2 font-bold rounded text-[10px] uppercase tracking-widest transition-all ${isOracleOnline ? 'bg-blue-600 hover:bg-blue-500 text-white' : 'bg-slate-800 text-slate-600 cursor-not-allowed'}`}
+                    className={`flex - 1 py - 2 font - bold rounded text - [10px] uppercase tracking - widest transition - all ${isOracleOnline ? 'bg-blue-600 hover:bg-blue-500 text-white' : 'bg-slate-800 text-slate-600 cursor-not-allowed'} `}
                 >
                     {isOracleOnline ? 'Iron Pay (Web3)' : 'Oracle Offline'}
                 </button>

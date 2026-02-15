@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { startRaydiumScanner, NewPoolEvent } from '../raydium_scanner';
 import { Shield, Eye, EyeOff, Lock, MonitorStop } from 'lucide-react';
-import { useWallet } from '@solana/wallet-adapter-react';
+import { useWallet } from '../../../stubs/solana-adapters';
 
 const RaydiumScout: React.FC = () => {
   const { connected } = useWallet();

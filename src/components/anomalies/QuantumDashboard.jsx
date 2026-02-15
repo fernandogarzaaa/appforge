@@ -3,7 +3,7 @@ import { useCausalStore } from '../../store/useCausalStore';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
-import { Activity, Zap, Layers, AlertCircle } from 'lucide-react';
+import { Activity, Zap, Layers } from 'lucide-react';
 
 export default function QuantumDashboard() {
     const {

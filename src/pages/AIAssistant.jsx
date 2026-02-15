@@ -13,7 +13,6 @@ import { generateEnhancedEntities } from '@/utils/enhancedEntityGeneration';
 import { generateBusinessContent } from '@/utils/intelligentContentGenerator';
 import { AIAgent } from '@/utils/aiAgentCore';
 import { extractDomainContext, generateDomainSpecificPlan } from '@/utils/domainContextExtractor';
-import { QuantumEngine } from '@/utils/QuantumEngine';
 import { detectLanguage, generateLocalizedContent } from '@/utils/multiLanguageSupport';
 import { useLLM } from '@/contexts/LLMContext';
 import ModelSelector from '@/components/ai/ModelSelector';

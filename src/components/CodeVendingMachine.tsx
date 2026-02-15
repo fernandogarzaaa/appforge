@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { Shield, Zap, Lock, Unlock, Rocket, Loader2, Wallet } from 'lucide-react';
 import SolanaMerchant from '@/plugins/solana/ui/SolanaMerchant';
-import { useWallet } from '@solana/wallet-adapter-react';
+import { useWallet } from '../stubs/solana-adapters';
 
 const CodeVendingMachine: React.FC = () => {
     const { connected } = useWallet();

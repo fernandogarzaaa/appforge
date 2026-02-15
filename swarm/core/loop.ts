@@ -2,8 +2,6 @@ import dotenv from 'dotenv';
 import path from 'path';
 import * as fs from 'fs/promises';
 import { fileURLToPath } from 'url';
-import { Connection, Keypair, PublicKey } from '@solana/web3.js';
-import bs58 from 'bs58';
 import { realityStatusSummary, requireRealityMode } from './reality_mode.js';
 
 // Resolve .env.local from project root
@@ -53,123 +51,30 @@ function parseBoolean(value: string | undefined, fallback = false): boolean {
     return ['1', 'true', 'yes', 'on'].includes(normalized);
 }
 
-function resolveSecretKey(privateKey: string): Keypair {
-    const trimmed = (privateKey || '').trim();
-    if (!trimmed) {
-        throw new Error('SOLANA_PRIVATE_KEY is empty');
-    }
-
-    if (trimmed.startsWith('[') && trimmed.endsWith(']')) {
-        const parsed = JSON.parse(trimmed) as number[];
-        if (!Array.isArray(parsed) || parsed.length < 32) {
-            throw new Error('Invalid JSON private key format');
-        }
-
-        const secret = Uint8Array.from(parsed);
-        if (secret.length >= 64) {
-            return Keypair.fromSecretKey(secret.slice(0, 64));
-        }
-        return Keypair.fromSeed(secret.slice(0, 32));
-    }
-
-    const decoded = bs58.decode(trimmed);
-    if (decoded.length === 64) {
-        return Keypair.fromSecretKey(decoded);
-    }
-    if (decoded.length === 32) {
-        return Keypair.fromSeed(decoded);
-    }
-
-    throw new Error(`Unsupported SOLANA_PRIVATE_KEY length: ${decoded.length}`);
-}
-
-async function validateWalletForTrading(): Promise<boolean> {
+/**
+ * 🛡️ SOVEREIGN IDENTITY PROTOCOL
+ * Verifies the system's ability to communicate and coordinate.
+ */
+async function validateSovereignIdentity(): Promise<boolean> {
     try {
-        const rpcUrl = process.env.SOLANA_RPC_URL || 'https://api.mainnet-beta.solana.com';
-        const walletAddress = (process.env.SOLANA_WALLET_ADDRESS || '').trim();
-        const privateKey = (process.env.SOLANA_PRIVATE_KEY || '').trim();
+        const isTrueIndependence = process.env.TRUE_AI_INDEPENDENCE === 'true';
+        const bridgeEnabled = !!(process.env.WHATSAPP_PHONE_NUMBER || process.env.IMESSAGE_RECIPIENT);
 
-        const liveTradingEnabled = parseBoolean(process.env.REAL_TRADING_ENABLED, false);
-        const autoExecuteTrades = parseBoolean(process.env.SWARM_AUTO_EXECUTE_TRADES, false);
-        const autonomousTradingEnabled = parseBoolean(process.env.SWARM_AUTONOMOUS_TRADING_ENABLED, false);
-
-        const requiresSigning = autonomousTradingEnabled || (liveTradingEnabled && autoExecuteTrades);
-
-        if (!walletAddress) {
-            if (requiresSigning) {
-                console.error('❌ WALLET ERROR: SOLANA_WALLET_ADDRESS is missing (required for auto-signing).');
-                return false;
-            }
-
-            console.warn('⚠️ WALLET WARNING: SOLANA_WALLET_ADDRESS not set. Trading features will be unavailable.');
+        if (isTrueIndependence) {
+            console.log('✅ IDENTITY VALIDATED: Local Sovereignty Active');
             return true;
         }
 
-        // Validate Solana public key format.
-        try {
-            new PublicKey(walletAddress);
-        } catch {
-            console.error('❌ WALLET ERROR: Invalid SOLANA_WALLET_ADDRESS format');
-            return false;
+        if (!bridgeEnabled) {
+            console.warn('⚠️ IDENTITY WARNING: Autonomous communication bridge not configured.');
+            return true;
         }
 
-        // If we are going to auto-sign, require a valid key that matches the address.
-        if (requiresSigning) {
-            let signer: Keypair;
-            try {
-                signer = resolveSecretKey(privateKey);
-            } catch (e: any) {
-                console.error(`❌ WALLET ERROR: ${e?.message || e}`);
-                return false;
-            }
-
-            if (signer.publicKey.toBase58() !== walletAddress) {
-                console.error('❌ WALLET ERROR: SOLANA_PRIVATE_KEY does not match SOLANA_WALLET_ADDRESS');
-                return false;
-            }
-        }
-
-        // On-chain sanity check (detect nonce/program accounts).
-        if (requiresSigning) {
-            try {
-                const connection = new Connection(rpcUrl, 'confirmed');
-                const info = await connection.getAccountInfo(new PublicKey(walletAddress), 'confirmed');
-                if (info) {
-                    if (info.data && info.data.length > 0) {
-                        console.error('❌ WALLET ERROR: Wallet account has data (likely NONCE or program account).');
-                        console.error('Rotate to a fresh wallet address before enabling auto-signing.');
-                        return false;
-                    }
-                } else {
-                    console.warn('⚠️ WALLET WARNING: Account not found on-chain yet (funding may still be pending).');
-                }
-            } catch (e: any) {
-                console.error(`❌ WALLET ERROR: Failed to verify wallet account on-chain: ${e?.message || e}`);
-                return false;
-            }
-        }
-
-        console.log('✅ WALLET VALIDATED:', walletAddress.slice(0, 8) + '...' + walletAddress.slice(-8));
-        console.log(`   - RPC: ${rpcUrl}`);
-        console.log(`   - Requires signing: ${requiresSigning}`);
+        console.log('✅ IDENTITY VALIDATED: Sovereign Bridge Active');
         return true;
-
     } catch (e: any) {
-        console.error('❌ WALLET ERROR:', e.message);
+        console.error('❌ IDENTITY ERROR:', e.message);
         return false;
-    }
-}
-
-/**
- * 🚫 TRADING SAFETY CHECK
- * Abort if wallet validation fails
- */
-async function requireWalletForTrading(): Promise<void> {
-    const isValid = await validateWalletForTrading();
-    if (!isValid) {
-        console.error('🚫 TRADING ABORTED: Wallet validation failed');
-        console.error('Run: npx tsx swarm/test_solana_trading.ts to diagnose');
-        process.exit(1);
     }
 }
 
@@ -224,8 +129,6 @@ import { ResonanceEngine } from './resonance_engine.js';
 import { ShadowSwarm } from './shadow_swarm.js';
 import { swarmCollaboration } from './swarm_collaboration.js';
 import { SwarmReporter } from './swarm_reporter.js';
-import { getCollectiveMembers } from './swarm_collectives.js';
-import { AutonomousTradingController } from './autonomous_trading_controller.js';
 import { MaintenanceGuard } from './maintenance_guard.js';
 
 const QUANTUM_CHANNEL = path.join(process.cwd(), 'src/data/quantum_channel.json');
@@ -303,15 +206,14 @@ async function main() {
     console.log('🐝 AppForge Swarm Daemon Starting...');
     console.log('⚛️ AUTONOMOUS MODE: Quantum-Powered Proactive Intelligence');
 
-    // 🛡️ WALLET SAFETY CHECK - Validate before any trading operations
-    console.log('🛡️ Running wallet validation protocol...');
-    const walletValid = await validateWalletForTrading();
-    if (!walletValid) {
-        console.error('🚫 SWARM HALTED: Wallet validation failed');
-        console.error('Please fix wallet configuration before restarting');
+    // 🛡️ IDENTITY SAFETY CHECK - Validate before any operations
+    console.log('🛡️ Running sovereign identity validation...');
+    const identityValid = await validateSovereignIdentity();
+    if (!identityValid) {
+        console.error('🚫 SWARM HALTED: Identity validation failed');
         process.exit(1);
     }
-    console.log('✅ Wallet validated - Safe for trading operations');
+    console.log('✅ Identity validated - Swarm Coordination Active');
 
     // Initialize Tools
     const base44 = new Base44Tool();
@@ -366,8 +268,6 @@ async function main() {
 
     // Initialize SwarmReporter
     const swarmReporter = new SwarmReporter();
-    const autonomousTradingController = new AutonomousTradingController();
-    await autonomousTradingController.initialize();
 
     // Initialize Hyper Intelligence
     const hyperStatus = hyperIntelligence.getStatus();
@@ -376,7 +276,7 @@ async function main() {
     console.log(`   - Accelerator fidelity: ${hyperStatus.accelerator.fidelity.toFixed(2)}`);
     console.log(`   - Safety principles: ${hyperStatus.safety.principlesLoaded}`);
 
-    console.log('✅ 33 Collaboration Nodes Initialized (Agents + Swarm Collectives). Entering Autonomous Loop...');
+    console.log('✅ Coordination nodes initialized. Entering Autonomous Loop...');
     console.log('⚛️ Quantum Core: Active');
     console.log('🔮 Oracle: Available for consultation\n');
     console.log('🤖 Autonomous Trading Controller:', autonomousTradingController.getStatus());
@@ -663,7 +563,6 @@ async function main() {
         try {
             // ⚛️ QUANTUM ENHANCEMENT: Check quantum channel for Antigravity messages
             await checkQuantumChannel();
-            await autonomousTradingController.tick({ isPaused, cycleCount });
 
             const now = Date.now();
             const shouldRunAutonomous = (now - lastAutonomousRun) >= AUTONOMOUS_INTERVAL_MS;

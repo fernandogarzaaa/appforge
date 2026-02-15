@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import axios from 'axios';
 import crypto from 'crypto';
-import { generateText, PromiseFulfilledResult, PromiseRejectedResult } from './llm_client.js';
+import { generateText, PromiseFulfilledResult, PromiseRejectedResult } from './inference_client.js';
 import { GodMode } from './god_mode.js';
 import { broadcastLog } from '../server.js';
 import { GitManager } from './git_manager.js';
