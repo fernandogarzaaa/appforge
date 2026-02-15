@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "phase": "waiting_funding",
+  "startedAt": "2026-02-15T10:54:13.373Z",
+  "trackedUsdcBalance": 0,
+  "tradesToday": 0,
+  "tradesDayKey": "2026-02-15",
+  "totalTrades": 0,
+  "successfulTrades": 0,
+  "failedTrades": 0,
+  "consecutiveFailures": 0,
+  "priceHistory": [],
+  "ledger": []
+}

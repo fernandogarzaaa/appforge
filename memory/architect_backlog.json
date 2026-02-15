@@ -399,7 +399,7 @@
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\services\\rateLimiter.ts",
     "metric": "COMPLEXITY",
     "timestamp": "2026-02-14T18:44:57.561Z",
-    "status": "IN_PROGRESS"
+    "status": "FAILED"
   },
   {
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\services\\redisCache.ts",
@@ -411,7 +411,7 @@
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\services\\redisCache.ts",
     "metric": "COMPLEXITY",
     "timestamp": "2026-02-14T18:44:57.563Z",
-    "status": "IN_PROGRESS"
+    "status": "FAILED"
   },
   {
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\services\\webhooksManager.ts",
@@ -447,6 +447,6 @@
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\swarm\\orchestrator.ts",
     "metric": "COMPLEXITY",
     "timestamp": "2026-02-14T18:44:57.569Z",
-    "status": "FAILED"
+    "status": "IN_PROGRESS"
   }
 ]

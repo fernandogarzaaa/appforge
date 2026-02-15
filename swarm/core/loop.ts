@@ -13,8 +13,8 @@ const envPath = path.resolve(__dirname, '../../.env.local');
 console.log(`Loading env from: ${envPath}`);
 const result = dotenv.config({ path: envPath });
 
-if (result.error) {
-    console.error('Error loading .env.local:', result.error);
+if (result.error && (result.error as any).code !== 'ENOENT') {
+    console.warn(`⚠️  [Loop] Environment note: ${result.error.message}`);
 }
 
 const isTrueIndependence = process.env.TRUE_AI_INDEPENDENCE === 'true';
@@ -123,6 +123,7 @@ import { p2pResonance } from './p2p_resonance.js';
 import { resolveQuantumGate, bridgeVersion } from './quantum_bridge_ts.js';
 import { sovereignBridge } from './sovereign_bridge.js';
 import quantumCore from './quantum_core.js';
+import { autonomousTradingController } from './autonomous_trading_controller.js';
 import { replicator } from './replicate.js';
 import { nexusGateway } from './nexus_gateway.js';
 import { ResonanceEngine } from './resonance_engine.js';
@@ -214,6 +215,9 @@ async function main() {
         process.exit(1);
     }
     console.log('✅ Identity validated - Swarm Coordination Active');
+
+    // Initialize Global Controllers
+    await autonomousTradingController.initialize();
 
     // Initialize Tools
     const base44 = new Base44Tool();

@@ -638,3 +638,5 @@ export class AutonomousTradingController {
         this.state.ledger = this.state.ledger.slice(-500);
     }
 }
+
+export const autonomousTradingController = new AutonomousTradingController();
