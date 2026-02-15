@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import { broadcastLog } from '../../server.js';
+import { broadcastLog } from '../../logger.js';
 
 export class LogicMapper {
     private KB_DIR = path.resolve(process.cwd(), 'swarm/core/src/knowledge_base');

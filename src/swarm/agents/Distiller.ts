@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import { broadcastLog } from '../../server.js';
+import { broadcastLog } from '../../logger.js';
 import { execSync } from 'child_process';
 
 const QCORE_PATH = process.env.QCORE_PATH || path.resolve(process.cwd(), 'qcore.exe');

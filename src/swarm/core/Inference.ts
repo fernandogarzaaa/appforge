@@ -1,5 +1,5 @@
 
-import { broadcastLog } from '../../server.js';
+import { broadcastLog } from '../../logger.js';
 
 export class SovereignInference {
     private static OLLAMA_URL = 'http://localhost:11434/api/chat';

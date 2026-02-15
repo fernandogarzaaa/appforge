@@ -1,4 +1,4 @@
-import { broadcastLog } from '../../server.js';
+import { broadcastLog } from '../../logger.js';
 
 export interface EvolutionProposal {
     id: string;

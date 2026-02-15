@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import { generateText } from '../llm_client.js';
+import { generateText } from '../inference_client.js';
 
 const DYNAMIC_TESTS_DIR = path.resolve(process.cwd(), 'src/swarm/oracle/dynamic_tests');
 

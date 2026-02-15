@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import { broadcastLog } from '../../server.js';
+import { broadcastLog } from '../../logger.js';
 
 export class Teacher {
     private MEMORY_DIR = path.resolve(process.cwd(), 'memory/synthetic_data');

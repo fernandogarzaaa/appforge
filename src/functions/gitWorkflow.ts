@@ -91,9 +91,11 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Only GitHub provider is supported in this build' }, { status: 400 });
     }
 
-    // Fallback PAT provided by user for autonomous bot
-    const FALLBACK_PAT = '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';
-    const githubToken = Deno.env.get('GITHUB_BOT_TOKEN') || Deno.env.get('GITHUB_TOKEN') || FALLBACK_PAT;
+    const githubToken = Deno.env.get('GITHUB_BOT_TOKEN') || Deno.env.get('GITHUB_TOKEN');
+
+    if (!githubToken) {
+      return Response.json({ error: 'SOVEREIGN_AUTH_FAILURE: GitHub Token not found in environment' }, { status: 401 });
+    }
 
     if (action === 'deploy') {
       const { workflowId } = payload;
@@ -101,17 +103,17 @@ Deno.serve(async (req) => {
         return Response.json({ error: 'Missing workflowId' }, { status: 400 });
       }
 
-      const workflow = await base44.asServiceRole.entities.GitWorkflow.get(workflowId);
+      const workflow = await (base44 as any).asServiceRole.entities.GitWorkflow.get(workflowId);
       if (!workflow) {
         return Response.json({ error: 'Workflow not found' }, { status: 404 });
       }
 
-      const updated = await base44.asServiceRole.entities.GitWorkflow.update(workflowId, {
+      const updated = await (base44 as any).asServiceRole.entities.GitWorkflow.update(workflowId, {
         status: 'active',
         deployed_at: new Date().toISOString()
       });
 
-      await base44.asServiceRole.entities.GitWorkflowDeployment.create({
+      await (base44 as any).asServiceRole.entities.GitWorkflowDeployment.create({
         workflow_id: workflowId,
         status: 'deployed',
         created_at: new Date().toISOString(),
@@ -127,13 +129,13 @@ Deno.serve(async (req) => {
         return Response.json({ error: 'Missing workflowId' }, { status: 400 });
       }
 
-      const workflow = await base44.asServiceRole.entities.GitWorkflow.get(workflowId);
+      const workflow = await (base44 as any).asServiceRole.entities.GitWorkflow.get(workflowId);
       if (!workflow) {
         return Response.json({ error: 'Workflow not found' }, { status: 404 });
       }
 
       const startedAt = new Date().toISOString();
-      const run = await base44.asServiceRole.entities.GitWorkflowRun.create({
+      const run = await (base44 as any).asServiceRole.entities.GitWorkflowRun.create({
         workflow_id: workflowId,
         status: 'running',
         started_at: startedAt,
@@ -142,14 +144,14 @@ Deno.serve(async (req) => {
       });
 
       const completedAt = new Date().toISOString();
-      const updatedRun = await base44.asServiceRole.entities.GitWorkflowRun.update(run.id, {
+      const updatedRun = await (base44 as any).asServiceRole.entities.GitWorkflowRun.update(run.id, {
         status: 'completed',
         completed_at: completedAt,
         duration_ms: new Date(completedAt).getTime() - new Date(startedAt).getTime(),
         output: { message: 'Workflow run completed' }
       });
 
-      await base44.asServiceRole.entities.GitWorkflow.update(workflowId, {
+      await (base44 as any).asServiceRole.entities.GitWorkflow.update(workflowId, {
         runs_count: (workflow.runs_count || 0) + 1,
         last_run: completedAt
       });
@@ -190,7 +192,7 @@ Deno.serve(async (req) => {
       // Use Quantum Processor
       const quantumPrompt = await quantum.collapseState(basePrompt);
 
-      const llm = await base44.integrations.Core.InvokeLLM({
+      const llm = await (base44 as any).integrations.Core.InvokeLLM({
         prompt: quantumPrompt,
         temperature: 0.2,
         max_tokens: 600
@@ -217,7 +219,7 @@ ${llm?.content || llm?.response || llm}
 
       const quantumPrompt = await quantum.collapseState(basePrompt);
 
-      const llm = await base44.integrations.Core.InvokeLLM({
+      const llm = await (base44 as any).integrations.Core.InvokeLLM({
         prompt: quantumPrompt,
         temperature: 0.3,
         max_tokens: 200
@@ -243,7 +245,7 @@ ${llm?.content || llm?.response || llm}
 
       const commits = (compare.commits || []).map((commit: any) => commit.commit?.message || commit.sha);
       const prompt = `Create a concise changelog from these commit messages:\n${commits.join('\n')}`;
-      const llm = await base44.integrations.Core.InvokeLLM({
+      const llm = await (base44 as any).integrations.Core.InvokeLLM({
         prompt,
         temperature: 0.2,
         max_tokens: 400

@@ -5,7 +5,7 @@
  * based on task complexity, cost, speed, and quality requirements
  */
 
-import { useCallback, useState, useEffect } from 'react';
+import React, { useCallback, useState, useEffect, useReducer, useMemo } from 'react';
 import {
   selectOptimalModel,
   selectModelsForTasks,
@@ -54,122 +54,95 @@ export interface UseQuantumModelSelectorReturn {
   lastStrategy: SelectionStrategy | null;
 }
 
+interface SelectionState {
+  selectedModel: ModelSelectionResult | null;
+  loading: boolean;
+  error: Error | null;
+  recommendations: any[];
+  lastComplexity: TaskComplexity | null;
+  lastStrategy: SelectionStrategy | null;
+}
+
+type SelectionAction =
+  | { type: 'START' }
+  | { type: 'ERROR'; error: Error }
+  | { type: 'SET_MODEL'; result: ModelSelectionResult; complexity?: TaskComplexity; strategy?: SelectionStrategy }
+  | { type: 'SET_BATCH'; results: ModelSelectionResult[] }
+  | { type: 'SET_RECOMMENDATIONS'; data: any[] };
+
+const initialState: SelectionState = {
+  selectedModel: null,
+  loading: false,
+  error: null,
+  recommendations: [],
+  lastComplexity: null,
+  lastStrategy: null,
+};
+
+function selectionReducer(state: SelectionState, action: SelectionAction): SelectionState {
+  switch (action.type) {
+    case 'START': return { ...state, loading: true, error: null };
+    case 'ERROR': return { ...state, loading: false, error: action.error };
+    case 'SET_MODEL': return { ...state, loading: false, selectedModel: action.result, lastComplexity: action.complexity || state.lastComplexity, lastStrategy: action.strategy || state.lastStrategy };
+    case 'SET_BATCH': return { ...state, loading: false, selectedModel: action.results[0] || null };
+    case 'SET_RECOMMENDATIONS': return { ...state, loading: false, recommendations: action.data };
+    default: return state;
+  }
+}
+
 export const useQuantumModelSelector = (): UseQuantumModelSelectorReturn => {
-  const [selectedModel, setSelectedModel] = useState<ModelSelectionResult | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<Error | null>(null);
-  const [recommendations, setRecommendations] = useState<any[]>([]);
-  const [lastComplexity, setLastComplexity] = useState<TaskComplexity | null>(null);
-  const [lastStrategy, setLastStrategy] = useState<SelectionStrategy | null>(null);
+  const [state, dispatch] = useReducer(selectionReducer, initialState);
 
-  // Select optimal model
-  const selectModel = useCallback(
-    async (complexity: TaskComplexity, strategy: SelectionStrategy = SelectionStrategy.OPTIMAL) => {
-      try {
-        setLoading(true);
-        setError(null);
-        setLastComplexity(complexity);
-        setLastStrategy(strategy);
-
-        const result = await selectOptimalModel(complexity, strategy);
-        setSelectedModel(result as ModelSelectionResult);
-
-        return result as ModelSelectionResult;
-      } catch (err) {
-        const error = err instanceof Error ? err : new Error('Unknown error');
-        setError(error);
-        console.error('Model selection error:', error);
-        return {
-          model: 'base44',
-          modelName: 'Base44',
-          index: 4,
-          error: error.message,
-          fallback: true,
-        };
-      } finally {
-        setLoading(false);
-      }
-    },
-    []
-  );
-
-  // Batch select models
-  const selectBatch = useCallback(
-    async (tasks: TaskComplexity[], strategy: SelectionStrategy = SelectionStrategy.OPTIMAL) => {
-      try {
-        setLoading(true);
-        setError(null);
-
-        const results = await selectModelsForTasks(tasks, strategy);
-        if (results.length > 0) {
-          setSelectedModel(results[0] as ModelSelectionResult);
-        }
-
-        return results as ModelSelectionResult[];
-      } catch (err) {
-        const error = err instanceof Error ? err : new Error('Unknown error');
-        setError(error);
-        console.error('Batch selection error:', error);
-        return [];
-      } finally {
-        setLoading(false);
-      }
-    },
-    []
-  );
-
-  // Compare models
-  const compareModels = useCallback(async (complexity: TaskComplexity) => {
+  const wrapAction = async <T>(fn: () => Promise<T>, onSuccess: (data: T) => void, fallback?: T) => {
+    dispatch({ type: 'START' });
     try {
-      setLoading(true);
-      setError(null);
-
-      const comparisons = await compareModelsForTask(complexity);
-      setRecommendations(comparisons);
-
-      return comparisons;
+      const result = await fn();
+      onSuccess(result);
+      return result;
     } catch (err) {
-      const error = err instanceof Error ? err : new Error('Unknown error');
-      setError(error);
-      console.error('Model comparison error:', error);
-      return [];
-    } finally {
-      setLoading(false);
+      const error = err instanceof Error ? err : new Error('Action failed');
+      dispatch({ type: 'ERROR', error });
+      return fallback as T;
     }
-  }, []);
+  };
 
-  // Get recommendation
-  const getRecommendationData = useCallback(async (complexity: TaskComplexity) => {
-    try {
-      setLoading(true);
-      setError(null);
+  const selectModel = useCallback((complexity: TaskComplexity, strategy: SelectionStrategy = SelectionStrategy.OPTIMAL) =>
+    wrapAction(
+      () => selectOptimalModel(complexity, strategy),
+      (result) => dispatch({ type: 'SET_MODEL', result: result as ModelSelectionResult, complexity, strategy }),
+      { model: 'base44', modelName: 'Base44', index: 4, fallback: true } as ModelSelectionResult
+    ), []);
 
-      const recommendation = await getRecommendation(complexity);
-      setRecommendations(recommendation.comparisons || []);
-      setSelectedModel(recommendation.recommendation as ModelSelectionResult);
+  const selectBatch = useCallback((tasks: TaskComplexity[], strategy: SelectionStrategy = SelectionStrategy.OPTIMAL) =>
+    wrapAction(
+      () => selectModelsForTasks(tasks, strategy),
+      (results) => dispatch({ type: 'SET_BATCH', results: results as ModelSelectionResult[] }),
+      []
+    ), []);
 
-      return recommendation;
-    } catch (err) {
-      const error = err instanceof Error ? err : new Error('Unknown error');
-      setError(error);
-      console.error('Recommendation error:', error);
-      return null;
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+  const compareModels = useCallback((complexity: TaskComplexity) =>
+    wrapAction(
+      () => compareModelsForTask(complexity),
+      (data) => dispatch({ type: 'SET_RECOMMENDATIONS', data }),
+      []
+    ), []);
+
+  const getRecommendationData = useCallback((complexity: TaskComplexity) =>
+    wrapAction(
+      () => getRecommendation(complexity),
+      (rec) => {
+        dispatch({ type: 'SET_RECOMMENDATIONS', data: rec.comparisons || [] });
+        dispatch({ type: 'SET_MODEL', result: rec.recommendation as ModelSelectionResult });
+      },
+      null
+    ), []);
 
   return {
+    ...state,
     selectModel,
     selectBatch,
     compareModels,
     getRecommendation: getRecommendationData,
-    selectedModel,
-    loading,
-    error,
-    recommendations,
-    lastComplexity,
-    lastStrategy,
   };
 };
 

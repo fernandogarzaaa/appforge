@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { generateText } from './llm_client.js';
+import { generateText } from './inference_client.js';
 import { generateNewSecurityTest } from './oracle/test_gen.js';
 
 const __filename = fileURLToPath(import.meta.url);

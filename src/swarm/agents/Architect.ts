@@ -1,5 +1,5 @@
-import { generateText } from '../llm_client.js';
-import { broadcastLog } from '../../server.js';
+import { generateText } from '../inference_client.js';
+import { broadcastLog } from '../../logger.js';
 import fs from 'fs';
 import path from 'path';
 

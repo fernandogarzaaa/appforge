@@ -1,5 +1,5 @@
 import { exec } from 'child_process';
-import { broadcastLog } from '../server.js';
+import { broadcastLog } from '../logger.js';
 
 export class GitManager {
     async commitAndPush(message: string, files: string[] = ['.']): Promise<boolean> {

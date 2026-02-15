@@ -1,7 +1,7 @@
 
 import fs from 'fs';
 import path from 'path';
-import { broadcastLog } from '../../server.js';
+import { broadcastLog } from '../../logger.js';
 import { Orchestrator } from '../orchestrator.js';
 
 export interface RefactorIntent {

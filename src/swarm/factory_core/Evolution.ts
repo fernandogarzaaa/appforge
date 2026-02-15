@@ -1,4 +1,4 @@
-import { broadcastLog } from '../../server.js';
+import { broadcastLog } from '../../logger.js';
 import { Spawner } from './Spawner.js';
 import { Orchestrator } from '../orchestrator.js'; // Circular dependency warning handled by architecture
 import { EvolutionProposal } from '../agents/Sentinel.js';

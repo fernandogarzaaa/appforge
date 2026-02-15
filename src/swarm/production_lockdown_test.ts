@@ -1,7 +1,7 @@
 
 import { Orchestrator } from './orchestrator.js';
 import { GitManager } from './git_manager.js';
-import { broadcastLog } from '../server.js';
+import { broadcastLog } from '../logger.js';
 
 async function testProductionLockdown() {
     console.log("🔒 STARTING PRODUCTION LOCKDOWN VERIFICATION 🔒");

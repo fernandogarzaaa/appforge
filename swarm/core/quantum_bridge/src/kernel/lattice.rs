@@ -1,4 +1,4 @@
-#![allow(dead_code)]
+#![allow(dead_code, unused_variables)]
 
 use crate::kernel::truth::{Axiom, TruthAnchor};
 use std::collections::HashMap;

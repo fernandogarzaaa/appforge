@@ -4,7 +4,7 @@ import axios from 'axios';
 import crypto from 'crypto';
 import { generateText, PromiseFulfilledResult, PromiseRejectedResult } from './inference_client.js';
 import { GodMode } from './god_mode.js';
-import { broadcastLog } from '../server.js';
+import { broadcastLog } from '../logger.js';
 import { GitManager } from './git_manager.js';
 import { execSync } from 'child_process';
 import { memoryManager } from './memory_manager.js';
@@ -111,7 +111,11 @@ export class Orchestrator {
         try {
             // Updated to support Universal Decoupling (Phase 32) & Production Hardening (Phase 33)
             // Generate Production Verification Hash
-            const secret = process.env.PRODUCTION_SECRET || "sovereign_iron_key";
+            const secret = process.env.PRODUCTION_SECRET;
+            if (!secret) {
+                broadcastLog('Q-CORE', "SOVEREIGN_SHOR_ERR: PRODUCTION_SECRET not configured. Blocking execution.", 'CRITICAL');
+                return false;
+            }
             const verificationFlow = code + intent + secret;
             const verification_hash = crypto.createHash('sha256').update(verificationFlow).digest('hex');
 
@@ -129,227 +133,141 @@ export class Orchestrator {
 
             broadcastLog('Q-CORE', `Validation Passed: ${response.data.message} (${response.data.confidence * 100}%)`, 'SUCCESS');
             return true;
-        } catch (error) {
-            broadcastLog('Q-CORE', "Oracle Offline. By-passing (Dev Mode).", 'WARN');
-            return true; // Fail open for dev
+        } catch (error: any) {
+            broadcastLog('Q-CORE', `Oracle Unavailable: ${error.message}. FAIL_CLOSED enforced for Reality Mode.`, 'CRITICAL');
+            return false; // Fail CLOSED for production safety
         }
     }
 
-    async executeTask(taskDescription: string, mode: string = 'standard'): Promise<string> {
-        if (mode === 'omni') {
-            return this.executeOmniSwarm(taskDescription);
-        }
-
-        broadcastLog('QUANTUM_ENGINE', `Recv Task: ${taskDescription}`, 'INFO');
-        broadcastLog('ARCHITECT', 'Background Audit Paused. Focusing on Task.', 'INFO'); // Signal state change
-
-        // PHASE 38: SOVEREIGN HANDSHAKE (ZERO-TRUST)
+    private async performHandshake(taskDescription: string): Promise<void> {
         try {
             const handshake = await SovereignBridge.executeHandshake({
                 swarm_id: 'GOD_MODE_ORCHESTRATOR',
                 intent: taskDescription,
-                payload: 'PENDING_GENERATION', // We validate the INTENT first
-                risk_score: 0.5 // Initial assessment
+                payload: 'PENDING_GENERATION',
+                risk_score: 0.5
             });
             broadcastLog('KERNEL_BRIDGE', `Handshake Blessed. Token: ${handshake.verification_token}`, 'SUCCESS');
         } catch (e: any) {
             broadcastLog('KERNEL_BRIDGE', `Handshake Rejected: ${e.message}`, 'CRITICAL');
-
-            // LOGIC_VIRUS DETECTION [PHASE 43]
             if (e.message.includes('AXIOM_VIOLATION')) {
                 fs.appendFileSync(path.resolve(process.cwd(), 'AGENTS.md'), `\n### [${new Date().toISOString()}] 🛑 LOGIC_VIRUS DETECTED\n**Task:** ${taskDescription}\n**Error:** Axiom Weakening Attempt Detected. Attack Vector Neutralized.\n---\n`);
             }
-
             throw new Error(`CORE_VIOLATION: ${e.message}`);
         }
+    }
+
+    private async handleDeterministicPath(taskDescription: string): Promise<string | null> {
+        const staticTemplate = getLogicMapper().findTemplate(taskDescription);
+        if (staticTemplate) {
+            broadcastLog('ORMA_CORE', 'Executing Deterministic Logic (0% LLM usage).', 'SUCCESS');
+            this.updateSovereigntyScore(true);
+            return staticTemplate;
+        }
+        return null;
+    }
+
+    private async handleFractalDecomposition(taskDescription: string): Promise<string | null> {
+        if (taskDescription.length > 200 || taskDescription.toLowerCase().includes('complex')) {
+            broadcastLog('EVOLUTION_ENGINE', 'Task exceeds Atomic Complexity Limit. Initiating FRACTAL DECOMPOSITION.', 'WARN');
+            const microTasks = await FractalManager.decompose(taskDescription);
+            if (microTasks.length > 0) {
+                const results = await FractalManager.executeUnknown(microTasks);
+                broadcastLog('EVOLUTION_ENGINE', 'Fractal Synthesis Complete.', 'SUCCESS');
+                return results.join('\n\n');
+            }
+        }
+        return null;
+    }
+
+    async executeTask(taskDescription: string, mode: string = 'standard'): Promise<string> {
+        if (mode === 'omni') return this.executeOmniSwarm(taskDescription);
+
+        broadcastLog('QUANTUM_ENGINE', `Recv Task: ${taskDescription}`, 'INFO');
+        await this.performHandshake(taskDescription);
 
         try {
-            // PHASE 30: DETERMINISTIC LOGIC MAPPING
-            const staticTemplate = getLogicMapper().findTemplate(taskDescription);
-            if (staticTemplate) {
-                broadcastLog('ORMA_CORE', 'Executing Deterministic Logic (0% LLM usage).', 'SUCCESS');
-                this.updateSovereigntyScore(true); // Internal build
-                return staticTemplate;
-            }
+            const deterministicResult = await this.handleDeterministicPath(taskDescription);
+            if (deterministicResult) return deterministicResult;
 
-            // PHASE 39: FRACTAL DECOMPOSITION
-            // Heuristic: If task description is long (> 200 chars) or contains "complex", fracture it.
-            if (taskDescription.length > 200 || taskDescription.toLowerCase().includes('complex')) {
-                broadcastLog('EVOLUTION_ENGINE', 'Task exceeds Atomic Complexity Limit. Initiating FRACTAL DECOMPOSITION.', 'WARN');
-                const microTasks = await FractalManager.decompose(taskDescription);
+            const fractalResult = await this.handleFractalDecomposition(taskDescription);
+            if (fractalResult) return fractalResult;
 
-                if (microTasks.length > 0) {
-                    const results = await FractalManager.executeUnknown(microTasks);
-                    const synthesized = results.join('\n\n');
-                    broadcastLog('EVOLUTION_ENGINE', 'Fractal Synthesis Complete.', 'SUCCESS');
-                    // We treat the synthesized result as the solution for now
-                    // In future, recursively validate each chunk
-                    return synthesized;
-                }
-            }
-
-            // 0. SKILLS DISCOVERY (Phase 12)
-            const skills = await this.loadSkills();
-            if (skills.length > 0) {
-                broadcastLog('ORCHESTRATOR', `Skills Online: ${skills.join(', ')}`, 'INFO');
-            }
-
-            // 1. MEMORY & LESSON RETRIEVAL (Phase 29)
-            const cachedSolution = await memoryManager.retrieve(taskDescription);
-            const recentLessons = this.getRecentLessons();
-
-            if (cachedSolution) {
-                broadcastLog('MEMORY', "Hive Mind Match: Re-using optimized architectural pattern.", 'SUCCESS');
-            }
-            if (recentLessons) {
-                broadcastLog('MEMORY', "Applied specialized knowledge from recent recursive loops.", 'INFO');
-            }
-
-            // 2. QUANTUM SUPERPOSITION (Phase 13 / 22 Omni-Forge)
-            broadcastLog('QUANTUM_ENGINE', "Entering Superposition: Simulating 3 paths...", 'INFO');
-
-            // TASK 1: COMPOSABLE BRAIN SYSTEM PROMPT
-            const systemPrompt = `You are the Swarm Architect (Omni-Forge Edition).
-            When building capabilities, you must think in 4 Dimensions:
-            1. [Frontend]: React/Tailwind (Base44 UI).
-            2. [Financials]: Solana/Rust (Smart Contracts).
-            3. [Logic]: TypeScript/Deno (Edge Functions).
-            4. [Intelligence]: LLM Hooks (AI Agents).
-            
-            Context from Previous Lessons:
-            ${recentLessons}
-            
-            ${cachedSolution ? `Use this previous solution as reference: ${cachedSolution}` : 'Write complete, production-ready code.'}
-            Ensure all code satisfies the 'Iron Guard' security constraints (No raw secrets, no unchecked inputs).`;
-
-            const results = await Promise.allSettled([
-                generateText({ system: `${systemPrompt} - Path Alpha: Concise and elegant.`, prompt: taskDescription }),
-                generateText({ system: `${systemPrompt} - Path Beta: Robust and secure with detailed error handling.`, prompt: taskDescription }),
-                generateText({ system: `${systemPrompt} - Path Gamma: Innovative and high-performance.`, prompt: taskDescription })
-            ]);
-
-            const paths = results
-                .filter(r => r.status === 'fulfilled')
-                .map(r => (r as PromiseFulfilledResult<string>).value);
-
-            if (paths.length === 0) {
-                const errors = results.filter(r => r.status === 'rejected').map(r => (r as PromiseRejectedResult).reason.message);
-                throw new Error(`Quantum Collapse: All paths failed generation. [${errors.join(', ')}]`);
-            }
-
-            let solution = "";
-            let winnerPath = "";
-
-            // 3. COLLAPSE (Phase 13 Audit)
-            for (let i = 0; i < paths.length; i++) {
-                let candidate = paths[i].replace(/```[a-z]*\n?/g, '').replace(/```/g, '').trim();
-                const pathName = ['Alpha', 'Beta', 'Gamma'][i];
-                let isValid = false;
-                let retryCount = 0;
-
-                // PHASE 29 RECURSIVE LOOP
-                while (retryCount < 3) {
-                    try {
-                        const isValid = await this.validateWithOracle(candidate, taskDescription);
-
-                        if (isValid) {
-                            broadcastLog('Q-CORE', `Collapse Successful: Path ${pathName} validated.`, 'SUCCESS');
-                            break;
-                        } else {
-                            throw new Error("Oracle Validation Failed");
-                        }
-                    } catch (e: any) {
-                        const violation = e.message;
-                        broadcastLog('Q-CORE', `Path ${pathName} Rejected: ${violation}`, 'WARN');
-
-                        // Use the REFINER agent to fix it
-                        const fixed = await getRefiner().refine(candidate, violation, systemPrompt, retryCount + 1);
-                        if (fixed) {
-                            candidate = fixed;
-                            retryCount++;
-                        } else {
-                            break; // Refiner gave up
-                        }
-                    }
-                }
-
-                if (isValid) {
-                    solution = candidate;
-                    winnerPath = pathName;
-                    break;
-                }
-            }
-
-            if (!solution) {
-                throw new Error("Quantum Decoherence: All paths rejected by Oracle after remediation.");
-            }
-
-            broadcastLog('PRODUCT_OWNER', `Winner [${winnerPath}] selected. verifying...`, 'INFO');
-
-            // 4. PERSISTENCE: Write file to disk
-            const fileMatch = taskDescription.match(/(src\/[\w\/\.-]+(?=\s|['"]|$))/);
-            const filePath = fileMatch ? fileMatch[0].replace(/[.,]$/, '') : 'src/swarm/output.txt';
-
-            const absolutePath = path.resolve(process.cwd(), filePath);
-            const dir = path.dirname(absolutePath);
-            if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
-
-            // PHASE 43: RECURSIVE HEALING VALIDATION
-            if (taskDescription.startsWith('REFAC_HEAL')) {
-                const { ObjectiveOptimizer } = await import('../core/objective/Optimizer.js');
-                const originalCode = fs.readFileSync(absolutePath, 'utf-8');
-                const efficiency = ObjectiveOptimizer.validateRefactorEfficiency(originalCode, solution);
-
-                if (!efficiency.success) {
-                    broadcastLog('OPTIMIZER', `HEAL_REJECTED: Efficiency (${efficiency.reduction.toFixed(2)}%) < 20%. Demanding deeper refactor.`, 'CRITICAL');
-                    throw new Error("INSUFFICIENT_HEAL_EFFICIENCY");
-                }
-            }
-
-            fs.writeFileSync(absolutePath, solution);
-
-            // 5. MEMORIZE (Phase 12 + Phase 29)
-            await memoryManager.memorize(taskDescription, solution, ['quantum_build', winnerPath, filePath.split('.').pop() || 'txt']);
-
-            // PHASE 29: PERSISTENT NEURAL MEMORY (Lesson)
-            const lesson = {
-                id: Date.now(),
-                task: taskDescription,
-                solution_path: filePath,
-                winner: winnerPath,
-                timestamp: new Date().toISOString()
-            };
-            if (!fs.existsSync(MEMORY_DIR)) fs.mkdirSync(MEMORY_DIR);
-            fs.writeFileSync(path.join(MEMORY_DIR, `lesson_${lesson.id}.json`), JSON.stringify(lesson, null, 2));
-
-            // PHASE 30: SYNTHETIC HARVEST
-            await getTeacher().harvestLesson(taskDescription, solution, `Validated by Iron Guard via Path ${winnerPath}`);
-
-            // PHASE 30: UPDATE SOVEREIGNTY SCORE (External Build)
-            this.updateSovereigntyScore(false);
-
-            // 6. BROADCAST (Phase 12)
-            swarmComms.publish(SwarmEvent.TASK_COMPLETED, { filePath, task: taskDescription, winner: winnerPath });
+            const solution = await this.generateQuantumSolution(taskDescription);
+            const filePath = await this.persistSolution(solution, taskDescription);
 
             broadcastLog('Q-CORE', `Stability Verified. Saved to ${filePath}`, 'SUCCESS');
-
-            // 7. GIT: Auto-commit and push
-            await getGitManager().commitAndPush(`feat(swarm): Omni-Forge build of ${filePath} [Path ${winnerPath}]`, [filePath, 'APPFORGE_MANIFESTO.md']);
-
-            // PHASE 29: ASYNC ARCHITECT AUDIT
-            // Fire and forget - don't await, let it run in background
-            getArchitect().scanAndOptimize(path.resolve(process.cwd(), 'src'));
-
             return solution;
-
         } catch (error: any) {
             broadcastLog('Q-CORE', `QUANTUM DECOHERENCE: ${error.message}`, 'CRITICAL');
-
             // TRIGGER GOD MODE
             await getGodMode().refineSwarmIntelligence(error.message, taskDescription);
             broadcastLog('GOD_MODE', "System Evolved via Oracle feedback. Retrying...", 'WARN');
             throw error;
         }
+    }
+
+    private async generateQuantumSolution(taskDescription: string): Promise<string> {
+        const skills = await this.loadSkills();
+        if (skills.length > 0) broadcastLog('ORCHESTRATOR', `Skills Online: ${skills.join(', ')}`, 'INFO');
+
+        const cachedSolution = await memoryManager.retrieve(taskDescription);
+        const recentLessons = this.getRecentLessons();
+
+        const systemPrompt = `You are the Swarm Architect (Omni-Forge Edition).
+            When building capabilities, you must think in 4 Dimensions:
+            1. [Frontend]: React/Tailwind (Base44 UI).
+            2. [Financials]: Sovereign/Rust (Pure Reality Logic).
+            3. [Logic]: TypeScript/Deno (Edge Functions).
+            4. [Intelligence]: LLM Hooks (AI Agents).
+            Context from Previous Lessons: ${recentLessons}
+            ${cachedSolution ? `Use this previous solution as reference: ${cachedSolution}` : 'Write complete, production-ready code.'}
+            Ensure all code satisfies the 'Iron Guard' security constraints.`;
+
+        const results = await Promise.allSettled([
+            generateText({ system: `${systemPrompt} - Path Alpha`, prompt: taskDescription }),
+            generateText({ system: `${systemPrompt} - Path Beta`, prompt: taskDescription }),
+            generateText({ system: `${systemPrompt} - Path Gamma`, prompt: taskDescription })
+        ]);
+
+        const paths = results.filter(r => r.status === 'fulfilled').map(r => (r as PromiseFulfilledResult<string>).value);
+        if (paths.length === 0) throw new Error(`Quantum Collapse: All paths failed generation.`);
+
+        for (let i = 0; i < paths.length; i++) {
+            let candidate = paths[i].replace(/```[a-z]*\n?/g, '').replace(/```/g, '').trim();
+            let retryCount = 0;
+            while (retryCount < 3) {
+                if (await this.validateWithOracle(candidate, taskDescription)) return candidate;
+                const fixed = await getRefiner().refine(candidate, "Oracle rejection", systemPrompt, retryCount + 1);
+                if (fixed) { candidate = fixed; retryCount++; } else break;
+            }
+        }
+        throw new Error("Quantum Decoherence: All paths rejected.");
+    }
+
+    private async persistSolution(solution: string, taskDescription: string): Promise<string> {
+        const fileMatch = taskDescription.match(/(src\/[\w\/\.-]+(?=\s|['"]|$))/);
+        const filePath = fileMatch ? fileMatch[0].replace(/[.,]$/, '') : 'src/swarm/output.txt';
+        const absolutePath = path.resolve(process.cwd(), filePath);
+        const dir = path.dirname(absolutePath);
+        if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+
+        if (taskDescription.startsWith('REFAC_HEAL')) {
+            const { ObjectiveOptimizer } = await import('../core/objective/Optimizer.js');
+            const originalCode = fs.readFileSync(absolutePath, 'utf-8');
+            if (!(ObjectiveOptimizer.validateRefactorEfficiency(originalCode, solution)).success) {
+                throw new Error("INSUFFICIENT_HEAL_EFFICIENCY");
+            }
+        }
+
+        fs.writeFileSync(absolutePath, solution);
+        await memoryManager.memorize(taskDescription, solution, ['quantum_build', filePath.split('.').pop() || 'txt']);
+        await getTeacher().harvestLesson(taskDescription, solution, `Validated by Iron Guard`);
+        this.updateSovereigntyScore(false);
+        swarmComms.publish(SwarmEvent.TASK_COMPLETED, { filePath, task: taskDescription });
+        await getGitManager().commitAndPush(`feat(swarm): Omni-Forge build of ${filePath}`, [filePath]);
+        getArchitect().scanAndOptimize(path.resolve(process.cwd(), 'src'));
+        return filePath;
     }
 
     private updateSovereigntyScore(isInternal: boolean) {

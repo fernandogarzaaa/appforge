@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import { generateText } from './llm_client';
+import { generateText } from './inference_client.js';
 
 const MEMORY_DIR = path.resolve(process.cwd(), 'src/swarm/memory');
 

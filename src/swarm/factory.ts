@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { runSwarmTask } from './orchestrator.js';
-import { broadcastLog } from '../server.js';
+import { broadcastLog } from '../logger.js';
 import { swarmComms, SwarmEvent } from './comms.js';
 
 const __filename = fileURLToPath(import.meta.url);

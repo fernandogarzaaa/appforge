@@ -1,5 +1,5 @@
 import { AgentPersona } from './Spawner.js';
-import { broadcastLog } from '../../server.js';
+import { broadcastLog } from '../../logger.js';
 
 export interface WorldState {
     intent: string;
