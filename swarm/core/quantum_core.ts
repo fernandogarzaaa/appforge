@@ -1,13 +1,18 @@
 import QuantumEngine from '../../universal_quantum_dist/index.js';
 import * as fs from 'fs/promises';
+import { fileURLToPath } from 'url';
 import path from 'path';
 import { geminiAdapter } from './gemini_skill_adapter.js';
 import { secureRandom, secureRandomRange } from './secure_entropy.js';
 import crypto from 'crypto';
 
-const STATE_FILE = path.join(process.cwd(), 'src/data/quantum_state.json');
-const ORACLE_STATE_FILE = path.join(process.cwd(), 'src/data/quantum_oracle_state.json');
-const COHERENCE_STATE_FILE = path.join(process.cwd(), 'src/data/quantum_coherence_state.json');
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const PROJECT_ROOT = path.resolve(__dirname, '../..');
+
+const STATE_FILE = path.join(PROJECT_ROOT, 'src/data/quantum_state.json');
+const ORACLE_STATE_FILE = path.join(PROJECT_ROOT, 'src/data/quantum_oracle_state.json');
+const COHERENCE_STATE_FILE = path.join(PROJECT_ROOT, 'src/data/quantum_coherence_state.json');
 
 /**
  * QUANTUM SWARM CORE

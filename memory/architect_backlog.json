@@ -69,7 +69,7 @@
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\functions\\gitWorkflow.ts",
     "metric": "SECURITY",
     "timestamp": "2026-02-14T18:44:57.419Z",
-    "status": "IN_PROGRESS"
+    "status": "FAILED"
   },
   {
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\functions\\gitWorkflow.ts",
@@ -339,7 +339,7 @@
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\quantum-core\\pkg\\quantum_core.d.ts",
     "metric": "COMPLEXITY",
     "timestamp": "2026-02-14T18:44:57.535Z",
-    "status": "IN_PROGRESS"
+    "status": "FAILED"
   },
   {
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\services\\abTestingService.ts",
@@ -351,7 +351,7 @@
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\services\\analyticsDashboard.ts",
     "metric": "SECURITY",
     "timestamp": "2026-02-14T18:44:57.544Z",
-    "status": "IN_PROGRESS"
+    "status": "FAILED"
   },
   {
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\services\\analyticsDashboard.ts",
@@ -381,7 +381,7 @@
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\services\\databaseOptimization.ts",
     "metric": "COMPLEXITY",
     "timestamp": "2026-02-14T18:44:57.556Z",
-    "status": "IN_PROGRESS"
+    "status": "FAILED"
   },
   {
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\services\\ddosProtection.ts",
@@ -399,7 +399,7 @@
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\services\\rateLimiter.ts",
     "metric": "COMPLEXITY",
     "timestamp": "2026-02-14T18:44:57.561Z",
-    "status": "FAILED"
+    "status": "IN_PROGRESS"
   },
   {
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\services\\redisCache.ts",
@@ -417,7 +417,7 @@
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\services\\webhooksManager.ts",
     "metric": "SECURITY",
     "timestamp": "2026-02-14T18:44:57.564Z",
-    "status": "IN_PROGRESS"
+    "status": "FAILED"
   },
   {
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\services\\webhooksManager.ts",
@@ -429,7 +429,7 @@
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\store\\useCausalStore.ts",
     "metric": "SECURITY",
     "timestamp": "2026-02-14T18:44:57.566Z",
-    "status": "IN_PROGRESS"
+    "status": "FAILED"
   },
   {
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\store\\useCausalStore.ts",
