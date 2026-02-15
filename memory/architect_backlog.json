@@ -291,7 +291,7 @@
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\lib\\zeroConfigDevOps.ts",
     "metric": "COMPLEXITY",
     "timestamp": "2026-02-14T18:44:57.523Z",
-    "status": "IN_PROGRESS"
+    "status": "FAILED"
   },
   {
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\lib\\__tests__\\holographicConsensus.test.ts",
@@ -303,13 +303,13 @@
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\lib\\__tests__\\quantumRenormalization.test.ts",
     "metric": "COMPLEXITY",
     "timestamp": "2026-02-14T18:44:57.526Z",
-    "status": "IN_PROGRESS"
+    "status": "FAILED"
   },
   {
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\lib\\__tests__\\quantumTunneling.test.ts",
     "metric": "COMPLEXITY",
     "timestamp": "2026-02-14T18:44:57.528Z",
-    "status": "FAILED"
+    "status": "IN_PROGRESS"
   },
   {
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\lib\\__tests__\\quantumZeno.test.ts",
@@ -321,13 +321,13 @@
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\lib\\__tests__\\wasmLoader.test.ts",
     "metric": "COMPLEXITY",
     "timestamp": "2026-02-14T18:44:57.531Z",
-    "status": "FAILED"
+    "status": "IN_PROGRESS"
   },
   {
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\middleware\\rateLimiter.ts",
     "metric": "SECURITY",
     "timestamp": "2026-02-14T18:44:57.532Z",
-    "status": "IN_PROGRESS"
+    "status": "FAILED"
   },
   {
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\middleware\\rateLimiter.ts",
@@ -363,13 +363,13 @@
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\services\\complianceManager.ts",
     "metric": "SECURITY",
     "timestamp": "2026-02-14T18:44:57.548Z",
-    "status": "IN_PROGRESS"
+    "status": "FAILED"
   },
   {
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\services\\complianceManager.ts",
     "metric": "COMPLEXITY",
     "timestamp": "2026-02-14T18:44:57.552Z",
-    "status": "IN_PROGRESS"
+    "status": "FAILED"
   },
   {
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\services\\databaseOptimization.ts",
@@ -381,7 +381,7 @@
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\services\\databaseOptimization.ts",
     "metric": "COMPLEXITY",
     "timestamp": "2026-02-14T18:44:57.556Z",
-    "status": "FAILED"
+    "status": "IN_PROGRESS"
   },
   {
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\services\\ddosProtection.ts",
@@ -399,7 +399,7 @@
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\services\\rateLimiter.ts",
     "metric": "COMPLEXITY",
     "timestamp": "2026-02-14T18:44:57.561Z",
-    "status": "IN_PROGRESS"
+    "status": "FAILED"
   },
   {
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\services\\redisCache.ts",
@@ -411,37 +411,37 @@
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\services\\redisCache.ts",
     "metric": "COMPLEXITY",
     "timestamp": "2026-02-14T18:44:57.563Z",
-    "status": "FAILED"
+    "status": "IN_PROGRESS"
   },
   {
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\services\\webhooksManager.ts",
     "metric": "SECURITY",
     "timestamp": "2026-02-14T18:44:57.564Z",
-    "status": "FAILED"
+    "status": "IN_PROGRESS"
   },
   {
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\services\\webhooksManager.ts",
     "metric": "COMPLEXITY",
     "timestamp": "2026-02-14T18:44:57.565Z",
-    "status": "FAILED"
+    "status": "IN_PROGRESS"
   },
   {
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\store\\useCausalStore.ts",
     "metric": "SECURITY",
     "timestamp": "2026-02-14T18:44:57.566Z",
-    "status": "IN_PROGRESS"
+    "status": "FAILED"
   },
   {
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\store\\useCausalStore.ts",
     "metric": "COMPLEXITY",
     "timestamp": "2026-02-14T18:44:57.567Z",
-    "status": "IN_PROGRESS"
+    "status": "FAILED"
   },
   {
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\swarm\\orchestrator.ts",
     "metric": "SECURITY",
     "timestamp": "2026-02-14T18:44:57.568Z",
-    "status": "FAILED"
+    "status": "IN_PROGRESS"
   },
   {
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\swarm\\orchestrator.ts",
