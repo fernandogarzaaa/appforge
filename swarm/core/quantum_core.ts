@@ -3,6 +3,7 @@ import * as fs from 'fs/promises';
 import path from 'path';
 import { geminiAdapter } from './gemini_skill_adapter.js';
 import { secureRandom, secureRandomRange } from './secure_entropy.js';
+import crypto from 'crypto';
 
 const STATE_FILE = path.join(process.cwd(), 'src/data/quantum_state.json');
 const ORACLE_STATE_FILE = path.join(process.cwd(), 'src/data/quantum_oracle_state.json');
@@ -172,30 +173,8 @@ export class QuantumSwarmCore {
         await this.ready;
         console.log(`🔮 Consulting Oracle (v3.0): ${question}`);
 
-        // Try Gemini 3 High-Fidelity Consultation first
-        try {
-            const geminiResult = await geminiAdapter.chat({
-                system: `You are the Sovereign Quantum Oracle. Provide high-fidelity guidance on the following decision.\nOptions: ${options.join(', ')}\nCriteria: ${criteria.join(', ')}`,
-                user: question,
-                usePro: true
-            });
-
-            if (geminiResult && !geminiResult.text.includes('[Gemini-Sim]')) {
-                console.log(`   ✨ Gemini Oracle recommends: ${geminiResult.text.substring(0, 100)}...`);
-                // Match recommendation to one of the options
-                const recommendation = options.find(o => geminiResult.text.includes(o)) || options[0];
-
-                return {
-                    recommendation,
-                    confidence: 0.98,
-                    alternatives: options.filter(o => o !== recommendation),
-                    predictionId: `G3-${Date.now()}`,
-                    reasoning: geminiResult.text
-                };
-            }
-        } catch (e) {
-            console.warn('   ⚠️ Gemini Oracle offline, falling back to local simulation.');
-        }
+        // SOVEREIGN PURGE: Gemini Oracle removed to ensure 100% local isolation.
+        // Falling back directly to local simulation/knowledge base.
 
         const result = await this.engine.quantumSolve(question, options, criteria);
         await this.persistEngineState();
@@ -344,8 +323,15 @@ export class QuantumSwarmCore {
             corrections.push('Decision is null - applying quantum fallback');
         }
 
-        if (context.priority === 'critical' && !decision.verified) {
-            corrections.push('Critical decision lacks verification - adding quantum checksum');
+        if (context.priority === 'critical') {
+            const secret = process.env.PRODUCTION_SECRET || 'SOVEREIGN_RESERVE';
+            const expectedChecksum = crypto.createHash('sha256')
+                .update(decision.intent + JSON.stringify(decision.params) + secret)
+                .digest('hex');
+
+            if (decision.checksum !== expectedChecksum) {
+                corrections.push('VIO_CHECKSUM: Decision checksum mismatch or missing. Action rejected.');
+            }
         }
 
         return {

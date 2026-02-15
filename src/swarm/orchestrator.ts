@@ -20,6 +20,7 @@ import { Sentinel, EvolutionProposal } from './agents/Sentinel.js';
 import { Evolution } from './factory_core/Evolution.js';
 import { SovereignBridge } from '../core/Bridge.js'; // Phase 38: Zero-Trust Bridge
 import { FractalManager } from './core/Fractal.js'; // Phase 39: Recursive Evolution
+import quantumCore from '../../swarm/core/quantum_core.js';
 
 const SKILLS_DIR = path.resolve(process.cwd(), 'src/swarm/skills');
 const QCORE_PATH = process.env.QCORE_PATH || path.resolve(process.cwd(), 'qcore.exe');
@@ -54,6 +55,9 @@ export class Orchestrator {
     async approveEvolution(proposalId: string): Promise<string> {
         const proposal = getSentinel().approveProposal(proposalId);
         if (!proposal) throw new Error("Proposal not found");
+
+        const verified = await this.verifyExecutiveAction('APPROVE_EVOLUTION', { proposalId });
+        if (!verified) throw new Error("SECURITY_ALERT: Evolution approval rejected by Truth Anchor.");
 
         return await Evolution.evolve(proposal, this);
     }
@@ -105,6 +109,24 @@ export class Orchestrator {
         await Spawner.distillDNA(taskDescription, swarm);
 
         return unifiedPlan;
+    }
+
+    private async verifyExecutiveAction(intent: string, params: any): Promise<boolean> {
+        const secret = process.env.PRODUCTION_SECRET || 'SOVEREIGN_RESERVE';
+        const checksum = crypto.createHash('sha256')
+            .update(intent + JSON.stringify(params) + secret)
+            .digest('hex');
+
+        const decision = { intent, params, checksum, verified: true };
+        const validation = await quantumCore.validateDecision(decision, { priority: 'critical' });
+
+        if (!validation.valid) {
+            broadcastLog('Q-CORE', `DECISION_REJECTED: ${validation.corrections.join(', ')}`, 'CRITICAL');
+            return false;
+        }
+
+        broadcastLog('Q-CORE', `Decision Verified: ${intent} [${checksum.substring(0, 8)}]`, 'SUCCESS');
+        return true;
     }
 
     private async validateWithOracle(code: string, intent: string): Promise<boolean> {
@@ -184,6 +206,11 @@ export class Orchestrator {
         if (mode === 'omni') return this.executeOmniSwarm(taskDescription);
 
         broadcastLog('QUANTUM_ENGINE', `Recv Task: ${taskDescription}`, 'INFO');
+
+        // Hardened Decision Verification
+        const verified = await this.verifyExecutiveAction('EXECUTE_TASK', { taskDescription, mode });
+        if (!verified) throw new Error("SECURITY_ALERT: Task execution rejected by Verification Gate.");
+
         await this.performHandshake(taskDescription);
 
         try {

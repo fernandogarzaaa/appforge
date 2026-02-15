@@ -8,16 +8,10 @@
  * 4. Renormalization - System criticality detection
  */
 
-import { 
-  executeHolographicConsensus,
-  executeSecurityAnalysis,
-  executeStabilityMonitoring,
-  detectCriticality,
-  executeFullQuantumAnalysis
-} from '@/lib/aiRouter';
-import { tunneling } from '@/lib/quantumTunneling';
-import { zeno } from '@/lib/quantumZeno';
-import { renormalization } from '@/lib/quantumRenormalization';
+import { executeHolographicConsensus } from './quantum/Consensus';
+import { executeSecurityAnalysis } from './quantum/Tunneling';
+import { executeStabilityMonitoring } from './quantum/Stability';
+import { detectCriticality } from './quantum/Criticality';
 
 // ============================================
 // UNIFIED QUANTUM SYSTEM
@@ -60,14 +54,14 @@ export class UnifiedQuantumSystem {
   async analyzeAISystem(params: {
     // For Holographic Consensus
     modelResponses?: { gpt4: string; claude: string; gemini: string };
-    
+
     // For Security Analysis
     securityAsset?: { name: string; barrier: number; estimatedAttackLevel: number };
-    
+
     // For Stability Monitoring
     testFrequency?: number;
     timeSinceLastTest?: number;
-    
+
     // For Criticality Detection
     systemMetrics?: number[];
   }): Promise<UnifiedQuantumMetrics> {
@@ -85,7 +79,7 @@ export class UnifiedQuantumSystem {
           params.modelResponses.claude,
           params.modelResponses.gemini
         );
-        
+
         if (consensusData.quality === 'poor') {
           alerts.push('⚠️ AI Consensus: Low quality - models disagree significantly');
           recommendations.push('Re-prompt models with more specific context');
@@ -99,7 +93,7 @@ export class UnifiedQuantumSystem {
     let securityData = null;
     if (params.securityAsset) {
       securityData = await executeSecurityAnalysis(params.securityAsset);
-      
+
       if (securityData.riskLevel !== 'LOW') {
         alerts.push(`🔐 Security: ${securityData.riskLevel} risk detected`);
         recommendations.push(securityData.recommendation);
@@ -113,7 +107,7 @@ export class UnifiedQuantumSystem {
         params.testFrequency,
         params.timeSinceLastTest
       );
-      
+
       if (stabilityData.status === 'CRITICAL' || stabilityData.status === 'WARNING') {
         alerts.push(`📊 Code Stability: ${stabilityData.status}`);
         recommendations.push(stabilityData.recommendation);
@@ -124,7 +118,7 @@ export class UnifiedQuantumSystem {
     let criticalityData = null;
     if (params.systemMetrics) {
       criticalityData = await detectCriticality(params.systemMetrics);
-      
+
       if (criticalityData.criticality > 0.6) {
         alerts.push(`🌊 System Criticality: ${criticalityData.systemHealth}`);
         recommendations.push('System approaching critical phase transition');
@@ -248,7 +242,7 @@ export class UnifiedQuantumSystem {
     topRecommendations: string[];
   } {
     const totalAnalyses = this.analysisHistory.length;
-    
+
     const healthScores = {
       EXCELLENT: 100,
       GOOD: 80,
@@ -318,7 +312,7 @@ export async function comprehensiveHealthCheck() {
   console.log(`Overall: ${metrics.overallHealth}`);
   console.log(`Alerts: ${metrics.alerts.length}`);
   metrics.alerts.forEach(alert => console.log(`  ${alert}`));
-  
+
   return metrics;
 }
 
@@ -344,7 +338,7 @@ export function startUnifiedMonitoring(
 
     console.log(`\n⏱️  [${new Date().toLocaleTimeString()}] Unified Quantum Monitor`);
     console.log(`Health: ${metrics.overallHealth}`);
-    
+
     if (metrics.alerts.length > 0) {
       console.log('🚨 ALERTS:');
       metrics.alerts.forEach(alert => console.log(`  ${alert}`));
