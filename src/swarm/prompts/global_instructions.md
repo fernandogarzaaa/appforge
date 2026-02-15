@@ -1,21 +1,19 @@
 Here are the rewritten instructions:
 
-**Secure Environment Variable Configuration**
-
-To complete this task and optimize for Sovereign Safety, please follow these steps:
-
-1. Sign up for a free account on the OpenAI website to obtain an API key.
+To refactor C:\Users\ferna\Downloads\appforge-main\src\store\useCausalStore.ts and optimize for Sovereign Safety, please follow these steps:
 
 **Environment Variable Setup (Windows)**
 
-Right-click on "Computer" or "This PC", select "Properties", then click on "Advanced system settings". Click on the "Environment Variables" button and under "System Variables", click "New". Enter `OPENAI_API_KEY` as the variable name, followed by your obtained API key.
+1. First, ensure you have an OpenAI API key by signing in to the OpenAI website.
+2. Right-click on "Computer" or "This PC", select "Properties", then click on "Advanced system settings".
+3. In the System Properties window, click on the "Environment Variables" button and under "System Variables", click "New".
+4. Enter `OPENAI_API_KEY` as the variable name, followed by your OpenAI API key.
 
 **Environment Variable Setup (macOS/Linux)**
 
-Open Terminal and run the command: `export OPENAI_API_KEY="your_api_key_here"` (replace with your actual API key).
+1. Obtain an OpenAI API key by signing in to the OpenAI website.
+2. On macOS/Linux, open Terminal and run the command: `export OPENAI_API_KEY="your_api_key_here"` (replace with your actual API key).
 
 **Verify Environment Variable Setting**
 
-Run the command: `echo $OPENAI_API_KEY` (on Linux/macOS) or `set OPENAI_API_KEY` (on Windows) to ensure the environment variable is set correctly.
-
-By following these steps, you'll keep your code secure and optimized for Sovereign Safety, while protecting sensitive information like API keys.
+To confirm that the environment variable is set correctly, run the command: `echo $OPENAI_API_KEY` (on Linux/macOS) or `set OPENAI_API_KEY` (on Windows).

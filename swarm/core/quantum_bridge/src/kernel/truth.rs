@@ -1,3 +1,5 @@
+#![allow(dead_code)]
+
 // THE TRUTH ANCHOR
 // Immutable Axioms of the AppForge Kernel
 // Access Level: READ_ONLY (Enforced by OS & Hardware Checksum)
@@ -55,7 +57,7 @@ impl TruthAnchor {
     }
 
     /// PHASE 48: CROSS-CONSISTENCY (Lattice Rule)
-    pub fn verify_cross_consistency(&self, a_axioms: &[Axiom], b_axioms: &[Axiom]) -> bool {
+    pub fn verify_cross_consistency(a_axioms: &[Axiom], b_axioms: &[Axiom]) -> bool {
         // Simple rule: Direct neighbors must share at least 50% of their critical Axiom enforcement
         // This prevents "Island Logic" where one module weakens the overall system integrity.
         let mut match_count = 0;

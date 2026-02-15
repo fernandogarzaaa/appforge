@@ -143,6 +143,8 @@ quantum_verification_report.json
 reports/
 logs/
 data/
+!src/data/quantum_state.json
+!src/data/quantum_predictions.json
 playwright-report/
 
 swarm/core/quantum_bridge/target/

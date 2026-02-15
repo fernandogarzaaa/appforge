@@ -56,10 +56,7 @@ impl LatticeController {
                 for neighbor_id in &node.neighbors {
                     if let Some(neighbor) = nodes.get(neighbor_id) {
                         // Check if neighbor violates axioms relative to this node
-                        if !self
-                            .anchor
-                            .verify_cross_consistency(&node.axioms, &neighbor.axioms)
-                        {
+                        if !TruthAnchor::verify_cross_consistency(&node.axioms, &neighbor.axioms) {
                             consistent = false;
                             _bad_neighbor = Some(neighbor_id.clone());
                             break;
