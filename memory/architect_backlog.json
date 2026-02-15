@@ -69,7 +69,7 @@
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\functions\\gitWorkflow.ts",
     "metric": "SECURITY",
     "timestamp": "2026-02-14T18:44:57.419Z",
-    "status": "FAILED"
+    "status": "IN_PROGRESS"
   },
   {
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\functions\\gitWorkflow.ts",
@@ -375,13 +375,13 @@
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\services\\databaseOptimization.ts",
     "metric": "SECURITY",
     "timestamp": "2026-02-14T18:44:57.554Z",
-    "status": "FAILED"
+    "status": "IN_PROGRESS"
   },
   {
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\services\\databaseOptimization.ts",
     "metric": "COMPLEXITY",
     "timestamp": "2026-02-14T18:44:57.556Z",
-    "status": "IN_PROGRESS"
+    "status": "FAILED"
   },
   {
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\services\\ddosProtection.ts",
@@ -393,7 +393,7 @@
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\services\\ddosProtection.ts",
     "metric": "COMPLEXITY",
     "timestamp": "2026-02-14T18:44:57.559Z",
-    "status": "FAILED"
+    "status": "IN_PROGRESS"
   },
   {
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\services\\rateLimiter.ts",
@@ -411,7 +411,7 @@
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\services\\redisCache.ts",
     "metric": "COMPLEXITY",
     "timestamp": "2026-02-14T18:44:57.563Z",
-    "status": "IN_PROGRESS"
+    "status": "FAILED"
   },
   {
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\services\\webhooksManager.ts",
@@ -435,13 +435,13 @@
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\store\\useCausalStore.ts",
     "metric": "COMPLEXITY",
     "timestamp": "2026-02-14T18:44:57.567Z",
-    "status": "FAILED"
+    "status": "IN_PROGRESS"
   },
   {
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\swarm\\orchestrator.ts",
     "metric": "SECURITY",
     "timestamp": "2026-02-14T18:44:57.568Z",
-    "status": "IN_PROGRESS"
+    "status": "FAILED"
   },
   {
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\swarm\\orchestrator.ts",

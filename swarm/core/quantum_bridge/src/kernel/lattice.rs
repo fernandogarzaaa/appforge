@@ -1,3 +1,5 @@
+#![allow(dead_code)]
+
 use crate::kernel::truth::{Axiom, TruthAnchor};
 use std::collections::HashMap;
 use std::sync::{Arc, Mutex};
@@ -48,7 +50,7 @@ impl LatticeController {
         let node_ids: Vec<String> = nodes.keys().cloned().collect();
 
         for id in node_ids {
-            let (is_consistent, neighbor_inconsistency) = {
+            let (is_consistent, _neighbor_inconsistency) = {
                 let node = nodes.get(&id).unwrap();
                 let mut consistent = true;
                 let mut _bad_neighbor = None;

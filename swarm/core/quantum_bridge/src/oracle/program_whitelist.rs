@@ -1,12 +1,14 @@
+#![allow(dead_code)]
+
 use std::collections::HashMap;
 
 pub fn get_allowed_programs() -> HashMap<String, String> {
     let mut allowed = HashMap::new();
-    
+
     // PHASE 53: SOVEREIGN MODULE WHITELIST
     // Purged all legacy Solana program IDs.
     // Tracking only internal Sovereign Kernel modules and verified bridges.
-    
+
     allowed.insert(
         "SOV_KERNEL_CORE".to_string(),
         "Sovereign Kernel v1.0".to_string(),
