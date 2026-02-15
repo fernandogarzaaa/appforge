@@ -24,18 +24,19 @@ export default function PermissionManager() {
   const [selectedPermission, setSelectedPermission] = useState('');
   const queryClient = useQueryClient();
 
-  const { data: permissions = [], isLoading } = useQuery({
+  const { data: permissions = [], isLoading: _permissionsLoading } = useQuery({
     queryKey: ['permissions'],
     queryFn: () => base44.entities.UserPermission.list('-created_date'),
   });
 
-  const { data: currentUser, isLoading } = useQuery({
+  const { data: currentUser, isLoading: _userLoading } = useQuery({
     queryKey: ['currentUser'],
     queryFn: () => base44.auth.me(),
   });
 
   const grantPermissionMutation = useMutation({
-    mutationFn: async ({ userEmail, permission }) => {
+    mutationFn: async (vars) => {
+      const { userEmail, permission } = vars;
       return base44.entities.UserPermission.create({
         user_email: userEmail,
         permission: permission,

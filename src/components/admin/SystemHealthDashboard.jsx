@@ -8,12 +8,12 @@ import { Activity, AlertCircle, Zap, TrendingUp } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 
 export default function SystemHealthDashboard() {
-  const { data: healthMetrics, isLoading } = useQuery({
+  const { data: healthMetrics, isLoading: healthLoading } = useQuery({
     queryKey: ['system-health-metrics'],
     queryFn: () => base44.entities.SystemHealthMetric.list('-timestamp', 100)
   });
 
-  const { data: performanceMetrics, isLoading } = useQuery({
+  const { data: performanceMetrics, isLoading: perfLoading } = useQuery({
     queryKey: ['model-performance-metrics'],
     queryFn: () => base44.entities.ModelPerformanceMetric.list('-timestamp', 100)
   });
@@ -255,8 +255,8 @@ export default function SystemHealthDashboard() {
                 </div>
                 <div>
                   <p className="text-xs text-slate-600">Last Training</p>
-                  <p className="text-sm">{latestPerformance?.last_training_date 
-                    ? new Date(latestPerformance.last_training_date).toLocaleDateString() 
+                  <p className="text-sm">{latestPerformance?.last_training_date
+                    ? new Date(latestPerformance.last_training_date).toLocaleDateString()
                     : 'Never'}</p>
                 </div>
               </CardContent>

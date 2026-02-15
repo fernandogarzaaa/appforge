@@ -7,9 +7,9 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
-import { 
-  Sparkles, ArrowRight, Check, X, HelpCircle, 
-  Clock, Target, BookOpen, Rocket 
+import {
+  Sparkles, ArrowRight, Check, X, HelpCircle,
+  Clock, Target, BookOpen, Rocket
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -21,12 +21,12 @@ export default function AIOnboardingWizard({ projectIdea, onComplete }) {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
-  const { data: user, isLoading } = useQuery({
+  const { data: user, isLoading: userLoading } = useQuery({
     queryKey: ['currentUser'],
     queryFn: () => base44.auth.me()
   });
 
-  const { data: config, isLoading } = useQuery({
+  const { data: config, isLoading: configLoading } = useQuery({
     queryKey: ['onboardingConfig'],
     queryFn: async () => {
       const configs = await base44.entities.OnboardingConfig.list();
@@ -34,13 +34,13 @@ export default function AIOnboardingWizard({ projectIdea, onComplete }) {
     }
   });
 
-  const { data: progress, isLoading } = useQuery({
+  const { data: progress, isLoading: progressLoading } = useQuery({
     queryKey: ['onboardingProgress', user?.email],
     queryFn: async () => {
       if (!user) return null;
-      const progs = await base44.entities.OnboardingProgress.filter({ 
+      const progs = await base44.entities.OnboardingProgress.filter({
         user_id: user.email,
-        completed: false 
+        completed: false
       });
       return progs[0] || null;
     },

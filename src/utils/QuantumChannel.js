@@ -67,7 +67,7 @@ export class QuantumChannel {
     /**
      * Calculate quantum coherence based on message queue state
      */
-    calculateCoherence(state: any): number {
+    calculateCoherence(state) {
         const totalMessages = state.antigravity_inbox.length + state.swarm_inbox.length;
         const maxMessages = 50;
         return Math.max(0, 1 - (totalMessages / maxMessages));
@@ -76,7 +76,7 @@ export class QuantumChannel {
     /**
      * Antigravity sends message to Swarm
      */
-    antigravitySend(message: any) {
+    antigravitySend(message) {
         const state = this.readChannel();
         const quantumMessage = {
             id: `ag_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
@@ -98,7 +98,7 @@ export class QuantumChannel {
     /**
      * Swarm sends message to Antigravity  
      */
-    swarmSend(message: any) {
+    swarmSend(message) {
         const state = this.readChannel();
         const quantumMessage = {
             id: `sw_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
@@ -181,7 +181,7 @@ export class QuantumChannel {
     /**
      * Calculate message priority using quantum probability
      */
-    calculatePriority(message: any): number {
+    calculatePriority(message) {
         // Higher priority for LLM requests, urgent tasks
         if (message.type === 'llm_request') return 0.9;
         if (message.type === 'urgent') return 0.8;

@@ -17,13 +17,13 @@ export default function CollaborationPanel({ botId }) {
 
   const queryClient = useQueryClient();
 
-  const { data: collaborators, isLoading } = useQuery({
+  const { data: collaborators, isLoading: collaboratorsLoading } = useQuery({
     queryKey: ['collaborators', botId],
     queryFn: () => base44.entities.BotCollaborator.filter({ bot_id: botId }),
     initialData: []
   });
 
-  const { data: activityLogs, isLoading } = useQuery({
+  const { data: activityLogs, isLoading: activityLoading } = useQuery({
     queryKey: ['activityLogs', botId],
     queryFn: () => base44.entities.BotActivityLog.filter({ bot_id: botId }, '-timestamp', 50),
     initialData: []
@@ -61,7 +61,7 @@ export default function CollaborationPanel({ botId }) {
     mutationFn: async (collaboratorId) => {
       const user = await base44.auth.me();
       const collaborator = collaborators.find(c => c.id === collaboratorId);
-      
+
       await base44.entities.BotCollaborator.delete(collaboratorId);
 
       // Log activity

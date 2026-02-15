@@ -5,13 +5,13 @@ import { Badge } from '@/components/ui/badge';
 import { Brain } from 'lucide-react';
 
 export default function QuantumAIBadge() {
-  const { data: user, isLoading } = useQuery({
+  const { data: user, isLoading: userLoading } = useQuery({
     queryKey: ['currentUser'],
     queryFn: () => base44.auth.me(),
     staleTime: 5 * 60 * 1000
   });
 
-  const { data: prefs = [], isLoading } = useQuery({
+  const { data: prefs = [], isLoading: prefsLoading } = useQuery({
     queryKey: ['quantumPref', user?.email],
     queryFn: async () => {
       if (!user) return [];
@@ -21,7 +21,7 @@ export default function QuantumAIBadge() {
     staleTime: 30 * 1000
   });
 
-  const { data: configs = [], isLoading } = useQuery({
+  const { data: configs = [], isLoading: configsLoading } = useQuery({
     queryKey: ['quantumConfig'],
     queryFn: () => base44.entities.QuantumLLMConfig.list(),
     staleTime: 5 * 60 * 1000
