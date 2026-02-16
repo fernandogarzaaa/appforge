@@ -65,6 +65,8 @@ jobs:
             swarm/swarm_memory.json
             src/data/quantum_state.json
             src/data/quantum_predictions.json
+            src/data/bounty_ledger.json
+            src/data/economic_state.json
           key: swarm-memory-${{ github.run_number }}
           restore-keys: |
             swarm-memory-
@@ -94,6 +96,8 @@ jobs:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           TRUE_AI_INDEPENDENCE: "true"
+          NODE_ID: "GA-SWARM-PULSE"
+          RESONANCE_PORT: "11435"
         run: |
           cd swarm
           npx tsx intelligence_pulse.ts
@@ -155,7 +159,9 @@ jobs:
           git add src/data/quantum_*.json
           git add src/data/reality_pulse.json
           git add src/data/quantum_coherence_state.json
+          git add src/data/bounty_ledger.json
+          git add src/data/economic_state.json
           git add swarm/core/*.ts
           git add swarm/intelligence_pulse.ts
-          git commit -m "chore: swarm autonomous update [Transcendence Era] [skip ci]" || echo "No changes to commit"
+          git commit -m "chore: swarm autonomous update [Bounty System] [Mesh Sync] [skip ci]" || echo "No changes to commit"
           git push
