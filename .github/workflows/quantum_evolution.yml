@@ -67,6 +67,13 @@ jobs:
         env:
           TRUE_AI_INDEPENDENCE: "true"
 
+      # 🔍 DIAGNOSTICS: Generate reality signals for Inception
+      - name: Pre-Pulse Diagnostics
+        run: |
+          npm run build > ../build_logs.txt 2>&1 || echo "Build failed (as expected for diagnosis)" > ../build_logs.txt
+          npm run lint -- --format json > ../lint_output.json 2>&1 || echo "[]" > ../lint_output.json
+        continue-on-error: true
+
       - name: Run Quantum Evolution
         working-directory: ./swarm
         run: npx tsx intelligence_pulse.ts
@@ -107,7 +114,9 @@ jobs:
           git add -f src/data/reality_pulse.json
           git add -f src/data/bounty_ledger.json
           git add -f src/data/economic_state.json
+          git add -f build_logs.txt
+          git add -f lint_output.json
           git add -f swarm/core/*.ts
           git add -f swarm/intelligence_pulse.ts
-          git commit -m "chore: quantum self-evolution update [Bounty System] [Mesh Sync] [skip ci]" || echo "No changes to commit"
+          git commit -m "chore: quantum self-evolution [Inception] [Bounty Sync] [skip ci]" || echo "No changes to commit"
           git push

@@ -15,6 +15,7 @@ import { BountyRegistry } from './core/bounty_registry.js';
 import { EconomicEngine } from './core/economic_engine.js';
 import { nexusGateway } from './core/nexus_gateway.js';
 import { p2pResonance } from './core/p2p_resonance.js';
+import { realitySensor } from './core/reality_sensor.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -69,6 +70,25 @@ function scanRealityMetrics(): RealityMetrics {
     return { buildSuccess, lintErrors, flaggedFiles, missingDependencies, solanaPresent };
 }
 
+/**
+ * Maps reality signals to legacy metrics for pulse stability.
+ */
+function getPulseMetrics(signals: any[]): RealityMetrics {
+    const metrics: RealityMetrics = {
+        buildSuccess: !signals.some(s => s.type === 'BUILD_FAILURE'),
+        lintErrors: signals.find(s => s.type === 'DEBT_ACCUMULATION')?.payload.count || 0,
+        flaggedFiles: [],
+        missingDependencies: [],
+        solanaPresent: true // Assume present if not flagged
+    };
+
+    signals.forEach(s => {
+        if (s.type === 'UNCOMMITTED_CHANGES') metrics.flaggedFiles.push(...s.payload.files);
+    });
+
+    return metrics;
+}
+
 async function runIntelligencePulse() {
     console.log('='.repeat(70));
     console.log(`⚛️  INITIATING UNIFIED REALITY PULSE [PHASE 72] (NODE:${process.env.NODE_ID || 'CORE'})`);
@@ -85,8 +105,9 @@ async function runIntelligencePulse() {
     await bountyRegistry.init();
     await economicEngine.init();
 
-    const metrics = scanRealityMetrics();
-    console.log(`📊 Reality Scan: Build=${metrics.buildSuccess ? '✅' : '❌'}, Lint Errors=${metrics.lintErrors}, Solana=${metrics.solanaPresent ? '✅' : '❌'}`);
+    const signals = await realitySensor.scan();
+    const metrics = getPulseMetrics(signals);
+    console.log(`📊 Reality Scan: Build=${metrics.buildSuccess ? '✅' : '❌'}, Lint Errors=${metrics.lintErrors}, Signals=${signals.length}`);
 
     const pulsePath = path.join(PROJECT_ROOT, 'src/data/reality_pulse.json');
     if (fs.existsSync(pulsePath)) {

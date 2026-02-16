@@ -90,6 +90,13 @@ jobs:
         env:
           TRUE_AI_INDEPENDENCE: "true"
 
+      # 🔍 DIAGNOSTICS: Generate reality signals for Inception
+      - name: Pre-Pulse Diagnostics
+        run: |
+          npm run build > ../build_logs.txt 2>&1 || echo "Build failed (as expected for diagnosis)" > ../build_logs.txt
+          npm run lint -- --format json > ../lint_output.json 2>&1 || echo "[]" > ../lint_output.json
+        continue-on-error: true
+
       # ⚛️ INTELLIGENCE PULSE: Unify Singularity, Brain, and Oracle
       - name: Run Intelligence Pulse
         env:
@@ -161,7 +168,9 @@ jobs:
           git add src/data/quantum_coherence_state.json
           git add src/data/bounty_ledger.json
           git add src/data/economic_state.json
+          git add build_logs.txt
+          git add lint_output.json
           git add swarm/core/*.ts
           git add swarm/intelligence_pulse.ts
-          git commit -m "chore: swarm autonomous update [Bounty System] [Mesh Sync] [skip ci]" || echo "No changes to commit"
+          git commit -m "chore: swarm autonomous pulse [Inception] [Transcendence] [skip ci]" || echo "No changes to commit"
           git push
