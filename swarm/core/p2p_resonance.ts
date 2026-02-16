@@ -12,6 +12,20 @@ const PROJECT_ROOT = path.resolve(__dirname, '../..');
  * An autonomous sharing protocol for local swarms.
  * Allows peer discovery and weight synchronization without cloud signals.
  */
+
+export type P2PMessageType =
+    | 'BOUNTY_SYNC'
+    | 'ECONOMY_SYNC'
+    | 'BRAIN_SYNC'
+    | 'REASONING_SYNC';
+
+export interface P2PMessage {
+    type: P2PMessageType;
+    payload: any;
+    nodeId: string;
+    timestamp: string;
+}
+
 export class P2PResonance {
     private resonanceBuffer: any[] = [];
     private peers: string[] = []; // Active peer addresses
@@ -148,6 +162,19 @@ export class P2PResonance {
 
     getPeerCount() {
         return this.clients.size;
+    }
+
+    /**
+     * Broadcasts a reasoning token to the mesh (Mesh CoT)
+     */
+    async broadcastThought(thought: string, confidence: number) {
+        const payload = {
+            thought,
+            confidence,
+            nodeId: process.env.NODE_ID || 'CORE',
+            context: 'collective_reasoning_v1'
+        };
+        await this.broadcastState('REASONING_SYNC', payload);
     }
 }
 

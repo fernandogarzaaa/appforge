@@ -109,6 +109,24 @@ export class EconomicEngine {
     }
 
     /**
+     * Calculates the optimal bounty reward based on policy optimization.
+     * Formula: max_pi E_pi [ sum_{t=0}^T gamma^t * r_t ]
+     * Ensures agents prioritize tasks with highest long-term Sovereign Utility.
+     */
+    calculateOptimalReward(baseValue: number, priority: number): number {
+        const gamma = 0.95; // Discount factor for long-term utility
+        const horizon = 10; // Tactical horizon
+
+        // Simplified policy estimation: baseValue * priority * discounted growth factor
+        let estimatedUtility = 0;
+        for (let t = 0; t < horizon; t++) {
+            estimatedUtility += Math.pow(gamma, t) * (baseValue * priority);
+        }
+
+        return Math.round(estimatedUtility / 5); // Normalized for swarm economy
+    }
+
+    /**
      * Get current state.
      */
     getState(): EconomicState {

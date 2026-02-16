@@ -132,6 +132,8 @@ import { swarmCollaboration } from './swarm_collaboration.js';
 import { SwarmReporter } from './swarm_reporter.js';
 import { MaintenanceGuard } from './maintenance_guard.js';
 import { getCollectiveMembers } from './swarm_collectives.js';
+import { realitySensor } from './reality_sensor.js';
+import { SingularityEngine } from './singularity_engine.js';
 
 const QUANTUM_CHANNEL = path.join(process.cwd(), 'src/data/quantum_channel.json');
 
@@ -569,8 +571,15 @@ async function main() {
             // ⚛️ QUANTUM ENHANCEMENT: Check quantum channel for Antigravity messages
             await checkQuantumChannel();
 
+            // ⚛️ INCEPTION: Reality Sensing (Event-Driven Trigger)
+            const signals = await realitySensor.scan();
+            const hasCriticalEvent = realitySensor.hasCriticalEvent();
+            if (hasCriticalEvent) {
+                console.log('🚨 [Inception] Critical Reality Signal Detected! Self-triggering autonomous cycle...');
+            }
+
             const now = Date.now();
-            const shouldRunAutonomous = (now - lastAutonomousRun) >= AUTONOMOUS_INTERVAL_MS;
+            const shouldRunAutonomous = (now - lastAutonomousRun) >= AUTONOMOUS_INTERVAL_MS || hasCriticalEvent;
 
             // ⚛️ COLLABORATION: Process Pending Signals
             const pendingSignals = swarmCollaboration.getPendingSignals('ALL');

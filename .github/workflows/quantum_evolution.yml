@@ -66,6 +66,8 @@ jobs:
         run: npx tsx scripts/reality_pulse.ts
         env:
           TRUE_AI_INDEPENDENCE: "true"
+          NODE_ID: "GH-ACTIONS-EVO"
+          MESH_ENABLED: "true"
 
       # 🔍 DIAGNOSTICS: Generate reality signals for Inception
       - name: Pre-Pulse Diagnostics
@@ -83,6 +85,7 @@ jobs:
           TRUE_AI_INDEPENDENCE: "true"
           QCORE_PATH: "./core/quantum_bridge/target/release/quantum_bridge"
           NODE_ID: "GA-EVOLUTION"
+          MESH_ENABLED: "true"
           RESONANCE_PORT: "11435"
           # Optimization Parameters (Hourly Cycle)
           QUANTUM_GENERATIONS: "50"

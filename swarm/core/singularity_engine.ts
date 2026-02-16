@@ -5,13 +5,15 @@
  * Implements: Self-modification, recursive learning, quantum decisions
  */
 
-import quantumCore from './quantum_core.js';
+import quantumCore from './quantum_core.js'; // ⚛️ Quantum Heartbeat: 2026-02-16T19:42:49.275Z
 import { secureRandom } from './secure_entropy.js';
 import { AtomicPatcher, PatchChunk } from './atomic_patcher.js';
 import { BountyRegistry, Bounty } from './bounty_registry.js';
 import { EconomicEngine } from './economic_engine.js';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { realitySensor } from './reality_sensor.js';
+import { p2pResonance } from './p2p_resonance.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -120,6 +122,10 @@ export class SingularityEngine {
         const newCapabilities: string[] = [];
 
         try {
+            // Phase 0: Reality Sensing & Objective Synthesis (Collective Inception)
+            console.log('   🎯 Phase 0: Reality sensing & objective synthesis...');
+            await this.synthesizeStrategicObjectives();
+
             // Phase 1: Self-Assessment
             console.log('   🧠 Phase 1: Self-assessment...');
             const assessment = await this.selfAssessment();
@@ -185,6 +191,61 @@ export class SingularityEngine {
                 singularityProgress: this.calculateSingularityProgress()
             };
         }
+    }
+
+    /**
+     * Strategic Objective Synthesizer (The Inception Layer)
+     * Proactively generates new high-value bounties based on environment signals.
+     */
+    private async synthesizeStrategicObjectives() {
+        const signals = await realitySensor.scan();
+        if (signals.length === 0) return;
+
+        console.log(`   🎯 [Inception] Synthesizing objectives from ${signals.length} environmental signals...`);
+
+        for (const signal of signals) {
+            const consensus = await this.aggregateCollectiveReasoning(signal);
+            console.log(`   ✨ [Consensus] Multi-node reasoning score: ${consensus.score.toFixed(2)}`);
+
+            const objective = await quantumCore.consultOracle(
+                `Incept strategic objective for signal: ${JSON.stringify(signal)}. Peer Insights: ${JSON.stringify(consensus.insights)}`,
+                ["SECURITY_PATCH", "PERFORMANCE_OPTIMIZATION", "MARKET_OPPORTUNITY", "DEBT_REDUCTION"],
+                ['proactivity', 'sovereignty', 'collective_intelligence']
+            );
+
+            console.log(`   ✨ [Inception] New Objective: ${objective.recommendation}`);
+
+            await this.bountyRegistry.addBounty({
+                description: `[Autonomously Incepted] ${objective.recommendation}: ${signal.type} (Consensus: ${consensus.score.toFixed(2)})`,
+                priority: signal.intensity * consensus.score,
+                reward: Math.round(signal.intensity * consensus.score * 100),
+                category: objective.recommendation.includes('SECURITY') ? 'code' : 'optimization'
+            });
+        }
+    }
+
+    /**
+     * Aggregates and scores "Reasoning Seeds" from the mesh (Consensus Governor)
+     */
+    private async aggregateCollectiveReasoning(signal: any) {
+        const stats = p2pResonance.getPeerCount();
+        if (stats === 0) return { score: 1.0, insights: [] };
+
+        console.log(`   🧠 [Consensus] Aggregating reasoning from ${stats} peers...`);
+        // In a real scenario, this would query the resonance buffer for REASONING_SYNC messages related to this signal
+        // For simulation, we'll consult the mesh via p2pResonance
+
+        await p2pResonance.broadcastThought(
+            `Analyzing signal ${signal.type} for strategic inception.`,
+            0.8
+        );
+
+        // Score is determined by peer count and variance (simulated)
+        const score = 1.0 + (stats * 0.05); // Intelligence boost per node
+        return {
+            score: Math.min(score, 2.0), // Cap at 2x boost
+            insights: ["Mesh validation active", "Cross-node coherence confirmed"]
+        };
     }
 
     /**

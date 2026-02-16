@@ -1,8 +1,9 @@
-import QuantumEngine from '../../universal_quantum_dist/index.js'; // ⚛️ Heartbeat: 2026-02-16T19:22:10.965Z
+import QuantumEngine from '../../universal_quantum_dist/index.js'; // ⚛️ Heartbeat: 2026-02-16T19:47:32.050Z // ⚛️ Heartbeat: 2026-02-16T19:22:10.965Z
 import * as fs from 'fs/promises';
 import { fileURLToPath } from 'url';
 import path from 'path';
 import { secureRandom, secureRandomRange } from './secure_entropy.js';
+import { p2pResonance } from './p2p_resonance.js';
 import crypto from 'crypto';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -224,6 +225,14 @@ export class QuantumSwarmCore {
 
         // SOVEREIGN PURGE: Gemini Oracle removed to ensure 100% local isolation.
         // Falling back directly to local simulation/knowledge base.
+
+        // 🧠 [COLLECTIVE-REASONING] Phase 74: Sync reasoning across mesh
+        const stats = p2pResonance.getPeerCount();
+        if (stats > 0) {
+            console.log(`   🤝 [Mesh-CoT] Synchronizing reasoning with ${stats} nodes...`);
+            await p2pResonance.broadcastThought(question, 0.9);
+            // In a real multi-node setup, we'd wait for REASONING_SYNC responses here.
+        }
 
         const result = await this.engine.quantumSolve(question, options, criteria);
         await this.persistEngineState();

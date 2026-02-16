@@ -139,7 +139,7 @@ jobs:
 
           # Run the Daemon (One-Shot Cycle)
           cd swarm
-          npm start
+          NODE_ID="GA-AUTONOMOUS" MESH_ENABLED="true" npm start
 
       # 🧬 SINGULARITY VERIFICATION: Validate evolutionary progress
       - name: Run Singularity Verification
