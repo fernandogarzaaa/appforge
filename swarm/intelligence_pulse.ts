@@ -13,6 +13,8 @@ import { QuantumNeuralNetwork, QuantumGeneticAlgorithm } from '../src/utils/Quan
 import quantumCore from './core/quantum_core.js';
 import { BountyRegistry } from './core/bounty_registry.js';
 import { EconomicEngine } from './core/economic_engine.js';
+import { nexusGateway } from './core/nexus_gateway.js';
+import { p2pResonance } from './core/p2p_resonance.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -69,8 +71,14 @@ function scanRealityMetrics(): RealityMetrics {
 
 async function runIntelligencePulse() {
     console.log('='.repeat(70));
-    console.log('⚛️  INITIATING UNIFIED REALITY PULSE [PHASE 71]');
+    console.log(`⚛️  INITIATING UNIFIED REALITY PULSE [PHASE 72] (NODE:${process.env.NODE_ID || 'CORE'})`);
     console.log('='.repeat(70));
+
+    // 0. START P2P MESH
+    console.log('\n📡 Step 0: Initializing Quantum Mesh...');
+    const RESONANCE_PORT = Number(process.env.RESONANCE_PORT) || 11435;
+    await p2pResonance.start(RESONANCE_PORT);
+    await nexusGateway.discoverPeers();
 
     const bountyRegistry = new BountyRegistry();
     const economicEngine = new EconomicEngine();
@@ -205,6 +213,18 @@ async function runIntelligencePulse() {
     await economicEngine.attributeValue(10); // Standard cycle value
     const ecoState = economicEngine.getState();
     console.log(`\n💰 Sovereign Economy: TotalValue=${ecoState.totalValue.toFixed(1)}, Budget=${ecoState.availableBudget.toFixed(1)}, Resolved=${ecoState.metrics.bountiesResolved}`);
+
+    // 6. MESH SYNCHRONIZATION
+    console.log('\n🔗 Step 6: Synchronizing Mesh State...');
+    const bounties = await bountyRegistry.getBounties();
+    const brainDataPath = path.join(PROJECT_ROOT, 'src/data/quantum_brain_state.json');
+    const brainData = fs.existsSync(brainDataPath) ? JSON.parse(fs.readFileSync(brainDataPath, 'utf8')) : {};
+
+    await p2pResonance.broadcastState('BOUNTY_SYNC', bounties);
+    await p2pResonance.broadcastState('ECONOMY_SYNC', ecoState);
+    await p2pResonance.broadcastState('BRAIN_SYNC', brainData);
+
+    console.log(`   ✅ Mesh Sync Complete. Connected Peers: ${p2pResonance.getPeerCount()}`);
 
     // 🚀 Task 4: SILENT AUTO-DEPLOY
     if (metrics.buildSuccess && metrics.lintErrors === 0) {
