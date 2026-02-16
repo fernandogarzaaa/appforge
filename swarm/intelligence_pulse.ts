@@ -73,6 +73,12 @@ async function runIntelligencePulse() {
     const metrics = scanRealityMetrics();
     console.log(`📊 Reality Scan: Build=${metrics.buildSuccess ? '✅' : '❌'}, Lint Errors=${metrics.lintErrors}, Solana=${metrics.solanaPresent ? '✅' : '❌'}`);
 
+    const pulsePath = path.join(PROJECT_ROOT, 'src/data/reality_pulse.json');
+    if (fs.existsSync(pulsePath)) {
+        const pulse = JSON.parse(fs.readFileSync(pulsePath, 'utf8'));
+        console.log(`🌍 Reality Pulse 2.0: Directive="${pulse.directive}" (Confidence=${(pulse.confidence * 100).toFixed(1)}%)`);
+    }
+
     // 1. SINGULARITY LEARNING CYCLE (Anchored to Physics)
     console.log('\n🌌 Step 1: Quantum Singularity Learning (Self-Assessment)...');
     const singularity = new SingularityEngine();

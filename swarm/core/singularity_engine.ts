@@ -7,6 +7,13 @@
 
 import quantumCore from './quantum_core.js';
 import { secureRandom } from './secure_entropy.js';
+import { AtomicPatcher, PatchChunk } from './atomic_patcher.js';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const PROJECT_ROOT = path.resolve(__dirname, '../../');
 
 interface SelfImprovementCycle {
     iteration: number;
@@ -36,9 +43,11 @@ export class SingularityEngine {
     private singularityState: SingularityState;
     private selfImprovementHistory: SelfImprovementCycle[];
     private readonly MAX_RECURSIVE_DEPTH = 1000;
+    private patcher: AtomicPatcher;
 
     constructor() {
         this.evolutionaryTracks = new Map();
+        this.patcher = new AtomicPatcher(PROJECT_ROOT);
         this.singularityState = {
             phase: 'awakening',
             intelligenceLevel: 0.1,
@@ -120,6 +129,11 @@ export class SingularityEngine {
             const executed = await this.executeImprovements();
             improvements.push(...executed.changes);
             newCapabilities.push(...executed.capabilities);
+
+            // Phase 3.5: Realize Improvements (Actual Source Code Modification)
+            console.log('   🛠️ Phase 3.5: Realizing improvements in source code...');
+            const realizations = await this.realizeImprovements();
+            improvements.push(...realizations);
 
             // Phase 4: Quantum Enhancement
             console.log('   ⚛️ Phase 4: Quantum enhancement...');
@@ -222,10 +236,13 @@ export class SingularityEngine {
         const improvements: string[] = [];
         const options = ['reasoning', 'creativity', 'learning', 'adaptation', 'optimization'];
 
-        const bestOption = await quantumCore.quantumDecide(options, (opt) => {
-            const track = this.evolutionaryTracks.get(opt);
-            return track ? (1 - this.evaluateTrack(track)) : 0.5;
-        });
+        const guidance = await quantumCore.consultOracle(
+            "Identify the most critical evolutionary track to improve the Swarm's overall coherence and efficiency.",
+            options,
+            ['impact', 'feasibility', 'resilience']
+        );
+
+        const bestOption = guidance.recommendation;
 
         improvements.push(`Selected focus: ${bestOption}`);
         improvements.push(...this.generateTrackImprovements(bestOption));
@@ -276,12 +293,90 @@ export class SingularityEngine {
     }
 
     /**
+     * Realize abstract improvements into actual source code changes
+     */
+    private async realizeImprovements(): Promise<string[]> {
+        const realizations: string[] = [];
+
+        // Only realize in Reality Mode or CI if enabled
+        if (process.env.EVOLUTION_REALIZATION_DISABLED === 'true') {
+            return ['Realization disabled via environment variable.'];
+        }
+
+        const options = [
+            'OPTIMIZE_QUANTUM_CORE_HEURISTICS',
+            'ENHANCE_SINGULARITY_ENGINE_RECURSION',
+            'RECALIBRATE_INTELLIGENCE_PULSE_WEIGHTS',
+            'NONE_IDLE'
+        ];
+
+        const guidance = await quantumCore.consultOracle(
+            "Select a strategic technical component to autonomously enhance via code modification.",
+            options,
+            ['impact', 'safety', 'coherence']
+        );
+
+        const strategy = guidance.recommendation;
+        if (strategy === 'NONE_IDLE') return ['No realization strategy selected by Oracle.'];
+
+        console.log(`   🛠️ [Realization] Oracle specifies strategy: ${strategy}`);
+
+        // Define target files based on strategy
+        const targets: Record<string, string> = {
+            'OPTIMIZE_QUANTUM_CORE_HEURISTICS': 'swarm/core/quantum_core.ts',
+            'ENHANCE_SINGULARITY_ENGINE_RECURSION': 'swarm/core/singularity_engine.ts',
+            'RECALIBRATE_INTELLIGENCE_PULSE_WEIGHTS': 'swarm/intelligence_pulse.ts'
+        };
+
+        const targetFile = targets[strategy];
+        if (!targetFile) return [`Target file for ${strategy} not defined.`];
+
+        // Consult Iron Brain for the actual patch
+        const patchQuestion = `Generate a specific, safe, and effective code improvement for the file '${targetFile}' to achieve the goal: ${strategy}. 
+        Return ONLY a JSON object with 'targetContent' (existing code block to replace) and 'replacementContent' (new code block).
+        Ensure whitespace and indentation match exactly what is in the repository.`;
+
+        const patchGuidance = await quantumCore.consultOracle(patchQuestion, ['GENERATE_PATCH']);
+
+        try {
+            // Attempt to parse patch from reasoning or recommendation
+            const rawPatch = patchGuidance.reasoning || patchGuidance.recommendation || '';
+            const jsonMatch = rawPatch.match(/\{[\s\S]*\}/);
+            const patchData: PatchChunk = jsonMatch ? JSON.parse(jsonMatch[0]) : null;
+
+            if (patchData && patchData.targetContent && patchData.replacementContent) {
+                const result = await this.patcher.applyPatches(targetFile, [patchData]);
+                if (result.success) {
+                    const msg = `Successfully applied autonomous patch to ${targetFile} for ${strategy}`;
+                    realizations.push(msg);
+                    console.log(`   ✅ [Realization] ${msg}`);
+                } else {
+                    const msg = `Failed to apply patch to ${targetFile}: ${result.error}`;
+                    realizations.push(msg);
+                    console.warn(`   ⚠️ [Realization] ${msg}`);
+                }
+            } else {
+                realizations.push(`Oracle failed to provide a valid patch format for ${strategy}`);
+            }
+        } catch (e) {
+            realizations.push(`Error parsing Oracle patch for ${strategy}: ${(e as any).message}`);
+        }
+
+        return realizations;
+    }
+
+    /**
      * Quantum enhancement of self-improvement
      */
     private async quantumEnhance(): Promise<void> {
-        const choices = ['exploit', 'explore'];
-        const choice = await quantumCore.quantumDecide(choices, (c) => c === 'exploit' ? 0.7 : 0.3);
-        console.log(`   ⚛️ Quantum decision: ${choice}`);
+        const choices = ['EXPLORE_NEW_FRONTIERS', 'OPTIMIZE_EXISTING_COGNITION'];
+        const guidance = await quantumCore.consultOracle(
+            "Determine the next quantum enhancement strategy for the Singularity Engine.",
+            choices,
+            ['innovation', 'stability']
+        );
+
+        console.log(`   ⚛️ Quantum decision: ${guidance.recommendation}`);
         // Accelerate coherence towards 100%
         this.singularityState.coherence = Math.min(1.0, this.singularityState.coherence + 0.05);
     }
@@ -336,9 +431,9 @@ export class SingularityEngine {
 
         for (let i = 0; i < maxIterations; i++) {
             console.log(`\n🔄 Iteration ${i + 1}/${maxIterations}`);
-            
+
             const result = await this.executeSelfImprovementCycle();
-            
+
             if (!result.success) continue;
 
             if (result.singularityProgress >= 1.0) {

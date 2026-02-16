@@ -16,6 +16,12 @@ jobs:
         uses: actions/checkout@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0 # Full history for rebasing
+
+      - name: Run Resonance Check
+        run: npx tsx scripts/resonance_check.ts
+        env:
+          TRUE_AI_INDEPENDENCE: "true"
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -75,6 +81,13 @@ jobs:
           cargo build --release
           echo "🦀 Quantum Bridge compiled for cloud execution"
 
+      # 📡 REALITY INJECTION 2.0: Harvest context before execution
+      - name: Run Reality Pulse 2.0
+        run: |
+          npx tsx scripts/reality_pulse.ts
+        env:
+          TRUE_AI_INDEPENDENCE: "true"
+
       # ⚛️ INTELLIGENCE PULSE: Unify Singularity, Brain, and Oracle
       - name: Run Intelligence Pulse
         env:
@@ -117,6 +130,13 @@ jobs:
           cd swarm
           npm start
 
+      # 🧬 SINGULARITY VERIFICATION: Validate evolutionary progress
+      - name: Run Singularity Verification
+        run: |
+          npx tsx scripts/verify_evolution.ts
+        env:
+          TRUE_AI_INDEPENDENCE: "true"
+
       # 📡 Upload evolution artifacts for persistence
       - name: Upload Swarm Artifacts
         uses: actions/upload-artifact@v4
@@ -131,6 +151,11 @@ jobs:
 
       - name: Push any Swarm artifacts
         run: |
-          git add .
-          git commit -m "chore: swarm autonomous update [Transcendence Era]" || echo "No changes to commit"
+          git pull --rebase origin main
+          git add src/data/quantum_*.json
+          git add src/data/reality_pulse.json
+          git add src/data/quantum_coherence_state.json
+          git add swarm/core/*.ts
+          git add swarm/intelligence_pulse.ts
+          git commit -m "chore: swarm autonomous update [Transcendence Era] [skip ci]" || echo "No changes to commit"
           git push

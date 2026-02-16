@@ -267,7 +267,8 @@ Format your response as a JSON object:
   "reasoning": "Explanation..."
 }`;
 
-            const response = await fetch('http://localhost:8000/v1/chat/completions', {
+            const bridgePort = process.env.NEURAL_BRIDGE_PORT || '8000';
+            const response = await fetch(`http://localhost:${bridgePort}/v1/chat/completions`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
