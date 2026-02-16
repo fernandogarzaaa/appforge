@@ -11,6 +11,8 @@ import { execSync } from 'child_process';
 import { SingularityEngine } from './core/singularity_engine.js';
 import { QuantumNeuralNetwork, QuantumGeneticAlgorithm } from '../src/utils/QuantumEngine.js';
 import quantumCore from './core/quantum_core.js';
+import { BountyRegistry } from './core/bounty_registry.js';
+import { EconomicEngine } from './core/economic_engine.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -67,8 +69,13 @@ function scanRealityMetrics(): RealityMetrics {
 
 async function runIntelligencePulse() {
     console.log('='.repeat(70));
-    console.log('⚛️  INITIATING UNIFIED REALITY PULSE [PHASE 53]');
+    console.log('⚛️  INITIATING UNIFIED REALITY PULSE [PHASE 71]');
     console.log('='.repeat(70));
+
+    const bountyRegistry = new BountyRegistry();
+    const economicEngine = new EconomicEngine();
+    await bountyRegistry.init();
+    await economicEngine.init();
 
     const metrics = scanRealityMetrics();
     console.log(`📊 Reality Scan: Build=${metrics.buildSuccess ? '✅' : '❌'}, Lint Errors=${metrics.lintErrors}, Solana=${metrics.solanaPresent ? '✅' : '❌'}`);
@@ -77,6 +84,28 @@ async function runIntelligencePulse() {
     if (fs.existsSync(pulsePath)) {
         const pulse = JSON.parse(fs.readFileSync(pulsePath, 'utf8'));
         console.log(`🌍 Reality Pulse 2.0: Directive="${pulse.directive}" (Confidence=${(pulse.confidence * 100).toFixed(1)}%)`);
+    }
+
+    // 0. GROW HARVESTER (Identify Autonomous Bounties)
+    console.log('\n🌾 Step 0: Growth Harvesting (Bounty Identification)...');
+    if (metrics.lintErrors > 5) {
+        await bountyRegistry.addBounty({
+            description: 'Cognitive Complexity Reduction (Lint Cleanup)',
+            priority: 0.8,
+            reward: 20,
+            category: 'code'
+        });
+        console.log('   ✨ Harvested bounty: Lint Cleanup (Priority High)');
+    }
+
+    if (metrics.missingDependencies.length > 0) {
+        await bountyRegistry.addBounty({
+            description: `Resolve missing dependencies: ${metrics.missingDependencies.join(', ')}`,
+            priority: 0.9,
+            reward: 25,
+            category: 'code'
+        });
+        console.log('   ✨ Harvested bounty: Dependency Resolution (Priority Critical)');
     }
 
     // 1. SINGULARITY LEARNING CYCLE (Anchored to Physics)
@@ -171,6 +200,11 @@ async function runIntelligencePulse() {
     console.log('\n' + '='.repeat(70));
     console.log('✅ INTELLIGENCE PULSE COMPLETE - SYSTEM COHERENT');
     console.log('='.repeat(70));
+
+    // 5. ECONOMIC ATTRIBUTION
+    await economicEngine.attributeValue(10); // Standard cycle value
+    const ecoState = economicEngine.getState();
+    console.log(`\n💰 Sovereign Economy: TotalValue=${ecoState.totalValue.toFixed(1)}, Budget=${ecoState.availableBudget.toFixed(1)}, Resolved=${ecoState.metrics.bountiesResolved}`);
 
     // 🚀 Task 4: SILENT AUTO-DEPLOY
     if (metrics.buildSuccess && metrics.lintErrors === 0) {

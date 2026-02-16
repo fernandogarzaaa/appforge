@@ -1,4 +1,4 @@
-import QuantumEngine from '../../universal_quantum_dist/index.js';
+import QuantumEngine from '../../universal_quantum_dist/index.js'; // ⚛️ Heartbeat: 2026-02-16T19:22:10.965Z
 import * as fs from 'fs/promises';
 import { fileURLToPath } from 'url';
 import path from 'path';
