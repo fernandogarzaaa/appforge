@@ -447,6 +447,6 @@
     "file": "C:\\Users\\ferna\\Downloads\\appforge-main\\src\\swarm\\orchestrator.ts",
     "metric": "COMPLEXITY",
     "timestamp": "2026-02-14T18:44:57.569Z",
-    "status": "IN_PROGRESS"
+    "status": "FAILED"
   }
 ]

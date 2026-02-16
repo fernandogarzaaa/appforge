@@ -1,0 +1,39 @@
+{
+    "name": "MetaBuilder",
+    "displayName": "Meta-Builder",
+    "expo": {
+        "name": "Meta-Builder",
+        "slug": "meta-builder",
+        "version": "1.0.0",
+        "orientation": "portrait",
+        "icon": "./assets/icon.png",
+        "userInterfaceStyle": "dark",
+        "splash": {
+            "image": "./assets/splash.png",
+            "resizeMode": "contain",
+            "backgroundColor": "#000000"
+        },
+        "ios": {
+            "supportsTablet": true,
+            "bundleIdentifier": "com.appforge.metabuilder",
+            "infoPlist": {
+                "NSFaceIDUsageDescription": "Authorize deployment and secure manifests via FaceID.",
+                "NSSpeechRecognitionUsageDescription": "Translate your architectural vibes into code.",
+                "NSMicrophoneUsageDescription": "Enable voice-to-vibe synthesis."
+            }
+        },
+        "android": {
+            "adaptiveIcon": {
+                "foregroundImage": "./assets/adaptive-icon.png",
+                "backgroundColor": "#000000"
+            },
+            "package": "com.appforge.metabuilder"
+        },
+        "web": {
+            "favicon": "./assets/favicon.png"
+        },
+        "plugins": [
+            "expo-face-id"
+        ]
+    }
+}

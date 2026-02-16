@@ -131,6 +131,7 @@ import { ShadowSwarm } from './shadow_swarm.js';
 import { swarmCollaboration } from './swarm_collaboration.js';
 import { SwarmReporter } from './swarm_reporter.js';
 import { MaintenanceGuard } from './maintenance_guard.js';
+import { getCollectiveMembers } from './swarm_collectives.js';
 
 const QUANTUM_CHANNEL = path.join(process.cwd(), 'src/data/quantum_channel.json');
 

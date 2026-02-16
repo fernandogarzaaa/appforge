@@ -1,17 +1,11 @@
 Here are the rewritten instructions:
 
-**Environment Variable Setup**
+**Step 1: Set an Environment Variable**
 
-To set up the environment variable for your OpenAI API key, follow these steps:
+To initiate the refactoring process, set the `OPENAI_API_KEY` environment variable by running one of the following commands depending on your operating system:
+```
+Windows: set OPENAI_API_KEY="your_openai_api_key"
+macOS/Linux: export OPENAI_API_KEY="your_openai_api_key"
+```
 
-1. **Windows**: Right-click on "Computer" or "This PC", select "Properties", then click on "Advanced system settings". In the System Properties window, click on the "Environment Variables" button and under "System Variables", click "New". Enter `OPENAI_API_KEY` as the variable name, followed by your OpenAI API key.
-2. **macOS/Linux**: Open Terminal and run the command: `export OPENAI_API_KEY="your_api_key_here"` (replace with your actual API key).
-
-**Verify Environment Variable Setting**
-
-To confirm that the environment variable is set correctly:
-
-* **Windows**: Run the command: `set OPENAI_API_KEY`
-* **macOS/Linux**: Run the command: `echo $OPENAI_API_KEY`
-
-By following these steps, you'll ensure that your OpenAI API key is securely stored as an environment variable, preventing errors like the one detected.
+Replace `your_openai_api_key` with your actual OpenAI API key.

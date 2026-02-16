@@ -1,14 +1,14 @@
 {
-  "timestamp": "2026-02-16T02:53:57.197Z",
+  "timestamp": "2026-02-16T03:21:22.164Z",
   "state": {
     "version": "3.1",
     "learningParams": {
       "bias": 1.8,
-      "exploration": 0.19039361138361524
+      "exploration": 0.02
     },
     "feedbackStats": {
-      "total": 813,
-      "success": 795
+      "total": 1853,
+      "success": 1833
     },
     "optionWeights": {
       "run": -0.24,
@@ -21,7 +21,7 @@
       "learning": -0.24,
       "prioritize": 0.36,
       "revenue": 0.36,
-      "expansion": 0.36,
+      "expansion": 2.5,
       "swarms": 0.36,
       "socialmediaswarm": 0.36,
       "researchswarm": 0.36,
@@ -70,11 +70,22 @@
       "expand": 2.5,
       "failure-mode": 2.5,
       "coverage": 2.5,
-      "coherence": -0.6,
-      "calibration": -0.6,
+      "coherence": -0.68,
+      "calibration": -0.68,
       "autonomous": 0.18,
       "oracle": 0.18,
-      "guidance": 0.18
+      "guidance": 0.18,
+      "aggressive": 2.5,
+      "maximize": 2.5,
+      "growth": 2.5,
+      "experimentation": 2.5,
+      "despite": 2.5,
+      "lower": 2.5,
+      "reserve": 2.5,
+      "ai": 2.5,
+      "economy": 2.5,
+      "swarm": 2.5,
+      "strategy": 2.5
     },
     "criteriaWeights": {
       "stability": 3,
@@ -87,7 +98,7 @@
       "speed": 3,
       "risk": 3,
       "reduction": 3,
-      "revenue": 1.1800000000000002,
+      "revenue": 3,
       "impact": 1.1800000000000002,
       "reasoning": 3,
       "long": 3,
@@ -107,347 +118,14 @@
       "auditability": 3,
       "user": 2.799999999999996,
       "trust": 2.799999999999996,
-      "system": 2.5299999999999976
+      "system": 3,
+      "runway": 3,
+      "safety": 3,
+      "growth": 3,
+      "resilience": 3,
+      "sustainability": 3
     },
     "memoryDump": {
-      "solve_48a292a0": {
-        "data": {
-          "predictionId": "Q3-1770931737964-212",
-          "optimizedBest": "RUN_ADAPTIVE_CORRECTION via error feedback and recursive learning",
-          "confidence": 0.99,
-          "alternatives": [
-            "LOCK_TARGET_COHERENCE with consistency-first execution and strict memory alignment",
-            "DEFER_CALIBRATION and continue with current coherence policy"
-          ],
-          "engineVersion": "3.1"
-        },
-        "timestamp": 1770931737964
-      },
-      "solve_2811485f": {
-        "data": {
-          "predictionId": "Q3-1770931737967-650",
-          "optimizedBest": "RUN_ADAPTIVE_CORRECTION via error feedback and recursive learning",
-          "confidence": 0.99,
-          "alternatives": [
-            "LOCK_TARGET_COHERENCE with consistency-first execution and strict memory alignment",
-            "DEFER_CALIBRATION and continue with current coherence policy"
-          ],
-          "engineVersion": "3.1"
-        },
-        "timestamp": 1770931737967
-      },
-      "solve_1ebad246": {
-        "data": {
-          "predictionId": "Q3-1770931740189-143",
-          "optimizedBest": "Prioritize revenue and expansion swarms (SocialMediaSwarm, ResearchSwarm, CustomerSuccessSwarm, ExperimentationSwarm, AIEconomySwarm)",
-          "confidence": 0.99,
-          "alternatives": [
-            "Prioritize reliability and quality swarms (LearningSwarm, QualityAssuranceSwarm)",
-            "Prioritize trading and market swarms (AutomatedTradingSwarm, CryptoSwarm, MarketAnalyzer)"
-          ],
-          "engineVersion": "3.1"
-        },
-        "timestamp": 1770931740189
-      },
-      "solve_42e2885a": {
-        "data": {
-          "predictionId": "Q3-1770931740287-45",
-          "optimizedBest": "Improve user experience and UI polish",
-          "confidence": 0.99,
-          "alternatives": [
-            "Refactor core architecture for scalability",
-            "Add new user-facing features"
-          ],
-          "engineVersion": "3.1"
-        },
-        "timestamp": 1770931740287
-      },
-      "solve_2b0170a6": {
-        "data": {
-          "predictionId": "Q3-1770981610232-777",
-          "optimizedBest": "Process High Priority requests first",
-          "confidence": 0.4951219512195122,
-          "alternatives": [
-            "Batch process similar requests",
-            "Optimize for fastest response time"
-          ],
-          "engineVersion": "3.1"
-        },
-        "timestamp": 1770981610232
-      },
-      "solve_58172bf4": {
-        "data": {
-          "predictionId": "Q3-1770981610197-85",
-          "optimizedBest": "Type errors and null pointer exceptions",
-          "confidence": 0.4951219512195122,
-          "alternatives": [
-            "Logic bugs in core business features",
-            "Critical runtime errors and crashes"
-          ],
-          "engineVersion": "3.1"
-        },
-        "timestamp": 1770981610197
-      },
-      "solve_1be3b147": {
-        "data": {
-          "predictionId": "Q3-1770934650759-964",
-          "optimizedBest": "Scan for dependency vulnerabilities",
-          "confidence": 0.99,
-          "alternatives": [
-            "Check for exposed secrets in code",
-            "Review authentication patterns"
-          ],
-          "engineVersion": "3.1"
-        },
-        "timestamp": 1770934650759
-      },
-      "solve_2870c3c2": {
-        "data": {
-          "predictionId": "Q3-1770932142600-55",
-          "optimizedBest": "CPU and processing efficiency",
-          "confidence": 0.99,
-          "alternatives": [
-            "Memory usage optimization",
-            "Bundle size and load times"
-          ],
-          "engineVersion": "3.1"
-        },
-        "timestamp": 1770932142600
-      },
-      "solve_1c0fe95e": {
-        "data": {
-          "predictionId": "Q3-1770931996590-191",
-          "optimizedBest": "AI integration consulting for enterprises",
-          "confidence": 0.99,
-          "alternatives": [
-            "Custom swarm development for businesses",
-            "Technical architecture reviews"
-          ],
-          "engineVersion": "3.1"
-        },
-        "timestamp": 1770931996590
-      },
-      "solve_32e5937b": {
-        "data": {
-          "predictionId": "Q3-1770931996592-732",
-          "optimizedBest": "Introduce usage-based pricing",
-          "confidence": 0.99,
-          "alternatives": [
-            "Raise Pro to $149, add more features",
-            "Add new Mid-tier at $199"
-          ],
-          "engineVersion": "3.1"
-        },
-        "timestamp": 1770931996592
-      },
-      "solve_79289fa": {
-        "data": {
-          "predictionId": "Q3-1770931996595-447",
-          "optimizedBest": "Database schemas",
-          "confidence": 0.99,
-          "alternatives": [
-            "API endpoints in TypeScript",
-            "Smart contracts in Solidity"
-          ],
-          "engineVersion": "3.1"
-        },
-        "timestamp": 1770931996595
-      },
-      "solve_7ed4ac60": {
-        "data": {
-          "predictionId": "Q3-1770931996606-83",
-          "optimizedBest": "INAPP_NUDGE with guided adoption checklist and health tips",
-          "confidence": 0.99,
-          "alternatives": [
-            "RETAIN_CALL with proactive success manager outreach",
-            "UPSELL with higher-tier value pitch and ROI framing"
-          ],
-          "engineVersion": "3.1"
-        },
-        "timestamp": 1770931996606
-      },
-      "solve_5d45c67e": {
-        "data": {
-          "predictionId": "Q3-1770932000049-179",
-          "optimizedBest": "Expand audit logging and change-management traceability",
-          "confidence": 0.99,
-          "alternatives": [
-            "Enforce compliance gate in CI and block non-compliant releases",
-            "Harden secrets policy and environment governance"
-          ],
-          "engineVersion": "3.1"
-        },
-        "timestamp": 1770932000049
-      },
-      "solve_34f8df1d": {
-        "data": {
-          "predictionId": "Q3-1770932006323-361",
-          "optimizedBest": "INAPP_NUDGE with guided adoption checklist and health tips",
-          "confidence": 0.99,
-          "alternatives": [
-            "RETAIN_CALL with proactive success manager outreach",
-            "UPSELL with higher-tier value pitch and ROI framing"
-          ],
-          "engineVersion": "3.1"
-        },
-        "timestamp": 1770932006325
-      },
-      "solve_79727e82": {
-        "data": {
-          "predictionId": "Q3-1770932006699-729",
-          "optimizedBest": "SELL: Bearish trend, take profits or cut losses",
-          "confidence": 0.99,
-          "alternatives": [
-            "BUY: Strong bullish trend with positive momentum",
-            "HOLD: Wait for clearer signals"
-          ],
-          "engineVersion": "3.1"
-        },
-        "timestamp": 1770932006699
-      },
-      "solve_24c6b20b": {
-        "data": {
-          "predictionId": "Q3-1770932007157-263",
-          "optimizedBest": "DEFENSIVE_COMPOUNDING - prioritize reserve runway and stable compounding",
-          "confidence": 0.3666666666666667,
-          "alternatives": [
-            "BALANCED_FLYWHEEL - balance reserve, growth reinvestment, and reliability",
-            "AGGRESSIVE_EXPANSION - maximize growth and experimentation despite lower reserve"
-          ],
-          "engineVersion": "3.1"
-        },
-        "timestamp": 1770932007157
-      },
-      "solve_49ec3514": {
-        "data": {
-          "predictionId": "Q3-1770932007789-240",
-          "optimizedBest": "SELL: Bearish trend, take profits or cut losses",
-          "confidence": 0.99,
-          "alternatives": [
-            "BUY: Strong bullish trend with positive momentum",
-            "HOLD: Wait for clearer signals"
-          ],
-          "engineVersion": "3.1"
-        },
-        "timestamp": 1770932007789
-      },
-      "solve_6dc19742": {
-        "data": {
-          "predictionId": "Q3-1770981454381-946",
-          "optimizedBest": "Latest Node.js security vulnerabilities",
-          "confidence": 0.4951219512195122,
-          "alternatives": [
-            "Open source package supply chain attacks",
-            "WASM and Rust optimization patterns"
-          ],
-          "engineVersion": "3.1"
-        },
-        "timestamp": 1770981454381
-      },
-      "solve_13526a9c": {
-        "data": {
-          "predictionId": "Q3-1770932143879-834",
-          "optimizedBest": "AUTO_RESOLVE with clear instructions and confirmation follow-up",
-          "confidence": 0.99,
-          "alternatives": [
-            "ESCALATE_HUMAN to specialist with incident context",
-            "OFFER_UPGRADE with value-focused plan recommendation"
-          ],
-          "engineVersion": "3.1"
-        },
-        "timestamp": 1770932143879
-      },
-      "solve_71a18f6c": {
-        "data": {
-          "predictionId": "Q3-1770932008525-257",
-          "optimizedBest": "SELL: Bearish trend, take profits or cut losses",
-          "confidence": 0.99,
-          "alternatives": [
-            "BUY: Strong bullish trend with positive momentum",
-            "HOLD: Wait for clearer signals"
-          ],
-          "engineVersion": "3.1"
-        },
-        "timestamp": 1770932008525
-      },
-      "solve_7de17732": {
-        "data": {
-          "predictionId": "Q3-1770932010158-167",
-          "optimizedBest": "Prioritize pricing_anchor_packaging_v2 (pricing) - winner=quarterly_anchor, uplift=15.5%, consensus=85.5%",
-          "confidence": 0.99,
-          "alternatives": [
-            "Prioritize content_offer_cta_mix_v4 (content) - winner=offer_led_cta, uplift=22.4%, consensus=77.1%",
-            "Prioritize onboarding_value_prop_v3 (onboarding) - winner=roi_value_path, uplift=15.7%, consensus=72.4%"
-          ],
-          "engineVersion": "3.1"
-        },
-        "timestamp": 1770932010158
-      },
-      "solve_188f49cd": {
-        "data": {
-          "predictionId": "Q3-1770940732005-981",
-          "optimizedBest": "Harden CI/CD with stricter pipeline gates and rollback checks",
-          "confidence": 0.3769230769230769,
-          "alternatives": [
-            "Improve deployment reliability with environment verification and runbooks",
-            "Expand observability and incident response automation"
-          ],
-          "engineVersion": "3.1"
-        },
-        "timestamp": 1770940732005
-      },
-      "solve_1ab04315": {
-        "data": {
-          "predictionId": "Q3-1770940731986-347",
-          "optimizedBest": "Reasoning hardening with adversarial drills and outcome feedback",
-          "confidence": 0.7285714285714283,
-          "alternatives": [
-            "Planning/autonomy orchestration and multi-agent dependency checks",
-            "Reliability stress checks and latency regression detection"
-          ],
-          "engineVersion": "3.1"
-        },
-        "timestamp": 1770940731986
-      },
-      "solve_21e5cfff": {
-        "data": {
-          "predictionId": "Q3-1770932009006-857",
-          "optimizedBest": "INAPP_NUDGE with guided adoption checklist and health tips",
-          "confidence": 0.99,
-          "alternatives": [
-            "RETAIN_CALL with proactive success manager outreach",
-            "UPSELL with higher-tier value pitch and ROI framing"
-          ],
-          "engineVersion": "3.1"
-        },
-        "timestamp": 1770932009006
-      },
-      "solve_615e73df": {
-        "data": {
-          "predictionId": "Q3-1770932009738-341",
-          "optimizedBest": "Prioritize reliability hardening before revenue expansion",
-          "confidence": 0.99,
-          "alternatives": [
-            "Launch unified SaaS offer combining content automation, retention automation, and reliability guarantees",
-            "Prioritize market expansion and platform integrations before optimization"
-          ],
-          "engineVersion": "3.1"
-        },
-        "timestamp": 1770932009738
-      },
-      "solve_385b638a": {
-        "data": {
-          "predictionId": "Q3-1770932009884-458",
-          "optimizedBest": "Canary rollback, feature-flag disable, and error-budget alerting",
-          "confidence": 0.99,
-          "alternatives": [
-            "Restart services repeatedly and wait for customer complaints",
-            "Disable monitoring to reduce noise during rollout"
-          ],
-          "engineVersion": "3.1"
-        },
-        "timestamp": 1770932009884
-      },
       "solve_3aae636": {
         "data": {
           "predictionId": "Q3-1770932010084-433",
@@ -528,7 +206,7 @@
       },
       "solve_2d2266d0": {
         "data": {
-          "predictionId": "Q3-1770940687899-570",
+          "predictionId": "Q3-1771212029410-843",
           "optimizedBest": "Contain suspicious sessions, rotate secrets, and preserve audit trail",
           "confidence": 0.876470588235294,
           "alternatives": [
@@ -537,11 +215,11 @@
           ],
           "engineVersion": "3.1"
         },
-        "timestamp": 1770940687899
+        "timestamp": 1771212029410
       },
       "solve_5e9cb1f6": {
         "data": {
-          "predictionId": "Q3-1770940731968-50",
+          "predictionId": "Q3-1771211948896-389",
           "optimizedBest": "Operational transform plus conflict prompts and immutable history",
           "confidence": 0.42727272727272725,
           "alternatives": [
@@ -550,7 +228,7 @@
           ],
           "engineVersion": "3.1"
         },
-        "timestamp": 1770940731968
+        "timestamp": 1771211948896
       },
       "solve_66edb972": {
         "data": {
@@ -736,7 +414,7 @@
       },
       "solve_8e3bb25": {
         "data": {
-          "predictionId": "Q3-1770980428406-538",
+          "predictionId": "Q3-1771185009300-561",
           "optimizedBest": "Focus on system integrity and stability.",
           "confidence": 0.3655737704918033,
           "alternatives": [
@@ -745,7 +423,7 @@
           ],
           "engineVersion": "3.1"
         },
-        "timestamp": 1770980428406
+        "timestamp": 1771185009300
       },
       "solve_df09ceb": {
         "data": {
@@ -866,7 +544,7 @@
       },
       "solve_70f1b94a": {
         "data": {
-          "predictionId": "Q3-1770940449238-76",
+          "predictionId": "Q3-1771211958211-634",
           "optimizedBest": "Reasoning hardening with adversarial drills and outcome feedback",
           "confidence": 0.7285714285714283,
           "alternatives": [
@@ -875,7 +553,7 @@
           ],
           "engineVersion": "3.1"
         },
-        "timestamp": 1770940449238
+        "timestamp": 1771211958211
       },
       "solve_4b5078c7": {
         "data": {
@@ -1243,16 +921,16 @@
       },
       "solve_63fccc79": {
         "data": {
-          "predictionId": "Q3-1770938987785-435",
+          "predictionId": "Q3-1771201721523-228",
           "optimizedBest": "Prioritize reliability hardening before revenue expansion",
-          "confidence": 0.7285714285714283,
+          "confidence": 0.99,
           "alternatives": [
             "Launch unified SaaS offer combining content automation, retention automation, and reliability guarantees",
             "Prioritize market expansion and platform integrations before optimization"
           ],
           "engineVersion": "3.1"
         },
-        "timestamp": 1770938987785
+        "timestamp": 1771201721523
       },
       "solve_6f523e65": {
         "data": {
@@ -1490,7 +1168,7 @@
       },
       "solve_199052bd": {
         "data": {
-          "predictionId": "Q3-1770938774801-426",
+          "predictionId": "Q3-1771205265475-880",
           "optimizedBest": "Prioritize reliability hardening before revenue expansion",
           "confidence": 0.7285714285714283,
           "alternatives": [
@@ -1499,20 +1177,20 @@
           ],
           "engineVersion": "3.1"
         },
-        "timestamp": 1770938774801
+        "timestamp": 1771205265475
       },
       "solve_7cb4a90d": {
         "data": {
-          "predictionId": "Q3-1770939293735-937",
+          "predictionId": "Q3-1771201880047-773",
           "optimizedBest": "Prioritize reliability hardening before revenue expansion",
-          "confidence": 0.7285714285714283,
+          "confidence": 0.99,
           "alternatives": [
             "Launch unified SaaS offer combining content automation, retention automation, and reliability guarantees",
             "Prioritize market expansion and platform integrations before optimization"
           ],
           "engineVersion": "3.1"
         },
-        "timestamp": 1770939293735
+        "timestamp": 1771201880047
       },
       "solve_648c44b2": {
         "data": {
@@ -1633,7 +1311,7 @@
       },
       "solve_17e4b650": {
         "data": {
-          "predictionId": "Q3-1770940183827-282",
+          "predictionId": "Q3-1771206087341-910",
           "optimizedBest": "Prioritize reliability hardening before revenue expansion",
           "confidence": 0.7285714285714283,
           "alternatives": [
@@ -1642,7 +1320,7 @@
           ],
           "engineVersion": "3.1"
         },
-        "timestamp": 1770940183827
+        "timestamp": 1771206087341
       },
       "solve_5aa165c1": {
         "data": {
@@ -1672,7 +1350,7 @@
       },
       "solve_56e66525": {
         "data": {
-          "predictionId": "Q3-1770940657900-917",
+          "predictionId": "Q3-1771207339616-338",
           "optimizedBest": "Prioritize reliability hardening before revenue expansion",
           "confidence": 0.7285714285714283,
           "alternatives": [
@@ -1681,7 +1359,7 @@
           ],
           "engineVersion": "3.1"
         },
-        "timestamp": 1770940657900
+        "timestamp": 1771207339616
       },
       "solve_358f80f8": {
         "data": {
@@ -1867,7 +1545,7 @@
       },
       "solve_32a86c34": {
         "data": {
-          "predictionId": "Q3-1771210437197-455",
+          "predictionId": "Q3-1771159048313-835",
           "optimizedBest": "UNIFIED_INTELLIGENCE_PULSE",
           "confidence": 0.3655737704918033,
           "alternatives": [
@@ -1876,7 +1554,2477 @@
           ],
           "engineVersion": "3.1"
         },
-        "timestamp": 1771210437197
+        "timestamp": 1771159048314
+      },
+      "solve_4f2c7580": {
+        "data": {
+          "predictionId": "Q3-1771190815770-383",
+          "optimizedBest": "Prioritize revenue and expansion swarms (SocialMediaSwarm, ResearchSwarm, CustomerSuccessSwarm, ExperimentationSwarm, AIEconomySwarm)",
+          "confidence": 0.49036144578313245,
+          "alternatives": [
+            "Prioritize autonomous economy swarms (AIEconomySwarm, RevenueHunter, FinanceSwarm, ExperimentationSwarm)",
+            "Prioritize reliability and quality swarms (LearningSwarm, QualityAssuranceSwarm)"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771190815770
+      },
+      "solve_617dac21": {
+        "data": {
+          "predictionId": "Q3-1771191726690-132",
+          "optimizedBest": "Prioritize revenue and expansion swarms (SocialMediaSwarm, ResearchSwarm, CustomerSuccessSwarm, ExperimentationSwarm, AIEconomySwarm)",
+          "confidence": 0.49036144578313245,
+          "alternatives": [
+            "Prioritize autonomous economy swarms (AIEconomySwarm, RevenueHunter, FinanceSwarm, ExperimentationSwarm)",
+            "Prioritize reliability and quality swarms (LearningSwarm, QualityAssuranceSwarm)"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771191726690
+      },
+      "solve_3bbf282a": {
+        "data": {
+          "predictionId": "Q3-1771192809126-94",
+          "optimizedBest": "BUY: Strong bullish trend with positive momentum",
+          "confidence": 0.49754601226993866,
+          "alternatives": [
+            "SELL: Bearish trend, take profits or cut losses",
+            "HOLD: Wait for clearer signals"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771192809126
+      },
+      "solve_63828653": {
+        "data": {
+          "predictionId": "Q3-1771192809131-687",
+          "optimizedBest": "SELL: Bearish trend, take profits or cut losses",
+          "confidence": 0.99,
+          "alternatives": [
+            "BUY: Strong bullish trend with positive momentum",
+            "HOLD: Wait for clearer signals"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771192809131
+      },
+      "solve_7d53bae9": {
+        "data": {
+          "predictionId": "Q3-1771192809259-683",
+          "optimizedBest": "BUY: Strong bullish trend with positive momentum",
+          "confidence": 0.49754601226993866,
+          "alternatives": [
+            "SELL: Bearish trend, take profits or cut losses",
+            "HOLD: Wait for clearer signals"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771192809259
+      },
+      "solve_73cee2c2": {
+        "data": {
+          "predictionId": "Q3-1771192815284-572",
+          "optimizedBest": "Prioritize revenue and expansion swarms (SocialMediaSwarm, ResearchSwarm, CustomerSuccessSwarm, ExperimentationSwarm, AIEconomySwarm)",
+          "confidence": 0.49036144578313245,
+          "alternatives": [
+            "Prioritize autonomous economy swarms (AIEconomySwarm, RevenueHunter, FinanceSwarm, ExperimentationSwarm)",
+            "Prioritize reliability and quality swarms (LearningSwarm, QualityAssuranceSwarm)"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771192815284
+      },
+      "solve_4b29e984": {
+        "data": {
+          "predictionId": "Q3-1771193723031-458",
+          "optimizedBest": "Prioritize revenue and expansion swarms (SocialMediaSwarm, ResearchSwarm, CustomerSuccessSwarm, ExperimentationSwarm, AIEconomySwarm)",
+          "confidence": 0.49036144578313245,
+          "alternatives": [
+            "Prioritize autonomous economy swarms (AIEconomySwarm, RevenueHunter, FinanceSwarm, ExperimentationSwarm)",
+            "Prioritize reliability and quality swarms (LearningSwarm, QualityAssuranceSwarm)"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771193723031
+      },
+      "solve_38d8b2e3": {
+        "data": {
+          "predictionId": "Q3-1771194811759-996",
+          "optimizedBest": "Prioritize revenue and expansion swarms (SocialMediaSwarm, ResearchSwarm, CustomerSuccessSwarm, ExperimentationSwarm, AIEconomySwarm)",
+          "confidence": 0.49036144578313245,
+          "alternatives": [
+            "Prioritize autonomous economy swarms (AIEconomySwarm, RevenueHunter, FinanceSwarm, ExperimentationSwarm)",
+            "Prioritize reliability and quality swarms (LearningSwarm, QualityAssuranceSwarm)"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771194811759
+      },
+      "solve_26877c42": {
+        "data": {
+          "predictionId": "Q3-1771195718497-575",
+          "optimizedBest": "Prioritize revenue and expansion swarms (SocialMediaSwarm, ResearchSwarm, CustomerSuccessSwarm, ExperimentationSwarm, AIEconomySwarm)",
+          "confidence": 0.99,
+          "alternatives": [
+            "Prioritize reliability and quality swarms (LearningSwarm, QualityAssuranceSwarm)",
+            "Prioritize trading and market swarms (AutomatedTradingSwarm, CryptoSwarm, MarketAnalyzer)"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771195718497
+      },
+      "solve_143645a1": {
+        "data": {
+          "predictionId": "Q3-1771196805370-499",
+          "optimizedBest": "Prioritize revenue and expansion swarms (SocialMediaSwarm, ResearchSwarm, CustomerSuccessSwarm, ExperimentationSwarm, AIEconomySwarm)",
+          "confidence": 0.49036144578313245,
+          "alternatives": [
+            "Prioritize autonomous economy swarms (AIEconomySwarm, RevenueHunter, FinanceSwarm, ExperimentationSwarm)",
+            "Prioritize reliability and quality swarms (LearningSwarm, QualityAssuranceSwarm)"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771196805370
+      },
+      "solve_1e50f00": {
+        "data": {
+          "predictionId": "Q3-1771197713879-742",
+          "optimizedBest": "Prioritize revenue and expansion swarms (SocialMediaSwarm, ResearchSwarm, CustomerSuccessSwarm, ExperimentationSwarm, AIEconomySwarm)",
+          "confidence": 0.49036144578313245,
+          "alternatives": [
+            "Prioritize autonomous economy swarms (AIEconomySwarm, RevenueHunter, FinanceSwarm, ExperimentationSwarm)",
+            "Prioritize reliability and quality swarms (LearningSwarm, QualityAssuranceSwarm)"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771197713879
+      },
+      "solve_106c27a1": {
+        "data": {
+          "predictionId": "Q3-1771198803409-90",
+          "optimizedBest": "Prioritize revenue and expansion swarms (SocialMediaSwarm, ResearchSwarm, CustomerSuccessSwarm, ExperimentationSwarm, AIEconomySwarm)",
+          "confidence": 0.99,
+          "alternatives": [
+            "Prioritize reliability and quality swarms (LearningSwarm, QualityAssuranceSwarm)",
+            "Prioritize trading and market swarms (AutomatedTradingSwarm, CryptoSwarm, MarketAnalyzer)"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771198803409
+      },
+      "solve_22bd5e42": {
+        "data": {
+          "predictionId": "Q3-1771199709954-437",
+          "optimizedBest": "Prioritize revenue and expansion swarms (SocialMediaSwarm, ResearchSwarm, CustomerSuccessSwarm, ExperimentationSwarm, AIEconomySwarm)",
+          "confidence": 0.49036144578313245,
+          "alternatives": [
+            "Prioritize autonomous economy swarms (AIEconomySwarm, RevenueHunter, FinanceSwarm, ExperimentationSwarm)",
+            "Prioritize reliability and quality swarms (LearningSwarm, QualityAssuranceSwarm)"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771199709954
+      },
+      "solve_101bb5a6": {
+        "data": {
+          "predictionId": "Q3-1771200792281-621",
+          "optimizedBest": "BUY: Strong bullish trend with positive momentum",
+          "confidence": 0.49754601226993866,
+          "alternatives": [
+            "SELL: Bearish trend, take profits or cut losses",
+            "HOLD: Wait for clearer signals"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771200792281
+      },
+      "solve_5738a073": {
+        "data": {
+          "predictionId": "Q3-1771200792285-460",
+          "optimizedBest": "SELL: Bearish trend, take profits or cut losses",
+          "confidence": 0.99,
+          "alternatives": [
+            "BUY: Strong bullish trend with positive momentum",
+            "HOLD: Wait for clearer signals"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771200792285
+      },
+      "solve_4c106f27": {
+        "data": {
+          "predictionId": "Q3-1771200792575-973",
+          "optimizedBest": "BUY: Strong bullish trend with positive momentum",
+          "confidence": 0.49754601226993866,
+          "alternatives": [
+            "SELL: Bearish trend, take profits or cut losses",
+            "HOLD: Wait for clearer signals"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771200792576
+      },
+      "solve_6214ecfd": {
+        "data": {
+          "predictionId": "Q3-1771200792584-874",
+          "optimizedBest": "Prioritize reliability hardening before revenue expansion",
+          "confidence": 0.99,
+          "alternatives": [
+            "Launch unified SaaS offer combining content automation, retention automation, and reliability guarantees",
+            "Prioritize market expansion and platform integrations before optimization"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771200792584
+      },
+      "solve_350e94e3": {
+        "data": {
+          "predictionId": "Q3-1771200798028-817",
+          "optimizedBest": "Prioritize revenue and expansion swarms (SocialMediaSwarm, ResearchSwarm, CustomerSuccessSwarm, ExperimentationSwarm, AIEconomySwarm)",
+          "confidence": 0.99,
+          "alternatives": [
+            "Prioritize reliability and quality swarms (LearningSwarm, QualityAssuranceSwarm)",
+            "Prioritize trading and market swarms (AutomatedTradingSwarm, CryptoSwarm, MarketAnalyzer)"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771200798028
+      },
+      "solve_1ea8f3bf": {
+        "data": {
+          "predictionId": "Q3-1771211957125-34",
+          "optimizedBest": "Expand audit logging and change-management traceability",
+          "confidence": 0.7285714285714283,
+          "alternatives": [
+            "Enforce compliance gate in CI and block non-compliant releases",
+            "Harden secrets policy and environment governance"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771211957125
+      },
+      "solve_2259af5b": {
+        "data": {
+          "predictionId": "Q3-1771201703467-501",
+          "optimizedBest": "AGGRESSIVE_EXPANSION - maximize growth and experimentation despite lower reserve",
+          "confidence": 0.99,
+          "alternatives": [
+            "DEFENSIVE_COMPOUNDING - prioritize reserve runway and stable compounding",
+            "BALANCED_FLYWHEEL - balance reserve, growth reinvestment, and reliability"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771201703467
+      },
+      "solve_25202cd7": {
+        "data": {
+          "predictionId": "Q3-1771201703556-369",
+          "optimizedBest": "Prioritize reliability hardening before revenue expansion",
+          "confidence": 0.99,
+          "alternatives": [
+            "Launch unified SaaS offer combining content automation, retention automation, and reliability guarantees",
+            "Prioritize market expansion and platform integrations before optimization"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771201703556
+      },
+      "solve_fe09375": {
+        "data": {
+          "predictionId": "Q3-1771211957415-809",
+          "optimizedBest": "Harden CI/CD with stricter pipeline gates and rollback checks",
+          "confidence": 0.3769230769230769,
+          "alternatives": [
+            "Improve deployment reliability with environment verification and runbooks",
+            "Expand observability and incident response automation"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771211957415
+      },
+      "solve_39569c29": {
+        "data": {
+          "predictionId": "Q3-1771201704715-848",
+          "optimizedBest": "BUY: Strong bullish trend with positive momentum",
+          "confidence": 0.49754601226993866,
+          "alternatives": [
+            "SELL: Bearish trend, take profits or cut losses",
+            "HOLD: Wait for clearer signals"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771201704715
+      },
+      "solve_48b1358d": {
+        "data": {
+          "predictionId": "Q3-1771201704751-923",
+          "optimizedBest": "SELL: Bearish trend, take profits or cut losses",
+          "confidence": 0.99,
+          "alternatives": [
+            "BUY: Strong bullish trend with positive momentum",
+            "HOLD: Wait for clearer signals"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771201704751
+      },
+      "solve_26d7f619": {
+        "data": {
+          "predictionId": "Q3-1771201705294-398",
+          "optimizedBest": "BUY: Strong bullish trend with positive momentum",
+          "confidence": 0.49754601226993866,
+          "alternatives": [
+            "SELL: Bearish trend, take profits or cut losses",
+            "HOLD: Wait for clearer signals"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771201705294
+      },
+      "solve_51f2b344": {
+        "data": {
+          "predictionId": "Q3-1771201705931-965",
+          "optimizedBest": "AGGRESSIVE_EXPANSION - maximize growth and experimentation despite lower reserve",
+          "confidence": 0.99,
+          "alternatives": [
+            "DEFENSIVE_COMPOUNDING - prioritize reserve runway and stable compounding",
+            "BALANCED_FLYWHEEL - balance reserve, growth reinvestment, and reliability"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771201705931
+      },
+      "solve_4aafbd6": {
+        "data": {
+          "predictionId": "Q3-1771201706785-366",
+          "optimizedBest": "SELL: Bearish trend, take profits or cut losses",
+          "confidence": 0.99,
+          "alternatives": [
+            "BUY: Strong bullish trend with positive momentum",
+            "HOLD: Wait for clearer signals"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771201706785
+      },
+      "solve_aaf9d8e": {
+        "data": {
+          "predictionId": "Q3-1771201709351-753",
+          "optimizedBest": "BUY: Strong bullish trend with positive momentum",
+          "confidence": 0.49754601226993866,
+          "alternatives": [
+            "SELL: Bearish trend, take profits or cut losses",
+            "HOLD: Wait for clearer signals"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771201709351
+      },
+      "solve_75d86237": {
+        "data": {
+          "predictionId": "Q3-1771201710005-722",
+          "optimizedBest": "BUY: Strong bullish trend with positive momentum",
+          "confidence": 0.49754601226993866,
+          "alternatives": [
+            "SELL: Bearish trend, take profits or cut losses",
+            "HOLD: Wait for clearer signals"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771201710005
+      },
+      "solve_5cc89910": {
+        "data": {
+          "predictionId": "Q3-1771201712353-704",
+          "optimizedBest": "Creator Revenue Studio (35.0)",
+          "confidence": 0.99,
+          "alternatives": [
+            "SwarmOps Command Center (51.0)",
+            "Competitor Pulse Radar (49.8)"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771201712353
+      },
+      "solve_14c905a": {
+        "data": {
+          "predictionId": "Q3-1771201720424-820",
+          "optimizedBest": "AGGRESSIVE_EXPANSION - maximize growth and experimentation despite lower reserve",
+          "confidence": 0.99,
+          "alternatives": [
+            "DEFENSIVE_COMPOUNDING - prioritize reserve runway and stable compounding",
+            "BALANCED_FLYWHEEL - balance reserve, growth reinvestment, and reliability"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771201720424
+      },
+      "solve_33a993c4": {
+        "data": {
+          "predictionId": "Q3-1771201721306-394",
+          "optimizedBest": "AGGRESSIVE_EXPANSION - maximize growth and experimentation despite lower reserve",
+          "confidence": 0.99,
+          "alternatives": [
+            "DEFENSIVE_COMPOUNDING - prioritize reserve runway and stable compounding",
+            "BALANCED_FLYWHEEL - balance reserve, growth reinvestment, and reliability"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771201721306
+      },
+      "solve_5e52eba2": {
+        "data": {
+          "predictionId": "Q3-1771201723435-481",
+          "optimizedBest": "AGGRESSIVE_EXPANSION - maximize growth and experimentation despite lower reserve",
+          "confidence": 0.876470588235294,
+          "alternatives": [
+            "DEFENSIVE_COMPOUNDING - prioritize reserve runway and stable compounding",
+            "BALANCED_FLYWHEEL - balance reserve, growth reinvestment, and reliability"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771201723435
+      },
+      "solve_4c4805cf": {
+        "data": {
+          "predictionId": "Q3-1771201723654-595",
+          "optimizedBest": "SELL: Bearish trend, take profits or cut losses",
+          "confidence": 0.99,
+          "alternatives": [
+            "BUY: Strong bullish trend with positive momentum",
+            "HOLD: Wait for clearer signals"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771201723654
+      },
+      "solve_59fbc0a9": {
+        "data": {
+          "predictionId": "Q3-1771201723964-919",
+          "optimizedBest": "SELL: Bearish trend, take profits or cut losses",
+          "confidence": 0.99,
+          "alternatives": [
+            "BUY: Strong bullish trend with positive momentum",
+            "HOLD: Wait for clearer signals"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771201723964
+      },
+      "solve_220b80b1": {
+        "data": {
+          "predictionId": "Q3-1771201724718-579",
+          "optimizedBest": "SELL: Bearish trend, take profits or cut losses",
+          "confidence": 0.99,
+          "alternatives": [
+            "BUY: Strong bullish trend with positive momentum",
+            "HOLD: Wait for clearer signals"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771201724718
+      },
+      "solve_53dab9f9": {
+        "data": {
+          "predictionId": "Q3-1771201724337-873",
+          "optimizedBest": "SELL: Bearish trend, take profits or cut losses",
+          "confidence": 0.99,
+          "alternatives": [
+            "BUY: Strong bullish trend with positive momentum",
+            "HOLD: Wait for clearer signals"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771201724337
+      },
+      "solve_3f9d27a8": {
+        "data": {
+          "predictionId": "Q3-1771201724763-332",
+          "optimizedBest": "BUY: Strong bullish trend with positive momentum",
+          "confidence": 0.49754601226993866,
+          "alternatives": [
+            "SELL: Bearish trend, take profits or cut losses",
+            "HOLD: Wait for clearer signals"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771201724763
+      },
+      "solve_f50b519": {
+        "data": {
+          "predictionId": "Q3-1771201725774-181",
+          "optimizedBest": "AGGRESSIVE_EXPANSION - maximize growth and experimentation despite lower reserve",
+          "confidence": 0.876470588235294,
+          "alternatives": [
+            "DEFENSIVE_COMPOUNDING - prioritize reserve runway and stable compounding",
+            "BALANCED_FLYWHEEL - balance reserve, growth reinvestment, and reliability"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771201725774
+      },
+      "solve_a524079": {
+        "data": {
+          "predictionId": "Q3-1771201726696-347",
+          "optimizedBest": "SELL: Bearish trend, take profits or cut losses",
+          "confidence": 0.99,
+          "alternatives": [
+            "BUY: Strong bullish trend with positive momentum",
+            "HOLD: Wait for clearer signals"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771201726696
+      },
+      "solve_6e40ef3d": {
+        "data": {
+          "predictionId": "Q3-1771201756470-917",
+          "optimizedBest": "BUY: Strong bullish trend with positive momentum",
+          "confidence": 0.49754601226993866,
+          "alternatives": [
+            "SELL: Bearish trend, take profits or cut losses",
+            "HOLD: Wait for clearer signals"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771201756470
+      },
+      "solve_5d24d9e9": {
+        "data": {
+          "predictionId": "Q3-1771201729674-830",
+          "optimizedBest": "SELL: Bearish trend, take profits or cut losses",
+          "confidence": 0.99,
+          "alternatives": [
+            "BUY: Strong bullish trend with positive momentum",
+            "HOLD: Wait for clearer signals"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771201729674
+      },
+      "solve_a8c1443": {
+        "data": {
+          "predictionId": "Q3-1771201734180-270",
+          "optimizedBest": "Creator Revenue Studio (42.8)",
+          "confidence": 0.99,
+          "alternatives": [
+            "Competitor Pulse Radar (52.2)",
+            "SwarmOps Command Center (52.1)"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771201734180
+      },
+      "solve_4b775233": {
+        "data": {
+          "predictionId": "Q3-1771201738847-26",
+          "optimizedBest": "AGGRESSIVE_EXPANSION - maximize growth and experimentation despite lower reserve",
+          "confidence": 0.876470588235294,
+          "alternatives": [
+            "DEFENSIVE_COMPOUNDING - prioritize reserve runway and stable compounding",
+            "BALANCED_FLYWHEEL - balance reserve, growth reinvestment, and reliability"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771201738847
+      },
+      "solve_3d67d015": {
+        "data": {
+          "predictionId": "Q3-1771201741104-84",
+          "optimizedBest": "SELL: Bearish trend, take profits or cut losses",
+          "confidence": 0.99,
+          "alternatives": [
+            "BUY: Strong bullish trend with positive momentum",
+            "HOLD: Wait for clearer signals"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771201741104
+      },
+      "solve_3eee962d": {
+        "data": {
+          "predictionId": "Q3-1771201741140-23",
+          "optimizedBest": "SELL: Bearish trend, take profits or cut losses",
+          "confidence": 0.99,
+          "alternatives": [
+            "BUY: Strong bullish trend with positive momentum",
+            "HOLD: Wait for clearer signals"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771201741140
+      },
+      "solve_5692b8ab": {
+        "data": {
+          "predictionId": "Q3-1771201742960-852",
+          "optimizedBest": "AGGRESSIVE_EXPANSION - maximize growth and experimentation despite lower reserve",
+          "confidence": 0.876470588235294,
+          "alternatives": [
+            "DEFENSIVE_COMPOUNDING - prioritize reserve runway and stable compounding",
+            "BALANCED_FLYWHEEL - balance reserve, growth reinvestment, and reliability"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771201742960
+      },
+      "solve_99c7ea": {
+        "data": {
+          "predictionId": "Q3-1771201744481-325",
+          "optimizedBest": "SELL: Bearish trend, take profits or cut losses",
+          "confidence": 0.99,
+          "alternatives": [
+            "BUY: Strong bullish trend with positive momentum",
+            "HOLD: Wait for clearer signals"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771201744481
+      },
+      "solve_1d10598c": {
+        "data": {
+          "predictionId": "Q3-1771201749936-443",
+          "optimizedBest": "AGGRESSIVE_EXPANSION - maximize growth and experimentation despite lower reserve",
+          "confidence": 0.876470588235294,
+          "alternatives": [
+            "DEFENSIVE_COMPOUNDING - prioritize reserve runway and stable compounding",
+            "BALANCED_FLYWHEEL - balance reserve, growth reinvestment, and reliability"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771201749936
+      },
+      "solve_1a6c1d07": {
+        "data": {
+          "predictionId": "Q3-1771201754515-200",
+          "optimizedBest": "AGGRESSIVE_EXPANSION - maximize growth and experimentation despite lower reserve",
+          "confidence": 0.876470588235294,
+          "alternatives": [
+            "DEFENSIVE_COMPOUNDING - prioritize reserve runway and stable compounding",
+            "BALANCED_FLYWHEEL - balance reserve, growth reinvestment, and reliability"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771201754516
+      },
+      "solve_79a51df7": {
+        "data": {
+          "predictionId": "Q3-1771201758345-884",
+          "optimizedBest": "SELL: Bearish trend, take profits or cut losses",
+          "confidence": 0.99,
+          "alternatives": [
+            "BUY: Strong bullish trend with positive momentum",
+            "HOLD: Wait for clearer signals"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771201758345
+      },
+      "solve_5bf796d4": {
+        "data": {
+          "predictionId": "Q3-1771201788684-68",
+          "optimizedBest": "BUY: Strong bullish trend with positive momentum",
+          "confidence": 0.49754601226993866,
+          "alternatives": [
+            "SELL: Bearish trend, take profits or cut losses",
+            "HOLD: Wait for clearer signals"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771201788684
+      },
+      "solve_4f624125": {
+        "data": {
+          "predictionId": "Q3-1771201782927-67",
+          "optimizedBest": "AGGRESSIVE_EXPANSION - maximize growth and experimentation despite lower reserve",
+          "confidence": 0.876470588235294,
+          "alternatives": [
+            "DEFENSIVE_COMPOUNDING - prioritize reserve runway and stable compounding",
+            "BALANCED_FLYWHEEL - balance reserve, growth reinvestment, and reliability"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771201782927
+      },
+      "solve_60976c20": {
+        "data": {
+          "predictionId": "Q3-1771201777737-28",
+          "optimizedBest": "AGGRESSIVE_EXPANSION - maximize growth and experimentation despite lower reserve",
+          "confidence": 0.876470588235294,
+          "alternatives": [
+            "DEFENSIVE_COMPOUNDING - prioritize reserve runway and stable compounding",
+            "BALANCED_FLYWHEEL - balance reserve, growth reinvestment, and reliability"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771201777737
+      },
+      "solve_68a649d8": {
+        "data": {
+          "predictionId": "Q3-1771201781243-733",
+          "optimizedBest": "SELL: Bearish trend, take profits or cut losses",
+          "confidence": 0.99,
+          "alternatives": [
+            "BUY: Strong bullish trend with positive momentum",
+            "HOLD: Wait for clearer signals"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771201781243
+      },
+      "solve_6cf66af3": {
+        "data": {
+          "predictionId": "Q3-1771201781335-291",
+          "optimizedBest": "SELL: Bearish trend, take profits or cut losses",
+          "confidence": 0.99,
+          "alternatives": [
+            "BUY: Strong bullish trend with positive momentum",
+            "HOLD: Wait for clearer signals"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771201781335
+      },
+      "solve_2bb045f0": {
+        "data": {
+          "predictionId": "Q3-1771201807832-606",
+          "optimizedBest": "BUY: Strong bullish trend with positive momentum",
+          "confidence": 0.49754601226993866,
+          "alternatives": [
+            "SELL: Bearish trend, take profits or cut losses",
+            "HOLD: Wait for clearer signals"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771201807832
+      },
+      "solve_4b384332": {
+        "data": {
+          "predictionId": "Q3-1771201783757-263",
+          "optimizedBest": "Creator Revenue Studio (73.8)",
+          "confidence": 0.99,
+          "alternatives": [
+            "SwarmOps Command Center (68.4)",
+            "Competitor Pulse Radar (67.8)"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771201783757
+      },
+      "solve_5507fd0e": {
+        "data": {
+          "predictionId": "Q3-1771201785467-564",
+          "optimizedBest": "SELL: Bearish trend, take profits or cut losses",
+          "confidence": 0.99,
+          "alternatives": [
+            "BUY: Strong bullish trend with positive momentum",
+            "HOLD: Wait for clearer signals"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771201785467
+      },
+      "solve_af7432f": {
+        "data": {
+          "predictionId": "Q3-1771201811909-470",
+          "optimizedBest": "BUY: Strong bullish trend with positive momentum",
+          "confidence": 0.49754601226993866,
+          "alternatives": [
+            "SELL: Bearish trend, take profits or cut losses",
+            "HOLD: Wait for clearer signals"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771201811909
+      },
+      "solve_21ba7e9d": {
+        "data": {
+          "predictionId": "Q3-1771201808395-178",
+          "optimizedBest": "AGGRESSIVE_EXPANSION - maximize growth and experimentation despite lower reserve",
+          "confidence": 0.876470588235294,
+          "alternatives": [
+            "DEFENSIVE_COMPOUNDING - prioritize reserve runway and stable compounding",
+            "BALANCED_FLYWHEEL - balance reserve, growth reinvestment, and reliability"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771201808395
+      },
+      "solve_8eed941": {
+        "data": {
+          "predictionId": "Q3-1771201789073-354",
+          "optimizedBest": "AGGRESSIVE_EXPANSION - maximize growth and experimentation despite lower reserve",
+          "confidence": 0.876470588235294,
+          "alternatives": [
+            "DEFENSIVE_COMPOUNDING - prioritize reserve runway and stable compounding",
+            "BALANCED_FLYWHEEL - balance reserve, growth reinvestment, and reliability"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771201789073
+      },
+      "solve_34ed5637": {
+        "data": {
+          "predictionId": "Q3-1771201793274-572",
+          "optimizedBest": "SELL: Bearish trend, take profits or cut losses",
+          "confidence": 0.99,
+          "alternatives": [
+            "BUY: Strong bullish trend with positive momentum",
+            "HOLD: Wait for clearer signals"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771201793274
+      },
+      "solve_4f143be3": {
+        "data": {
+          "predictionId": "Q3-1771201795372-973",
+          "optimizedBest": "AGGRESSIVE_EXPANSION - maximize growth and experimentation despite lower reserve",
+          "confidence": 0.876470588235294,
+          "alternatives": [
+            "DEFENSIVE_COMPOUNDING - prioritize reserve runway and stable compounding",
+            "BALANCED_FLYWHEEL - balance reserve, growth reinvestment, and reliability"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771201795372
+      },
+      "solve_e51217f": {
+        "data": {
+          "predictionId": "Q3-1771201806953-851",
+          "optimizedBest": "BUY: Strong bullish trend with positive momentum",
+          "confidence": 0.49754601226993866,
+          "alternatives": [
+            "SELL: Bearish trend, take profits or cut losses",
+            "HOLD: Wait for clearer signals"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771201806953
+      },
+      "solve_600d18b0": {
+        "data": {
+          "predictionId": "Q3-1771201803995-179",
+          "optimizedBest": "SELL: Bearish trend, take profits or cut losses",
+          "confidence": 0.99,
+          "alternatives": [
+            "BUY: Strong bullish trend with positive momentum",
+            "HOLD: Wait for clearer signals"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771201803995
+      },
+      "solve_4b7631b2": {
+        "data": {
+          "predictionId": "Q3-1771201810215-423",
+          "optimizedBest": "Prioritize reliability hardening before revenue expansion",
+          "confidence": 0.99,
+          "alternatives": [
+            "Launch unified SaaS offer combining content automation, retention automation, and reliability guarantees",
+            "Prioritize market expansion and platform integrations before optimization"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771201810215
+      },
+      "solve_6fcd672b": {
+        "data": {
+          "predictionId": "Q3-1771201834629-111",
+          "optimizedBest": "BUY: Strong bullish trend with positive momentum",
+          "confidence": 0.49754601226993866,
+          "alternatives": [
+            "SELL: Bearish trend, take profits or cut losses",
+            "HOLD: Wait for clearer signals"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771201834629
+      },
+      "solve_1b6a27d7": {
+        "data": {
+          "predictionId": "Q3-1771201811901-786",
+          "optimizedBest": "BUY: Strong bullish trend with positive momentum",
+          "confidence": 0.49754601226993866,
+          "alternatives": [
+            "SELL: Bearish trend, take profits or cut losses",
+            "HOLD: Wait for clearer signals"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771201811901
+      },
+      "solve_4e72f1e8": {
+        "data": {
+          "predictionId": "Q3-1771201842838-531",
+          "optimizedBest": "BUY: Strong bullish trend with positive momentum",
+          "confidence": 0.49754601226993866,
+          "alternatives": [
+            "SELL: Bearish trend, take profits or cut losses",
+            "HOLD: Wait for clearer signals"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771201842838
+      },
+      "solve_4370c23a": {
+        "data": {
+          "predictionId": "Q3-1771201825949-870",
+          "optimizedBest": "BUY: Strong bullish trend with positive momentum",
+          "confidence": 0.49754601226993866,
+          "alternatives": [
+            "SELL: Bearish trend, take profits or cut losses",
+            "HOLD: Wait for clearer signals"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771201825949
+      },
+      "solve_546f9659": {
+        "data": {
+          "predictionId": "Q3-1771201814019-660",
+          "optimizedBest": "SELL: Bearish trend, take profits or cut losses",
+          "confidence": 0.99,
+          "alternatives": [
+            "BUY: Strong bullish trend with positive momentum",
+            "HOLD: Wait for clearer signals"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771201814019
+      },
+      "solve_ab6c523": {
+        "data": {
+          "predictionId": "Q3-1771201850848-416",
+          "optimizedBest": "BUY: Strong bullish trend with positive momentum",
+          "confidence": 0.49754601226993866,
+          "alternatives": [
+            "SELL: Bearish trend, take profits or cut losses",
+            "HOLD: Wait for clearer signals"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771201850848
+      },
+      "solve_3d84f567": {
+        "data": {
+          "predictionId": "Q3-1771201824060-53",
+          "optimizedBest": "AGGRESSIVE_EXPANSION - maximize growth and experimentation despite lower reserve",
+          "confidence": 0.876470588235294,
+          "alternatives": [
+            "DEFENSIVE_COMPOUNDING - prioritize reserve runway and stable compounding",
+            "BALANCED_FLYWHEEL - balance reserve, growth reinvestment, and reliability"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771201824060
+      },
+      "solve_728a4a15": {
+        "data": {
+          "predictionId": "Q3-1771201824158-956",
+          "optimizedBest": "SELL: Bearish trend, take profits or cut losses",
+          "confidence": 0.99,
+          "alternatives": [
+            "BUY: Strong bullish trend with positive momentum",
+            "HOLD: Wait for clearer signals"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771201824158
+      },
+      "solve_133ba581": {
+        "data": {
+          "predictionId": "Q3-1771201834336-448",
+          "optimizedBest": "AGGRESSIVE_EXPANSION - maximize growth and experimentation despite lower reserve",
+          "confidence": 0.876470588235294,
+          "alternatives": [
+            "DEFENSIVE_COMPOUNDING - prioritize reserve runway and stable compounding",
+            "BALANCED_FLYWHEEL - balance reserve, growth reinvestment, and reliability"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771201834336
+      },
+      "solve_3de4fd5f": {
+        "data": {
+          "predictionId": "Q3-1771201841897-861",
+          "optimizedBest": "AGGRESSIVE_EXPANSION - maximize growth and experimentation despite lower reserve",
+          "confidence": 0.876470588235294,
+          "alternatives": [
+            "DEFENSIVE_COMPOUNDING - prioritize reserve runway and stable compounding",
+            "BALANCED_FLYWHEEL - balance reserve, growth reinvestment, and reliability"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771201841897
+      },
+      "solve_777ec7ef": {
+        "data": {
+          "predictionId": "Q3-1771201844713-492",
+          "optimizedBest": "Creator Revenue Studio (57.4)",
+          "confidence": 0.99,
+          "alternatives": [
+            "Autonomous Risk Desk (48.3)",
+            "SwarmOps Command Center (46.4)"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771201844713
+      },
+      "solve_6341f83c": {
+        "data": {
+          "predictionId": "Q3-1771201846073-283",
+          "optimizedBest": "AGGRESSIVE_EXPANSION - maximize growth and experimentation despite lower reserve",
+          "confidence": 0.876470588235294,
+          "alternatives": [
+            "DEFENSIVE_COMPOUNDING - prioritize reserve runway and stable compounding",
+            "BALANCED_FLYWHEEL - balance reserve, growth reinvestment, and reliability"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771201846073
+      },
+      "solve_5a7244f5": {
+        "data": {
+          "predictionId": "Q3-1771201852460-449",
+          "optimizedBest": "BUY: Strong bullish trend with positive momentum",
+          "confidence": 0.49754601226993866,
+          "alternatives": [
+            "SELL: Bearish trend, take profits or cut losses",
+            "HOLD: Wait for clearer signals"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771201852460
+      },
+      "solve_11ca7170": {
+        "data": {
+          "predictionId": "Q3-1771201879685-240",
+          "optimizedBest": "BUY: Strong bullish trend with positive momentum",
+          "confidence": 0.49754601226993866,
+          "alternatives": [
+            "SELL: Bearish trend, take profits or cut losses",
+            "HOLD: Wait for clearer signals"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771201879685
+      },
+      "solve_75016bfa": {
+        "data": {
+          "predictionId": "Q3-1771201894511-128",
+          "optimizedBest": "AGGRESSIVE_EXPANSION - maximize growth and experimentation despite lower reserve",
+          "confidence": 0.876470588235294,
+          "alternatives": [
+            "DEFENSIVE_COMPOUNDING - prioritize reserve runway and stable compounding",
+            "BALANCED_FLYWHEEL - balance reserve, growth reinvestment, and reliability"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771201894511
+      },
+      "solve_12eda03f": {
+        "data": {
+          "predictionId": "Q3-1771201940797-430",
+          "optimizedBest": "AGGRESSIVE_EXPANSION - maximize growth and experimentation despite lower reserve",
+          "confidence": 0.876470588235294,
+          "alternatives": [
+            "DEFENSIVE_COMPOUNDING - prioritize reserve runway and stable compounding",
+            "BALANCED_FLYWHEEL - balance reserve, growth reinvestment, and reliability"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771201940797
+      },
+      "solve_3129c125": {
+        "data": {
+          "predictionId": "Q3-1771201889832-314",
+          "optimizedBest": "BUY: Strong bullish trend with positive momentum",
+          "confidence": 0.49754601226993866,
+          "alternatives": [
+            "SELL: Bearish trend, take profits or cut losses",
+            "HOLD: Wait for clearer signals"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771201889832
+      },
+      "solve_3d96f81d": {
+        "data": {
+          "predictionId": "Q3-1771201920368-176",
+          "optimizedBest": "AGGRESSIVE_EXPANSION - maximize growth and experimentation despite lower reserve",
+          "confidence": 0.876470588235294,
+          "alternatives": [
+            "DEFENSIVE_COMPOUNDING - prioritize reserve runway and stable compounding",
+            "BALANCED_FLYWHEEL - balance reserve, growth reinvestment, and reliability"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771201920369
+      },
+      "solve_39803254": {
+        "data": {
+          "predictionId": "Q3-1771201936954-113",
+          "optimizedBest": "BUY: Strong bullish trend with positive momentum",
+          "confidence": 0.49754601226993866,
+          "alternatives": [
+            "SELL: Bearish trend, take profits or cut losses",
+            "HOLD: Wait for clearer signals"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771201936954
+      },
+      "solve_58269ee7": {
+        "data": {
+          "predictionId": "Q3-1771201923162-26",
+          "optimizedBest": "SELL: Bearish trend, take profits or cut losses",
+          "confidence": 0.99,
+          "alternatives": [
+            "BUY: Strong bullish trend with positive momentum",
+            "HOLD: Wait for clearer signals"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771201923162
+      },
+      "solve_1bf6174e": {
+        "data": {
+          "predictionId": "Q3-1771201923637-795",
+          "optimizedBest": "BUY: Strong bullish trend with positive momentum",
+          "confidence": 0.49754601226993866,
+          "alternatives": [
+            "SELL: Bearish trend, take profits or cut losses",
+            "HOLD: Wait for clearer signals"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771201923637
+      },
+      "solve_62f3f2fa": {
+        "data": {
+          "predictionId": "Q3-1771201931015-500",
+          "optimizedBest": "AGGRESSIVE_EXPANSION - maximize growth and experimentation despite lower reserve",
+          "confidence": 0.876470588235294,
+          "alternatives": [
+            "DEFENSIVE_COMPOUNDING - prioritize reserve runway and stable compounding",
+            "BALANCED_FLYWHEEL - balance reserve, growth reinvestment, and reliability"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771201931015
+      },
+      "solve_20feae": {
+        "data": {
+          "predictionId": "Q3-1771201931597-601",
+          "optimizedBest": "SELL: Bearish trend, take profits or cut losses",
+          "confidence": 0.99,
+          "alternatives": [
+            "BUY: Strong bullish trend with positive momentum",
+            "HOLD: Wait for clearer signals"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771201931597
+      },
+      "solve_31754fc1": {
+        "data": {
+          "predictionId": "Q3-1771201934659-985",
+          "optimizedBest": "SELL: Bearish trend, take profits or cut losses",
+          "confidence": 0.99,
+          "alternatives": [
+            "BUY: Strong bullish trend with positive momentum",
+            "HOLD: Wait for clearer signals"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771201934659
+      },
+      "solve_2adc4b9c": {
+        "data": {
+          "predictionId": "Q3-1771201947588-899",
+          "optimizedBest": "AGGRESSIVE_EXPANSION - maximize growth and experimentation despite lower reserve",
+          "confidence": 0.876470588235294,
+          "alternatives": [
+            "DEFENSIVE_COMPOUNDING - prioritize reserve runway and stable compounding",
+            "BALANCED_FLYWHEEL - balance reserve, growth reinvestment, and reliability"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771201947588
+      },
+      "solve_6858228c": {
+        "data": {
+          "predictionId": "Q3-1771201952638-397",
+          "optimizedBest": "SELL: Bearish trend, take profits or cut losses",
+          "confidence": 0.99,
+          "alternatives": [
+            "BUY: Strong bullish trend with positive momentum",
+            "HOLD: Wait for clearer signals"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771201952638
+      },
+      "solve_48bd7e14": {
+        "data": {
+          "predictionId": "Q3-1771201956872-306",
+          "optimizedBest": "Creator Revenue Studio (38.0)",
+          "confidence": 0.99,
+          "alternatives": [
+            "SwarmOps Command Center (64.0)",
+            "Competitor Pulse Radar (54.3)"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771201956872
+      },
+      "solve_76d49796": {
+        "data": {
+          "predictionId": "Q3-1771202690855-82",
+          "optimizedBest": "AGGRESSIVE_EXPANSION - maximize growth and experimentation despite lower reserve",
+          "confidence": 0.876470588235294,
+          "alternatives": [
+            "DEFENSIVE_COMPOUNDING - prioritize reserve runway and stable compounding",
+            "BALANCED_FLYWHEEL - balance reserve, growth reinvestment, and reliability"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771202690855
+      },
+      "solve_79647546": {
+        "data": {
+          "predictionId": "Q3-1771201959703-280",
+          "optimizedBest": "SELL: Bearish trend, take profits or cut losses",
+          "confidence": 0.99,
+          "alternatives": [
+            "BUY: Strong bullish trend with positive momentum",
+            "HOLD: Wait for clearer signals"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771201959703
+      },
+      "solve_42875f48": {
+        "data": {
+          "predictionId": "Q3-1771206656942-551",
+          "optimizedBest": "AGGRESSIVE_EXPANSION - maximize growth and experimentation despite lower reserve",
+          "confidence": 0.876470588235294,
+          "alternatives": [
+            "DEFENSIVE_COMPOUNDING - prioritize reserve runway and stable compounding",
+            "BALANCED_FLYWHEEL - balance reserve, growth reinvestment, and reliability"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771206656942
+      },
+      "solve_5585a37a": {
+        "data": {
+          "predictionId": "Q3-1771201962512-761",
+          "optimizedBest": "AGGRESSIVE_EXPANSION - maximize growth and experimentation despite lower reserve",
+          "confidence": 0.876470588235294,
+          "alternatives": [
+            "DEFENSIVE_COMPOUNDING - prioritize reserve runway and stable compounding",
+            "BALANCED_FLYWHEEL - balance reserve, growth reinvestment, and reliability"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771201962512
+      },
+      "solve_9bb593e": {
+        "data": {
+          "predictionId": "Q3-1771201967392-377",
+          "optimizedBest": "SELL: Bearish trend, take profits or cut losses",
+          "confidence": 0.99,
+          "alternatives": [
+            "BUY: Strong bullish trend with positive momentum",
+            "HOLD: Wait for clearer signals"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771201967392
+      },
+      "solve_10af1f3d": {
+        "data": {
+          "predictionId": "Q3-1771201971077-731",
+          "optimizedBest": "AGGRESSIVE_EXPANSION - maximize growth and experimentation despite lower reserve",
+          "confidence": 0.876470588235294,
+          "alternatives": [
+            "DEFENSIVE_COMPOUNDING - prioritize reserve runway and stable compounding",
+            "BALANCED_FLYWHEEL - balance reserve, growth reinvestment, and reliability"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771201971077
+      },
+      "solve_63b57de0": {
+        "data": {
+          "predictionId": "Q3-1771201973082-960",
+          "optimizedBest": "Creator Revenue Studio (50.1)",
+          "confidence": 0.99,
+          "alternatives": [
+            "SwarmOps Command Center (59.4)",
+            "Competitor Pulse Radar (49.8)"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771201973082
+      },
+      "solve_60b571f8": {
+        "data": {
+          "predictionId": "Q3-1771201976084-169",
+          "optimizedBest": "AGGRESSIVE_EXPANSION - maximize growth and experimentation despite lower reserve",
+          "confidence": 0.876470588235294,
+          "alternatives": [
+            "DEFENSIVE_COMPOUNDING - prioritize reserve runway and stable compounding",
+            "BALANCED_FLYWHEEL - balance reserve, growth reinvestment, and reliability"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771201976084
+      },
+      "solve_4e7af9b4": {
+        "data": {
+          "predictionId": "Q3-1771202043419-286",
+          "optimizedBest": "BUY: Strong bullish trend with positive momentum",
+          "confidence": 0.49754601226993866,
+          "alternatives": [
+            "SELL: Bearish trend, take profits or cut losses",
+            "HOLD: Wait for clearer signals"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771202043419
+      },
+      "solve_4ed9cd5d": {
+        "data": {
+          "predictionId": "Q3-1771202049666-110",
+          "optimizedBest": "BUY: Strong bullish trend with positive momentum",
+          "confidence": 0.49754601226993866,
+          "alternatives": [
+            "SELL: Bearish trend, take profits or cut losses",
+            "HOLD: Wait for clearer signals"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771202049666
+      },
+      "solve_63c1cc56": {
+        "data": {
+          "predictionId": "Q3-1771201994652-733",
+          "optimizedBest": "Creator Revenue Studio (46.3)",
+          "confidence": 0.99,
+          "alternatives": [
+            "Autonomous Risk Desk (48.3)",
+            "Competitor Pulse Radar (43.8)"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771201994652
+      },
+      "solve_7ebaa4b8": {
+        "data": {
+          "predictionId": "Q3-1771201995435-900",
+          "optimizedBest": "AGGRESSIVE_EXPANSION - maximize growth and experimentation despite lower reserve",
+          "confidence": 0.876470588235294,
+          "alternatives": [
+            "DEFENSIVE_COMPOUNDING - prioritize reserve runway and stable compounding",
+            "BALANCED_FLYWHEEL - balance reserve, growth reinvestment, and reliability"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771201995435
+      },
+      "solve_7be49a15": {
+        "data": {
+          "predictionId": "Q3-1771202010818-86",
+          "optimizedBest": "BUY: Strong bullish trend with positive momentum",
+          "confidence": 0.49754601226993866,
+          "alternatives": [
+            "SELL: Bearish trend, take profits or cut losses",
+            "HOLD: Wait for clearer signals"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771202010818
+      },
+      "solve_59520958": {
+        "data": {
+          "predictionId": "Q3-1771202007101-829",
+          "optimizedBest": "AGGRESSIVE_EXPANSION - maximize growth and experimentation despite lower reserve",
+          "confidence": 0.876470588235294,
+          "alternatives": [
+            "DEFENSIVE_COMPOUNDING - prioritize reserve runway and stable compounding",
+            "BALANCED_FLYWHEEL - balance reserve, growth reinvestment, and reliability"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771202007101
+      },
+      "solve_48e0958f": {
+        "data": {
+          "predictionId": "Q3-1771202010495-111",
+          "optimizedBest": "SELL: Bearish trend, take profits or cut losses",
+          "confidence": 0.99,
+          "alternatives": [
+            "BUY: Strong bullish trend with positive momentum",
+            "HOLD: Wait for clearer signals"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771202010495
+      },
+      "solve_39f4d4e6": {
+        "data": {
+          "predictionId": "Q3-1771202018661-353",
+          "optimizedBest": "SELL: Bearish trend, take profits or cut losses",
+          "confidence": 0.99,
+          "alternatives": [
+            "BUY: Strong bullish trend with positive momentum",
+            "HOLD: Wait for clearer signals"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771202018661
+      },
+      "solve_15e59c3": {
+        "data": {
+          "predictionId": "Q3-1771202022886-392",
+          "optimizedBest": "AGGRESSIVE_EXPANSION - maximize growth and experimentation despite lower reserve",
+          "confidence": 0.876470588235294,
+          "alternatives": [
+            "DEFENSIVE_COMPOUNDING - prioritize reserve runway and stable compounding",
+            "BALANCED_FLYWHEEL - balance reserve, growth reinvestment, and reliability"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771202022886
+      },
+      "solve_57ddd4ae": {
+        "data": {
+          "predictionId": "Q3-1771202023593-256",
+          "optimizedBest": "SELL: Bearish trend, take profits or cut losses",
+          "confidence": 0.99,
+          "alternatives": [
+            "BUY: Strong bullish trend with positive momentum",
+            "HOLD: Wait for clearer signals"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771202023593
+      },
+      "solve_324d3337": {
+        "data": {
+          "predictionId": "Q3-1771202023604-463",
+          "optimizedBest": "SELL: Bearish trend, take profits or cut losses",
+          "confidence": 0.99,
+          "alternatives": [
+            "BUY: Strong bullish trend with positive momentum",
+            "HOLD: Wait for clearer signals"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771202023604
+      },
+      "solve_1213adaf": {
+        "data": {
+          "predictionId": "Q3-1771202028866-586",
+          "optimizedBest": "BUY: Strong bullish trend with positive momentum",
+          "confidence": 0.49754601226993866,
+          "alternatives": [
+            "SELL: Bearish trend, take profits or cut losses",
+            "HOLD: Wait for clearer signals"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771202028866
+      },
+      "solve_10fd247f": {
+        "data": {
+          "predictionId": "Q3-1771202033058-995",
+          "optimizedBest": "AGGRESSIVE_EXPANSION - maximize growth and experimentation despite lower reserve",
+          "confidence": 0.876470588235294,
+          "alternatives": [
+            "DEFENSIVE_COMPOUNDING - prioritize reserve runway and stable compounding",
+            "BALANCED_FLYWHEEL - balance reserve, growth reinvestment, and reliability"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771202033058
+      },
+      "solve_1f73cecf": {
+        "data": {
+          "predictionId": "Q3-1771202034194-100",
+          "optimizedBest": "SELL: Bearish trend, take profits or cut losses",
+          "confidence": 0.99,
+          "alternatives": [
+            "BUY: Strong bullish trend with positive momentum",
+            "HOLD: Wait for clearer signals"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771202034194
+      },
+      "solve_2f8c9d4f": {
+        "data": {
+          "predictionId": "Q3-1771202034430-931",
+          "optimizedBest": "SELL: Bearish trend, take profits or cut losses",
+          "confidence": 0.99,
+          "alternatives": [
+            "BUY: Strong bullish trend with positive momentum",
+            "HOLD: Wait for clearer signals"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771202034430
+      },
+      "solve_59fdf418": {
+        "data": {
+          "predictionId": "Q3-1771202145621-2",
+          "optimizedBest": "BUY: Strong bullish trend with positive momentum",
+          "confidence": 0.49754601226993866,
+          "alternatives": [
+            "SELL: Bearish trend, take profits or cut losses",
+            "HOLD: Wait for clearer signals"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771202145621
+      },
+      "solve_4df074f7": {
+        "data": {
+          "predictionId": "Q3-1771202049514-232",
+          "optimizedBest": "Prioritize reliability hardening before revenue expansion",
+          "confidence": 0.7285714285714283,
+          "alternatives": [
+            "Launch unified SaaS offer combining content automation, retention automation, and reliability guarantees",
+            "Prioritize market expansion and platform integrations before optimization"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771202049514
+      },
+      "solve_5ccaaa1b": {
+        "data": {
+          "predictionId": "Q3-1771202172869-26",
+          "optimizedBest": "BUY: Strong bullish trend with positive momentum",
+          "confidence": 0.49754601226993866,
+          "alternatives": [
+            "SELL: Bearish trend, take profits or cut losses",
+            "HOLD: Wait for clearer signals"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771202172869
+      },
+      "solve_5ce5a9bf": {
+        "data": {
+          "predictionId": "Q3-1771202058814-819",
+          "optimizedBest": "AGGRESSIVE_EXPANSION - maximize growth and experimentation despite lower reserve",
+          "confidence": 0.876470588235294,
+          "alternatives": [
+            "DEFENSIVE_COMPOUNDING - prioritize reserve runway and stable compounding",
+            "BALANCED_FLYWHEEL - balance reserve, growth reinvestment, and reliability"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771202058814
+      },
+      "solve_136c35b0": {
+        "data": {
+          "predictionId": "Q3-1771202210820-143",
+          "optimizedBest": "BUY: Strong bullish trend with positive momentum",
+          "confidence": 0.49754601226993866,
+          "alternatives": [
+            "SELL: Bearish trend, take profits or cut losses",
+            "HOLD: Wait for clearer signals"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771202210820
+      },
+      "solve_5c979b5f": {
+        "data": {
+          "predictionId": "Q3-1771202076753-401",
+          "optimizedBest": "AGGRESSIVE_EXPANSION - maximize growth and experimentation despite lower reserve",
+          "confidence": 0.876470588235294,
+          "alternatives": [
+            "DEFENSIVE_COMPOUNDING - prioritize reserve runway and stable compounding",
+            "BALANCED_FLYWHEEL - balance reserve, growth reinvestment, and reliability"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771202076753
+      },
+      "solve_b7b0e79": {
+        "data": {
+          "predictionId": "Q3-1771202087091-690",
+          "optimizedBest": "SELL: Bearish trend, take profits or cut losses",
+          "confidence": 0.99,
+          "alternatives": [
+            "BUY: Strong bullish trend with positive momentum",
+            "HOLD: Wait for clearer signals"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771202087091
+      },
+      "solve_40bf5a24": {
+        "data": {
+          "predictionId": "Q3-1771202087438-638",
+          "optimizedBest": "Creator Revenue Studio (38.0)",
+          "confidence": 0.99,
+          "alternatives": [
+            "Autonomous Risk Desk (49.8)",
+            "Competitor Pulse Radar (47.5)"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771202087438
+      },
+      "solve_112a55e2": {
+        "data": {
+          "predictionId": "Q3-1771202091752-629",
+          "optimizedBest": "BUY: Strong bullish trend with positive momentum",
+          "confidence": 0.49754601226993866,
+          "alternatives": [
+            "SELL: Bearish trend, take profits or cut losses",
+            "HOLD: Wait for clearer signals"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771202091752
+      },
+      "solve_57e5845a": {
+        "data": {
+          "predictionId": "Q3-1771202199523-265",
+          "optimizedBest": "Prioritize reliability hardening before revenue expansion",
+          "confidence": 0.7285714285714283,
+          "alternatives": [
+            "Launch unified SaaS offer combining content automation, retention automation, and reliability guarantees",
+            "Prioritize market expansion and platform integrations before optimization"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771202199523
+      },
+      "solve_7b5849a5": {
+        "data": {
+          "predictionId": "Q3-1771210006595-610",
+          "optimizedBest": "AGGRESSIVE_EXPANSION - maximize growth and experimentation despite lower reserve",
+          "confidence": 0.876470588235294,
+          "alternatives": [
+            "DEFENSIVE_COMPOUNDING - prioritize reserve runway and stable compounding",
+            "BALANCED_FLYWHEEL - balance reserve, growth reinvestment, and reliability"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771210006595
+      },
+      "solve_1b9675b7": {
+        "data": {
+          "predictionId": "Q3-1771202264865-183",
+          "optimizedBest": "BUY: Strong bullish trend with positive momentum",
+          "confidence": 0.49754601226993866,
+          "alternatives": [
+            "SELL: Bearish trend, take profits or cut losses",
+            "HOLD: Wait for clearer signals"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771202264865
+      },
+      "solve_a97a198": {
+        "data": {
+          "predictionId": "Q3-1771202108047-409",
+          "optimizedBest": "SELL: Bearish trend, take profits or cut losses",
+          "confidence": 0.99,
+          "alternatives": [
+            "BUY: Strong bullish trend with positive momentum",
+            "HOLD: Wait for clearer signals"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771202108047
+      },
+      "solve_59980db6": {
+        "data": {
+          "predictionId": "Q3-1771202115565-774",
+          "optimizedBest": "SELL: Bearish trend, take profits or cut losses",
+          "confidence": 0.99,
+          "alternatives": [
+            "BUY: Strong bullish trend with positive momentum",
+            "HOLD: Wait for clearer signals"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771202115565
+      },
+      "solve_5a0631c5": {
+        "data": {
+          "predictionId": "Q3-1771202122592-222",
+          "optimizedBest": "SELL: Bearish trend, take profits or cut losses",
+          "confidence": 0.99,
+          "alternatives": [
+            "BUY: Strong bullish trend with positive momentum",
+            "HOLD: Wait for clearer signals"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771202122592
+      },
+      "solve_490eb78e": {
+        "data": {
+          "predictionId": "Q3-1771202288554-602",
+          "optimizedBest": "BUY: Strong bullish trend with positive momentum",
+          "confidence": 0.49754601226993866,
+          "alternatives": [
+            "SELL: Bearish trend, take profits or cut losses",
+            "HOLD: Wait for clearer signals"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771202288554
+      },
+      "solve_4ad830bf": {
+        "data": {
+          "predictionId": "Q3-1771202144096-520",
+          "optimizedBest": "AGGRESSIVE_EXPANSION - maximize growth and experimentation despite lower reserve",
+          "confidence": 0.876470588235294,
+          "alternatives": [
+            "DEFENSIVE_COMPOUNDING - prioritize reserve runway and stable compounding",
+            "BALANCED_FLYWHEEL - balance reserve, growth reinvestment, and reliability"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771202144096
+      },
+      "solve_57a47e5f": {
+        "data": {
+          "predictionId": "Q3-1771202155388-282",
+          "optimizedBest": "SELL: Bearish trend, take profits or cut losses",
+          "confidence": 0.99,
+          "alternatives": [
+            "BUY: Strong bullish trend with positive momentum",
+            "HOLD: Wait for clearer signals"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771202155388
+      },
+      "solve_64179dd6": {
+        "data": {
+          "predictionId": "Q3-1771202333834-665",
+          "optimizedBest": "BUY: Strong bullish trend with positive momentum",
+          "confidence": 0.49754601226993866,
+          "alternatives": [
+            "SELL: Bearish trend, take profits or cut losses",
+            "HOLD: Wait for clearer signals"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771202333834
+      },
+      "solve_d6643c5": {
+        "data": {
+          "predictionId": "Q3-1771202185799-140",
+          "optimizedBest": "SELL: Bearish trend, take profits or cut losses",
+          "confidence": 0.99,
+          "alternatives": [
+            "BUY: Strong bullish trend with positive momentum",
+            "HOLD: Wait for clearer signals"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771202185799
+      },
+      "solve_17830827": {
+        "data": {
+          "predictionId": "Q3-1771202222090-720",
+          "optimizedBest": "SELL: Bearish trend, take profits or cut losses",
+          "confidence": 0.99,
+          "alternatives": [
+            "BUY: Strong bullish trend with positive momentum",
+            "HOLD: Wait for clearer signals"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771202222090
+      },
+      "solve_5461cb68": {
+        "data": {
+          "predictionId": "Q3-1771202401196-939",
+          "optimizedBest": "BUY: Strong bullish trend with positive momentum",
+          "confidence": 0.49754601226993866,
+          "alternatives": [
+            "SELL: Bearish trend, take profits or cut losses",
+            "HOLD: Wait for clearer signals"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771202401196
+      },
+      "solve_78b78872": {
+        "data": {
+          "predictionId": "Q3-1771202237628-852",
+          "optimizedBest": "Creator Revenue Studio (35.0)",
+          "confidence": 0.99,
+          "alternatives": [
+            "Competitor Pulse Radar (52.2)",
+            "SwarmOps Command Center (52.1)"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771202237628
+      },
+      "solve_f785e41": {
+        "data": {
+          "predictionId": "Q3-1771202237642-757",
+          "optimizedBest": "Creator Revenue Studio (42.8)",
+          "confidence": 0.99,
+          "alternatives": [
+            "Autonomous Risk Desk (42.1)",
+            "Freelance Pipeline IQ (39.8)"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771202237642
+      },
+      "solve_6e243223": {
+        "data": {
+          "predictionId": "Q3-1771202245886-798",
+          "optimizedBest": "AGGRESSIVE_EXPANSION - maximize growth and experimentation despite lower reserve",
+          "confidence": 0.876470588235294,
+          "alternatives": [
+            "DEFENSIVE_COMPOUNDING - prioritize reserve runway and stable compounding",
+            "BALANCED_FLYWHEEL - balance reserve, growth reinvestment, and reliability"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771202245886
+      },
+      "solve_26d6191": {
+        "data": {
+          "predictionId": "Q3-1771202249144-963",
+          "optimizedBest": "BUY: Strong bullish trend with positive momentum",
+          "confidence": 0.49754601226993866,
+          "alternatives": [
+            "SELL: Bearish trend, take profits or cut losses",
+            "HOLD: Wait for clearer signals"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771202249144
+      },
+      "solve_4136471d": {
+        "data": {
+          "predictionId": "Q3-1771202322534-424",
+          "optimizedBest": "AGGRESSIVE_EXPANSION - maximize growth and experimentation despite lower reserve",
+          "confidence": 0.876470588235294,
+          "alternatives": [
+            "DEFENSIVE_COMPOUNDING - prioritize reserve runway and stable compounding",
+            "BALANCED_FLYWHEEL - balance reserve, growth reinvestment, and reliability"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771202322534
+      },
+      "solve_9cbd340": {
+        "data": {
+          "predictionId": "Q3-1771202308056-431",
+          "optimizedBest": "AGGRESSIVE_EXPANSION - maximize growth and experimentation despite lower reserve",
+          "confidence": 0.876470588235294,
+          "alternatives": [
+            "DEFENSIVE_COMPOUNDING - prioritize reserve runway and stable compounding",
+            "BALANCED_FLYWHEEL - balance reserve, growth reinvestment, and reliability"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771202308056
+      },
+      "solve_26e4ccc9": {
+        "data": {
+          "predictionId": "Q3-1771210976610-870",
+          "optimizedBest": "Prioritize reliability hardening before revenue expansion",
+          "confidence": 0.7285714285714283,
+          "alternatives": [
+            "Launch unified SaaS offer combining content automation, retention automation, and reliability guarantees",
+            "Prioritize market expansion and platform integrations before optimization"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771210976610
+      },
+      "solve_7993d1fa": {
+        "data": {
+          "predictionId": "Q3-1771202355795-146",
+          "optimizedBest": "Prioritize reliability hardening before revenue expansion",
+          "confidence": 0.7285714285714283,
+          "alternatives": [
+            "Launch unified SaaS offer combining content automation, retention automation, and reliability guarantees",
+            "Prioritize market expansion and platform integrations before optimization"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771202355795
+      },
+      "solve_18ee4c78": {
+        "data": {
+          "predictionId": "Q3-1771202370254-93",
+          "optimizedBest": "Prioritize reliability hardening before revenue expansion",
+          "confidence": 0.7285714285714283,
+          "alternatives": [
+            "Launch unified SaaS offer combining content automation, retention automation, and reliability guarantees",
+            "Prioritize market expansion and platform integrations before optimization"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771202370254
+      },
+      "solve_20dd849e": {
+        "data": {
+          "predictionId": "Q3-1771202349125-298",
+          "optimizedBest": "AGGRESSIVE_EXPANSION - maximize growth and experimentation despite lower reserve",
+          "confidence": 0.876470588235294,
+          "alternatives": [
+            "DEFENSIVE_COMPOUNDING - prioritize reserve runway and stable compounding",
+            "BALANCED_FLYWHEEL - balance reserve, growth reinvestment, and reliability"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771202349125
+      },
+      "solve_7f9bc058": {
+        "data": {
+          "predictionId": "Q3-1771202355789-390",
+          "optimizedBest": "BUY: Strong bullish trend with positive momentum",
+          "confidence": 0.49754601226993866,
+          "alternatives": [
+            "SELL: Bearish trend, take profits or cut losses",
+            "HOLD: Wait for clearer signals"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771202355789
+      },
+      "solve_425e50ea": {
+        "data": {
+          "predictionId": "Q3-1771202432912-943",
+          "optimizedBest": "BUY: Strong bullish trend with positive momentum",
+          "confidence": 0.49754601226993866,
+          "alternatives": [
+            "SELL: Bearish trend, take profits or cut losses",
+            "HOLD: Wait for clearer signals"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771202432912
+      },
+      "solve_7956fbd7": {
+        "data": {
+          "predictionId": "Q3-1771209480250-514",
+          "optimizedBest": "AGGRESSIVE_EXPANSION - maximize growth and experimentation despite lower reserve",
+          "confidence": 0.876470588235294,
+          "alternatives": [
+            "DEFENSIVE_COMPOUNDING - prioritize reserve runway and stable compounding",
+            "BALANCED_FLYWHEEL - balance reserve, growth reinvestment, and reliability"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771209480250
+      },
+      "solve_3e56e461": {
+        "data": {
+          "predictionId": "Q3-1771202420343-263",
+          "optimizedBest": "Prioritize reliability hardening before revenue expansion",
+          "confidence": 0.7285714285714283,
+          "alternatives": [
+            "Launch unified SaaS offer combining content automation, retention automation, and reliability guarantees",
+            "Prioritize market expansion and platform integrations before optimization"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771202420343
+      },
+      "solve_5cc99d29": {
+        "data": {
+          "predictionId": "Q3-1771212082164-238",
+          "optimizedBest": "AGGRESSIVE_EXPANSION - maximize growth and experimentation despite lower reserve",
+          "confidence": 0.876470588235294,
+          "alternatives": [
+            "DEFENSIVE_COMPOUNDING - prioritize reserve runway and stable compounding",
+            "BALANCED_FLYWHEEL - balance reserve, growth reinvestment, and reliability"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771212082164
+      },
+      "solve_7936bf8d": {
+        "data": {
+          "predictionId": "Q3-1771202428710-339",
+          "optimizedBest": "SELL: Bearish trend, take profits or cut losses",
+          "confidence": 0.99,
+          "alternatives": [
+            "BUY: Strong bullish trend with positive momentum",
+            "HOLD: Wait for clearer signals"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771202428710
+      },
+      "solve_3624ef22": {
+        "data": {
+          "predictionId": "Q3-1771202439014-429",
+          "optimizedBest": "AGGRESSIVE_EXPANSION - maximize growth and experimentation despite lower reserve",
+          "confidence": 0.876470588235294,
+          "alternatives": [
+            "DEFENSIVE_COMPOUNDING - prioritize reserve runway and stable compounding",
+            "BALANCED_FLYWHEEL - balance reserve, growth reinvestment, and reliability"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771202439014
+      },
+      "solve_19e16399": {
+        "data": {
+          "predictionId": "Q3-1771202439008-688",
+          "optimizedBest": "AGGRESSIVE_EXPANSION - maximize growth and experimentation despite lower reserve",
+          "confidence": 0.876470588235294,
+          "alternatives": [
+            "DEFENSIVE_COMPOUNDING - prioritize reserve runway and stable compounding",
+            "BALANCED_FLYWHEEL - balance reserve, growth reinvestment, and reliability"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771202439009
+      },
+      "solve_195bc3dc": {
+        "data": {
+          "predictionId": "Q3-1771202507345-386",
+          "optimizedBest": "Creator Revenue Studio (57.4)",
+          "confidence": 0.6279999999999999,
+          "alternatives": [
+            "SwarmOps Command Center (57.5)",
+            "Competitor Pulse Radar (52.2)"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771202507345
+      },
+      "solve_46c0112b": {
+        "data": {
+          "predictionId": "Q3-1771203288358-956",
+          "optimizedBest": "Creator Revenue Studio (41.0)",
+          "confidence": 0.6279999999999999,
+          "alternatives": [
+            "SwarmOps Command Center (46.5)",
+            "Autonomous Risk Desk (42.1)"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771203288359
+      },
+      "solve_3391a5ce": {
+        "data": {
+          "predictionId": "Q3-1771202544771-368",
+          "optimizedBest": "Creator Revenue Studio (46.3)",
+          "confidence": 0.6279999999999999,
+          "alternatives": [
+            "SwarmOps Command Center (54.4)",
+            "Competitor Pulse Radar (52.2)"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771202544771
+      },
+      "solve_6df8bbf9": {
+        "data": {
+          "predictionId": "Q3-1771202616739-328",
+          "optimizedBest": "Creator Revenue Studio (57.4)",
+          "confidence": 0.6279999999999999,
+          "alternatives": [
+            "SwarmOps Command Center (46.5)",
+            "Autonomous Risk Desk (42.1)"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771202616739
+      },
+      "solve_1c5f0069": {
+        "data": {
+          "predictionId": "Q3-1771202591923-810",
+          "optimizedBest": "Prioritize reliability hardening before revenue expansion",
+          "confidence": 0.7285714285714283,
+          "alternatives": [
+            "Launch unified SaaS offer combining content automation, retention automation, and reliability guarantees",
+            "Prioritize market expansion and platform integrations before optimization"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771202591923
+      },
+      "solve_4bc7400e": {
+        "data": {
+          "predictionId": "Q3-1771202631609-43",
+          "optimizedBest": "Prioritize reliability hardening before revenue expansion",
+          "confidence": 0.7285714285714283,
+          "alternatives": [
+            "Launch unified SaaS offer combining content automation, retention automation, and reliability guarantees",
+            "Prioritize market expansion and platform integrations before optimization"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771202631609
+      },
+      "solve_445610f4": {
+        "data": {
+          "predictionId": "Q3-1771202731411-248",
+          "optimizedBest": "Creator Revenue Studio (35.0)",
+          "confidence": 0.6279999999999999,
+          "alternatives": [
+            "Autonomous Risk Desk (42.1)",
+            "Freelance Pipeline IQ (39.8)"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771202731411
+      },
+      "solve_199b0958": {
+        "data": {
+          "predictionId": "Q3-1771205372875-886",
+          "optimizedBest": "Prioritize reliability hardening before revenue expansion",
+          "confidence": 0.7285714285714283,
+          "alternatives": [
+            "Launch unified SaaS offer combining content automation, retention automation, and reliability guarantees",
+            "Prioritize market expansion and platform integrations before optimization"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771205372875
+      },
+      "solve_59809892": {
+        "data": {
+          "predictionId": "Q3-1771202734729-414",
+          "optimizedBest": "Prioritize reliability hardening before revenue expansion",
+          "confidence": 0.7285714285714283,
+          "alternatives": [
+            "Launch unified SaaS offer combining content automation, retention automation, and reliability guarantees",
+            "Prioritize market expansion and platform integrations before optimization"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771202734729
+      },
+      "solve_539e4dbf": {
+        "data": {
+          "predictionId": "Q3-1771202740162-785",
+          "optimizedBest": "AGGRESSIVE_EXPANSION - maximize growth and experimentation despite lower reserve",
+          "confidence": 0.876470588235294,
+          "alternatives": [
+            "DEFENSIVE_COMPOUNDING - prioritize reserve runway and stable compounding",
+            "BALANCED_FLYWHEEL - balance reserve, growth reinvestment, and reliability"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771202740162
+      },
+      "solve_6b97e0e9": {
+        "data": {
+          "predictionId": "Q3-1771205852286-292",
+          "optimizedBest": "Prioritize reliability hardening before revenue expansion",
+          "confidence": 0.7285714285714283,
+          "alternatives": [
+            "Launch unified SaaS offer combining content automation, retention automation, and reliability guarantees",
+            "Prioritize market expansion and platform integrations before optimization"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771205852286
+      },
+      "solve_4ed787b7": {
+        "data": {
+          "predictionId": "Q3-1771202795715-657",
+          "optimizedBest": "AGGRESSIVE_EXPANSION - maximize growth and experimentation despite lower reserve",
+          "confidence": 0.876470588235294,
+          "alternatives": [
+            "DEFENSIVE_COMPOUNDING - prioritize reserve runway and stable compounding",
+            "BALANCED_FLYWHEEL - balance reserve, growth reinvestment, and reliability"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771202795715
+      },
+      "solve_3e30d0c1": {
+        "data": {
+          "predictionId": "Q3-1771202870747-798",
+          "optimizedBest": "Prioritize reliability hardening before revenue expansion",
+          "confidence": 0.7285714285714283,
+          "alternatives": [
+            "Launch unified SaaS offer combining content automation, retention automation, and reliability guarantees",
+            "Prioritize market expansion and platform integrations before optimization"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771202870747
+      },
+      "solve_1d51b7d0": {
+        "data": {
+          "predictionId": "Q3-1771202978881-464",
+          "optimizedBest": "Prioritize reliability hardening before revenue expansion",
+          "confidence": 0.7285714285714283,
+          "alternatives": [
+            "Launch unified SaaS offer combining content automation, retention automation, and reliability guarantees",
+            "Prioritize market expansion and platform integrations before optimization"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771202978881
+      },
+      "solve_42fc5814": {
+        "data": {
+          "predictionId": "Q3-1771203246376-645",
+          "optimizedBest": "Prioritize reliability hardening before revenue expansion",
+          "confidence": 0.7285714285714283,
+          "alternatives": [
+            "Launch unified SaaS offer combining content automation, retention automation, and reliability guarantees",
+            "Prioritize market expansion and platform integrations before optimization"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771203246377
+      },
+      "solve_47610d99": {
+        "data": {
+          "predictionId": "Q3-1771208970181-245",
+          "optimizedBest": "AGGRESSIVE_EXPANSION - maximize growth and experimentation despite lower reserve",
+          "confidence": 0.876470588235294,
+          "alternatives": [
+            "DEFENSIVE_COMPOUNDING - prioritize reserve runway and stable compounding",
+            "BALANCED_FLYWHEEL - balance reserve, growth reinvestment, and reliability"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771208970181
+      },
+      "solve_1d81a699": {
+        "data": {
+          "predictionId": "Q3-1771203004938-963",
+          "optimizedBest": "AGGRESSIVE_EXPANSION - maximize growth and experimentation despite lower reserve",
+          "confidence": 0.876470588235294,
+          "alternatives": [
+            "DEFENSIVE_COMPOUNDING - prioritize reserve runway and stable compounding",
+            "BALANCED_FLYWHEEL - balance reserve, growth reinvestment, and reliability"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771203004938
+      },
+      "solve_1a836d71": {
+        "data": {
+          "predictionId": "Q3-1771203201840-448",
+          "optimizedBest": "Prioritize reliability hardening before revenue expansion",
+          "confidence": 0.7285714285714283,
+          "alternatives": [
+            "Launch unified SaaS offer combining content automation, retention automation, and reliability guarantees",
+            "Prioritize market expansion and platform integrations before optimization"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771203201840
+      },
+      "solve_17fcb834": {
+        "data": {
+          "predictionId": "Q3-1771203187791-73",
+          "optimizedBest": "AGGRESSIVE_EXPANSION - maximize growth and experimentation despite lower reserve",
+          "confidence": 0.876470588235294,
+          "alternatives": [
+            "DEFENSIVE_COMPOUNDING - prioritize reserve runway and stable compounding",
+            "BALANCED_FLYWHEEL - balance reserve, growth reinvestment, and reliability"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771203187791
+      },
+      "solve_7f7eee48": {
+        "data": {
+          "predictionId": "Q3-1771203309082-743",
+          "optimizedBest": "Prioritize reliability hardening before revenue expansion",
+          "confidence": 0.7285714285714283,
+          "alternatives": [
+            "Launch unified SaaS offer combining content automation, retention automation, and reliability guarantees",
+            "Prioritize market expansion and platform integrations before optimization"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771203309082
+      },
+      "solve_4e898275": {
+        "data": {
+          "predictionId": "Q3-1771203297809-394",
+          "optimizedBest": "AGGRESSIVE_EXPANSION - maximize growth and experimentation despite lower reserve",
+          "confidence": 0.876470588235294,
+          "alternatives": [
+            "DEFENSIVE_COMPOUNDING - prioritize reserve runway and stable compounding",
+            "BALANCED_FLYWHEEL - balance reserve, growth reinvestment, and reliability"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771203297809
+      },
+      "solve_4fee51ed": {
+        "data": {
+          "predictionId": "Q3-1771211957100-118",
+          "optimizedBest": "Prioritize reliability hardening before revenue expansion",
+          "confidence": 0.7285714285714283,
+          "alternatives": [
+            "Launch unified SaaS offer combining content automation, retention automation, and reliability guarantees",
+            "Prioritize market expansion and platform integrations before optimization"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771211957100
+      },
+      "solve_6ecf8de8": {
+        "data": {
+          "predictionId": "Q3-1771203649489-607",
+          "optimizedBest": "Prioritize reliability hardening before revenue expansion",
+          "confidence": 0.7285714285714283,
+          "alternatives": [
+            "Launch unified SaaS offer combining content automation, retention automation, and reliability guarantees",
+            "Prioritize market expansion and platform integrations before optimization"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771203649489
+      },
+      "solve_3f848c52": {
+        "data": {
+          "predictionId": "Q3-1771208164515-283",
+          "optimizedBest": "Prioritize reliability hardening before revenue expansion",
+          "confidence": 0.7285714285714283,
+          "alternatives": [
+            "Launch unified SaaS offer combining content automation, retention automation, and reliability guarantees",
+            "Prioritize market expansion and platform integrations before optimization"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771208164515
+      },
+      "solve_392e3541": {
+        "data": {
+          "predictionId": "Q3-1771207028457-523",
+          "optimizedBest": "Prioritize reliability hardening before revenue expansion",
+          "confidence": 0.7285714285714283,
+          "alternatives": [
+            "Launch unified SaaS offer combining content automation, retention automation, and reliability guarantees",
+            "Prioritize market expansion and platform integrations before optimization"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771207028457
+      },
+      "solve_6d3479b0": {
+        "data": {
+          "predictionId": "Q3-1771204068135-272",
+          "optimizedBest": "Prioritize reliability hardening before revenue expansion",
+          "confidence": 0.7285714285714283,
+          "alternatives": [
+            "Launch unified SaaS offer combining content automation, retention automation, and reliability guarantees",
+            "Prioritize market expansion and platform integrations before optimization"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771204068135
+      },
+      "solve_3f106699": {
+        "data": {
+          "predictionId": "Q3-1771211939915-46",
+          "optimizedBest": "Prioritize reliability hardening before revenue expansion",
+          "confidence": 0.7285714285714283,
+          "alternatives": [
+            "Launch unified SaaS offer combining content automation, retention automation, and reliability guarantees",
+            "Prioritize market expansion and platform integrations before optimization"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771211939915
+      },
+      "solve_54d3839": {
+        "data": {
+          "predictionId": "Q3-1771206751462-493",
+          "optimizedBest": "Prioritize reliability hardening before revenue expansion",
+          "confidence": 0.7285714285714283,
+          "alternatives": [
+            "Launch unified SaaS offer combining content automation, retention automation, and reliability guarantees",
+            "Prioritize market expansion and platform integrations before optimization"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771206751462
+      },
+      "solve_73bf41": {
+        "data": {
+          "predictionId": "Q3-1771205515801-283",
+          "optimizedBest": "Prioritize reliability hardening before revenue expansion",
+          "confidence": 0.7285714285714283,
+          "alternatives": [
+            "Launch unified SaaS offer combining content automation, retention automation, and reliability guarantees",
+            "Prioritize market expansion and platform integrations before optimization"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771205515801
+      },
+      "solve_475fcb84": {
+        "data": {
+          "predictionId": "Q3-1771205494291-317",
+          "optimizedBest": "Prioritize revenue and expansion swarms (SocialMediaSwarm, ResearchSwarm, CustomerSuccessSwarm, ExperimentationSwarm, AIEconomySwarm)",
+          "confidence": 0.99,
+          "alternatives": [
+            "Prioritize reliability and quality swarms (LearningSwarm, QualityAssuranceSwarm)",
+            "Prioritize trading and market swarms (AutomatedTradingSwarm, CryptoSwarm, MarketAnalyzer)"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771205494291
+      },
+      "solve_3ce5bc52": {
+        "data": {
+          "predictionId": "Q3-1771206097557-818",
+          "optimizedBest": "Prioritize reliability hardening before revenue expansion",
+          "confidence": 0.7285714285714283,
+          "alternatives": [
+            "Launch unified SaaS offer combining content automation, retention automation, and reliability guarantees",
+            "Prioritize market expansion and platform integrations before optimization"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771206097557
+      },
+      "solve_837077f": {
+        "data": {
+          "predictionId": "Q3-1771207103046-233",
+          "optimizedBest": "AGGRESSIVE_EXPANSION - maximize growth and experimentation despite lower reserve",
+          "confidence": 0.876470588235294,
+          "alternatives": [
+            "DEFENSIVE_COMPOUNDING - prioritize reserve runway and stable compounding",
+            "BALANCED_FLYWHEEL - balance reserve, growth reinvestment, and reliability"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771207103046
+      },
+      "solve_36d9eb9f": {
+        "data": {
+          "predictionId": "Q3-1771207767488-239",
+          "optimizedBest": "Prioritize reliability hardening before revenue expansion",
+          "confidence": 0.7285714285714283,
+          "alternatives": [
+            "Launch unified SaaS offer combining content automation, retention automation, and reliability guarantees",
+            "Prioritize market expansion and platform integrations before optimization"
+          ],
+          "engineVersion": "3.1"
+        },
+        "timestamp": 1771207767488
       }
     }
   }
