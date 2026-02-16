@@ -1,14 +1,14 @@
 {
-  "timestamp": "2026-02-16T18:58:09.134Z",
+  "timestamp": "2026-02-16T19:03:16.601Z",
   "state": {
     "version": "3.1",
     "learningParams": {
-      "bias": 1.7547851243925,
-      "exploration": 0.076832
+      "bias": 1.710706018216223,
+      "exploration": 0.1325894528
     },
     "feedbackStats": {
-      "total": 1858,
-      "success": 1835
+      "total": 1863,
+      "success": 1837
     },
     "optionWeights": {
       "run": -0.48000000000000004,
@@ -70,11 +70,11 @@
       "expand": 2.5,
       "failure-mode": 2.5,
       "coverage": 2.5,
-      "coherence": -0.68,
-      "calibration": -0.68,
-      "autonomous": 0.18,
-      "oracle": 0.18,
-      "guidance": 0.18,
+      "coherence": -0.8000000000000002,
+      "calibration": -0.8000000000000002,
+      "autonomous": 0.21,
+      "oracle": 0.21,
+      "guidance": 0.21,
       "aggressive": 2.5,
       "maximize": 2.5,
       "growth": 2.5,
