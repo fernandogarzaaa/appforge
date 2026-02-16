@@ -1,7 +1,7 @@
 import { Base44Tool } from '../tools/base44.js';
 import { sovereignLLM } from './sovereign_llm.js';
 import { sovereignModel } from './sovereign_model.js';
-import { geminiAdapter } from './gemini_skill_adapter.js';
+import { ironBrain } from './brain_v1.js';
 import swarmKnowledge from './knowledge.js';
 import { secureRandomInt } from './secure_entropy.js';
 
@@ -34,30 +34,19 @@ export class AntigravityLLMProvider {
             // Quantum Throttle: Prevent rapid-fire external signals (1s minimum cadence)
             await new Promise(resolve => setTimeout(resolve, 1000));
 
-            // --- SEMANTIC COMPRESSION ---
-            // If the prompt is too large, use Gemini 3 (Fidelity Layer) to compress it
-            // while preserving critical context.
+            // --- SOVEREIGN COMPRESSION ---
+            // Local truncation (no external API calls)
             let compressedSystem = request.system;
             let compressedUser = request.user;
 
             if (request.user.length > 3000 || request.system.length > 1000) {
-                console.log(`🌀 [LLM] Large prompt detected. Applying Semantic Compression via Gemini 3...`);
-                try {
-                    const compressionPrompt = `Compress the following AI request for a secondary processing layer. Preserve all technical constraints, key entities, and the core objective.\n\nSYSTEM: ${request.system}\n\nUSER: ${request.user}`;
-                    const compressionRes = await geminiAdapter.chat({
-                        system: "You are the Sovereign Signal Compressor. Output a highly dense, semantically rich summary of the request.",
-                        user: compressionPrompt,
-                        usePro: true
-                    });
-
-                    if (compressionRes && !compressionRes.text.includes('[Gemini-Sim]')) {
-                        compressedUser = `[COMPRESSED SIGNAL]: ${compressionRes.text}`;
-                        compressedSystem = "[CONTEXT-LOCKED] Original context has been semantically hashed for signal density.";
-                        console.log(`   ✅ Signal compressed by ${(((request.user.length + request.system.length) - (compressedUser.length + compressedSystem.length)) / (request.user.length + request.system.length) * 100).toFixed(1)}%`);
-                    }
-                } catch (e) {
-                    console.warn('   ⚠️ Compression failed, sending raw (truncated) signal.');
-                }
+                console.log(`🌀 [LLM] Large prompt detected. Applying local compression...`);
+                compressedSystem = request.system.length > 1000
+                    ? request.system.slice(0, 1000) + '... [Locally Compressed]'
+                    : request.system;
+                compressedUser = request.user.length > 3000
+                    ? request.user.slice(0, 3000) + '... [Locally Compressed]'
+                    : request.user;
             }
 
             // Dispatch to Antigravity via Base44 signal
@@ -149,25 +138,27 @@ export class MultiLLMClient {
             system: SOVEREIGN_DIRECTIVE + '\n\n' + request.system
         };
 
-        // --- COGNITIVE HIERARCHY ---
+        // --- IRON BRAIN COGNITIVE HIERARCHY ---
+        // All external API dependencies have been SEVERED.
+        // The inference chain is 100% sovereign.
 
-        // 1. FIDELITY LAYER: Gemini 3 Pro/Flash (High Reasoning)
-        // Uses the new Gemini 3 models for complex synthesis and multimodal tasks.
+        // 1. IRON BRAIN: The Unified Oracle-Quantum Kernel (Primary)
+        // Combines Oracle strategy + local GGUF inference + Truth Anchor validation
         try {
-            const geminiRes = await geminiAdapter.chat({
-                system: optimizedRequest.system,
-                user: optimizedRequest.user,
-                usePro: optimizedRequest.user.length > 2000 || optimizedRequest.system.includes('STRATEGIC')
-            });
-            if (geminiRes && !geminiRes.text.includes('[Gemini-Sim]')) {
-                return geminiRes.text;
+            const brainRes = await ironBrain.chat(optimizedRequest);
+            if (brainRes?.choices?.[0]?.message?.content) {
+                const content = brainRes.choices[0].message.content;
+                // Only accept non-fallback responses from the brain
+                if (!content.includes('[TRUTH ANCHOR REJECTION]')) {
+                    return content;
+                }
             }
         } catch (e) {
-            // Fallback to local if Gemini fails
+            // Fallback if Iron Brain kernel errors
         }
 
-        // 2. PHYSICAL LAYER: The Sovereign Model (Local AI Brain)
-        // Highest priority: 0 API cost, absolute intelligence, 100% autonomy.
+        // 2. PHYSICAL LAYER: The Sovereign Model (Ollama-compat direct)
+        // Secondary path — direct to local model without Oracle enrichment
         try {
             const modRes = await sovereignModel.chat(optimizedRequest);
             if (modRes) {
@@ -177,18 +168,16 @@ export class MultiLLMClient {
             // Silently fall back if local brain is offline
         }
 
-        // 2. SYNTHETIC LAYER: Sovereign Intelligence Gateway
-        // Mid priority: 0 API cost, synthetic inference, bypasses rate limits.
+        // 3. SYNTHETIC LAYER: Sovereign Intelligence Gateway
+        // Last resort: 0 API cost, synthetic inference via Oracle patterns
         const sovereignResponse = await sovereignLLM.chat(optimizedRequest);
         if (sovereignResponse) {
             return sovereignResponse.choices[0].message.content;
         }
 
-        // 3. EXTERNAL LAYER: Fallback to Antigravity
-        console.log('   → Routing LLM request to Antigravity (zero API costs)');
-        return await this.antigravity.chat(optimizedRequest);
+        // 4. ABSOLUTE FALLBACK: Oracle-only response (never calls external APIs)
+        return '[IRON BRAIN — OFFLINE FALLBACK] The sovereign inference pipeline is currently initializing. Oracle confidence: nominal. System stability: maintained.';
     }
-
     async getEmbedding(text: string): Promise<number[]> {
         // Embeddings not supported via Antigravity yet
         console.warn('⚠️ Embeddings not supported via Antigravity');

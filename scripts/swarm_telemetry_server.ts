@@ -1033,6 +1033,5 @@ process.on('SIGTERM', () => {
         process.exit(0);
     });
 });
-}
 
 start().catch(console.error);

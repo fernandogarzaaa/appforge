@@ -21,7 +21,7 @@ async function runQuantumDiagnostic() {
         // 1. Quantum Integrity Check (Test Suite)
         console.log("\n🧪 Running Quantum Integrity Protocols (Tests)...");
         try {
-            const { stdout, stderr } = await execPromise('npm run test run');
+            const { stdout, stderr } = await execPromise('npm run test');
             console.log(stdout); // Show test output
             report.testStatus = 'PASSED';
             console.log("   ✅ Quantum Integrity: STABLE");

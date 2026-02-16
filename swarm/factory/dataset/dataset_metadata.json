@@ -1,0 +1,30 @@
+{
+  "generated_at": "2026-02-16T10:41:18.146Z",
+  "total_sft_entries": 180,
+  "total_dpo_entries": 5,
+  "categories": {
+    "swarm_execution": 30,
+    "oracle_strategy": 41,
+    "truth_validation": 41,
+    "agent_execution": 5,
+    "solana_domain": 3,
+    "mobile_architecture": 2,
+    "truth_anchor": 4,
+    "coding_patterns": 2,
+    "truth_rejection": 41,
+    "architecture": 1,
+    "decision_action_chain": 5,
+    "oracle_reasoning": 5
+  },
+  "average_confidence": 0.9168333333333325,
+  "format": {
+    "sft": "alpaca",
+    "dpo": "chosen_rejected"
+  },
+  "source": "AppForge Sovereign Swarm v3.1 + Iron Brain Oracle",
+  "target_model": "Llama-3.2-3B-Instruct",
+  "training_stages": [
+    "SFT (Phase 1)",
+    "DPO (Phase 2)"
+  ]
+}

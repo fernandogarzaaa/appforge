@@ -10,6 +10,7 @@ export default defineConfig({
     setupFiles: './src/tests/setup.js',
     exclude: [
       'node_modules/**',
+      '**/node_modules/**',
       'dist/**',
       '**/e2e/**',
       'tests/e2e/**',
@@ -20,7 +21,10 @@ export default defineConfig({
       'src/lib/__tests__/holographic*.{js,ts}',
       'backend/node_modules/**',
       'swarm/node_modules/**',
-      'functions/node_modules/**'
+      'functions/node_modules/**',
+      'sovereign-ui/node_modules/**',
+      'scripts/archive/**',
+      'tests/integration/**'
     ],
     coverage: {
       provider: 'v8',

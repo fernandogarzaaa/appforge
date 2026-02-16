@@ -10,11 +10,11 @@ export function fuzzyScore(searchStr, targetStr) {
 
   if (!search) return 100; // Empty search matches everything
   if (target.includes(search)) return 100; // Exact substring match
-  
-  let score = consecutive * 5;
+
   let searchIndex = 0;
   let targetIndex = 0;
   let consecutive = 0;
+  let score = 0;
 
   while (searchIndex < search.length && targetIndex < target.length) {
     if (search[searchIndex] === target[targetIndex]) {
@@ -52,7 +52,7 @@ export function fuzzySearch(query, items = [], field = 'name') {
         score: fuzzyScore(normalized, String(value))
       };
     })
-      .filter(item => item.score > 0)
+    .filter(item => item.score > 0)
     .sort((a, b) => b.score - a.score);
 }
 

@@ -1,0 +1,30 @@
+# OPERATION IRON BRAIN — Conda Environment
+# Python 3.14 is not supported by PyTorch/Unsloth.
+# This environment uses Python 3.11 for training.
+#
+# Setup:
+#   conda env create -f swarm/factory/environment.yml
+#   conda activate appforge-train
+#
+# Inference (llama.cpp) has NO Python dependency.
+
+name: appforge-train
+channels:
+  - pytorch
+  - nvidia
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.11
+  - pip
+  - pip:
+      - torch>=2.1.0
+      - unsloth[colab-new]
+      - datasets
+      - trl>=0.7.0
+      - transformers>=4.40.0
+      - peft>=0.10.0
+      - accelerate>=0.28.0
+      - bitsandbytes>=0.43.0
+      - sentencepiece
+      - protobuf

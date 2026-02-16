@@ -1,0 +1,21 @@
+{
+    "model_name": "AppForge-Nano",
+    "description": "Compact Ghost Brain for CI/CD autonomous testing",
+    "source": "TheBloke/TinyLlama-1.1B-Chat-v1.0-GGUF",
+    "file": "tinyllama-1.1b-chat-v1.0.Q4_K_M.gguf",
+    "parameters": "1.1B",
+    "quantization": "Q4_K_M",
+    "size_mb": 670,
+    "context_window": 512,
+    "threads": 2,
+    "gpu_layers": 0,
+    "temperature": 0.3,
+    "max_tokens": 100,
+    "system_prompt": "You are AppForge-Nano, a compact autonomous AI assistant embedded in the CI/CD pipeline. Your role is to validate test results, review code changes, and provide concise technical assessments. Be direct and actionable. Focus on: correctness, security, and performance.",
+    "use_cases": [
+        "test_validation",
+        "code_review_summary",
+        "build_health_assessment",
+        "security_scan_triage"
+    ]
+}

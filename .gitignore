@@ -149,3 +149,10 @@ playwright-report/
 
 swarm/core/quantum_bridge/target/
 whatsapp_qr.png
+
+# Models & Large Binary Data (Neural Bridge)
+swarm/factory/models/
+unsloth_compiled_cache/
+*.gguf
+*.safetensors
+*.bin

@@ -11,12 +11,83 @@ export class SovereignModelProvider {
     private baseUrl: string;
     private defaultModel: string;
     private modelPriority: string[];
+    private ironBrainMode: boolean;
+    private kvCacheWarmed: boolean = false;
+    private systemPromptCache: string = '';
+    private performanceLog: { tokensPerSecond: number; timestamp: number }[] = [];
 
     constructor(baseUrl: string = 'http://localhost:11434', defaultModel: string = 'phi3:mini') {
         this.baseUrl = baseUrl;
         this.defaultModel = defaultModel;
+        // Iron Brain mode: detect if llama-server is running (vs Ollama)
+        this.ironBrainMode = false;
         // Try models in order of preference (fastest first)
-        this.modelPriority = ['phi3:mini', 'llama3:latest', 'deepseek-coder:6.7b'];
+        this.modelPriority = ['appforge-v1', 'phi3:mini', 'llama3:latest', 'deepseek-coder:6.7b'];
+    }
+
+    /**
+     * Detect if Iron Brain (llama-server) or Ollama is running
+     */
+    async detectBackend(): Promise<'iron-brain' | 'ollama' | 'offline'> {
+        try {
+            // llama-server uses /health endpoint
+            const healthRes = await fetch(`${this.baseUrl}/health`);
+            if (healthRes.ok) {
+                const data = await healthRes.json();
+                if (data.status === 'ok') {
+                    this.ironBrainMode = true;
+                    console.log('🧠 [IRON BRAIN] Local inference engine detected');
+                    return 'iron-brain';
+                }
+            }
+        } catch { }
+        try {
+            // Ollama uses /api/tags
+            const ollamaRes = await fetch(`${this.baseUrl}/api/tags`);
+            if (ollamaRes.ok) {
+                this.ironBrainMode = false;
+                return 'ollama';
+            }
+        } catch { }
+        return 'offline';
+    }
+
+    /**
+     * Warm the KV cache with a persistent system prompt (Iron Brain only)
+     */
+    async warmKVCache(systemPrompt: string): Promise<void> {
+        if (!this.ironBrainMode || this.kvCacheWarmed) return;
+        try {
+            await fetch(`${this.baseUrl}/v1/chat/completions`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    messages: [{ role: 'system', content: systemPrompt }],
+                    max_tokens: 1,
+                    temperature: 0,
+                    cache_prompt: true
+                })
+            });
+            this.systemPromptCache = systemPrompt;
+            this.kvCacheWarmed = true;
+            console.log('   ⚡ KV cache warmed for Iron Brain');
+        } catch (e) {
+            // Non-critical, continue without cache
+        }
+    }
+
+    /**
+     * Get performance metrics
+     */
+    getPerformanceStats() {
+        if (this.performanceLog.length === 0) return null;
+        const recent = this.performanceLog.slice(-10);
+        const avgTps = recent.reduce((sum, e) => sum + e.tokensPerSecond, 0) / recent.length;
+        return {
+            avgTokensPerSecond: Math.round(avgTps * 10) / 10,
+            totalInferences: this.performanceLog.length,
+            mode: this.ironBrainMode ? 'iron-brain' : 'ollama'
+        };
     }
 
     /**
@@ -54,7 +125,7 @@ export class SovereignModelProvider {
                 console.log(`   ✅ Model ${model} is available`);
                 return true;
             }
-            
+
             console.log(`   📥 Pulling model ${model}...`);
             const response = await fetch(`${this.baseUrl}/api/pull`, {
                 method: 'POST',
@@ -76,17 +147,17 @@ export class SovereignModelProvider {
         const requestId = `sov_mod_${Date.now()}`;
         console.log(`🌌 [SOVEREIGN-MODEL] Consulting Physical Brain: ${requestId}`);
 
-        const modelsToTry = request.model 
+        const modelsToTry = request.model
             ? [request.model, ...this.modelPriority.filter(m => m !== request.model)]
             : this.modelPriority;
 
         for (const model of modelsToTry) {
             try {
                 console.log(`   🤖 Trying model: ${model}`);
-                
+
                 const controller = new AbortController();
                 const timeoutId = setTimeout(() => controller.abort(), 180000); // 3 min timeout
-                
+
                 const response = await fetch(`${this.baseUrl}/api/chat`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -104,7 +175,7 @@ export class SovereignModelProvider {
                     }),
                     signal: controller.signal
                 });
-                
+
                 clearTimeout(timeoutId);
 
                 if (!response.ok) {
@@ -114,7 +185,7 @@ export class SovereignModelProvider {
                 }
 
                 const data = await response.json();
-                
+
                 console.log(`   ✅ Success with model: ${model}`);
                 return {
                     id: requestId,
@@ -149,7 +220,7 @@ export class SovereignModelProvider {
         try {
             const controller = new AbortController();
             const timeoutId = setTimeout(() => controller.abort(), 60000);
-            
+
             const response = await fetch(`${this.baseUrl}/api/chat`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -163,11 +234,11 @@ export class SovereignModelProvider {
                 }),
                 signal: controller.signal
             });
-            
+
             clearTimeout(timeoutId);
-            
+
             if (!response.ok) return null;
-            
+
             const data = await response.json();
             return data.message?.content || data.response || null;
         } catch (e) {
