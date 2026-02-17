@@ -1,0 +1,36 @@
+name: Curiosity Engine Scan
+
+on:
+    schedule:
+        - cron: "0 */4 * * *" # Run every 4 hours
+    workflow_dispatch: # Allow manual trigger
+
+jobs:
+    curiosity-scan:
+        runs-on: ubuntu-latest
+        permissions:
+            contents: read
+
+        steps:
+            - name: Checkout Code
+              uses: actions/checkout@v4
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: "22"
+                  cache: "npm"
+                  cache-dependency-path: swarm/package-lock.json
+
+            - name: Install Swarm Dependencies
+              run: |
+                  cd swarm
+                  npm ci --legacy-peer-deps
+
+            - name: Run Curiosity Scan
+              env:
+                  BASE44_APP_ID: ${{ secrets.BASE44_APP_ID }}
+                  BASE44_API_KEY: ${{ secrets.BASE44_API_KEY }}
+                  OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+              run: |
+                  npx tsx scripts/trigger_curiosity.ts
