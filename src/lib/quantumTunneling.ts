@@ -67,7 +67,7 @@ export class QuantumTunnelingAnalyzer {
     // Find index with maximum tunneling probability
     let weakestIndex = 0;
     let maxWeakness = 0;
-    
+
     barriers.forEach((barrier, idx) => {
       const prob = this.calculateTunnelingProbability(barrier, 0.7);
       if (prob > maxWeakness) {
@@ -144,7 +144,7 @@ export class QuantumTunnelingAnalyzer {
     attackSophistication: number
   ): number {
     if (attackSophistication === 0) return 0;
-    
+
     // WKB-like approximation
     const effectiveBarrier = barrierStrength * this.defenseComplexity;
     const exponent = -effectiveBarrier / (attackSophistication + 0.001);
@@ -162,7 +162,8 @@ export class QuantumTunnelingAnalyzer {
     // barrier = -attack * ln(1 - confidenceLevel)
     const targetBreach = 1 - confidenceLevel;
     if (targetBreach >= 1) return 1;
-    return -attackLevel * Math.log(targetBreach);
+    const required = -attackLevel * Math.log(targetBreach);
+    return Math.min(1, required);
   }
 }
 

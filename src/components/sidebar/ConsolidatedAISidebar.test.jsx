@@ -1,8 +1,19 @@
+import React from 'react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { RouterProvider, createMemoryRouter } from 'react-router-dom';
 import ConsolidatedAISidebar from '@/components/sidebar/ConsolidatedAISidebar';
-import { LLMProvider } from '@/contexts/LLMContext';
+// import { LLMProvider } from '@/contexts/LLMContext'; // Removed real provider
+
+// Mock LLMContext
+vi.mock('@/contexts/LLMContext', () => ({
+  LLMProvider: ({ children }) => <div>{children}</div>,
+  useLLM: () => ({
+    selectedModel: 'quantum',
+    availableModels: ['quantum'],
+  }),
+}));
+const LLMProvider = ({ children }) => <div>{children}</div>;
 
 // Mock components and dependencies
 vi.mock('@/components/sidebar/AIModelRouter', () => ({
@@ -36,6 +47,48 @@ vi.mock('@/components/ui/button', () => ({
     </button>
   ),
 }));
+
+// Mock Base44 Client to prevent network errors
+vi.mock('@/api/base44Client', () => ({
+  base44: {
+    chat: vi.fn().mockResolvedValue({ content: 'Mock response' }),
+    completion: vi.fn().mockResolvedValue({ text: 'Mock completion' }),
+  },
+}));
+
+// Mock framer-motion to avoid animation issues
+vi.mock('framer-motion', () => ({
+  motion: {
+    div: ({ children, animate, style, ...props }) => (
+      <div style={{ ...style, ...animate }} {...props}>
+        {children}
+      </div>
+    ),
+  },
+  AnimatePresence: ({ children }) => <>{children}</>,
+}));
+
+// Mock useAnalytics hook
+vi.mock('@/hooks/useAnalytics', () => ({
+  useAnalytics: () => ({
+    trackSectionCollapsed: vi.fn(),
+    trackSectionExpanded: vi.fn(),
+  }),
+}));
+
+// Mock utils
+vi.mock('@/utils', () => ({
+  createPageUrl: (page) => `/mock-url/${page}`,
+  cn: (...inputs) => inputs.join(' '),
+}));
+
+
+// Polyfill ResizeObserver for framer-motion
+global.ResizeObserver = class ResizeObserver {
+  observe() { }
+  unobserve() { }
+  disconnect() { }
+};
 
 const renderWithRouter = (ui) => {
   const router = createMemoryRouter(
@@ -143,11 +196,13 @@ describe('ConsolidatedAISidebar Component', () => {
 
     rerender(
       <RouterProvider router={createMemoryRouter(
-        [{ path: '/', element: (
-          <LLMProvider>
-            <ConsolidatedAISidebar {...defaultProps} user={mockAdminUser} />
-          </LLMProvider>
-        ) }],
+        [{
+          path: '/', element: (
+            <LLMProvider>
+              <ConsolidatedAISidebar {...defaultProps} user={mockAdminUser} />
+            </LLMProvider>
+          )
+        }],
         {
           initialEntries: ['/'],
           future: {
@@ -239,7 +294,7 @@ describe('ConsolidatedAISidebar Component', () => {
   });
 
   it('is memoized to prevent unnecessary re-renders', () => {
-    const { rerender } = renderWithRouter(
+    const { container } = renderWithRouter(
       <LLMProvider>
         <ConsolidatedAISidebar {...defaultProps} />
       </LLMProvider>

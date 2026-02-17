@@ -14,6 +14,29 @@ import { TunnelingScanner } from '../quantumTunneling';
 import { ZenoStabilizer } from '../quantumZeno';
 import { RenormalizationEngine } from '../quantumRenormalization';
 
+// Mock the WASM module
+vi.mock('../quantum-core/pkg/quantum_core', () => ({
+  default: vi.fn(),
+  QuantumAnnealer: class {
+    constructor() { }
+    optimize_energy() { return true; }
+    get_temperature() { return 0; }
+    is_frozen() { return true; }
+    static optimize() { return { recommendation: 'Optimized' }; }
+  },
+  EntangledState: class {
+    create_bell_state() { }
+    apply_rotation() { }
+    measure_fidelity() { return 0.99; }
+  },
+  SuperpositionSynthesizer: class {
+    create_superposition() { }
+    apply_interference() { }
+    collapse_to_optimal() { return 0; }
+    calculate_entropy() { return 0.1; }
+  },
+}));
+
 describe('Quantum Module E2E Integration', () => {
   let quantumCore;
   let consensus;

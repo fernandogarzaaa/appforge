@@ -11,17 +11,29 @@ let isInitialized = false;
  */
 export async function initializeQuantumCore() {
   if (isInitialized) return quantumModule;
-  
+
   try {
-    try { const { default: init, QuantumAnnealer, EntangledState, SuperpositionSynthesizer } = await import('../quantum-core/pkg/quantum_core'); } catch (error) { console.error('❌ Failed to import quantum core:', error); throw error; }
+    let init, QuantumAnnealer, EntangledState, SuperpositionSynthesizer;
+
+    try {
+      const module = await import('../quantum-core/pkg/quantum_core');
+      init = module.default;
+      QuantumAnnealer = module.QuantumAnnealer;
+      EntangledState = module.EntangledState;
+      SuperpositionSynthesizer = module.SuperpositionSynthesizer;
+    } catch (error) {
+      console.error('❌ Failed to import quantum core:', error);
+      throw error;
+    }
+
     await init();
-    
+
     quantumModule = {
       QuantumAnnealer,
       EntangledState,
       SuperpositionSynthesizer,
     };
-    
+
     isInitialized = true;
     console.log('✅ Quantum Core initialized successfully');
     return quantumModule;
@@ -37,7 +49,7 @@ export async function initializeQuantumCore() {
  */
 export async function optimizeDependencies(dependencies, constraints = {}) {
   if (!isInitialized) await initializeQuantumCore();
-  
+
   const {
     startTemp = 100.0,
     coolingRate = 0.95,
@@ -48,33 +60,33 @@ export async function optimizeDependencies(dependencies, constraints = {}) {
     const annealer = new quantumModule.QuantumAnnealer(startTemp, coolingRate);
     let currentConfig = dependencies;
     let currentEnergy = calculateDependencyEnergy(currentConfig);
-    
+
     const optimizationHistory = [];
-    
+
     for (let i = 0; i < maxIterations; i++) {
       const newConfig = mutateConfiguration(currentConfig);
       const newEnergy = calculateDependencyEnergy(newConfig);
-      
+
       const accepted = annealer.optimize_energy(currentEnergy, newEnergy);
-      
+
       if (accepted) {
         currentConfig = newConfig;
         currentEnergy = newEnergy;
       }
-      
+
       optimizationHistory.push({
         iteration: i,
         energy: currentEnergy,
         temperature: annealer.get_temperature(),
         accepted,
       });
-      
+
       if (annealer.is_frozen()) {
         console.log(`Quantum annealing frozen at iteration ${i}`);
         break;
       }
     }
-    
+
     return {
       optimizedConfig: currentConfig,
       finalEnergy: currentEnergy,
@@ -97,17 +109,17 @@ export async function optimizeDependencies(dependencies, constraints = {}) {
  */
 export async function synchronizeCollaborativeState(state1, state2) {
   if (!isInitialized) await initializeQuantumCore();
-  
+
   try {
     const entanglement = new quantumModule.EntangledState();
     const bellState = entanglement.create_bell_state();
-    
+
     // Apply state to the entangled system
     const rotatedState = entanglement.apply_rotation(Math.PI / 4);
-    
+
     // Measure fidelity (correlation quality)
     const fidelity = entanglement.measure_fidelity(bellState, rotatedState);
-    
+
     return {
       bellState: bellState,
       entanglement: fidelity,
@@ -129,21 +141,21 @@ export async function synchronizeCollaborativeState(state1, state2) {
  */
 export async function generateOptimalCode(codeRequirements, candidates = 100) {
   if (!isInitialized) await initializeQuantumCore();
-  
+
   try {
     const synthesizer = new quantumModule.SuperpositionSynthesizer();
-    
+
     // Create superposition of all possible solutions
     const superposition = synthesizer.create_superposition(candidates);
-    
+
     // Apply interference based on constraints
     const constraints = evaluateConstraints(codeRequirements);
     const interference = synthesizer.apply_interference(constraints, superposition);
-    
+
     // Collapse to the optimal solution
     const optimalIndex = synthesizer.collapse_to_optimal();
     const entropy = synthesizer.calculate_entropy();
-    
+
     return {
       optimalSolution: optimalIndex,
       superposition: superposition,
@@ -198,8 +210,8 @@ function calculateDependencyEnergy(config) {
  */
 function hasConflict(dep1, dep2) {
   if (!dep1.conflicts || !dep2.conflicts) return false;
-  return (dep1.conflicts.includes(dep2.name) || 
-          dep2.conflicts.includes(dep1.name));
+  return (dep1.conflicts.includes(dep2.name) ||
+    dep2.conflicts.includes(dep1.name));
 }
 
 /**
@@ -207,7 +219,7 @@ function hasConflict(dep1, dep2) {
  */
 function calculateVersionDistance(dep) {
   if (!dep.version) return 10;
-  
+
   const [major, minor] = dep.version.split('.').map(Number);
   return Math.abs(major * 10 + (minor || 0));
 }
@@ -218,21 +230,21 @@ function calculateVersionDistance(dep) {
 function mutateConfiguration(config) {
   const mutated = { ...config };
   const keys = Object.keys(mutated);
-  
+
   if (keys.length === 0) return mutated;
-  
+
   const randomKey = keys[Math.floor(Math.random() * keys.length)];
   const currentVersion = mutated[randomKey].version;
-  
+
   // Randomly adjust version
   const [major, minor] = currentVersion.split('.').map(Number);
   const change = Math.random() > 0.5 ? 1 : -1;
-  
+
   mutated[randomKey] = {
     ...mutated[randomKey],
     version: `${Math.max(0, major + change)}.${minor || 0}`,
   };
-  
+
   return mutated;
 }
 
@@ -241,14 +253,14 @@ function mutateConfiguration(config) {
  */
 function evaluateConstraints(requirements) {
   const constraints = [];
-  
+
   if (requirements.performance) constraints.push(0.9);
   if (requirements.security) constraints.push(0.95);
   if (requirements.simplicity) constraints.push(0.8);
   if (requirements.scalability) constraints.push(0.85);
-  
-  return constraints.length > 0 
-    ? constraints 
+
+  return constraints.length > 0
+    ? constraints
     : [0.5]; // Default neutral constraint
 }
 
