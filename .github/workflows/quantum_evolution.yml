@@ -59,7 +59,7 @@ jobs:
 
       - name: Install Dependencies
         working-directory: ./swarm
-        run: npm install
+        run: npm install --legacy-peer-deps
 
       - name: Run Reality Pulse 2.0
         working-directory: ./
@@ -72,6 +72,7 @@ jobs:
       # 🔍 DIAGNOSTICS: Generate reality signals for Inception
       - name: Pre-Pulse Diagnostics
         run: |
+          npm ci --legacy-peer-deps
           npm run build > ../build_logs.txt 2>&1 || echo "Build failed (as expected for diagnosis)" > ../build_logs.txt
           npm run lint -- --format json > ../lint_output.json 2>&1 || echo "[]" > ../lint_output.json
         continue-on-error: true

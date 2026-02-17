@@ -74,7 +74,7 @@ jobs:
       - name: Install Swarm Dependencies
         run: |
           cd swarm
-          npm install
+          npm install --legacy-peer-deps
 
       # 🦀 TRANSCENDENCE: Build Rust Quantum Bridge
       - name: Build Quantum Bridge
