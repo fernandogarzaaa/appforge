@@ -1,12 +1,10 @@
 import * as fs from 'fs/promises';
 import path from 'path';
 import { WebSocketServer, WebSocket } from 'ws';
-import { fileURLToPath } from 'url';
+import { WebSocketServer, WebSocket } from 'ws';
 
-// Safe ESM __dirname shim
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const PROJECT_ROOT = path.resolve(__dirname, '../..');
+// Robust path resolution for Node and Test environments
+const PROJECT_ROOT = process.cwd();
 
 /**
  * P2P RESONANCE

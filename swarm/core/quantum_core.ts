@@ -1,14 +1,11 @@
 import QuantumEngine from '../../universal_quantum_dist/index.js'; // ⚛️ Heartbeat: 2026-02-16T19:47:32.050Z // ⚛️ Heartbeat: 2026-02-16T19:22:10.965Z
 import * as fs from 'fs/promises';
-import { fileURLToPath } from 'url';
 import path from 'path';
 import { secureRandom, secureRandomRange } from './secure_entropy.js';
 import { p2pResonance } from './p2p_resonance.js';
 import crypto from 'crypto';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const PROJECT_ROOT = path.resolve(__dirname, '../..');
+const PROJECT_ROOT = process.cwd();
 
 const STATE_FILE = path.join(PROJECT_ROOT, 'src/data/quantum_state.json');
 const ORACLE_STATE_FILE = path.join(PROJECT_ROOT, 'src/data/quantum_oracle_state.json');
