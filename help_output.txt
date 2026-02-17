@@ -1,0 +1,26 @@
+Usage: base44 [options] [command]
+
+Base44 CLI - Unified interface for managing Base44 applications
+
+Options:
+  -V, --version            output the version number
+  -h, --help               display help for command
+
+Commands:
+  agents                   Manage project agents
+  connectors               Manage project connectors (OAuth integrations)
+  create [options] [name]  Create a new Base44 project
+  dashboard                Manage app dashboard
+  deploy [options]         Deploy all project resources (entities, functions,
+                           agents, connectors, and site)
+  eject [options]          Download the code for an existing Base44 project
+  entities                 Manage project entities
+  functions                Manage project functions
+  help [command]           display help for command
+  link [options]           Link a local project to a Base44 project (create new
+                           or link existing)
+  login                    Authenticate with Base44
+  logout                   Logout from current device
+  site                     Manage app site (frontend app)
+  types                    Manage TypeScript type generation
+  whoami                   Display current authenticated user

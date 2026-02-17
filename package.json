@@ -180,6 +180,7 @@
     "autoprefixer": "^10.4.20",
     "babel-jest": "^29.7.0",
     "babel-plugin-transform-react-remove-prop-types": "^0.4.24",
+    "base44": "^0.0.32",
     "baseline-browser-mapping": "^2.8.32",
     "electron": "^40.4.0",
     "electron-builder": "^26.7.0",

@@ -1,0 +1,12 @@
+[dotenv@17.3.1] injecting env (13) from .env.local -- tip: ≡ƒ¢á∩╕Å  run anywhere with `dotenvx run -- yourcommand`
+≡ƒÜÇ Pushing 'Task' Entity Schema to App: 69741d9301465d2bac03e8bb
+   ≡ƒôä Loaded Schema: Task
+   ≡ƒôí POST https://appforge.fun/api/v1/apps/69741d9301465d2bac03e8bb/entities
+   Γ¥î Push Failed: Request failed with status code 405
+   Status: 405
+   Data: {
+  "error_type": "HTTPException",
+  "message": "Method Not Allowed",
+  "detail": "Method Not Allowed",
+  "traceback": ""
+}

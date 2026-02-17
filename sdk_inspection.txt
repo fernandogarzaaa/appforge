@@ -1,0 +1,53 @@
+[dotenv@17.3.1] injecting env (13) from .env.local -- tip: ΓÜÖ∩╕Å  write to custom object with { processEnv: myObject }
+--- Inspector Gadget ---
+Client Keys: [
+  'entities',  'integrations',
+  'auth',      'functions',
+  'agents',    'appLogs',
+  'users',     'analytics',
+  'cleanup',   'setToken',
+  'getConfig', 'asServiceRole'
+]
+Client.entities Keys: []
+Full Client: {
+  entities: {},
+  integrations: {},
+  auth: {
+    me: [AsyncFunction: me],
+    updateMe: [AsyncFunction: updateMe],
+    redirectToLogin: [Function: redirectToLogin],
+    loginWithProvider: [Function: loginWithProvider],
+    logout: [Function: logout],
+    setToken: [Function: setToken],
+    loginViaEmailPassword: [AsyncFunction: loginViaEmailPassword],
+    isAuthenticated: [AsyncFunction: isAuthenticated],
+    inviteUser: [Function: inviteUser],
+    register: [Function: register],
+    verifyOtp: [Function: verifyOtp],
+    resendOtp: [Function: resendOtp],
+    resetPasswordRequest: [Function: resetPasswordRequest],
+    resetPassword: [Function: resetPassword],
+    changePassword: [Function: changePassword]
+  },
+  functions: { invoke: [AsyncFunction: invoke] },
+  agents: {
+    getConversations: [Function: getConversations],
+    getConversation: [Function: getConversation],
+    listConversations: [Function: listConversations],
+    createConversation: [Function: createConversation],
+    addMessage: [AsyncFunction: addMessage],
+    subscribeToConversation: [Function: subscribeToConversation],
+    getWhatsAppConnectURL: [Function: getWhatsAppConnectURL]
+  },
+  appLogs: {
+    logUserInApp: [AsyncFunction: logUserInApp],
+    fetchLogs: [AsyncFunction: fetchLogs],
+    getStats: [AsyncFunction: getStats]
+  },
+  users: { inviteUser: [AsyncFunction: inviteUser] },
+  analytics: { track: [Function: track], cleanup: [Function: cleanup] },
+  cleanup: [Function: cleanup],
+  setToken: [Function: setToken],
+  getConfig: [Function: getConfig],
+  asServiceRole: [Getter]
+}

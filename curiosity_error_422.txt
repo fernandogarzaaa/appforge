@@ -1,0 +1,153 @@
+≡ƒîî Quantum Engine v3.0 [Holographic Architecture] Online
+[dotenv@17.3.1] injecting env (0) from .env.local -- tip: ≡ƒ¢í∩╕Å auth for agents: https://vestauth.com
+≡ƒò╡∩╕Å Triggering Manual Curiosity Scan...
+≡ƒò╡∩╕Å [Curiosity] Scanning for neglected artifacts...
+≡ƒôÜ [Quantum] Loaded 1 saved states
+≡ƒôÜ [Quantum] Loaded Oracle learning state
+≡ƒö« Consulting Oracle (v3.0): Analyze this filename: swarm\core\whatsapp_ai_chat.ts. Why might it be interesting to explore or refactor? Return a short hypothesis.
+   Γ£¿ Local Oracle recommends: Potential Technical Debt
+   ≡ƒôè Confidence: 36.6%
+   ≡ƒº¼ Engine Version: 3.1
+   Γ£¿ Found Candidate: swarm\core\whatsapp_ai_chat.ts
+   ≡ƒñö Hypothesis: Autonomous exploration of neglected code.
+Γ£¿ [Curiosity] Synthesizing Bounty for: whatsapp_ai_chat.ts
+[Base44 SDK Error] 422: Error in field project_id: Field required
+Error in field title: Field required
+Error data: {
+  "error_type": "ValidationError",
+  "message": "Error in field project_id: Field required\nError in field title: Field required",
+  "detail": "[{'type': 'missing', 'loc': ('project_id',), 'msg': 'Field required', 'input': {'description': '[Curiosity] Explore whatsapp_ai_chat.ts', 'status': 'OPEN', 'metadata': {'type': 'CURIOSITY_EXPLORATION', 'target': 'swarm\\\\core\\\\whatsapp_ai_chat.ts', 'hypothesis': 'Autonomous exploration of neglected code.', 'priority': 'LOW'}}, 'url': 'https://errors.pydantic.dev/2.12/v/missing'}, {'type': 'missing', 'loc': ('title',), 'msg': 'Field required', 'input': {'description': '[Curiosity] Explore whatsapp_ai_chat.ts', 'status': 'OPEN', 'metadata': {'type': 'CURIOSITY_EXPLORATION', 'target': 'swarm\\\\core\\\\whatsapp_ai_chat.ts', 'hypothesis': 'Autonomous exploration of neglected code.', 'priority': 'LOW'}}, 'url': 'https://errors.pydantic.dev/2.12/v/missing'}]",
+  "traceback": ""
+}
+   Γ¥î Scan failed: Base44Error: Error in field project_id: Field required
+Error in field title: Field required
+    at file:///C:/Users/ferna/Downloads/appforge-main/swarm/node_modules/@base44/sdk/dist/utils/axios-client.js:183:33
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async Axios.request (file:///C:/Users/ferna/Downloads/appforge-main/swarm/node_modules/axios/lib/core/Axios.js:41:14)
+    at async CuriosityEngine.synthesizeBounty (C:\Users\ferna\Downloads\appforge-main\swarm\core\curiosity_engine.ts:63:9)
+    at async trigger (C:\Users\ferna\Downloads\appforge-main\scripts\trigger_curiosity.ts:23:13) {
+  status: 422,
+  code: undefined,
+  data: {
+    error_type: 'ValidationError',
+    message: 'Error in field project_id: Field required\n' +
+      'Error in field title: Field required',
+    detail: "[{'type': 'missing', 'loc': ('project_id',), 'msg': 'Field required', 'input': {'description': '[Curiosity] Explore whatsapp_ai_chat.ts', 'status': 'OPEN', 'metadata': {'type': 'CURIOSITY_EXPLORATION', 'target': 'swarm\\\\core\\\\whatsapp_ai_chat.ts', 'hypothesis': 'Autonomous exploration of neglected code.', 'priority': 'LOW'}}, 'url': 'https://errors.pydantic.dev/2.12/v/missing'}, {'type': 'missing', 'loc': ('title',), 'msg': 'Field required', 'input': {'description': '[Curiosity] Explore whatsapp_ai_chat.ts', 'status': 'OPEN', 'metadata': {'type': 'CURIOSITY_EXPLORATION', 'target': 'swarm\\\\core\\\\whatsapp_ai_chat.ts', 'hypothesis': 'Autonomous exploration of neglected code.', 'priority': 'LOW'}}, 'url': 'https://errors.pydantic.dev/2.12/v/missing'}]",
+    traceback: ''
+  },
+  originalError: AxiosError: Request failed with status code 422
+      at settle (file:///C:/Users/ferna/Downloads/appforge-main/swarm/node_modules/axios/lib/core/settle.js:19:12)
+      at BrotliDecompress.handleStreamEnd (file:///C:/Users/ferna/Downloads/appforge-main/swarm/node_modules/axios/lib/adapters/http.js:798:11)
+      at BrotliDecompress.emit (node:events:508:28)
+      at endReadableNT (node:internal/streams/readable:1701:12)
+      at process.processTicksAndRejections (node:internal/process/task_queues:89:21) {
+    isAxiosError: true,
+    code: 'ERR_BAD_REQUEST',
+    config: {
+      transitional: [Object],
+      adapter: [Array],
+      transformRequest: [Array],
+      transformResponse: [Array],
+      timeout: 0,
+      xsrfCookieName: 'XSRF-TOKEN',
+      xsrfHeaderName: 'X-XSRF-TOKEN',
+      maxContentLength: -1,
+      maxBodyLength: -1,
+      env: [Object],
+      validateStatus: [Function: validateStatus],
+      headers: [Object [AxiosHeaders]],
+      baseURL: 'https://appforge.fun/api',
+      method: 'post',
+      url: '/apps/69741d9301465d2bac03e8bb/entities/Task',
+      data: '{"description":"[Curiosity] Explore whatsapp_ai_chat.ts","status":"OPEN","metadata":{"type":"CURIOSITY_EXPLORATION","target":"swarm\\\\core\\\\whatsapp_ai_chat.ts","hypothesis":"Autonomous exploration of neglected code.","priority":"LOW"}}',
+      allowAbsoluteUrls: true,
+      requestId: 'd849180e-6a09-48ba-8a4a-94e95b52a0ba'
+    },
+    request: ClientRequest {
+      _events: [Object: null prototype],
+      _eventsCount: 7,
+      _maxListeners: undefined,
+      outputData: [],
+      outputSize: 0,
+      writable: true,
+      destroyed: true,
+      _last: false,
+      chunkedEncoding: false,
+      shouldKeepAlive: true,
+      maxRequestsOnConnectionReached: false,
+      _defaultKeepAlive: true,
+      useChunkedEncodingByDefault: true,
+      sendDate: false,
+      _removedConnection: false,
+      _removedContLen: false,
+      _removedTE: false,
+      strictContentLength: false,
+      _contentLength: 235,
+      _hasBody: true,
+      _trailer: '',
+      finished: true,
+      _headerSent: true,
+      _closed: true,
+      _header: 'POST /api/apps/69741d9301465d2bac03e8bb/entities/Task HTTP/1.1\r\n' +
+        'Accept: application/json\r\n' +
+        'Content-Type: application/json\r\n' +
+        'Authorization: Bearer f3cfbad41798465097a9a5213f1d686c\r\n' +
+        'X-App-Id: 69741d9301465d2bac03e8bb\r\n' +
+        'User-Agent: axios/1.13.5\r\n' +
+        'Content-Length: 235\r\n' +
+        'Accept-Encoding: gzip, compress, deflate, br\r\n' +
+        'Host: appforge.fun\r\n' +
+        'Connection: keep-alive\r\n' +
+        '\r\n',
+      _keepAliveTimeout: 0,
+      _onPendingData: [Function: nop],
+      agent: [Agent],
+      socketPath: undefined,
+      method: 'POST',
+      maxHeaderSize: undefined,
+      insecureHTTPParser: undefined,
+      joinDuplicateHeaders: undefined,
+      path: '/api/apps/69741d9301465d2bac03e8bb/entities/Task',
+      _ended: true,
+      res: [IncomingMessage],
+      aborted: false,
+      timeoutCb: null,
+      upgradeOrConnect: false,
+      parser: null,
+      maxHeadersCount: null,
+      reusedSocket: false,
+      host: 'appforge.fun',
+      protocol: 'https:',
+      _redirectable: [Writable],
+      Symbol(shapeMode): false,
+      Symbol(kCapture): false,
+      Symbol(kBytesWritten): 0,
+      Symbol(kNeedDrain): false,
+      Symbol(corked): 0,
+      Symbol(kChunkedBuffer): [],
+      Symbol(kChunkedLength): 0,
+      Symbol(kSocket): [TLSSocket],
+      Symbol(kOutHeaders): [Object: null prototype],
+      Symbol(errored): null,
+      Symbol(kHighWaterMark): 16384,
+      Symbol(kRejectNonStandardBodyWrites): false,
+      Symbol(kUniqueHeaders): null
+    },
+    response: {
+      status: 422,
+      statusText: 'Unprocessable Entity',
+      headers: [Object [AxiosHeaders]],
+      config: [Object],
+      request: [ClientRequest],
+      data: [Object]
+    },
+    status: 422
+  }
+}
+[Base44 SDK Error] 401: Authentication required to view users
+Error data: {
+  "message": "Authentication required to view users",
+  "detail": "You must be logged in to perform this operation.",
+  "traceback": null,
+  "extra_data": null
+}

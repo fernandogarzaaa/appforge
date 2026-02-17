@@ -1,0 +1,18 @@
+
+[90mΓöî[39m   Base 44 
+DEBUG: Reading entity file: C:/Users/ferna/Downloads/appforge-main/base44/entities/task.jsonc
+DEBUG: Parsed content: {"name":"task","type":"object","properties":{"description":{"type":"string","description":"What needs to be done."},"status":{"type":"string","default":"OPEN"}},"required":["description","status"]}
+[90mΓöé[39m
+[34mΓùÅ[39m  Found 1 entities to push: task
+[?25l[90mΓöé[39m
+[35mΓùÆ[39m  Pushing entities to Base44...
+[999D[J[32mΓùç[39m  Failed to push entities
+[?25h[90mΓöé[39m
+[31mΓûá[39m  Error syncing entities: This endpoint is only available for Backend Platform apps
+[90mΓöé[39m
+[31mΓûá[39m  [Agent Hints]
+[90mΓöé[39m    This feature requires an app created with the Base44 CLI. Remove `base44/.app.jsonc` and run 'base44 link' to connect your project to a CLI-created app.
+[90mΓöé[39m    Read more at https://docs.base44.com/developers/backend/overview/introduction
+[90mΓöé[39m
+[90mΓöö[39m  Session: B9oN_JRFvFsl | App: 69741d9301465d2bac03e8bb | 2026-02-17T16:03:52.904Z
+

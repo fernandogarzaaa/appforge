@@ -45,7 +45,17 @@ export class RealitySensor {
     private async scanGitHub() {
         try {
             // Check for uncommitted changes or recent commits
-            const status = execSync('git status --short', { cwd: PROJECT_ROOT }).toString();
+            // NOISE FILTER: Wrap in try-catch and sanitize output
+            let status = '';
+            try {
+                const output = execSync('git status --short', { cwd: PROJECT_ROOT, encoding: 'utf8' });
+                // Filter out non-text noise or known shell errors
+                status = output.replace(/.*Unexpected token.*/g, '').trim();
+            } catch (innerError) {
+                // If git fails entirely (e.g. not a repo), just ignore
+                return;
+            }
+
             if (status.length > 0) {
                 this.signals.push({
                     source: 'github',

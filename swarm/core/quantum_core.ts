@@ -83,7 +83,8 @@ export class QuantumSwarmCore {
     private async persistStates(): Promise<void> {
         try {
             // Hive Restoration: Ensure directory exists
-            await fs.mkdir(path.dirname(STATE_FILE), { recursive: true });
+            const dir = path.dirname(STATE_FILE);
+            try { await fs.mkdir(dir, { recursive: true }); } catch (e) { }
 
             const data = Object.fromEntries(this.savedStates);
             await fs.writeFile(STATE_FILE, JSON.stringify(data, null, 2));
@@ -119,7 +120,8 @@ export class QuantumSwarmCore {
             if (!state) return;
 
             // Hive Restoration: Ensure directory exists
-            await fs.mkdir(path.dirname(ORACLE_STATE_FILE), { recursive: true });
+            const dir = path.dirname(ORACLE_STATE_FILE);
+            try { await fs.mkdir(dir, { recursive: true }); } catch (e) { }
 
             await fs.writeFile(ORACLE_STATE_FILE, JSON.stringify({
                 timestamp: new Date().toISOString(),
