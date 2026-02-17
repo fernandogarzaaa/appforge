@@ -134,6 +134,7 @@ import { MaintenanceGuard } from './maintenance_guard.js';
 import { getCollectiveMembers } from './swarm_collectives.js';
 import { realitySensor } from './reality_sensor.js';
 import { SingularityEngine } from './singularity_engine.js';
+import { CuriosityEngine } from './curiosity_engine.js';
 
 const QUANTUM_CHANNEL = path.join(process.cwd(), 'src/data/quantum_channel.json');
 
@@ -272,6 +273,7 @@ async function main() {
     const experimentationSwarm = new ExperimentationSwarm();
     const aiEconomySwarm = new AIEconomySwarm();
     const resonanceEngine = new ResonanceEngine(swarmKnowledge);
+    const curiosityEngine = new CuriosityEngine(base44);
 
     // Initialize SwarmReporter
     const swarmReporter = new SwarmReporter();
@@ -773,6 +775,16 @@ async function main() {
                 // 🏛️ AIEconomySwarm (every 19 cycles - treasury and reinvestment flywheel)
                 if (cycleCount % 19 === 0) {
                     results.aiEconomySwarm = await aiEconomySwarm.runCycle();
+                }
+
+                // 🕵️ Curiosity Cycle (every 10 cycles - Phase 7)
+                if (cycleCount % 10 === 0) {
+                    console.log('🕵️ [Curiosity] Awakening...');
+                    const bounties = await curiosityEngine.scanForNovelty(1);
+                    if (bounties.length > 0) {
+                        await curiosityEngine.synthesizeBounty(bounties[0]);
+                        results.curiosity = bounties[0];
+                    }
                 }
 
                 // 🔮 ORACLE PRIORITY OVERRIDE: Always act on oracle guidance every autonomous cycle.
