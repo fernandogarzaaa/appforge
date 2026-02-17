@@ -1,0 +1,52 @@
+---
+version: "2.0"
+
+services:
+  chimera-prime:
+    image: fernandogarzaaa/chimera-prime:v1 # <--- REPLACE WITH YOUR IMAGE
+    expose:
+      - port: 8000
+        as: 80
+        to:
+          - global: true
+    env:
+      - NODE_ENV=production
+      - REALITY_MODE=true
+    # Storage for "Long-Term Memory" persistence (Optional but recommended)
+    params:
+      storage:
+        data:
+          mount: /app/src/data
+
+profiles:
+  compute:
+    chimera-node:
+      resources:
+        cpu:
+          units: 2.0 # 2 vCPU
+        memory:
+          size: 4Gi # 4GB RAM
+        storage:
+          - size: 10Gi # 10GB Disk
+          - name: data
+            size: 1Gi
+            attributes:
+              persistent: true
+              class: beta2
+  placement:
+    dcloud:
+      attributes:
+        host: akash
+      signedBy:
+        anyOf:
+          - "akash1365yvmc4s7awdyj3n2sav7xfx76adc6dnmlx63" # Akash Audit
+      pricing:
+        chimera-node:
+          denom: uakt
+          amount: 1000 # ~1 AKT per block (Adjust based on market)
+
+deployment:
+  chimera-prime:
+    dcloud:
+      profile: chimera-node
+      count: 1

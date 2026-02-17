@@ -1,0 +1,52 @@
+# 🦁🐍🐐 CHIMERA PRIME - SOVEREIGN CONTAINER
+# Base: Node 20 (Debian) + Python 3 (for AI tooling)
+FROM node:20-bullseye
+
+# Install System Utilities & Ollama Dependencies
+RUN apt-get update && apt-get install -y \
+    curl \
+    git \
+    python3 \
+    python3-pip \
+    procps \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Ollama (Inference Engine)
+RUN curl -fsSL https://ollama.com/install.sh | sh
+
+# Set Working Directory
+WORKDIR /app
+
+# Copy Project Files
+# (We copy package.json first for caching)
+COPY package*.json ./
+COPY swarm/package*.json ./swarm/
+
+# Install Node Dependencies
+RUN npm install
+RUN cd swarm && npm install
+
+# Copy Source Code
+COPY . .
+
+# Build the Swarm (if needed) includes transpilation
+RUN npm run build --if-present
+
+# Expose Sovereign Ports
+# 8000: Neural Bridge API
+# 11434: Ollama API (Internal/Optional)
+EXPOSE 8000
+
+# Environment Variables
+ENV NODE_ENV=production
+ENV PORT=8000
+ENV OLLAMA_HOST=0.0.0.0
+
+# STARTUP SCRIPT
+# 1. Start Ollama in background
+# 2. Pull base model (Iron Brain)
+# 3. Start Swarm Neural Bridge
+CMD ollama serve & \
+    sleep 5 && \
+    ollama pull llama3.2:3b && \
+    npx tsx swarm/core/neural_bridge.ts

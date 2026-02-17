@@ -1,0 +1,13 @@
+Usage: base44 create [options] [name]
+
+Create a new Base44 project
+
+Arguments:
+  name                 Project name
+
+Options:
+  -p, --path <path>    Path where to create the project
+  -t, --template <id>  Template ID (e.g., backend-only, backend-and-client)
+  --deploy             Build and deploy the site
+  --no-skills          Skip AI agent skills installation
+  -h, --help           display help for command
