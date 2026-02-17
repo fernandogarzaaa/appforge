@@ -1,0 +1,313 @@
+
+[1m[46m RUN [49m[22m [36mv4.0.18 [39m[90mC:/Users/ferna/Downloads/appforge-main[39m
+
+ [31mΓ¥»[39m scripts/archive/verify_prediction.test.ts [2m([22m[2m0 test[22m[2m)[22m
+ [31mΓ¥»[39m scripts/archive/verify_quantum_collapse.test.ts [2m([22m[2m0 test[22m[2m)[22m
+ [31mΓ¥»[39m scripts/archive/verify_entanglement.test.ts [2m([22m[2m0 test[22m[2m)[22m
+ [31mΓ¥»[39m scripts/archive/verify_quantum_cycle.test.ts [2m([22m[2m0 test[22m[2m)[22m
+ [31mΓ¥»[39m scripts/archive/verify_security.test.ts [2m([22m[2m0 test[22m[2m)[22m
+ [31mΓ¥»[39m scripts/archive/verify_timeline.test.ts [2m([22m[2m0 test[22m[2m)[22m
+ [31mΓ¥»[39m e2e/accessibility.spec.js [2m([22m[2m0 test[22m[2m)[22m
+ [31mΓ¥»[39m e2e/ai-assistant.spec.js [2m([22m[2m0 test[22m[2m)[22m
+ [31mΓ¥»[39m e2e/landing.spec.js [2m([22m[2m0 test[22m[2m)[22m
+ [31mΓ¥»[39m e2e/performance.spec.js [2m([22m[2m0 test[22m[2m)[22m
+ [32mΓ£ô[39m src/hooks/useAPIKeys.test.js [2m([22m[2m14 tests[22m[2m)[22m[33m 977[2mms[22m[39m
+Error: AggregateError
+    at Object.dispatchError (C:\Users\ferna\Downloads\appforge-main\node_modules\jsdom\lib\jsdom\living\xhr\xhr-utils.js:63:19)
+    at Request.<anonymous> (C:\Users\ferna\Downloads\appforge-main\node_modules\jsdom\lib\jsdom\living\xhr\XMLHttpRequest-impl.js:655:18)
+    at Request.emit (node:events:520:35)
+    at ClientRequest.<anonymous> (C:\Users\ferna\Downloads\appforge-main\node_modules\jsdom\lib\jsdom\living\helpers\http-request.js:127:14)
+    at ClientRequest.emit (node:events:508:28)
+    at emitErrorEvent (node:_http_client:108:11)
+    at Socket.socketErrorListener (node:_http_client:575:5)
+    at Socket.emit (node:events:508:28)
+    at emitErrorNT (node:internal/streams/destroy:170:8)
+    at emitErrorCloseNT (node:internal/streams/destroy:129:3) undefined
+stderr | src/hooks/useAnalytics.test.js
+[Base44 SDK Error] undefined: Network Error
+
+Error: AggregateError
+    at Object.dispatchError (C:\Users\ferna\Downloads\appforge-main\node_modules\jsdom\lib\jsdom\living\xhr\xhr-utils.js:63:19)
+    at Request.<anonymous> (C:\Users\ferna\Downloads\appforge-main\node_modules\jsdom\lib\jsdom\living\xhr\XMLHttpRequest-impl.js:655:18)
+    at Request.emit (node:events:520:35)
+    at ClientRequest.<anonymous> (C:\Users\ferna\Downloads\appforge-main\node_modules\jsdom\lib\jsdom\living\helpers\http-request.js:127:14)
+    at ClientRequest.emit (node:events:508:28)
+    at emitErrorEvent (node:_http_client:108:11)
+    at Socket.socketErrorListener (node:_http_client:575:5)
+    at Socket.emit (node:events:508:28)
+    at emitErrorNT (node:internal/streams/destroy:170:8)
+    at emitErrorCloseNT (node:internal/streams/destroy:129:3) undefined
+stderr | src/hooks/useAnalytics.test.js
+[Base44 SDK Error] undefined: Network Error
+
+Error: AggregateError
+    at Object.dispatchError (C:\Users\ferna\Downloads\appforge-main\node_modules\jsdom\lib\jsdom\living\xhr\xhr-utils.js:63:19)
+    at Request.<anonymous> (C:\Users\ferna\Downloads\appforge-main\node_modules\jsdom\lib\jsdom\living\xhr\XMLHttpRequest-impl.js:655:18)
+    at Request.emit (node:events:520:35)
+    at ClientRequest.<anonymous> (C:\Users\ferna\Downloads\appforge-main\node_modules\jsdom\lib\jsdom\living\helpers\http-request.js:127:14)
+    at ClientRequest.emit (node:events:508:28)
+    at emitErrorEvent (node:_http_client:108:11)
+    at Socket.socketErrorListener (node:_http_client:575:5)
+    at Socket.emit (node:events:508:28)
+    at emitErrorNT (node:internal/streams/destroy:170:8)
+    at emitErrorCloseNT (node:internal/streams/destroy:129:3) undefined
+Error: AggregateError
+    at Object.dispatchError (C:\Users\ferna\Downloads\appforge-main\node_modules\jsdom\lib\jsdom\living\xhr\xhr-utils.js:63:19)
+    at Request.<anonymous> (C:\Users\ferna\Downloads\appforge-main\node_modules\jsdom\lib\jsdom\living\xhr\XMLHttpRequest-impl.js:655:18)
+    at Request.emit (node:events:520:35)
+    at ClientRequest.<anonymous> (C:\Users\ferna\Downloads\appforge-main\node_modules\jsdom\lib\jsdom\living\helpers\http-request.js:127:14)
+    at ClientRequest.emit (node:events:508:28)
+    at emitErrorEvent (node:_http_client:108:11)
+    at Socket.socketErrorListener (node:_http_client:575:5)
+    at Socket.emit (node:events:508:28)
+    at emitErrorNT (node:internal/streams/destroy:170:8)
+    at emitErrorCloseNT (node:internal/streams/destroy:129:3) undefined
+Error: AggregateError
+    at Object.dispatchError (C:\Users\ferna\Downloads\appforge-main\node_modules\jsdom\lib\jsdom\living\xhr\xhr-utils.js:63:19)
+    at Request.<anonymous> (C:\Users\ferna\Downloads\appforge-main\node_modules\jsdom\lib\jsdom\living\xhr\XMLHttpRequest-impl.js:655:18)
+    at Request.emit (node:events:520:35)
+    at ClientRequest.<anonymous> (C:\Users\ferna\Downloads\appforge-main\node_modules\jsdom\lib\jsdom\living\helpers\http-request.js:127:14)
+    at ClientRequest.emit (node:events:508:28)
+    at emitErrorEvent (node:_http_client:108:11)
+    at Socket.socketErrorListener (node:_http_client:575:5)
+    at Socket.emit (node:events:508:28)
+    at emitErrorNT (node:internal/streams/destroy:170:8)
+    at emitErrorCloseNT (node:internal/streams/destroy:129:3) undefined
+Error: AggregateError
+    at Object.dispatchError (C:\Users\ferna\Downloads\appforge-main\node_modules\jsdom\lib\jsdom\living\xhr\xhr-utils.js:63:19)
+    at Request.<anonymous> (C:\Users\ferna\Downloads\appforge-main\node_modules\jsdom\lib\jsdom\living\xhr\XMLHttpRequest-impl.js:655:18)
+    at Request.emit (node:events:520:35)
+    at ClientRequest.<anonymous> (C:\Users\ferna\Downloads\appforge-main\node_modules\jsdom\lib\jsdom\living\helpers\http-request.js:127:14)
+    at ClientRequest.emit (node:events:508:28)
+    at emitErrorEvent (node:_http_client:108:11)
+    at Socket.socketErrorListener (node:_http_client:575:5)
+    at Socket.emit (node:events:508:28)
+    at emitErrorNT (node:internal/streams/destroy:170:8)
+    at emitErrorCloseNT (node:internal/streams/destroy:129:3) undefined
+Error: AggregateError
+    at Object.dispatchError (C:\Users\ferna\Downloads\appforge-main\node_modules\jsdom\lib\jsdom\living\xhr\xhr-utils.js:63:19)
+    at Request.<anonymous> (C:\Users\ferna\Downloads\appforge-main\node_modules\jsdom\lib\jsdom\living\xhr\XMLHttpRequest-impl.js:655:18)
+    at Request.emit (node:events:520:35)
+    at ClientRequest.<anonymous> (C:\Users\ferna\Downloads\appforge-main\node_modules\jsdom\lib\jsdom\living\helpers\http-request.js:127:14)
+    at ClientRequest.emit (node:events:508:28)
+    at emitErrorEvent (node:_http_client:108:11)
+    at Socket.socketErrorListener (node:_http_client:575:5)
+    at Socket.emit (node:events:508:28)
+    at emitErrorNT (node:internal/streams/destroy:170:8)
+    at emitErrorCloseNT (node:internal/streams/destroy:129:3) undefined
+Error: AggregateError
+    at Object.dispatchError (C:\Users\ferna\Downloads\appforge-main\node_modules\jsdom\lib\jsdom\living\xhr\xhr-utils.js:63:19)
+    at Request.<anonymous> (C:\Users\ferna\Downloads\appforge-main\node_modules\jsdom\lib\jsdom\living\xhr\XMLHttpRequest-impl.js:655:18)
+    at Request.emit (node:events:520:35)
+    at ClientRequest.<anonymous> (C:\Users\ferna\Downloads\appforge-main\node_modules\jsdom\lib\jsdom\living\helpers\http-request.js:127:14)
+    at ClientRequest.emit (node:events:508:28)
+    at emitErrorEvent (node:_http_client:108:11)
+    at Socket.socketErrorListener (node:_http_client:575:5)
+    at Socket.emit (node:events:508:28)
+    at emitErrorNT (node:internal/streams/destroy:170:8)
+    at emitErrorCloseNT (node:internal/streams/destroy:129:3) undefined
+Error: AggregateError
+    at Object.dispatchError (C:\Users\ferna\Downloads\appforge-main\node_modules\jsdom\lib\jsdom\living\xhr\xhr-utils.js:63:19)
+    at Request.<anonymous> (C:\Users\ferna\Downloads\appforge-main\node_modules\jsdom\lib\jsdom\living\xhr\XMLHttpRequest-impl.js:655:18)
+    at Request.emit (node:events:520:35)
+    at ClientRequest.<anonymous> (C:\Users\ferna\Downloads\appforge-main\node_modules\jsdom\lib\jsdom\living\helpers\http-request.js:127:14)
+    at ClientRequest.emit (node:events:508:28)
+    at emitErrorEvent (node:_http_client:108:11)
+    at Socket.socketErrorListener (node:_http_client:575:5)
+    at Socket.emit (node:events:508:28)
+    at emitErrorNT (node:internal/streams/destroy:170:8)
+    at emitErrorCloseNT (node:internal/streams/destroy:129:3) undefined
+ [32mΓ£ô[39m src/hooks/useAnalytics.test.js [2m([22m[2m9 tests[22m[2m)[22m[33m 1084[2mms[22m[39m
+Error: AggregateError
+    at Object.dispatchError (C:\Users\ferna\Downloads\appforge-main\node_modules\jsdom\lib\jsdom\living\xhr\xhr-utils.js:63:19)
+    at Request.<anonymous> (C:\Users\ferna\Downloads\appforge-main\node_modules\jsdom\lib\jsdom\living\xhr\XMLHttpRequest-impl.js:655:18)
+    at Request.emit (node:events:520:35)
+    at ClientRequest.<anonymous> (C:\Users\ferna\Downloads\appforge-main\node_modules\jsdom\lib\jsdom\living\helpers\http-request.js:127:14)
+    at ClientRequest.emit (node:events:508:28)
+    at emitErrorEvent (node:_http_client:108:11)
+    at Socket.socketErrorListener (node:_http_client:575:5)
+    at Socket.emit (node:events:508:28)
+    at emitErrorNT (node:internal/streams/destroy:170:8)
+    at emitErrorCloseNT (node:internal/streams/destroy:129:3) undefined
+stderr | src/hooks/useAICompletion.test.js > useAICompletion > should debounce API calls
+Warning: An update to TestComponent inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at TestComponent (C:\Users\ferna\Downloads\appforge-main\node_modules\@testing-library\react\dist\pure.js:328:5)
+Warning: An update to TestComponent inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at TestComponent (C:\Users\ferna\Downloads\appforge-main\node_modules\@testing-library\react\dist\pure.js:328:5)
+Warning: An update to TestComponent inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at TestComponent (C:\Users\ferna\Downloads\appforge-main\node_modules\@testing-library\react\dist\pure.js:328:5)
+
+stderr | src/hooks/useAICompletion.test.js > useAICompletion > should abort previous requests
+Warning: An update to TestComponent inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at TestComponent (C:\Users\ferna\Downloads\appforge-main\node_modules\@testing-library\react\dist\pure.js:328:5)
+Warning: An update to TestComponent inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at TestComponent (C:\Users\ferna\Downloads\appforge-main\node_modules\@testing-library\react\dist\pure.js:328:5)
+Warning: An update to TestComponent inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at TestComponent (C:\Users\ferna\Downloads\appforge-main\node_modules\@testing-library\react\dist\pure.js:328:5)
+Warning: An update to TestComponent inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at TestComponent (C:\Users\ferna\Downloads\appforge-main\node_modules\@testing-library\react\dist\pure.js:328:5)
+Warning: An update to TestComponent inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at TestComponent (C:\Users\ferna\Downloads\appforge-main\node_modules\@testing-library\react\dist\pure.js:328:5)
+Warning: An update to TestComponent inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at TestComponent (C:\Users\ferna\Downloads\appforge-main\node_modules\@testing-library\react\dist\pure.js:328:5)
+
+ [32mΓ£ô[39m src/hooks/useAICompletion.test.js [2m([22m[2m9 tests[22m[2m)[22m[33m 4326[2mms[22m[39m
+     [33m[2mΓ£ô[22m[39m should fetch completions when enabled [33m 579[2mms[22m[39m
+     [33m[2mΓ£ô[22m[39m should filter suggestions by confidence threshold [33m 559[2mms[22m[39m
+     [33m[2mΓ£ô[22m[39m should accept suggestion and track analytics [33m 960[2mms[22m[39m
+     [33m[2mΓ£ô[22m[39m should reject suggestion and track analytics [33m 556[2mms[22m[39m
+     [33m[2mΓ£ô[22m[39m should navigate between suggestions [33m 554[2mms[22m[39m
+     [33m[2mΓ£ô[22m[39m should wrap navigation with wrap enabled [33m 724[2mms[22m[39m
+ [32mΓ£ô[39m src/hooks/useDeployments.test.js [2m([22m[2m19 tests[22m[2m)[22m[33m 612[2mms[22m[39m
+Error: AggregateError
+    at Object.dispatchError (C:\Users\ferna\Downloads\appforge-main\node_modules\jsdom\lib\jsdom\living\xhr\xhr-utils.js:63:19)
+    at Request.<anonymous> (C:\Users\ferna\Downloads\appforge-main\node_modules\jsdom\lib\jsdom\living\xhr\XMLHttpRequest-impl.js:655:18)
+    at Request.emit (node:events:520:35)
+    at ClientRequest.<anonymous> (C:\Users\ferna\Downloads\appforge-main\node_modules\jsdom\lib\jsdom\living\helpers\http-request.js:127:14)
+    at ClientRequest.emit (node:events:508:28)
+    at emitErrorEvent (node:_http_client:108:11)
+    at Socket.socketErrorListener (node:_http_client:575:5)
+    at Socket.emit (node:events:508:28)
+    at emitErrorNT (node:internal/streams/destroy:170:8)
+    at emitErrorCloseNT (node:internal/streams/destroy:129:3) undefined
+stderr | src/hooks/useEnvironmentVariables.test.js
+[Base44 SDK Error] undefined: Network Error
+
+Error: AggregateError
+    at Object.dispatchError (C:\Users\ferna\Downloads\appforge-main\node_modules\jsdom\lib\jsdom\living\xhr\xhr-utils.js:63:19)
+    at Request.<anonymous> (C:\Users\ferna\Downloads\appforge-main\node_modules\jsdom\lib\jsdom\living\xhr\XMLHttpRequest-impl.js:655:18)
+    at Request.emit (node:events:520:35)
+    at ClientRequest.<anonymous> (C:\Users\ferna\Downloads\appforge-main\node_modules\jsdom\lib\jsdom\living\helpers\http-request.js:127:14)
+    at ClientRequest.emit (node:events:508:28)
+    at emitErrorEvent (node:_http_client:108:11)
+    at Socket.socketErrorListener (node:_http_client:575:5)
+    at Socket.emit (node:events:508:28)
+    at emitErrorNT (node:internal/streams/destroy:170:8)
+    at emitErrorCloseNT (node:internal/streams/destroy:129:3) undefined
+stderr | src/hooks/useEnvironmentVariables.test.js > useEnvironmentVariables Hook > should load environment variables
+[Base44 SDK Error] undefined: Network Error
+
+ [32mΓ£ô[39m src/hooks/useFavorites.test.js [2m([22m[2m16 tests[22m[2m)[22m[33m 937[2mms[22m[39m
+     [33m[2mΓ£ô[22m[39m should load favorites from localStorage [33m 374[2mms[22m[39m
+ [32mΓ£ô[39m src/hooks/useEnvironmentVariables.test.js [2m([22m[2m21 tests[22m[2m)[22m[33m 1539[2mms[22m[39m
+ [32mΓ£ô[39m src/hooks/useSearch.test.js [2m([22m[2m18 tests[22m[2m)[22m[33m 938[2mms[22m[39m
+ [32mΓ£ô[39m src/hooks/useProjectCloning.test.js [2m([22m[2m19 tests[22m[2m)[22m[33m 533[2mms[22m[39m
+ [32mΓ£ô[39m src/lib/apiKeyUtils.test.js [2m([22m[2m18 tests[22m[2m)[22m[32m 190[2mms[22m[39m
+Error: AggregateError
+    at Object.dispatchError (C:\Users\ferna\Downloads\appforge-main\node_modules\jsdom\lib\jsdom\living\xhr\xhr-utils.js:63:19)
+    at Request.<anonymous> (C:\Users\ferna\Downloads\appforge-main\node_modules\jsdom\lib\jsdom\living\xhr\XMLHttpRequest-impl.js:655:18)
+    at Request.emit (node:events:520:35)
+    at ClientRequest.<anonymous> (C:\Users\ferna\Downloads\appforge-main\node_modules\jsdom\lib\jsdom\living\helpers\http-request.js:127:14)
+    at ClientRequest.emit (node:events:508:28)
+    at emitErrorEvent (node:_http_client:108:11)
+    at Socket.socketErrorListener (node:_http_client:575:5)
+    at Socket.emit (node:events:508:28)
+    at emitErrorNT (node:internal/streams/destroy:170:8)
+    at emitErrorCloseNT (node:internal/streams/destroy:129:3) undefined
+stderr | src/hooks/useTeamInvites.test.js
+[Base44 SDK Error] undefined: Network Error
+
+Error: AggregateError
+    at Object.dispatchError (C:\Users\ferna\Downloads\appforge-main\node_modules\jsdom\lib\jsdom\living\xhr\xhr-utils.js:63:19)
+    at Request.<anonymous> (C:\Users\ferna\Downloads\appforge-main\node_modules\jsdom\lib\jsdom\living\xhr\XMLHttpRequest-impl.js:655:18)
+    at Request.emit (node:events:520:35)
+    at ClientRequest.<anonymous> (C:\Users\ferna\Downloads\appforge-main\node_modules\jsdom\lib\jsdom\living\helpers\http-request.js:127:14)
+    at ClientRequest.emit (node:events:508:28)
+    at emitErrorEvent (node:_http_client:108:11)
+    at Socket.socketErrorListener (node:_http_client:575:5)
+    at Socket.emit (node:events:508:28)
+    at emitErrorNT (node:internal/streams/destroy:170:8)
+    at emitErrorCloseNT (node:internal/streams/destroy:129:3) undefined
+stderr | src/hooks/useTeamInvites.test.js
+[Base44 SDK Error] undefined: Network Error
+
+ [32mΓ£ô[39m src/hooks/useTeamInvites.test.js [2m([22m[2m22 tests[22m[2m)[22m[33m 951[2mms[22m[39m
+ [32mΓ£ô[39m src/lib/deploymentHistory.test.js [2m([22m[2m18 tests[22m[2m)[22m[32m 17[2mms[22m[39m
+ [32mΓ£ô[39m src/lib/environmentVariables.test.js [2m([22m[2m21 tests[22m[2m)[22m[32m 21[2mms[22m[39m
+ [32mΓ£ô[39m src/lib/favorites.test.js [2m([22m[2m16 tests[22m[2m)[22m[32m 19[2mms[22m[39m
+ [32mΓ£ô[39m src/lib/projectCloning.test.js [2m([22m[2m10 tests[22m[2m)[22m[32m 18[2mms[22m[39m
+ [32mΓ£ô[39m src/lib/teamInvites.test.js [2m([22m[2m18 tests[22m[2m)[22m[32m 20[2mms[22m[39m
+ [32mΓ£ô[39m src/lib/search.test.js [2m([22m[2m25 tests[22m[2m)[22m[32m 17[2mms[22m[39m
+ [2m[90mΓåô[39m[22m tests/integration/payment-integration.test.ts [2m([22m[2m5 tests[22m[2m | [22m[33m5 skipped[39m[2m)[22m
+ [32mΓ£ô[39m src/utils/accessibility.test.js [2m([22m[2m24 tests[22m[2m)[22m[33m 979[2mms[22m[39m

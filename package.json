@@ -16,6 +16,7 @@
     "swarm:stop": "pm2 stop appforge-swarm",
     "swarm:logs": "pm2 logs appforge-swarm",
     "swarm:benchmark": "tsx scripts/benchmark_swarm_intelligence.ts",
+    "swarm:optimize:bridge": "tsx scripts/optimize_neural_bridge.ts",
     "swarm:oracle:report": "tsx scripts/report_benchmark_to_oracle.ts",
     "swarm:cli": "tsx scripts/swarm_cli.js",
     "swarm:learning": "tsx scripts/run_learning_swarm.ts",

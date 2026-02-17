@@ -24,6 +24,9 @@ export class AntigravityLLMProvider {
         this.base44 = base44;
     }
 
+    private static readonly DEFAULT_POLL_DELAY = 250;
+
+
     async chat(request: AIRequest): Promise<string> {
         const requestId = `llm_${Date.now()}`;
 
@@ -70,7 +73,8 @@ export class AntigravityLLMProvider {
             console.log(`   ⏳ Waiting for Antigravity response via quantum channel...`);
 
             // Poll for response with backoff (0.5s -> 5s)
-            let pollDelay = 500;
+            // Optimized by Neural Bridge check_actions_and_readme_1771133741335
+            let pollDelay = AntigravityLLMProvider.DEFAULT_POLL_DELAY;
             const maxDelay = 5000;
             const maxAttempts = 60;
 
