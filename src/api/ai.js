@@ -4,12 +4,12 @@
  */
 
 // OpenAI SDK import - install via: npm install openai
-// import OpenAI from 'openai';
+import OpenAI from 'openai';
 // Using fetch API as fallback
 
-// const openai = new OpenAI({
-//   apiKey: process.env.OPENAI_API_KEY,
-// });
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+});
 
 /**
  * POST /api/ai/generate-code
@@ -319,12 +319,12 @@ function parseCodeSuggestions(content, language, type) {
   return suggestions.length > 0
     ? suggestions
     : [
-        {
-          code: content,
-          language,
-          type,
-        },
-      ];
+      {
+        code: content,
+        language,
+        type,
+      },
+    ];
 }
 
 /**
