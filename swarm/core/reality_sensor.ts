@@ -103,15 +103,19 @@ export class RealitySensor {
         }
 
         if (fs.existsSync(lintPath)) {
-            const lint = JSON.parse(fs.readFileSync(lintPath, 'utf8'));
-            if (lint.length > 10) {
-                this.signals.push({
-                    source: 'system',
-                    type: 'DEBT_ACCUMULATION',
-                    intensity: 0.7,
-                    payload: { count: lint.length },
-                    timestamp: new Date().toISOString()
-                });
+            try {
+                const lint = JSON.parse(fs.readFileSync(lintPath, 'utf8'));
+                if (lint.length > 10) {
+                    this.signals.push({
+                        source: 'system',
+                        type: 'DEBT_ACCUMULATION',
+                        intensity: 0.7,
+                        payload: { count: lint.length },
+                        timestamp: new Date().toISOString()
+                    });
+                }
+            } catch (e) {
+                console.warn('   ⚠️ [RealitySensor] Failed to parse lint output:', (e as any).message);
             }
         }
     }

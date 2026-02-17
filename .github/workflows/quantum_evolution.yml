@@ -77,6 +77,11 @@ jobs:
           npm run lint -- --format json > ../lint_output.json 2>&1 || echo "[]" > ../lint_output.json
         continue-on-error: true
 
+      - name: Configure Git Identity
+        run: |
+          git config --global user.email "fernando@appforge.ai"
+          git config --global user.name "Fernando Garza (Sovereign Swarm)"
+
       - name: Run Quantum Evolution
         working-directory: ./swarm
         run: npx tsx intelligence_pulse.ts

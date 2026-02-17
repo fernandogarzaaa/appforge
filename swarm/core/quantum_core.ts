@@ -82,6 +82,9 @@ export class QuantumSwarmCore {
      */
     private async persistStates(): Promise<void> {
         try {
+            // Hive Restoration: Ensure directory exists
+            await fs.mkdir(path.dirname(STATE_FILE), { recursive: true });
+
             const data = Object.fromEntries(this.savedStates);
             await fs.writeFile(STATE_FILE, JSON.stringify(data, null, 2));
         } catch (error) {
@@ -115,6 +118,9 @@ export class QuantumSwarmCore {
                 : null;
             if (!state) return;
 
+            // Hive Restoration: Ensure directory exists
+            await fs.mkdir(path.dirname(ORACLE_STATE_FILE), { recursive: true });
+
             await fs.writeFile(ORACLE_STATE_FILE, JSON.stringify({
                 timestamp: new Date().toISOString(),
                 state
@@ -142,6 +148,9 @@ export class QuantumSwarmCore {
 
     private async persistCoherenceState(): Promise<void> {
         try {
+            // Hive Restoration: Ensure directory exists
+            await fs.mkdir(path.dirname(COHERENCE_STATE_FILE), { recursive: true });
+
             await fs.writeFile(COHERENCE_STATE_FILE, JSON.stringify({
                 timestamp: new Date().toISOString(),
                 target: this.coherenceTarget,
@@ -179,7 +188,16 @@ export class QuantumSwarmCore {
         if (process.env.CI === 'true') {
             try {
                 const staticOraclePath = path.join(PROJECT_ROOT, 'swarm/core/static_oracle.json');
-                const raw = await fs.readFile(staticOraclePath, 'utf-8');
+
+                // Hive Restoration: Verify existence before reading
+                let raw: string;
+                if (await fs.stat(staticOraclePath).then(() => true).catch(() => false)) {
+                    raw = await fs.readFile(staticOraclePath, 'utf-8');
+                } else {
+                    console.warn(`   ⚠️ Static Oracle missing in CI. Generating Safe-Mode Default.`);
+                    raw = JSON.stringify({ "default": "Safe-Mode: Proceed with caution." });
+                }
+
                 const staticOracle = JSON.parse(raw);
 
                 // Simple fuzzy match or return first key for stability
