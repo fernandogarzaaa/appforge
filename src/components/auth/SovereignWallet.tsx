@@ -2,6 +2,7 @@ import {
     ConnectionProvider, WalletProvider, WalletModalProvider, WalletMultiButton,
     WalletAdapterNetwork, PhantomWalletAdapter, SolflareWalletAdapter
 } from '../../stubs/solana-adapters';
+import { useMemo } from 'react';
 
 // Local styles placeholder
 // import '@solana/wallet-adapter-react-ui/styles.css';

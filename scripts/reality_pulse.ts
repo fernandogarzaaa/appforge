@@ -2,17 +2,22 @@ import { execSync } from 'child_process';
 import * as fs from 'fs';
 import * as path from 'path';
 import { fileURLToPath } from 'url';
-import dotenv from 'dotenv';
 import quantumCore from '../swarm/core/quantum_core.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const PROJECT_ROOT = path.resolve(__dirname, '..');
 
-// Load environment variables
+// Load environment variables manually to avoid dependency issues in some CI envs
 const envPath = path.resolve(PROJECT_ROOT, '.env.local');
 if (fs.existsSync(envPath)) {
-    dotenv.config({ path: envPath });
+    const envConfig = fs.readFileSync(envPath, 'utf8');
+    envConfig.split('\n').forEach(line => {
+        const [key, value] = line.split('=');
+        if (key && value && !key.startsWith('#')) {
+            process.env[key.trim()] = value.trim();
+        }
+    });
 }
 
 async function harvestReality() {
