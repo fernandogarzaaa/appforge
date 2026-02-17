@@ -1,37 +1,30 @@
-import express from 'express';
-import { performance } from 'perf_hooks';
+export const getPerformanceData = async (req, res) => {
+  try {
+    const startTime = Date.now();
 
-const router = express.Router();
+    // Simulate fetching data from a database or a third-party API
+    const data = await fetchDataFromSource();
 
-const optimizeMiddleware = (req, res, next) => {
-    // Start measuring performance
-    const start = performance.now();
+    const endTime = Date.now();
+    const latency = endTime - startTime;
 
-    res.on('finish', () => {
-        const duration = performance.now() - start;
-        console.log(`Request duration: ${duration.toFixed(2)} ms`);
-    });
-    next();
-};
+    console.log(`API latency: ${latency}ms`);
 
-router.use(optimizeMiddleware);
-
-router.get('/data', async (req, res) => {
-    // Simulated data fetching with the intention to optimize
-    try {
-        const data = await fetchData();
-        res.status(200).json(data);
-    } catch (error) {
-        console.error('Error fetching data:', error);
-        res.status(500).json({ message: 'Internal Server Error' });
+    if (latency > 200) {
+      console.warn(`High latency detected: ${latency}ms`);
+      // Optimize fetching or processing logic here
     }
-});
 
-const fetchData = async () => {
-    // Here we could implement caching or optimized data retrieval logic
-    // Simulating high latency for illustration
-    await new Promise(resolve => setTimeout(resolve, 100));
-    return { message: 'Data retrieved successfully' };
+    res.status(200).json(data);
+  } catch (error) {
+    console.error('Error fetching performance data:', error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
 };
 
-export default router;
+const fetchDataFromSource = async () => {
+  // Optimize this function to reduce latency
+  return await new Promise((resolve) => {
+    setTimeout(() => resolve({ message: 'Data fetched successfully!' }), 50);
+  });
+};
