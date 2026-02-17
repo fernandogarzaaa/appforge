@@ -7,6 +7,19 @@ echo ═════════════════════════
 echo    🧠 IRON BRAIN — LOCAL INFERENCE SERVER
 echo ════════════════════════════════════════════════════════════════════════
 echo.
+
+:: Robust Root Detection
+set "SCRIPT_DIR=%~dp0"
+cd /d "%SCRIPT_DIR%"
+cd ..\..
+set "PROJECT_ROOT=%CD%"
+cd /d "%PROJECT_ROOT%"
+
+:: Enhancing PATH for DLL stability (Rustup + MSVC + MinGW/MSYS2)
+set "MSVC_PATH=C:\Program Files\Microsoft Visual Studio\2022\BuildTools\VC\Tools\MSVC\14.42.34433\bin\Hostx64\x64"
+set "RUSTUP_PATH=%USERPROFILE%\.cargo\bin"
+set "PATH=%RUSTUP_PATH%;%MSVC_PATH%;%PATH%;C:\msys64\mingw64\bin;C:\msys64\usr\bin"
+
 echo Starting AppForge-v1 on local hardware (RTX 2060)
 echo Zero API costs. Zero network lag. Total sovereignty.
 echo.

@@ -9,99 +9,98 @@ interface BridgeStatus {
     message: string;
 }
 
-export class UnifiedSovereignBridge {
+export class MultiTransportGateway {
     private commandHandler: ((cmd: string) => Promise<void>) | null = null;
-    private useWhatsApp: boolean = true;
+    private transports: Map<string, any> = new Map();
     private isInitialized: boolean = false;
-    private commandBound: boolean = false;
 
     constructor() {
-        console.log('🌌 [Bridge] Initializing Sovereign Bridge...');
+        console.log('🌌 [Gateway] Initializing Multi-Transport Sovereign Gateway (OpenClaw Synthesis)...');
     }
 
     async start() {
-        console.log('📡 [Bridge] Starting bridge services...');
-        
+        console.log('📡 [Gateway] Activating transport mesh...');
+
+        // 1. WhatsApp (Primary)
         try {
-            // Try to start WhatsApp bridge
             const { whatsappBridge } = await import('./whatsapp_bridge.js');
             await whatsappBridge.start();
-            this.isInitialized = true;
-            this.useWhatsApp = true;
-            await this.bindCommandHandler();
-            console.log('✅ [Bridge] WhatsApp connected successfully');
+            this.transports.set('whatsapp', whatsappBridge);
+            console.log('✅ [Gateway] WhatsApp transport active');
         } catch (err: any) {
-            console.warn('⚠️ [Bridge] WhatsApp failed:', err.message);
-            console.log('📱 [Bridge] Bridge will operate in limited mode');
-            this.isInitialized = true; // Mark as initialized even without WhatsApp
-            this.useWhatsApp = false;
+            console.warn('⚠️ [Gateway] WhatsApp failed:', err.message);
         }
+
+        // 2. Discord (Synthesis)
+        try {
+            const { discordBridge } = await import('./discord_bridge.js');
+            await discordBridge.start();
+            this.transports.set('discord', discordBridge);
+        } catch (e: any) {
+            console.log('ℹ️ [Gateway] Discord transport inactive (Standby)');
+        }
+
+        // 3. Telegram (Synthesis)
+        try {
+            const { telegramBridge } = await import('./telegram_bridge.js');
+            await telegramBridge.start();
+            this.transports.set('telegram', telegramBridge);
+        } catch (e: any) {
+            console.log('ℹ️ [Gateway] Telegram transport inactive (Standby)');
+        }
+
+        this.isInitialized = true;
+        await this.bindAllCommandHandlers();
     }
 
     async stop() {
-        console.log('📡 [Bridge] Stopping bridge services...');
+        console.log('📡 [Gateway] Powering down transport mesh...');
+        for (const [name, bridge] of this.transports) {
+            if (bridge.stop) await bridge.stop();
+        }
     }
 
     onCommand(handler: (cmd: string) => Promise<void>) {
         this.commandHandler = handler;
-        this.commandBound = false;
-        void this.bindCommandHandler();
+        void this.bindAllCommandHandlers();
     }
 
+    /**
+     * Broadcast message to ALL active transports
+     */
     async pushUpdate(text: string) {
         if (!this.isInitialized) {
-            console.log(`📱 [Bridge] Would send update: "${text.substring(0, 50)}..."`);
+            console.log(`📱 [Gateway] Caching update: "${text.substring(0, 50)}..."`);
             return;
         }
 
-        if (this.useWhatsApp) {
-            try {
-                const { whatsappBridge } = await import('./whatsapp_bridge.js');
-                await whatsappBridge.pushUpdate(text);
-            } catch (err) {
-                console.warn('⚠️ [Bridge] Failed to send WhatsApp update:', err);
-            }
-        } else {
-            console.log(`📱 [Bridge] Update (no transport): "${text.substring(0, 50)}..."`);
-        }
+        const promises = Array.from(this.transports.values()).map(bridge =>
+            bridge.pushUpdate(text).catch((e: any) => console.error(`❌ [Gateway] Broadcast error:`, e.message))
+        );
+
+        await Promise.all(promises);
     }
 
-    getStatus(): BridgeStatus {
-        return {
-            transport: this.useWhatsApp ? 'whatsapp' : 'none',
-            status: this.isInitialized ? 'active' : 'initializing',
-            message: this.useWhatsApp 
-                ? 'WhatsApp is primary messaging channel' 
-                : 'No messaging transport available'
-        };
+    getStatus(): BridgeStatus[] {
+        return Array.from(this.transports.values()).map(b => b.getStatus());
     }
 
     async switchTransport(transport: string) {
-        if (transport === 'whatsapp') {
-            this.useWhatsApp = true;
-            this.commandBound = false;
-            await this.bindCommandHandler();
-            console.log('✅ [Bridge] Switched to WhatsApp');
-        } else {
-            console.log('⚠️ [Bridge] Only WhatsApp is available');
-            this.useWhatsApp = true;
-        }
+        console.log(`📡 [Gateway] Transport switching is now handled automatically for all active channels.`);
     }
 
-    private async bindCommandHandler() {
-        if (!this.commandHandler || !this.useWhatsApp || this.commandBound) {
-            return;
-        }
+    private async bindAllCommandHandlers() {
+        if (!this.commandHandler) return;
 
-        try {
-            const { whatsappBridge } = await import('./whatsapp_bridge.js');
-            whatsappBridge.onCommand(this.commandHandler);
-            this.commandBound = true;
-            console.log('✅ [Bridge] Command handler bound to WhatsApp bridge');
-        } catch (err: any) {
-            console.warn('⚠️ [Bridge] Failed to bind command handler:', err.message);
+        for (const [name, bridge] of this.transports) {
+            try {
+                bridge.onCommand(this.commandHandler);
+                console.log(`✅ [Gateway] Command handler bound to ${name}`);
+            } catch (e: any) {
+                console.warn(`⚠️ [Gateway] Failed to bind ${name}:`, e.message);
+            }
         }
     }
 }
 
-export const sovereignBridge = new UnifiedSovereignBridge();
+export const sovereignBridge = new MultiTransportGateway();

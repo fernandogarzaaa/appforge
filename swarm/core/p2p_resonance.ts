@@ -16,7 +16,8 @@ export type P2PMessageType =
     | 'BOUNTY_SYNC'
     | 'ECONOMY_SYNC'
     | 'BRAIN_SYNC'
-    | 'REASONING_SYNC';
+    | 'REASONING_SYNC'
+    | 'HOLOGRAPHIC_SYNC';
 
 export interface P2PMessage {
     type: P2PMessageType;
@@ -113,7 +114,7 @@ export class P2PResonance {
         this.ingest({ type, data, timestamp });
 
         // Simple file-based merge for specific types
-        if (type === 'BOUNTY_SYNC' || type === 'ECONOMY_SYNC') {
+        if (type === 'BOUNTY_SYNC' || type === 'ECONOMY_SYNC' || type === 'HOLOGRAPHIC_SYNC') {
             await this.mergeState(type, data);
         }
     }
@@ -124,7 +125,8 @@ export class P2PResonance {
     private async mergeState(type: string, data: any) {
         const fileMap: Record<string, string> = {
             'BOUNTY_SYNC': 'src/data/bounty_ledger.json',
-            'ECONOMY_SYNC': 'src/data/economic_state.json'
+            'ECONOMY_SYNC': 'src/data/economic_state.json',
+            'HOLOGRAPHIC_SYNC': 'src/data/quantum_brain_state.json'
         };
 
         const targetFile = fileMap[type];

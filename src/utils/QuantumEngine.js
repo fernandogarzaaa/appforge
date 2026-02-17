@@ -248,6 +248,74 @@ export class SuperpositionProcessor {
 }
 
 /**
+ * Multi-Qubit Consensus Algorithm
+ * Simulates agreement across multiple quantum states for higher fidelity
+ */
+export class MultiQubitConsensus {
+    constructor(qubitCount = 8) {
+        this.qubitCount = qubitCount;
+    }
+
+    /**
+     * Achieve consensus across multiple virtual qubits
+     */
+    async achieveConsensus(problem, options, scoringFn) {
+        const qubits = [];
+        for (let i = 0; i < this.qubitCount; i++) {
+            // Each qubit explores the subspace with a slight phase shift
+            const phaseShift = (i / this.qubitCount) * Math.PI;
+            qubits.push(this.simulateQubitReasoning(problem, options, scoringFn, phaseShift));
+        }
+
+        const results = await Promise.all(qubits);
+
+        // Aggregate votes based on confidence and score
+        const tallied = new Map();
+        results.forEach(res => {
+            const current = tallied.get(res.recommendation) || { count: 0, totalConfidence: 0 };
+            tallied.set(res.recommendation, {
+                count: current.count + 1,
+                totalConfidence: current.totalConfidence + res.confidence
+            });
+        });
+
+        // Find winner
+        let winner = options[0];
+        let maxScore = -1;
+
+        tallied.forEach((stats, recommendation) => {
+            const finalScore = (stats.count / this.qubitCount) * stats.totalConfidence;
+            if (finalScore > maxScore) {
+                maxScore = finalScore;
+                winner = recommendation;
+            }
+        });
+
+        return {
+            recommendation: winner,
+            consensusFidelity: maxScore,
+            qubitCount: this.qubitCount,
+            traces: results
+        };
+    }
+
+    async simulateQubitReasoning(problem, options, scoringFn, phase) {
+        // Simulate a single qubit's "perspective" using probabilities
+        const scores = options.map(opt => {
+            const base = scoringFn(opt);
+            const interference = Math.sin(phase + base * Math.PI) * 0.1;
+            return { opt, score: Math.max(0, base + interference) };
+        });
+
+        scores.sort((a, b) => b.score - a.score);
+        return {
+            recommendation: scores[0].opt,
+            confidence: scores[0].score
+        };
+    }
+}
+
+/**
  * Quantum-Inspired Entanglement Analyzer
  * Finds correlations and dependencies across data (like quantum entanglement)
  */
@@ -595,6 +663,7 @@ export class QuantumInspiredAI {
         this.annealing = new QuantumAnnealingOptimizer();
         this.parallel = new QuantumParallelProcessor();
         this.decision = new QuantumDecisionMaker();
+        this.consensus = new MultiQubitConsensus();
     }
 
     /**
@@ -632,12 +701,19 @@ export class QuantumInspiredAI {
         );
         console.log(`🌡️ Quantum annealing: ${optimized.iterations} iterations, energy: ${optimized.energy.toFixed(4)}`);
 
+        // Step 5: Final Multi-Qubit Consensus
+        const finalConsensus = await this.consensus.achieveConsensus(
+            problem,
+            [optimized.solution, measurement.bestSolution],
+            (sol) => evaluationFn(sol)
+        );
+
         return {
-            solution: optimized.solution,
-            confidence: measurement.probability,
-            quantumAdvantage: `Explored ${possibleSolutions.length} solutions simultaneously`,
+            solution: finalConsensus.recommendation,
+            confidence: finalConsensus.consensusFidelity,
+            quantumAdvantage: `Explored ${possibleSolutions.length} solutions simultaneously with ${this.consensus.qubitCount}-qubit consensus`,
             optimizationIterations: optimized.iterations,
-            technique: 'Superposition + Amplitude Amplification + Quantum Annealing'
+            technique: 'Superposition + Amplitude Amplification + Quantum Annealing + Multi-Qubit Consensus'
         };
     }
 

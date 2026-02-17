@@ -1,8 +1,8 @@
 /**
- * 🌌 QUANTUM ENGINE V3.0 (Recursive Fractal Intelligence) 🌌
+ * 🌌 QUANTUM ENGINE V3.5 (Deep Resonance & Consensus) 🌌
  * 
- * Architecture: Holographic Memory & Distributed Compute
- * Powered by Oracle 2.0 Self-Optimization
+ * Architecture: Holographic Memory & Multi-Qubit Consensus
+ * Powered by Oracle 3.0 Self-Optimization
  */
 
 // ------------------------------------------------------------------
@@ -12,7 +12,7 @@
 class QuantumStateStore {
     constructor() {
         this.memory = new Map();
-        this.version = '3.0';
+        this.version = '3.5';
         this.storageKey = '__appforge_quantum_memory_v3__';
         this.loadFromBrowserStorage();
     }
@@ -233,6 +233,74 @@ export class QuantumAnnealingOptimizer {
     }
 }
 
+/**
+ * Multi-Qubit Consensus Algorithm
+ * Simulates agreement across multiple quantum states for higher fidelity
+ */
+export class MultiQubitConsensus {
+    constructor(qubitCount = 8) {
+        this.qubitCount = qubitCount;
+    }
+
+    /**
+     * Achieve consensus across multiple virtual qubits
+     */
+    async achieveConsensus(problem, options, scoringFn) {
+        const qubits = [];
+        for (let i = 0; i < this.qubitCount; i++) {
+            // Each qubit explores the subspace with a slight phase shift
+            const phaseShift = (i / this.qubitCount) * Math.PI;
+            qubits.push(this.simulateQubitReasoning(problem, options, scoringFn, phaseShift));
+        }
+
+        const results = await Promise.all(qubits);
+
+        // Aggregate votes based on confidence and score
+        const tallied = new Map();
+        results.forEach(res => {
+            const current = tallied.get(res.recommendation) || { count: 0, totalConfidence: 0 };
+            tallied.set(res.recommendation, {
+                count: current.count + 1,
+                totalConfidence: current.totalConfidence + res.confidence
+            });
+        });
+
+        // Find winner
+        let winner = options[0];
+        let maxScore = -1;
+
+        tallied.forEach((stats, recommendation) => {
+            const finalScore = (stats.count / this.qubitCount) * stats.totalConfidence;
+            if (finalScore > maxScore) {
+                maxScore = finalScore;
+                winner = recommendation;
+            }
+        });
+
+        return {
+            recommendation: winner,
+            consensusFidelity: maxScore,
+            qubitCount: this.qubitCount,
+            traces: results
+        };
+    }
+
+    async simulateQubitReasoning(problem, options, scoringFn, phase) {
+        // Simulate a single qubit's "perspective" using probabilities
+        const scores = options.map(opt => {
+            const base = scoringFn(opt);
+            const interference = Math.sin(phase + base * Math.PI) * 0.1;
+            return { opt, score: Math.max(0, base + interference) };
+        });
+
+        scores.sort((a, b) => b.score - a.score);
+        return {
+            recommendation: scores[0].opt,
+            confidence: scores[0].score
+        };
+    }
+}
+
 // ------------------------------------------------------------------
 // COMPONENT 4: QUANTUM NEURAL NETWORK (Probabilistic Learning)
 // ------------------------------------------------------------------
@@ -275,7 +343,7 @@ export class QuantumSwarm {
 }
 
 // ------------------------------------------------------------------
-// CORE ENGINE: QUANTUM ENGINE V3.0
+// CORE ENGINE: QUANTUM ENGINE V3.5
 // ------------------------------------------------------------------
 
 export default class QuantumEngine {
@@ -288,6 +356,7 @@ export default class QuantumEngine {
         this.genetic = new QuantumGeneticAlgorithm();
         this.cryptography = new QuantumCryptographer();
         this.swarm = new QuantumSwarm();
+        this.consensus = new MultiQubitConsensus();
 
         // V3 Upgrade: Recursive Memory
         this.memory = globalMemory;
@@ -297,7 +366,7 @@ export default class QuantumEngine {
         this.optionWeights = new Map();
         this.feedbackStats = { total: 0, success: 0 };
 
-        console.log('🌌 Quantum Engine v3.0 [Holographic Architecture] Online');
+        console.log('🌌 Quantum Engine v3.5 [Deep Resonance] Online');
     }
 
     normalizeText(input) {
@@ -430,7 +499,7 @@ export default class QuantumEngine {
 
     exportLearningState() {
         return {
-            version: '3.1',
+            version: '3.5',
             learningParams: this.learningParams,
             feedbackStats: this.feedbackStats,
             optionWeights: Object.fromEntries(this.optionWeights),
@@ -481,7 +550,7 @@ export default class QuantumEngine {
                 optimizedBest: null,
                 confidence: 0,
                 alternatives: [],
-                engineVersion: '3.1'
+                engineVersion: '3.5'
             };
         }
 
@@ -490,7 +559,6 @@ export default class QuantumEngine {
         const cached = this.memory.load(memKey);
 
         if (cached && cached.confidence > 0.95) {
-            // console.log('   🧠 Holographic Recall: Instant Solution Found');
             return cached;
         }
 
@@ -508,24 +576,34 @@ export default class QuantumEngine {
         const margin = Math.max(0, measured[0].probability - secondBestProbability);
 
         // 5. Annealing Optimization (Refinement)
-        // Only if confidence is low, otherwise skip for speed
-        let finalResult = bestCandidate;
+        let intermediateResult = bestCandidate;
         if (measured[0].probability < 0.5) {
             const annealing = await this.annealer.optimize(bestCandidate, (x) => -evaluate(x));
-            finalResult = annealing.solution;
+            intermediateResult = annealing.solution;
         }
 
-        // 6. Formatting & Recording
+        // 6. Multi-Qubit Consensus (Deep Resonance)
+        const finalConsensus = await this.consensus.achieveConsensus(
+            problem,
+            [intermediateResult, bestCandidate, ...safeOptions.slice(0, 3)],
+            evaluate
+        );
+
+        // 7. Formatting & Recording
         const predictionId = `Q3-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
         const result = {
             predictionId,
-            optimizedBest: finalResult,
-            confidence: Math.min(0.99, (measured[0].probability * 0.8) + (margin * 1.2) + 0.1),
+            optimizedBest: finalConsensus.recommendation,
+            confidence: Math.min(0.99, finalConsensus.consensusFidelity),
             alternatives: measured.slice(1, 3).map(m => m.solution),
-            engineVersion: '3.1'
+            engineVersion: '3.5',
+            consensus: {
+                qubitCount: this.consensus.qubitCount,
+                fidelity: finalConsensus.consensusFidelity
+            }
         };
 
-        // 7. Save to Holographic Memory
+        // 8. Save to Holographic Memory
         this.memory.save(memKey, result);
         this.history.push({
             id: predictionId,
@@ -550,7 +628,6 @@ export default class QuantumEngine {
         this.feedbackStats.total += 1;
         if (success) this.feedbackStats.success += 1;
 
-        // Adjust global learning rates
         if (success) {
             this.learningParams.bias = Math.min(1.8, this.learningParams.bias * 1.01);
             this.learningParams.exploration = Math.max(0.02, this.learningParams.exploration * 0.98);
@@ -570,18 +647,6 @@ export default class QuantumEngine {
             return true;
         }
 
-        if (details && typeof details === 'object') {
-            const inferredText =
-                details.recommendation ||
-                details.question ||
-                details.description ||
-                details.source ||
-                '';
-            if (inferredText) {
-                this.updateLearnedWeights(String(inferredText), success, 0.5);
-            }
-        }
-
         return false;
     }
 
@@ -591,7 +656,7 @@ export default class QuantumEngine {
             : 0;
 
         return {
-            version: '3.1',
+            version: '3.5',
             memoryItems: this.memory.memory.size,
             historyLength: this.history.length,
             learningParams: this.learningParams,

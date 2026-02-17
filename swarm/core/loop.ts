@@ -122,6 +122,7 @@ import { nas } from './nas.js';
 import { p2pResonance } from './p2p_resonance.js';
 import { resolveQuantumGate, bridgeVersion } from './quantum_bridge_ts.js';
 import { sovereignBridge } from './sovereign_bridge.js';
+import { skillRegistry, initializeDefaultSkills } from '../skills/registry.js';
 import quantumCore from './quantum_core.js';
 import { autonomousTradingController } from './autonomous_trading_controller.js';
 import { replicator } from './replicate.js';
@@ -134,7 +135,9 @@ import { MaintenanceGuard } from './maintenance_guard.js';
 import { getCollectiveMembers } from './swarm_collectives.js';
 import { realitySensor } from './reality_sensor.js';
 import { SingularityEngine } from './singularity_engine.js';
+import { EconomicEngine } from './economic_engine.js';
 import { CuriosityEngine } from './curiosity_engine.js';
+import { AutonomousBugFixer } from './autonomous_bug_fixer.js';
 
 const QUANTUM_CHANNEL = path.join(process.cwd(), 'src/data/quantum_channel.json');
 
@@ -228,6 +231,8 @@ async function main() {
     const fsTool = new FileSystemTool();
     const git = new GitTool();
     const memory = new SwarmMemory(fsTool);
+    const economicEngine = new EconomicEngine();
+    await economicEngine.init();
 
     // Initialize Agents
     const sentinel = new SentinelAgent(base44);
@@ -237,6 +242,9 @@ async function main() {
     const productOwner = new ProductOwnerAgent(base44, fsTool, memory);
     const antigravity = new AntigravityAgent(base44, fsTool, git);
     const librarian = new LibrarianAgent(base44);
+
+    // 🔌 [AgentSkills] OpenClaw Synthesis
+    initializeDefaultSkills({ sentinel, bugHunter, optimizer });
 
     // Revenue Swarm Agents
     const salesBot = new SalesBot(base44, fsTool);
@@ -274,6 +282,7 @@ async function main() {
     const aiEconomySwarm = new AIEconomySwarm();
     const resonanceEngine = new ResonanceEngine(swarmKnowledge);
     const curiosityEngine = new CuriosityEngine(base44);
+    const bugFixer = new AutonomousBugFixer(process.cwd(), quantumCore);
 
     // Initialize SwarmReporter
     const swarmReporter = new SwarmReporter();
@@ -575,13 +584,28 @@ async function main() {
 
             // ⚛️ INCEPTION: Reality Sensing (Event-Driven Trigger)
             const signals = await realitySensor.scan();
+
+            // 🛠️ RECURSIVE SELF-PATCHING: Phase 90
+            for (const signal of signals) {
+                await bugFixer.processSignal(signal);
+            }
             const hasCriticalEvent = realitySensor.hasCriticalEvent();
             if (hasCriticalEvent) {
                 console.log('🚨 [Inception] Critical Reality Signal Detected! Self-triggering autonomous cycle...');
             }
 
             const now = Date.now();
-            const shouldRunAutonomous = (now - lastAutonomousRun) >= AUTONOMOUS_INTERVAL_MS || hasCriticalEvent;
+
+            // 💓 [HEARTBEAT ENGINE] OpenClaw synthesis
+            // If reality intensity > 0.85, trigger an Adrenaline Pulse
+            const realityPulse = realitySensor.getSignals().some(s => s.intensity > 0.85);
+            const shouldRunAutonomous = (now - lastAutonomousRun) >= AUTONOMOUS_INTERVAL_MS || hasCriticalEvent || realityPulse;
+
+            if (realityPulse && (now - lastAutonomousRun) < AUTONOMOUS_INTERVAL_MS) {
+                const signal = realitySensor.getSignals().find(s => s.intensity > 0.85);
+                console.log('💓 [Heartbeat] High Reality Intensity detected! Injecting Cognitive Adrenaline...');
+                await sovereignBridge.pushUpdate(`💓 *ADRENALINE PULSE*: High Reality Intensity detected (${signal?.type})! Triggering pro-active swarm cycle...`);
+            }
 
             // ⚛️ COLLABORATION: Process Pending Signals
             const pendingSignals = swarmCollaboration.getPendingSignals('ALL');
@@ -683,6 +707,20 @@ async function main() {
                     const singularity = new SingularityEngine();
                     const evoRes = await singularity.executeSelfImprovementCycle();
                     results.evolution = { status: 'completed', progress: evoRes.singularityProgress };
+
+                    const excellence = economicEngine.getState().excellenceIndex;
+                    await sovereignBridge.pushUpdate(`🧬 *Evolution Pulse*: Progress: ${(evoRes.singularityProgress * 100).toFixed(1)}% | Excellence: ${excellence.toFixed(2)}`);
+                }
+
+                // 🧠 [NEURAL INDEPENDENCE] Autonomous Growth Cycle (every 10 pulses)
+                if (cycleCount % 10 === 0) {
+                    console.log('🧬 [Singularity] Triggering Autonomous Growth Cycle...');
+                    const singularity = new SingularityEngine();
+                    const growthRes = await singularity.executeSelfImprovementCycle();
+                    results.autonomous_growth = growthRes;
+
+                    const wealth = economicEngine.getState().totalValue;
+                    await sovereignBridge.pushUpdate(`🌱 *Autonomous Growth*: Self-improvement complete. Swarm wealth now at ${wealth.toFixed(0)} units.`);
                 }
 
                 // 🦊 CryptoSwarm (every 4 cycles)

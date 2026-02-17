@@ -143,18 +143,21 @@ export class MultiLLMClient {
         };
 
         // --- IRON BRAIN COGNITIVE HIERARCHY ---
-        // All external API dependencies have been SEVERED.
+        // All external API dependencies have been SEVERED by default.
         // The inference chain is 100% sovereign.
 
         // 1. IRON BRAIN: The Unified Oracle-Quantum Kernel (Primary)
-        // Combines Oracle strategy + local GGUF inference + Truth Anchor validation
+        // Combines Oracle strategy + local GGUF/Unsloth inference
         try {
-            const brainRes = await ironBrain.chat(optimizedRequest);
-            if (brainRes?.choices?.[0]?.message?.content) {
-                const content = brainRes.choices[0].message.content;
-                // Only accept non-fallback responses from the brain
-                if (!content.includes('[TRUTH ANCHOR REJECTION]')) {
-                    return content;
+            const useIndependence = process.env.TRUE_AI_INDEPENDENCE !== 'false';
+            if (useIndependence) {
+                const brainRes = await ironBrain.chat(optimizedRequest);
+                if (brainRes?.choices?.[0]?.message?.content) {
+                    const content = brainRes.choices[0].message.content;
+                    // Only accept non-fallback responses from the brain
+                    if (!content.includes('[TRUTH ANCHOR REJECTION]')) {
+                        return content;
+                    }
                 }
             }
         } catch (e) {

@@ -8,7 +8,7 @@ const __dirname = path.dirname(__filename);
 const PROJECT_ROOT = path.resolve(__dirname, '../..');
 
 export interface EnvironmentSignal {
-    source: 'github' | 'market' | 'system';
+    source: 'github' | 'market' | 'system' | 'synergy';
     type: string;
     intensity: number; // 0.0 to 1.0
     payload: any;
@@ -30,7 +30,8 @@ export class RealitySensor {
                 this.scanGitHub(),
                 this.scanMarket(),
                 this.scanSystem(),
-                this.scanCI()
+                this.scanCI(),
+                this.scanSynergy()
             ]);
         } catch (error) {
             console.error('   ❌ [RealitySensor] Scan error:', (error as any).message);
@@ -89,6 +90,20 @@ export class RealitySensor {
                 timestamp: new Date().toISOString()
             });
             console.log(`   📈 [Market] High volatility detected (${(volatility * 100).toFixed(1)}%)`);
+        }
+
+        // 🧠 [CURIOSITY] Phase 84: Market Novelty / Trend Discovery
+        // Simulating detection of GitHub trending or AI paper drops
+        const curiositySignal = Math.random();
+        if (curiositySignal > 0.9) {
+            this.signals.push({
+                source: 'market',
+                type: 'MARKET_NOVELTY',
+                intensity: curiositySignal,
+                payload: { trend: 'Kimi K2.5 Adaptation', value: 'High' },
+                timestamp: new Date().toISOString()
+            });
+            console.log(`   🌟 [Curiosity] Market Novelty detected (${(curiositySignal * 100).toFixed(1)}%)`);
         }
     }
 
@@ -159,6 +174,34 @@ export class RealitySensor {
      */
     hasCriticalEvent(): boolean {
         return this.signals.some(s => s.intensity > 0.85);
+    }
+
+    /**
+     * Monitors harvested synergy patterns from GitHub
+     */
+    private async scanSynergy() {
+        const synergyPath = path.join(PROJECT_ROOT, 'src/data/synergy_scout.json');
+        if (fs.existsSync(synergyPath)) {
+            try {
+                const results = JSON.parse(fs.readFileSync(synergyPath, 'utf8'));
+                if (Array.isArray(results) && results.length > 0) {
+                    // Emit a signal for the most recent or highest-star repo
+                    const topRepo = results.sort((a, b) => (b.stars || 0) - (a.stars || 0))[0];
+
+                    this.signals.push({
+                        source: 'synergy',
+                        type: 'SYNERGY_HARVESTED',
+                        intensity: 0.85,
+                        payload: topRepo,
+                        timestamp: new Date().toISOString()
+                    });
+
+                    console.log(`    telescope [Synergy] Harvested Pattern: ${topRepo.name} (${topRepo.stars} stars)`);
+                }
+            } catch (e) {
+                // Ignore parsing errors
+            }
+        }
     }
 }
 

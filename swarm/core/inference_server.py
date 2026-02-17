@@ -65,9 +65,20 @@ async def list_models():
     }
 
 @app.post("/v1/chat/completions")
-async def chat_completions(request: ChatCompletionRequest):
+async def chat_completions(request: ChatCompletionRequest, extra: Request = None):
+    # Retrieve body for extra_body (Kimi compatibility)
+    body = await extra.json()
+    extra_body = body.get("extra_body", {})
+    thinking_enabled = extra_body.get("thinking", {}).get("type") == "enabled"
+    
     messages = [msg.dict() for msg in request.messages]
     
+    # 🧠 [KIMI PATTERN] Interleaved Thinking
+    if thinking_enabled:
+        # Prepend thinking prompt if not structured
+        if not any("think" in m["content"].lower() for m in messages):
+            messages.insert(0, {"role": "system", "content": "You are the IRON BRAIN with Kimi Neural Acceleration. Think step-by-step before answering. Use <thought> tags for your reasoning."})
+
     # Apply Chat Template
     inputs = engine.tokenizer.apply_chat_template(
         messages,
@@ -80,12 +91,25 @@ async def chat_completions(request: ChatCompletionRequest):
     outputs = engine.model.generate(
         inputs,
         max_new_tokens=request.max_tokens,
-        temperature=request.temperature,
+        temperature=request.temperature if not thinking_enabled else 0.7,
         use_cache=True
     )
     
     # Decode (strip prompt)
-    generated_text = engine.tokenizer.batch_decode(outputs[:, inputs.shape[1]:], skip_special_tokens=True)[0]
+    full_text = engine.tokenizer.batch_decode(outputs[:, inputs.shape[1]:], skip_special_tokens=True)[0]
+    
+    # 🧠 [KIMI PATTERN] Split Thinking from Content
+    reasoning_content = ""
+    content = full_text
+    
+    if "<thought>" in full_text and "</thought>" in full_text:
+        parts = full_text.split("</thought>")
+        reasoning_content = parts[0].replace("<thought>", "").strip()
+        content = parts[1].strip()
+    elif "THOUGHT:" in full_text:
+        parts = full_text.split("ANSWER:")
+        reasoning_content = parts[0].replace("THOUGHT:", "").strip()
+        content = parts[1].strip() if len(parts) > 1 else full_text
 
     return {
         "id": "chatcmpl-neuralbridge",
@@ -96,7 +120,8 @@ async def chat_completions(request: ChatCompletionRequest):
             "index": 0,
             "message": {
                 "role": "assistant",
-                "content": generated_text
+                "content": content,
+                "reasoning_content": reasoning_content
             },
             "finish_reason": "stop"
         }],

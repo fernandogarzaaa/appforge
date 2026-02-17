@@ -19,7 +19,7 @@ import { realitySensor } from './core/reality_sensor.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const ALLOW_SILENT_DEPLOY = true; // Phase 53 Task 4
+const ALLOW_SILENT_DEPLOY = false; // Phase 53 Task 4 - [USER OVERRIDE: NO PUSH COMMITS]
 const PROJECT_ROOT = path.resolve(__dirname, '..');
 
 interface RealityMetrics {
@@ -147,11 +147,28 @@ async function runIntelligencePulse() {
     console.log('\n🧠 Step 2: Recalibrating Quantum Neural Network (Neural Recalibration)...');
 
     // CHIMERA CLOUD UPLINK (Task 3)
+    // CHIMERA CLOUD UPLINK (Task 3)
     if (process.env.CHIMERA_CLOUD_URL) {
-        console.log(`   🦁🐍🐐 [CHIMERA] Uplink Established: ${process.env.CHIMERA_CLOUD_URL}`);
-        console.log(`   ✨ Offloading training to Sovereign Cloud...`);
-        // In a real implementation, we would POST the metrics here.
-        // For now, we log the handshake.
+        console.log(`   🦁🐍🐐 [CHIMERA] Handshaking Uplink: ${process.env.CHIMERA_CLOUD_URL}`);
+        try {
+            const fetch = (await import('node-fetch')).default;
+            const handshake = await fetch(`${process.env.CHIMERA_CLOUD_URL}/v1/chat/completions`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    model: "chimera-prime-v1",
+                    messages: [{ role: "user", content: "HEARTBEAT_CHIMERA_PULSE" }],
+                    max_tokens: 10
+                })
+            });
+            if (handshake.status === 200) {
+                console.log(`   ✅ [CHIMERA] Uplink COHERENT (Verified).`);
+            } else {
+                console.warn(`   ⚠️ [CHIMERA] Uplink latency or error detected: ${handshake.status}`);
+            }
+        } catch (e) {
+            console.warn(`   ⚠️ [CHIMERA] Cloud Uplink unreachable: ${(e as any).message}`);
+        }
     }
 
     const brain = new QuantumNeuralNetwork([5, 10, 1]);
@@ -243,6 +260,10 @@ async function runIntelligencePulse() {
     await economicEngine.attributeValue(10); // Standard cycle value
     const ecoState = economicEngine.getState();
     console.log(`\n💰 Sovereign Economy: TotalValue=${ecoState.totalValue.toFixed(1)}, Budget=${ecoState.availableBudget.toFixed(1)}, Resolved=${ecoState.metrics.bountiesResolved}`);
+
+    // 📡 [PHASE 84] Wiring: Global Gateway
+    const { sovereignBridge } = await import('./core/sovereign_bridge.js');
+    await sovereignBridge.pushUpdate(`⚛️ *Intelligence Pulse*: Reality Scan Complete (Build: ${metrics.buildSuccess ? '✅' : '❌'}). Excellence Index: ${ecoState.excellenceIndex.toFixed(2)} [${process.env.NODE_ID || 'CORE'}]`);
 
     // 6. MESH SYNCHRONIZATION
     console.log('\n🔗 Step 6: Synchronizing Mesh State...');

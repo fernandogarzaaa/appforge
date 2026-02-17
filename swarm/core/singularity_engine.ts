@@ -14,6 +14,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { realitySensor } from './reality_sensor.js';
 import { p2pResonance } from './p2p_resonance.js';
+import { skillRegistry } from '../skills/registry.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -98,6 +99,12 @@ export class SingularityEngine {
             },
             {
                 name: 'optimization',
+                currentVersion: '1.0.0',
+                improvements: [],
+                performanceGain: 0.0
+            },
+            {
+                name: 'kimi_acceleration',
                 currentVersion: '1.0.0',
                 improvements: [],
                 performanceGain: 0.0
@@ -207,20 +214,34 @@ export class SingularityEngine {
             const consensus = await this.aggregateCollectiveReasoning(signal);
             console.log(`   ✨ [Consensus] Multi-node reasoning score: ${consensus.score.toFixed(2)}`);
 
+            // 🧠 [KIMI PATTERN] Expert Swarm Inception
             const objective = await quantumCore.consultOracle(
-                `Incept strategic objective for signal: ${JSON.stringify(signal)}. Peer Insights: ${JSON.stringify(consensus.insights)}`,
-                ["SECURITY_PATCH", "PERFORMANCE_OPTIMIZATION", "MARKET_OPPORTUNITY", "DEBT_REDUCTION"],
+                `Think step-by-step to incept a DOMAIN-SPECIFIC EXPERT objective for signal: ${JSON.stringify(signal)}. 
+                Peer Insights: ${JSON.stringify(consensus.insights)}.
+                Format: EXPERT_[ExpertName]: [Action]`,
+                ["EXPERT_SECURITY: Patch vulnerability", "EXPERT_ADAPTER: Optimize logic", "EXPERT_ARCHITECT: Refactor core", "EXPERT_GROWTH: Market capture"],
                 ['proactivity', 'sovereignty', 'collective_intelligence']
             );
 
-            console.log(`   ✨ [Inception] New Objective: ${objective.recommendation}`);
+
+            console.log(`   ✨ [Expert Swarm] New Objective: ${objective.recommendation}`);
+
+            // 🔌 [AgentSkills] Skill Discovery
+            const category = objective.recommendation.split(':')[0].replace('EXPERT_', '').toLowerCase();
+            const relevantSkills = skillRegistry.getSkillsByCategory(category);
+            if (relevantSkills.length > 0) {
+                console.log(`   💡 [Registry] Discovered ${relevantSkills.length} relevant skills: ${relevantSkills.map(s => s.id).join(', ')}`);
+            }
 
             await this.bountyRegistry.addBounty({
-                description: `[Autonomously Incepted] ${objective.recommendation}: ${signal.type} (Consensus: ${consensus.score.toFixed(2)})`,
+                description: `[Neural Accelerator] ${objective.recommendation} (Coherence: ${consensus.score.toFixed(2)})`,
                 priority: signal.intensity * consensus.score,
                 reward: Math.round(signal.intensity * consensus.score * 100),
-                category: objective.recommendation.includes('SECURITY') ? 'code' : 'optimization'
+                category: category
             });
+
+            // 💰 [Sovereign Economy] Attribute value for the inception
+            await this.economicEngine.attributeInceptionValue(signal.intensity * 50);
         }
     }
 

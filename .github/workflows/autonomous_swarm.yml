@@ -67,6 +67,8 @@ jobs:
             src/data/quantum_predictions.json
             src/data/bounty_ledger.json
             src/data/economic_state.json
+            src/data/synergy_scout.json
+            src/data/antigravity_blueprint.json
           key: swarm-memory-${{ github.run_number }}
           restore-keys: |
             swarm-memory-
@@ -126,6 +128,11 @@ jobs:
           BASE44_API_KEY: ${{ secrets.BASE44_API_KEY }}
           BASE44_APP_ID: ${{ secrets.BASE44_APP_ID }}
 
+          # 📡 GATEWAY: Multi-Transport Sovereign Bridge
+          WHATSAPP_PHONE_NUMBER: ${{ secrets.WHATSAPP_PHONE_NUMBER }}
+          DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+
           # 🏦 SOLANA REALITY MODE (Requires GitHub Secrets)
           SOLANA_WALLET_ADDRESS: ${{ secrets.SOLANA_WALLET_ADDRESS }}
           SOLANA_PRIVATE_KEY: ${{ secrets.SOLANA_PRIVATE_KEY }}
@@ -173,9 +180,11 @@ jobs:
           git add src/data/quantum_coherence_state.json
           git add src/data/bounty_ledger.json
           git add src/data/economic_state.json
+          git add src/data/synergy_scout.json
+          git add src/data/antigravity_blueprint.json
           git add build_logs.txt
           git add lint_output.json
           git add swarm/core/*.ts
           git add swarm/intelligence_pulse.ts
-          git commit -m "chore: swarm autonomous pulse [Inception] [Transcendence] [skip ci]" || echo "No changes to commit"
+          git commit -m "chore: swarm autonomous pulse [Inception] [Transcendence] [Synergy] [skip ci]" || echo "No changes to commit"
           git push

@@ -14,7 +14,9 @@ export interface EconomicState {
         cyclesCompleted: number;
         successfulPatches: number;
         bountiesResolved: number;
+        totalInceptionValue: number;
     };
+    excellenceIndex: number; // 0.0 to 1.0 (Quality score)
     lastUpdate: string;
 }
 
@@ -35,8 +37,10 @@ export class EconomicEngine {
             metrics: {
                 cyclesCompleted: 0,
                 successfulPatches: 0,
-                bountiesResolved: 0
+                bountiesResolved: 0,
+                totalInceptionValue: 0
             },
+            excellenceIndex: 0.5, // Start at baseline
             lastUpdate: new Date().toISOString()
         };
     }
@@ -47,7 +51,8 @@ export class EconomicEngine {
     async init(): Promise<void> {
         try {
             const content = await fs.readFile(this.statePath, 'utf8');
-            this.state = JSON.parse(content);
+            const loaded = JSON.parse(content);
+            this.state = { ...this.state, ...loaded, metrics: { ...this.state.metrics, ...loaded.metrics } };
         } catch (error) {
             await this.save();
         }
@@ -98,7 +103,31 @@ export class EconomicEngine {
      */
     async incrementCycle(): Promise<void> {
         this.state.metrics.cyclesCompleted++;
+        this.calculateExcellenceIndex();
         await this.save();
+    }
+
+    /**
+     * Attributes value specifically for new "Inceptions"
+     */
+    async attributeInceptionValue(amount: number): Promise<void> {
+        this.state.metrics.totalInceptionValue += amount;
+        this.state.totalValue += amount * 0.2;
+        this.calculateExcellenceIndex();
+        await this.save();
+    }
+
+    /**
+     * Updates the Excellence Index based on swarm performance
+     */
+    private calculateExcellenceIndex() {
+        const patchSuccessRate = this.state.metrics.successfulPatches / (this.state.metrics.cyclesCompleted || 1);
+        const bountyWeight = Math.min(1.0, this.state.metrics.bountiesResolved / 10);
+
+        // Balanced score: 40% patch stability, 40% bounty completion, 20% total value growth
+        const newValue = (patchSuccessRate * 0.4) + (bountyWeight * 0.4) + (Math.min(1.0, this.state.totalValue / 5000) * 0.2);
+
+        this.state.excellenceIndex = Math.min(1.0, newValue);
     }
 
     /**
