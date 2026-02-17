@@ -98,6 +98,11 @@ jobs:
         continue-on-error: true
 
       # ⚛️ INTELLIGENCE PULSE: Unify Singularity, Brain, and Oracle
+      - name: Configure Git Identity
+        run: |
+          git config --global user.email "fernando@appforge.ai"
+          git config --global user.name "Fernando Garza (Sovereign Swarm)"
+
       - name: Run Intelligence Pulse
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
@@ -134,8 +139,8 @@ jobs:
           TRUE_AI_INDEPENDENCE: "true"
         run: |
           # Configure Git for potential commits
-          git config --global user.name "AppForge Swarm"
-          git config --global user.email "swarm@appforge.bot"
+          git config --global user.name "Fernando Garza (Sovereign Swarm)"
+          git config --global user.email "fernando@appforge.ai"
 
           # Run the Daemon (One-Shot Cycle)
           cd swarm
