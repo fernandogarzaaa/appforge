@@ -613,6 +613,12 @@ export default class QuantumEngine {
             result,
             outcome: null
         });
+
+        // 9. RECURSIVE COHERENCE: Immediately calibrate based on internal consensus
+        if (result.confidence > 0.9) {
+            this.reportOutcome(predictionId, true, { source: 'auto_recursive_coherence' });
+        }
+
         if (this.history.length > 500) {
             this.history = this.history.slice(-500);
         }

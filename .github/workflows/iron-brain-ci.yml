@@ -28,7 +28,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: "22"
           cache: "npm"
 
       - name: Install dependencies
@@ -104,6 +104,11 @@ jobs:
         env:
           TRUE_AI_INDEPENDENCE: "true"
           NEURAL_BRIDGE_PORT: ${{ env.IRON_BRAIN_PORT }}
+
+      - name: "📜 Sovereign Reality Audit (Executive)"
+        run: npx tsx scripts/executive_oracle_audit.ts
+        env:
+          PRODUCTION_SECRET: "CI_VERIFICATION_GATE"
 
       - name: "📊 Generate Health Report"
         if: always()
