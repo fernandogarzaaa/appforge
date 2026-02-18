@@ -359,7 +359,7 @@ export class HolographicConsensusEngine {
     for (let i = 0; i < embeddings.length; i++) {
       const embedding = embeddings[i];
       const confidence = 0.9; // Default confidence per model
-      
+
       for (let j = 0; j < embedding.length; j++) {
         result[j] += embedding[j] * confidence;
       }
@@ -450,6 +450,10 @@ export class HolographicConsensusEngine {
 // ============================================================================
 
 export default HolographicConsensusEngine;
+
+// Legacy aliases for backward compatibility with tests
+export { HolographicConsensusEngine as HolographicConsensusAnalyzer };
+export const holographicConsensus = new HolographicConsensusEngine();
 
 /**
  * Example Usage:

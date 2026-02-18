@@ -6,6 +6,13 @@
 
 import { vi } from 'vitest';
 import '@testing-library/jest-dom/vitest';
+import React from 'react';
+
+// Provide global React for tests that don't import it
+global.React = React;
+
+// Provide global jest as an alias for vi to support legacy mocks
+global.jest = vi;
 
 // ============================================================================
 // FETCH & NETWORK MOCKS
