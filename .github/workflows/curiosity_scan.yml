@@ -22,6 +22,9 @@ jobs:
                   cache: "npm"
                   cache-dependency-path: swarm/package-lock.json
 
+            - name: Install Project Dependencies
+              run: npm ci --legacy-peer-deps
+
             - name: Install Swarm Dependencies
               run: |
                   cd swarm
