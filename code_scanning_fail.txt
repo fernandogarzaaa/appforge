@@ -1,0 +1,245 @@
+ESLint Code Quality	Set up job	﻿2026-02-18T12:03:36.0669269Z Current runner version: '2.331.0'
+ESLint Code Quality	Set up job	2026-02-18T12:03:36.0694428Z ##[group]Runner Image Provisioner
+ESLint Code Quality	Set up job	2026-02-18T12:03:36.0695287Z Hosted Compute Agent
+ESLint Code Quality	Set up job	2026-02-18T12:03:36.0695810Z Version: 20260123.484
+ESLint Code Quality	Set up job	2026-02-18T12:03:36.0696473Z Commit: 6bd6555ca37d84114959e1c76d2c01448ff61c5d
+ESLint Code Quality	Set up job	2026-02-18T12:03:36.0697552Z Build Date: 2026-01-23T19:41:17Z
+ESLint Code Quality	Set up job	2026-02-18T12:03:36.0698206Z Worker ID: {de57021c-f294-426d-8794-f71d8ea3e8ac}
+ESLint Code Quality	Set up job	2026-02-18T12:03:36.0698946Z Azure Region: westus
+ESLint Code Quality	Set up job	2026-02-18T12:03:36.0699480Z ##[endgroup]
+ESLint Code Quality	Set up job	2026-02-18T12:03:36.0700951Z ##[group]Operating System
+ESLint Code Quality	Set up job	2026-02-18T12:03:36.0701509Z Ubuntu
+ESLint Code Quality	Set up job	2026-02-18T12:03:36.0702132Z 24.04.3
+ESLint Code Quality	Set up job	2026-02-18T12:03:36.0702560Z LTS
+ESLint Code Quality	Set up job	2026-02-18T12:03:36.0703006Z ##[endgroup]
+ESLint Code Quality	Set up job	2026-02-18T12:03:36.0703585Z ##[group]Runner Image
+ESLint Code Quality	Set up job	2026-02-18T12:03:36.0704110Z Image: ubuntu-24.04
+ESLint Code Quality	Set up job	2026-02-18T12:03:36.0704605Z Version: 20260209.23.1
+ESLint Code Quality	Set up job	2026-02-18T12:03:36.0705658Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260209.23/images/ubuntu/Ubuntu2404-Readme.md
+ESLint Code Quality	Set up job	2026-02-18T12:03:36.0707549Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20260209.23
+ESLint Code Quality	Set up job	2026-02-18T12:03:36.0708574Z ##[endgroup]
+ESLint Code Quality	Set up job	2026-02-18T12:03:36.0709638Z ##[group]GITHUB_TOKEN Permissions
+ESLint Code Quality	Set up job	2026-02-18T12:03:36.0711528Z Contents: read
+ESLint Code Quality	Set up job	2026-02-18T12:03:36.0712058Z Metadata: read
+ESLint Code Quality	Set up job	2026-02-18T12:03:36.0712577Z Packages: read
+ESLint Code Quality	Set up job	2026-02-18T12:03:36.0713076Z ##[endgroup]
+ESLint Code Quality	Set up job	2026-02-18T12:03:36.0715570Z Secret source: Actions
+ESLint Code Quality	Set up job	2026-02-18T12:03:36.0716265Z Prepare workflow directory
+ESLint Code Quality	Set up job	2026-02-18T12:03:36.1035968Z Prepare all required actions
+ESLint Code Quality	Set up job	2026-02-18T12:03:36.1082540Z Getting action download info
+ESLint Code Quality	Set up job	2026-02-18T12:03:36.5585409Z Download action repository 'actions/checkout@v4' (SHA:34e114876b0b11c390a56381ad16ebd13914f8d5)
+ESLint Code Quality	Set up job	2026-02-18T12:03:36.6966319Z Download action repository 'actions/setup-node@v4' (SHA:49933ea5288caeca8642d1e84afbd3f7d6820020)
+ESLint Code Quality	Set up job	2026-02-18T12:03:36.8872272Z Complete job name: ESLint Code Quality
+ESLint Code Quality	Run actions/checkout@v4	﻿2026-02-18T12:03:36.9558652Z ##[group]Run actions/checkout@v4
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:36.9559644Z with:
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:36.9560059Z   repository: fernandogarzaaa/appforge
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:36.9560731Z   token: ***
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:36.9561114Z   ssh-strict: true
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:36.9561503Z   ssh-user: git
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:36.9561903Z   persist-credentials: true
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:36.9562337Z   clean: true
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:36.9562732Z   sparse-checkout-cone-mode: true
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:36.9563204Z   fetch-depth: 1
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:36.9563585Z   fetch-tags: false
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:36.9563976Z   show-progress: true
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:36.9564378Z   lfs: false
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:36.9564740Z   submodules: false
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:36.9565147Z   set-safe-directory: true
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:36.9565778Z ##[endgroup]
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:37.0656680Z Syncing repository: fernandogarzaaa/appforge
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:37.0659015Z ##[group]Getting Git version info
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:37.0659704Z Working directory is '/home/runner/work/appforge/appforge'
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:37.0660641Z [command]/usr/bin/git version
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:37.0675248Z git version 2.52.0
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:37.0701296Z ##[endgroup]
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:37.0715738Z Temporarily overriding HOME='/home/runner/work/_temp/6023d965-cd10-4872-904b-d1407a6a1bf5' before making global git config changes
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:37.0728758Z Adding repository directory to the temporary git global config as a safe directory
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:37.0730075Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/appforge/appforge
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:37.0771567Z Deleting the contents of '/home/runner/work/appforge/appforge'
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:37.0775293Z ##[group]Initializing the repository
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:37.0779490Z [command]/usr/bin/git init /home/runner/work/appforge/appforge
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:37.0883139Z hint: Using 'master' as the name for the initial branch. This default branch name
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:37.0884559Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:37.0885632Z hint: to use in all of your new repositories, which will suppress this warning,
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:37.0886944Z hint: call:
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:37.0888121Z hint:
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:37.0888974Z hint: 	git config --global init.defaultBranch <name>
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:37.0889663Z hint:
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:37.0890309Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:37.0891402Z hint: 'development'. The just-created branch can be renamed via this command:
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:37.0892323Z hint:
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:37.0893035Z hint: 	git branch -m <name>
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:37.0893875Z hint:
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:37.0894521Z hint: Disable this message with "git config set advice.defaultBranchName false"
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:37.0895501Z Initialized empty Git repository in /home/runner/work/appforge/appforge/.git/
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:37.0898219Z [command]/usr/bin/git remote add origin https://github.com/fernandogarzaaa/appforge
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:37.0932551Z ##[endgroup]
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:37.0933294Z ##[group]Disabling automatic garbage collection
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:37.0936949Z [command]/usr/bin/git config --local gc.auto 0
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:37.0965555Z ##[endgroup]
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:37.0966228Z ##[group]Setting up auth
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:37.0972902Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:37.1003340Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:37.1364207Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:37.1398771Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:37.1653789Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:37.1690294Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:37.1970731Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:37.2006813Z ##[endgroup]
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:37.2008427Z ##[group]Fetching the repository
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:37.2016899Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +cc6e486685cc9f8d286202b0d03a6e69bb87f68d:refs/remotes/origin/main
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:43.2832948Z From https://github.com/fernandogarzaaa/appforge
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:43.2834277Z  * [new ref]         cc6e486685cc9f8d286202b0d03a6e69bb87f68d -> origin/main
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:43.2870036Z ##[endgroup]
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:43.2871346Z ##[group]Determining the checkout info
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:43.2873550Z ##[endgroup]
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:43.2879870Z [command]/usr/bin/git sparse-checkout disable
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:43.2926590Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:43.2955977Z ##[group]Checking out the ref
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:43.2960726Z [command]/usr/bin/git checkout --progress --force -B main refs/remotes/origin/main
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:44.3264551Z Updating files:  30% (1599/5248)
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:44.4293504Z Updating files:  31% (1627/5248)
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:44.7371181Z Updating files:  32% (1680/5248)
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:44.7976659Z Updating files:  33% (1732/5248)
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:44.7996313Z Updating files:  34% (1785/5248)
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:44.8017587Z Updating files:  35% (1837/5248)
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:44.8038035Z Updating files:  36% (1890/5248)
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:44.8058933Z Updating files:  37% (1942/5248)
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:44.9505008Z Updating files:  38% (1995/5248)
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:45.2561638Z Updating files:  39% (2047/5248)
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:45.2861594Z Updating files:  40% (2100/5248)
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:45.2895166Z Updating files:  41% (2152/5248)
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:45.2922388Z Updating files:  42% (2205/5248)
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:45.2945889Z Updating files:  43% (2257/5248)
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:45.2974418Z Updating files:  44% (2310/5248)
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:45.3002855Z Updating files:  45% (2362/5248)
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:45.3050752Z Updating files:  46% (2415/5248)
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:45.3055115Z Updating files:  46% (2462/5248)
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:45.3077441Z Updating files:  47% (2467/5248)
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:45.3098341Z Updating files:  48% (2520/5248)
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:45.3123565Z Updating files:  49% (2572/5248)
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:45.3148487Z Updating files:  50% (2624/5248)
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:45.3175384Z Updating files:  51% (2677/5248)
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:45.3201713Z Updating files:  52% (2729/5248)
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:45.3232676Z Updating files:  53% (2782/5248)
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:45.3257772Z Updating files:  54% (2834/5248)
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:45.3282784Z Updating files:  55% (2887/5248)
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:45.3310373Z Updating files:  56% (2939/5248)
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:45.3336597Z Updating files:  57% (2992/5248)
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:45.3364302Z Updating files:  58% (3044/5248)
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:45.3388423Z Updating files:  59% (3097/5248)
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:45.3413446Z Updating files:  60% (3149/5248)
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:45.3432653Z Updating files:  61% (3202/5248)
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:45.3455582Z Updating files:  62% (3254/5248)
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:45.3484122Z Updating files:  63% (3307/5248)
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:45.3513265Z Updating files:  64% (3359/5248)
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:45.3546041Z Updating files:  65% (3412/5248)
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:45.3567565Z Updating files:  66% (3464/5248)
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:45.3590426Z Updating files:  67% (3517/5248)
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:45.3610360Z Updating files:  68% (3569/5248)
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:45.3638384Z Updating files:  69% (3622/5248)
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:45.3664152Z Updating files:  70% (3674/5248)
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:45.3685884Z Updating files:  71% (3727/5248)
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:45.3709109Z Updating files:  72% (3779/5248)
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:45.3738699Z Updating files:  73% (3832/5248)
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:45.3762312Z Updating files:  74% (3884/5248)
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:45.3788420Z Updating files:  75% (3936/5248)
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:45.3816216Z Updating files:  76% (3989/5248)
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:45.3843091Z Updating files:  77% (4041/5248)
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:45.3872136Z Updating files:  78% (4094/5248)
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:45.3898300Z Updating files:  79% (4146/5248)
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:45.3925496Z Updating files:  80% (4199/5248)
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:45.3951555Z Updating files:  81% (4251/5248)
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:45.3989919Z Updating files:  82% (4304/5248)
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:45.4010995Z Updating files:  83% (4356/5248)
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:45.4041259Z Updating files:  84% (4409/5248)
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:45.4063499Z Updating files:  85% (4461/5248)
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:45.4085743Z Updating files:  86% (4514/5248)
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:45.4112801Z Updating files:  87% (4566/5248)
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:45.4141760Z Updating files:  88% (4619/5248)
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:45.4176296Z Updating files:  89% (4671/5248)
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:45.4210954Z Updating files:  90% (4724/5248)
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:45.4242986Z Updating files:  91% (4776/5248)
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:45.4277359Z Updating files:  92% (4829/5248)
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:45.4303832Z Updating files:  93% (4881/5248)
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:45.5394573Z Updating files:  94% (4934/5248)
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:45.5437628Z Updating files:  95% (4986/5248)
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:45.5474821Z Updating files:  96% (5039/5248)
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:45.5576557Z Updating files:  97% (5091/5248)
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:45.5636482Z Updating files:  98% (5144/5248)
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:45.5773414Z Updating files:  99% (5196/5248)
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:45.5774153Z Updating files: 100% (5248/5248)
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:45.5774655Z Updating files: 100% (5248/5248), done.
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:45.5837533Z Switched to a new branch 'main'
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:45.5841167Z branch 'main' set up to track 'origin/main'.
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:45.5931848Z ##[endgroup]
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:45.5973181Z [command]/usr/bin/git log -1 --format=%H
+ESLint Code Quality	Run actions/checkout@v4	2026-02-18T12:03:45.5996449Z cc6e486685cc9f8d286202b0d03a6e69bb87f68d
+ESLint Code Quality	Setup Node.js	﻿2026-02-18T12:03:45.6227960Z ##[group]Run actions/setup-node@v4
+ESLint Code Quality	Setup Node.js	2026-02-18T12:03:45.6228457Z with:
+ESLint Code Quality	Setup Node.js	2026-02-18T12:03:45.6228636Z   node-version: 22.x
+ESLint Code Quality	Setup Node.js	2026-02-18T12:03:45.6228826Z   cache: npm
+ESLint Code Quality	Setup Node.js	2026-02-18T12:03:45.6228995Z   always-auth: false
+ESLint Code Quality	Setup Node.js	2026-02-18T12:03:45.6229174Z   check-latest: false
+ESLint Code Quality	Setup Node.js	2026-02-18T12:03:45.6229490Z   token: ***
+ESLint Code Quality	Setup Node.js	2026-02-18T12:03:45.6229661Z ##[endgroup]
+ESLint Code Quality	Setup Node.js	2026-02-18T12:03:45.8046267Z Found in cache @ /opt/hostedtoolcache/node/22.22.0/x64
+ESLint Code Quality	Setup Node.js	2026-02-18T12:03:45.8053147Z ##[group]Environment details
+ESLint Code Quality	Setup Node.js	2026-02-18T12:03:48.5403371Z node: v22.22.0
+ESLint Code Quality	Setup Node.js	2026-02-18T12:03:48.5403680Z npm: 10.9.4
+ESLint Code Quality	Setup Node.js	2026-02-18T12:03:48.5403894Z yarn: 1.22.22
+ESLint Code Quality	Setup Node.js	2026-02-18T12:03:48.5405412Z ##[endgroup]
+ESLint Code Quality	Setup Node.js	2026-02-18T12:03:48.5426307Z [command]/opt/hostedtoolcache/node/22.22.0/x64/bin/npm config get cache
+ESLint Code Quality	Setup Node.js	2026-02-18T12:03:48.8462758Z /home/runner/.npm
+ESLint Code Quality	Setup Node.js	2026-02-18T12:03:49.1378002Z npm cache is not found
+ESLint Code Quality	Install dependencies	﻿2026-02-18T12:03:49.1520574Z ##[group]Run npm ci
+ESLint Code Quality	Install dependencies	2026-02-18T12:03:49.1520849Z [36;1mnpm ci[0m
+ESLint Code Quality	Install dependencies	2026-02-18T12:03:49.1581769Z shell: /usr/bin/bash -e {0}
+ESLint Code Quality	Install dependencies	2026-02-18T12:03:49.1582030Z ##[endgroup]
+ESLint Code Quality	Install dependencies	2026-02-18T12:03:52.1979128Z npm error code ERESOLVE
+ESLint Code Quality	Install dependencies	2026-02-18T12:03:52.1980117Z npm error ERESOLVE could not resolve
+ESLint Code Quality	Install dependencies	2026-02-18T12:03:52.1980554Z npm error
+ESLint Code Quality	Install dependencies	2026-02-18T12:03:52.1981097Z npm error While resolving: @react-three/drei@10.7.7
+ESLint Code Quality	Install dependencies	2026-02-18T12:03:52.1981677Z npm error Found: react@18.3.1
+ESLint Code Quality	Install dependencies	2026-02-18T12:03:52.1982110Z npm error node_modules/react
+ESLint Code Quality	Install dependencies	2026-02-18T12:03:52.1982659Z npm error   react@"^18.3.0" from the root project
+ESLint Code Quality	Install dependencies	2026-02-18T12:03:52.1983642Z npm error   peerOptional react@"^16.8.0 || ^17.0.0 || ^18.0.0 || >=19.0.0-rc" from @apollo/client@3.14.0
+ESLint Code Quality	Install dependencies	2026-02-18T12:03:52.1984503Z npm error   node_modules/@apollo/client
+ESLint Code Quality	Install dependencies	2026-02-18T12:03:52.1985181Z npm error     @apollo/client@"latest" from the root project
+ESLint Code Quality	Install dependencies	2026-02-18T12:03:52.1986020Z npm error   112 more (@floating-ui/react-dom, @hello-pangea/dnd, ...)
+ESLint Code Quality	Install dependencies	2026-02-18T12:03:52.1986602Z npm error
+ESLint Code Quality	Install dependencies	2026-02-18T12:03:52.1987284Z npm error Could not resolve dependency:
+ESLint Code Quality	Install dependencies	2026-02-18T12:03:52.1987975Z npm error peer react@"^19" from @react-three/drei@10.7.7
+ESLint Code Quality	Install dependencies	2026-02-18T12:03:52.1988667Z npm error node_modules/@react-three/drei
+ESLint Code Quality	Install dependencies	2026-02-18T12:03:52.1989351Z npm error   @react-three/drei@"10.7.7" from the root project
+ESLint Code Quality	Install dependencies	2026-02-18T12:03:52.1989882Z npm error
+ESLint Code Quality	Install dependencies	2026-02-18T12:03:52.1990357Z npm error Conflicting peer dependency: react@19.2.4
+ESLint Code Quality	Install dependencies	2026-02-18T12:03:52.1990912Z npm error node_modules/react
+ESLint Code Quality	Install dependencies	2026-02-18T12:03:52.1991524Z npm error   peer react@"^19" from @react-three/drei@10.7.7
+ESLint Code Quality	Install dependencies	2026-02-18T12:03:52.1992187Z npm error   node_modules/@react-three/drei
+ESLint Code Quality	Install dependencies	2026-02-18T12:03:52.1992902Z npm error     @react-three/drei@"10.7.7" from the root project
+ESLint Code Quality	Install dependencies	2026-02-18T12:03:52.1993428Z npm error
+ESLint Code Quality	Install dependencies	2026-02-18T12:03:52.1993847Z npm error Fix the upstream dependency conflict, or retry
+ESLint Code Quality	Install dependencies	2026-02-18T12:03:52.1994290Z npm error this command with --force or --legacy-peer-deps
+ESLint Code Quality	Install dependencies	2026-02-18T12:03:52.1994828Z npm error to accept an incorrect (and potentially broken) dependency resolution.
+ESLint Code Quality	Install dependencies	2026-02-18T12:03:52.1995258Z npm error
+ESLint Code Quality	Install dependencies	2026-02-18T12:03:52.1995427Z npm error
+ESLint Code Quality	Install dependencies	2026-02-18T12:03:52.1995642Z npm error For a full report see:
+ESLint Code Quality	Install dependencies	2026-02-18T12:03:52.1996081Z npm error /home/runner/.npm/_logs/2026-02-18T12_03_49_215Z-eresolve-report.txt
+ESLint Code Quality	Install dependencies	2026-02-18T12:03:52.1996782Z npm error A complete log of this run can be found in: /home/runner/.npm/_logs/2026-02-18T12_03_49_215Z-debug-0.log
+ESLint Code Quality	Install dependencies	2026-02-18T12:03:52.2436665Z ##[error]Process completed with exit code 1.
+ESLint Code Quality	Post Run actions/checkout@v4	﻿2026-02-18T12:03:52.2616449Z Post job cleanup.
+ESLint Code Quality	Post Run actions/checkout@v4	2026-02-18T12:03:52.3559781Z [command]/usr/bin/git version
+ESLint Code Quality	Post Run actions/checkout@v4	2026-02-18T12:03:52.3595807Z git version 2.52.0
+ESLint Code Quality	Post Run actions/checkout@v4	2026-02-18T12:03:52.3640596Z Temporarily overriding HOME='/home/runner/work/_temp/26bb7c11-be99-4aa4-acdf-a177019b215d' before making global git config changes
+ESLint Code Quality	Post Run actions/checkout@v4	2026-02-18T12:03:52.3642139Z Adding repository directory to the temporary git global config as a safe directory
+ESLint Code Quality	Post Run actions/checkout@v4	2026-02-18T12:03:52.3647343Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/appforge/appforge
+ESLint Code Quality	Post Run actions/checkout@v4	2026-02-18T12:03:52.3683691Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+ESLint Code Quality	Post Run actions/checkout@v4	2026-02-18T12:03:52.3716945Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+ESLint Code Quality	Post Run actions/checkout@v4	2026-02-18T12:03:52.3963144Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+ESLint Code Quality	Post Run actions/checkout@v4	2026-02-18T12:03:52.3983878Z http.https://github.com/.extraheader
+ESLint Code Quality	Post Run actions/checkout@v4	2026-02-18T12:03:52.3996888Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+ESLint Code Quality	Post Run actions/checkout@v4	2026-02-18T12:03:52.4027801Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+ESLint Code Quality	Post Run actions/checkout@v4	2026-02-18T12:03:52.4266530Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+ESLint Code Quality	Post Run actions/checkout@v4	2026-02-18T12:03:52.4298661Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+ESLint Code Quality	Complete job	﻿2026-02-18T12:03:52.4646867Z Cleaning up orphan processes

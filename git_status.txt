@@ -1,0 +1,40 @@
+ M src/data/swarm_signals.json
+ M src/lib/__tests__/quantumIntegration.test.js
+ M src/lib/__tests__/wasmLoader.test.ts
+ M src/lib/holographicConsensus.ts
+ M src/lib/quantumIntegration.js
+ M src/lib/quantumZeno.ts
+ M src/lib/wasmLoader.ts
+ M src/tests/setup.js
+ M swarm/data/autonomous_trading_state.json
+ M swarm/data/swarm_registry.json
+ M swarm/multi_swarm_channel.json
+?? code_scanning_fail.txt
+?? consensus_fail.txt
+?? fail_log_676.txt
+?? fail_log_recent.txt
+?? final_results.txt
+?? final_scan.txt
+?? final_scan_v10.txt
+?? final_scan_v11.txt
+?? final_scan_v12.txt
+?? final_scan_v13.txt
+?? final_scan_v14.txt
+?? final_scan_v15.txt
+?? final_scan_v2.txt
+?? final_scan_v3.txt
+?? final_scan_v4.txt
+?? final_scan_v5.txt
+?? final_scan_v6.txt
+?? final_scan_v7.txt
+?? final_scan_v8.txt
+?? final_scan_v9.txt
+?? final_verification.txt
+?? git_status.txt
+?? local_test_fail.txt
+?? node_ci_fail_fixed.txt
+?? oracle_plan.txt
+?? run_list.json
+?? run_list.txt
+?? run_list_fixed.json
+?? verification_results.txt

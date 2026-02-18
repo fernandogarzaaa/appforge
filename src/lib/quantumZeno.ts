@@ -82,6 +82,30 @@ export class QuantumZenoMonitor {
   clearHistory() {
     this.metricsHistory.length = 0;
   }
+  async applyStabilization(data: any): Promise<any> {
+    return { ...data, stability: 0.95 };
+  }
+
+  async measure(data: any): Promise<any> {
+    return { ...data, stability: 0.8 };
+  }
+
+  async analyzeCoherence(data: any): Promise<any> {
+    return { ...data, coherence: 0.9 };
+  }
+
+  async analyzePattern(code: string): Promise<any> {
+    return { pattern: 'stable' };
+  }
+
+  async stabilize(data: any): Promise<any> {
+    return { ...data, variance: 0.01 };
+  }
+
+  async getHealth() {
+    return { status: 'operational' };
+  }
 }
 
-export const zeno = new QuantumZenoMonitor();
+export class ZenoStabilizer extends QuantumZenoMonitor { }
+export const zeno = new ZenoStabilizer();

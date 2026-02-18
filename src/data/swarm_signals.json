@@ -1,0 +1,14 @@
+[
+  {
+    "fromAgent": "CLI",
+    "toAgent": "GodMode",
+    "type": "QUERY",
+    "payload": {
+      "question": "Analyze the current Vitest failures in src/lib/__tests__ and suggest a systemic repair pattern."
+    },
+    "priority": "MEDIUM",
+    "id": "sig_1771419741185_7pojb7qns",
+    "timestamp": "2026-02-18T13:02:21.185Z",
+    "status": "PENDING"
+  }
+]

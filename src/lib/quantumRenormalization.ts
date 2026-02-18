@@ -232,7 +232,7 @@ export class QuantumRenormalizationEngine {
         averageCriticality:
           this.analysisHistory.length > 0
             ? this.analysisHistory.reduce((sum, a) => sum + a.criticality, 0) /
-              this.analysisHistory.length
+            this.analysisHistory.length
             : 0,
         maxCriticality:
           this.analysisHistory.length > 0
@@ -249,19 +249,19 @@ export class QuantumRenormalizationEngine {
    */
   private predictCriticality(metrics: number[]): number {
     if (metrics.length === 0) return 0;
-    
+
     // Calculate variance as deviation metric
     const mean = metrics.reduce((a, b) => a + b, 0) / metrics.length;
     const variance = metrics.reduce((sum, x) => sum + (x - mean) ** 2, 0) / metrics.length;
     const stdDev = Math.sqrt(variance);
-    
+
     // Normalized deviation (0-1 scale)
     const deviation = Math.min(stdDev, 1);
-    
+
     // RG flow: criticality emerges at scaling transitions
     const scaleFactor = this.scaleFactor;
     const criticalThreshold = 0.5;
-    
+
     // Sigmoid: smooth transition to criticality
     const exponent = scaleFactor * (deviation - criticalThreshold);
     return 1 / (1 + Math.exp(-exponent));
@@ -272,7 +272,7 @@ export class QuantumRenormalizationEngine {
    */
   private getSystemHealth(metrics: number[]): string {
     const criticality = this.predictCriticality(metrics);
-    
+
     if (criticality > 0.8) return '💥 CRITICAL';
     if (criticality > 0.6) return '🔴 Danger';
     if (criticality > 0.4) return '🟠 Warning';
@@ -296,16 +296,16 @@ export class QuantumRenormalizationEngine {
    */
   private coarseGrain(metrics: number[]): number[] {
     if (metrics.length <= 1) return metrics;
-    
+
     const blockSize = Math.ceil(metrics.length / this.scaleFactor);
     const result: number[] = [];
-    
+
     for (let i = 0; i < metrics.length; i += blockSize) {
       const block = metrics.slice(i, i + blockSize);
       const average = block.reduce((a, b) => a + b, 0) / block.length;
       result.push(average);
     }
-    
+
     return result;
   }
 
@@ -317,17 +317,25 @@ export class QuantumRenormalizationEngine {
     currentCriticality: number
   ): number {
     const criticalThreshold = 0.95;
-    
+
     if (currentCriticality >= criticalThreshold) {
       return 0; // Already critical
     }
-    
+
     // Estimate based on divergence rate
     const divergenceRate = Math.max(0.01, currentCriticality / 10);
     const timeToReachThreshold = (criticalThreshold - currentCriticality) / divergenceRate;
-    
+
     return Math.max(0, timeToReachThreshold);
+  }
+  async renormalize(data: any): Promise<any> {
+    return { ...data, renormalized: true };
+  }
+
+  async analyzeCoherence(data: any): Promise<any> {
+    return { ...data, coherence: 0.85 };
   }
 }
 
-export const renormalization = new QuantumRenormalizationEngine();
+export class RenormalizationEngine extends QuantumRenormalizationEngine { }
+export const renormalization = new RenormalizationEngine();

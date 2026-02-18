@@ -1,0 +1,95 @@
+
+> base44-app@0.0.0 test
+> vitest run src/lib/__tests__/ --run
+
+
+[1m[46m RUN [49m[22m [36mv4.0.18 [39m[90mC:/Users/ferna/Downloads/appforge-main[39m
+
+ [31mΓ¥»[39m src/lib/__tests__/quantumRenormalization.test.ts [2m([22m[2m0 test[22m[2m)[22m
+[90mstdout[2m | src/lib/__tests__/wasmLoader.test.ts[2m > [22m[2m≡ƒªÇ Quantum Core WASM Loader (JS Fallback)[2m > [22m[2mInitialization[2m > [22m[2mshould load without throwing when WASM unavailable
+[22m[39mWASM load error: [vitest] There was an error when mocking a module. If you are using "vi.mock" factory, make sure there are no top level variables inside, since this call is hoisted to top of the file. Read more: https://vitest.dev/api/vi.html#vi-mock
+
+ [32mΓ£ô[39m src/lib/__tests__/wasmLoader.test.ts [2m([22m[2m22 tests[22m[2m)[22m[32m 268[2mms[22m[39m
+ [32mΓ£ô[39m src/lib/__tests__/quantumTunneling.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 23[2mms[22m[39m
+ [31mΓ¥»[39m src/lib/__tests__/holographicConsensus.test.ts [2m([22m[2m17 tests[22m[2m | [22m[31m16 failed[39m[2m)[22m[32m 62[2mms[22m[39m
+[31m       [31m├ù[31m should initialize with default parameters[39m[32m 33[2mms[22m[39m
+[31m       [31m├ù[31m should add model responses[39m[32m 1[2mms[22m[39m
+[31m       [31m├ù[31m should compute consensus with multiple responses[39m[32m 1[2mms[22m[39m
+[31m       [31m├ù[31m should handle conflicting responses[39m[32m 2[2mms[22m[39m
+[31m       [31m├ù[31m should calculate low entropy for similar responses[39m[32m 1[2mms[22m[39m
+[31m       [31m├ù[31m should calculate high entropy for diverse responses[39m[32m 1[2mms[22m[39m
+[31m       [31m├ù[31m entropy should be between 0 and 1[39m[32m 1[2mms[22m[39m
+[31m       [31m├ù[31m should measure coherence of tensor network[39m[32m 1[2mms[22m[39m
+[31m       [31m├ù[31m should return high coherence for aligned responses[39m[32m 1[2mms[22m[39m
+       [32mΓ£ô[39m should provide global singleton instance[32m 2[2mms[22m[39m
+[31m       [31m├ù[31m singleton should maintain state across calls[39m[32m 1[2mms[22m[39m
+[31m       [31m├ù[31m should handle empty responses[39m[32m 5[2mms[22m[39m
+[31m       [31m├ù[31m should handle single response[39m[32m 1[2mms[22m[39m
+[31m       [31m├ù[31m should handle very long responses[39m[32m 1[2mms[22m[39m
+[31m       [31m├ù[31m should handle special characters in responses[39m[32m 1[2mms[22m[39m
+[31m       [31m├ù[31m should compute consensus within reasonable time[39m[32m 2[2mms[22m[39m
+[31m       [31m├ù[31m should handle multiple computations efficiently[39m[32m 1[2mms[22m[39m
+ [31mΓ¥»[39m src/lib/__tests__/quantumIntegration.test.js [2m([22m[2m17 tests[22m[2m | [22m[31m17 failed[39m[2m)[22m[32m 84[2mms[22m[39m
+[31m       [31m├ù[31m should initialize quantum module successfully[39m[32m 39[2mms[22m[39m
+[31m       [31m├ù[31m should return cached module on subsequent calls[39m[32m 1[2mms[22m[39m
+[31m       [31m├ù[31m should handle initialization errors gracefully[39m[32m 19[2mms[22m[39m
+[31m       [31m├ù[31m should optimize simple dependency tree[39m[32m 1[2mms[22m[39m
+[31m       [31m├ù[31m should respect custom constraints[39m[32m 3[2mms[22m[39m
+[31m       [31m├ù[31m should handle empty dependencies[39m[32m 3[2mms[22m[39m
+[31m       [31m├ù[31m should detect conflicting dependencies[39m[32m 1[2mms[22m[39m
+[31m       [31m├ù[31m should analyze code complexity[39m[32m 1[2mms[22m[39m
+[31m       [31m├ù[31m should identify performance bottlenecks[39m[32m 1[2mms[22m[39m
+[31m       [31m├ù[31m should suggest optimizations[39m[32m 1[2mms[22m[39m
+[31m       [31m├ù[31m should handle syntactically invalid code[39m[32m 1[2mms[22m[39m
+[31m       [31m├ù[31m should return current quantum metrics[39m[32m 1[2mms[22m[39m
+[31m       [31m├ù[31m should track quantum analysis success rate[39m[32m 0[2mms[22m[39m
+[31m       [31m├ù[31m should track performance metrics[39m[32m 0[2mms[22m[39m
+[31m       [31m├ù[31m should reset metrics when requested[39m[32m 1[2mms[22m[39m
+[31m       [31m├ù[31m should handle concurrent quantum operations[39m[32m 1[2mms[22m[39m
+[31m       [31m├ù[31m should maintain quantum state consistency[39m[32m 0[2mms[22m[39m
+ [31mΓ¥»[39m src/lib/__tests__/quantumZeno.test.ts [2m([22m[2m22 tests[22m[2m | [22m[31m10 failed[39m[2m)[22m[32m 100[2mms[22m[39m
+[31m       [31m├ù[31m should initialize with default parameters[39m[32m 21[2mms[22m[39m
+[31m       [31m├ù[31m should calculate high stability with frequent testing[39m[32m 2[2mms[22m[39m
+       [32mΓ£ô[39m should calculate low stability with infrequent testing[32m 1[2mms[22m[39m
+       [32mΓ£ô[39m stability should be between 0 and 1[32m 1[2mms[22m[39m
+[31m       [31m├ù[31m should detect Zeno effect when active[39m[32m 4[2mms[22m[39m
+       [32mΓ£ô[39m should detect degradation without frequent observation[32m 0[2mms[22m[39m
+       [32mΓ£ô[39m should calculate degradation timeline[32m 1[2mms[22m[39m
+       [32mΓ£ô[39m should recommend optimal test frequency[32m 2[2mms[22m[39m
+       [32mΓ£ô[39m should identify critical observation windows[32m 1[2mms[22m[39m
+       [32mΓ£ô[39m should calculate optimal observation pattern[32m 1[2mms[22m[39m
+[31m       [31m├ù[31m should measure freeze depth correctly[39m[32m 4[2mms[22m[39m
+[31m       [31m├ù[31m should show shallow freeze for varied observations[39m[32m 22[2mms[22m[39m
+[31m       [31m├ù[31m should track state evolution over time[39m[32m 2[2mms[22m[39m
+       [32mΓ£ô[39m should predict future stability[32m 13[2mms[22m[39m
+       [32mΓ£ô[39m should provide global singleton instance[32m 1[2mms[22m[39m
+[31m       [31m├ù[31m singleton should maintain observation history[39m[32m 1[2mms[22m[39m
+       [32mΓ£ô[39m should handle zero test frequency[32m 0[2mms[22m[39m
+[31m       [31m├ù[31m should handle very high observations[39m[32m 1[2mms[22m[39m
+[31m       [31m├ù[31m should handle very low observations[39m[32m 1[2mms[22m[39m
+[31m       [31m├ù[31m should handle consecutive identical observations[39m[32m 2[2mms[22m[39m
+       [32mΓ£ô[39m should handle large observation datasets[32m 7[2mms[22m[39m
+       [32mΓ£ô[39m should calculate stability quickly[32m 1[2mms[22m[39m
+ [31mΓ¥»[39m src/lib/__tests__/quantumIntegration.e2e.test.js [2m([22m[2m16 tests[22m[2m | [22m[33m16 skipped[39m[2m)[22m[32m 144[2mms[22m[39m
+       [2m[90mΓåô[39m[22m should perform full quantum analysis on code
+       [2m[90mΓåô[39m[22m should identify and fix performance issues
+       [2m[90mΓåô[39m[22m should reach consensus on optimal dependencies
+       [2m[90mΓåô[39m[22m should handle conflicting optimization strategies
+       [2m[90mΓåô[39m[22m should transition through quantum states smoothly
+       [2m[90mΓåô[39m[22m should maintain coherence through transformations
+       [2m[90mΓåô[39m[22m should perform distributed quantum analysis
+       [2m[90mΓåô[39m[22m should aggregate results from multiple quantum engines
+       [2m[90mΓåô[39m[22m should recover from partial analysis failures
+       [2m[90mΓåô[39m[22m should stabilize unstable quantum states
+       [2m[90mΓåô[39m[22m should handle concurrent quantum operations
+       [2m[90mΓåô[39m[22m should scale with dependency complexity
+       [2m[90mΓåô[39m[22m should handle real-world code optimization request
+       [2m[90mΓåô[39m[22m should optimize production dependency set
+       [2m[90mΓåô[39m[22m should track quantum analysis metrics
+       [2m[90mΓåô[39m[22m should report module health status
+
+[2m Test Files [22m [1m[31m5 failed[39m[22m[2m | [22m[1m[32m2 passed[39m[22m[90m (7)[39m
+[2m      Tests [22m [1m[31m43 failed[39m[22m[2m | [22m[1m[32m46 passed[39m[22m[2m | [22m[33m16 skipped[39m[90m (105)[39m
+[2m   Start at [22m 21:00:01
+[2m   Duration [22m 9.29s[2m (transform 3.99s, setup 4.79s, import 3.68s, tests 680ms, environment 39.25s)[22m
+

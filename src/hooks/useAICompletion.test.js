@@ -2,6 +2,7 @@
  * AI Code Completion Tests
  */
 
+import React from 'react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { renderHook, act, waitFor } from '@testing-library/react';
 import { useAICompletion } from '@/hooks/useAICompletion';

@@ -1,0 +1,27 @@
+≡ƒîî Quantum Engine v3.5 [Deep Resonance] Online
+≡ƒñ¥ [Collab] Agent registered: CLI
+
+[36mΓòöΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòù
+Γòæ                    ≡ƒÉ¥ SWARM CLI v1.0 ≡ƒÉ¥                     Γòæ
+Γòæ          Token-Free Agent Collaboration System              Γòæ
+[0m[33mΓòÜΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓò¥
+[0m
+Available Commands:
+  [32mstatus[0m          - Show swarm status
+  [32mlist[0m            - List all agents and swarm collectives
+  [32msignals[0m         - Show pending signals
+  [32msend <to> <msg>[0m - Send signal to agent/collective
+  [32mbroadcast <msg>[0m - Broadcast to all agents
+  [32mquery <agent> <q>[0m - Query an agent
+  [32mstates[0m           - List saved quantum states
+  [32msave <name>[0m     - Save current state
+  [32mload <name>[0m     - Load a saved state
+  [32malert <msg>[0m     - Send critical alert
+  [32mclear[0m           - Clear old signals
+  [32mstats[0m           - Show collaboration stats
+  [32mhelp[0m            - Show this help
+  [32mexit[0m            - Exit
+
+[31mUnknown command: --oracle[0m
+Type 'help' for available commands.
+≡ƒôÜ [Quantum] Loaded 1 saved states

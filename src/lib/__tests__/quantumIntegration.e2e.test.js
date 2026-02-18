@@ -15,7 +15,7 @@ import { ZenoStabilizer } from '../quantumZeno';
 import { RenormalizationEngine } from '../quantumRenormalization';
 
 // Mock the WASM module
-vi.mock('../quantum-core/pkg/quantum_core', () => ({
+vi.mock('../../quantum-core/pkg/quantum_core', () => ({
   default: vi.fn(),
   QuantumAnnealer: class {
     constructor() { }

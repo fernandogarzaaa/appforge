@@ -2,16 +2,19 @@ import { defineConfig } from 'vitest/config';
 import path from 'path';
 import { loadEnv } from 'vite';
 
+import react from '@vitejs/plugin-react';
+
 export default defineConfig(({ mode }) => {
     // Load env file based on `mode` in the current working directory.
     // Set the third parameter to '' to load all env regardless of the `VITE_` prefix.
     const env = loadEnv(mode, process.cwd(), '');
 
     return {
+        plugins: [react()],
         test: {
             environment: 'jsdom',
             globals: true,
-            setupFiles: ['./tests/setup.ts'],
+            setupFiles: ['./src/tests/setup.js'],
             include: ['**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
             exclude: ['node_modules', 'dist', '.idea', '.git', '.cache'],
             alias: {
