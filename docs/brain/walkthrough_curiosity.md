@@ -1,0 +1,22 @@
+# Walkthrough: Curiosity-Driven Inception
+
+I have successfully implemented **Phase 7: Curiosity-Driven Inception**.
+The Swarm can now proactively hunt for "interesting" code to improve, rather than just reacting to tasks.
+
+## 🕵️ The Curiosity Engine
+
+- **File:** [swarm/core/curiosity_engine.ts](file:///c:/Users/ferna/Downloads/appforge-main/swarm/core/curiosity_engine.ts)
+- **Logic:**
+    1. **Scan**: Finds files with low edit frequency (neglected) or high complexity.
+    2. **Hypothesize**: Consults Oracle to determine *why* it's interesting.
+    3. **Incept**: Creates a formal `CURIOSITY_EXPLORATION` bounty.
+
+## 🧬 Autonomous Integration
+
+- **File:** [swarm/core/loop.ts](file:///c:/Users/ferna/Downloads/appforge-main/swarm/core/loop.ts)
+- **Cycle:** Runs every **10 cycles**.
+- **Output:** Automatically populates the `Base44` task queue.
+
+## ✅ Verification
+
+- **Test:** `scripts/test_curiosity.ts` successfully identified a candidate file and synthesized a bounty.

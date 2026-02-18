@@ -1,0 +1,49 @@
+# Implementation Plan - Phase 6: Neural Bridge Wiring
+
+The user wants to "wire and implement" the specific `pollDelay` optimization (500ms -> 250ms) discovered by the Neural Bridge.
+We will formalize this change in the codebase and expose the optimization tool.
+
+## User Review Required
+>
+> [!NOTE]
+> This refactors the "patched" code into a clean architectural constant.
+
+## Proposed Changes
+
+### Core Components
+
+#### [MODIFY] [swarm/core/llm.ts](file:///c:/Users/ferna/Downloads/appforge-main/swarm/core/llm.ts)
+
+- **Action**: Promote `pollDelay` from a local variable to a `private static readonly` property.
+- **Value**: Set to `250` (The optimized value).
+- **Documentation**: Add comment `// Optimized by Neural Bridge check_actions_and_readme_1771133741335`.
+
+### Configuration
+
+#### [MODIFY] [package.json](file:///c:/Users/ferna/Downloads/appforge-main/package.json)
+
+- **Action**: Add script `"swarm:optimize:bridge": "tsx scripts/optimize_neural_bridge.ts"`.
+
+## Verification Plan
+
+### Automated Tests
+
+1. **Run Tests**
+
+    ```bash
+    npm run test
+    ```
+
+    - **Expectation**: All tests pass (no regression from lower delay).
+
+2. **Verify Script Alias**
+
+    ```bash
+    npm run swarm:optimize:bridge
+    ```
+
+    - **Expectation**: Script runs (even if it just re-verifies).
+
+### Manual Verification
+
+- Inspect `llm.ts` to ensure clean code structure.

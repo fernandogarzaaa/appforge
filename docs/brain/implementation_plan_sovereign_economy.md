@@ -1,0 +1,52 @@
+# Phase 84: Sovereign Economy & Gateway Wiring
+
+This phase formalizes the Swarm's economic autonomy and ensures all critical "thoughts" and "actions" are broadcast through our new multi-transport gateway (WhatsApp, Discord, Telegram).
+
+## Proposed Changes
+
+### [Economic Engine]
+
+#### [MODIFY] [economic_engine.ts](file:///c:/Users/ferna/Downloads/appforge-main/swarm/core/economic_engine.ts)
+
+- Add `excellenceIndex` to the state, calculated as a weighted average of patch success rate and bounty complexity.
+- Implement `calculateExcellenceIndex()` to dynamically update this metric.
+- Add "Excellence" milestones that trigger rewards.
+
+### [Reality & Curiosity]
+
+#### [MODIFY] [reality_sensor.ts](file:///c:/Users/ferna/Downloads/appforge-main/swarm/core/reality_sensor.ts)
+
+- Expand `scanMarket()` to simulate "Novelty Discovery" (e.g., detecting new AI papers or GitHub trending spikes).
+- Add a new signal type: `MARKET_NOVELTY` with high curiosity weighting.
+
+### [Sovereign Skills]
+
+#### [MODIFY] [registry.ts](file:///c:/Users/ferna/Downloads/appforge-main/swarm/skills/registry.ts)
+
+- Add the `ReleaseSkill`: Automatically performs a `git push` and tags a version once a high-value bounty is verified.
+- Add the `BroadcasterSkill`: Specifically designed to format system metrics for the Gateway.
+
+### [System Wiring]
+
+#### [MODIFY] [loop.ts](file:///c:/Users/ferna/Downloads/appforge-main/swarm/core/loop.ts)
+
+- Integrate a global event listener that catches `SingularityEngine` milestones and `Bounty` completions.
+- Call `sovereignBridge.pushUpdate()` for every major autonomous action.
+- Ensure "Adrenaline Pulses" are reported to the user immediately.
+
+## Verification Plan
+
+### Automated Tests
+
+- Run `npx tsx scripts/verify_sovereign_economy.ts` (new):
+  - Verify `excellenceIndex` calculation.
+  - Verify `MARKET_NOVELTY` signal detection.
+  - Test the `ReleaseSkill` in a dry-run mode.
+- Run `npx tsx scripts/test_gateway_wiring.ts` (new):
+  - Trigger a mock bounty completion and verify a message is sent to the `sovereignBridge`.
+
+### Manual Verification
+
+1. Observe the terminal for: `📈 [Economy] Excellence Index: 0.92 (Growing)`.
+2. Check WhatsApp for a message like: `🚨 [Heartbeat] High Adrenaline detected in Market Novelty Signal. Executing Expert Swarm...`
+3. Verify that the `economic_state.json` is updated with the new metrics.

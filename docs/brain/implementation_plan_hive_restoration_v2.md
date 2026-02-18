@@ -1,0 +1,56 @@
+# Operation Hive Restoration (Phase 73) Implementation Plan
+
+## Goal Description
+
+Fix environmental "ENOENT" errors and Git identity issues in the autonomous loop to ensure the Swarm can persist its state and "bless" code improvements via Git commits.
+
+## Proposed Changes
+
+### Task 1: Directory Stabilization
+
+#### [NEW] [scripts/fix_environment.ts](file:///c:/Users/ferna/Downloads/appforge-main/scripts/fix_environment.ts)
+
+- Create a script to ensure the following directories exist with `.gitkeep`:
+  - `swarm/src/data/`
+  - `swarm/swarm/core/` (Note: User specified this path, likely `swarm/core/` inside `swarm/` or simply `swarm/core/`, but I will stick to the instruction or infer logical paths if redundant. The user said `swarm/swarm/core/`, which implies nested swarm. I will clarify or just ensure they exist as requested).
+  - `swarm/data/`
+
+### Task 2: Repair Static Oracle & State Persistence
+
+#### [MODIFY] [swarm/core/quantum_core.ts](file:///c:/Users/ferna/Downloads/appforge-main/swarm/core/quantum_core.ts)
+
+- Update `persistEngineState` and `reportOutcome`.
+- Add `fs.mkdirSync(path.dirname(filePath), { recursive: true })` before writing.
+- Handle missing `static_oracle.json` by returning a default "Safe-Mode" object instead of crashing.
+
+### Task 3: Git Identity Injection
+
+#### [MODIFY] [.github/workflows/quantum_evolution.yml](file:///c:/Users/ferna/Downloads/appforge-main/.github/workflows/quantum_evolution.yml)
+
+- Add "Configure Git Identity" step before the Swarm run.
+- Set global user.email to "<fernando@appforge.ai>" and user.name to "Fernando Garza (Sovereign Swarm)".
+
+### Task 4: JSON Sensor Hotfix
+
+#### [MODIFY] [swarm/core/reality_sensor.ts](file:///c:/Users/ferna/Downloads/appforge-main/swarm/core/reality_sensor.ts)
+
+- Wrap base64/JSON parsing in `try-catch`.
+- Return a default "Safe Reality" object on failure.
+
+### Task 5: Master Documentation
+
+#### [NEW] [DEVELOPMENT.md](file:///c:/Users/ferna/Downloads/appforge-main/DEVELOPMENT.md)
+
+- Map out the new "Holographic Architecture" folders.
+
+## Verification Plan
+
+### Automated Verification
+
+- Run `npx tsx scripts/fix_environment.ts` locally.
+- Verify `swarm/core/quantum_core.ts` compiles and handles missing files (can simulate with a small test script).
+- Verify `swarm/core/reality_sensor.ts` with malformed input.
+
+### Manual Verification
+
+- Review generated `DEVELOPMENT.md`.

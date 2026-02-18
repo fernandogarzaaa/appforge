@@ -1,0 +1,74 @@
+# Schema Push & Curiosity Engine Fix Walkthrough
+
+This guide documents the successful synchronization of the `Task` entity to Base44 Cloud, enabling the `CuriosityEngine` to autonomously generate bounties.
+
+## 1. The Problem
+
+- **Error**: `CuriosityEngine` failed with `422 Unprocessable Entity` when trying to create tasks.
+- **Root Cause**: The local schema was not synced to the cloud, and the previous app configuration (`base44/config.jsonc`) was pointing to a Frontend-Only app which does not support entity pushing.
+- **Blocker**: `npx base44 link` failed to create a backend app due to existing configuration conflicts.
+
+## 2. The Solution
+
+### A. Reverse Engineering a Valid Configuration
+
+We created a temporary backend app using the CLI to generate a valid `appId` and configuration structure.
+
+```bash
+npx base44 create temp-backend-app
+# Selected "Start from a template" -> "Full-stack"
+```
+
+Extracted the valid App ID from `temp-backend-app/base44/.app.jsonc`.
+
+### B. Configuration Fix
+
+1. **Created `base44/.app.jsonc`**:
+
+   ```jsonc
+   {
+     "id": "699493e5ed3fd6b61dc0b599"
+   }
+   ```
+
+2. **Updated `base44/config.jsonc`**:
+   Removed `appId` to align with the new structure where ID is managed by `.app.jsonc`.
+
+3. **Updated `.env.local`**:
+   Set `BASE44_APP_ID` to the new backend app ID.
+
+### C. Schema Correction
+
+The SDK expects the entity name to be capitalized as `Task`, but our schema definition was lowercased.
+
+**Fixed `base44/entities/task.jsonc`**:
+
+```diff
+- "name": "task",
++ "name": "Task",
+```
+
+## 3. Verification results
+
+### Schema Push
+
+Executed `npx base44 entities push`:
+
+```
+[34mΓùÅ [39m  Found 1 entities to push: Task
+[32mΓùç [39m  Entities pushed successfully
+```
+
+### End-to-End Test
+
+Ran `scripts/trigger_curiosity.ts`:
+
+```
+🕵️ [Curiosity] Scanning for neglected artifacts...
+✨ [Curiosity] Synthesizing Bounty for: swarm_telemetry_server.ts
+   ✅ Bounty Created: Exlpore swarm_telemetry_server.ts 
+```
+
+## 4. Conclusion
+
+The `CuriosityEngine` is now fully operational and can autonomously create tasks in the cloud. The schema is correctly synced, and the project is linked to a valid backend application.

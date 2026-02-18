@@ -1,0 +1,53 @@
+# Phase 83: Neural Independence (The Local Singularity)
+
+This phase focuses on transitioning the AppForge Swarm from a conceptual simulation to a physically independent, local intelligence model. We will break the external API dependencies (OpenAI/Gemini) and activate the **Iron Brain** (Local Inference) as the primary cognitive driver for the Hive Mind.
+
+## User Review Required
+
+> [!IMPORTANT]
+> This phase will enable **Autonomous Code Modification**. The `SingularityEngine` will begin patching the codebase to resolve logical rejections stored in the `AGENTS.md` ledger.
+
+## Proposed Changes
+
+### [Swarm Core]
+
+Summary: Reconfiguring the cognitive routing to prioritize the local Neural Bridge.
+
+#### [MODIFY] [quantum_core.ts](file:///c:/Users/ferna/Downloads/appforge-main/swarm/core/quantum_core.ts)
+
+- Set `TRUE_AI_INDEPENDENCE=true` by default if not specified.
+- Enhance the `consultNeuralBridge` fallback logic to handle common local inference failures gracefully.
+
+#### [MODIFY] [llm.ts](file:///c:/Users/ferna/Downloads/appforge-main/swarm/core/llm.ts)
+
+- Update the default LLM provider to detect the presence of the local `Neural Bridge` (Port 8000) and use it as the primary fallback when `OPENAI_API_KEY` is missing.
+
+### [Launchers]
+
+Summary: Standardizing the environment for local-first intelligence.
+
+#### [MODIFY] [SOVEREIGN_MASTER_START.bat](file:///c:/Users/ferna/Downloads/appforge-main/SOVEREIGN_MASTER_START.bat)
+
+- Explicitly set `TRUE_AI_INDEPENDENCE=true`.
+- Add a pre-flight check for the local python environment (`unsloth`) to ensure the `inference_server.py` can start.
+
+### [Autonomous Loops]
+
+Summary: Activating the recursive healing cycle.
+
+#### [MODIFY] [loop.ts](file:///c:/Users/ferna/Downloads/appforge-main/swarm/core/loop.ts)
+
+- Integrate a call to `SingularityEngine.executeSelfImprovementCycle()` at the end of every 10 intelligence pulses. This will begin processing the backlog of `Quantum Rejections` from the ledger.
+
+## Verification Plan
+
+### Automated Tests
+
+- Run `scripts/verify_coherence.ts` to ensure the new routing logic doesn't degrade system integrity.
+- Run `scripts/test_self_evolution.ts` to verify the `SingularityEngine` can still identify and propose improvements.
+
+### Manual Verification
+
+1. Start the ecosystem via [SOVEREIGN_MASTER_START.bat](file:///c:/Users/ferna/Downloads/appforge-main/SOVEREIGN_MASTER_START.bat).
+2. Monitor terminal logs for `🔗 [Neural Bridge] Connecting to: http://localhost:8000`.
+3. Verify that the `OPENAI_API_KEY missing` warnings in `swarm_telemetry_server.ts` or `loop.ts` logs are replaced by local inference activity.

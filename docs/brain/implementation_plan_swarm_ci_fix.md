@@ -1,0 +1,36 @@
+# Fix Autonomous Swarm Cycle: CI Dependency Failure
+
+Resolve the `ERR_MODULE_NOT_FOUND` error for `bs58` in the GitHub Actions environment.
+
+## Proposed Changes
+
+### Swarm Package
+
+#### [MODIFY] [package.json](file:///c:/Users/ferna/Downloads/appforge-main/swarm/package.json)
+
+- Upgrade `bs58` to `^6.0.0` for native ESM support.
+- This ensures better compatibility with `tsx` and the `NodeNext` resolution used in the project.
+
+#### [ACTION] Synchronize Lockfile
+
+- Run `npm install` locally in the `swarm` directory to ensure `package-lock.json` is 100% in sync with the new dependency.
+- This is critical because CI environments rely on the lockfile for consistent builds.
+
+### GitHub Actions Workflow
+
+#### [MODIFY] [.github/workflows/autonomous_swarm.yml](file:///c:/Users/ferna/Downloads/appforge-main/.github/workflows/autonomous_swarm.yml)
+
+- Update the cache key to be more specific or add a cache-busting suffix if necessary.
+- Ensure `npm install` is run in the root as well if there are cross-directory dependencies.
+
+## Verification Plan
+
+### Automated Tests
+
+- Run `npx tsx integrations/jupiter.ts` locally to ensure no runtime errors after the upgrade.
+- Push the changes and monitor the GitHub Action run.
+
+### Manual Verification
+
+1. Check the "Install Swarm Dependencies" log in the GitHub Action to verify `bs58@6.0.0` is installed.
+2. Verify the "Run Swarm (One-Shot)" step successfully completes the cycle.

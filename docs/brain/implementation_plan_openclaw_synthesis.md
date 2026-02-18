@@ -1,0 +1,57 @@
+# Phase 86: OpenClaw Synthesis (Reverse-Engineering the "Lobster Way" 🦞)
+
+This phase integrates architectural breakthroughs from **OpenClaw** into the AppForge Swarm, transforming it into a proactive, multi-platform "Jarvis" for the local ecosystem.
+
+## User Review Required
+
+> [!IMPORTANT]
+> The "MultiTransportGateway" will require future API tokens for Discord and Telegram if you wish to activate those channels. For now, we will implement the infrastructure and stubs.
+
+## Proposed Changes
+
+### [Sovereign Gateway]
+
+Summary: Transitioning from a simple bridge to a multi-platform gateway.
+
+#### [MODIFY] [sovereign_bridge.ts](file:///c:/Users/ferna/Downloads/appforge-main/swarm/core/sovereign_bridge.ts)
+
+- Rename `UnifiedSovereignBridge` internals to `MultiTransportGateway`.
+- Add a `transports` map to manage multiple active connections (WhatsApp, Discord, Telegram).
+- Implement `broadcastUniversal(text: string)` to send updates to all active channels simultaneously.
+
+#### [NEW] [discord_bridge.ts](file:///c:/Users/ferna/Downloads/appforge-main/swarm/core/discord_bridge.ts)
+
+- Create a stub for Discord integration using `discord.js` patterns (connection handling, command listening).
+
+### [Heartbeat Engine]
+
+Summary: Making the swarm proactive rather than reactive.
+
+#### [MODIFY] [loop.ts](file:///c:/Users/ferna/Downloads/appforge-main/swarm/core/loop.ts)
+
+- Implement `evaluateHeartbeat()`: This function will look at the `realitySensor` signal intensity.
+- If intensity > 0.7, trigger an immediate "Adrenaline Pulse" (extra cycle) regardless of the 5-minute timer.
+- Add "Proactive Awareness" logs to show the swarm is scanning even when not executing.
+
+### [AgentSkills Registry]
+
+Summary: Modularizing capabilities for easier extension.
+
+#### [NEW] [swarm/skills/registry.ts](file:///c:/Users/ferna/Downloads/appforge-main/swarm/skills/registry.ts)
+
+- Define a `Skill` interface (name, category, execution logic).
+- Map existing agents (Sentinel, BugHunter, etc.) to the `AgentSkills` registry.
+- Allow `SingularityEngine` to "request a skill" instead of hardcoding agent calls.
+
+## Verification Plan
+
+### Automated Tests
+
+- Run `npx tsx scripts/verify_gateway_v2.ts` (new) to test multi-transport message routing.
+- Run `npx tsx scripts/test_proactive_heartbeat.ts` (new) to simulate high-intensity signals and verify eary-triggering of the swarm loop.
+
+### Manual Verification
+
+1. Send "gateway:status" via WhatsApp.
+2. Observe the new "Heartbeat" logs in the terminal: `💓 [Heartbeat] Reality Intensity: 0.82 - Triggering Cognitive Adrenaline...`
+3. Verify that the `SingularityEngine` can now reference "Skills" in its inception phase.

@@ -1,0 +1,21 @@
+# Operation Chimera: Persistence & Operations Plan
+
+**Goal**: Clarify the roles of various `.bat` files and ensure system persistence after restarts.
+
+## Proposed Changes
+
+### Documentation
+
+- [NEW] [OPERATIONS_MANUAL.md](file:///c:/Users/ferna/.gemini/antigravity/brain/f042b730-7bc1-49cf-b4b1-81a995c49be9/docs/OPERATIONS_MANUAL.md): A concise map of all launchers.
+- [MODIFY] [FREE_SOVEREIGN_GUIDE.md](file:///c:/Users/ferna/.gemini/antigravity/brain/f042b730-7bc1-49cf-b4b1-81a995c49be9/docs/FREE_SOVEREIGN_GUIDE.md): Add persistence instructions.
+
+## Verification Plan
+
+### Automated Tests
+
+- N/A (Documentation change)
+
+### Manual Verification
+
+1. User to read the `OPERATIONS_MANUAL.md` and confirm clarity.
+2. User to verify the existence of the `LAUNCH_CHIMERA_UPLINK.bat` in the root.

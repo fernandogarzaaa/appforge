@@ -1,0 +1,37 @@
+# Implementation Plan - Phase 8: Quantum Sovereignty
+
+The specific goal is to make the Swarm resilient to Cloud failures (like the Schema Mismatch we just faced).
+We will implement **Sovereign Local Storage** so that `CuriosityEngine` and other agents can continue working even if Base44 Cloud is unreachable or misconfigured.
+
+## User Review Required
+>
+> [!NOTE]
+> This enables "Offline Mode" by default on error. Data will be stored in `.sovereign/db.json`.
+
+## Proposed Changes
+
+### Core Components
+
+#### [NEW] [swarm/core/sovereign_storage.ts](file:///c:/Users/ferna/Downloads/appforge-main/swarm/core/sovereign_storage.ts)
+
+- **Class**: `SovereignStorage`
+- **methods**: `saveEntity`, `findEntity`, `listEntities`.
+- **Storage**: Simple JSON file in `.sovereign/db.json`.
+
+#### [MODIFY] [swarm/tools/base44.ts](file:///c:/Users/ferna/Downloads/appforge-main/swarm/tools/base44.ts)
+
+- **Action**: Wrap API calls in try/catch.
+- **Fallback**: On error (404/500/Network), delegate to `SovereignStorage`.
+
+## Verification Plan
+
+### Automated Tests
+
+1. **Test Offline Mode**
+    - Create `scripts/test_sovereign_mode.ts`.
+    - Disconnect/Mock failure.
+    - Verify data is written to `.sovereign/db.json`.
+
+2. **Verify Curiosity Trigger**
+    - Run `scripts/trigger_curiosity.ts` (which currently fails).
+    - Expect "Success (Sovereign Mode)" instead of Crash.

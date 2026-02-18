@@ -1,0 +1,33 @@
+# Master Launcher & Resilience Patch
+
+**Goal**: Create a single "Master Switch" for the entire Sovereign AI ecosystem and fix the directory-drift bugs in existing launchers.
+
+## Proposed Changes
+
+### Root Folder
+#### [NEW] [SOVEREIGN_MASTER_START.bat](file:///c:/Users/ferna/Downloads/appforge-main/SOVEREIGN_MASTER_START.bat)
+- A master script that sequences the startup of all components (Iron Brain, Sovereign Core, Chimera Uplink).
+- Implements absolute path resolution.
+
+### Launchers (scripts/launchers/)
+
+#### [MODIFY] [LAUNCH_SOVEREIGN_CORE.bat](file:///c:/Users/ferna/Downloads/appforge-main/scripts/launchers/LAUNCH_SOVEREIGN_CORE.bat)
+- Apply robust root detection.
+- Use `%PROJECT_ROOT%` for all internal `cd` and `start` commands.
+
+#### [MODIFY] [launch_neural_bridge.bat](file:///c:/Users/ferna/Downloads/appforge-main/scripts/launchers/launch_neural_bridge.bat)
+- Apply robust root detection.
+
+#### [MODIFY] [launch_iron_brain.bat](file:///c:/Users/ferna/Downloads/appforge-main/scripts/launchers/launch_iron_brain.bat)
+- Apply robust root detection.
+
+## Verification Plan
+
+### Manual Verification
+1.  **Reboot Test Simulation**: Close all terminal windows.
+2.  **Master Launch**: Run `SOVEREIGN_MASTER_START.bat`.
+3.  **Check Components**:
+    - Verify Chrome opens with the Sovereign UI.
+    - Verify `cloudflared` outputs a URL in its own window.
+    - Verify `llama-server` is active in its own window.
+    - Verify `loop.ts` log shows autonomous activity.

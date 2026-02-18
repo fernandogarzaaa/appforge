@@ -1,0 +1,55 @@
+# The Sovereign Tunnel (Free Hosting)
+
+**"Why rent a cloud when you own the hardware?"**
+
+The best free alternative to Akash is **Your Own Machine** + **Cloudflare Tunnel**.
+This architecture allows you to run **Chimera Prime** locally (where it is fast and private) and securely expose it to your GitHub Actions.
+
+## ✅ Advantages
+
+1. **Cost**: $0.00 / month.
+2. **Privacy**: Data never leaves your hardware (except encrypted in transit).
+3. **Power**: Use your local GPU/NPU instead of renting weak vCPUs.
+
+## 🛠️ Setup Guide
+
+### Step 1: Install Cloudflare Tunnel (cloudflared)
+
+**Windows (PowerShell Admin):**
+
+```powershell
+winget install Cloudflare.cloudflared
+```
+
+### Step 2: Start the Chimera Bridge
+
+Ensure your Neural Bridge is running locally:
+
+```bash
+# In appforge-main directory
+npx tsx swarm/core/neural_bridge.ts
+# It should say: Listening on port 8000
+```
+
+### Step 3: Create the Tunnel
+
+In a new terminal:
+
+```bash
+cloudflared tunnel --url http://localhost:8000
+```
+
+### Step 4: The Sovereign Connection
+
+1. Cloudflare will output a URL like: `https://rapid-serving-random-words.trycloudflare.com`
+2. **Copy this URL.**
+3. Go to **GitHub Secrets**.
+4. Set `CHIMERA_CLOUD_URL` = `https://rapid-serving-random-words.trycloudflare.com`
+
+## 🔮 Verification
+
+1. Trigger a GitHub Action manually (or push a commit).
+2. Watch the `Intelligence Pulse` step.
+3. It will connect to your *Local* machine via the Tunnel and use your *Local* Brain to train/think.
+
+**Note**: You must keep your terminal open for the tunnel to remain active.

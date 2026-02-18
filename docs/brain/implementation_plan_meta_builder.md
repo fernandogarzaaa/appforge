@@ -1,0 +1,38 @@
+# Phase 61: Meta-Builder Genesis [BUILD #700]
+
+This phase implements the Meta-Builder, a mobile platform for synthesizing, testing, and deploying apps directly from iOS.
+
+## Proposed Changes
+
+### [Component] Meta-Builder Mobile App [NEW]
+
+#### [NEW] [package.json](file:///c:/Users/ferna/Downloads/appforge-main/apps/mobile/package.json)
+
+#### [NEW] [app.json](file:///c:/Users/ferna/Downloads/appforge-main/apps/mobile/app.json)
+
+#### [NEW] [SynthesisEngine.ts](file:///c:/Users/ferna/Downloads/appforge-main/apps/mobile/src/engine/SynthesisEngine.ts)
+
+- Integrate mobile-optimized MCP.
+- Load Llama-3.2-3B via ExecuTorch.
+
+#### [NEW] [RecursiveCompiler.tsx](file:///c:/Users/ferna/Downloads/appforge-main/apps/mobile/src/core/compiler/RecursiveCompiler.tsx)
+
+- Dynamic Component Injection for React Native.
+- Real-time preview bridge.
+
+#### [NEW] [VoiceIntentBridge.ts](file:///c:/Users/ferna/Downloads/appforge-main/apps/mobile/src/voice/VoiceIntentBridge.ts)
+
+- Integration with Apple Speech API.
+- Oracle v3.1 translation logic.
+
+#### [NEW] [BiometricDeploy.ts](file:///c:/Users/ferna/Downloads/appforge-main/apps/mobile/src/core/security/BiometricDeploy.ts)
+
+- FaceID authorization for deployment actions.
+
+## Verification Plan
+
+### Manual Verification
+
+- Verify the `app.json` scaffolding.
+- Mock Speech-to-Intent flows in the simulator.
+- Validate the "Iron Gray" axiom mapping in generated code.

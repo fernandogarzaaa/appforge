@@ -1,0 +1,48 @@
+# Emergency Fix: Persistent Startup & UI Errors
+
+Resolve the syntax error in the telemetry server, handle port conflicts, and address the Rust compilation failure hindering the Sovereign Kernel.
+
+## User Review Required
+
+> [!IMPORTANT]
+> **Rust Compilation Failure**: The `quantum_bridge` fails to compile with `failed to add native library ... kernel32.dll_imports.lib`. This indicates the Windows SDK is missing or the Rust toolchain is misconfigured.
+> **Action**: Please ensure "Desktop development with C++" is installed in Visual Studio and run `rustup update`.
+
+> [!NOTE]
+> **UI Dependencies**: After my `package.json` update, you **must** run `npm install` inside the `sovereign-ui` directory to resolve the Tailwind CSS error.
+
+## Proposed Changes
+
+### Telemetry Server
+
+#### [MODIFY] [scripts/swarm_telemetry_server.ts](file:///c:/Users/ferna/Downloads/appforge-main/scripts/swarm_telemetry_server.ts)
+
+- Remove the dangling `}` on line 1036.
+
+### Native Launcher
+
+#### [MODIFY] [scripts/launchers/LAUNCH_SOVEREIGN_CORE.bat](file:///c:/Users/ferna/Downloads/appforge-main/scripts/launchers/LAUNCH_SOVEREIGN_CORE.bat)
+
+- Add commands to kill existing processes on ports 3001 and 5174 to prevent `EADDRINUSE`.
+
+```batch
+taskkill /F /IM node.exe /T 2>nul
+```
+
+*(Warning: This kills ALL node processes. A safer targeted approach using `findstr` on `netstat` is preferred.)*
+
+### UI (sovereign-ui)
+
+- **Instruction**: Run `npm install` to apply the Tailwind v4 upgrade.
+
+## Verification Plan
+
+### Automated Tests
+
+- `npx tsx scripts/swarm_telemetry_server.ts` should now start (or at least pass the transform phase) without syntax errors.
+
+### Manual Verification
+
+1. Run `START_SOVEREIGN.bat`.
+2. Check `data/logs/sovereign-ui.log` to see if Tailwind resolution error is gone.
+3. Check `data/logs/rust_oracle.log` to see if compilation succeeds after user environment fix.

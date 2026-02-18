@@ -1,0 +1,37 @@
+# Implementation Plan - Hybrid Cloud Sovereignty
+
+The user requires the "Iron Brain" (custom LLM) to work **both locally and online (cloud)**. This ensures high availability and accessibility while maintaining sovereignty (no reliance on public shared APIs like OpenAI).
+
+## Oracle Consultation (Simulated)
+
+**Query**: "How to extend Sovereign Intelligence to the Cloud without compromising Independence?"
+**Directive**: "Implement the **Sovereign Cloud Link**. The Swarm must not rely on 'rented' intelligence, but it may occupy 'rented' compute. Treat the Cloud as a remote extension of the Local Request Bus. Secure it with Sovereign Keys."
+
+## Proposed Architecture
+
+1. **Unified Iron Brain Client**:
+    - Update `swarm/core/brain_v1.ts` to accept `IRON_BRAIN_URL` from environment variables.
+    - Support both `http://localhost:11434` (Local) and `https://<user-cloud-ip>` (Cloud).
+    - Add `IRON_BRAIN_Auth_KEY` support for securing the remote endpoint.
+
+2. **Workflow Updates**:
+    - Update `autonomous_swarm.yml` to allow `IRON_BRAIN_URL` injection (via GitHub Secrets).
+    - This allows CI/CD to use the "Cloud Brain" instead of needing a local llama-server, potentially speeding up CI.
+
+3. **Deployment Guide**:
+    - Create `docs/CLOUD_SOVEREIGNTY.md` explaining how to host the AppForge-v1 GGUF on a VPS (RunPod, Lambda, DigitalOcean) and connect it.
+
+## Steps
+
+1. **Modify `swarm/core/brain_v1.ts`**:
+    - Read `process.env.IRON_BRAIN_URL`.
+    - Add headers for authentication.
+2. **Modify `swarm/core/llm.ts`**:
+    - Ensure it respects the global config.
+3. **Update `task.md`**:
+    - Add "Hybrid Cloud Sovereignty" phase.
+
+## Verification
+
+- **Configuration**: Set `IRON_BRAIN_URL` to a mock remote address (or real if provided).
+- **Test**: Run `scripts/verify_reality.ts` config check to see if it picks up the remote URL.

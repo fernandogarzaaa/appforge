@@ -1,0 +1,66 @@
+# Vercel Deployment Strategy
+
+The project is currently failing to build on Base44 and has an outdated `vercel.json` that prevents correct Vercel deployment. This plan outlines the steps to enable a successful Vercel deployment for the Vite frontend and the serverless `api/` functions.
+
+## Proposed Changes
+
+### [Root]
+
+#### [MODIFY] [vercel.json](file:///c:/Users/ferna/Downloads/appforge-main/vercel.json)
+
+Replace the static configuration with a modern Vite-compatible setup.
+
+```json
+{
+  "version": 2,
+  "framework": "vite",
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "/api/$1"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}
+```
+
+#### [MODIFY] [package.json](file:///c:/Users/ferna/Downloads/appforge-main/package.json)
+
+Ensure the build command doesn't attempt to run `wasm-pack` on Vercel (since WASM is already pre-built in `src/`).
+
+```json
+"scripts": {
+  "build": "vite build",
+  ...
+}
+```
+
+> [!NOTE]
+> The current `package.json` already has `"build": "vite build"`. The `build:quantum` scripts are separate, which is good for Vercel.
+
+### [Backend Integration]
+
+Vercel doesn't support the long-running process in `backend/server.js`. To deploy the backend logic to Vercel:
+
+1. **Serverless**: Move Express routes into `api/server.js` using `@vercel/node`.
+2. **Separate Deployment**: Host the backend on Render/Railway and update the frontend `VITE_API_URL`.
+
+## Verification Plan
+
+### Automated Tests
+
+- Run `npm run build` locally to ensure the Vite build completes without errors.
+- Validate `vercel.json` schema.
+
+### Manual Verification
+
+- Instructions for the user to link the GitHub repo to Vercel.
+- List required environment variables:
+  - `BASE44_API_KEY`
+  - `BASE44_API_URL`
+  - `VITE_API_URL` (pointing to the backend)

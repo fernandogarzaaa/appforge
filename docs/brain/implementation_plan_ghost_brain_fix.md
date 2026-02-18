@@ -1,0 +1,22 @@
+# Implementation Plan: Ghost Brain CI Stabilization
+
+The "Ghost Brain" CI workflow (`iron-brain-ci.yml`) is failing due to the same React peer dependency conflict as the other workflows. This plan outlines the fix to ensure consistent and successful CI runs.
+
+## Proposed Changes
+
+### [CI/CD Configuration]
+
+#### [MODIFY] [.github/workflows/iron-brain-ci.yml](file:///c:/Users/ferna/Downloads/appforge-main/.github/workflows/iron-brain-ci.yml)
+
+- Update `npm ci` command to `npm ci --legacy-peer-deps` to bypass the `react@19` peer dependency conflict from `@react-three/drei`.
+
+## Verification Plan
+
+### Automated Tests
+
+- **`npm install --legacy-peer-deps`**: Run locally to verify that the command completes successfully without resolution errors.
+- **CI Simulation**: Since I cannot run the GitHub Action directly, I will rely on the local install verification and the fact that this same fix resolved the issues in `quantum_evolution.yml` and `autonomous_swarm.yml`.
+
+### Manual Verification
+
+- Review the `iron-brain-ci.yml` file to confirm the change is correctly applied.

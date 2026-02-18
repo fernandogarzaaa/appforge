@@ -1,0 +1,38 @@
+# Curiosity Engine CI Integration
+
+## Goal Description
+
+Integrate the `CuriosityEngine` into GitHub Actions to autonomously scan the codebase for "neglected" artifacts and generate bounties. This ensures the project continues to evolve even without direct human intervention.
+
+## Proposed Changes
+
+### GitHub Workflows
+
+#### [NEW] [.github/workflows/curiosity_scan.yml](file:///c:/Users/ferna/Downloads/appforge-main/.github/workflows/curiosity_scan.yml)
+
+- Create a new workflow `curiosity_scan.yml`.
+- Trigger:
+  - `schedule`: Every 4 hours (`0 */4 * * *`).
+  - `workflow_dispatch`: Manual trigger for testing.
+- Steps:
+  - Checkout code.
+  - Setup Node.js.
+  - Install dependencies.
+  - Run `npx tsx scripts/trigger_curiosity.ts`.
+- Environment Variables (Secrets):
+  - `BASE44_APP_ID`
+  - `BASE44_API_KEY`
+  - `OPENAI_API_KEY`
+
+### Workflow Audit
+- Scan all `.github/workflows/*.yml` for `BASE44_APP_ID` usage.
+- Ensure they are using `${{ secrets.BASE44_APP_ID }}` and NOT hardcoded values.
+- **Action Required**: User must update the `BASE44_APP_ID` secret in GitHub Settings to the new ID `699493e5ed3fd6b61dc0b599`.
+
+## Verification Plan
+
+### Automated Verification
+
+- Commit the new workflow file.
+- Manually trigger the workflow via `gh workflow run curiosity_scan.yml` (using GitHub CLI if available, or just verify file creation).
+- **Note**: Actual execution on GitHub requires secrets to be set in the repo. I can only verify the file creation and syntax locally.
