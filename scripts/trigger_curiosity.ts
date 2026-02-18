@@ -8,11 +8,11 @@ dotenv.config({ path: path.resolve(process.cwd(), '.env.local') });
 async function trigger() {
     console.log('🕵️ Triggering Manual Curiosity Scan...');
 
-    // Initialize Real Base44 (uses local DB/Logs)
-    const base44 = new Base44Tool();
-    const engine = new CuriosityEngine(base44);
-
     try {
+        // Initialize Real Base44 (uses local DB/Logs)
+        const base44 = new Base44Tool();
+        const engine = new CuriosityEngine(base44);
+
         const bounties = await engine.scanForNovelty(1);
 
         if (bounties.length > 0) {
@@ -27,7 +27,11 @@ async function trigger() {
         }
     } catch (error) {
         console.error('   ❌ Scan failed:', error);
+        process.exit(1);
     }
 }
 
-trigger();
+trigger().catch((err) => {
+    console.error('🏁 [Fatal] Trigger crashed:', err);
+    process.exit(1);
+});
