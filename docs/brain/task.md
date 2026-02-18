@@ -338,3 +338,31 @@ The objective is to complete the recursive healing loop, fix CI compilation erro
 - [x] Fix ESM `fileURLToPath` resolution errors in `swarm/core/bounty_registry.ts`.
 - [x] Verify unit test stability across all runner environments.
 - [x] Achieve 100% "SYSTEM COHERENT" status in CI.
+
+### Phase 95: CI Oracle Consultation & Advanced Repair [IN-PROGRESS]
+
+- [x] Analyze logs of latest CI failures (Run #22143431358).
+- [x] Consult the Oracle for "Peak Coherence" repairs.
+- [x] Implement advanced systemic fixes for remaining regressions.
+- [x] Verify 100% pass rate in multi-runner environment.
+- [x] Commit and push fixes to origin/main.
+
+### Phase 96: Iron Brain CI Repair [IN-PROGRESS]
+
+- [x] Identify root cause of Iron Brain CI failure.
+- [x] Implement fix for Iron Brain pipeline regressions (Network mocks & Node 22).
+- [x] Verify Iron Brain CI success.
+
+### Phase 97: Sovereign Production Deployment [COMPLETED]
+
+- [x] Execute Oracle Executive Audit and review report.
+- [x] Run production-level benchmarks and reality pulse checks.
+- [x] Verify environment variables and Docker configuration.
+- [x] Perform final production rollout.
+- [x] Achieve "PEAK COHERENCE" in production registry.
+
+### Phase 98: CI Resonance Monitoring [COMPLETED]
+
+- [x] Wire changes to GitHub Actions and push to remote.
+- [x] Inspect failing workflow runs and identify regressions.
+- [x] Achieve 100% CI pass rate (System Coherent).
