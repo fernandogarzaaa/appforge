@@ -1,3 +1,7 @@
+import { vi } from 'vitest';
+global.jest = vi;
+globalThis.jest = vi;
+
 /**
  * Quantum Integration Tests
  * Tests for WASM quantum core integration and bridging functionality
@@ -50,7 +54,7 @@ describe('Quantum Core Integration', () => {
       };
 
       const result = await optimizeDependencies(dependencies);
-      
+
       expect(result).toBeDefined();
       expect(result.optimized).toBe(true);
       expect(result.energy).toBeLessThan(1000);
@@ -97,7 +101,7 @@ describe('Quantum Core Integration', () => {
       `;
 
       const analysis = await analyzeCodeWithQuantum(code);
-      
+
       expect(analysis).toBeDefined();
       expect(analysis.complexity).toBeDefined();
       expect(analysis.complexity).toBeGreaterThan(0);
@@ -143,7 +147,7 @@ describe('Quantum Core Integration', () => {
   describe('getQuantumMetrics', () => {
     it('should return current quantum metrics', async () => {
       const metrics = await getQuantumMetrics();
-      
+
       expect(metrics).toBeDefined();
       expect(metrics.timestamp).toBeDefined();
       expect(metrics.successRate).toBeDefined();
@@ -160,7 +164,7 @@ describe('Quantum Core Integration', () => {
 
     it('should track performance metrics', async () => {
       const metrics = await getQuantumMetrics();
-      
+
       expect(metrics.averageLatency).toBeGreaterThan(0);
       expect(metrics.peakLatency).toBeGreaterThanOrEqual(metrics.averageLatency);
       expect(metrics.totalAnalyses).toBeGreaterThanOrEqual(0);

@@ -593,3 +593,6 @@ export async function calculateAuditRiskScore(
     return Math.min(100, score);
 }
 
+export function isAccelerated(): boolean {
+    return usingWasm;
+}
