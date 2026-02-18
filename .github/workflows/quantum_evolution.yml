@@ -17,15 +17,15 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           fetch-depth: 0 # Full history for rebasing
 
-      - name: Run Resonance Check
-        run: npx tsx scripts/resonance_check.ts
-        env:
-          TRUE_AI_INDEPENDENCE: "true"
-
       - name: Setup Node.js (v22 Required)
         uses: actions/setup-node@v4
         with:
           node-version: "22"
+
+      - name: Run Resonance Check
+        run: npx tsx scripts/resonance_check.ts
+        env:
+          TRUE_AI_INDEPENDENCE: "true"
 
       # ⚡ CACHE: Node.js dependencies
       - name: Cache Node Modules
@@ -60,8 +60,9 @@ jobs:
         run: cargo build --release
 
       - name: Install Dependencies
-        working-directory: ./swarm
-        run: npm install --legacy-peer-deps
+        run: |
+          npm install --legacy-peer-deps
+          cd swarm && npm install --legacy-peer-deps
 
       - name: Run Reality Pulse 2.0
         working-directory: ./
