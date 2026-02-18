@@ -1,0 +1,7 @@
+# Task: Integrate Solana Wallet Credentials
+
+- [x] Evaluate dependencies for mnemonic derivation
+- [/] Create derivation script to generate private key from seed phrase
+- [ ] Update [.env.local](file:///c:/Users/ferna/Downloads/appforge-main/.env.local) with `SOLANA_WALLET_ADDRESS` and `SOLANA_PRIVATE_KEY`
+- [ ] Verify wallet validation via loop logic
+- [ ] Finalize walkthrough

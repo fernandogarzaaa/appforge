@@ -1,0 +1,33 @@
+# Comprehensive Wallet and WhatsApp Fix
+
+All remaining instances of the old wallet addresses will be replaced, and the WhatsApp integration will be reset to ensure a fresh, successful link.
+
+## Proposed Changes
+
+### Wallet Address Replacements
+#### [MODIFY] [examples/quantum_commerce_server.js](file:///c:/Users/ferna/Downloads/appforge-main/examples/quantum_commerce_server.js)
+- Replace `2ZeBAFtHq5vNThXMjbZ7E59Msgv6xPpBFn7cw4KMxmot` with `CT1Ud6MvZ4NeACuF1x1EsnGpynLW6s7dWCx7C2LXJwsJ`
+
+#### [MODIFY] [examples/solana_commerce_prod.js](file:///c:/Users/ferna/Downloads/appforge-main/examples/solana_commerce_prod.js)
+- Replace `2ZeBAFtHq5vNThXMjbZ7E59Msgv6xPpBFn7cw4KMxmot` with `CT1Ud6MvZ4NeACuF1x1EsnGpynLW6s7dWCx7C2LXJwsJ`
+
+#### [MODIFY] [examples/solana_commerce.js](file:///c:/Users/ferna/Downloads/appforge-main/examples/solana_commerce.js)
+- Replace `2ZeBAFtHq5vNThXMjbZ7E59Msgv6xPpBFn7cw4KMxmot` with `CT1Ud6MvZ4NeACuF1x1EsnGpynLW6s7dWCx7C2LXJwsJ`
+
+#### [MODIFY] [scripts/verify_solana_commerce.js](file:///c:/Users/ferna/Downloads/appforge-main/scripts/verify_solana_commerce.js)
+- Replace `2ZeBAFtHq5vNThXMjbZ7E59Msgv6xPpBFn7cw4KMxmot` with `CT1Ud6MvZ4NeACuF1x1EsnGpynLW6s7dWCx7C2LXJwsJ`
+
+#### [MODIFY] [scripts/verify_solana_commerce.ts](file:///c:/Users/ferna/Downloads/appforge-main/scripts/verify_solana_commerce.ts)
+- Replace `2ZeBAFtHq5vNThXMjbZ7E59Msgv6xPpBFn7cw4KMxmot` with `CT1Ud6MvZ4NeACuF1x1EsnGpynLW6s7dWCx7C2LXJwsJ`
+
+#### [DELETE] [swarm/benchmarks/real_trading_benchmark_latest.json](file:///c:/Users/ferna/Downloads/appforge-main/swarm/benchmarks/real_trading_benchmark_latest.json)
+- Remove this benchmark file as it contains the old wallet address and will be regenerated.
+
+### WhatsApp Integration
+- Reset the WhatsApp session to force a new QR code scan.
+#### [DELETE] [auth_info_baileys_swarm](file:///c:/Users/ferna/Downloads/appforge-main/auth_info_baileys_swarm)
+#### [DELETE] [auth_test](file:///c:/Users/ferna/Downloads/appforge-main/auth_test)
+
+## Verification Plan
+- Run [launch_swarm.bat](file:///c:/Users/ferna/Downloads/appforge-main/launch_swarm.bat) to confirm the new directive and wallet address are in effect.
+- Scan the fresh WhatsApp QR code to verify connectivity.

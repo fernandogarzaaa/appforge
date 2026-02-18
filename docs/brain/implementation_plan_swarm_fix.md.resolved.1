@@ -1,0 +1,21 @@
+# Swarm Dependency Repair Plan
+
+Fix the `ERR_MODULE_NOT_FOUND` error in the autonomous swarm cycle by restoring missing dependencies in the [swarm](file:///c:/Users/ferna/Downloads/appforge-main/src/utils/QuantumChannel.js#98-119) workspace.
+
+## Proposed Changes
+
+### [Swarm Workspace]
+
+#### [MODIFY] [package.json](file:///c:/Users/ferna/Downloads/appforge-main/swarm/package.json)
+- Add `@solana/web3.js` to `dependencies`.
+- Add `bs58` to `dependencies`.
+
+## Verification Plan
+
+### Automated Tests
+- Run `npm install` in the [swarm](file:///c:/Users/ferna/Downloads/appforge-main/src/utils/QuantumChannel.js#98-119) directory.
+- Execute `npx tsx core/loop.ts` to verify the loop starts without module errors.
+- Run `npx tsx integrations/jupiter.ts` to verify the Solana integration loads correctly.
+
+### Manual Verification
+- Monitor the swarm logs for "Connected to Solana RPC" to confirm successful integration loading.

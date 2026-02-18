@@ -1,0 +1,47 @@
+# Phases 51 & 52: Pure Reality & Legacy Purge
+
+This plan outlines the total transition from a "local tool" to an independent, production-grade platform.
+
+## User Review Required
+
+> [!WARNING]
+> **Phase 52** involves a total purge of Solana dependencies. Any features relying on Solana (Merchant, Raydium Scout, etc.) will be refactored into agnostic placeholders or removed entirely if they do not align with the Sovereign Production mandate.
+
+## Proposed Changes
+
+### Phase 52: Legacy Purge
+
+#### [MODIFY] [loop.ts](file:///c:/Users/ferna/Downloads/appforge-main/swarm/core/loop.ts)
+- [DELETE] `@solana/web3.js` and `bs58` imports.
+- [MODIFY] [validateWalletForTrading](file:///c:/Users/ferna/Downloads/appforge-main/swarm/core/loop.ts#86-162) -> `validateSovereignIdentity`. Now verifies Bridge availability (WhatsApp/iMessage) instead of Solana wallets.
+- [DELETE] [requireWalletForTrading](file:///c:/Users/ferna/Downloads/appforge-main/swarm/core/loop.ts#163-175).
+
+#### [MODIFY] [package.json](file:///c:/Users/ferna/Downloads/appforge-main/package.json)
+- [DELETE] `@solana/web3.js`, `@solana/pay`, `@solana/spl-token`, `@solana/wallet-adapter-*`.
+- [DELETE] `bs58`, `bip39`, `ed25519-hd-key`.
+
+---
+
+### Phase 51: Pure Reality
+
+#### [NEW] [SovereignGit.ts](file:///c:/Users/ferna/Downloads/appforge-main/src/core/git/SovereignGit.ts)
+- [NEW] Automatic commit generation based on Swarm logs.
+- [NEW] Pushes to [main](file:///c:/Users/ferna/Downloads/appforge-main/swarm/core/loop.ts#302-1050) after Kernel verification.
+
+#### [NEW] [ResourceAuditor.ts](file:///c:/Users/ferna/Downloads/appforge-main/src/core/resource/ResourceAuditor.ts)
+- [NEW] Calculates `$Cost_{compute}` of Swarm cycles.
+- [NEW] Implements ROI-based refactor rejection logic.
+
+#### [MODIFY] [SovereignDashboard.tsx](file:///c:/Users/ferna/Downloads/appforge-main/src/components/SovereignDashboard.tsx)
+- [MODIFY] Primary metrics: Build #602, Sync Status (Live Main), Kernel Score.
+
+## Verification Plan
+
+### Automated Tests
+- `grep -r "@solana" .` (Must return zero results).
+- `npm run build` validation.
+- Swarm simulation run with `TRUE_AI_INDEPENDENCE=true`.
+
+### Manual Verification
+- Verify Dashboard reflects "Reality Mode" status.
+- Confirm Git commit flow triggers correctly on "Heal" events.

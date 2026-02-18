@@ -1,0 +1,34 @@
+# Sovereign Command Center: Admin Phase Walkthrough
+
+The Sovereign AI Ecosystem is now equipped with a state-of-the-art **Command Center (SCC)**. This phase focused on admin ease-of-life, providing high-end visuals and remote control capabilities.
+
+## 🖥️ Local PC Command Center
+
+We have implemented a futuristic, high-performance dashboard that provides a real-time window into the swarm's soul.
+
+- **URL**: `http://localhost:5173/admin/sovereign`
+- **Visuals**: HSL-based dark mode, neon telemetry, and glassmorphic UI.
+- **Telemetry**: Real-time log streaming and intelligence metrics (Coherence, Reasoning, Gain).
+- **Control**: Direct toggle for Maintenance Mode (Warm Restart).
+
+## 📱 iPhone / Remote Access
+
+Following Oracle guidance, we've enabled secure iPhone management via a PWA (Progressive Web App) approach.
+
+- **Secure Tunnel**: The dashboard can be securely tunneled to your iPhone for mobile monitoring.
+- **V3 Integration**: A new option has been added to [launch_swarm_v3.bat](file:///c:/Users/ferna/Downloads/appforge-main/launch_swarm_v3.bat) to automate the tunnel creation.
+
+## ⚙️ Architectural Integration
+
+- **[scc_server.ts](file:///c:/Users/ferna/Downloads/appforge-main/scripts/scc_server.ts)**: The real-time backbone, streaming logs via WebSockets.
+- **[ecosystem.sovereign.config.cjs](file:///c:/Users/ferna/Downloads/appforge-main/ecosystem.sovereign.config.cjs)**: Unified PM2 config now manages the SCC server as a core pillar.
+- **Improved Launch V3**: Enhanced batch script with quick-links to local and mobile access.
+
+## Validation Results
+
+- ✅ **WebSocket Sync**: Verified real-time telemetry from all 4 swarm streams.
+- ✅ **UI/UX Excellence**: Premium futuristic design implemented in React.
+- ✅ **Remote Control**: Maintenance toggles from the UI successfully trigger swarm warm-restarts.
+- ✅ **Mobile Bridge**: Local tunnel verified for secure cross-device access.
+
+The Admin is now in full command of the Sovereign AI Ecosystem from any device, anywhere.

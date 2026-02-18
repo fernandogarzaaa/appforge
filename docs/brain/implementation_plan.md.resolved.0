@@ -1,0 +1,33 @@
+# Deploy Swarm with New Directive and Solana Address
+
+Update the swarm's primary objective and set a new default Solana address for payments.
+
+## Proposed Changes
+
+### Swarm Core
+#### [MODIFY] [launch_swarm.bat](file:///c:/Users/ferna/Downloads/appforge-main/launch_swarm.bat)
+- Update "Primary Directive" display string to: `Make money in reality no simulation 💰`
+
+#### [MODIFY] [swarm_configs.ts](file:///c:/Users/ferna/Downloads/appforge-main/swarm/core/swarm_configs.ts)
+- Update `SWARM_OBJECTIVE` in `main`, `finance`, and `crypto` configs to: `Make money in reality no simulation`
+
+### Payment Configuration
+#### [MODIFY] [payment_portal.html](file:///c:/Users/ferna/Downloads/appforge-main/public/payment_portal.html)
+- Update `TREASURY` constant to: `CT1Ud6MvZ4NeACuF1x1EsnGpynLW6s7dWCx7C2LXJwsJ`
+
+#### [MODIFY] [.env](file:///c:/Users/ferna/Downloads/appforge-main/.env)
+- Update `SOLANA_ADMIN_WALLET` to: `CT1Ud6MvZ4NeACuF1x1EsnGpynLW6s7dWCx7C2LXJwsJ`
+
+#### [MODIFY] [.env.production](file:///c:/Users/ferna/Downloads/appforge-main/.env.production)
+- Update `SOLANA_ADMIN_WALLET` to: `CT1Ud6MvZ4NeACuF1x1EsnGpynLW6s7dWCx7C2LXJwsJ`
+
+## Verification Plan
+
+### Automated Tests
+- Run `npm run test:integration` to verify that the Solana configuration endpoint returns the new address.
+  - This requires the backend to be running. I will attempt to run it if possible.
+
+### Manual Verification
+- Inspect [launch_swarm.bat](file:///c:/Users/ferna/Downloads/appforge-main/launch_swarm.bat) to confirm the directive is updated.
+- Inspect [public/payment_portal.html](file:///c:/Users/ferna/Downloads/appforge-main/public/payment_portal.html) to confirm the `TREASURY` address is updated.
+- Verify that the swarm agents log the new objective when started.

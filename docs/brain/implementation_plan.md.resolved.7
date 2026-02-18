@@ -1,0 +1,49 @@
+# Optimized Swarm Deployment & Oracle Guidance
+
+This plan implements the Oracle's recommendations for achieving a self-sustaining ecosystem with robust deployment cycles and unified management.
+
+## User Review Required
+
+> [!IMPORTANT]
+> **Unified Management**: We will migrate from manual [launch_swarm.bat](file:///c:/Users/ferna/Downloads/appforge-main/launch_swarm.bat) terminals to a single **PM2 Dashboard**. This will change how logs are viewed; instead of 4 windows, you will use `pm2 monit` or view individual log files in `swarm/logs`.
+
+## Proposed Changes
+
+---
+
+### [Swarm Core]
+
+#### [NEW] [maintenance_guard.ts](file:///c:/Users/ferna/Downloads/appforge-main/swarm/core/maintenance_guard.ts)
+Implement a utility to check for `swarm/data/maintenance.lock`. Agents will listen to this to perform graceful shutdowns.
+
+#### [MODIFY] [loop.ts](file:///c:/Users/ferna/Downloads/appforge-main/swarm/core/loop.ts)
+Integrate `maintenance_guard` into the main autonomous loop to ensure the "warm-restart" protocol is followed.
+
+---
+
+### [Deployment & Orchestration]
+
+#### [NEW] [ecosystem.sovereign.config.cjs](file:///c:/Users/ferna/Downloads/appforge-main/ecosystem.sovereign.config.cjs)
+A unified PM2 configuration launching:
+- Hyper Intelligence v2
+- Agent Collective
+- Universal Intelligence
+- WhatsApp Bridge
+
+#### [NEW] [launch_swarm_v3.bat](file:///c:/Users/ferna/Downloads/appforge-main/launch_swarm_v3.bat)
+Improved batch file that:
+1. Performs pre-flight checks (WASM, env, node).
+2. Manages the Sovereign PM2 ecosystem.
+3. Provides a dedicated "Maintenance Mode" command.
+
+#### [NEW] [maintenance_mode.ts](file:///c:/Users/ferna/Downloads/appforge-main/scripts/maintenance_mode.ts)
+CLI tool to toggle the maintenance signal.
+
+## Verification Plan
+
+### Automated Tests
+- `npm run swarm:maintenance:on` followed by checking if agents exit.
+- `pm2 status` to verify all components are running under the unified config.
+
+### Manual Verification
+- Execute `launch_swarm_v3.bat` and verify that `pm2 monit` displays all 4 primary streams.

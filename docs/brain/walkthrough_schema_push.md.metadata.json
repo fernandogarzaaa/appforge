@@ -1,0 +1,5 @@
+{
+  "artifactType": "ARTIFACT_TYPE_WALKTHROUGH",
+  "summary": "Walkthrough of the schema push process, detailing how we reverse-engineered the Base44 CLI, created a valid backend app configuration, and corrected the entity schema casing to resolve 422 errors.",
+  "updatedAt": "2026-02-17T16:20:37.073089500Z"
+}

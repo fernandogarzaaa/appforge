@@ -1,0 +1,92 @@
+# Operation "Iron Brain" — Implementation Plan
+
+Total Cognitive Autonomy: A system that doesn't "use" AI, but **is** the AI.
+
+## Hardware Constraints
+
+| Resource | Available | Impact |
+|----------|-----------|--------|
+| GPU | RTX 2060 (6GB VRAM) | QLoRA on ≤3B models; GGUF Q4 inference up to 8B |
+| RAM | 20GB | Sufficient for inference, tight for training |
+| Python | 3.14.2 | Unsloth requires 3.10-3.12 — will use a conda env |
+
+> [!IMPORTANT]
+> The RTX 2060 can fine-tune 1B-3B models with QLoRA (4-bit), and run up to 8B GGUF models for inference. We'll target **Llama-3.2-3B-Instruct** as our base and produce a 4-bit GGUF for local deployment.
+
+## Proposed Changes
+
+---
+
+### Task 1: Dataset Distillation
+
+#### [NEW] [distill.ts](file:///c:/Users/ferna/Downloads/appforge-main/swarm/factory/distill.ts)
+Crawl the swarm's high-confidence execution history to produce a training dataset:
+- Scan `swarm/agents/` (55 agents) to extract system prompts, execution patterns, and decision templates
+- Parse `swarm/core/quantum_core.ts` Oracle consultation patterns → `[ORACLE_STRATEGY]`
+- Parse `swarm/core/loop.ts` execution logs → `[SWARM_EXECUTION]`
+- Extract Truth Anchor validation logic from `src/lib/unifiedQuantumSystem.ts` → `[TRUTH_VALIDATION]`
+- Generate **Alpaca-format** JSONL: `{"instruction": "...", "input": "...", "output": "..."}`
+- Target: 5,000 high-quality rows (realistic for available source material, expandable via augmentation)
+
+#### [NEW] [dataset/](file:///c:/Users/ferna/Downloads/appforge-main/swarm/factory/dataset/)
+Output directory for generated training data in `.jsonl` format.
+
+---
+
+### Task 2: The Forge (Training Environment)
+
+#### [NEW] [train.py](file:///c:/Users/ferna/Downloads/appforge-main/swarm/factory/train.py)
+QLoRA fine-tuning script using **Unsloth** + PyTorch:
+- Base model: `unsloth/Llama-3.2-3B-Instruct` (fits in 6GB with 4-bit)
+- LoRA config: `r=16, alpha=32, target_modules=["q_proj", "k_proj", "v_proj", "o_proj"]`
+- Training: 3 epochs, batch_size=2, gradient_accumulation=4
+- Output: LoRA adapter → merged → **GGUF Q4_K_M** export for `llama.cpp`
+
+#### [NEW] [environment.yml](file:///c:/Users/ferna/Downloads/appforge-main/swarm/factory/environment.yml)
+Conda environment pinned to Python 3.11 (Unsloth compatibility).
+
+> [!WARNING]
+> Python 3.14 is **not supported** by PyTorch/Unsloth. A conda environment with Python 3.11 is required for training. Inference via `llama.cpp` has no Python dependency.
+
+---
+
+### Task 3: Quantum Inference Engine
+
+#### [MODIFY] [sovereign_model.ts](file:///c:/Users/ferna/Downloads/appforge-main/swarm/core/sovereign_model.ts)
+Replace Ollama API with direct `llama.cpp` server integration:
+- Point to local `llama-server` running `appforge-v1.gguf`
+- Implement KV cache warmup for system prompts (persistent context)
+- Add token/s metrics for performance monitoring
+
+#### [NEW] [launch_iron_brain.bat](file:///c:/Users/ferna/Downloads/appforge-main/scripts/launchers/launch_iron_brain.bat)
+Launcher script that:
+1. Starts `llama-server` with `appforge-v1.gguf` on port 11434 (same as Ollama API for drop-in compatibility)
+2. Enables GPU offloading (`-ngl 33` for full RTX 2060 utilization)
+3. Sets KV cache and context window parameters
+
+---
+
+### Task 4: GitHub Action "Ghost Brain" (AppForge-Nano)
+
+#### [NEW] [.github/workflows/iron-brain-ci.yml](file:///c:/Users/ferna/Downloads/appforge-main/.github/workflows/iron-brain-ci.yml)
+CI workflow that:
+- Downloads a quantized nano model (e.g., `TinyLlama-1.1B` Q4 GGUF, ~600MB)
+- Uses `llama.cpp` server in the CI runner for autonomous test validation
+- No external API keys required
+
+#### [NEW] [nano_model_config.json](file:///c:/Users/ferna/Downloads/appforge-main/swarm/factory/nano_model_config.json)
+Configuration for the CI/CD nano model with reduced context window and fast inference settings.
+
+---
+
+## Verification Plan
+
+### Automated Tests
+1. **Dataset Validation**: `npx tsx swarm/factory/distill.ts --dry-run` — verify JSONL output format
+2. **Training Smoke Test**: `python swarm/factory/train.py --max-steps 10 --dry-run` — verify training loop initializes
+3. **Inference Test**: Start `llama-server`, then `curl http://localhost:11434/v1/chat/completions` with a test prompt
+4. **Oracle Verification**: `npx tsx scripts/verify_postfix_oracle.ts` — verify Oracle still functions with new inference backend
+
+### Manual Verification
+- User verifies conda environment setup (`conda activate appforge-train`)
+- User confirms GGUF model loads on RTX 2060 with acceptable token/s speed (target: >15 tok/s)

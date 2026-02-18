@@ -1,0 +1,44 @@
+# Implementation Plan - Repository-Wide Evolutionary Scope
+
+Enable the swarm to analyze, synthesize objectives for, and autonomously patch code across the entire repository, breaking the current `swarm/core` directory constraint.
+
+## Proposed Changes
+
+### [Component] Global Analysis Script
+
+#### [MODIFY] [analyze_antigravity.ts](file:///c:/Users/ferna/Downloads/appforge-main/scripts/analyze_antigravity.ts)
+
+- Expand `CORE_DIR` focus to include major project directories: `src/`, `apps/`, `infrastructure/`, and the root.
+- Implement more robust pattern recognition (e.g., looking for API patterns, UI components, and infrastructure-as-code).
+- Update the blueprint output to categorize insights by module.
+
+---
+
+### [Component] Swarm Core - Singularity & Inception
+
+#### [MODIFY] [singularity_engine.ts](file:///c:/Users/ferna/Downloads/appforge-main/swarm/core/singularity_engine.ts)
+
+- **Inception Layer**: Enhance `synthesizeStrategicObjectives` to allow the Oracle to suggest *any* file as a bounty target based on `antigravity_blueprint.json` insights.
+- **Realization Layer**: Modify `realizeImprovements` to remove hardcoded `targets` mappings. Allow the Oracle to specify the `targetFile` path directly in the patch guidance.
+- **Safety & Sovereignty**: 
+    - Implement a "Sovereign Axiom Filter" to ensure patches align with Decentralization and Local-First principles.
+    - Ensure `AtomicPatcher` continues to validate TypeScript syntax for any repo-wide patches.
+    - [NEW] **Multi-File Transactions**: Extend `AtomicPatcher` to support multi-file commit groups for atomic cross-module refactors.
+
+#### [MODIFY] [reality_sensor.ts](file:///c:/Users/ferna/Downloads/appforge-main/swarm/core/reality_sensor.ts)
+
+- Update `scanSystem` to look for project-wide telemetry and perhaps a "Repo Heatmap" (recently modified files).
+
+## Verification Plan
+
+### Automated Verification
+
+- **Global Analysis Test**: Run `npm run swarm:analyze` and check `src/data/antigravity_blueprint.json` to confirm it contains data from `src/` or other non-swarm directories.
+- **Bounty Generation Test**: Manually trigger `SingularityEngine.executeSelfImprovementCycle()` (can be done via a temporary script) and verify that it can generate a bounty with a target outside of `swarm/core`.
+
+### Manual Verification
+
+- **Directed Patch Test**:
+    1. Create a "Bounty" in `swarm/data/bounty_registry.json` (simulated via JSON edit) that targets a non-critical file like `README.md` or a small utility in `src/`.
+    2. Run the `SingularityEngine` cycle.
+    3. Verify that the file is actually patched and the change is committed.

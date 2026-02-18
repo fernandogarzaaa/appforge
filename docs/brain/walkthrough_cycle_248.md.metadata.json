@@ -1,0 +1,5 @@
+{
+  "artifactType": "ARTIFACT_TYPE_WALKTHROUGH",
+  "summary": "Walkthrough of Cycle #248 Fixes.\n- Fixed `ReferenceError: useMemo` in `SovereignWallet.tsx`.\n- Fixed `Error [ERR_MODULE_NOT_FOUND]: dotenv` in `scripts/reality_pulse.ts`.\n- Fixed `TypeError: fileURLToPath` in `swarm/core/p2p_resonance.ts`.\n- Created `.env.local` to fix `Environment Configuration Error`.\n- Verified via `reality_pulse.ts`.",
+  "updatedAt": "2026-02-17T13:12:08.079638600Z"
+}

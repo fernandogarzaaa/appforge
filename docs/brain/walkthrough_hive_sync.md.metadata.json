@@ -1,0 +1,5 @@
+{
+  "artifactType": "ARTIFACT_TYPE_WALKTHROUGH",
+  "summary": "Walkthrough for \"Syncing the Hive Mind\" (Phase 65)\n- **Objective:** Enable `quantum_core.ts` to use the fine-tuned \"Iron Brain\" model.\n- **Changes:**\n  - Modified `quantum_core.ts` to implement `consultNeuralBridge`.\n  - Created `verify_hive_mind.ts` for rigorous testing.\n- **Verification:**\n  - Successfully routed a strategic question to `localhost:8000`.\n  - Confirmed response from `Iron-Brain-v1`.\n  - Validated fallback mechanism.\n- **Result:** The Swarm is now powered by your custom Fine-Tuned Llama-3.2-3B model.",
+  "updatedAt": "2026-02-16T18:12:34.995488500Z"
+}

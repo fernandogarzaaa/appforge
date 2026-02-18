@@ -1,0 +1,5 @@
+{
+  "artifactType": "ARTIFACT_TYPE_IMPLEMENTATION_PLAN",
+  "summary": "Vercel Deployment Strategy for AppForge.极轴\nUpdating the project for Vercel deployment by fixing the `vercel.json` and ensuring environment variable compatibility. Addressing the 'Failed to install dependencies' issue by standardizing the build configuration.极轴",
+  "updatedAt": "2026-02-15T10:42:30.025690100Z"
+}

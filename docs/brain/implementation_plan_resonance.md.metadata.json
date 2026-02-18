@@ -1,0 +1,5 @@
+{
+  "artifactType": "ARTIFACT_TYPE_IMPLEMENTATION_PLAN",
+  "summary": "Implementation plan for Workflow Resonance and Race Condition Mitigation.\n- **Objective:** Ensure the interconnected workflows can sync state without merge conflicts and verify state freshness.\n- **Proposed Changes:**\n  - Update `autonomous_swarm.yml` and `quantum_evolution.yml` with `git pull --rebase`.\n  - Create `scripts/resonance_check.ts` to validate the age of the Reality Pulse and Singularity state.\n  - Wire `resonance_check.ts` into the workflows.\n- **Verification:** Mock git collision and check resonance script output.",
+  "updatedAt": "2026-02-16T19:01:46.491380500Z"
+}

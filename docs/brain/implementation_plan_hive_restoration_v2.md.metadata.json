@@ -1,0 +1,5 @@
+{
+  "artifactType": "ARTIFACT_TYPE_IMPLEMENTATION_PLAN",
+  "summary": "Plan for Operation Hive Restoration (Phase 73) covering directory stabilization, persistence repair, git identity injection, JSON sensor hotfix, and documentation.",
+  "updatedAt": "2026-02-17T16:35:28.263725800Z"
+}

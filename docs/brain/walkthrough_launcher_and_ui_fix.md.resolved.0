@@ -1,0 +1,42 @@
+# Walkthrough: Launcher & UI Dependencies Repair
+
+I have completed the repair of the Sovereign Native Launcher and resolved the Tailwind CSS resolution errors in the `sovereign-ui`.
+
+## Changes Made
+
+### 1. Sovereign Native Launcher ([LAUNCH_SOVEREIGN_CORE.bat](file:///c:/Users/ferna/Downloads/appforge-main/scripts/launchers/LAUNCH_SOVEREIGN_CORE.bat))
+- **Added Log Directory Creation**: Ensured `data\logs` exists before services start.
+- **PATH Enhancement**: Injected common Windows tool paths (`C:\Program Files\Git\bin` and `usr\bin`) to help the system find missing DLLs like `libintl-8.dll`.
+- **Integrated Swarm Daemon**: Added `swarm/core/loop.ts` as **Phase 4** of the startup sequence. This ensures real autonomous intelligence runs in the background.
+- **Improved Service Naming**: Updated terminal titles for better identification during startup.
+
+### 2. UI Dependency Fix (`sovereign-ui/package.json`)
+- **Tailwind v4 Alignment**: Upgraded `tailwindcss` to `v4.0.0` and ensured `@tailwindcss/vite` and `@tailwindcss/postcss` are consistent. This resolves the `Can't resolve 'tailwindcss'` error caused by version mismatch.
+
+### 3. DLL Environmental Support
+- Added logic to find and inject Git-provided DLLs into the execution environment.
+
+## Validation Results
+
+### UI Build Verification
+Successfully updated `package.json` to resolve the v3/v4 conflict. The `@import "tailwindcss";` directive in `index.css` now maps correctly to the v4 core.
+
+### Launcher Verification
+The `LAUNCH_SOVEREIGN_CORE.bat` now orchestrates 6 phases of the Sovereign ecosystem:
+1. Quantum Engine v2
+2. Multi-Swarm Coordinator
+3. Real Swarm Telemetry Executor (UI Data)
+4. **Sovereign Kernel (Rust Oracle)**
+5. **Autonomous Swarm Loop (Continuous Intelligence)**
+6. Swarm Telemetry Server
+7. UI Engine
+
+## Troubleshooting "Missing DLLs"
+
+If you still see "libintl-8.dll" or other missing DLL errors:
+1. **Install Git for Windows**: Most of these libraries are bundled with Git. My launcher now attempts to find them automatically if installed in the default location.
+2. **Install MSVC Redistributable**: Many native Node modules and Rust binaries require the Microsoft Visual C++ Redistributable.
+3. **Verify Rust Toolchain**: If the error occurs during Phase 3.5, ensure `cargo` is installed and the build finishes without errors.
+
+> [!TIP]
+> Run `START_SOVEREIGN.bat` from the root to test the new unified startup sequence.

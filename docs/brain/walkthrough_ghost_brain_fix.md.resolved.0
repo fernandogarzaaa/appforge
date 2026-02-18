@@ -1,0 +1,13 @@
+# Walkthrough: Phase 76 - Ghost Brain CI Stabilization
+
+In this phase, I applied the critical peer dependency fix to the Ghost Brain CI pipeline ([iron-brain-ci.yml](file:///c:/Users/ferna/Downloads/appforge-main/.github/workflows/iron-brain-ci.yml)), ensuring the stability of the "Iron Brain" autonomous testing environment.
+
+## Changes Made
+
+### CI/CD Configuration
+- **Ghost Brain Repair:** Updated [iron-brain-ci.yml](file:///c:/Users/ferna/Downloads/appforge-main/.github/workflows/iron-brain-ci.yml) to use `npm ci --legacy-peer-deps`. This resolves the `ERESOLVE could not resolve` error caused by the conflict between the project's React 18 base and the React 19 requirement from `@react-three/drei`.
+
+## Verification
+- **Consistency Check:** Verified that [iron-brain-ci.yml](file:///c:/Users/ferna/Downloads/appforge-main/.github/workflows/iron-brain-ci.yml) now matches the dependency installation strategy of [quantum_evolution.yml](file:///c:/Users/ferna/Downloads/appforge-main/.github/workflows/quantum_evolution.yml) and [autonomous_swarm.yml](file:///c:/Users/ferna/Downloads/appforge-main/.github/workflows/autonomous_swarm.yml).
+
+The Ghost Brain is now aligned with the Swarm's immune system protocols.

@@ -1,0 +1,51 @@
+# Walkthrough: Launcher, Telemetry & UI Repair
+
+I have completed the repair of the Sovereign ecosystem's startup sequence, telemetry server, and UI dependencies.
+
+## Changes Made
+
+### 1. Sovereign Native Launcher ([LAUNCH_SOVEREIGN_CORE.bat](file:///c:/Users/ferna/Downloads/appforge-main/scripts/launchers/LAUNCH_SOVEREIGN_CORE.bat))
+- **Port Clearance Logic**: Added logic to automatically terminate processes on ports **3001** (Telemetry) and **5174** (UI). This prevents the "Address in use" errors that were blocking startup.
+- **PATH Enhancement**: Injected common Windows tool paths (`C:\Program Files\Git\bin` and `usr\bin`) help find missing DLLs like `libintl-8.dll`.
+- **Integrated Swarm Daemon**: Added `swarm/core/loop.ts` as **Phase 4** of the startup sequence. This ensures real autonomous intelligence runs in the background.
+
+### 2. Telemetry Server Syntax Repair (`scripts/swarm_telemetry_server.ts`)
+- **Fixed Dangling Brace**: Removed a syntax error at line 1036 that was causing transform failure and preventing the service from starting.
+
+### 3. UI Dependency Fix (`sovereign-ui/package.json`)
+- **Tailwind v4 Alignment**: Upgraded `tailwindcss` to `v4.0.0` to resolve the resolution mismatch in Vite.
+
+## Validation Results
+
+### Swarm Daemon Status
+The `swarm_daemon.log` shows the loop is running **successfully**!
+- ✅ WhatsApp connected
+- ✅ Solana connected
+- ✅ Autonomous cycles active
+
+### Telemetry & UI Status
+- **Telemetry Server**: Syntax error is resolved. Port 3001 is now automatically cleared before start.
+- **UI Engine**: Port 5174 is cleared. Tailwind v4 configuration is updated in `package.json`.
+
+## Critical Next Steps for the User
+
+To finalize the restoration, please perform the following actions:
+
+1. **Install UI Dependencies**:
+   Open a terminal and run:
+   ```cmd
+   cd sovereign-ui
+   npm install
+   ```
+   This is required to apply the Tailwind v4 upgrade.
+
+2. **Fix Rust Environment**:
+   The `quantum_bridge` (Oracle) is failing to compile because of a missing Windows SDK component (`kernel32.dll_imports.lib`).
+   - Please ensure **"Desktop development with C++"** is installed in their Visual Studio Installer.
+   - Run `rustup update` in a terminal.
+
+3. **Restart the App**:
+   Run `START_SOVEREIGN.bat` from the root directory.
+
+> [!TIP]
+   By default, the launcher now clears any stuck Node processes on the UI/Telemetry ports, so you shouldn't see "Address already in use" anymore.

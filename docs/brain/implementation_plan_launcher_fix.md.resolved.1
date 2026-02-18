@@ -1,0 +1,34 @@
+# Launcher Path Resilience Patch
+
+**Goal**: Fix the "Path not found" and "Missing package.json" errors by making the directory switching logic more robust.
+
+## Proposed Changes
+
+### [Sovereign Core Launcher]
+#### [MODIFY] [LAUNCH_SOVEREIGN_CORE.bat](file:///c:/Users/ferna/Downloads/appforge-main/scripts/launchers/LAUNCH_SOVEREIGN_CORE.bat)
+- Replace `cd /d "%~dp0..\.."` with a two-step robust directory change.
+- Use a `PROJECT_ROOT` variable to ensure all subsequent `cd` operations are relative to the true root.
+- Add checks to verify directory existence before jumping.
+
+```batch
+:: Robust Root Detection
+set "SCRIPT_DIR=%~dp0"
+cd /d "%SCRIPT_DIR%"
+cd ..\..
+set "PROJECT_ROOT=%CD%"
+
+:: Verification
+if not exist "%PROJECT_ROOT%\swarm" (
+    echo ❌ ERROR: Could not find project root. Currently at: %CD%
+    pause
+    exit /b 1
+)
+```
+
+## Verification Plan
+### Automated Tests
+- N/A
+
+### Manual Verification
+1. Run the updated [LAUNCH_SOVEREIGN_CORE.bat](file:///c:/Users/ferna/Downloads/appforge-main/scripts/launchers/LAUNCH_SOVEREIGN_CORE.bat) and verify it no longer reports "path not found" for the Rust Oracle or UI.
+2. Confirm the UI logs are being written to the correct `data/logs` folder in the project root.

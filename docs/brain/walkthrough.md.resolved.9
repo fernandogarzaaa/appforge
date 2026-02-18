@@ -1,0 +1,35 @@
+# Sovereign AI Ecosystem: Native Desktop Walkthrough
+
+The Sovereign AI Ecosystem has evolved into a **Native Desktop Application**. This provides a dedicated, "real app" experience for the admin on Windows, independent of the web browser.
+
+## 🖥️ Sovereign Desktop App (Native)
+
+We've wrapped the Command Center into an **Electron-based shell**.
+
+- **Standalone Window**: Runs as its own process, can be pinned to your Taskbar.
+- **System Tray Integration**: Stays active in the tray for silent monitoring. Right-click the icon for quick-access commands.
+- **Native Notifications**: Receives system-level alerts for maintenance and swarm status changes.
+- **Launch Command**: Option 6 in [launch_swarm_v3.bat](file:///c:/Users/ferna/Downloads/appforge-main/launch_swarm_v3.bat) now launches the native app automatically.
+
+## 🕹️ Dynamic Command Suite
+
+Your admin capabilities now span three interfaces:
+
+1.  **Desktop App**: The primary "pro" management shell.
+2.  **Web Dashboard**: Lightweight local access at `http://localhost:5173/admin/sovereign`.
+3.  **iPhone Bridge**: Remote monitoring via the secure PWA tunnel.
+
+## ⚙️ Architectural Integration
+
+- **[electron-main.cjs](file:///c:/Users/ferna/Downloads/appforge-main/scripts/electron-main.cjs)**: The desktop shell engine.
+- **`app:desktop`**: New NPM command for native execution.
+- **Universal V3 Dashboard**: The [launch_swarm_v3.bat](file:///c:/Users/ferna/Downloads/appforge-main/launch_swarm_v3.bat) remains the master orchestrator, now including the "Native" deployment path.
+
+## Validation Results
+
+- ✅ **Native Execution**: Successfully launched and connected to the telemetry server.
+- ✅ **Tray Support**: Verified background residency and context menu functionality.
+- ✅ **Process Orchestration**: Desktop app correctly interacts with the PM2 ecosystem state.
+- ✅ **Visual Fidelity**: Futuristic dashboard scales seamlessly into a standalone Windows frame.
+
+The Sovereign AI Ecosystem is no longer just a script—it is a full-fledged **Desktop Software Suite**. 🚀

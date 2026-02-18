@@ -1,0 +1,5 @@
+{
+  "artifactType": "ARTIFACT_TYPE_WALKTHROUGH",
+  "summary": "Walkthrough of the successful swarm dependency and reference repair.极轴+Swarm 依赖项和引用修复成功的演示。极轴+解决了 `bs58` 缺失和 `getCollectiveMembers` 未定义的错误。极轴",
+  "updatedAt": "2026-02-15T19:47:28.150190900Z"
+}

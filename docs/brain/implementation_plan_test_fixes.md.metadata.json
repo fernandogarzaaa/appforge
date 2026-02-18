@@ -1,0 +1,5 @@
+{
+  "artifactType": "ARTIFACT_TYPE_IMPLEMENTATION_PLAN",
+  "summary": "Plan to fix residual test failures.\n- Create `vitest.config.ts` to load `.env.local`.\n- Create `tests/setup.ts` for global mocks.\n- Refactor `p2p_resonance.ts` to use `process.cwd()` instead of `import.meta.url`.",
+  "updatedAt": "2026-02-17T13:18:36.951605500Z"
+}

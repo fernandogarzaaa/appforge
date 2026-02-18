@@ -1,0 +1,26 @@
+# Repair Sovereign Native Launcher
+
+Integrate the autonomous swarm daemon ([loop.ts](file:///c:/Users/ferna/Downloads/appforge-main/swarm/core/loop.ts)) into the native application's startup sequence and ensure the environment is correctly prepared (log directories, etc.).
+
+## Proposed Changes
+
+### Native Launchers
+
+#### [MODIFY] [LAUNCH_SOVEREIGN_CORE.bat](file:///c:/Users/ferna/Downloads/appforge-main/scripts/launchers/LAUNCH_SOVEREIGN_CORE.bat)
+
+- Add `if not exist data\logs mkdir data\logs` to ensure logs can be written.
+- Add a new startup phase for the **Sovereign Swarm Daemon** ([swarm/core/loop.ts](file:///c:/Users/ferna/Downloads/appforge-main/swarm/core/loop.ts)).
+- Update the **Real Swarm Executor** description to clarify it's for UI telemetry.
+- Improve wait times for more reliable sequential booting.
+
+## Verification Plan
+
+### Automated Verification
+None (Batch file orchestration is best verified manually or via process inspection).
+
+### Manual Verification
+1. Run [START_SOVEREIGN.bat](file:///c:/Users/ferna/Downloads/appforge-main/START_SOVEREIGN.bat) from the root.
+2. Verify that a new terminal window or background process starts for [swarm/core/loop.ts](file:///c:/Users/ferna/Downloads/appforge-main/swarm/core/loop.ts).
+3. Check `data/logs/swarm_daemon.log` to ensure the loop is running without errors.
+4. Open the Sovereign UI (localhost:5174) and verify that "Real Mode" data is being updated by the daemon.
+5. Check if the "Sovereign Bridge" (WhatsApp/iMessage) initializes if configured in [.env.local](file:///c:/Users/ferna/Downloads/appforge-main/.env.local).

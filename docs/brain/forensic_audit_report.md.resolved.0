@@ -1,0 +1,60 @@
+# SYSTEM AUDIT: AppForge/Sovereign Forensic Report
+
+## PHASE 1: DIRECTORY & LINKAGE MAPPING
+
+- [src/utils/aiAgentCore.js]: [STATUS: OK]
+- [ISSUE]: Initially searched for .ts, but confirmed existence as .js.
+- [REPAIR]: None required. Linkage in SovereignIDE.jsx is correct.
+
+- [src/swarm/prompts/global_instructions.md]: [STATUS: BROKEN]
+- [ISSUE]: File contains only a single-line LLM refusal message instead of architectural laws.
+- [REPAIR]: Replace content with formal system instructions for the Oracle.
+
+- [contracts/]: [STATUS: MISSING]
+- [ISSUE]: Directory referenced in audit request does not exist in the root.
+- [REPAIR]: Locate or initialize the contracts directory for Solana anchor/programs.
+
+---
+
+## PHASE 2: SECURITY & ORACLE INTEGRITY
+
+- [.env]: [STATUS: BROKEN/CRITICAL]
+- [ISSUE]: Hardcoded `SOLANA_PRIVATE_KEY` found. This constitutes a severe leakage risk.
+- [REPAIR]: `SOLANA_PRIVATE_KEY` must be moved to an encrypted secret manager or wiped in favor of a local-only keystore.
+- [ACTION]: Rotate key immediately.
+
+- [src/components/auth/SovereignWallet.tsx]: [STATUS: BROKEN]
+- [ISSUE]: Current implementation is a pure visual mock. It renders children unconditionally (line 13) and does not verify wallet connection.
+- [REPAIR]: Integrate `@solana/wallet-adapter-react` to conditionally gate content based on `connected` state.
+
+- [src/components/RaydiumScout.tsx]: [STATUS: BROKEN]
+- [ISSUE]: "Honesty Gating" detected. User can bypass the 0.1 SOL requirement by simply clicking a local toggle (setIsUnlocked(true) on line 50).
+- [REPAIR]: Require a valid transaction signature verify-callback before setting `isUnlocked`.
+
+---
+
+## PHASE 3: THE QUANTUM EVOLUTION CHECK
+
+- [src/swarm/orchestrator.ts]: [STATUS: OK]
+- [ISSUE]: Superposition logic (Promise.allSettled) verified. It concurrently simulates 3 paths and collapses onto the first Q-Core validated result.
+- [REPAIR]: None required. Oracle call to qcore.exe is active.
+
+- [qcore.exe]: [STATUS: OK]
+- [ISSUE]: Successfully unified with the `quantum-core` engine.
+- [REPAIR]: Deployment confirmed at project root.
+
+---
+
+## PHASE 4: THE GAP REPORT (LEVEL 5 AUTONOMY)
+
+### 1. Persistence
+- [ISSUE]: The Orchestrator and Scout run as standard Node/TSX processes. They will terminate if the terminal closes.
+- [REPAIR]: Deploy via `pm2 start src/server.ts --name sovereign-orchestrator` to achieve background persistence.
+
+### 2. Git Keeper Reliability
+- [ISSUE]: Depends on local git credentials. Pushes fail silently if MFA or authentication is required at the shell level.
+- [REPAIR]: Implement Git Personal Access Token (PAT) support in [src/swarm/git_manager.ts](file:///c:/Users/ferna/Downloads/appforge-main/src/swarm/git_manager.ts).
+
+### 3. Verification Immunity
+- [ISSUE]: The Swarm generates tests, but does not yet run a self-correction loop if the tests themselves fail to compile.
+- [REPAIR]: Add a `cargo check` step into [test_gen.ts](file:///c:/Users/ferna/Downloads/appforge-main/src/swarm/oracle/test_gen.ts) before creating the antibody.

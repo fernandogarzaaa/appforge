@@ -1,0 +1,23 @@
+# Implementation Plan - GitHub Action Patches (Phase 71 & 72)
+
+This plan outlines the updates required for the GitHub Action workflows to support the newly implemented **Autonomous Bounty** and **Quantum Orchestration** systems.
+
+## Proposed Changes
+
+### [Workflows]
+
+#### [MODIFY] [quantum_evolution.yml](file:///c:/Users/ferna/Downloads/appforge-main/.github/workflows/quantum_evolution.yml)
+- **Environment Variables:** Add `NODE_ID: "GA-EVOLUTION"` and `RESONANCE_PORT: "11435"` to the `Run Quantum Evolution` step.
+- **State Persistence (Cache):** Add [src/data/bounty_ledger.json](file:///c:/Users/ferna/Downloads/appforge-main/src/data/bounty_ledger.json) and [src/data/economic_state.json](file:///c:/Users/ferna/Downloads/appforge-main/src/data/economic_state.json) to the `Cache Evolution State` step.
+- **Artifact Commits:** Update `git add` to include the new bounty and economic ledgers.
+
+#### [MODIFY] [autonomous_swarm.yml](file:///c:/Users/ferna/Downloads/appforge-main/.github/workflows/autonomous_swarm.yml)
+- **Environment Variables:** Add `NODE_ID: "GA-SWARM"` and `RESONANCE_PORT: "11435"` to the `Run Intelligence Pulse` and `Run Swarm` steps.
+- **State Persistence (Cache):** Add bounty and economic state files to the `Cache Swarm Memory` step.
+- **Artifact Commits:** Update `git add` to include the new bounty and economic ledgers.
+
+## Verification Plan
+
+### Automated Verification
+- **Workflow Linting:** I will use the `run_command` tool to validate the YAML syntax of the modified workflows if a linter is available (e.g., `yamllint` or simply checking if git accepts them).
+- **Manual Path Check:** Verify that all paths added to `git add` and [Cache](file:///c:/Users/ferna/Downloads/appforge-main/swarm/core/brain_v1.ts#136-160) actually exist in the repository structure.

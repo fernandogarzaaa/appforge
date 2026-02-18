@@ -1,0 +1,38 @@
+# Implementation Plan: Sovereign Portable Core Consolidation
+
+This plan outlines the "compilation" and migration of the core Sovereign Intelligence components into the standalone `quantum-portable` project.
+
+## User Review Required
+
+> [!IMPORTANT]
+> This will overwrite any legacy logic in `quantum-portable` with the new high-fidelity Gemini 3 / Oracle 3.0 suite.
+
+## Proposed Changes
+
+### [Component: Intelligence Core Migration]
+
+#### [NEW] [quantum_core.ts](file:///c:/Users/ferna/Downloads/appforge-main/quantum-portable/swarm/core/quantum_core.ts)
+- Port the latest Oracle 3.0 logic from `appforge-main`.
+- Integrate the high-speed quantum simulation engine.
+
+#### [NEW] [gemini_skill_adapter.ts](file:///c:/Users/ferna/Downloads/appforge-main/quantum-portable/swarm/core/gemini_skill_adapter.ts)
+- Port the Gemini 3 SDK adapter for high-fidelity reasoning.
+
+#### [NEW] [hyper_brain.ts](file:///c:/Users/ferna/Downloads/appforge-main/quantum-portable/swarm/core/hyper_brain.ts)
+- Port the Hyper Intelligence expert routing middleware.
+
+### [Component: Orchestration]
+
+#### [NEW] [QUANTUM_LAUNCHER.bat](file:///c:/Users/ferna/Downloads/appforge-main/quantum-portable/QUANTUM_LAUNCHER.bat)
+- Create a standalone batch script to initialize the portable core and a CLI interface.
+
+#### [NEW] [package.json](file:///c:/Users/ferna/Downloads/appforge-main/quantum-portable/package.json)
+- Define a lightweight dependency list (only `@google/genai`, `socket.io-client`, etc.) for portability.
+
+## Verification Plan
+
+### Automated Verification
+- Run a `portable_benchmark.ts` within the `quantum-portable` folder to ensure the core resolves correctly.
+
+### Manual Verification
+- Verify that double-clicking `QUANTUM_LAUNCHER.bat` initializes the Oracle without errors.

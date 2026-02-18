@@ -1,0 +1,20 @@
+# Investigation and Patching of Failed GitHub Action Workflows
+
+- [x] Research GitHub Action failures and log messages
+- [x] Analyze [swarm/core/loop.ts](file:///c:/Users/ferna/Downloads/appforge-main/swarm/core/loop.ts) for fatal environment checks
+- [x] Analyze LLM client logic and [SovereignInference](file:///c:/Users/ferna/Downloads/appforge-main/src/swarm/core/Inference.ts#4-77)
+- [x] Develop implementation plan to enforce CI-stable Local Sovereignty
+- [x] Update GitHub Action workflows with `TRUE_AI_INDEPENDENCE` flag
+- [x] Patch [swarm/core/loop.ts](file:///c:/Users/ferna/Downloads/appforge-main/swarm/core/loop.ts) to prevent fatal exits in CI/Sovereign mode
+- [x] Refactor [src/swarm/llm_client.ts](file:///c:/Users/ferna/Downloads/appforge-main/src/swarm/llm_client.ts) to eliminate top-level cloud SDK dependencies
+- [x] Adjust [HyperModelRouter](file:///c:/Users/ferna/Downloads/appforge-main/swarm/core/hyper/hyper_model_router.ts#176-421) to prioritize local models even for complex tasks
+- [x] Verify fix by running a simulated local swarm cycle
+
+## Phase 50: Syntax & Hook Normalization (Build #601)
+
+- [x] Research unused imports and hook violations
+- [x] Create implementation plan for Build #601
+- [x] Remove unused imports across 4 components
+- [/] Fix React Hook order in [CausalInferenceViewer.jsx](file:///c:/Users/ferna/Downloads/appforge-main/src/components/anomalies/CausalInferenceViewer.jsx)
+- [ ] Run `npm run build` locally to verify zero-defect baseline
+- [ ] Update evolution ledger (walkthrough.md)

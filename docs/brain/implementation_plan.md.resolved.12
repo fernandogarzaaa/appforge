@@ -1,0 +1,49 @@
+# Sovereign Standalone App: Overhaul Plan
+
+The objective is to create a **completely standalone** native desktop application for the Sovereign AI Ecosystem. This will be a distinct piece of software, physically decoupled from the AppForge web app builder, providing a true "Antigravity-like" management experience.
+
+## User Review Required
+
+> [!IMPORTANT]
+> **Complete Decoupling**: We are moving the Sovereign UI out of the `src/` folder of your web project and into its own dedicated micro-project. This ensures that when you open the "Sovereign AI" app, it is a dedicated tool for your swarm, not a page in your website builder.
+
+## Proposed Changes
+
+---
+
+### [Sovereign UI Workspace]
+
+#### [NEW] [sovereign-ui/](file:///c:/Users/ferna/Downloads/appforge-main/scripts/sovereign-ui)
+A dedicated, lightweight React + Vite project exclusively for the Sovereign interface.
+- Includes its own [package.json](file:///c:/Users/ferna/Downloads/appforge-main/package.json), `vite.config.ts`, and asset folder.
+- Contains the [AdminSovereign](file:///c:/Users/ferna/Downloads/appforge-main/src/pages/AdminSovereign.tsx#39-319) dashboard as its main entry point.
+
+#### [NEW] [install_sovereign_ui.ps1](file:///c:/Users/ferna/Downloads/appforge-main/scripts/install_sovereign_ui.ps1)
+A setup script to initialize the standalone UI workspace and install its specific dependencies.
+
+---
+
+### [Desktop App Shell]
+
+#### [MODIFY] [electron-main.cjs](file:///c:/Users/ferna/Downloads/appforge-main/scripts/electron-main.cjs)
+Update the Electron main process to:
+- Load the local dev server of the **Sovereign UI project** (Port 5174) instead of the main project (Port 5173).
+- Implement a fully frameless, transparent-ready window for a premium, standalone software feel.
+
+---
+
+### [Unified Deployment]
+
+#### [MODIFY] [launch_swarm_v3.bat](file:///c:/Users/ferna/Downloads/appforge-main/launch_swarm_v3.bat)
+Update the "Native App" launch command to start the dedicated Sovereign UI engine separately from the AppForge builder.
+
+#### [MODIFY] [SovereignApp.bat](file:///c:/Users/ferna/Downloads/appforge-main/SovereignApp.bat)
+Update the "One-Click" launcher to orchestrate the standalone UI project.
+
+## Verification Plan
+
+### Automated Tests
+- Verify that `npm run app:desktop` opens a window that is EXCLUSIVELY the Sovereign Command Center, without any AppForge navigation or sidebars.
+
+### Manual Verification
+- Confirm that the AppForge web app can still be developed on `localhost:5173` while the Sovereign UI runs independently on its own port/process.

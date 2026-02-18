@@ -1,0 +1,5 @@
+{
+  "artifactType": "ARTIFACT_TYPE_WALKTHROUGH",
+  "summary": "Walkthrough for Phase 76: Ghost Brain CI Stabilization.\n- Resolved React 19 peer dependency conflicts in `iron-brain-ci.yml`.\n- Aligned Ghost Brain CI with the main evolution workflows.",
+  "updatedAt": "2026-02-17T03:52:19.669237800Z"
+}

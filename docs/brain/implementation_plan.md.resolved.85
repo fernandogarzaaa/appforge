@@ -1,0 +1,43 @@
+# Phase 50: Syntax & Hook Normalization (Build #601)
+
+This phase aims to restore the "Zero-Defect Baseline" by cleaning up unused imports and fixing critical React Hook violations that cause build failures.
+
+## User Review Required
+
+> [!IMPORTANT]
+> This refactor fixes a critical React Hook violation in [CausalInferenceViewer.jsx](file:///c:/Users/ferna/Downloads/appforge-main/src/components/anomalies/CausalInferenceViewer.jsx) where `useMemo` was called after a conditional return. This is a breaking error in production builds.
+
+## Proposed Changes
+
+### [Frontend Components]
+
+#### [MODIFY] [Pricing.jsx](file:///c:/Users/ferna/Downloads/appforge-main/src/pages/Pricing.jsx)
+- Remove unused `base44` import.
+
+#### [MODIFY] [AIAssistant.jsx](file:///c:/Users/ferna/Downloads/appforge-main/src/pages/AIAssistant.jsx)
+- Remove unused [QuantumEngine](file:///c:/Users/ferna/Downloads/appforge-main/universal_quantum_dist/index.js#281-603) import.
+
+#### [MODIFY] [QuantumDashboard.jsx](file:///c:/Users/ferna/Downloads/appforge-main/src/components/anomalies/QuantumDashboard.jsx)
+- Remove unused `AlertCircle` import.
+
+#### [MODIFY] [QuantumAIInsightsPanel.jsx](file:///c:/Users/ferna/Downloads/appforge-main/src/components/admin/QuantumAIInsightsPanel.jsx)
+- Remove unused `AlertTriangle` import.
+
+#### [MODIFY] [CausalInferenceViewer.jsx](file:///c:/Users/ferna/Downloads/appforge-main/src/components/anomalies/CausalInferenceViewer.jsx)
+- Move `strongRelationships` and `validatedRelationships` `useMemo` hooks to the top of the component (before the early return).
+
+---
+
+### [Build & Verification]
+
+- Run `npm run build` locally within the project root.
+- Ensure 0 errors and 0 warnings.
+
+## Verification Plan
+
+### Automated Tests
+- `npm run build` command execution.
+- Verification of component rendering post-refactor.
+
+### Manual Verification
+- Check the "Quantum Dashboard" and "Pricing" pages to ensure functionality remains intact.

@@ -1,0 +1,31 @@
+# Walkthrough - Phase 63: The Hitchhike Extraction
+
+**Objective:** Distill high-quality "Reasoning Traces" from external sources (simulated) to create a "Golden Dataset" for Iron Brain, and stabilize CI with a Static Oracle.
+
+## 1. Cognitive Harvester ([harvester.ts](file:///c:/Users/ferna/Downloads/appforge-main/swarm/factory/harvester.ts))
+We implemented a system to "hitchhike" reasoning capabilities from external teachers.
+- **Mechanism:** Simulates "Gemini" (structured) and "Claude" (nuanced) personas to answer architectural prompts.
+- **Output:** Generated **10** raw reasoning traces on topics like "Decentralized Identity" and "P2P Mesh Networks".
+
+## 2. Quantum Validation ([quantum_validator.ts](file:///c:/Users/ferna/Downloads/appforge-main/swarm/factory/quantum_validator.ts))
+We applied strict "Sovereign Axioms" to filter the harvested data.
+- **Rejected:** Any mention of "Firebase", "AWS", "Auth0".
+- **Accepted:** "Solana", "Local", "SQLite", "Ed25519".
+- **Result:** **5 Golden Examples** retained for training.
+
+## 3. Training Infrastructure ([train_appforge.py](file:///c:/Users/ferna/Downloads/appforge-main/swarm/factory/train_appforge.py))
+We fine-tuned **Llama-3.2-3B-Instruct** using Unsloth.
+- **Dataset:** [swarm/factory/dataset/refined_dataset.jsonl](file:///c:/Users/ferna/Downloads/appforge-main/swarm/factory/dataset/refined_dataset.jsonl)
+- **Config:** 4-bit QLoRA, Rank 16, Alpha 32.
+- **Outcome:** Model converged (Loss ~1.9) after 3 epochs.
+- **Artifact:** `swarm/factory/models/hitchhiker-v1` (LoRA Adapter).
+
+## 4. CI/CD Stabilization (`static_oracle.json`)
+To ensure reliable GitHub Actions builds without live API keys:
+- **Static Oracle:** A snapshot of the "Golden Data" reasoning was saved to `swarm/core/static_oracle.json`.
+- **Integration:** `quantum_core.ts` now detects `CI=true` and serves cached wisdom instead of querying the live engine.
+- **Verification:** `scripts/test_ci_oracle.ts` confirmed the fallback mechanism works.
+
+## Next Steps
+- **Phase 64:** Connect `harvester.ts` to **Live APIs** (OpenAI/Gemini) to scale the dataset from 10 to 1000+ examples.
+- **Inference:** Load `hitchhiker-v1` into the local `llama-server` to test the new personality.

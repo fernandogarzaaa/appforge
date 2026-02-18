@@ -1,0 +1,52 @@
+# Phases 43-45: Sovereignty & Strategic Hardening
+
+This plan outlines the total enforcement of Local-Only Sovereignty, parallelized inference hardening, and Mass Parallel Evolution (Turbo-Heal) to clear the system backlog and achieve a Zero-Defect Baseline.
+
+## Phase 43: Privacy Shield [Local-Only Inference]
+
+### [NEW] [Inference.ts](file:///c:/Users/ferna/Downloads/appforge-main/src/swarm/core/Inference.ts)
+- Implement `SovereignInference` class.
+- Disable all cloud fallback logic.
+- Rule: Handshake process must NEVER leave the local machine.
+
+### [MODIFY] [Optimizer.ts](file:///c:/Users/ferna/Downloads/appforge-main/src/core/objective/Optimizer.ts)
+- Implement `validateRefactorEfficiency(original, refactored)`: Must prove >= 20% reduction in complexity.
+
+### [MODIFY] [AGENTS.md](file:///c:/Users/ferna/Downloads/appforge-main/AGENTS.md)
+- Transition into an "Evolution Ledger".
+- Implement `LOGIC_VIRUS` detection: Cross-reference mutations with Truth Anchor Axioms.
+
+### Silent Mode
+- [MODIFY] [server.ts](file:///c:/Users/ferna/Downloads/appforge-main/src/server.ts) or [orchestrator.ts](file:///c:/Users/ferna/Downloads/appforge-main/src/swarm/orchestrator.ts) to suppress success logs, only alerting on `TERMINAL_ERROR` or `AX_VIOLATION`.
+
+## Phase 44: Inference Hardening [Stability]
+
+### Ollama Overhaul
+- Set `OLLAMA_NUM_PARALLEL=4`.
+- Set `OLLAMA_KEEP_ALIVE=24h`.
+- Optimize threads for physical cores.
+
+### Connection Guardian
+- [MODIFY] `Inference.ts` with Heartbeat check.
+- Auto-restart Ollama service on drop.
+
+### Model Weight Locking
+- Enforce `llama3:8b-instruct-q8_0` or higher.
+- `DEGRADED_LOGIC_WARNING` flag if quantization < 8-bit.
+
+## Phase 45: Turbo-Heal [Mass Parallel Evolution]
+
+### Clustered Refactoring
+- [MODIFY] `Orchestrator.ts`: Cluster backlog into batches of 4.
+- Parallel execution of Batches A-D.
+
+### Parallel Kernel Bridge
+- [MODIFY] [main.rs](file:///c:/Users/ferna/Downloads/appforge-main/swarm/core/quantum_bridge/src/main.rs): Use `tokio::spawn` for concurrent Handshake Blessing.
+
+### Progress Visualizer
+- [MODIFY] [CommandCenter.tsx](file:///c:/Users/ferna/Downloads/appforge-main/src/pages/CommandCenter.tsx): Collapse thinking logs into 'Turbo-Heal Progress Bar'.
+
+## Verification Plan
+- **Sovereignty Test**: Kill internet connection -> run Refactor -> verify completion.
+- **Efficiency Test**: Run HEAL on `gitWorkflow.ts` -> verify Complexity reduction >= 20%.
+- **Parallel Test**: Verify 4 simultaneous handshakes in Rust logs.

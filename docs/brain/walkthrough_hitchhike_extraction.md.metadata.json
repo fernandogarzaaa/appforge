@@ -1,0 +1,5 @@
+{
+  "artifactType": "ARTIFACT_TYPE_WALKTHROUGH",
+  "summary": "Walkthrough for Phase 63: The Hitchhike Extraction.\n- Harvester: Generated simulated reasoning traces.\n- Validator: Filtered for Sovereign Axioms (5 Golden Examples).\n- Training: Fine-tuned Llama-3.2-3B to create `hitchhiker-v1` LoRA.\n- CI: Integrated `static_oracle.json` for stable builds.",
+  "updatedAt": "2026-02-16T17:41:56.678671700Z"
+}

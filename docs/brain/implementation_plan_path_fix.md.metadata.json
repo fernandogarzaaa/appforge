@@ -1,0 +1,5 @@
+{
+  "artifactType": "ARTIFACT_TYPE_IMPLEMENTATION_PLAN",
+  "summary": "Path Resolution Fix for Swarm Modules.极轴\nFixing `ENOENT` errors by making path resolution in `quantum_core.ts` independent of the current working directory. Use `__dirname` or equivalent to resolve the project root.极轴",
+  "updatedAt": "2026-02-15T10:26:12.935165700Z"
+}

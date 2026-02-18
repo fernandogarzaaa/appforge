@@ -1,0 +1,50 @@
+# Implementation Plan - Phase 64: Neural Bridge Activation
+
+**Objective:** Activate the "Iron Brain" by serving the fine-tuned adapter via a custom Python "Neural Bridge" (Inference Server) and connecting the Harvester to local Ollama.
+
+## User Review Required
+> [!IMPORTANT]
+> **Architecture Shift:** We are bypassing GGUF conversion (which was buggy) and serving the model directly via Python (`Unsloth` + `FastAPI`). This ensures the **exact** fine-tuned weights are used. This requires the `appforge-train` Conda environment to be active for inference.
+
+## Proposed Changes
+
+### 1. Harvester Upgrade (Local Sovereignty)
+#### [MODIFY] [swarm/factory/harvester.ts](file:///c:/Users/ferna/Downloads/appforge-main/swarm/factory/harvester.ts)
+- Add `OllamaService` integration.
+- If `TRUE_AI_INDEPENDENCE=true`, route prompts to `http://localhost:11434`.
+- Use "Teacher" prompts even with local models to extract best-effort reasoning.
+
+### 2. The Neural Bridge (Inference Server)
+#### [NEW] [swarm/core/inference_server.py](file:///c:/Users/ferna/Downloads/appforge-main/swarm/core/inference_server.py)
+- **Tech Stack:** `FastAPI`, `Uvicorn`, `Unsloth`.
+- **Function:** 
+    - Loads Base Model + `hitchhiker-v1` LoRA.
+    - Implements `/v1/chat/completions` (OpenAI format).
+    - Implements `/v1/models` (lists `iron-brain-v1`).
+- **Optimization:** Uses 4-bit quantization for low VRAM usage (RTX 2060 friendly).
+
+#### [NEW] [scripts/launchers/launch_neural_bridge.bat](file:///c:/Users/ferna/Downloads/appforge-main/scripts/launchers/launch_neural_bridge.bat)
+- Activates `appforge-train` environment.
+- Sets `PYTHONUTF8=1`.
+- Launches `swarm/core/inference_server.py` on port `8000`.
+
+### 3. Coherence Verification
+#### [NEW] [scripts/verify_coherence.ts](file:///c:/Users/ferna/Downloads/appforge-main/scripts/verify_coherence.ts)
+- Checks:
+    1.  env vars (`TRUE_AI_INDEPENDENCE`).
+    2.  Model Adapter existence (`hitchhiker-v1`).
+    3.  Neural Bridge connectivity (pings `localhost:8000`).
+    4.  Persona Test: Asks "Who are you?" -> Expects "Iron Brain" or sovereign response.
+
+## Verification Plan
+
+### Automated Tests
+- **Harvester Check:** `npx tsx swarm/factory/harvester.ts --dry-run` (Should verify Ollama connection).
+- **Neural Bridge Check:** 
+    1.  Start server: `scripts/launchers/launch_neural_bridge.bat`
+    2.  Run verification: `npx tsx scripts/verify_coherence.ts`
+    3.  *Expectation:* "✅ Coherence 100%: Neural Bridge Active."
+
+### Manual Verification
+- **User Action:** Run `launch_neural_bridge.bat`.
+- **Observation:** Console should show "Unsloth: FastLanguageModel.model from_pretrained..." and "Uvicorn running on http://0.0.0.0:8000".

@@ -1,0 +1,5 @@
+{
+  "artifactType": "ARTIFACT_TYPE_IMPLEMENTATION_PLAN",
+  "summary": "Phase 64 Execution Plan: \"Neural Bridge Activation\"\n1.  **Harvester (`harvester.ts`)**: Upgrade to support **Ollama** as the primary teacher (True Independence).\n2.  **Inference Server (`inference_server.py`)**: A Python-based FastAPI server using **Unsloth**.\n    - Loads Llama-3.2-3B + `hitchhiker-v1` adapter.\n    - Exposes OpenAI-compatible endpoints (`/v1/chat/completions`).\n    - Bypasses GGUF conversion blockers.\n3.  **Launcher (`launch_neural_bridge.bat`)**: Script to start the Python server.\n4.  **Coherence (`verify_coherence.ts`)**: Verifies the API responds to \"Who are you?\" with the Iron Brain persona.",
+  "updatedAt": "2026-02-16T17:43:50.359072900Z"
+}

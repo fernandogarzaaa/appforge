@@ -1,0 +1,5 @@
+{
+  "artifactType": "ARTIFACT_TYPE_IMPLEMENTATION_PLAN",
+  "summary": "Implementation plan for patching GitHub Actions for Phase 71 & 72.\n- **Goal:** Support autonomous bounty and P2P orchestration states in CI.\n- **Changes:** Update environment variables, commit file lists, and cache paths in `quantum_evolution.yml` and `autonomous_swarm.yml`.\n- **Verification:** Dry-run validation of the workflow files.",
+  "updatedAt": "2026-02-16T19:30:10.644615300Z"
+}

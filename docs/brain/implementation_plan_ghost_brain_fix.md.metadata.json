@@ -1,0 +1,5 @@
+{
+  "artifactType": "ARTIFACT_TYPE_IMPLEMENTATION_PLAN",
+  "summary": "Implementation plan to stabilize Ghost Brain CI.\n- Updates `iron-brain-ci.yml` to use `npm ci --legacy-peer-deps`.\n- Ensures consistency with other CI workflows.",
+  "updatedAt": "2026-02-17T03:49:03.502041100Z"
+}

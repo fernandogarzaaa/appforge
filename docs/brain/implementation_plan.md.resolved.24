@@ -1,0 +1,35 @@
+# Implementation Plan: Gemini Skills Synergy
+
+This plan outlines the integration of standardized "skills" and next-generation Gemini 3 capabilities from the `google-gemini/gemini-skills` repository into the Sovereign Swarm intelligence core.
+
+## User Review Required
+
+> [!IMPORTANT]
+> This integration will introduce the **Gemini 3 Pro/Flash Preview** models as the primary intelligence drivers and migrate the project from `google-generativeai` to the new `google-genai` SDK ecosystem.
+
+## Proposed Changes
+
+### [Component: Intelligence Core]
+
+#### [MODIFY] [quantum_core.ts](file:///c:/Users/ferna/Downloads/appforge-main/swarm/core/quantum_core.ts)
+- Update model references to `gemini-3-pro-preview` and `gemini-3-flash-preview`.
+- Implement support for standardized **Structured Outputs** matching the new Gemini schema definitions.
+
+#### [NEW] [gemini_skill_adapter.ts](file:///c:/Users/ferna/Downloads/appforge-main/swarm/core/gemini_skill_adapter.ts)
+- Create a middleware that allows the Swarm to dynamically consume patterns from the local `.agents/skills` library.
+- Implement standardized **Function Calling** orchestration based on the `google-genai` best practices.
+
+### [Component: Documentation & Knowledge]
+
+#### [NEW] [GEMINI_SYNERGY.md](file:///c:/Users/ferna/Downloads/appforge-main/docs/GEMINI_SYNERGY.md)
+- Document the migration to the new SDK and the utilization of the `llms.txt` pattern for continuous documentation sync.
+
+## Verification Plan
+
+### Automated Verification
+- Run a benchmark test using the new models in `scripts/intelligence_benchmark.ts`.
+- Verify that function calling requests correctly resolve using the new SDK pattern.
+
+### Manual Verification
+- Confirm that the "Oracle" UI correctly displays reasoning traces from the Gemini 3 models.
+- Verify that multimodal (image/video) analysis tasks are successfully processed by the updated executor.

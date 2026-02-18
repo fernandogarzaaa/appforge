@@ -1,0 +1,5 @@
+{
+  "artifactType": "ARTIFACT_TYPE_IMPLEMENTATION_PLAN",
+  "summary": "Implementation plan to wire Phase 73 (Collective Inception) to GitHub Actions.\n- **Goal:** Enable the Swarm to sense CI environment signals and proactively trigger evolution cycles during automated runs.\n- **Workflow Changes:** Pipe build and lint outputs to files sensed by the `RealitySensor`.\n- **Code Changes:** Refactor `intelligence_pulse.ts` to use `RealitySensor` signals and update commit logic.\n- **Verification:** local simulation of a CI pulse with injected signals.",
+  "updatedAt": "2026-02-16T19:44:35.394793600Z"
+}

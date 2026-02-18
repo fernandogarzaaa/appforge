@@ -1,0 +1,42 @@
+# Sovereign Prompt Implementation Plan
+
+The objective is to imbue the Sovereign Command Center with its own "Antigravity"—a natural language interface for direct swarm interaction and intelligence retrieval.
+
+## User Review Required
+
+> [!IMPORTANT]
+> **Cognitive Layer**: The prompt bar will leverage the swarm's existing LLM infrastructure ([MultiLLMClient](file:///c:/Users/ferna/Downloads/appforge-main/swarm/core/llm.ts#105-155)), which uses zero-cost routing via local models and the Antigravity quantum channel.
+
+## Proposed Changes
+
+---
+
+### [Command Center UI]
+
+#### [MODIFY] [AdminSovereign.tsx](file:///c:/Users/ferna/Downloads/appforge-main/src/pages/AdminSovereign.tsx)
+- **Prompt Bar**: Add a sleek, sticky prompt input area at the bottom of the log stream.
+- **AI Chat Module**: Implement a separate toggle or persistent panel for AI conversations.
+- **Micro-animations**: Add "thinking" state animations and message streaming visuals.
+
+---
+
+### [SCC Server Backend]
+
+#### [MODIFY] [scc_server.ts](file:///c:/Users/ferna/Downloads/appforge-main/scripts/scc_server.ts)
+- **Prompt Receiver**: Listen for `prompt` events from the UI.
+- **Intelligence Bridge**: Initialize the [MultiLLMClient](file:///c:/Users/ferna/Downloads/appforge-main/swarm/core/llm.ts#105-155) and route user queries.
+- **Stream Relay**: Emit `ai_response` chunks or completed messages back to the dashboard.
+
+#### [NEW] [prompt_handler.ts](file:///c:/Users/ferna/Downloads/appforge-main/scripts/prompt_handler.ts)
+A dedicated module to:
+- Contextualize user prompts with swarm status and mission data.
+- Manage message history for stateful conversations.
+
+## Verification Plan
+
+### Automated Tests
+- `npx tsx scripts/test_prompt.ts`: Verify that a test prompt receives a coherent response from the [MultiLLMClient](file:///c:/Users/ferna/Downloads/appforge-main/swarm/core/llm.ts#105-155).
+
+### Manual Verification
+- Type "What is the current swarm status?" into the new prompt bar and verify the AI response correctly reflects telemetry data.
+- Verify that messages scroll naturally and the "thinking" indicator works as expected.

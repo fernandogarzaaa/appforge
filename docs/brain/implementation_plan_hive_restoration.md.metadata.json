@@ -1,0 +1,5 @@
+{
+  "artifactType": "ARTIFACT_TYPE_IMPLEMENTATION_PLAN",
+  "summary": "Implementation plan for Phase 2: The Repair Swarm.\n- Create `.env.example` (Critical remediation from Phase 1).\n- Execute \"Search and Destroy\" on TypeScript errors via `npx tsc`.\n- Refactor `src/utils/swarm_utils.ts` and `quantum_core.ts`.\n- Ensure GitHub Workflows degrade gracefully without AI.",
+  "updatedAt": "2026-02-17T04:03:47.336496200Z"
+}

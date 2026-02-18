@@ -1,0 +1,39 @@
+# God Mode Protocol: Governed Swarm Architecture
+
+This plan documents the transition from fragmented "Revenue Hunter" scripts to a unified, governed swarm architecture backed by GPT-4o and Claude 3.5 Sonnet, with a self-correcting "God Mode" engine for instruction optimization.
+
+## User Review Required
+
+> [!IMPORTANT]
+> This is a complete architectural pivot. Legacy components like [RevenueHunter.ts](file:///c:/Users/ferna/Downloads/appforge-main/swarm/agents/RevenueHunter.ts) and [real_hyper_intelligence_v2.ts](file:///c:/Users/ferna/Downloads/appforge-main/swarm/core/real_hyper_intelligence_v2.ts) will be deleted.
+
+## Proposed Changes
+
+### [Phase 1] Purge & Security
+- **Deprecation**: Remove legacy and unstable swarm components.
+- **Security**: Strict enforcement of `process.env.SOLANA_PRIVATE_KEY` with NEW wallet credentials.
+
+### [Phase 2] Swarm Infrastructure
+- **Dependency Update**: Standardize on OpenAI and Anthropic SDKs for brain operations.
+
+### [Phase 3] Swarm Brain Layer
+- #### [NEW] [llm_client.ts](file:///c:/Users/ferna/Downloads/appforge-main/src/swarm/llm_client.ts)
+  - Unified interface for multi-model reasoning (GPT-4o, Claude 3.5 Sonnet).
+- #### [NEW] [god_mode.ts](file:///c:/Users/ferna/Downloads/appforge-main/src/swarm/god_mode.ts)
+  - Instruction refinement engine triggered on system failure.
+- #### [NEW] [orchestrator.ts](file:///c:/Users/ferna/Downloads/appforge-main/src/swarm/orchestrator.ts)
+  - Main loop for executing and verifying swarm tasks.
+
+### [Phase 4] Control Plane
+- #### [MODIFY] [server.ts](file:///c:/Users/ferna/Downloads/appforge-main/src/server.ts)
+  - Real-time log streaming via Server-Sent Events (SSE).
+  - Command API for Sovereign IDE interaction.
+
+## Verification Plan
+
+### Automated Tests
+- Manual check of API endpoints: `curl http://localhost:3001/api/stream-logs`
+
+### Manual Verification
+- Test "God Cycle": Trigger intentional error -> Verify `global_instructions.md` update.
+- Verify log stream in Sovereign UI.

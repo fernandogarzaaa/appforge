@@ -1,0 +1,46 @@
+# Phases 51 & 52: Pure Reality & Legacy Purge
+
+This plan outlines the total transition from a "local tool" to an independent, production-grade platform.
+
+## User Review Required
+
+> [!WARNING]
+> **Phase 52** involves removing all legacy Solana dependencies from the swarm core.
+> **Phase 51** will switch the application from "Simulation Mode" (mocks) to "Reality Mode" (live production APIs). This requires valid production credentials for all integrated services.
+
+## Proposed Changes
+
+### Phase 52: Legacy Purge
+
+#### [MODIFY] [loop.ts](file:///c:/Users/ferna/Downloads/appforge-main/swarm/core/loop.ts)
+- Strip `@solana/web3.js` imports.
+- Refactor transaction/wallet logic into agnostic "Truth Anchor" verification stubs.
+
+#### [MODIFY] [package.json](file:///c:/Users/ferna/Downloads/appforge-main/swarm/package.json)
+- Remove all `@solana/` dependencies.
+- Ensure [tsx](file:///c:/Users/ferna/Downloads/appforge-main/src/pages/CommandCenter.tsx) and core swarm dependencies are healthy.
+
+---
+
+### Phase 51: Pure Reality
+
+#### [NEW] [SovereignGit.ts](file:///c:/Users/ferna/Downloads/appforge-main/src/core/git/SovereignGit.ts)
+- Implement autonomic commit and push logic.
+- Integrate "Truth Anchor" validation before pushing.
+
+#### [MODIFY] [SovereignDashboard.tsx](file:///c:/Users/ferna/Downloads/appforge-main/src/components/SovereignDashboard.tsx)
+- Upgrade HUD to show Build #, Sync Status, and Kernel Score.
+
+#### [MODIFY] [src/api/](file:///c:/Users/ferna/Downloads/appforge-main/src/api/)
+- Eliminate mocks. Replace with authenticated production streams.
+
+## Verification Plan
+
+### Automated Tests
+- Global scan: `grep -r "@solana" .` (Must return zero results in functional code).
+- Build check: `npm run build` after dependency purge.
+- Swarm cycle: Execute loop and verify Git commit generation.
+
+### Manual Verification
+- Review Dashboard metrics for "Live" status synchronization.
+- Verify production API connectivity.

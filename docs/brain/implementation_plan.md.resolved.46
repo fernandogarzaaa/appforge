@@ -1,0 +1,202 @@
+# God Mode Protocol: Governed Swarm Architecture
+
+This plan documents the transition from fragmented "Revenue Hunter" scripts to a unified, governed swarm architecture backed by GPT-4o and Claude 3.5 Sonnet, with a self-correcting "God Mode" engine for instruction optimization.
+
+## User Review Required
+
+> [!IMPORTANT]
+> This is a complete architectural pivot. Legacy components like `RevenueHunter.ts` and `real_hyper_intelligence_v2.ts` will be deleted.
+
+## Proposed Changes
+
+### [Phase 1] Purge & Security
+
+- **Deprecation**: Remove legacy and unstable swarm components.
+- **Security**: Strict enforcement of `process.env.SOLANA_PRIVATE_KEY` with NEW wallet credentials.
+
+### [Phase 2] Swarm Infrastructure
+
+- **Dependency Update**: Standardize on OpenAI and Anthropic SDKs for brain operations.
+
+### [Phase 5] Local-First Sovereign Brain
+
+- **Ollama Integration**: Replace external LLM providers with local Ollama API.
+- **Cost Optimization**: 100% independent, zero-cost inference.
+- **Dependency**: Requires Ollama running locally with `llama3` pulled.
+
+- #### [NEW] [llm_client.ts](file:///c:/Users/ferna/Downloads/appforge-main/src/swarm/llm_client.ts)
+
+  - Unified interface for multi-model reasoning (GPT-4o, Claude 3.5 Sonnet).
+
+## Phase 18: AppForge v1.0 Re-Alignment
+
+Unify all Sovereign/Swarm components into the core AppForge brand and establish a secure bridge with the hosted environment.
+
+### [NEW] CommandCenter.tsx
+
+- Rename [SovereignIDE.jsx](file:///c:/Users/ferna/Downloads/appforge-main/src/pages/SovereignIDE.jsx) to [CommandCenter.tsx](file:///c:/Users/ferna/Downloads/appforge-main/src/pages/CommandCenter.tsx).
+- Apply brand colors: Deep Slate (#0f172a), Electric Blue (#3b82f6), Cyber White (#f8fafc).
+- Integrate [QCoreVisualizer](file:///c:/Users/ferna/Downloads/appforge-main/src/components/QCoreVisualizer.tsx#9-85).
+
+### [MODIFY] server.ts
+
+- Implement `x-api-key` header verification for all `/api/command` and `/api/factory` endpoints.
+
+### [NEW] appforge_bridge.ts
+
+- Utility for the hosted app to communicate with the local orchestrator via secure tunneling (e.g., ngrok/local-link).
+
+### [NEW] QCoreVisualizer.tsx
+
+- Dashboard component showing code input, Oracle reasoning, and final Pass/Fail status with real-time scanning animations.
+
+### [NEW] APPFORGE_MANIFESTO.md
+
+- Technical documentation of the Quantum-Oracle safety standard for AI-generated code.
+
+### [Phase 3] Swarm Brain Layer
+
+- #### [NEW] [god_mode.ts](file:///c:/Users/ferna/Downloads/appforge-main/src/swarm/god_mode.ts)
+
+  - Instruction refinement engine triggered on system failure.
+
+- #### [NEW] [orchestrator.ts](file:///c:/Users/ferna/Downloads/appforge-main/src/swarm/orchestrator.ts)
+
+  - Main loop for executing and verifying swarm tasks.
+
+### [Phase 4] Control Plane
+
+- #### [MODIFY] [server.ts](file:///c:/Users/ferna/Downloads/appforge-main/src/server.ts)
+
+  - Real-time log streaming via Server-Sent Events (SSE).
+  - Command API for Sovereign IDE interaction.
+
+### [Phase 6.5] The Git Keeper
+
+- **Git Manager**: Implement [GitManager](file:///c:/Users/ferna/Downloads/appforge-main/src/swarm/git_manager.ts#4-26) to allow automated commits and pushes.
+- **Orchestration**: Link [GitManager](file:///c:/Users/ferna/Downloads/appforge-main/src/swarm/git_manager.ts#4-26) to the task execution loop to "save progress" after successful verification.
+
+### [Phase 6] Sovereign Identity Layer
+
+- **Solana Integration**: Implement a secure, decentralized identity layer using Solana wallet adapters.
+- **Component**: [SovereignWallet.tsx](file:///c:/Users/ferna/Downloads/appforge-main/src/components/auth/SovereignWallet.tsx) providing connection context for the entire application.
+
+### [Phase 7] Swarm CI/CD Optimization
+
+- **GitHub Actions**: Debug and stabilize the [swarm.yml](file:///c:/Users/ferna/Downloads/appforge-main/.github/workflows/autonomous_swarm.yml) workflow.
+- **Autonomous Evolution**: Ensure "Quantum Self Evolution" correctly triggers in CI environments.
+
+### [Phase 9] The Economic Engine
+
+- **Financial Rails**: Install `@solana/pay` and `bignumber.js` to enable standardized crypto payments.
+- **Sovereign Merchant**: Trigger Swarm to build [SolanaMerchant.tsx](file:///c:/Users/ferna/Downloads/appforge-main/src/components/SolanaMerchant.tsx) for QR-based USDC payments.
+- **UI Integration**: Harmonize [WalletBalance](file:///c:/Users/ferna/Downloads/appforge-main/src/components/WalletBalance.tsx#8-45) and [SolanaMerchant](file:///c:/Users/ferna/Downloads/appforge-main/src/components/SolanaMerchant.tsx#12-83) in the `SovereignIDE` dashboard.
+
+### [Phase 9.5] The Code Vending Machine
+
+- **Vending Logic**: Link revenue to labor by requiring payment before Swarm task execution.
+- **Merchant Callback**: Add `onPaymentSuccess` trigger to [SolanaMerchant.tsx](file:///c:/Users/ferna/Downloads/appforge-main/src/components/SolanaMerchant.tsx).
+- **Integrated Machine**: Create [CodeVendingMachine.tsx](file:///c:/Users/ferna/Downloads/appforge-main/src/components/CodeVendingMachine.tsx) to handle user input, pricing, payment, and autonomous build triggering.
+
+### [Phase 10] Autonomous Factory Mode
+
+- **Blueprint Engine**: Define a JSON schema for "High Value" assets.
+- **Factory Loop**: Create a script to iterate through blueprints and trigger the Swarm to build standalone, sellable React components.
+- **Automation**: Expose a REST endpoint to trigger production lines.
+
+- #### [NEW] [products.json](file:///c:/Users/ferna/Downloads/appforge-main/src/swarm/products.json)
+
+  - List of product definitions (Token Minter, Art Gallery).
+
+- #### [NEW] [factory.ts](file:///c:/Users/ferna/Downloads/appforge-main/src/swarm/factory.ts)
+
+  - The "Production Line" logic that wraps blueprints into Swarm tasks.
+
+### [Phase 11] Dedicated Scout Unit
+
+- **Signal Intelligence**: Implement a Raydium Liquidity Pool scanner using Solana WebSockets.
+- **Blurred UI**: Create a component that blurs sensitive data (mint addresses) until payment is verified.
+- **Monetization**: Integrate a "Unlock Feed" button for 0.1 SOL.
+
+- #### [NEW] [raydium_scanner.ts](file:///c:/Users/ferna/Downloads/appforge-main/src/utils/raydium_scanner.ts)
+
+  - Logic to listen for Raydium V4 `initialize2` logs.
+
+- #### [NEW] [RaydiumScout.tsx](file:///c:/Users/ferna/Downloads/appforge-main/src/components/RaydiumScout.tsx)
+
+  - The visual terminal for live signals.
+
+### [Phase 12] The Convergence (Hive Mind Architecture)
+
+Inspired by OpenClaw and MemU, this phase unifies the fragmented swarm into a single, high-bandwidth architecture.
+
+- **Hierarchical Memory (MemU Pattern)**:
+  - [NEW] `src/swarm/memory/` - A directory acting as the long-term context for all agents.
+  - [NEW] `src/swarm/memory_manager.ts` - Logic to `memorize()` successful builds and `retrieve()` patterns for new tasks.
+- **Inter-Swarm Communication (OpenClaw Pattern)**:
+  - [NEW] `src/swarm/comms.ts` - An internal messaging bus where the "Signal Scout" can trigger the "Autonomous Factory".
+- **Dynamic Skills Registry**:
+  - [NEW] `src/swarm/skills/` - Modular skill files that the Orchestrator can load on-demand.
+
+### [Phase 13] The Quantum Oracle (Q-CORE)
+
+Moving from standard logic to Verifiable Evolutionary Intelligence.
+
+- **Rust Oracle**:
+  - [NEW] `src/swarm/oracle/qcore.rs` - A lightweight Rust validator for "Logic Invariants".
+  - Compilation: `rustc src/swarm/oracle/qcore.rs -o qcore`.
+- **Superposition Execution**:
+  - [MODIFY] `src/swarm/orchestrator.ts` - Refactor to generate 3 code paths simultaneously and collapse onto the one validated by the Oracle.
+
+### [Phase 14] Self-Evolutionary Intelligence
+
+The Swarm learns from its rejections.
+
+- **Mutation Memory**:
+  - [MODIFY] `src/swarm/god_mode.ts` - Logic to update `AGENTS.md` (or `global_instructions.md`) when the Oracle rejects a path, creating a "Memory of Mistakes".
+
+### [Phase 15] Recursive Oracle Synthesis
+
+Granting the Swarm the power of Recursive Validation.
+
+- **Automated Test Generation**:
+  - [NEW] `src/swarm/oracle/test_gen.ts` - Uses local LLM to generate Rust unit tests based on historical rejections.
+- **Dynamic Oracle (Quantum Core)**:
+  - [MODIFY] `src/swarm/oracle/qcore.rs` - Refactor to scan `dynamic_tests/`, compile, and run them on the fly.
+- **Recursive Immune System**:
+  - The Swarm will now generate a new Rust test case every time a security violation is detected, preventing repeat patterns.
+
+## Verification Plan
+
+### Automated Tests
+
+- **Oracle Audit**: Trigger a task that intentionally violates safety (e.g., FS in React) -> Verify Q-Core rejection.
+- **Quantum Collapse**: Check Orchestrator logs for "Superposition: Simulating 3 paths" -> Verify outcome.
+- **Evolution Check**: Verify `global_instructions.md` updates after a rejection.
+- **Test Generation**: Trigger a violation -> Verify a new `.rs` file appears in `dynamic_tests/`.
+- **Dynamic Rejection**: Verify `qcore.exe` rejects the violation using the newly generated test.
+
+## Phase 19: AppForge Core Recovery
+
+Resolve technical debt and alignment issues to ensure the core platform is stable and deployment-ready.
+
+### [Phase 1] The Rust Fix (Quantum Bridge)
+
+- **Problem**: `mod lib` in `main.rs` violates Rust crate conventions.
+- **Solution**: Remove `mod lib` and use package-level imports.
+
+### [Phase 2] Architectural Alignment
+
+- Review `App.jsx` and `index.html` to ensure `CommandCenter` is the primary hub.
+- Audit local scripts for integration status.
+
+### [Phase 3] Safety Audit Dashboard
+
+- #### [NEW] [SafetyAudit.tsx](file:///c:/Users/ferna/Downloads/appforge-main/src/components/SafetyAudit.tsx)
+
+  - Real-time display of logs from `quantum_bridge` and `Q-Core`.
+  - Visual indicator for "Quantum Superposition" (Path Alpha/Beta/Gamma).
+
+### [Phase 4] Deployment Readiness
+- [x] Fix `.github/workflows/quantum_evolution.yml` to build both Rust and React targets.
+- [x] Verified Rust build (`cargo check`) and Frontend build (`npm run build`).

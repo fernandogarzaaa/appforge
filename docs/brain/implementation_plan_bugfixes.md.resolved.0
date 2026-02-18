@@ -1,0 +1,35 @@
+# Emergency Fix: UI and DLL Errors
+
+Resolve the missing `libintl-8.dll` (or similar) error and the Tailwind CSS v4 resolution failure in the UI.
+
+## User Review Required
+
+> [!IMPORTANT]
+> The `libint-8.dll` error might be related to a specific native dependency or environment setup. I will attempt to identify the source, but the user might need to install a specific runtime (like MSVC Redistributables or Gettext) if it's not present on the system.
+
+## Proposed Changes
+
+### UI (sovereign-ui)
+
+#### [MODIFY] [package.json](file:///c:/Users/ferna/Downloads/appforge-main/sovereign-ui/package.json)
+
+- Upgrade `tailwindcss` to `^4.0.0` to match `@tailwindcss/vite`.
+- Ensure all Tailwind related packages are consistent.
+- Move `tailwindcss` to `dependencies` if it's required at runtime for the vite plugin in some environments.
+
+### Swarm & Core
+
+#### [RESEARCH] DLL Source
+- Investigate which dependency requires `libint-8.dll`.
+- Check [scripts/launchers/LAUNCH_SOVEREIGN_CORE.bat](file:///c:/Users/ferna/Downloads/appforge-main/scripts/launchers/LAUNCH_SOVEREIGN_CORE.bat) for any hints on environment PATH.
+
+## Verification Plan
+
+### Automated Tests
+- Run `npm run build` in `sovereign-ui` to verify Tailwind resolution.
+- Run `npx vite dev` in `sovereign-ui` to check if the error persists.
+
+### Manual Verification
+1. Start the application using [START_SOVEREIGN.bat](file:///c:/Users/ferna/Downloads/appforge-main/START_SOVEREIGN.bat).
+2. Check if the "dll not found" alert still appears.
+3. Access `http://localhost:5174` and verify the CSS loads correctly.

@@ -1,0 +1,17 @@
+# Task Checklist: God Mode Protocol Implementation
+
+- [ ] **Phase 1: The Purge & Security** [/]
+  - [ ] Terminate all Node.js and Python processes
+  - [ ] [DELETE] [swarm/core/real_hyper_intelligence_v2.ts](file:///c:/Users/ferna/Downloads/appforge-main/swarm/core/real_hyper_intelligence_v2.ts)
+  - [ ] [DELETE] [swarm/agents/RevenueHunter.ts](file:///c:/Users/ferna/Downloads/appforge-main/swarm/agents/RevenueHunter.ts)
+  - [ ] Verify [.env](file:///c:/Users/ferna/Downloads/appforge-main/.env) security for new Solana wallet
+- [ ] **Phase 2: Core Dependencies Installation**
+  - [ ] `npm install openai @anthropic-ai/sdk dotenv express cors`
+- [ ] **Phase 3: Swarm Brain Engineering**
+  - [ ] [NEW] `src/swarm/llm_client.ts`
+  - [ ] [NEW] `src/swarm/god_mode.ts`
+  - [ ] [NEW] `src/swarm/orchestrator.ts`
+- [ ] **Phase 4: Sovereign IDE Integration**
+  - [ ] [MODIFY] `src/server.ts`
+  - [ ] Start Orchestrator server on port 3001
+  - [ ] Verify `/api/stream-logs` and `/api/command` endpoints

@@ -1,0 +1,5 @@
+{
+  "artifactType": "ARTIFACT_TYPE_IMPLEMENTATION_PLAN",
+  "summary": "Plan to implement Curiosity Engine (Phase 7).\n- Create `swarm/core/curiosity_engine.ts`.\n- Implement scanning logic for \"neglected\" files (low edit frequency).\n- Wire into `loop.ts` for autonomous execution.",
+  "updatedAt": "2026-02-17T14:32:49.635240700Z"
+}

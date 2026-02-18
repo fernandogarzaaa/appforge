@@ -1,0 +1,32 @@
+# Launcher Path Resilience Patch
+
+**Goal**: Fix the "Path not found" and "Missing package.json" errors by making the directory switching logic more robust across all launchers.
+
+## Proposed Changes
+
+### Launchers (scripts/launchers/)
+
+#### [MODIFY] [LAUNCH_SOVEREIGN_CORE.bat](file:///c:/Users/ferna/Downloads/appforge-main/scripts/launchers/LAUNCH_SOVEREIGN_CORE.bat)
+- Implement absolute root detection.
+- Use `%PROJECT_ROOT%` for all internal commands to avoid relative path drift.
+
+#### [MODIFY] [launch_neural_bridge.bat](file:///c:/Users/ferna/Downloads/appforge-main/scripts/launchers/launch_neural_bridge.bat)
+- Add root detection to ensure it finds the `swarm` folder correctly.
+
+#### [MODIFY] [launch_iron_brain.bat](file:///c:/Users/ferna/Downloads/appforge-main/scripts/launchers/launch_iron_brain.bat)
+- Add root detection to ensure it finds the model files.
+
+```batch
+:: Robust Root Detection Pattern
+set "SCRIPT_DIR=%~dp0"
+cd /d "%SCRIPT_DIR%"
+cd ..\..
+set "PROJECT_ROOT=%CD%"
+```
+
+## Verification Plan
+
+### Manual Verification
+1. Run [LAUNCH_SOVEREIGN_CORE.bat](file:///c:/Users/ferna/Downloads/appforge-main/scripts/launchers/LAUNCH_SOVEREIGN_CORE.bat) and verify Phase 3.5 (Rust Oracle) and Phase 6 (UI) start correctly.
+2. Verify that `npm run dev` in the UI starts in `sovereign-ui` and not `C:\Users`.
+3. Check the logs in `data/logs/` to confirm they are being written.

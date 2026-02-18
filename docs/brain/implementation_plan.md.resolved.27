@@ -1,0 +1,36 @@
+# Implementation Plan: Base44 Web App Strategic Alignment
+
+This plan outlines the UI enhancements for the `sovereign-ui` project (the Admin Command Center) to reflect the recent Base44 cognitive optimizations.
+
+## User Review Required
+
+> [!TIP]
+> This will add a live "Cloud Bridge" status indicator to the dashboard, matching the newly implemented backend monitor.
+
+## Proposed Changes
+
+### [Component: UI Navigation & Metrics]
+
+#### [MODIFY] [App.tsx](file:///c:/Users/ferna/Downloads/appforge-main/sovereign-ui/src/App.tsx)
+- Add a `bridgeStatus` state to the main App component.
+- Listen for the `bridge_status` or `system_metrics` socket events (depending on the final telemetry payload).
+- Implement a **"Signal Compression Dashboard"** section in the main layout.
+
+### [Component: Status Indicators]
+
+#### [MODIFY] [QuantumParameterTuner.tsx](file:///c:/Users/ferna/Downloads/appforge-main/sovereign-ui/src/components/QuantumParameterTuner.tsx)
+- Integrate the **Cloud Resonance** indicator (Online/Offline) next to the Coherence metric.
+- Display real-time **Bridge Latency** (ms) from the Base44 health check.
+
+#### [NEW] [SignalDensityMonitor.tsx](file:///c:/Users/ferna/Downloads/appforge-main/sovereign-ui/src/components/SignalDensityMonitor.tsx)
+- Create a visualization for the **Semantic Compression Ratio** achieved by Gemini 3.
+- Show "Raw Signal" vs "Compressed Signal" throughput.
+
+## Verification Plan
+
+### Automated Verification
+- Run the `sovereign-ui` dev server and verify Socket.IO message reception using a mock emitter.
+
+### Manual Verification
+- Launch [LAUNCH_SOVEREIGN_CORE.bat](file:///c:/Users/ferna/Downloads/appforge-main/scripts/launchers/LAUNCH_SOVEREIGN_CORE.bat).
+- Open `http://localhost:5174` and verify the "Cloud Bridge" indicator reflects the [.env.local](file:///c:/Users/ferna/Downloads/appforge-main/.env.local) health.

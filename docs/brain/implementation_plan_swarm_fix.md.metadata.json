@@ -1,0 +1,6 @@
+{
+  "artifactType": "ARTIFACT_TYPE_IMPLEMENTATION_PLAN",
+  "summary": "Implementation plan to fix missing dependencies in the swarm workspace to resolve the fatal cycle failure.极轴+修复 swarm 工作区缺失依赖项以解决致命循环失败的实施计划。极轴+核心修复：向 `package.json` 添加 `bs58` 和 `@solana/web3.js`。极轴",
+  "updatedAt": "2026-02-15T19:43:38.324065600Z",
+  "version": "1"
+}

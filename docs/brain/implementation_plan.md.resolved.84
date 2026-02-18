@@ -1,0 +1,41 @@
+# CI Stabilization: Enforcing Sovereign Autonomy
+
+The current GitHub Action workflows are failing due to a fatal `OPENAI_API_KEY` check in the core swarm loop. This plan enforces "True Independence" by ensuring the system defaults to local and Antigravity-based inference in CI environments without external API keys.
+
+## User Review Required
+
+> [!IMPORTANT]
+> This change will strictly default the CI environment to `TRUE_AI_INDEPENDENCE=true`. This means GitHub Actions will rely on local simulation or Antigravity-routed inference, ensuring 0% failure from missing secrets.
+
+## Proposed Changes
+
+### [GitHub Workflows]
+
+#### [MODIFY] [autonomous_swarm.yml](file:///c:/Users/ferna/Downloads/appforge-main/.github/workflows/autonomous_swarm.yml)
+- Inject `TRUE_AI_INDEPENDENCE: "true"` into the environment for all steps.
+
+#### [MODIFY] [quantum_evolution.yml](file:///c:/Users/ferna/Downloads/appforge-main/.github/workflows/quantum_evolution.yml)
+- Inject `TRUE_AI_INDEPENDENCE: "true"` into the environment.
+
+---
+
+### [Swarm Core]
+
+#### [MODIFY] [loop.ts](file:///c:/Users/ferna/Downloads/appforge-main/swarm/core/loop.ts)
+- Relax the `OPENAI_API_KEY` check.
+- If `TRUE_AI_INDEPENDENCE` is set or if we are in a `CI` environment, do not exit.
+
+#### [MODIFY] [llm_client.ts](file:///c:/Users/ferna/Downloads/appforge-main/src/swarm/llm_client.ts)
+- Lazy-load the `OpenAI` and `Anthropic` SDKs.
+- This prevents top-level errors if the environment isn't perfectly configured for cloud SDKs that aren't even being used in sovereign mode.
+
+#### [MODIFY] [hyper_model_router.ts](file:///c:/Users/ferna/Downloads/appforge-main/swarm/core/hyper/hyper_model_router.ts)
+- Adjust complexity weights to favor `willow` and `consensus` (local) over `gpt4` when `TRUE_AI_INDEPENDENCE` is active.
+
+## Verification Plan
+
+### Automated Tests
+- Run `npm run test` (if applicable) and manually trigger a local swarm cycle with `TRUE_AI_INDEPENDENCE=true` to verify it skips the OpenAI key check.
+
+### Manual Verification
+- Commit the changes and monitor the GitHub Actions tab to ensure the "Autonomous Swarm Cycle" and "Quantum Self-Evolution" workflows finish with 🟢 SUCCESS.

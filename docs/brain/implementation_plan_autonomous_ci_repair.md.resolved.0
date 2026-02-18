@@ -1,0 +1,14 @@
+# Autonomous Swarm CI Repair (Phase 79)
+
+## Goal
+Fix the "Autonomous Swarm Cycle" GitHub Action ([autonomous_swarm.yml](file:///c:/Users/ferna/Downloads/appforge-main/.github/workflows/autonomous_swarm.yml)) by injecting the "Blessed" Git Identity ("Fernando Garza (Sovereign Swarm)") to enable authorized code commits during the Intelligence Pulse and Swarm Daemon execution.
+
+## Proposed Changes
+### GitHub Workflow
+#### [MODIFY] [.github/workflows/autonomous_swarm.yml](file:///c:/Users/ferna/Downloads/appforge-main/.github/workflows/autonomous_swarm.yml)
+- **Step: Run Intelligence Pulse**: Add `git config` setup before execution.
+- **Step: Run Swarm (One-Shot)**: Update existing `git config` to match the blessed identity.
+
+## Verification
+- **Manual**: Review the workflow file changes.
+- **Automated**: Push changes and trigger the workflow via GitHub UI (User action).

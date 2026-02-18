@@ -1,0 +1,33 @@
+# Curiosity Engine CI Integration Walkthrough
+
+This document details the integration of the **Curiosity Engine** into GitHub Actions to enable autonomous, scheduled codebase exploration.
+
+## 1. Overview
+The Curiosity Engine scans the codebase for "neglected" or interesting files (based on edit frequency and complexity) and autonomously generates "Curiosity Bounties" in the Base44 cloud.
+
+## 2. New Workflow: [curiosity_scan.yml](file:///c:/Users/ferna/Downloads/appforge-main/.github/workflows/curiosity_scan.yml)
+We created a new GitHub Action workflow: [curiosity_scan.yml](file:///c:/Users/ferna/Downloads/appforge-main/.github/workflows/curiosity_scan.yml).
+
+### Configuration
+- **Schedule**: Runs every **4 hours** (`0 */4 * * *`).
+- **Trigger**: Can also be triggered manually via "Run workflow" in GitHub Actions tab.
+- **Environment**:
+  - Node.js 22
+  - Dependencies cached via `npm ci`
+
+### Secrets Used
+The workflow relies on the following repository secrets:
+- `BASE44_APP_ID`: Link to the backend app (Updated to `699493e5ed3fd6b61dc0b599`).
+- `BASE44_API_KEY`: Authentication for Base44 SDK.
+- `OPENAI_API_KEY`: For the prompt engine to generate hypotheses.
+
+## 3. Workflow Audit
+We verified that existing workflows (like [autonomous_swarm.yml](file:///c:/Users/ferna/Downloads/appforge-main/.github/workflows/autonomous_swarm.yml)) correctly reference the `BASE44_APP_ID` secret and do not contain hardcoded values of the old App ID.
+
+## 4. How to Verify
+1. Go to the **Actions** tab in your GitHub repository.
+2. Select **Curiosity Engine Scan** from the left sidebar.
+3. Click **Run workflow** to test it immediately.
+4. Check the logs:
+   - Valid output should show `🕵️ Triggering Manual Curiosity Scan...`.
+   - If a bounty is found: `✨ Found Candidate: ...`.

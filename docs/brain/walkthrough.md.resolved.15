@@ -1,0 +1,26 @@
+# Sovereign AI: Standalone Desktop Suite
+
+The Sovereign AI Ecosystem has been fully decoupled into a **Standalone Desktop Suite**. It is now a distinct, professional piece of software, independent of your web app builder.
+
+## 🚀 The Standalone Experience
+
+- **"Real" Software Feel**: When you launch "Sovereign AI", it is a dedicated management shell exclusively for your swarm. 
+- **Standalone Project Isolation**: The UI lives in its own dedicated micro-project (`sovereign-ui`), completely isolated from the main AppForge project.
+- **Quantum CSS Resolution**: Resolved persistent Tailwind v4 build issues via **Oracle-guided isolation**, ensuring zero configuration leakage from the root project.
+- **Sovereign Prompt**: Talk directly to your swarm via the AI Command Bar. It uses zero-cost local brain models for all interactions.
+- **One-Click Startup**: Double-click the **Sovereign AI** shortcut on your Desktop. It automatically boots the dedicated UI engine and Electron shell.
+
+## 🕹️ Control Center Features
+
+1.  **Unified Telemetry**: Live log streams from all swarm agents and components.
+2.  **Maintenance Guard**: Toggle the swarm's warm-restart mode directly from the standalone UI.
+3.  **Intelligence Metrics**: Track swarm coherence, latency, and revenue gain in real-time.
+4.  **System Tray**: Stay active in your system tray for silent background monitoring.
+
+## 🛠️ Operational Guide
+
+- **Launch**: Double-click the desktop shortcut or run [.\SovereignApp.bat](file:///c:/Users/ferna/Downloads/appforge-main/SovereignApp.bat).
+- **Remote Access**: Use Option 7 in [launch_swarm_v3.bat](file:///c:/Users/ferna/Downloads/appforge-main/launch_swarm_v3.bat) to bridge this standalone UI to your iPhone.
+- **Architecture**: The UI source code is located in the dedicated `sovereign-ui` folder with its own isolated build pipeline.
+
+Your Sovereign AI Ecosystem is now an **elite, standalone Command Center**. 🌌

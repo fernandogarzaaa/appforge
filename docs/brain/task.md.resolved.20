@@ -1,0 +1,9 @@
+# Task: Optimize AppForge Web App
+
+- [x] Explore project structure and identify core web app components
+- [/] Task the Swarm (BugHunter, Optimizer) with auditing the web app
+- [ ] Implement Swarm-identified fixes for UI/UX and performance
+- [x] Align payment backend with Swarm-derived treasury configuration
+- [ ] Verify web app "Reality Mode" functionality
+- [ ] Integrate Swarm-led autonomous content generation
+- [ ] Finalize walkthrough

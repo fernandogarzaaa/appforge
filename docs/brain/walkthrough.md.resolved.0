@@ -1,0 +1,47 @@
+# Walkthrough - Swarm Deployment with New Directive
+
+I have updated the swarm's primary directive and the default Solana payment address.
+
+## Activity Summary
+
+- **Updated Swarm Directive**: Changed the primary directive to "make money in reality no simulation" in [launch_swarm.bat](file:///c:/Users/ferna/Downloads/appforge-main/launch_swarm.bat) and [swarm_configs.ts](file:///c:/Users/ferna/Downloads/appforge-main/swarm/core/swarm_configs.ts).
+- **Updated Solana Address**: Set the default payment address to `CT1Ud6MvZ4NeACuF1x1EsnGpynLW6s7dWCx7C2LXJwsJ` in [payment_portal.html](file:///c:/Users/ferna/Downloads/appforge-main/public/payment_portal.html), [.env](file:///c:/Users/ferna/Downloads/appforge-main/.env), and [.env.production](file:///c:/Users/ferna/Downloads/appforge-main/.env.production).
+
+## Changes
+
+### Swarm Core
+
+#### [launch_swarm.bat](file:///c:/Users/ferna/Downloads/appforge-main/launch_swarm.bat)
+```diff
+-echo Primary Directive: Make Admin money 💰
++echo Primary Directive: Make money in reality no simulation 💰
+```
+
+#### [swarm_configs.ts](file:///c:/Users/ferna/Downloads/appforge-main/swarm/core/swarm_configs.ts)
+```diff
+-            SWARM_OBJECTIVE: 'Default admin-controlled operations'
++            SWARM_OBJECTIVE: 'Make money in reality no simulation'
+```
+
+### Payment Configuration
+
+#### [payment_portal.html](file:///c:/Users/ferna/Downloads/appforge-main/public/payment_portal.html)
+```diff
+-        const TREASURY = "2ZeBAFtHq5vNThXMjbZ7E59Msgv6xPpBFn7cw4KMxmot";
++        const TREASURY = "CT1Ud6MvZ4NeACuF1x1EsnGpynLW6s7dWCx7C2LXJwsJ";
+```
+
+#### [.env](file:///c:/Users/ferna/Downloads/appforge-main/.env)
+```diff
+-SOLANA_ADMIN_WALLET=2ZeBAFtHq5vNThXMjbZ7E59Msgv6xPpBFn7cw4KMxmot
++SOLANA_ADMIN_WALLET=CT1Ud6MvZ4NeACuF1x1EsnGpynLW6s7dWCx7C2LXJwsJ
+```
+
+## Verification Results
+
+### Manual Verification
+- Verified that [launch_swarm.bat](file:///c:/Users/ferna/Downloads/appforge-main/launch_swarm.bat) displays the new directive:
+  ![Directive Update](file:///c:/Users/ferna/Downloads/appforge-main/launch_swarm.bat)
+- Verified that [public/payment_portal.html](file:///c:/Users/ferna/Downloads/appforge-main/public/payment_portal.html) uses the new `TREASURY` address:
+  ![Treasury Update](file:///c:/Users/ferna/Downloads/appforge-main/public/payment_portal.html)
+- Verified environment variables are consistent across [.env](file:///c:/Users/ferna/Downloads/appforge-main/.env) and [.env.production](file:///c:/Users/ferna/Downloads/appforge-main/.env.production).

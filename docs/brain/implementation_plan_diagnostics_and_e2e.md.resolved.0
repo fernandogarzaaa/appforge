@@ -1,0 +1,35 @@
+# Plan: Resolve Diagnostics & Execute E2E Test
+
+Fix the "No test files found" diagnostic failure and verify the complete startup sequence.
+
+## Proposed Changes
+
+### Configuration Refinement
+
+#### [MODIFY] [vitest.config.js](file:///c:/Users/ferna/Downloads/appforge-main/vitest.config.js)
+- Refine the `exclude` list to ensure core integrity tests (e.g., in `src/tests`) are included during diagnostic runs while keeping node_modules excluded.
+- Ensure the `setupFiles` and `environment` are correctly handled for the diagnostic context.
+
+### Infrastructure Verification
+
+#### [ACTION] Run Quantum Diagnostic
+- Execute `npx tsx scripts/quantum_diagnostic.js` to verify that the configurations now allow for successful test discovery and passing.
+
+### End-to-End (E2E) Verification
+
+#### [ACTION] Launch Sovereign Ecosystem
+- Run `START_SOVEREIGN.bat` (or the unified launcher) to verify:
+  - Telemetry Server starts on Port 3001.
+  - UI starts on Port 5174.
+  - Swarm Daemon (`loop.ts`) initializes and starts autonomous cycles.
+  - No DLL errors or port conflicts occur.
+
+## Verification Plan
+
+### Automated
+- `npm run test` should no longer exit with "No test files found".
+- `quantum_diagnostic.js` should report "Structural Coherence: OPTIMAL".
+
+### Manual
+- Inspect `data/logs/swarm_daemon.log` for successful WhatsApp/Solana connections and autonomous cycle logs.
+- Verify UI accessibility in the browser (if possible) or check launcher output for successful process PID tracking.

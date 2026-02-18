@@ -1,0 +1,5 @@
+{
+  "artifactType": "ARTIFACT_TYPE_IMPLEMENTATION_PLAN",
+  "summary": "Plan to audit and fix CI configuration using a local Quantum Engine simulation.\n- Create `scripts/quantum_ci_audit.js` to validate file existence, lockfile consistency, and script availability.\n- Execute the script to identify hidden issues.\n- Apply fixes based on the audit report.",
+  "updatedAt": "2026-02-17T10:33:47.325009800Z"
+}

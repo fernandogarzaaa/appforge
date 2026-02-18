@@ -1,0 +1,19 @@
+# Iron Brain CI Repair (Phase 80)
+
+## Goal
+Investigate and fix the failing "Iron Brain CI" workflow. The user suspects "ENOENT" or other issues. We will use [gh](file:///c:/Users/ferna/Downloads/appforge-main/swarm/core/quantum_core.ts#352-362) CLI to get logs and [verify_evolution.ts](file:///c:/Users/ferna/Downloads/appforge-main/scripts/verify_evolution.ts) analysis to find the root cause.
+
+## Investigation Steps
+1. **List Runs**: `gh run list` to find the failed run ID.
+2. **View Logs**: `gh run view <RUN_ID> --log` to see the error.
+3. **Analyze Script**: Check [scripts/verify_evolution.ts](file:///c:/Users/ferna/Downloads/appforge-main/scripts/verify_evolution.ts) for potential failure points (directories, dependencies).
+
+## Potential Fixes
+- **ENOENT**: Ensure `src/data` or `swarm/data` exists (already partially covered by Hive Restoration).
+- **Missing Dependencies**: Check if `llama.cpp` download or execution fails.
+- **Git Identity**: If the workflow commits, ensure `git config` is set (we did this for other workflows, likely needed here too).
+
+## Verification Plan
+### Automated
+- Trigger workflow: `gh workflow run iron-brain-ci.yml`.
+- Watch Status: `gh run watch`.

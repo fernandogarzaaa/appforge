@@ -1,0 +1,44 @@
+# Web App Strategic Alignment: Base44 & Quantum Resonance
+
+Align the primary web application and the standalone dashboard with the recent backend optimizations (Semantic Compression & Health Monitoring). This ensures that the user interface provides real-time transparency into the cloud bridge's health and signal efficiency.
+
+## Proposed Changes
+
+### [Backend] Swarm Telemetry Server
+
+#### [MODIFY] [swarm_telemetry_server.ts](file:///c:/Users/ferna/Downloads/appforge-main/scripts/swarm_telemetry_server.ts)
+- [x] Broadcast `bridge_update` events via Socket.IO.
+- [x] Include `latency` and `online` status in the `swarm_state` broadcast.
+
+---
+
+### [Frontend] Sovereign UI (Standalone)
+
+#### [MODIFY] [App.tsx](file:///c:/Users/ferna/Downloads/appforge-main/sovereign-ui/src/App.tsx)
+- [x] Add state for `bridgeStatus` and `compressionRatio`.
+- [x] Subscribe to `realDataService` updates for bridge metrics.
+
+#### [NEW] [SignalDensityMonitor.tsx](file:///c:/Users/ferna/Downloads/appforge-main/sovereign-ui/src/components/SignalDensityMonitor.tsx)
+- [x] Component for visualizing semantic compression ratios and throughput boosts.
+
+---
+
+### [Frontend] Primary Web App (Root Project)
+
+#### [MODIFY] [AdminSovereign.tsx](file:///c:/Users/ferna/Downloads/appforge-main/src/pages/AdminSovereign.tsx)
+- [ ] Implement `bridge_update` socket listener.
+- [ ] Add `Bridge Resonance` status indicators to the Intelligence Matrix or Header.
+- [ ] Integrate a Signal Density visualization within the telemetry section.
+
+#### [NEW] [SignalDensityDisplay.jsx](file:///c:/Users/ferna/Downloads/appforge-main/src/components/common/SignalDensityDisplay.jsx)
+- [ ] Port the high-fidelity signal density monitor to the root project's component library.
+
+## Verification Plan
+
+### Automated Tests
+- Run [benchmark_base44.ts](file:///c:/Users/ferna/Downloads/appforge-main/scripts/benchmark_base44.ts) to confirm metrics are being generated.
+- Verify WebSocket packets using browser dev tools or a test client.
+
+### Manual Verification
+- Deploy the telemetry server and browse to `/admin/sovereign` to confirm live resonance metrics.
+- Verify the Signal Density bar updates when large prompts are sent.

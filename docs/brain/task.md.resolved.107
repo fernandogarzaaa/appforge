@@ -1,0 +1,48 @@
+# Task Checklist: God Mode Protocol Implementation
+
+- [x] **Phase 1: The Purge & Security**
+  - [x] Terminate all Node.js and Python processes
+  - [x] [DELETE] `swarm/core/real_hyper_intelligence_v2.ts`
+  - [x] [DELETE] [swarm/agents/RevenueHunter.ts](file:///c:/Users/ferna/Downloads/appforge-main/swarm/agents/RevenueHunter.ts)
+  - [x] Verify [.env](file:///c:/Users/ferna/Downloads/appforge-main/.env) security for new Solana wallet
+- [x] **Phase 2: Core Dependencies Installation**
+  - [x] `npm install openai @anthropic-ai/sdk dotenv express cors`
+- [x] **Phase 3: Swarm Brain Engineering**
+  - [x] [NEW] [src/swarm/llm_client.ts](file:///c:/Users/ferna/Downloads/appforge-main/src/swarm/llm_client.ts)
+  - [x] [NEW] [src/swarm/god_mode.ts](file:///c:/Users/ferna/Downloads/appforge-main/src/swarm/god_mode.ts)
+  - [x] [NEW] [src/swarm/orchestrator.ts](file:///c:/Users/ferna/Downloads/appforge-main/src/swarm/orchestrator.ts)
+- [x] **Phase 4: Sovereign IDE Integration**
+  - [x] [MODIFY] [src/server.ts](file:///c:/Users/ferna/Downloads/appforge-main/src/server.ts)
+  - [x] Start Orchestrator server on port 3001
+- [x] **Phase 6: Local-First Sovereign Brain (Ollama)**
+  - [x] Rewrite [src/swarm/llm_client.ts](file:///c:/Users/ferna/Downloads/appforge-main/src/swarm/llm_client.ts) for Ollama
+  - [x] Update [src/swarm/god_mode.ts](file:///c:/Users/ferna/Downloads/appforge-main/src/swarm/god_mode.ts) for local model usage
+  - [x] Configure [.env](file:///c:/Users/ferna/Downloads/appforge-main/.env) with `LOCAL_MODEL=llama3` and `PORT=3001`
+  - [x] Restart Orchestrator server
+  - [x] Verify local "Proof of Evolution" test
+- [x] **Phase 6.5: The Git Keeper (Autonomous Commit)**
+  - [x] [NEW] [src/swarm/git_manager.ts](file:///c:/Users/ferna/Downloads/appforge-main/src/swarm/git_manager.ts)
+  - [x] [MODIFY] [src/swarm/orchestrator.ts](file:///c:/Users/ferna/Downloads/appforge-main/src/swarm/orchestrator.ts) to integrate [GitManager](file:///c:/Users/ferna/Downloads/appforge-main/src/swarm/git_manager.ts#4-28)
+  - [x] Verify Git Authentication
+- [x] **Phase 7: Sovereign Identity Layer**
+  - [x] Install Solana wallet adapter dependencies
+  - [x] [NEW] [src/components/auth/SovereignWallet.tsx](file:///c:/Users/ferna/Downloads/appforge-main/src/components/auth/SovereignWallet.tsx)
+  - [x] [MODIFY] [src/App.jsx](file:///c:/Users/ferna/Downloads/appforge-main/src/App.jsx) to wrap with [SovereignWallet](file:///c:/Users/ferna/Downloads/appforge-main/src/components/auth/SovereignWallet.tsx#11-35)
+- [x] **Phase 8: Final Verification & Evolution Report**
+  - [x] Confirm God Mode evolution in [global_instructions.md](file:///c:/Users/ferna/Downloads/appforge-main/src/swarm/prompts/global_instructions.md)
+  - [x] Verify multi-wallet connectivity in Sovereign IDE
+- [x] **Phase 8: Total Autonomy (The Sovereign Cycle)**
+  - [x] Refine [src/swarm/git_manager.ts](file:///c:/Users/ferna/Downloads/appforge-main/src/swarm/git_manager.ts) (Git Keeper)
+  - [x] Update [src/swarm/orchestrator.ts](file:///c:/Users/ferna/Downloads/appforge-main/src/swarm/orchestrator.ts) with `fs` persistence
+  - [x] Execute First Sovereign Build: [WalletBalance.tsx](file:///c:/Users/ferna/Downloads/appforge-main/src/components/WalletBalance.tsx)
+  - [x] Verify GitHub Commit Persistence
+- [x] **Phase 9: The Economic Engine (Revenue Generation)**
+  - [x] Install `@solana/pay` and `bignumber.js`
+  - [x] Execute Sovereign Merchant Build: [SolanaMerchant.tsx](file:///c:/Users/ferna/Downloads/appforge-main/src/components/SolanaMerchant.tsx)
+  - [x] Integrate [WalletBalance](file:///c:/Users/ferna/Downloads/appforge-main/src/components/WalletBalance.tsx#8-45) and [SolanaMerchant](file:///c:/Users/ferna/Downloads/appforge-main/src/components/SolanaMerchant.tsx#12-83) into [SovereignIDE.jsx](file:///c:/Users/ferna/Downloads/appforge-main/src/pages/SovereignIDE.jsx)
+  - [x] Verify QR Code generation and payment flow
+- [/] **Phase 9.5: The Code Vending Machine (Revenue-Labor Link)**
+  - [x] [MODIFY] [src/components/SolanaMerchant.tsx](file:///c:/Users/ferna/Downloads/appforge-main/src/components/SolanaMerchant.tsx) with `onPaymentSuccess`
+  - [x] [NEW] [src/components/CodeVendingMachine.tsx](file:///c:/Users/ferna/Downloads/appforge-main/src/components/CodeVendingMachine.tsx) (Logic Loop)
+  - [x] [MODIFY] [src/pages/SovereignIDE.jsx](file:///c:/Users/ferna/Downloads/appforge-main/src/pages/SovereignIDE.jsx) to deploy Vending Machine
+  - [/] Verify "Pay-to-Unlock" labor cycle

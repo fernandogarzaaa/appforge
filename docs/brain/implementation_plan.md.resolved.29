@@ -1,0 +1,46 @@
+# Mission: Sovereign Agentic IDE (SAI) Overhaul
+
+Restructure the web application into a unified Agentic AI-powered IDE. This replaces the fragmented "Dashboard-to-Assistant" flow with a high-performance, real-time building environment where users build full-stack apps through natural language, multi-modal feedback, and quantum-backed swarm intelligence.
+
+## Technical Pillar: Quantum-Base44 Synergy
+- **Quantum Engine**: Orchestrates the agentic swarm, predicts architectural bottlenecks, and optimizes signal density.
+- **Base44**: Handles the high-speed deployment, hosting, and state management for the generated applications.
+
+## Proposed Architecture (Triple Helix)
+1. **Swarm Console (Side Panel)**: Multi-modal chat interface with direct agent control and status tracking.
+2. **Project Canvas (Center/Main)**: Live preview of generated apps, code editor, and visual design surface.
+3. **Quantum Pulse (HUD/Toolbar)**: Real-time telemetry, core resonance, and agent heartbeats.
+
+## Proposed Changes
+
+### [Frontend] Core Navigation & Layout
+
+#### [NEW] [SovereignIDE.jsx](file:///c:/Users/ferna/Downloads/appforge-main/src/pages/SovereignIDE.jsx)
+- The primary workspace for SAI.
+- Integrates the `AIAgentCore` and [QuantumEngine](file:///c:/Users/ferna/Downloads/appforge-main/universal_quantum_dist/index.js#281-603) directly into the state.
+- Split-pane layout using `@radix-ui/react-resizable-panels`.
+
+#### [MODIFY] [pages.config.jsx](file:///c:/Users/ferna/Downloads/appforge-main/src/pages.config.jsx)
+- Set `SovereignIDE` as the main focus.
+- Add entry for the new SAI page and related components.
+
+### [Frontend] Components & State
+
+#### [NEW] [SwarmConsole.jsx](file:///c:/Users/ferna/Downloads/appforge-main/src/components/ide/SwarmConsole.jsx)
+- Unified command interface.
+- Real-time agent collaboration feed.
+- High-fidelity mode (Quantum Resonance).
+
+#### [NEW] [ProjectCanvas.jsx](file:///c:/Users/ferna/Downloads/appforge-main/src/components/ide/ProjectCanvas.jsx)
+- Live project preview.
+- Deep integration with Base44 deployment status.
+
+#### [MODIFY] [DashboardNew.jsx](file:///c:/Users/ferna/Downloads/appforge-main/src/pages/DashboardNew.jsx)
+- Transition "Generate App" to initialize SAI session state and navigate to the IDE.
+
+## Verification Plan
+
+### Manual Verification
+- **Cold Boot Flow**: Describe app -> Navigate to SAI -> Watch Swarm initialize and start building.
+- **Quantum Pulse**: Verify real-time metrics update in the IDE toolbar.
+- **Deployment**: Confirm the "Publish to Base44" flow works from within the new IDE.

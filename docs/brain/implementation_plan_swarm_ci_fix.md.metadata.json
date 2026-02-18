@@ -1,0 +1,5 @@
+{
+  "artifactType": "ARTIFACT_TYPE_IMPLEMENTATION_PLAN",
+  "summary": "Implementation plan to resolve the autonomous swarm cycle failure in CI by fixing the missing bs58 dependency, synchronizing lockfiles, and upgrading to native ESM.极轴+解决 CI 中自主集群周期失败的实施计划，通过修复缺失的 bs58 依赖项、同步锁文件并升级到原生 ESM。极轴",
+  "updatedAt": "2026-02-16T04:00:00.298340900Z"
+}

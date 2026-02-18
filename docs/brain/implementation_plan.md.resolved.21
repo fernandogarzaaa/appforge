@@ -1,0 +1,33 @@
+# Oracle UI Evolution: Quantum Dashboard Enhancements
+
+Following the Quantum Oracle's blueprint, this plan outlines the implementation of high-fidelity UI components into the Sovereign Command Center.
+
+## Proposed Changes
+
+### [Component] QuantumParameterTuner
+- **Goal**: Provide a live interface to adjust Quantum Engine parameters (Entropy, Variance, Coherence) without service restarts.
+- **Files**:
+    - `sovereign-ui/src/components/QuantumParameterTuner.tsx` [NEW]
+    - [scripts/swarm_telemetry_server.ts](file:///c:/Users/ferna/Downloads/appforge-main/scripts/swarm_telemetry_server.ts) [MODIFY] (Add API endpoints for dynamic parameter updates)
+
+### [Component] MemoryGraphVisualization
+- **Goal**: Visualize the swarm's shared memory resonance in real-time.
+- **Files**:
+    - `sovereign-ui/src/components/MemoryGraph.tsx` [NEW]
+    - [sovereign-ui/src/realDataService.ts](file:///c:/Users/ferna/Downloads/appforge-main/sovereign-ui/src/realDataService.ts) [MODIFY] (Add memory resonance data stream)
+
+### [Component] LiveAgentStatus
+- **Goal**: Track individual agent cognitive load and state.
+- **Files**:
+    - `sovereign-ui/src/components/AgentStatusGrid.tsx` [NEW]
+
+## Verification Plan
+
+### Automated Verification
+- `npm run test` in `sovereign-ui` (if applicable).
+- Verify API responsiveness for parameter updates.
+
+### Manual Verification
+- Open dashboard at `http://localhost:5174`.
+- Adjust a slider in `QuantumParameterTuner` and verify the metrics change in real-time.
+- Confirm the `MemoryGraph` updates as swarms perform tasks.

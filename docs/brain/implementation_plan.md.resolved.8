@@ -1,0 +1,49 @@
+# Sovereign Command Center (SCC) Implementation Plan
+
+The objective is to create a premium, futuristic management interface for the Sovereign AI Ecosystem, enabling both local PC control and remote iPhone monitoring.
+
+## User Review Required
+
+> [!IMPORTANT]
+> **Mobile Access**: To access the Command Center on your iPhone, we will use a **Local Tunnel** (e.g., Cloudflare Tunnel or `localtunnel`). This requires a one-time setup on your PC.
+
+## Proposed Changes
+
+---
+
+### [Command Center Backend]
+
+#### [NEW] [scc_server.ts](file:///c:/Users/ferna/Downloads/appforge-main/scripts/scc_server.ts)
+A lightweight Socket.io + Express server that:
+- Watches `swarm/logs/*.log` and `src/data/*.json` for changes.
+- Streams real-time telemetry to the dashboard.
+- Proxies commands (Maintenance, Restart, Config) to the swarm processes.
+
+---
+
+### [Command Center Frontend]
+
+#### [NEW] [AdminSovereign.tsx](file:///c:/Users/ferna/Downloads/appforge-main/src/pages/AdminSovereign.tsx)
+A dedicated futuristic dashboard page:
+- **Visuals**: HSL-based dark mode, glassmorphism, and neon telemetry.
+- **Features**: Live revenue chart, swarm health matrix, and "God Mode" kill-switch.
+- **PWA Support**: Manifest and Service Worker for iPhone "Add to Home Screen" support.
+
+---
+
+### [Unified Launch]
+
+#### [MODIFY] [ecosystem.sovereign.config.cjs](file:///c:/Users/ferna/Downloads/appforge-main/ecosystem.sovereign.config.cjs)
+Add the `scc-server` as a persistence layer for the UI.
+
+#### [MODIFY] [launch_swarm_v3.bat](file:///c:/Users/ferna/Downloads/appforge-main/launch_swarm_v3.bat)
+Update to launch the SCC and provide the mobile access tunnel command.
+
+## Verification Plan
+
+### Automated Tests
+- `npm run scc:test`: Verify WebSocket connectivity and data streaming.
+
+### Manual Verification
+- Open `http://localhost:5173/admin/sovereign` and verify real-time log updates.
+- Toggle Maintenance Mode from the UI and verify that agents shut down via terminal logs.

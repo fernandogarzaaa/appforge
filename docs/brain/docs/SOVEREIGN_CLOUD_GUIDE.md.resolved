@@ -1,0 +1,56 @@
+# Sovereign Cloud Deployment Guide (Akash Network)
+
+This guide enables you to deploy **Chimera Prime** (your Sovereign Brain) to the Akash Network, a decentralized cloud computing marketplace.
+
+## 📦 The Deployment Pack
+
+I have generated two critical files for you:
+1.  **`Dockerfile.chimera`**: The blueprint for your Sovereign Brain container. It includes:
+    -   Node.js 20 (Swarm Runtime)
+    -   Ollama (Inference Engine)
+    -   The Chimera Fuse Engine
+    -   Sovereign API Gateway (Port 8000)
+
+2.  **`akash.sdl`**: The configuration file for the Akash Network. It defines:
+    -   CPU/RAM/Storage requirements (Standard GPU tier).
+    -   Port mappings (8000 for API).
+    -   Pricing limits (Sovereign Budget).
+
+## 🚀 Deployment Steps
+
+### Step 1: Build the Container (Local or Docker Hub)
+You need to build the image and push it to a public registry (like Docker Hub) so Akash providers can pull it.
+
+```bash
+# Login to Docker Hub
+docker login
+
+# Build
+docker build -t your-username/chimera-prime:v1 -f Dockerfile.chimera .
+
+# Push
+docker push your-username/chimera-prime:v1
+```
+
+*(Replace `your-username` with your Docker Hub username. Update `akash.sdl` image name accordingly.)*
+
+### Step 2: Install Akash CLI (or use Console)
+The easiest way is to use the **Akash Console** (Web UI):
+1.  Go to [console.akash.network](https://console.akash.network).
+2.  Connect your Wallet (Keplr/Leap).
+3.  Click **"Deploy"**.
+4.  Choose **"Empty"** or **"Custom SDL"**.
+5.  Copy-Paste the content of `akash.sdl`.
+
+### Step 3: Fund & Launch
+1.  The console will ask for a small deposit (AKT tokens).
+2.  It will show you bids from providers.
+3.  Select a provider (Look for "Audited" or high uptime).
+4.  Wait for the **Manifest** to be sent.
+
+### Step 4: Link to Swarm
+Once deployed, you will get a **Uri** (e.g., `http://provider-uri:31234`).
+1.  Go to your GitHub Repository -> Settings -> Secrets.
+2.  Add `CHIMERA_CLOUD_URL` = `http://provider-uri:31234`.
+
+**Congratulations. Your AI now lives on the Decentralized Cloud.**

@@ -1,0 +1,29 @@
+# Fix Wallet, Enable Reality Mode, and Fix WhatsApp
+
+The previous update missed some occurrences of the wallet address and "reality mode" was disabled. The WhatsApp integration also needs fixing.
+
+## Proposed Changes
+
+### Configuration Fixes
+#### [MODIFY] [.env.local](file:///c:/Users/ferna/Downloads/appforge-main/.env.local)
+- Update `SOLANA_WALLET_ADDRESS` to: `CT1Ud6MvZ4NeACuF1x1EsnGpynLW6s7dWCx7C2LXJwsJ`
+- Set `SWARM_REALITY_MODE` to `true`
+- Set `REAL_TRADING_ENABLED` to `true`
+- Set `SWARM_AUTONOMOUS_TRADING_ENABLED` to `true`
+
+### WhatsApp Integration
+#### [DELETE] [auth_info_baileys_swarm](file:///c:/Users/ferna/Downloads/appforge-main/auth_info_baileys_swarm)
+- Clear the WhatsApp session directory to force a fresh login/QR scan.
+
+#### [MODIFY] [whatsapp_bridge.ts](file:///c:/Users/ferna/Downloads/appforge-main/swarm/core/whatsapp_bridge.ts)
+- (If needed after seeing logs) Review connection logic.
+
+## Verification Plan
+
+### Automated Verification
+- Run [launch_swarm.bat](file:///c:/Users/ferna/Downloads/appforge-main/launch_swarm.bat) and observe the logs.
+- Check [swarm/logs/whatsapp.log](file:///c:/Users/ferna/Downloads/appforge-main/swarm/logs/whatsapp.log) for connection status.
+
+### Manual Verification
+- Verify that the terminal displays the new wallet address if printed.
+- Scan the new WhatsApp QR code to confirm integration.

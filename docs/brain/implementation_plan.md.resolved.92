@@ -1,0 +1,19 @@
+# Fix CI Compilation Failure (quantum_bridge)
+
+Address unused variable and dead code warnings in the `quantum_bridge` crate that are causing CI failures due to `-D warnings`.
+
+## Proposed Changes
+
+### [Component] quantum_bridge (Rust)
+
+#### [MODIFY] [lattice.rs](file:///c:/Users/ferna/Downloads/appforge-main/swarm/core/quantum_bridge/src/kernel/lattice.rs)
+- Ensure unused variable `neighbor_inconsistency` is prefixed with an underscore.
+- Add `#[allow(dead_code)]` to `NodeState`, [LatticeNode](file:///c:/Users/ferna/Downloads/appforge-main/swarm/core/quantum_bridge/src/kernel/lattice.rs#14-20), [LatticeController](file:///c:/Users/ferna/Downloads/appforge-main/swarm/core/quantum_bridge/src/kernel/lattice.rs#21-25), and its associated items to suppress warnings since they are not currently utilized in [main.rs](file:///c:/Users/ferna/Downloads/appforge-main/swarm/core/quantum_bridge/src/main.rs).
+
+#### [MODIFY] [program_whitelist.rs](file:///c:/Users/ferna/Downloads/appforge-main/swarm/core/quantum_bridge/src/oracle/program_whitelist.rs)
+- Add `#[allow(dead_code)]` to [get_allowed_programs](file:///c:/Users/ferna/Downloads/appforge-main/swarm/core/quantum_bridge/src/oracle/program_whitelist.rs#5-27) and [get_program_name](file:///c:/Users/ferna/Downloads/appforge-main/swarm/core/quantum_bridge/src/oracle/program_whitelist.rs#28-32) as they are foundational but currently unused.
+
+## Verification Plan
+
+### Automated Tests
+- Run `cargo check` in the `swarm/core/quantum_bridge` directory to ensure all warnings are suppressed or resolved.

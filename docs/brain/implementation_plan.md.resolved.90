@@ -1,0 +1,47 @@
+# Phases 51, 52 & 53: Pure Reality Transition
+
+This plan outlines the total transition from a "local tool" to an independent, production-grade platform.
+
+## Phase 52 & 53: Legacy Purge & Quantum Stability
+
+Ensure the autonomous infrastructure is pass-through stable and 100% "Pure Reality" compliant.
+
+> [!IMPORTANT]
+> This phase removes the final Rust-level tracers of Solana from the `quantum_bridge` and fixes the CI bottlenecks for the autonomous loop.
+
+## Proposed Changes
+
+### [Component] Swarm Quantum Bridge (Rust)
+Final purification of the Rust-based oracle.
+
+#### [MODIFY] [truth.rs](file:///c:/Users/ferna/Downloads/appforge-main/swarm/core/quantum_bridge/src/kernel/truth.rs)
+- Convert [verify_cross_consistency](file:///c:/Users/ferna/Downloads/appforge-main/swarm/core/quantum_bridge/src/kernel/truth.rs#57-70) to a static method (remove `&self`).
+- Fix `Axiom` comparisons using `Eq` and robust logic.
+- Add `#[allow(dead_code)]` for constants intended for future expansion to satisfy strict CI lints.
+
+#### [MODIFY] [lattice.rs](file:///c:/Users/ferna/Downloads/appforge-main/swarm/core/quantum_bridge/src/kernel/lattice.rs)
+- Update calls to [verify_cross_consistency](file:///c:/Users/ferna/Downloads/appforge-main/swarm/core/quantum_bridge/src/kernel/truth.rs#57-70) to match the static signature (call via `TruthAnchor::`).
+
+#### [MODIFY] [tx_audit.rs](file:///c:/Users/ferna/Downloads/appforge-main/swarm/core/quantum_bridge/src/oracle/tx_audit.rs)
+- Purge Solana transaction parsing logic.
+- Implement a generic "Sovereign Audit" that validates internal coordinating signals.
+
+#### [MODIFY] [program_whitelist.rs](file:///c:/Users/ferna/Downloads/appforge-main/swarm/core/quantum_bridge/src/oracle/program_whitelist.rs)
+- Purge Solana program IDs.
+- Transition to "Verified Sovereign Modules" list.
+
+### [Component] Infrastructure
+Fixing Git bottlenecks.
+
+#### [MODIFY] [.gitignore](file:///c:/Users/ferna/Downloads/appforge-main/.gitignore)
+- Explicitly unignore `src/data/quantum_*.json` to allow evolution results to be tracked.
+
+#### [MODIFY] [quantum_evolution.yml](file:///c:/Users/ferna/Downloads/appforge-main/.github/workflows/quantum_evolution.yml)
+- Update `git add` to target specific results and handle ignored states gracefully.
+
+## Verification Plan
+
+### Automated Tests
+- `cargo check --release` (Rust)
+- `npm run swarm` (Node.js)
+- Verify `src/data` tracking status in Git.

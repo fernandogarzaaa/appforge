@@ -1,0 +1,25 @@
+# Walkthrough: Cycle #248 Repairs
+
+The Autonomous Swarm detected critical regressions. The Repair Swarm has successfully neutralized them.
+
+## 🛠️ Fixes Implemented
+
+### 1. `ReferenceError: useMemo`
+- **Component:** [src/components/auth/SovereignWallet.tsx](file:///c:/Users/ferna/Downloads/appforge-main/src/components/auth/SovereignWallet.tsx)
+- **Issue:** `useMemo` was used without import.
+- **Fix:** Added `import { useMemo } from 'react';`.
+
+### 2. Environment Configuration
+- **Issue:** Missing `VITE_BASE44_APP_ID` caused test failures.
+- **Fix:** Created [.env.local](file:///c:/Users/ferna/Downloads/appforge-main/.env.local) from [.env.example](file:///c:/Users/ferna/Downloads/appforge-main/.env.example) and added the missing variable.
+
+### 3. Script Resilience ([reality_pulse.ts](file:///c:/Users/ferna/Downloads/appforge-main/scripts/reality_pulse.ts))
+- **Issue:** `dotenv` module not found in some CI contexts.
+- **Fix:** Removed dependency. Implemented manual [.env](file:///c:/Users/ferna/Downloads/appforge-main/.env) parsing using `fs`.
+
+### 4. Path Resolution ([p2p_resonance.ts](file:///c:/Users/ferna/Downloads/appforge-main/swarm/core/p2p_resonance.ts))
+- **Issue:** `fileURLToPath` was failing in Vitest/SSR context.
+- **Fix:** Refactored `__dirname` shim to be safe for mixed environments.
+
+## ✅ Verification
+- [scripts/reality_pulse.ts](file:///c:/Users/ferna/Downloads/appforge-main/scripts/reality_pulse.ts): **PASSED** (Oracle consultation successful).

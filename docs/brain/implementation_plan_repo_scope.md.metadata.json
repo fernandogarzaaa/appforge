@@ -1,0 +1,5 @@
+{
+  "artifactType": "ARTIFACT_TYPE_IMPLEMENTATION_PLAN",
+  "summary": "Implementation plan to expand the swarm's self-improvement and analysis capabilities to the entire repository. This involves decoupling the SingularityEngine from hardcoded swarm/core targets and enhancing the analyze_antigravity script to scan the full repo.",
+  "updatedAt": "2026-02-18T05:25:50.316133300Z"
+}

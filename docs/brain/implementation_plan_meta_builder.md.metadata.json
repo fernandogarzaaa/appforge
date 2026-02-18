@@ -1,0 +1,5 @@
+{
+  "artifactType": "ARTIFACT_TYPE_IMPLEMENTATION_PLAN",
+  "summary": "Implementation plan for Phase 61: Meta-Builder Genesis. This plan covers the creation of a React Native iOS application capable of on-device code generation using ExecuTorch, a recursive compiler for instant UI previews, and biometric-secured deployments.极轴+Phase 61: Meta-Builder Genesis 的实施计划。极轴+该计划涵盖了创建一个 React Native iOS 应用，该应用能够利用 ExecuTorch 进行设备端代码生成，包含用于即时 UI 预览的递归编译器，以及生物识别担保的部署。极轴",
+  "updatedAt": "2026-02-15T12:39:44.007116400Z"
+}

@@ -1,0 +1,26 @@
+# Implementation Plan - Phase 8: Cloud Schema Synchronization
+
+The objective is to push the [Task](file:///c:/Users/ferna/Downloads/appforge-main/swarm/tools/base44.ts#71-76) entity schema to the Base44 Cloud to resolve the 404/422 errors preventing the [CuriosityEngine](file:///c:/Users/ferna/Downloads/appforge-main/swarm/core/curiosity_engine.ts#14-99) from operating live.
+Research confirmed that the SDK (`@base44/sdk`) is for data manipulation, not schema management. Therefore, we **MUST** use the CLI (`@base44/cli`) as originally requested by the user.
+
+## User Review Required
+> [!NOTE]
+> I will attempt to debug the CLI installation (`npm install @base44/cli`). If strictly blocked by environment, manual user action might be needed, but I will try to self-heal first.
+
+## Proposed Changes
+
+### Configuration
+#### [NEW] [base44/entities/Task.json](file:///c:/Users/ferna/Downloads/appforge-main/base44/entities/Task.json)
+-   Already created. Defines the [Task](file:///c:/Users/ferna/Downloads/appforge-main/swarm/tools/base44.ts#71-76) entity.
+
+### Execution Steps
+1.  **Install CLI**: Run `npm install @base44/cli --verbose` to diagnose previous failure.
+2.  **Push Schema**: Run `npx base44 entities push` (using the local project config).
+3.  **Verify**: Run `npx tsx scripts/trigger_curiosity.ts` to confirm "Task Created" success.
+
+## Verification Plan
+
+### Automated Tests
+-   **CLI Installation Check**: `npx base44 --version`
+-   **Schema Push Check**: Exit code 0 from `base44 entities push`.
+-   **End-to-End**: [scripts/trigger_curiosity.ts](file:///c:/Users/ferna/Downloads/appforge-main/scripts/trigger_curiosity.ts) should return success (creating a real Task in the cloud).

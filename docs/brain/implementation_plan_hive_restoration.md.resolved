@@ -1,0 +1,33 @@
+# Implementation Plan: Phase 2 - The Repair Swarm
+
+Following the "Hive Restoration" protocol, this phase focuses on active repair of the codebase based on the Triage Report.
+
+## Proposed Changes
+
+### [Critical Remediation]
+
+#### [NEW] [.env.example](file:///c:/Users/ferna/Downloads/appforge-main/.env.example)
+- Create a template environment file derived from [src/config/securityConfig.ts](file:///c:/Users/ferna/Downloads/appforge-main/src/config/securityConfig.ts) and [swarm/package.json](file:///c:/Users/ferna/Downloads/appforge-main/swarm/package.json) dependencies.
+
+### [Agent: BugHunter]
+
+#### [MODIFY] [Codebase Wide]
+- Execute `npx tsc --noEmit` to identify hidden type errors.
+- Resolve any remaining issues in `swarm/core` or `src/utils`.
+
+### [Agent: Optimizer]
+
+#### [MODIFY] [swarm/core/quantum_core.ts](file:///c:/Users/ferna/Downloads/appforge-main/swarm/core/quantum_core.ts)
+- Remove `@ts-ignore` if possible by adding a proper declaration file or interface for `universal_quantum_dist`.
+
+### [Agent: DevOps]
+
+#### [MODIFY] [.github/workflows/iron-brain-ci.yml](file:///c:/Users/ferna/Downloads/appforge-main/.github/workflows/iron-brain-ci.yml)
+- Verify the "No AI Required" step ensures the pipeline passes even if Ghost Brain (Ollama) fails to start (already implemented, but will double-check logic).
+
+## Verification Plan
+
+### Automated Tests
+- **`npx tsc --noEmit`**: Must return exit code 0.
+- **`npm run lint`**: Must remain clean.
+- **`npx tsx scripts/verify_reality.ts`**: Regression test to ensure Reality Sensor still works.

@@ -1,0 +1,37 @@
+# Swarm Daemon Stability Patch
+
+The swarm daemon is currently crashing due to a `ReferenceError` and failing to load environment variables gracefully in CI environments.
+
+## Proposed Changes
+
+### [Swarm Core]
+
+#### [MODIFY] [autonomous_trading_controller.ts](file:///c:/Users/ferna/Downloads/appforge-main/swarm/core/autonomous_trading_controller.ts)
+
+Export a singleton instance of the controller to match the pattern used by other core modules.
+
+```typescript
+export const autonomousTradingController = new AutonomousTradingController();
+```
+
+#### [MODIFY] [loop.ts](file:///c:/Users/ferna/Downloads/appforge-main/swarm/core/loop.ts)
+
+1.  Make [.env.local](file:///c:/Users/ferna/Downloads/appforge-main/.env.local) loading optional and silent when missing.
+2.  Import `autonomousTradingController`.
+3.  Initialize the controller in the [main](file:///c:/Users/ferna/Downloads/appforge-main/swarm/core/loop.ts#205-949) function.
+
+```typescript
+import { autonomousTradingController } from './autonomous_trading_controller.js';
+
+// Inside main()
+await autonomousTradingController.initialize();
+```
+
+## Verification Plan
+
+### Automated Tests
+- Run `npx tsx swarm/core/loop.ts` (dry run or with mock env).
+- Check logs for "Autonomous Trading Controller" status.
+
+### Manual Verification
+- Verify that the "Error loading .env.local" is gone or downgraded to a warning.

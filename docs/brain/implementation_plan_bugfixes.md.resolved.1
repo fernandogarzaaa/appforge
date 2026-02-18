@@ -1,0 +1,40 @@
+# Emergency Fix: UI and DLL Errors
+
+Resolve the missing `libintl-8.dll` (or similar) error and the Tailwind CSS v4 resolution failure in the UI.
+
+## User Review Required
+
+> [!IMPORTANT]
+> The `libint-8.dll` error might be related to a specific native dependency or environment setup. I will attempt to identify the source, but the user might need to install a specific runtime (like MSVC Redistributables or Gettext) if it's not present on the system.
+
+## Proposed Changes
+
+### UI (sovereign-ui)
+
+#### [MODIFY] [package.json](file:///c:/Users/ferna/Downloads/appforge-main/sovereign-ui/package.json)
+
+- Upgrade `tailwindcss` to `^4.0.0` (latest v4).
+- Ensure `@tailwindcss/postcss` and `@tailwindcss/vite` are at `^4.0.0`.
+- Remove legacy `autoprefixer` if it's bundled with v4 or ensure compatibility.
+
+### Swarm & Core (DLL Issues)
+
+#### [ACTION] Environment Path Injection
+- Add common Windows binary paths (Git, OpenSSL, etc.) to the `PATH` in [scripts/launchers/LAUNCH_SOVEREIGN_CORE.bat](file:///c:/Users/ferna/Downloads/appforge-main/scripts/launchers/LAUNCH_SOVEREIGN_CORE.bat) to help find `libintl-8.dll` and others.
+- Identify if any native `node_modules` (like `sqlite3` or `sharp`) are missing their prebuilt binaries.
+
+#### [RESEARCH] Missing DLL List
+- Ask user for the names of the other missing DLLs to identify the source package (e.g., `libssl`, `libcrypto`, `zlib`).
+
+## Verification Plan
+
+### Automated Tests
+
+- Run `npm run build` in `sovereign-ui` to verify Tailwind resolution.
+- Run `npx vite dev` in `sovereign-ui` to check if the error persists.
+
+### Manual Verification
+
+1. Start the application using [START_SOVEREIGN.bat](file:///c:/Users/ferna/Downloads/appforge-main/START_SOVEREIGN.bat).
+2. Check if the "dll not found" alert still appears.
+3. Access `http://localhost:5174` and verify the CSS loads correctly.

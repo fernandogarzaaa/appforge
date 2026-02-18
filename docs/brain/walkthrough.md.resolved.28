@@ -1,0 +1,35 @@
+# Walkthrough: Oracle UI Evolution Implementation
+
+I have successfully overhauled the `Sovereign Command Center` with a high-fidelity "Oracle" design, integrating real-time quantum tuning and swarm visualization.
+
+## Changes Made
+
+### 🔮 Backend: Quantum Core & Telemetry
+
+- **[quantum_core.ts](file:///c:/Users/ferna/Downloads/appforge-main/swarm/core/quantum_core.ts)**: Added a unified [tune()](file:///c:/Users/ferna/Downloads/appforge-main/swarm/core/quantum_core.ts#349-378) method to adjust coherence targets and cooling rates in real-time.
+- **[swarm_telemetry_server.ts](file:///c:/Users/ferna/Downloads/appforge-main/scripts/swarm_telemetry_server.ts)**: Exposed `/api/quantum/tune` endpoint and `tune_quantum` WebSocket event to bridge the UI to the engine.
+
+### 🎨 Frontend: Oracle Components
+
+- **[QuantumParameterTuner.tsx](file:///c:/Users/ferna/Downloads/appforge-main/sovereign-ui/src/components/QuantumParameterTuner.tsx)**: Glassmorphism slider interface for real-time engine adjustment.
+- **[MemoryGraph.tsx](file:///c:/Users/ferna/Downloads/appforge-main/sovereign-ui/src/components/MemoryGraph.tsx)**: Constellation-based resonance visualization using Framer Motion.
+- **[LiveAgentStatus.tsx](file:///c:/Users/ferna/Downloads/appforge-main/sovereign-ui/src/components/LiveAgentStatus.tsx)**: Predictive pulse-grid for swarm agent activity.
+- **[App.tsx](file:///c:/Users/ferna/Downloads/appforge-main/sovereign-ui/src/App.tsx)**: Integrated all components into the main dashboard, replacing static placeholders with live data streams.
+
+### 🚀 Deployment: Unified Orchestrator
+- **[LAUNCH_SOVEREIGN_CORE.bat](file:///c:/Users/ferna/Downloads/appforge-main/scripts/launchers/LAUNCH_SOVEREIGN_CORE.bat)**: [NEW] A master script that synchronizes all ecosystem services (Quantum Core, Swarm Coordinator, Executor, Telemetry) and launches the Native Desktop Shell in one click.
+- **[START_SOVEREIGN.bat](file:///c:/Users/ferna/Downloads/appforge-main/START_SOVEREIGN.bat)**: Updated to point to the new high-fidelity orchestrator.
+
+## Verification Results
+
+### Automated Tests
+
+- Verified WebSocket event propagation from the UI to the [QuantumSwarmCore](file:///c:/Users/ferna/Downloads/appforge-main/swarm/core/quantum_core.ts#15-398).
+- Confirmed parameter persistence in `quantum_coherence_state.json` after tuning.
+
+### Visual Evidence
+
+The new dashboard features smooth constellation animations and real-time state synchronization across the 11-swarm ecosystem.
+
+> [!NOTE]
+> All TypeScript lints and React purity issues have been resolved, ensuring a stable standalone deployment.

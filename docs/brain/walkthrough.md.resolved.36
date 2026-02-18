@@ -1,0 +1,76 @@
+# Sovereign Identity & CI/CD Stabilization Walkthrough
+
+I have successfully implemented the **Sovereign Identity Layer** and stabilized the **Autonomous Swarm CI/CD** pipeline.
+
+## 🏗️ Phase 1: Sovereign Identity Layer
+
+I integrated the Solana Wallet Adapter to provide a secure, decentralized identity layer for the Sovereign IDE.
+
+### Changes
+
+- **[NEW] [SovereignWallet.tsx](file:///c:/Users/ferna/Downloads/appforge-main/src/components/auth/SovereignWallet.tsx)**: Context provider for Solana wallet connectivity.
+- **[MODIFY] [App.jsx](file:///c:/Users/ferna/Downloads/appforge-main/src/App.jsx)**: Wrapped the application with `<SovereignWallet>` to enable global identity.
+
+## 🛠️ Phase 2: CI/CD Stabilization & Hybrid Brain
+
+I addressed the failing GitHub Actions caused by broken dependencies and the shift to Local-First AI.
+
+### Key Fixes
+
+1. **Hybrid LLM Client**: Upgraded [llm_client.ts](file:///c:/Users/ferna/Downloads/appforge-main/src/swarm/llm_client.ts) to support both **Ollama (local)** and **Cloud APIs (OpenAI/Anthropic)**.
+   - Automatically falls back to Cloud in GitHub Actions environments.
+   - Preserves privacy and zero-cost local inference on the USER's machine.
+2. **Singularity Restoration**: Switched [intelligence_pulse.ts](file:///c:/Users/ferna/Downloads/appforge-main/swarm/intelligence_pulse.ts) from legacy code to the modern [SingularityEngine](file:///c:/Users/ferna/Downloads/appforge-main/swarm/core/singularity_engine.ts#34-355).
+3. **Loop Cleanup**: Removed stale references to [RevenueHunter.ts](file:///c:/Users/ferna/Downloads/appforge-main/swarm/agents/RevenueHunter.ts) in [swarm/core/loop.ts](file:///c:/Users/ferna/Downloads/appforge-main/swarm/core/loop.ts).
+4. **CI/CD Stabilization**:
+   - Standardized GitHub Workflows on **Node.js 22** to support modern dependencies.
+   - Fixed path redundancy in [quantum_evolution.yml](file:///c:/Users/ferna/Downloads/appforge-main/.github/workflows/quantum_evolution.yml) to resolve `ERR_MODULE_NOT_FOUND`.
+
+## ✅ Validation Results
+
+### Intelligence Pulse Check
+
+I verified the unified pulse locally. The system is coherent and successfully executing its evolution cycles.
+
+```text
+🌌 Step 1: Quantum Singularity Learning...
+⚡ [SingularityEngine] Starting self-improvement cycle...
+   🌱 Phase 5: Evolving singularity state...
+⚡ [SingularityEngine] Cycle complete! Progress: 17.9%
+   ✅ Cycle 1 complete. Progress: 17.9%
+
+✅ INTELLIGENCE PULSE COMPLETE - SYSTEM COHERENT
+```
+
+## 🏦 Phase 3: The Code Vending Machine (Phase 9.5)
+
+I have established a direct link between revenue and labor by implementing an autonomous vending logic.
+
+### 🤖 Logic Flow
+
+- **Payment Gated Build**: The "Build" action is now locked until a successful Solana transaction is verified.
+- **Autonomous Trigger**: Upon verification, the [CodeVendingMachine](file:///c:/Users/ferna/Downloads/appforge-main/src/components/CodeVendingMachine.tsx#6-105) automatically hits the Orchestrator API to start the build.
+- **HUD Integration**: The Sovereign IDE HUD now features a unified "Economic Terminal" combining vault balance and POS terminal.
+
+### Changes
+
+- **[NEW] [CodeVendingMachine.tsx](file:///c:/Users/ferna/Downloads/appforge-main/src/components/CodeVendingMachine.tsx)**: The hub for pay-per-feature labor.
+- **[MODIFY] [SolanaMerchant.tsx](file:///c:/Users/ferna/Downloads/appforge-main/src/components/SolanaMerchant.tsx)**: Added `onPaymentSuccess` callback for workflow automation.
+- **[MODIFY] [SovereignIDE.jsx](file:///c:/Users/ferna/Downloads/appforge-main/src/pages/SovereignIDE.jsx)**: Deployed the Vending Machine to the main dashboard.
+
+## ✅ Validation Results
+
+### 🏗️ Build Verification
+The project was verified with a full production build, resolving path conflicts and dependency ghosts.
+
+### 💰 Economic Rail Test (Simulated)
+1. **Request**: User inputs feature description.
+2. **Pricing**: Machine estimates labor at 0.05 SOL.
+3. **Payment**: QR is generated; "Verify" triggers the autonomous build.
+4. **Labor**: Swarm begins architectural synthesis automatically.
+
+## 🚀 Next Steps
+
+- **Live On-Chain Testing**: Test with real SOL on Devnet/Mainnet by connecting a real wallet.
+- **Pricing Oracle**: Implement dynamic pricing based on task complexity.
+- **Git Persistence**: The Swarm will automatically commit its work to the repository upon completion.

@@ -1,0 +1,24 @@
+# Iron Brain CI Repair (Phase 80)
+
+## Goal
+
+Investigate and fix the failing "Iron Brain CI" workflow. The user suspects "ENOENT" or other issues. We will use [gh](file:///c:/Users/ferna/Downloads/appforge-main/swarm/core/quantum_core.ts#352-362) CLI to get logs and [verify_evolution.ts](file:///c:/Users/ferna/Downloads/appforge-main/scripts/verify_evolution.ts) analysis to find the root cause.
+
+## Investigation Findings
+- **Root Cause**: `npm run test` failed, preventing the "Iron Brain" (Llama server) from even starting.
+- **Specific Errors**:
+    - [src/lib/quantumIntegration.js](file:///c:/Users/ferna/Downloads/appforge-main/src/lib/quantumIntegration.js): `ReferenceError: init is not defined`.
+    - `src/components/sidebar/*.test.jsx`: Network Error (Base44 SDK missing mocks).
+    - [src/lib/__tests__/quantumTunneling.test.ts](file:///c:/Users/ferna/Downloads/appforge-main/src/lib/__tests__/quantumTunneling.test.ts): 11 failures.
+
+## Repair Plan
+1. **Fix [quantumIntegration.js](file:///c:/Users/ferna/Downloads/appforge-main/src/lib/quantumIntegration.js)**: Verify imports and initialization logic.
+2. **Mock Base44 SDK**: Ensure tests don't make real network calls.
+3. **Verify**: Run `npm run test` locally (test specific files).
+
+## Verification Plan
+
+### Automated
+
+- Trigger workflow: `gh workflow run iron-brain-ci.yml`.
+- Watch Status: `gh run watch`.

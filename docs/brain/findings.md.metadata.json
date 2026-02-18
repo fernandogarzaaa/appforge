@@ -1,0 +1,5 @@
+{
+  "artifactType": "ARTIFACT_TYPE_OTHER",
+  "summary": "Triage Report for Operation Hive Restoration.\n- Critical: Missing `.env.example`.\n- High: Potential hardcoded secrets in `src/config` and `src/pages`.\n- Medium: Missing documentation in `src/api` and `src/components`.\n- Low: Linting passed (verify configuration).",
+  "updatedAt": "2026-02-17T04:02:41.173623800Z"
+}

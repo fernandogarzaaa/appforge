@@ -1,0 +1,5 @@
+{
+  "artifactType": "ARTIFACT_TYPE_IMPLEMENTATION_PLAN",
+  "summary": "Plan for Sovereign Local Storage (Phase 8).\n- Implement `SovereignStorage` (JSON-based local DB).\n- Update `Base44Tool` to fallback to `SovereignStorage` on cloud failure.\n- Verify offline bounty synthesis.",
+  "updatedAt": "2026-02-17T15:01:11.638067600Z"
+}

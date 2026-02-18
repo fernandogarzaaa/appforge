@@ -1,0 +1,48 @@
+# Project Core Cleanup & Reorganization
+
+The `appforge-main` directory has accumulated many temporary, redundant, and misplaced files across multiple development phases. This plan outlines a comprehensive cleanup to restore project clarity and maintainability.
+
+## User Review Required
+
+> [!IMPORTANT]
+> - Root testing scripts will be moved to `scripts/archive/testing/` to declutter the root.
+> - [deno.exe](file:///c:/Users/ferna/Downloads/appforge-main/deno.exe) and [deno.zip](file:///c:/Users/ferna/Downloads/appforge-main/deno.zip) will be removed from the root to save space and reduce clutter.
+> - Miscellaneous documentation will be moved to `docs/`.
+
+## Proposed Changes
+
+### Root Directory Cleanup
+
+#### [DELETE] deno.exe
+#### [DELETE] deno.zip
+#### [DELETE] .env.local.backup
+#### [DELETE] whatsapp_qr.png
+
+#### [MOVE] Root Documentation to `docs/`
+- [HYPER_INTELLIGENCE_ARCHITECTURE.md](file:///c:/Users/ferna/Downloads/appforge-main/HYPER_INTELLIGENCE_ARCHITECTURE.md) -> `docs/architecture/HYPER_INTELLIGENCE_ARCHITECTURE.md`
+- [INTEGRATIONS_GUIDE.md](file:///c:/Users/ferna/Downloads/appforge-main/INTEGRATIONS_GUIDE.md) -> `docs/guides/INTEGRATIONS_GUIDE.md`
+- [ORCHESTRATOR_COHERENCE.md](file:///c:/Users/ferna/Downloads/appforge-main/ORCHESTRATOR_COHERENCE.md) -> `docs/architecture/ORCHESTRATOR_COHERENCE.md`
+- [VERCEL_SIMPLE_GUIDE.md](file:///c:/Users/ferna/Downloads/appforge-main/VERCEL_SIMPLE_GUIDE.md) -> `docs/guides/VERCEL_SIMPLE_GUIDE.md`
+- [WHATSAPP_SETUP.md](file:///c:/Users/ferna/Downloads/appforge-main/WHATSAPP_SETUP.md) -> `docs/guides/WHATSAPP_SETUP.md`
+
+#### [MOVE] Testing & Verification Scripts to `scripts/archive/`
+- [test-domain-context.js](file:///c:/Users/ferna/Downloads/appforge-main/test-domain-context.js) -> `scripts/archive/test-domain-context.js`
+- [test-persistence.html](file:///c:/Users/ferna/Downloads/appforge-main/test-persistence.html) -> `scripts/archive/test-persistence.html`
+- [test-quantum-ai.js](file:///c:/Users/ferna/Downloads/appforge-main/test-quantum-ai.js) -> `scripts/archive/test-quantum-ai.js`
+- [test-quantum.js](file:///c:/Users/ferna/Downloads/appforge-main/test-quantum.js) -> `scripts/archive/test-quantum.js`
+- [test_market_intelligence.ts](file:///c:/Users/ferna/Downloads/appforge-main/test_market_intelligence.ts) -> `scripts/archive/test_market_intelligence.ts`
+- [test_real_crypto_standalone.mjs](file:///c:/Users/ferna/Downloads/appforge-main/test_real_crypto_standalone.mjs) -> `scripts/archive/test_real_crypto_standalone.mjs`
+- [test_replication.ts](file:///c:/Users/ferna/Downloads/appforge-main/test_replication.ts) -> `scripts/archive/test_replication.ts`
+- [test_true_independence.ts](file:///c:/Users/ferna/Downloads/appforge-main/test_true_independence.ts) -> `scripts/archive/test_true_independence.ts`
+- [verify-persistence.js](file:///c:/Users/ferna/Downloads/appforge-main/verify-persistence.js) -> `scripts/archive/verify-persistence.js`
+- [verify-quantum.js](file:///c:/Users/ferna/Downloads/appforge-main/verify-quantum.js) -> `scripts/archive/verify-quantum.js`
+- [verify_whatsapp_fix.ts](file:///c:/Users/ferna/Downloads/appforge-main/verify_whatsapp_fix.ts) -> `scripts/archive/verify_whatsapp_fix.ts`
+
+---
+
+## Verification Plan
+
+### Manual Verification
+- Verify that [START_SOVEREIGN_APP.bat](file:///c:/Users/ferna/Downloads/appforge-main/scripts/launchers/START_SOVEREIGN_APP.bat) still works after the move.
+- Verify that the `docs/` folder is correctly populated.
+- Verify that the root directory is significantly cleaner.

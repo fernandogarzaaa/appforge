@@ -1,0 +1,143 @@
+# Phases 43-45: Sovereignty & Strategic Hardening
+
+This plan outlines the total enforcement of Local-Only Sovereignty, parallelized inference hardening, and Mass Parallel Evolution (Turbo-Heal) to clear the system backlog and achieve a Zero-Defect Baseline.
+
+## Phase 43: Privacy Shield [Local-Only Inference]
+
+### [NEW] [Inference.ts](file:///c:/Users/ferna/Downloads/appforge-main/src/swarm/core/Inference.ts)
+
+- Implement [SovereignInference](file:///c:/Users/ferna/Downloads/appforge-main/src/swarm/core/Inference.ts#4-77) class.
+- Disable all cloud fallback logic.
+- Rule: Handshake process must NEVER leave the local machine.
+
+### [MODIFY] [Optimizer.ts](file:///c:/Users/ferna/Downloads/appforge-main/src/core/objective/Optimizer.ts)
+
+- Implement [validateRefactorEfficiency(original, refactored)](file:///c:/Users/ferna/Downloads/appforge-main/src/core/objective/Optimizer.ts#49-66): Must prove >= 20% reduction in complexity.
+
+### [MODIFY] [AGENTS.md](file:///c:/Users/ferna/Downloads/appforge-main/AGENTS.md)
+
+- Transition into an "Evolution Ledger".
+- Implement `LOGIC_VIRUS` detection: Cross-reference mutations with Truth Anchor Axioms.
+
+### Silent Mode
+
+- [MODIFY] [server.ts](file:///c:/Users/ferna/Downloads/appforge-main/src/server.ts) or [orchestrator.ts](file:///c:/Users/ferna/Downloads/appforge-main/src/swarm/orchestrator.ts) to suppress success logs, only alerting on `TERMINAL_ERROR` or `AX_VIOLATION`.
+
+## Phase 44: Inference Hardening [Stability]
+
+### Ollama Overhaul
+
+- Set `OLLAMA_NUM_PARALLEL=4`.
+- Set `OLLAMA_KEEP_ALIVE=24h`.
+- Optimize threads for physical cores.
+
+### Connection Guardian
+
+- [MODIFY] [Inference.ts](file:///c:/Users/ferna/Downloads/appforge-main/src/swarm/core/Inference.ts) with Heartbeat check.
+- Auto-restart Ollama service on drop.
+
+### Model Weight Locking
+
+- Enforce `llama3:8b-instruct-q8_0` or higher.
+- `DEGRADED_LOGIC_WARNING` flag if quantization < 8-bit.
+
+## Phase 45: Turbo-Heal [Mass Parallel Evolution]
+
+### Clustered Refactoring
+
+- [MODIFY] `Orchestrator.ts`: Cluster backlog into batches of 4.
+- Parallel execution of Batches A-D.
+
+### Parallel Kernel Bridge
+
+- [MODIFY] [main.rs](file:///c:/Users/ferna/Downloads/appforge-main/swarm/core/quantum_bridge/src/main.rs): Use `tokio::spawn` for concurrent Handshake Blessing.
+
+### Progress Visualizer
+
+- [MODIFY] [CommandCenter.tsx](file:///c:/Users/ferna/Downloads/appforge-main/src/pages/CommandCenter.tsx): Collapse thinking logs into 'Turbo-Heal Progress Bar'.
+
+## Verification Plan
+
+- **Sovereignty Test**: Kill internet connection -> run Refactor -> verify completion.
+- **Efficiency Test**: Run HEAL on `gitWorkflow.ts` -> verify Complexity reduction >= 20%.
+- **Parallel Test**: Verify 4 simultaneous handshakes in Rust logs.
+
+## Phase 46: The Sovereign UI [Final Production Polish]
+
+The goal is to transition from a "Developer Dashboard" to a high-fidelity "Digital Iron" Command Interface.
+
+### Proposed Changes
+
+#### [Component Name]
+
+##### [NEW] [EvolutionMap.tsx](file:///c:/Users/ferna/Downloads/appforge-main/src/components/EvolutionMap.tsx)
+
+- Procedural node-based graph using Three.js.
+- Visualizes the entire repository.
+- States: Amber (Verifying), Blue (Refactoring), Iron Gray (Blessed).
+
+##### [MODIFY] [CommandCenter.tsx](file:///c:/Users/ferna/Downloads/appforge-main/src/pages/CommandCenter.tsx)
+
+- Replace top nav with **Truth-HUD**.
+- Integrate [EvolutionMap](file:///c:/Users/ferna/Downloads/appforge-main/src/components/EvolutionMap.tsx#48-82).
+
+##### [NEW] [CommandStream.tsx](file:///c:/Users/ferna/Downloads/appforge-main/src/components/CommandStream.tsx)
+
+- High-speed terminal with predictive intent.
+- Neural pulse animation.
+
+##### [NEW] [RecordsVault.tsx](file:///c:/Users/ferna/Downloads/appforge-main/src/components/RecordsVault.tsx)
+
+- Cryptographically sorted ledger UI.
+- Searchable by Axiom Violation/Performance Gain.
+
+##### Production Lockdown
+
+- Prune `src/components/dev/*`.
+- Minify bundle and eliminate redundant re-renders.
+
+## Verification Plan
+
+### Automated Tests
+
+- `npm run build`: Ensure production bundle is optimized.
+- Three.js performance check: Verify 60FPS in [EvolutionMap](file:///c:/Users/ferna/Downloads/appforge-main/src/components/EvolutionMap.tsx#48-82).
+
+### Manual Verification
+
+- Visual check of Truth-HUD indicators.
+- Interaction test with Command-Stream terminal.
+
+## Phase 47: First Flight [Build #600]
+
+This phase executes the final transition to a Zero-Defect Sovereign Environment.
+
+### Proposed Changes
+
+#### [Component Name]
+
+##### [NEW] [execute_first_flight.ts](file:///c:/Users/ferna/Downloads/appforge-main/scripts/execute_first_flight.ts)
+- Script to perform a system-wide integrity sweep.
+- Verifies files against the 5 Immutable Axioms (AX_PRIV, AX_ATOM, AX_MEM, AX_CONS, AX_GOV).
+- Generates the Sovereign Manifest.
+
+##### [MODIFY] [EvolutionMap.tsx](file:///c:/Users/ferna/Downloads/appforge-main/src/components/EvolutionMap.tsx)
+- Force Iron Gray state for all verified nodes.
+- Implement 'subtle, rhythmic heartbeat' in the visualization.
+
+##### [MODIFY] [App.tsx](file:///c:/Users/ferna/Downloads/appforge-main/src/App.tsx)
+- Set [CommandCenter](file:///c:/Users/ferna/Downloads/appforge-main/src/pages/CommandCenter.tsx#11-149) as the default route.
+- Implement production-mode routing lockdown.
+
+##### [NEW] [FINAL_BUILD_600.json](file:///c:/Users/ferna/Downloads/appforge-main/prod/FINAL_BUILD_600.json)
+- Cryptographic hashes of all blessed files.
+
+## Verification Plan
+
+### Automated Tests
+- Run `execute_first_flight.ts` and verify all 75+ files are "Blessed".
+- Verify SHA-256 hashes in `FINAL_BUILD_600.json`.
+
+### Manual Verification
+- Verify Sovereignty HUD shows 1.00 ratio.
+- Verify heartbeat pulse in Evolution Map.

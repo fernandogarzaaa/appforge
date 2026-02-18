@@ -1,0 +1,23 @@
+# Sync Task Schema to Base44 Cloud
+
+## Goal Description
+Sync the local `Task` entity schema to Base44 Cloud to resolve valid schema expectations and enable backend operations like `CuriosityEngine`. The current app configuration points to a frontend-only app, preventing schema pushes. We will create/link a new Backend App.
+
+## Proposed Changes
+### Configuration
+#### [MODIFY] [base44/config.jsonc](file:///c:/Users/ferna/Downloads/appforge-main/base44/config.jsonc)
+- Update `appId` to point to the new Backend App.
+
+#### [MODIFY] [.env.local](file:///c:/Users/ferna/Downloads/appforge-main/.env.local)
+- Update `BASE44_APP_ID` and `VITE_BASE44_APP_ID` to the new App ID.
+
+### Schema Pushing
+- Run `npx base44 entities push` to sync [base44/entities/task.jsonc](file:///c:/Users/ferna/Downloads/appforge-main/base44/entities/task.jsonc).
+
+## Verification Plan
+### Automated Verification
+- Detailed logs from `npx base44 entities push`.
+- Check `npx base44 entities list` to verify `task` entity exists on cloud.
+
+### Manual Verification
+- Trigger `CuriosityEngine` to verify it can interact with the new app without 422 errors (or with different errors related to schema validation that we can then fix).

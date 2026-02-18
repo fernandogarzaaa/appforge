@@ -1,0 +1,37 @@
+# Implementation Plan: Unified Sovereign One-Click Launcher
+
+The current "one-click" startup process is fragmented across multiple scripts, resulting in some services (like the Quantum Engine or Swarm Executor) being missed depending on which entry point is used. This plan consolidates all services into a single, robust launcher.
+
+## User Review Required
+
+> [!IMPORTANT]
+> This change will transition the default "one-click" behavior to launch the **Native Desktop Application (Electron)** by default, rather than just opening a browser tab.
+
+## Proposed Changes
+
+### [Component: Launchers]
+
+#### [MODIFY] [START_SOVEREIGN.bat](file:///c:/Users/ferna/Downloads/appforge-main/START_SOVEREIGN.bat)
+Update to point to the new unified orchestrator.
+
+#### [NEW] [LAUNCH_SOVEREIGN_CORE.bat](file:///c:/Users/ferna/Downloads/appforge-main/scripts/launchers/LAUNCH_SOVEREIGN_CORE.bat)
+Create a unified orchestrator that starts services in the correct sequence:
+1.  **Quantum Engine**: High-performance optimization core.
+2.  **Swarm Coordinator**: Event-driven inter-swarm communication.
+3.  **Real Swarm Executor**: Actual execution of swarm logic and metric updates.
+4.  **Telemetry Server**: WebSocket relay for real-time visualization.
+5.  **UI Engine**: Vite-powered dashboard server.
+6.  **Native Shell**: Electron wrapper for a standalone experience.
+
+## Verification Plan
+
+### Automated Verification
+- Run the new [.bat](file:///c:/Users/ferna/Downloads/appforge-main/SovereignApp.bat) file and verify that:
+  - Port 3001 (Telemetry) is active.
+  - Port 5174 (UI) is active.
+  - All background [tsx](file:///c:/Users/ferna/Downloads/appforge-main/sovereign-ui/src/App.tsx) processes are running.
+
+### Manual Verification
+- Confirm that the Electron window opens automatically.
+- Verify that the "Cognitive Feed" in the UI shows live data from the [RealSwarmExecutor](file:///c:/Users/ferna/Downloads/appforge-main/scripts/real_swarm_executor.ts#58-631).
+- Test the "Quantum Parameter Tuner" to ensure it communicates through the Telemetry server to the Quantum Engine.

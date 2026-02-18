@@ -1,0 +1,33 @@
+# Implementation Plan: Sovereign UI Stability & Security
+
+The `sovereign-ui` project is currently experiencing React runtime errors due to matching its dependencies with the root project and missing local definitions for `framer-motion`. Additionally, a CSP warning needs to be addressed for Electron compliance.
+
+## User Review Required
+
+> [!IMPORTANT]
+> I am downgrading `sovereign-ui` from React 19 to React 18.3.1 to ensure consistency with the root project's extensive ecosystem and to resolve "Invalid Hook Call" errors.
+
+## Proposed Changes
+
+### [Component: sovereign-ui]
+
+#### [MODIFY] [package.json](file:///c:/Users/ferna/Downloads/appforge-main/sovereign-ui/package.json)
+- Downgrade `react` and `react-dom` to `18.3.1`.
+- Add `framer-motion` to dependencies local to the project.
+- Align `@types/react` and `@types/react-dom` to `^18.3.0`.
+
+#### [MODIFY] [index.html](file:///c:/Users/ferna/Downloads/appforge-main/sovereign-ui/index.html)
+- Add a Content Security Policy (CSP) meta tag to address Electron security warnings.
+
+### [Component: Electron]
+
+#### [MODIFY] [electron-main.cjs](file:///c:/Users/ferna/Downloads/appforge-main/scripts/electron-main.cjs)
+- (Optional) Refine security settings in `webPreferences`.
+
+## Verification Plan
+
+### Automated Verification
+- Run `npm install` in `sovereign-ui`.
+- Start the unified launcher [LAUNCH_SOVEREIGN_CORE.bat](file:///c:/Users/ferna/Downloads/appforge-main/scripts/launchers/LAUNCH_SOVEREIGN_CORE.bat).
+- Check Electron console for React "Invalid Hook" errors.
+- Confirm CSP warning is resolved.

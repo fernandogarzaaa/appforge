@@ -1,0 +1,6 @@
+{
+  "artifactType": "ARTIFACT_TYPE_WALKTHROUGH",
+  "summary": "Final walkthrough of the fixes for the Sovereign Native Launcher, Telemetry Server, and UI dependencies. Includes troubleshooting for Port conflicts, Syntax errors, and Rust compilation.极轴+Sovereign 原生启动器、遥测服务器及 UI 依赖项修复的最终演示。极轴+包含针对端口冲突、语法错误及 Rust 编译的故障排除方案。极轴",
+  "updatedAt": "2026-02-16T03:51:27.821333700Z",
+  "version": "1"
+}

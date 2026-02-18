@@ -1,0 +1,44 @@
+# Implementation Plan: Real-Time Swarm Telemetry Sync
+
+The objective is to decouple the Sovereign UI from simulated/fallback values and ensure 100% fidelity with the physical swarm executor. This includes dynamic swarm discovery (10+ swarms) and real-time log streaming from the backend.
+
+## Proposed Changes
+
+---
+
+### [Telemetry Server]
+
+#### [MODIFY] [swarm_telemetry_server.ts](file:///c:/Users/ferna/Downloads/appforge-main/scripts/swarm_telemetry_server.ts)
+
+- Implement a **Log Tailer**: Use `fs.watch` or a polling mechanism to read `data/logs/executor.log`.
+- Emit `telemetry` events: Broadcast new log lines to all connected Socket.IO clients.
+- Ensure `swarm_update` sends the full 10-swarm registry gathered from [real_swarm_executor.ts](file:///c:/Users/ferna/Downloads/appforge-main/scripts/real_swarm_executor.ts).
+
+---
+
+### [UI Data Layer]
+
+#### [MODIFY] [realDataService.ts](file:///c:/Users/ferna/Downloads/appforge-main/sovereign-ui/src/realDataService.ts)
+
+- Update [getRealTimeData](file:///c:/Users/ferna/Downloads/appforge-main/sovereign-ui/src/realDataService.ts#144-153) to stop returning [getDefaultSwarms()](file:///c:/Users/ferna/Downloads/appforge-main/sovereign-ui/src/realDataService.ts#154-226) once real data has been received.
+- Add a Log Subscriber: Handle the `telemetry` event and pipe it to the UI callback.
+
+---
+
+### [UI Dashboard]
+
+#### [MODIFY] [App.tsx](file:///c:/Users/ferna/Downloads/appforge-main/sovereign-ui/src/App.tsx)
+
+- **Fix Swarm Update Logic**: Update the `setSwarms` reducer to handle dynamic arrays (don't map over `prev` size).
+- **Log Feed Integration**: Ensure the "COGNITIVE FEED" scrolls and displays the real-time stream from the telemetry server.
+
+## Verification Plan
+
+### Automated Tests
+- Run `npx tsx scripts/swarm_telemetry_server.ts` and verify log lines appear in the console.
+- Mock a socket event and verify the UI state updates for 10 swarms.
+
+### Manual Verification
+- Open [localhost:5174](http://localhost:5174).
+- Confirm the "COGNITIVE FEED" shows live logs from the executor.
+- Confirm all 10 swarms listed in the registry are visible and togglable.

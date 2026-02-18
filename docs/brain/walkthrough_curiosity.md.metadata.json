@@ -1,0 +1,5 @@
+{
+  "artifactType": "ARTIFACT_TYPE_WALKTHROUGH",
+  "summary": "Walkthrough of Curiosity-Driven Inception.\n- Implemented CuriosityEngine.\n- Integrated into autonomous loop (every 10 cycles).\n- Verified via test_curiosity.ts.",
+  "updatedAt": "2026-02-17T14:34:34.086828200Z"
+}
