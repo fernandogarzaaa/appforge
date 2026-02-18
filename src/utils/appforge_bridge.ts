@@ -8,8 +8,9 @@ export class AppForgeBridge {
     private localUrl: string;
     private apiKey: string;
 
-    constructor(localUrl = 'http://localhost:3001', apiKey = import.meta.env.VITE_BASE44_API_KEY) {
-        this.localUrl = localUrl;
+    constructor(localUrl?: string, apiKey = import.meta.env.VITE_BASE44_API_KEY) {
+        // Prioritize VITE_API_URL regarding Base44 Sovereign Deployment
+        this.localUrl = localUrl || import.meta.env.VITE_API_URL || 'http://localhost:3001';
         this.apiKey = apiKey;
     }
 

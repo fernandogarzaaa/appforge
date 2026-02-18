@@ -18,12 +18,13 @@ export default defineConfig({
   },
   plugins: [
     nodePolyfills({
-      include: ['crypto', 'stream', 'buffer'],
       globals: {
         Buffer: true,
         global: true,
         process: true,
       },
+      // Allow all polyfills to ensure @solana/web3.js works
+      protocolImports: true,
     }),
     base44({
       // Support for legacy code that imports the base44 SDK with @/integrations, @/entities, etc.
@@ -49,7 +50,7 @@ export default defineConfig({
   ],
   optimizeDeps: {
     // Include React for proper ESM module resolution in preview/sandbox environments
-    include: ['react', 'react-dom', 'react/jsx-runtime', 'react/jsx-dev-runtime'],
+    include: ['react', 'react-dom', 'react/jsx-runtime', 'react/jsx-dev-runtime', '@solana/web3.js', '@solana/spl-token'],
     // Exclude the WASM glue so Vite doesn't try to prebundle it
     exclude: ['@/quantum-core/pkg/quantum_core']
   },

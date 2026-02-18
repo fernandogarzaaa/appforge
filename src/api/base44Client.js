@@ -5,14 +5,38 @@ const { appId, token, functionsVersion, appBaseUrl } = appParams;
 export const hasServiceToken = false; // Never expose service token on client
 
 //Create a client with authentication required
-export const base44 = createClient({
-  appId,
-  token,
-  functionsVersion,
-  serverUrl: '',
-  requiresAuth: false,
-  appBaseUrl
-});
+let client;
+try {
+  if (!appId) throw new Error('Base44 App ID missing - Sovereign Mode Active');
+  client = createClient({
+    appId,
+    token,
+    functionsVersion,
+    serverUrl: '',
+    requiresAuth: false,
+    appBaseUrl
+  });
+} catch (e) {
+  console.warn(`🛡️ [SOVEREIGN GUARD] Base44 Client Init Failed: ${e.message}. Using Sovereign Mock.`);
+  // Minimal sovereign mock to prevent UI crash
+  client = {
+    auth: {
+      me: async () => null,
+      logout: () => { },
+      redirectToLogin: () => { }
+    },
+    entities: new Proxy({}, {
+      get: () => ({
+        list: async () => [],
+        create: async () => ({}),
+        update: async () => ({}),
+        delete: async () => ({})
+      })
+    })
+  };
+}
+
+export const base44 = client;
 
 // In test environments, silence outbound analytics calls to avoid jsdom network errors
 if (typeof process !== 'undefined' && process.env?.NODE_ENV === 'test') {
