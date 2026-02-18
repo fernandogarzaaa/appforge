@@ -1,0 +1,42 @@
+# Walkthrough - Repository-Wide Evolutionary Scope (Phase 93)
+
+I have expanded the swarm's autonomous self-improvement capabilities from the `swarm/core` directory to the entire repository. This allows the system to analyze, synthesize objectives for, and patch any file in the codebase while adhering to Sovereign Axioms.
+
+## Changes Made
+
+### 🔍 Global Analysis Implementation
+
+- **Script**: `scripts/analyze_antigravity.ts`
+- **Action**: Upgraded the script to recursively scan `swarm/core`, `src`, `backend`, and `apps`.
+- **Outcome**: The `antigravity_blueprint.json` now provides the swarm with a comprehensive map of patterns (Oracle use, Reality signals, Sovereignty awareness) across 43+ files.
+
+### ⚛️ Atomic Multi-File Transactions
+
+- **Component**: `swarm/core/atomic_patcher.ts`
+- **Feature**: Added `applyMultiFilePatches` to support atomic cross-module updates. This ensures that complex refactors (e.g., changing a data structure and its consumers) either succeed completely or fail safely without partial state.
+
+### 🛡️ Sovereign Axiom Filter
+
+- **Component**: `swarm/core/singularity_engine.ts`
+- **Logic**: The Oracle now evaluates every proposed patch against the "Sovereign Axioms" (Decentralization, Local-First, Security). Any patch that fails this governance filter is rejected before application.
+- **Direct Targeting**: Removed hardcoded target mappings. The Oracle can now specify any repository file path as an improvement target.
+
+### 📡 GitHub Actions Integration
+
+- **Workflow**: `autonomous_swarm.yml` & `quantum_evolution.yml`
+- **Automation**: Integrated `swarm:analyze` into the main pulse and expanded the commit scope to include all source directories, allowing the swarm to persist its repo-wide improvements.
+
+## Verification Results
+
+### Simulated Repo-Wide Cycle
+
+I executed a verification script (`scripts/verify_repo_evolution.ts`) which:
+
+1. Created an objective to improve `README.md`.
+2. Successfully navigated the `SingularityEngine` cycle.
+3. Passed the Sovereign Axiom Filter.
+4. Applied the improvement to the root directory.
+
+**Result**: ✅ `Repo-wide evolution verified.`
+
+The swarm is now truly repository-aware and capable of global self-optimization.

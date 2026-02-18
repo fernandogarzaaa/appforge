@@ -410,51 +410,72 @@ export class SingularityEngine {
         if (bounty) {
             console.log(`   💎 [Bounty] Selected high-priority task: ${bounty.description} (Reward: ${bounty.reward})`);
             strategy = bounty.description;
-            // Map common bounty types to files (or Oracle will decide)
-            const targets: Record<string, string> = {
-                'code': 'swarm/core/quantum_core.ts',
-                'docs': 'README.md',
-                'optimization': 'swarm/core/singularity_engine.ts'
-            };
-            targetFile = targets[bounty.category as string] || 'swarm/core/quantum_core.ts';
+
+            // [PHASE 93] REPO-WIDE TARGETING
+            // If the bounty description contains a file path, use it.
+            const fileMatch = strategy.match(/file:\s*([^\s,]+)/i);
+            if (fileMatch) {
+                targetFile = fileMatch[1];
+            } else {
+                const targets: Record<string, string> = {
+                    'code': 'swarm/core/quantum_core.ts',
+                    'docs': 'README.md',
+                    'optimization': 'swarm/core/singularity_engine.ts',
+                    'ui': 'sovereign-ui/src/App.tsx'
+                };
+                targetFile = targets[bounty.category as string] || 'swarm/core/quantum_core.ts';
+            }
         } else {
-            // ⚛️ Priority 2: Generic Oracle Strategies
-            const options = [
-                'OPTIMIZE_QUANTUM_CORE_HEURISTICS',
-                'ENHANCE_SINGULARITY_ENGINE_RECURSION',
-                'RECALIBRATE_INTELLIGENCE_PULSE_WEIGHTS',
-                'NONE_IDLE'
-            ];
+            // ⚛️ Priority 2: Generic Oracle Global Strategies
+            // Reading findings from blueprint to inform targeting
+            const blueprintPath = path.join(PROJECT_ROOT, 'src/data/antigravity_blueprint.json');
+            let blueprint: any = null;
+            try { blueprint = JSON.parse(fs.readFileSync(blueprintPath, 'utf8')); } catch (e) { }
+
+            const strategyPrompt = `Select a strategic file and technical improvement to autonomously enhance. 
+            Blueprint Insights: ${JSON.stringify(blueprint?.recommendations || [])}
+            Repo Scope: ${blueprint?.repoScope || 0} files.
+            Return: [FILE_PATH]|[IMPROVEMENT_DESCRIPTION]`;
 
             const guidance = await quantumCore.consultOracle(
-                "Select a strategic technical component to autonomously enhance via code modification.",
-                options,
-                ['impact', 'safety', 'coherence']
+                strategyPrompt,
+                ['GLOBAL_OPTIMIZATION', 'NONE_IDLE'],
+                ['impact', 'safety', 'sovereign_phi']
             );
 
-            strategy = guidance.recommendation;
-            if (strategy === 'NONE_IDLE') return ['No realization strategy selected by Oracle.'];
+            if (guidance.recommendation === 'NONE_IDLE') return ['No realization strategy selected by Oracle.'];
 
-            console.log(`   🛠️ [Realization] Oracle specifies strategy: ${strategy}`);
+            const parts = guidance.recommendation.split('|');
+            if (parts.length === 2) {
+                targetFile = parts[0].trim();
+                strategy = parts[1].trim();
+            } else {
+                targetFile = 'swarm/core/quantum_core.ts'; // Fallback
+                strategy = guidance.recommendation;
+            }
 
-            // Define target files based on strategy
-            const targets: Record<string, string> = {
-                'OPTIMIZE_QUANTUM_CORE_HEURISTICS': 'swarm/core/quantum_core.ts',
-                'ENHANCE_SINGULARITY_ENGINE_RECURSION': 'swarm/core/singularity_engine.ts',
-                'RECALIBRATE_INTELLIGENCE_PULSE_WEIGHTS': 'swarm/intelligence_pulse.ts'
-            };
-
-            targetFile = targets[strategy];
+            console.log(`   🛠️ [Realization] Global Target: ${targetFile} | Strategy: ${strategy}`);
         }
 
         if (!targetFile) return [`Target file for ${strategy} not defined.`];
 
         // Consult Iron Brain for the actual patch
         const patchQuestion = `Generate a specific, safe, and effective code improvement for the file '${targetFile}' to achieve the goal: ${strategy}. 
+        🛡️ SOVEREIGN AXIOMS: Ensure the change promotes Decentralization, Local-First operation, and Privacy.
         Return ONLY a JSON object with 'targetContent' (existing code block to replace) and 'replacementContent' (new code block).
         Ensure whitespace and indentation match exactly what is in the repository.`;
 
-        const patchGuidance = await quantumCore.consultOracle(patchQuestion, ['GENERATE_PATCH']);
+        const patchGuidance = await quantumCore.consultOracle(patchQuestion, ['GENERATE_PATCH'], ['safety', 'sovereign_axioms']);
+
+        // [PHASE 93] SOVEREIGN AXIOM FILTER
+        const axiomQuestion = `Does the following patch for '${targetFile}' align with Sovereign Axioms (Decentralization, Local-First, Security)?
+        PATCH: ${patchGuidance.recommendation}
+        Reply with AXIOMS_PASSED or AXIOMS_FAILED.`;
+
+        const axiomCheck = await quantumCore.consultOracle(axiomQuestion, ['AXIOMS_PASSED', 'AXIOMS_FAILED']);
+        if (axiomCheck.recommendation === 'AXIOMS_FAILED') {
+            return [`Patch rejected by Sovereign Axiom Filter for ${targetFile}`];
+        }
 
         try {
             // Attempt to parse patch from reasoning or recommendation

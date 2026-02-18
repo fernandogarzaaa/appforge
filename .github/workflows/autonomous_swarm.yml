@@ -89,6 +89,7 @@ jobs:
       - name: Run Reality Pulse 2.0
         run: |
           npx tsx scripts/reality_pulse.ts
+          npm run swarm:analyze
         env:
           TRUE_AI_INDEPENDENCE: "true"
 
@@ -175,16 +176,13 @@ jobs:
       - name: Push any Swarm artifacts
         run: |
           git pull --rebase origin main
-          git add src/data/quantum_*.json
-          git add src/data/reality_pulse.json
-          git add src/data/quantum_coherence_state.json
-          git add src/data/bounty_ledger.json
-          git add src/data/economic_state.json
-          git add src/data/synergy_scout.json
-          git add src/data/antigravity_blueprint.json
+          git add src/data/*.json
+          git add src/**/*.ts
+          git add apps/**/*.ts
+          git add backend/**/*.ts
+          git add swarm/**/*.ts
+          git add docs/brain/*.md
           git add build_logs.txt
           git add lint_output.json
-          git add swarm/core/*.ts
-          git add swarm/intelligence_pulse.ts
           git commit -m "chore: swarm autonomous pulse [Inception] [Transcendence] [Synergy] [skip ci]" || echo "No changes to commit"
           git push

@@ -133,15 +133,13 @@ jobs:
           git config --global user.name "Quantum Engine"
           git config --global user.email "quantum@appforge.bot"
           git pull --rebase origin main
-          git add -f src/data/quantum_*.json
-          git add -f src/data/reality_pulse.json
-          git add -f src/data/bounty_ledger.json
-          git add -f src/data/economic_state.json
-          git add -f src/data/synergy_scout.json
-          git add -f src/data/antigravity_blueprint.json
+          git add -f src/data/*.json
+          git add -f src/**/*.ts
+          git add -f apps/**/*.ts
+          git add -f backend/**/*.ts
+          git add -f swarm/**/*.ts
+          git add -f docs/brain/*.md
           git add -f build_logs.txt
           git add -f lint_output.json
-          git add -f swarm/core/*.ts
-          git add -f swarm/intelligence_pulse.ts
           git commit -m "chore: quantum self-evolution [Inception] [Bounty Sync] [Synergy] [skip ci]" || echo "No changes to commit"
           git push

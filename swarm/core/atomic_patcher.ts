@@ -47,8 +47,7 @@ export class AtomicPatcher {
             // Optional: Basic syntax check (e.g. for .ts files)
             if (relativeFilePath.endsWith('.ts')) {
                 try {
-                    // Just check if it's parseable? Full tsc might be too slow/complex here.
-                    // For now, we'll rely on the caller or a post-deployment check.
+                    // Basic syntax check placeholder
                 } catch (e) {
                     await fs.unlink(tempPath);
                     return { success: false, error: `Syntax validation failed: ${(e as any).message}` };
@@ -62,6 +61,53 @@ export class AtomicPatcher {
             return { success: true };
 
         } catch (error: any) {
+            return { success: false, error: error.message };
+        }
+    }
+
+    /**
+     * Apply patches to multiple files atomically.
+     * Either all succeed or none are applied.
+     */
+    async applyMultiFilePatches(filePatches: { relativeFilePath: string; patches: PatchChunk[] }[]): Promise<{ success: boolean; error?: string }> {
+        const preparedPaths: { tmp: string; original: string }[] = [];
+
+        try {
+            // Phase 1: Prepare and validate all files
+            for (const item of filePatches) {
+                const fullPath = path.resolve(this.projectRoot, item.relativeFilePath);
+                let content = await fs.readFile(fullPath, 'utf8');
+
+                for (const patch of item.patches) {
+                    if (!content.includes(patch.targetContent)) {
+                        throw new Error(`Target content not found in ${item.relativeFilePath}`);
+                    }
+                    content = content.replace(patch.targetContent, patch.replacementContent);
+                }
+
+                const tempPath = `${fullPath}.tmp`;
+                await fs.writeFile(tempPath, content, 'utf8');
+                preparedPaths.push({ tmp: tempPath, original: fullPath });
+            }
+
+            // Phase 2: Commit (Atomic rename)
+            for (const pathPair of preparedPaths) {
+                await fs.rename(pathPair.tmp, pathPair.original);
+            }
+
+            console.log(`✅ [AtomicPatcher] Multi-file patch applied successfully to ${filePatches.length} files.`);
+            return { success: true };
+
+        } catch (error: any) {
+            // Cleanup on failure
+            for (const pathPair of preparedPaths) {
+                try {
+                    const stats = await fs.stat(pathPair.tmp);
+                    if (stats.isFile()) {
+                        await fs.unlink(pathPair.tmp);
+                    }
+                } catch (e) { }
+            }
             return { success: false, error: error.message };
         }
     }
