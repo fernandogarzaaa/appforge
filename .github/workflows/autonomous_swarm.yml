@@ -9,7 +9,8 @@ jobs:
   swarm-execution:
     runs-on: ubuntu-latest
     permissions:
-      contents: write # Allow committing back to repo
+      contents: write
+      pull-requests: write
 
     steps:
       - name: Checkout Code
@@ -173,16 +174,11 @@ jobs:
             src/data/quantum_predictions.json
           retention-days: 30
 
-      - name: Push any Swarm artifacts
+      - name: Open Evolution Pull Request
+        if: success()
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          NODE_ID: "GA-AUTONOMOUS-PR"
         run: |
-          git pull --rebase origin main
-          git add src/data/*.json
-          git add src/**/*.ts
-          git add apps/**/*.ts
-          git add backend/**/*.ts
-          git add swarm/**/*.ts
-          git add docs/brain/*.md
-          git add build_logs.txt
-          git add lint_output.json
-          git commit -m "chore: swarm autonomous pulse [Inception] [Transcendence] [Synergy] [skip ci]" || echo "No changes to commit"
-          git push
+          npx tsx scripts/create_evolution_pr.ts
