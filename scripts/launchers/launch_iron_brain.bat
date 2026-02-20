@@ -86,8 +86,8 @@ if "%GGUF_FILE%"=="" (
 echo 🔧 Configuration:
 echo    Model:    %GGUF_FILE%
 echo    Port:     %PORT%
-echo    GPU:      %GPU_LAYERS% layers offloaded
-echo    Context:  %CONTEXT_SIZE% tokens
+echo    GPU:      %N_GPU_LAYERS% layers offloaded
+echo    Context:  %CTX_SIZE% tokens
 echo    Threads:  %THREADS%
 echo.
 
@@ -106,8 +106,8 @@ REM Start llama-server with OpenAI-compatible API
 llama-server ^
     -m "%GGUF_FILE%" ^
     --port %PORT% ^
-    -ngl %GPU_LAYERS% ^
-    -c %CONTEXT_SIZE% ^
+    -ngl %N_GPU_LAYERS% ^
+    -c %CTX_SIZE% ^
     -t %THREADS% ^
     --host 0.0.0.0 ^
     --log-disable

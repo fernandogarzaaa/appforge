@@ -1,14 +1,14 @@
 {
-  "timestamp": "2026-02-20T18:01:27.237Z",
+  "timestamp": "2026-02-20T18:11:22.656Z",
   "state": {
     "version": "3.5",
     "learningParams": {
-      "bias": 1.0510100501,
-      "exploration": 0.18078415936
+      "bias": 1.0768747076368936,
+      "exploration": 0.21081702423623994
     },
     "feedbackStats": {
-      "total": 5,
-      "success": 5
+      "total": 15,
+      "success": 12
     },
     "optionWeights": {
       "expert": 0.18,
@@ -16,7 +16,39 @@
       "refactor": 0.18,
       "core": 0.18,
       "axioms": 0.06,
-      "passed": 0.06
+      "passed": 0.06,
+      "run": -0.12000000000000001,
+      "adaptive": -0.12000000000000001,
+      "correction": -0.12000000000000001,
+      "via": -0.12000000000000001,
+      "error": -0.12000000000000001,
+      "feedback": -0.12000000000000001,
+      "recursive": -0.12000000000000001,
+      "learning": -0.12000000000000001,
+      "prioritize": 0.12,
+      "revenue": 0.12,
+      "expansion": 0.12,
+      "swarms": 0.12,
+      "socialmediaswarm": 0.12,
+      "researchswarm": 0.12,
+      "customersuccessswarm": 0.12,
+      "experimentationswarm": 0.12,
+      "aieconomyswarm": 0.12,
+      "improve": 0.06,
+      "user": 0.06,
+      "experience": 0.06,
+      "ui": 0.06,
+      "polish": 0.06,
+      "process": 0.06,
+      "high": 0.06,
+      "priority": 0.06,
+      "requests": 0.06,
+      "first": 0.06,
+      "type": 0.06,
+      "errors": 0.06,
+      "null": 0.06,
+      "pointer": 0.06,
+      "exceptions": 0.06
     },
     "criteriaWeights": {
       "proactivity": 1.09,
@@ -24,7 +56,27 @@
       "collective": 1.09,
       "intelligence": 1.09,
       "effectiveness": 1.03,
-      "efficiency": 1.03
+      "efficiency": 1.06,
+      "stability": 0.94,
+      "consistency": 0.94,
+      "error": 0.94,
+      "correction": 0.94,
+      "strategic": 1.06,
+      "value": 1.09,
+      "execution": 1.06,
+      "speed": 1.06,
+      "risk": 1.06,
+      "reduction": 1.06,
+      "revenue": 1.06,
+      "impact": 1.09,
+      "business": 1.03,
+      "user": 1.06,
+      "need": 1.03,
+      "feasibility": 1.03,
+      "quality": 1.03,
+      "latency": 1.03,
+      "severity": 1.03,
+      "frequency": 1.03
     },
     "memoryDump": {
       "solve_5fc6c991": {
@@ -939,6 +991,159 @@
           }
         },
         "timestamp": 1771610487236
+      },
+      "solve_48a292a0": {
+        "data": {
+          "predictionId": "Q3-1771611075461-801",
+          "optimizedBest": "RUN_ADAPTIVE_CORRECTION via error feedback and recursive learning",
+          "confidence": 0.99,
+          "alternatives": [
+            "LOCK_TARGET_COHERENCE with consistency-first execution and strict memory alignment",
+            "DEFER_CALIBRATION and continue with current coherence policy"
+          ],
+          "engineVersion": "3.5",
+          "consensus": {
+            "qubitCount": 8,
+            "fidelity": 5.868820084929288
+          }
+        },
+        "timestamp": 1771611075462
+      },
+      "solve_2811485f": {
+        "data": {
+          "predictionId": "Q3-1771611075475-255",
+          "optimizedBest": "RUN_ADAPTIVE_CORRECTION via error feedback and recursive learning",
+          "confidence": 0.99,
+          "alternatives": [
+            "LOCK_TARGET_COHERENCE with consistency-first execution and strict memory alignment",
+            "DEFER_CALIBRATION and continue with current coherence policy"
+          ],
+          "engineVersion": "3.5",
+          "consensus": {
+            "qubitCount": 8,
+            "fidelity": 5.681001862572067
+          }
+        },
+        "timestamp": 1771611075475
+      },
+      "solve_1ebad246": {
+        "data": {
+          "predictionId": "Q3-1771611078520-814",
+          "optimizedBest": "Prioritize revenue and expansion swarms (SocialMediaSwarm, ResearchSwarm, CustomerSuccessSwarm, ExperimentationSwarm, AIEconomySwarm)",
+          "confidence": 0.99,
+          "alternatives": [
+            "Prioritize reliability and quality swarms (LearningSwarm, QualityAssuranceSwarm)",
+            "Prioritize trading and market swarms (AutomatedTradingSwarm, CryptoSwarm, MarketAnalyzer)"
+          ],
+          "engineVersion": "3.5",
+          "consensus": {
+            "qubitCount": 8,
+            "fidelity": 2.93616417156855
+          }
+        },
+        "timestamp": 1771611078520
+      },
+      "solve_42e2885a": {
+        "data": {
+          "predictionId": "Q3-1771611078621-317",
+          "optimizedBest": "Improve user experience and UI polish",
+          "confidence": 0.99,
+          "alternatives": [
+            "Refactor core architecture for scalability",
+            "Add new user-facing features"
+          ],
+          "engineVersion": "3.5",
+          "consensus": {
+            "qubitCount": 8,
+            "fidelity": 3.3632300149629604
+          }
+        },
+        "timestamp": 1771611078621
+      },
+      "solve_2b0170a6": {
+        "data": {
+          "predictionId": "Q3-1771611078678-437",
+          "optimizedBest": "Process High Priority requests first",
+          "confidence": 0.99,
+          "alternatives": [
+            "Batch process similar requests",
+            "Optimize for fastest response time"
+          ],
+          "engineVersion": "3.5",
+          "consensus": {
+            "qubitCount": 8,
+            "fidelity": 1.509270763585226
+          }
+        },
+        "timestamp": 1771611078678
+      },
+      "solve_1bfb016e": {
+        "data": {
+          "predictionId": "Q3-1771611082656-796",
+          "optimizedBest": "Prioritize performance optimization",
+          "confidence": 0.8030702218081256,
+          "alternatives": [
+            "Focus on system integrity and stability",
+            "Focus on security and validation"
+          ],
+          "engineVersion": "3.5",
+          "consensus": {
+            "qubitCount": 8,
+            "fidelity": 0.8030702218081256
+          }
+        },
+        "timestamp": 1771611082656
+      },
+      "solve_1be3b147": {
+        "data": {
+          "predictionId": "Q3-1771611078704-943",
+          "optimizedBest": "Scan for dependency vulnerabilities",
+          "confidence": 0.23402726571802124,
+          "alternatives": [
+            "Check for exposed secrets in code",
+            "Review authentication patterns"
+          ],
+          "engineVersion": "3.5",
+          "consensus": {
+            "qubitCount": 8,
+            "fidelity": 0.23402726571802124
+          }
+        },
+        "timestamp": 1771611078704
+      },
+      "solve_2870c3c2": {
+        "data": {
+          "predictionId": "Q3-1771611078742-583",
+          "optimizedBest": "Bundle size and load times",
+          "confidence": 0.14708366967521613,
+          "alternatives": [
+            "Bundle size and load times",
+            "Memory usage optimization"
+          ],
+          "engineVersion": "3.5",
+          "consensus": {
+            "qubitCount": 8,
+            "fidelity": 0.14708366967521613
+          }
+        },
+        "timestamp": 1771611078742
+      },
+      "solve_58172bf4": {
+        "data": {
+          "predictionId": "Q3-1771611078751-269",
+          "optimizedBest": "Type errors and null pointer exceptions",
+          "confidence": 0.99,
+          "alternatives": [
+            "Logic bugs in core business features",
+            "Critical runtime errors and crashes"
+          ],
+          "engineVersion": "3.5",
+          "consensus": {
+            "qubitCount": 8,
+            "fidelity": 1.7069936658721532
+          }
+        },
+        "timestamp": 1771611078751
       }
     }
   }

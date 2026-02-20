@@ -20,6 +20,10 @@ if %errorlevel% neq 0 (
     exit /b 1
 )
 
+:: 🧠 NEURAL INDEPENDENCE
+set "TRUE_AI_INDEPENDENCE=true"
+set "SWARM_REALITY_MODE=true"
+
 echo [1/2] Orchestrating Swarm Ecosystem via PM2...
 cmd /c "cd /d %~dp0.. && npx pm2 start ecosystem.config.cjs"
 if %errorlevel% neq 0 (

@@ -60,13 +60,42 @@ async function validateSovereignIdentity(): Promise<boolean> {
         const isTrueIndependence = process.env.TRUE_AI_INDEPENDENCE === 'true';
         const bridgeEnabled = !!(process.env.WHATSAPP_PHONE_NUMBER || process.env.IMESSAGE_RECIPIENT);
 
+        // Physical Anchor 1: Brain State Persistence
+        const brainStatePath = path.join(process.cwd(), 'src/data/quantum_brain_state.json');
+        try {
+            await fs.access(brainStatePath);
+            console.log('   🧠 Brain State Anchor: VERIFIED');
+        } catch (e) {
+            console.warn('   ⚠️ Brain State Anchor: MISSING (Self-healing required)');
+        }
+
         if (isTrueIndependence) {
+            // Physical Anchor 2: Local Model Resonance
+            const port = process.env.NEURAL_BRIDGE_PORT || '11434';
+            try {
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 2000);
+                const fetch = (await import('node-fetch')).default;
+                const response = await fetch(`http://localhost:${port}/api/tags`, { signal: controller.signal });
+                clearTimeout(timeoutId);
+                if (response.ok) {
+                    console.log('   ⚛️ Local Model Resonance: STABLE');
+                } else {
+                    throw new Error('Incoherent response');
+                }
+            } catch (e) {
+                console.warn(`   ⚠️ Local Model Resonance: COLLAPSED (Is Ollama running on ${port}?)`);
+                if (process.env.SWARM_REALITY_MODE === 'true') {
+                    console.error('   ❌ IDENTITY CRITICAL: Cannot resonate with local brain in REALITY_MODE.');
+                    return false;
+                }
+            }
             console.log('✅ IDENTITY VALIDATED: Local Sovereignty Active');
             return true;
         }
 
         if (!bridgeEnabled) {
-            console.warn('⚠️ IDENTITY WARNING: Autonomous communication bridge not configured.');
+            console.warn('   ⚠️ IDENTITY WARNING: Autonomous communication bridge not configured.');
             return true;
         }
 
