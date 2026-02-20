@@ -175,79 +175,53 @@ class RealDataService {
 
   // Get current real-time data
   getRealTimeData(): RealTimeData {
-    const hasRealData = this.realSwarms.length > 0;
+    const hasRealData = this.isConnected && this.realSwarms.length > 0;
     return {
       systemMetrics: { ...this.currentMetrics },
-      swarms: hasRealData ? this.realSwarms : this.getDefaultSwarms(),
-      evolution: this.currentEvolution || this.getDefaultEvolution(),
+      swarms: hasRealData ? this.realSwarms : [],
+      evolution: this.currentEvolution || {
+        totalCycles: 0,
+        totalPRsCreated: 0,
+        totalMerges: 0,
+        lastMutationScore: 0,
+        mutationHistory: []
+      },
       lastUpdated: new Date().toISOString(),
-      isDemo: !this.isConnected || !hasRealData,
+      isDemo: !this.isConnected,
       bridgeStatus: this.currentMetrics.bridgeStatus
     };
   }
 
-  // Default swarms when server is not available
+  // Default swarms - REMOVED for True Sovereignty
   private getDefaultSwarms(): SwarmData[] {
-    const baseCoherence = this.currentMetrics.coherence;
-    return [
-      { id: 'CryptoSwarm', name: 'CryptoSwarm', type: 'Trading & Finance', status: 'online', successRate: Math.round(baseCoherence * 100 - 3), revenue: 15000, tasks: 150, efficiency: Math.round(baseCoherence * 96), agents: ['Trader', 'BlockchainAnalyzer', 'MarketPredictor'] },
-      { id: 'RevenueHunter', name: 'RevenueHunter', type: 'Trading & Finance', status: 'online', successRate: Math.round(baseCoherence * 100 - 8), revenue: 12000, tasks: 89, efficiency: Math.round(baseCoherence * 92), agents: ['Analyst', 'Strategist', 'OpportunityHunter'] },
-      { id: 'FreelanceSwarm', name: 'FreelanceSwarm', type: 'Freelance & Revenue', status: 'online', successRate: Math.round(baseCoherence * 100 - 12), revenue: 8500, tasks: 45, efficiency: Math.round(baseCoherence * 88), agents: ['Freelancer', 'ClientHunter', 'Contractor'] },
-      { id: 'TrendAnalyzer', name: 'TrendAnalyzer', type: 'Marketing & Sales', status: 'online', successRate: Math.round(baseCoherence * 100 - 6), revenue: 0, tasks: 200, efficiency: Math.round(baseCoherence * 94), agents: ['TrendHunter', 'MarketScanner', 'DataMiner'] },
-      { id: 'ArbitrageHunter', name: 'ArbitrageHunter', type: 'Trading & Finance', status: 'online', successRate: Math.round(baseCoherence * 100 - 1), revenue: 5000, tasks: 300, efficiency: Math.round(baseCoherence * 90), agents: ['PriceMonitor', 'ExecutionBot', 'RouteOptimizer'] },
-      { id: 'YieldOptimizer', name: 'YieldOptimizer', type: 'DeFi & Finance', status: 'online', successRate: Math.round(baseCoherence * 100 - 10), revenue: 3000, tasks: 150, efficiency: Math.round(baseCoherence * 85), agents: ['YieldFarmer', 'ProtocolAnalyst', 'RiskManager'] },
-      { id: 'MarketAnalyzer', name: 'MarketAnalyzer', type: 'Marketing & Sales', status: 'online', successRate: Math.round(baseCoherence * 100 - 9), revenue: 0, tasks: 120, efficiency: Math.round(baseCoherence * 90), agents: ['MarketAnalyst', 'CompetitorTracker', 'SentimentMonitor'] },
-      { id: 'SalesBot', name: 'SalesBot', type: 'Marketing & Sales', status: 'online', successRate: Math.round(baseCoherence * 100 - 5), revenue: 5000, tasks: 35, efficiency: Math.round(baseCoherence * 95), agents: ['SalesAgent', 'LeadConverter', 'ClosingBot'] },
-      { id: 'ReferralManager', name: 'ReferralManager', type: 'Marketing & Sales', status: 'online', successRate: Math.round(baseCoherence * 100 - 4), revenue: 1200, tasks: 80, efficiency: Math.round(baseCoherence * 89), agents: ['AdaptiveOptimization', 'FeedbackLearning'] },
-      { id: 'SolanaDeFiSwarm', name: 'SolanaDeFiSwarm', type: 'DeFi & Finance', status: 'online', successRate: Math.round(baseCoherence * 100 - 7), revenue: 2500, tasks: 110, efficiency: Math.round(baseCoherence * 82), agents: ['SolanaExpert', 'BridgeMonitor'] },
-      { id: 'GodSwarm', name: 'GodSwarm', type: 'General Intelligence', status: 'online', successRate: 99, revenue: 50000, tasks: 1000, efficiency: 100, agents: ['PrimeDirector', 'Architect', 'Overseer'] }
-    ];
+    return [];
   }
 
-  // Default evolution state for demo
+  // Default evolution state - REMOVED for True Sovereignty
   private getDefaultEvolution(): EvolutionData {
     return {
-      totalCycles: 128,
-      totalPRsCreated: 15,
-      totalMerges: 12,
-      lastMutationScore: 0.89,
-      mutationHistory: [
-        { cycle: 120, score: 0.82, timestamp: new Date().toISOString() },
-        { cycle: 124, score: 0.85, timestamp: new Date().toISOString() },
-        { cycle: 128, score: 0.89, timestamp: new Date().toISOString() }
-      ]
+      totalCycles: 0,
+      totalPRsCreated: 0,
+      totalMerges: 0,
+      lastMutationScore: 0,
+      mutationHistory: []
     };
   }
 
-  // Generate real revenue data for charts
+  // Generate revenue data from REAL history only
   getRevenueData(): { time: number; value: number }[] {
-    const baseValue = 10000;
-    const data: { time: number; value: number }[] = [];
-    let currentValue = baseValue;
-
-    for (let i = 0; i < 20; i++) {
-      // Real growth pattern with quantum coherence influence
-      const coherence = this.currentMetrics.coherence;
-      const growth = (Math.random() * 100 + 50) * coherence;
-      currentValue += growth;
-
-      data.push({
-        time: i,
-        value: Math.round(currentValue)
-      });
-    }
-
-    return data;
+    // Purged simulation: return empty if no real history
+    return [];
   }
 
   // Get system coherence from quantum engine
   getCoherence(): number {
-    return this.currentMetrics.coherence;
+    return this.isConnected ? this.currentMetrics.coherence : 0;
   }
 
   // Get system latency from quantum engine
   getLatency(): number {
-    return this.currentMetrics.latency;
+    return this.isConnected ? this.currentMetrics.latency : 0;
   }
 
   // Check if connected to real server
@@ -255,28 +229,12 @@ class RealDataService {
     return this.isConnected;
   }
 
-  // Start real-time updates
+  // Purged: No longer auto-generating fake metric drifts
   startRealTimeUpdates(intervalMs: number = 5000): void {
     if (this.intervalId) {
       clearInterval(this.intervalId);
     }
-
-    this.intervalId = setInterval(() => {
-      // Update metrics with slight variations based on quantum state
-      const coherence = 0.94 + Math.random() * 0.04; // 94-98%
-      const latency = 35 + Math.floor(Math.random() * 15); // 35-50ms
-
-      this.currentMetrics = {
-        ...this.currentMetrics,
-        coherence,
-        latency,
-        throughput: 0.88 + Math.random() * 0.08,
-        memoryUsage: 0.42 + Math.random() * 0.12,
-        cpuUsage: 0.28 + Math.random() * 0.18
-      };
-
-      this.notifyCallbacks();
-    }, intervalMs);
+    // Only poll or wait for socket events
   }
 
   // Get swarm data directly (returns array of swarms)

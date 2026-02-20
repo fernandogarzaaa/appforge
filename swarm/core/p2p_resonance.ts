@@ -176,6 +176,19 @@ export class P2PResonance {
         };
         await this.broadcastState('REASONING_SYNC', payload);
     }
+
+    /**
+     * Broadcasts cognitive evolution weights to the mesh.
+     */
+    async broadcastEvolution(evolutionKey: string, value: any) {
+        const payload = {
+            key: evolutionKey,
+            value,
+            timestamp: new Date().toISOString(),
+            nodeId: process.env.NODE_ID || 'sovereign-node'
+        };
+        await this.broadcastState('BRAIN_SYNC', payload);
+    }
 }
 
 export const p2pResonance = new P2PResonance();
