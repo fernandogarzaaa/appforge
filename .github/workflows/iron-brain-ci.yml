@@ -40,11 +40,19 @@ jobs:
       - name: "🏗️ Build Verification"
         run: npm run build
 
+      - name: "💾 Cache AI Models"
+        uses: actions/cache@v4
+        with:
+          path: models
+          key: ${{ runner.os }}-models-${{ hashFiles('.github/workflows/iron-brain-ci.yml') }}
+          restore-keys: |
+            ${{ runner.os }}-models-
+
       - name: "📥 Download Nano Model (AppForge-Nano)"
         run: |
           mkdir -p models
           pip install huggingface-hub
-          python3 -m huggingface_hub.commands.huggingface_cli download ${{ env.NANO_MODEL }} ${{ env.NANO_MODEL_FILE }} --local-dir models
+          huggingface-cli download ${{ env.NANO_MODEL }} ${{ env.NANO_MODEL_FILE }} --local-dir models
 
       - name: "⚡ Download llama.cpp Server"
         run: |

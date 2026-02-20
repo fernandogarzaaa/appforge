@@ -15,6 +15,7 @@
     "preview": "vite preview",
     "swarm:scout": "npx tsx scripts/scout_synergy.ts",
     "swarm:analyze": "npx tsx scripts/analyze_antigravity.ts",
+    "swarm:models:pull": "node scripts/pull_models.mjs",
     "swarm:daemon": "pm2 start ecosystem.config.cjs",
     "swarm:stop": "pm2 stop appforge-swarm",
     "swarm:logs": "pm2 logs appforge-swarm",
