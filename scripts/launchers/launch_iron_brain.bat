@@ -24,7 +24,7 @@ echo Starting AppForge-v1 on local hardware (RTX 2060)
 echo Zero API costs. Zero network lag. Total sovereignty.
 echo.
 
-RE:: Model Configuration - IRON BRAIN PIVOT STRATEGY
+:: Model Configuration - IRON BRAIN PIVOT STRATEGY
 :: Due to GGUF conversion tool incompatibilities, we are running the Base Model.
 :: The DPO Adapter is saved at: swarm\factory\models\appforge-v1-dpo-lora
 :: To enable fine-tuning, convert the adapter to GGUF and add: --lora swarm\factory\models\appforge-v1-dpo-lora.gguf
@@ -56,7 +56,7 @@ if %errorlevel% neq 0 (
     echo     git clone https://github.com/ggerganov/llama.cpp
     echo     cd llama.cpp
     echo     cmake -B build -DGGML_CUDA=ON
-    cmake --build build --config Release
+    echo     cmake --build build --config Release
     echo.
     echo Then add the build directory to your PATH.
     pause
@@ -64,24 +64,7 @@ if %errorlevel% neq 0 (
 )
 
 REM Find the GGUF model file
-SET GGUF_FILE=
-for %%f in ("%MODEL_PATH%\*.gguf") do SET GGUF_FILE=%%f
-
-if "%GGUF_FILE%"=="" (
-    echo ❌ No GGUF model found in %MODEL_PATH%
-    echo.
-    echo Run the training pipeline first:
-    echo   1. npx tsx swarm/factory/distill.ts
-    echo   2. conda activate appforge-train
-    echo   3. python swarm/factory/train.py
-    echo.
-    
-    REM Fallback: Check for any downloaded model
-    echo 💡 Alternatively, download a pre-trained model:
-    echo   huggingface-cli download TheBloke/Llama-2-7B-Chat-GGUF llama-2-7b-chat.Q4_K_M.gguf --local-dir %MODEL_PATH%
-    pause
-    exit /b 1
-)
+SET "GGUF_FILE=%MODEL_PATH%"
 
 echo 🔧 Configuration:
 echo    Model:    %GGUF_FILE%
