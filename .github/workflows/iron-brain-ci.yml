@@ -51,8 +51,11 @@ jobs:
       - name: "📥 Download Nano Model (AppForge-Nano)"
         run: |
           mkdir -p models
-          pip install huggingface-hub
-          huggingface-cli download ${{ env.NANO_MODEL }} ${{ env.NANO_MODEL_FILE }} --local-dir models
+          if [ ! -f models/${{ env.NANO_MODEL_FILE }} ]; then
+            wget -q --show-progress "https://huggingface.co/${{ env.NANO_MODEL }}/resolve/main/${{ env.NANO_MODEL_FILE }}?download=true" -O models/${{ env.NANO_MODEL_FILE }}
+          else
+            echo "Model restored from cache."
+          fi
 
       - name: "⚡ Download llama.cpp Server"
         run: |
