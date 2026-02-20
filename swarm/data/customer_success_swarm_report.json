@@ -1,0 +1,37 @@
+{
+  "timestamp": "2026-02-20T20:44:09.863Z",
+  "accountsProcessed": 4,
+  "highRiskAccounts": 0,
+  "upsellTargets": 0,
+  "retentionActions": 4,
+  "decisions": [
+    {
+      "accountId": "acct_001",
+      "churnRisk": 0.556,
+      "action": "inapp_nudge",
+      "recommendation": "INAPP_NUDGE with guided adoption checklist and health tips",
+      "confidence": 0.9680485261488313
+    },
+    {
+      "accountId": "acct_002",
+      "churnRisk": 0.139,
+      "action": "inapp_nudge",
+      "recommendation": "INAPP_NUDGE with guided adoption checklist and health tips",
+      "confidence": 0.99
+    },
+    {
+      "accountId": "acct_003",
+      "churnRisk": 0.586,
+      "action": "inapp_nudge",
+      "recommendation": "INAPP_NUDGE with guided adoption checklist and health tips",
+      "confidence": 0.99
+    },
+    {
+      "accountId": "acct_004",
+      "churnRisk": 0.216,
+      "action": "inapp_nudge",
+      "recommendation": "INAPP_NUDGE with guided adoption checklist and health tips",
+      "confidence": 0.99
+    }
+  ]
+}

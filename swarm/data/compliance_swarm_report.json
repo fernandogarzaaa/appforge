@@ -1,10 +1,10 @@
 {
-  "timestamp": "2026-02-12T23:56:16.295Z",
+  "timestamp": "2026-02-20T20:45:35.712Z",
   "checks": [
     {
       "name": "policy_docs",
-      "status": "pass",
-      "details": "4/4 core policy/legal docs present"
+      "status": "warn",
+      "details": "3/4 core policy/legal docs present"
     },
     {
       "name": "env_hygiene",

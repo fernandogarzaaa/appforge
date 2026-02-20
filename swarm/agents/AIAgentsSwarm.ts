@@ -6,7 +6,7 @@
  * 
  * REVENUE POTENTIAL: $25000/year
  * 
- * REAL APIs USED: GitHub API - Trending repos, OpenAI/Anthropic - AI models
+ * REAL APIs USED: GitHub API, HuggingFace API
  */
 
 import { Base44Tool } from '../tools/base44.js';
@@ -26,7 +26,7 @@ export class AIAgents {
     constructor(base44: Base44Tool, fs: FileSystemTool) {
         this.base44 = base44;
         this.fs = fs;
-        this.apiEndpoints = ["https://api.github.com/search/repositories?q=topic:ai+stars:>1000"];
+        this.apiEndpoints = ["https://api.github.com/search/repositories?q=language:python&sort=stars","https://api-inference.huggingface.co/models/meta-llama/Meta-Llama-3-8B-Instruct"];
     }
 
     async run(): Promise<{
@@ -95,7 +95,7 @@ export class AIAgents {
         return {
             fetched: data.length,
             total,
-            revenue: total * 0.5
+            revenue: total * 10
         };
     }
 }

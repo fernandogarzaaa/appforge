@@ -1,9 +1,9 @@
 {
-  "timestamp": "2026-02-12T23:54:54.486Z",
+  "timestamp": "2026-02-20T20:47:01.489Z",
   "internalAgents": 4,
   "experimentsEvaluated": 4,
   "topRecommendation": "Promote quarterly_anchor for pricing_anchor_packaging_v2 with staged rollout (25% -> 50% -> 100%)",
-  "oracleRecommendation": "Prioritize pricing_anchor_packaging_v2 (pricing) - winner=quarterly_anchor, uplift=15.5%, consensus=85.5%",
+  "oracleRecommendation": "Prioritize content_offer_cta_mix_v4 (content) - winner=offer_led_cta, uplift=22.4%, consensus=77.1%",
   "executedHandovers": 2,
   "rankings": [
     {

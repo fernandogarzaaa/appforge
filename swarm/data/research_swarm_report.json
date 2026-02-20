@@ -1,10 +1,22 @@
 {
-  "timestamp": "2026-02-12T23:53:11.930Z",
-  "signalsAnalyzed": 0,
+  "timestamp": "2026-02-20T20:44:59.896Z",
+  "signalsAnalyzed": 10,
   "competitorsTracked": 8,
   "topFocus": "Creator Revenue Studio",
-  "oracleRecommendation": "Creator Revenue Studio (38.0)",
+  "oracleRecommendation": "Creator Revenue Studio (73.8)",
   "opportunities": [
+    {
+      "id": "creator_revenue_studio",
+      "name": "Creator Revenue Studio",
+      "theme": "creator",
+      "problem": "Creators struggle to plan, publish, and monetize across channels consistently.",
+      "solution": "Unified AI workflow for topic ideation, multi-platform scheduling, and revenue optimization.",
+      "monetization": "$99-$299/month plus performance tier",
+      "score": 73.75,
+      "priority": "medium",
+      "rationale": "Demand=100.0 | CompetitorPressure=75.0 | MoatBonus=25.0",
+      "oracleSelected": true
+    },
     {
       "id": "freelance_pipeline_iq",
       "name": "Freelance Pipeline IQ",
@@ -28,18 +40,6 @@
       "priority": "low",
       "rationale": "Demand=45.0 | CompetitorPressure=72.0 | MoatBonus=28.0",
       "oracleSelected": false
-    },
-    {
-      "id": "creator_revenue_studio",
-      "name": "Creator Revenue Studio",
-      "theme": "creator",
-      "problem": "Creators struggle to plan, publish, and monetize across channels consistently.",
-      "solution": "Unified AI workflow for topic ideation, multi-platform scheduling, and revenue optimization.",
-      "monetization": "$99-$299/month plus performance tier",
-      "score": 38,
-      "priority": "low",
-      "rationale": "Demand=45.0 | CompetitorPressure=75.0 | MoatBonus=25.0",
-      "oracleSelected": true
     },
     {
       "id": "swarm_ops_command_center",

@@ -1,24 +1,24 @@
 {
-  "timestamp": "2026-02-12T23:56:19.926Z",
-  "grossInflow": 61120,
-  "operatingCost": 900,
-  "netInflow": 60220,
-  "reserveBefore": 11324,
-  "reserveAfter": 22648,
+  "timestamp": "2026-02-20T20:45:12.586Z",
+  "grossInflow": 58120,
+  "operatingCost": 1140,
+  "netInflow": 56980,
+  "reserveBefore": 137228,
+  "reserveAfter": 147712,
   "activeSources": 3,
   "strategy": "aggressive_expansion",
   "strategySource": "oracle",
   "oracleRecommendation": "AGGRESSIVE_EXPANSION - maximize growth and experimentation despite lower reserve",
-  "oracleConfidence": 0.876,
+  "oracleConfidence": 0.99,
   "oracleMinConfidence": 0.55,
   "oracleAccepted": true,
   "sustainabilityScore": 0.82,
   "allocation": {
     "strategy": "aggressive_expansion",
-    "reserveAmount": 12224,
-    "growthAmount": 24448,
-    "experimentationAmount": 15280,
-    "infrastructureAmount": 9168,
+    "reserveAmount": 11624,
+    "growthAmount": 23248,
+    "experimentationAmount": 14530,
+    "infrastructureAmount": 8718,
     "percentages": {
       "reserve": 0.2,
       "growth": 0.4,
@@ -27,9 +27,9 @@
     }
   },
   "milestones": [
-    "Reserve treasury to +$12224.00 for runway extension",
-    "Fund retention and upsell execution with $24448.00",
-    "Fund experiment velocity with $15280.00",
-    "Harden reliability and deployment with $9168.00"
+    "Reserve treasury to +$11624.00 for runway extension",
+    "Fund retention and upsell execution with $23248.00",
+    "Fund experiment velocity with $14530.00",
+    "Harden reliability and deployment with $8718.00"
   ]
 }

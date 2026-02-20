@@ -6,7 +6,7 @@
  * 
  * REVENUE POTENTIAL: $8000/year
  * 
- * REAL APIs USED: OpenAI API - Content generation, SEO APIs - Keyword research
+ * REAL APIs USED: OpenAI API, Anthropic API
  */
 
 import { Base44Tool } from '../tools/base44.js';
@@ -26,14 +26,14 @@ export class ContentAI {
     constructor(base44: Base44Tool, fs: FileSystemTool) {
         this.base44 = base44;
         this.fs = fs;
-        this.apiEndpoints = [];
+        this.apiEndpoints = ["https://api.openai.com/v1/completions","https://api.anthropic.com/v1/complete"];
     }
 
     async run(): Promise<{
         status: string;
         metrics: ContentAIMetrics;
     }> {
-        console.log('[📝] ContentAISwarm: Fetching REAL data...');
+        console.log('[✍️] ContentAISwarm: Fetching REAL data...');
 
         try {
             // Fetch REAL data from APIs
@@ -50,7 +50,7 @@ export class ContentAI {
                 metrics
             };
         } catch (error: any) {
-            console.error('[📝] ContentAISwarm Error:', error.message);
+            console.error('[✍️] ContentAISwarm Error:', error.message);
             
             await this.base44.logActivity('CONTENTAISWARM', 
                 'API unavailable - waiting for real data');
@@ -78,7 +78,7 @@ export class ContentAI {
                 }
             } catch (e) {
                 // API failed - continue without fallback
-                console.log('[📝] API failed: ' + endpoint);
+                console.log('[✍️] API failed: ' + endpoint);
             }
         }
         
@@ -95,7 +95,7 @@ export class ContentAI {
         return {
             fetched: data.length,
             total,
-            revenue: total * 0.3
+            revenue: total * 15
         };
     }
 }

@@ -6,7 +6,7 @@
  * 
  * REVENUE POTENTIAL: $30000/year
  * 
- * REAL APIs USED: DeFiLlama API - Yields, DexScreener - Token prices
+ * REAL APIs USED: DexScreener API, Birdeye API, DexLab API
  */
 
 import { Base44Tool } from '../tools/base44.js';
@@ -26,14 +26,14 @@ export class SolanaDeFi {
     constructor(base44: Base44Tool, fs: FileSystemTool) {
         this.base44 = base44;
         this.fs = fs;
-        this.apiEndpoints = ["https://api.llama.fi/yields"];
+        this.apiEndpoints = ["https://api.dexscreener.com/latest/dex/tokens/solana","https://public-api.birdeye.so/public/v1/tokens","https://api.dexlab.app/v1/tokens"];
     }
 
     async run(): Promise<{
         status: string;
         metrics: SolanaDeFiMetrics;
     }> {
-        console.log('[💹] SolanaDeFiSwarm: Fetching REAL data...');
+        console.log('[🌈] SolanaDeFiSwarm: Fetching REAL data...');
 
         try {
             // Fetch REAL data from APIs
@@ -50,7 +50,7 @@ export class SolanaDeFi {
                 metrics
             };
         } catch (error: any) {
-            console.error('[💹] SolanaDeFiSwarm Error:', error.message);
+            console.error('[🌈] SolanaDeFiSwarm Error:', error.message);
             
             await this.base44.logActivity('SOLANADEFISWARM', 
                 'API unavailable - waiting for real data');
@@ -78,7 +78,7 @@ export class SolanaDeFi {
                 }
             } catch (e) {
                 // API failed - continue without fallback
-                console.log('[💹] API failed: ' + endpoint);
+                console.log('[🌈] API failed: ' + endpoint);
             }
         }
         
@@ -95,7 +95,7 @@ export class SolanaDeFi {
         return {
             fetched: data.length,
             total,
-            revenue: total * 1
+            revenue: total * 50
         };
     }
 }

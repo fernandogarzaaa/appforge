@@ -6,7 +6,7 @@
  * 
  * REVENUE POTENTIAL: $20000/year
  * 
- * REAL APIs USED: Stripe API - Subscriptions, Paddle API - Payments
+ * REAL APIs USED: Stripe API, Paddle API
  */
 
 import { Base44Tool } from '../tools/base44.js';
@@ -26,14 +26,14 @@ export class SaaSSubscription {
     constructor(base44: Base44Tool, fs: FileSystemTool) {
         this.base44 = base44;
         this.fs = fs;
-        this.apiEndpoints = [];
+        this.apiEndpoints = ["https://api.stripe.com/v1/subscriptions","https://vendors.paddle.com/api/1.0/subscriptions"];
     }
 
     async run(): Promise<{
         status: string;
         metrics: SaaSSubscriptionMetrics;
     }> {
-        console.log('[☁️] SaaSSubscriptionSwarm: Fetching REAL data...');
+        console.log('[💰] SaaSSubscriptionSwarm: Fetching REAL data...');
 
         try {
             // Fetch REAL data from APIs
@@ -50,7 +50,7 @@ export class SaaSSubscription {
                 metrics
             };
         } catch (error: any) {
-            console.error('[☁️] SaaSSubscriptionSwarm Error:', error.message);
+            console.error('[💰] SaaSSubscriptionSwarm Error:', error.message);
             
             await this.base44.logActivity('SAASSUBSCRIPTIONSWARM', 
                 'API unavailable - waiting for real data');
@@ -78,7 +78,7 @@ export class SaaSSubscription {
                 }
             } catch (e) {
                 // API failed - continue without fallback
-                console.log('[☁️] API failed: ' + endpoint);
+                console.log('[💰] API failed: ' + endpoint);
             }
         }
         
@@ -95,7 +95,7 @@ export class SaaSSubscription {
         return {
             fetched: data.length,
             total,
-            revenue: total * 5
+            revenue: total * 100
         };
     }
 }

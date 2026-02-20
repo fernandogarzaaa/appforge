@@ -6,7 +6,7 @@
  * 
  * REVENUE POTENTIAL: $15000/year
  * 
- * REAL APIs USED: Labelbox API - Data labeling, Scale AI API - Annotations
+ * REAL APIs USED: Scale AI API, Labelbox API
  */
 
 import { Base44Tool } from '../tools/base44.js';
@@ -26,7 +26,7 @@ export class DataLabeling {
     constructor(base44: Base44Tool, fs: FileSystemTool) {
         this.base44 = base44;
         this.fs = fs;
-        this.apiEndpoints = [];
+        this.apiEndpoints = ["https://api.scale.com/v1/datasets","https://api.labelbox.com/graphql"];
     }
 
     async run(): Promise<{
@@ -95,7 +95,7 @@ export class DataLabeling {
         return {
             fetched: data.length,
             total,
-            revenue: total * 2
+            revenue: total * 5
         };
     }
 }

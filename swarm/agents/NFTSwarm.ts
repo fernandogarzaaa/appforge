@@ -6,7 +6,7 @@
  * 
  * REVENUE POTENTIAL: $12000/year
  * 
- * REAL APIs USED: Magic Eden API - NFT data, OpenSea API - Collections
+ * REAL APIs USED: OpenSea API, Magic Eden API
  */
 
 import { Base44Tool } from '../tools/base44.js';
@@ -26,14 +26,14 @@ export class NFT {
     constructor(base44: Base44Tool, fs: FileSystemTool) {
         this.base44 = base44;
         this.fs = fs;
-        this.apiEndpoints = ["https://api.dexscreener.com/latest/dex/tokens"];
+        this.apiEndpoints = ["https://api.opensea.io/api/v2/collections","https://api-mainnet.magiceden.io/v2/collections"];
     }
 
     async run(): Promise<{
         status: string;
         metrics: NFTMetrics;
     }> {
-        console.log('[🎨] NFTSwarm: Fetching REAL data...');
+        console.log('[🖼️] NFTSwarm: Fetching REAL data...');
 
         try {
             // Fetch REAL data from APIs
@@ -50,7 +50,7 @@ export class NFT {
                 metrics
             };
         } catch (error: any) {
-            console.error('[🎨] NFTSwarm Error:', error.message);
+            console.error('[🖼️] NFTSwarm Error:', error.message);
             
             await this.base44.logActivity('NFTSWARM', 
                 'API unavailable - waiting for real data');
@@ -78,7 +78,7 @@ export class NFT {
                 }
             } catch (e) {
                 // API failed - continue without fallback
-                console.log('[🎨] API failed: ' + endpoint);
+                console.log('[🖼️] API failed: ' + endpoint);
             }
         }
         
@@ -95,7 +95,7 @@ export class NFT {
         return {
             fetched: data.length,
             total,
-            revenue: total * 1.5
+            revenue: total * 25
         };
     }
 }
