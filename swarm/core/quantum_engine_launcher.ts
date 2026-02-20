@@ -12,7 +12,7 @@
 import { EnhancedQuantumEngine } from './enhanced_quantum_engine_v2.js';
 import { willowPatterns, WillowPatterns } from './willow_patterns.js';
 import path from 'path';
-import { fileURLToPath } from 'url';
+import { fileURLToPath } from 'node:url';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -46,8 +46,8 @@ export function getQuantumEngine(): EnhancedQuantumEngine {
  * @returns Quantum optimization result
  */
 export function quantumSolve(
-    objective: string, 
-    solutions: any[], 
+    objective: string,
+    solutions: any[],
     objectives: string[]
 ): ReturnType<EnhancedQuantumEngine['solve']> {
     const engine = getQuantumEngine();
@@ -59,7 +59,7 @@ export function quantumSolve(
  */
 export function quickSolve(solutions: any[], optimizeFor: 'coherence' | 'speed' | 'balance' = 'balance'): any {
     const engine = getQuantumEngine();
-    
+
     switch (optimizeFor) {
         case 'coherence':
             return engine.solve('Maximize coherence', solutions, ['coherence']);
@@ -88,7 +88,7 @@ export function isReady(): boolean {
 /**
  * Initialize Quantum Engine with custom config
  */
-export function initialize(config?: { 
+export function initialize(config?: {
     coherenceThreshold?: number;
     islandCount?: number;
     reinforcementEpisodes?: number;
@@ -137,16 +137,16 @@ export const launcherInfo = {
 if (process.argv[1] === __filename) {
     console.log('🌌 [QuantumLauncher] Starting Quantum Engine v2.0...');
     const engine = getQuantumEngine();
-    
+
     // Quick self-test
     const testSolutions = [
         { id: 'opt1', coherence: 0.95, latency: 0.1 },
         { id: 'opt2', coherence: 0.88, latency: 0.05 },
         { id: 'opt3', coherence: 0.92, latency: 0.08 }
     ];
-    
+
     const result = quantumSolve('Maximize coherence', testSolutions, ['coherence']);
-    
+
     console.log('✅ [QuantumLauncher] Self-test complete');
     console.log('📊 Best Solution:', result.ob?.id || result.osb?.id);
     console.log('🎯 Coherence:', result.coh);

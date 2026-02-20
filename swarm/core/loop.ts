@@ -1,7 +1,7 @@
 import dotenv from 'dotenv';
 import path from 'path';
 import * as fs from 'fs/promises';
-import { fileURLToPath } from 'url';
+import { fileURLToPath } from 'node:url';
 import { realityStatusSummary, requireRealityMode } from './reality_mode.js';
 
 // Resolve .env.local from project root

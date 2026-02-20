@@ -29,7 +29,7 @@ describe('QuantumRenormalizationEngine', () => {
     });
 
     test('criticality should be between 0 and 1', () => {
-      const metrics = [Math.random() * 100 for _ in range(10)];
+      const metrics = Array.from({ length: 10 }, () => Math.random() * 100);
       const criticality = engine.predictCriticality(metrics);
 
       expect(criticality).toBeGreaterThanOrEqual(0);
@@ -123,7 +123,7 @@ describe('QuantumRenormalizationEngine', () => {
     test('should estimate short time for rapid degradation', () => {
       const metrics = [10, 50, 100, 200]; // Exponential growth
       const shortTime = engine.estimateTimeToCriticality(metrics, 0.1);
-      
+
       const metrics2 = [10, 11, 12, 13]; // Slow growth
       const longTime = engine.estimateTimeToCriticality(metrics2, 0.1);
 
@@ -233,7 +233,7 @@ describe('QuantumRenormalizationEngine', () => {
   describe('Performance', () => {
     test('should handle large metric arrays', () => {
       const metrics = Array(10000).fill(0).map(() => Math.random() * 100);
-      
+
       const start = performance.now();
       engine.predictCriticality(metrics);
       const end = performance.now();
@@ -243,7 +243,7 @@ describe('QuantumRenormalizationEngine', () => {
 
     test('should coarse grain efficiently', () => {
       const metrics = Array(10000).fill(0).map(() => Math.random());
-      
+
       const start = performance.now();
       engine.coarseGrain(metrics, 10);
       const end = performance.now();

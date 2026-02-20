@@ -9,7 +9,7 @@ import { ProductOwnerAgent } from '../agents/ProductOwner.js';
 import { AntigravityAgent } from '../agents/Antigravity.js';
 import { LibrarianAgent } from '../agents/Librarian.js';
 import { SwarmKnowledge } from './knowledge.js';
-import { fileURLToPath } from 'url';
+import { fileURLToPath } from 'node:url';
 import path from 'path';
 import fs from 'fs/promises';
 

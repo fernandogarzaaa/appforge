@@ -33,9 +33,18 @@ export interface SwarmData {
   agents: string[];
 }
 
+export interface EvolutionData {
+  totalCycles: number;
+  totalPRsCreated: number;
+  totalMerges: number;
+  lastMutationScore: number;
+  mutationHistory: Array<{ cycle: number; score: number; timestamp: string }>;
+}
+
 export interface RealTimeData {
   systemMetrics: SystemMetrics;
   swarms: SwarmData[];
+  evolution?: EvolutionData;
   lastUpdated: string;
   isDemo: boolean; // True when using simulated data
   bridgeStatus?: { online: boolean; latency: number };
@@ -49,6 +58,7 @@ class RealDataService {
   private currentMetrics: SystemMetrics;
   private realSwarms: SwarmData[] = [];
   private isConnected: boolean = false;
+  private currentEvolution?: EvolutionData;
 
   constructor() {
     this.currentMetrics = {
@@ -112,6 +122,13 @@ class RealDataService {
           this.notifyCallbacks();
         });
 
+        // Listen for evolution updates
+        this.socket.on('evolution_update', (data: EvolutionData) => {
+          console.log('[RealDataService] Evolution update received');
+          this.currentEvolution = data;
+          this.notifyCallbacks();
+        });
+
         // Listen for swarm_state updates
         this.socket.on('swarm_state', (state: { coherence?: number, bridge?: any }) => {
           if (state.coherence) {
@@ -162,6 +179,7 @@ class RealDataService {
     return {
       systemMetrics: { ...this.currentMetrics },
       swarms: hasRealData ? this.realSwarms : this.getDefaultSwarms(),
+      evolution: this.currentEvolution || this.getDefaultEvolution(),
       lastUpdated: new Date().toISOString(),
       isDemo: !this.isConnected || !hasRealData,
       bridgeStatus: this.currentMetrics.bridgeStatus
@@ -184,6 +202,21 @@ class RealDataService {
       { id: 'SolanaDeFiSwarm', name: 'SolanaDeFiSwarm', type: 'DeFi & Finance', status: 'online', successRate: Math.round(baseCoherence * 100 - 7), revenue: 2500, tasks: 110, efficiency: Math.round(baseCoherence * 82), agents: ['SolanaExpert', 'BridgeMonitor'] },
       { id: 'GodSwarm', name: 'GodSwarm', type: 'General Intelligence', status: 'online', successRate: 99, revenue: 50000, tasks: 1000, efficiency: 100, agents: ['PrimeDirector', 'Architect', 'Overseer'] }
     ];
+  }
+
+  // Default evolution state for demo
+  private getDefaultEvolution(): EvolutionData {
+    return {
+      totalCycles: 128,
+      totalPRsCreated: 15,
+      totalMerges: 12,
+      lastMutationScore: 0.89,
+      mutationHistory: [
+        { cycle: 120, score: 0.82, timestamp: new Date().toISOString() },
+        { cycle: 124, score: 0.85, timestamp: new Date().toISOString() },
+        { cycle: 128, score: 0.89, timestamp: new Date().toISOString() }
+      ]
+    };
   }
 
   // Generate real revenue data for charts

@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
-import { useCausalStore } from '../src/store/useCausalStore';
+import { useCausalStore } from '../../src/store/useCausalStore';
 
 describe('Quantum Entanglement Evolution', () => {
     beforeEach(() => {

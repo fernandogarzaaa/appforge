@@ -1,6 +1,6 @@
 import { execSync } from 'child_process';
 import path from 'path';
-import { fileURLToPath } from 'url';
+import { fileURLToPath } from 'node:url';
 import makeWASocket, {
     DisconnectReason,
     useMultiFileAuthState,

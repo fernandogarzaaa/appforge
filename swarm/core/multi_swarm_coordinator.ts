@@ -7,7 +7,7 @@
 
 import * as fs from 'fs';
 import path from 'path';
-import { fileURLToPath } from 'url';
+import { fileURLToPath } from 'node:url';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -157,14 +157,14 @@ export class MultiSwarmCoordinator {
      */
     private persistMessage(message: SwarmMessage): void {
         try {
-            const data = fs.existsSync(this.outputPath) 
+            const data = fs.existsSync(this.outputPath)
                 ? JSON.parse(fs.readFileSync(this.outputPath, 'utf8'))
                 : { messages: [], swarmStatuses: {}, lastUpdated: new Date().toISOString() };
-            
+
             data.messages = data.messages || [];
             data.messages.push(message);
             data.lastUpdated = new Date().toISOString();
-            
+
             fs.writeFileSync(this.outputPath, JSON.stringify(data, null, 2));
         } catch (e) {
             console.error('❌ [Coordinator] Failed to persist message:', e);
@@ -181,13 +181,13 @@ export class MultiSwarmCoordinator {
                 statuses[id] = status;
             });
 
-            const data = fs.existsSync(this.outputPath) 
+            const data = fs.existsSync(this.outputPath)
                 ? JSON.parse(fs.readFileSync(this.outputPath, 'utf8'))
                 : { messages: [], swarmStatuses: {}, lastUpdated: new Date().toISOString() };
-            
+
             data.swarmStatuses = statuses;
             data.lastUpdated = new Date().toISOString();
-            
+
             fs.writeFileSync(this.outputPath, JSON.stringify(data, null, 2));
         } catch (e) {
             console.error('❌ [Coordinator] Failed to persist statuses:', e);
@@ -200,7 +200,7 @@ export class MultiSwarmCoordinator {
     generateReport(): string {
         const statuses = this.getAllStatuses();
         let report = `📊 **MULTI-SWARM STATUS REPORT**\n\n`;
-        
+
         Object.entries(SWARM_CONFIGS).forEach(([id, config]) => {
             const status = this.swarmStatuses.get(id);
             const emoji = status?.status === 'online' ? '🟢' : '🔴';

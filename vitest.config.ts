@@ -16,7 +16,7 @@ export default defineConfig(({ mode }) => {
             globals: true,
             setupFiles: ['./src/tests/setup.js'],
             include: ['**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
-            exclude: ['node_modules', 'dist', '.idea', '.git', '.cache'],
+            exclude: ['**/node_modules/**', 'dist/**', '.idea/**', '.git/**', '.cache/**', 'e2e/**', 'tests/e2e/**', 'src/tests/e2e/**', 'backend/**'],
             alias: {
                 '@': path.resolve(__dirname, './src'),
             },

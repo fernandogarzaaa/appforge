@@ -14,9 +14,11 @@ import { spawn, exec, execSync } from 'child_process';
 import * as fs from 'fs/promises';
 import * as path from 'path';
 import { sovereignModel } from './sovereign_model.js';
-import { willowPatterns } from './willow_patterns.js';
+import { WillowPatterns } from './willow_patterns.js';
 import { EvolutionState, EvolutionStateData } from './evolution_state.js';
 import { validateMutation } from './swarm_guard.js';
+import { realitySensor } from './reality_sensor.js';
+import { replicator } from './replicate.js';
 // Note: QuantumConsensus requires Base44Tool - simplified for standalone use
 
 interface SwarmMetrics {
@@ -273,6 +275,17 @@ Write 5 core directives that govern your behavior. Be concise but comprehensive.
         // 3. Save Evolution State
         await EvolutionState.save(this.evState);
 
+        // 🎯 [Phase 135] Autonomous Replication Spore
+        if (mutationTriggered && mutationScore > 0.95) {
+            console.log('🧬 [GOD SWARM] Threshold reached. Spawning replication seed...');
+            try {
+                const seedPath = await replicator.createSeed(`autonomous_evolution_v${this.evState.totalCycles}`);
+                console.log(`✅ [Replication] Physical seed preserved: ${seedPath}`);
+            } catch (e) {
+                console.warn('⚠️ [Replication] Failed to preserve seed.');
+            }
+        }
+
         // 4. Auto-improve low performers (original logic)
         for (const swarmName of lowPerfNames) {
             await this.improveSwarm(swarmName);
@@ -340,13 +353,16 @@ Write 5 core directives that govern your behavior. Be concise but comprehensive.
             for (const file of files) {
                 if (file.endsWith('Swarm.ts') || file.endsWith('Agent.ts')) {
                     const name = file.replace('.ts', '');
+                    const signals = realitySensor.getSignals();
+                    const sysStability = signals.some(s => s.type === 'BUILD_FAILURE') ? 0.3 : 0.95;
+
                     this.swarmRegistry.set(name, {
                         name,
-                        successRate: Math.random() * 0.3 + 0.7, // Simulated
-                        revenue: Math.floor(Math.random() * 10000),
-                        tasksCompleted: Math.floor(Math.random() * 100),
+                        successRate: sysStability,
+                        revenue: 0,
+                        tasksCompleted: this.evState?.totalCycles || 0,
                         errors: [],
-                        efficiency: Math.random() * 0.3 + 0.7,
+                        efficiency: sysStability * 0.98,
                         lastActive: new Date()
                     });
                 }

@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import { useCausalStore } from '../src/store/useCausalStore';
+import { useCausalStore } from '../../src/store/useCausalStore';
 
 describe('⏳ Quantum Time Travel (Timeline)', () => {
     beforeEach(() => {

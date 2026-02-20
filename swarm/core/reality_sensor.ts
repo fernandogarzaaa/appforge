@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import { fileURLToPath } from 'url';
+import { fileURLToPath } from 'node:url';
 import { execSync } from 'child_process';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -75,35 +75,45 @@ export class RealitySensor {
     }
 
     /**
-     * Monitors Market signals (Solana/Crypto simulation)
+     * Monitors Market signals (Real Solana telemetry)
      */
     private async scanMarket() {
-        // In a real implementation, this would call DEX APIs or Price Oracles
-        // For Phase 73, we simulate a "Volatility Signal"
-        const volatility = Math.random();
-        if (volatility > 0.8) {
+        try {
+            const { getSOLPrice } = await import('../integrations/jupiter.js');
+            const price = await getSOLPrice();
+
+            // Volatility is derived from historical divergence if we had it, 
+            // for now we use the price itself as an intensity anchor.
             this.signals.push({
                 source: 'market',
-                type: 'HIGH_VOLATILITY',
-                intensity: volatility,
-                payload: { asset: 'SOL', delta: 0.15 },
+                type: 'SOL_PRICE_PULSE',
+                intensity: Math.min(price / 500, 1.0), // Intensity scaled to price
+                payload: { asset: 'SOL', priceUsd: price },
                 timestamp: new Date().toISOString()
             });
-            console.log(`   📈 [Market] High volatility detected (${(volatility * 100).toFixed(1)}%)`);
+            console.log(`   📈 [Market] Real SOL Price: $${price.toFixed(2)}`);
+        } catch (e) {
+            console.warn('   ⚠️ [Market] Failed to fetch real SOL price.');
         }
 
-        // 🧠 [CURIOSITY] Phase 84: Market Novelty / Trend Discovery
-        // Simulating detection of GitHub trending or AI paper drops
-        const curiositySignal = Math.random();
-        if (curiositySignal > 0.9) {
-            this.signals.push({
-                source: 'market',
-                type: 'MARKET_NOVELTY',
-                intensity: curiositySignal,
-                payload: { trend: 'Kimi K2.5 Adaptation', value: 'High' },
-                timestamp: new Date().toISOString()
-            });
-            console.log(`   🌟 [Curiosity] Market Novelty detected (${(curiositySignal * 100).toFixed(1)}%)`);
+        // Hardware-Anchored Telemetry (Phase 135)
+        try {
+            const os = await import('os');
+            const load = os.loadavg()[0]; // 1-minute load average
+            const freeMem = os.freemem() / os.totalmem();
+
+            if (load > 2.0 || freeMem < 0.1) {
+                this.signals.push({
+                    source: 'system',
+                    type: 'HARDWARE_STRESS',
+                    intensity: Math.min(load / 8.0, 1.0),
+                    payload: { load, freeMemPct: freeMem * 100 },
+                    timestamp: new Date().toISOString()
+                });
+                console.log(`   🔋 [System] Hardware Stress detected: Load=${load.toFixed(2)}`);
+            }
+        } catch (e) {
+            // OS telemetry unavailable
         }
     }
 

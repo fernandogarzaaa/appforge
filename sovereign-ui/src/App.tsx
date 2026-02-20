@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { io } from 'socket.io-client';
-import { realDataService } from './realDataService';
+import { realDataService, EvolutionData } from './realDataService';
 import {
   Activity,
   Terminal,
@@ -31,6 +31,7 @@ import MemoryGraph from './components/MemoryGraph';
 import QuantumParameterTuner from './components/QuantumParameterTuner';
 import LiveAgentStatus from './components/LiveAgentStatus';
 import SignalDensityMonitor from './components/SignalDensityMonitor';
+import EvolutionDashboard from './components/EvolutionDashboard';
 
 // --- Swarm Data Interface (now uses real data from quantum engine) ---
 interface Swarm {
@@ -276,6 +277,7 @@ function App() {
   );
   const [bridgeStatus, setBridgeStatus] = useState<{ online: boolean; latency: number }>({ online: true, latency: 0 });
   const [compressionRatio, setCompressionRatio] = useState(0.65);
+  const [evolutionData, setEvolutionData] = useState<EvolutionData | undefined>();
 
   // Swarm Dashboard State - load from realDataService
   const [swarms, setSwarms] = useState<Swarm[]>(
@@ -352,6 +354,7 @@ function App() {
     const unsubscribe = realDataService.subscribe((data) => {
       if (data.bridgeStatus) setBridgeStatus(data.bridgeStatus);
       if (data.systemMetrics.compressionRatio) setCompressionRatio(data.systemMetrics.compressionRatio);
+      if (data.evolution) setEvolutionData(data.evolution);
 
       setSwarms(prev => {
         const newData = data.swarms;
@@ -597,6 +600,9 @@ function App() {
           <>
             {/* LEFT COL: METRICS & CONTROLS */}
             <div className="col-span-4 flex flex-col gap-6 overflow-y-auto pr-2">
+              {/* EVOLUTION DASHBOARD */}
+              <EvolutionDashboard data={evolutionData} />
+
               {/* MEMORY RESONANCE */}
               <MemoryGraph swarms={swarms} />
 

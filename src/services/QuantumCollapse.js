@@ -1,10 +1,10 @@
-import { QuantumEngine } from '@/lib/QuantumEngine';
+import { QuantumInspiredAI } from '@/lib/QuantumEngine';
 
 // 🌠 Quantum Collapse Service
 // Uses Quantum Decision Making to collapse the wavefunction of possible future states
 export class QuantumCollapse {
     constructor() {
-        this.engine = new QuantumEngine();
+        this.engine = new QuantumInspiredAI();
     }
 
     /**

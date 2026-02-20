@@ -79,7 +79,7 @@ export class CuriosityEngine {
                 try {
                     const data = await fs.readFile(localLog, 'utf8');
                     bounties = JSON.parse(data);
-                } catch (e) {}
+                } catch (e) { }
                 bounties.push({ ...bounty, timestamp: new Date().toISOString() });
                 await fs.writeFile(localLog, JSON.stringify(bounties, null, 2));
             } else {
@@ -89,24 +89,52 @@ export class CuriosityEngine {
     }
 
     private async findCandidateFiles(): Promise<string[]> {
-        // In a real implementation, this would use git logs or stats.
-        // For now, we crawl a few directories.
         const dirs = ['swarm/core', 'src/utils', 'scripts'];
-        let files: string[] = [];
+        let candidates: { file: string; mtimeMs: number }[] = [];
 
         for (const dir of dirs) {
             try {
-                const entries = await fs.readdir(path.join(this.projectRoot, dir));
-                const fullPaths = entries
-                    .filter(e => e.endsWith('.ts') || e.endsWith('.js'))
-                    .map(e => path.join(dir, e));
-                files = files.concat(fullPaths);
-            } catch (e) {
-                // Ignore missing dirs
-            }
+                const fullDir = path.join(this.projectRoot, dir);
+                const entries = await fs.readdir(fullDir);
+
+                for (const entry of entries) {
+                    if (entry.endsWith('.ts') || entry.endsWith('.js')) {
+                        const filePath = path.join(dir, entry);
+                        const fullPath = path.join(fullDir, entry);
+                        const stats = await fs.stat(fullPath);
+                        candidates.push({ file: filePath, mtimeMs: stats.mtimeMs });
+                    }
+                }
+            } catch (e) { }
         }
 
-        // Shuffle for randomness (Novelty)
-        return files.sort(() => Math.random() - 0.5);
+        // Sort by age first to narrow down candidates
+        candidates.sort((a, b) => a.mtimeMs - b.mtimeMs);
+
+        // Take top 20 "oldest" candidates and run git check on them
+        const topCandidates = candidates.slice(0, 20);
+        const { execSync } = await import('child_process');
+        const scored: { file: string; score: number }[] = [];
+
+        for (const cand of topCandidates) {
+            let commitCount = 0;
+            try {
+                // Fast check: count commits to see how active it is
+                commitCount = parseInt(execSync(`git rev-list --count HEAD -- "${cand.file}"`, {
+                    cwd: this.projectRoot,
+                    encoding: 'utf8',
+                    timeout: 1000 // 1s limit per file
+                }).trim());
+            } catch (e) {
+                commitCount = 10; // Default if git fails or times out
+            }
+
+            const ageDays = (Date.now() - cand.mtimeMs) / (1000 * 60 * 60 * 24);
+            const score = (100 / (commitCount + 1)) + ageDays;
+            scored.push({ file: cand.file, score });
+        }
+
+        // Sort by neglect score (Highest score = most interesting/neglected)
+        return scored.sort((a, b) => b.score - a.score).map(c => c.file);
     }
 }

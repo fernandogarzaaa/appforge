@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import { usePermissionStore } from '../src/store/usePermissionStore';
+import { usePermissionStore } from '../../src/store/usePermissionStore';
 
 // 🛡️ MOCK PENETRATION TEST SUITE
 describe('🛡️ Security Penetration Test (RBAC)', () => {

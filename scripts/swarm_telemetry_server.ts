@@ -42,6 +42,7 @@ const PORT = 3001;
 const KNOWLEDGE_BASE_PATH = path.join(process.cwd(), 'swarm/data/repository_knowledge.json');
 const SWARM_REGISTRY_PATH = path.join(process.cwd(), 'swarm/data/swarm_registry.json');
 const LOG_FILE_PATH = path.join(process.cwd(), 'data/logs/executor.log');
+const EVOLUTION_STATE_PATH = path.join(process.cwd(), 'swarm/evolution_state.json');
 
 import { Base44Tool } from '../swarm/tools/base44.js';
 let base44: Base44Tool | null = null;
@@ -507,6 +508,26 @@ async function loadSwarmRegistry(): Promise<any> {
     }
 }
 
+}
+
+/**
+ * Load evolution state data
+ */
+async function loadEvolutionState(): Promise<any> {
+    try {
+        const content = await fs.readFile(EVOLUTION_STATE_PATH, 'utf-8');
+        return JSON.parse(content);
+    } catch (e) {
+        return {
+            totalCycles: 0,
+            totalPRsCreated: 0,
+            totalMerges: 0,
+            lastMutationScore: 0,
+            mutationHistory: []
+        };
+    }
+}
+
 /**
  * Infer swarm type from ID
  */
@@ -620,6 +641,10 @@ httpServer.on('request', async (req, res) => {
             const result = await loadSwarmRegistry();
             res.end(JSON.stringify(result));
         }
+        else if (url.pathname === '/api/evolution') {
+            const result = await loadEvolutionState();
+            res.end(JSON.stringify(result));
+        }
         else if (url.pathname === '/api/quantum/tune') {
             const params = await parseBody(req);
             if (quantumCore && typeof quantumCore.tune === 'function') {
@@ -695,6 +720,12 @@ io.on('connection', (socket) => {
     socket.on('refresh_swarms', async () => {
         const swarms = await loadSwarmRegistry();
         socket.emit('swarm_update', swarms);
+    });
+
+    // Handle evolution state refresh
+    socket.on('get_evolution', async () => {
+        const evolution = await loadEvolutionState();
+        socket.emit('evolution_update', evolution);
     });
 
     // Handle Oracle consultations

@@ -1,7 +1,6 @@
 import * as fs from 'fs/promises';
 import path from 'path';
 import { WebSocketServer, WebSocket } from 'ws';
-import { WebSocketServer, WebSocket } from 'ws';
 
 // Robust path resolution for Node and Test environments
 const PROJECT_ROOT = process.cwd();
