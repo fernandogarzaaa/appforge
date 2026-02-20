@@ -1,0 +1,47 @@
+
+[1m[46m RUN [49m[22m [36mv4.0.18 [39m[90mC:/Users/ferna/Downloads/appforge-main[39m
+
+[90mstdout[2m | swarm/core/__tests__/collective_reasoning.test.ts
+[22m[39m🌌 Quantum Engine v3.5 [Deep Resonance] Online
+
+[90mstdout[2m | swarm/core/__tests__/collective_reasoning.test.ts
+[22m[39m📚 [Quantum] Loaded 1 saved states
+
+ [32m✓[39m swarm/core/__tests__/collective_reasoning.test.ts[2m > [22mdiagnostic: should run this test[32m 3[2mms[22m[39m
+ [31m×[39m swarm/core/__tests__/collective_reasoning.test.ts[2m > [22mSingularityEngine: Collective Reasoning[2m > [22mshould aggregate high confidence consensus[32m 11[2mms[22m[39m
+[31m   → engine.calculateConsensusScore is not a function[39m
+ [31m×[39m swarm/core/__tests__/collective_reasoning.test.ts[2m > [22mSingularityEngine: Collective Reasoning[2m > [22mshould reject low confidence noise[32m 2[2mms[22m[39m
+[31m   → engine.calculateConsensusScore is not a function[39m
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  swarm/core/__tests__/collective_reasoning.test.ts > SingularityEngine: Collective Reasoning > should aggregate high confidence consensus
+TypeError: engine.calculateConsensusScore is not a function
+ ❯ swarm/core/__tests__/collective_reasoning.test.ts:31:48
+     29| 
+     30|         // However, a purer test of the scoring math:
+     31|         const consensusScore = (engine as any).calculateConsensusScore…
+       |                                                ^
+     32|         expect(consensusScore).toBeGreaterThan(0.8);
+     33|     });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  swarm/core/__tests__/collective_reasoning.test.ts > SingularityEngine: Collective Reasoning > should reject low confidence noise
+TypeError: engine.calculateConsensusScore is not a function
+ ❯ swarm/core/__tests__/collective_reasoning.test.ts:42:48
+     40|         ];
+     41| 
+     42|         const consensusScore = (engine as any).calculateConsensusScore…
+       |                                                ^
+     43|         expect(consensusScore).toBeLessThan(0.4);
+     44|     });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m1 passed[39m[22m[90m (3)[39m
+[2m   Start at [22m 11:17:30
+[2m   Duration [22m 8.24s[2m (transform 1.17s, setup 683ms, import 2.60s, tests 20ms, environment 3.97s)[22m
+

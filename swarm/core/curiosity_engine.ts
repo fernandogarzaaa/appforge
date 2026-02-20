@@ -53,25 +53,39 @@ export class CuriosityEngine {
         return bounties;
     }
 
-    /**
-     * Synthesizes a formal bounty for the swarm to execute.
-     */
     async synthesizeBounty(bounty: CuriosityBounty): Promise<void> {
         console.log(`✨ [Curiosity] Synthesizing Bounty for: ${path.basename(bounty.file)}`);
 
-        // Create a formal task in Base44
-        await this.base44.client.entities.Task.create({
-            description: `[Curiosity] Explore ${path.basename(bounty.file)}`,
-            status: 'OPEN',
-            metadata: {
-                type: 'CURIOSITY_EXPLORATION',
-                target: bounty.file,
-                hypothesis: bounty.hypothesis,
-                priority: 'LOW' // Curiosity is low urgency, high potential
+        try {
+            // Create a formal task in Base44
+            await this.base44.client.entities.Task.create({
+                description: `[Curiosity] Explore ${path.basename(bounty.file)}`,
+                status: 'OPEN',
+                metadata: {
+                    type: 'CURIOSITY_EXPLORATION',
+                    target: bounty.file,
+                    hypothesis: bounty.hypothesis,
+                    priority: 'LOW' // Curiosity is low urgency, high potential
+                }
+            });
+            console.log(`   ✅ Bounty Created: Exlpore ${path.basename(bounty.file)}`);
+        } catch (error: any) {
+            const status = error?.status || error?.response?.status;
+            if (status === 401 || status === 403) {
+                console.warn(`   ⚠️ [Curiosity] Auth Failure: ${error.message}. Persisting bounty locally only.`);
+                // Fallback: append to a local curiosity log if cloud is unavailable
+                const localLog = path.join(this.projectRoot, 'src/data/local_bounties.json');
+                let bounties = [];
+                try {
+                    const data = await fs.readFile(localLog, 'utf8');
+                    bounties = JSON.parse(data);
+                } catch (e) {}
+                bounties.push({ ...bounty, timestamp: new Date().toISOString() });
+                await fs.writeFile(localLog, JSON.stringify(bounties, null, 2));
+            } else {
+                throw error;
             }
-        });
-
-        console.log(`   ✅ Bounty Created: Exlpore ${path.basename(bounty.file)}`);
+        }
     }
 
     private async findCandidateFiles(): Promise<string[]> {

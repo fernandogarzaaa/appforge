@@ -1,0 +1,599 @@
+
+[1m[46m RUN [49m[22m [36mv4.0.18 [39m[90mC:/Users/ferna/Downloads/appforge-main[39m
+
+ [31m❯[39m src/lib/__tests__/quantumRenormalization.test.ts [2m([22m[2m31 tests[22m[2m | [22m[31m16 failed[39m[2m)[22m[32m 71[2mms[22m[39m
+[31m       [31m×[31m should initialize with default parameters[39m[32m 19[2mms[22m[39m
+[31m       [31m×[31m should predict low criticality for stable metrics[39m[32m 3[2mms[22m[39m
+       [32m✓[39m should predict high criticality for volatile metrics[32m 2[2mms[22m[39m
+       [32m✓[39m criticality should be between 0 and 1[32m 1[2mms[22m[39m
+[31m       [31m×[31m should detect approaching phase transition[39m[32m 2[2mms[22m[39m
+[31m       [31m×[31m should identify stable phase[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m should calculate critical exponent[39m[32m 1[2mms[22m[39m
+       [32m✓[39m should coarse grain metric fluctuations[32m 1[2mms[22m[39m
+       [32m✓[39m should preserve overall trends during coarse graining[32m 1[2mms[22m[39m
+       [32m✓[39m should handle different block sizes[32m 1[2mms[22m[39m
+       [32m✓[39m should compute flow evolution[32m 0[2mms[22m[39m
+[31m       [31m×[31m should track fixed points[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m should measure coupling constants[39m[32m 1[2mms[22m[39m
+       [32m✓[39m should estimate time to critical point[32m 0[2mms[22m[39m
+[31m       [31m×[31m should estimate short time for rapid degradation[39m[32m 2[2mms[22m[39m
+[31m       [31m×[31m should return infinity for stable systems[39m[32m 2[2mms[22m[39m
+[31m       [31m×[31m should calculate correlation length[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m should detect short correlation lengths[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m should detect long correlation lengths[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m should report HEALTHY for low criticality[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m should report WARNING for medium criticality[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m should report CRITICAL for high criticality[39m[32m 5[2mms[22m[39m
+       [32m✓[39m should provide global singleton instance[32m 2[2mms[22m[39m
+[31m       [31m×[31m singleton should maintain metric history[39m[32m 1[2mms[22m[39m
+       [32m✓[39m should handle empty metrics[32m 2[2mms[22m[39m
+       [32m✓[39m should handle single metric[32m 0[2mms[22m[39m
+       [32m✓[39m should handle very large metrics[32m 0[2mms[22m[39m
+       [32m✓[39m should handle very small metrics[32m 1[2mms[22m[39m
+       [32m✓[39m should handle negative metrics[32m 0[2mms[22m[39m
+       [32m✓[39m should handle large metric arrays[32m 4[2mms[22m[39m
+       [32m✓[39m should coarse grain efficiently[32m 2[2mms[22m[39m
+ [31m❯[39m scripts/archive/verify_quantum_cycle.test.ts [2m([22m[2m1 test[22m[2m | [22m[31m1 failed[39m[2m)[22m[32m 116[2mms[22m[39m
+[31m     [31m×[31m should execute the full quantum loop: Entangle -> Predict -> Measure -> Collapse -> Remediate[39m[32m 112[2mms[22m[39m
+stderr | src/hooks/useAICompletion.test.js > useAICompletion > should debounce API calls
+Warning: An update to TestComponent inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at TestComponent (C:\Users\ferna\Downloads\appforge-main\node_modules\@testing-library\react\dist\pure.js:328:5)
+Warning: An update to TestComponent inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at TestComponent (C:\Users\ferna\Downloads\appforge-main\node_modules\@testing-library\react\dist\pure.js:328:5)
+Warning: An update to TestComponent inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at TestComponent (C:\Users\ferna\Downloads\appforge-main\node_modules\@testing-library\react\dist\pure.js:328:5)
+
+stderr | src/hooks/useAICompletion.test.js > useAICompletion > should abort previous requests
+Warning: An update to TestComponent inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at TestComponent (C:\Users\ferna\Downloads\appforge-main\node_modules\@testing-library\react\dist\pure.js:328:5)
+Warning: An update to TestComponent inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at TestComponent (C:\Users\ferna\Downloads\appforge-main\node_modules\@testing-library\react\dist\pure.js:328:5)
+Warning: An update to TestComponent inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at TestComponent (C:\Users\ferna\Downloads\appforge-main\node_modules\@testing-library\react\dist\pure.js:328:5)
+Warning: An update to TestComponent inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at TestComponent (C:\Users\ferna\Downloads\appforge-main\node_modules\@testing-library\react\dist\pure.js:328:5)
+Warning: An update to TestComponent inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at TestComponent (C:\Users\ferna\Downloads\appforge-main\node_modules\@testing-library\react\dist\pure.js:328:5)
+Warning: An update to TestComponent inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at TestComponent (C:\Users\ferna\Downloads\appforge-main\node_modules\@testing-library\react\dist\pure.js:328:5)
+
+ [32m✓[39m src/hooks/useAICompletion.test.js [2m([22m[2m9 tests[22m[2m)[22m[33m 4015[2mms[22m[39m
+     [33m[2m✓[22m[39m should fetch completions when enabled [33m 424[2mms[22m[39m
+     [33m[2m✓[22m[39m should filter suggestions by confidence threshold [33m 389[2mms[22m[39m
+     [33m[2m✓[22m[39m should accept suggestion and track analytics [33m 549[2mms[22m[39m
+     [33m[2m✓[22m[39m should reject suggestion and track analytics [33m 640[2mms[22m[39m
+     [33m[2m✓[22m[39m should navigate between suggestions [33m 680[2mms[22m[39m
+     [33m[2m✓[22m[39m should wrap navigation with wrap enabled [33m 921[2mms[22m[39m
+ [32m✓[39m src/components/ui/__tests__/button.test.jsx [2m([22m[2m6 tests[22m[2m)[22m[33m 3295[2mms[22m[39m
+     [33m[2m✓[22m[39m renders with text [33m 1163[2mms[22m[39m
+     [33m[2m✓[22m[39m handles click events [33m 1032[2mms[22m[39m
+     [33m[2m✓[22m[39m can be disabled [33m 360[2mms[22m[39m
+     [33m[2m✓[22m[39m applies variant styles [33m 375[2mms[22m[39m
+stderr | src/components/sidebar/ConsolidatedAISidebar.test.jsx > ConsolidatedAISidebar Component > renders without crashing
+⚠️ React Router Future Flag Warning: React Router will begin wrapping state updates in `React.startTransition` in v7. You can use the `v7_startTransition` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_starttransition.
+
+ [32m✓[39m src/lib/apiKeyUtils.test.js [2m([22m[2m18 tests[22m[2m)[22m[33m 414[2mms[22m[39m
+ [32m✓[39m src/tests/unit/integration/apiIntegration.test.js [2m([22m[2m11 tests[22m[2m)[22m[33m 2442[2mms[22m[39m
+       [33m[2m✓[22m[39m should have axios instance configured [33m 828[2mms[22m[39m
+       [33m[2m✓[22m[39m should have all required service files [33m 1598[2mms[22m[39m
+stderr | src/components/sidebar/AIModelRouter.test.jsx > AIModelRouter Component > renders without crashing
+⚠️ React Router Future Flag Warning: React Router will begin wrapping state updates in `React.startTransition` in v7. You can use the `v7_startTransition` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_starttransition.
+
+stderr | src/components/sidebar/MobileDrawerSidebar.test.jsx > MobileDrawerSidebar Component > renders hamburger menu button for mobile
+⚠️ React Router Future Flag Warning: React Router will begin wrapping state updates in `React.startTransition` in v7. You can use the `v7_startTransition` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_starttransition.
+
+ [32m✓[39m src/utils/accessibility.test.js [2m([22m[2m24 tests[22m[2m)[22m[33m 334[2mms[22m[39m
+ [32m✓[39m src/hooks/useAPIKeys.test.js [2m([22m[2m14 tests[22m[2m)[22m[33m 557[2mms[22m[39m
+ [32m✓[39m src/components/sidebar/AIModelRouter.test.jsx [2m([22m[2m13 tests[22m[2m)[22m[33m 5890[2mms[22m[39m
+     [33m[2m✓[22m[39m renders without crashing [33m 1558[2mms[22m[39m
+     [33m[2m✓[22m[39m displays current model name and provider [33m 584[2mms[22m[39m
+     [33m[2m✓[22m[39m filters models based on search query [33m 1143[2mms[22m[39m
+     [33m[2m✓[22m[39m clears search when X button is clicked [33m 558[2mms[22m[39m
+     [33m[2m✓[22m[39m calls updateSettings when model is selected [33m 523[2mms[22m[39m
+ [32m✓[39m src/utils/__tests__/errorTracking.test.js [2m([22m[2m5 tests[22m[2m)[22m[32m 165[2mms[22m[39m
+ [32m✓[39m src/utils/__tests__/dataSecurity.test.js [2m([22m[2m7 tests[22m[2m)[22m[33m 584[2mms[22m[39m
+       [33m[2m✓[22m[39m encrypts and decrypts data correctly [33m 477[2mms[22m[39m
+ [32m✓[39m src/components/sidebar/ConsolidatedAISidebar.test.jsx [2m([22m[2m15 tests[22m[2m)[22m[33m 10985[2mms[22m[39m
+     [33m[2m✓[22m[39m renders without crashing [33m 1808[2mms[22m[39m
+     [33m[2m✓[22m[39m displays header with APPFORGE branding [33m 1770[2mms[22m[39m
+     [33m[2m✓[22m[39m shows collapse button in expanded state [33m 1170[2mms[22m[39m
+     [33m[2m✓[22m[39m renders all accordion sections [33m 571[2mms[22m[39m
+     [33m[2m✓[22m[39m displays admin section only for admin users [33m 409[2mms[22m[39m
+     [33m[2m✓[22m[39m shows Settings link in footer [33m 803[2mms[22m[39m
+     [33m[2m✓[22m[39m contains Core navigation items [33m 1275[2mms[22m[39m
+     [33m[2m✓[22m[39m contains Build section items [33m 1243[2mms[22m[39m
+     [33m[2m✓[22m[39m contains Enterprise section items [33m 1124[2mms[22m[39m
+ [32m✓[39m src/components/sidebar/MobileDrawerSidebar.test.jsx [2m([22m[2m18 tests[22m[2m)[22m[33m 7617[2mms[22m[39m
+     [33m[2m✓[22m[39m renders hamburger menu button for mobile [33m 1631[2mms[22m[39m
+     [33m[2m✓[22m[39m includes Dialog component for drawer [33m 663[2mms[22m[39m
+     [33m[2m✓[22m[39m displays APPFORGE branding in drawer header [33m 336[2mms[22m[39m
+     [33m[2m✓[22m[39m renders all navigation sections in drawer [33m 1439[2mms[22m[39m
+     [33m[2m✓[22m[39m displays Core section with Dashboard and Projects [33m 731[2mms[22m[39m
+     [33m[2m✓[22m[39m displays Build section [33m 536[2mms[22m[39m
+     [33m[2m✓[22m[39m shows Admin section only for admin users [33m 401[2mms[22m[39m
+ [32m✓[39m src/hooks/useEnvironmentVariables.test.js [2m([22m[2m21 tests[22m[2m)[22m[33m 638[2mms[22m[39m
+ [32m✓[39m src/hooks/useAnalytics.test.js [2m([22m[2m9 tests[22m[2m)[22m[33m 436[2mms[22m[39m
+ [32m✓[39m src/utils/__tests__/security.test.js [2m([22m[2m30 tests[22m[2m)[22m[33m 333[2mms[22m[39m
+ [32m✓[39m src/hooks/useTeamInvites.test.js [2m([22m[2m22 tests[22m[2m)[22m[33m 371[2mms[22m[39m
+ [32m✓[39m src/hooks/useSearch.test.js [2m([22m[2m18 tests[22m[2m)[22m[32m 253[2mms[22m[39m
+[90mstdout[2m | src/lib/__tests__/quantumIntegration.e2e.test.js[2m > [22m[2mQuantum Module E2E Integration
+[22m[39m⚛️ [Quantum] Sovereign WASM Core initialized successfully.
+
+ [32m✓[39m src/lib/__tests__/quantumIntegration.e2e.test.js [2m([22m[2m16 tests[22m[2m)[22m[32m 173[2mms[22m[39m
+ [32m✓[39m src/components/ui/__tests__/card.test.jsx [2m([22m[2m3 tests[22m[2m)[22m[32m 165[2mms[22m[39m
+ [32m✓[39m src/hooks/useProjectCloning.test.js [2m([22m[2m19 tests[22m[2m)[22m[32m 221[2mms[22m[39m
+ [32m✓[39m src/utils/__tests__/webhooks.test.js [2m([22m[2m13 tests[22m[2m)[22m[32m 50[2mms[22m[39m
+stderr | src/tests/unit/components/PrivateRoute.test.jsx > PrivateRoute > should render protected content when authenticated
+⚠️ React Router Future Flag Warning: React Router will begin wrapping state updates in `React.startTransition` in v7. You can use the `v7_startTransition` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_starttransition.
+
+ [32m✓[39m src/tests/unit/components/PrivateRoute.test.jsx [2m([22m[2m3 tests[22m[2m)[22m[32m 174[2mms[22m[39m
+ [32m✓[39m src/hooks/useFavorites.test.js [2m([22m[2m16 tests[22m[2m)[22m[33m 421[2mms[22m[39m
+ [32m✓[39m src/tests/unit/hooks/useOfflineDetection.test.jsx [2m([22m[2m5 tests[22m[2m)[22m[32m 228[2mms[22m[39m
+ [32m✓[39m src/hooks/useDeployments.test.js [2m([22m[2m19 tests[22m[2m)[22m[32m 287[2mms[22m[39m
+stderr | src/lib/__tests__/quantumIntegration.test.js > Quantum Core Integration > initializeQuantumCore > should initialize quantum module successfully
+⚠️ [Quantum] Real WASM Core failed to load, falling back to Simulation Mode. TypeError: WebAssembly.instantiate(): Argument 0 must be a buffer source
+    at __wbg_load (C:/Users/ferna/Downloads/appforge-main/src/quantum-core/pkg/quantum_core.js:1781:44)
+    at Module.__wbg_init (C:/Users/ferna/Downloads/appforge-main/src/quantum-core/pkg/quantum_core.js:1839:40)
+    at processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at initializeQuantumCore (C:/Users/ferna/Downloads/appforge-main/src/lib/quantumIntegration.js:16:7)
+    at C:/Users/ferna/Downloads/appforge-main/src/lib/__tests__/quantumIntegration.test.js:24:22
+    at file:///C:/Users/ferna/Downloads/appforge-main/node_modules/@vitest/runner/dist/index.js:915:20
+
+ [32m✓[39m src/lib/__tests__/quantumIntegration.test.js [2m([22m[2m17 tests[22m[2m)[22m[32m 87[2mms[22m[39m
+ [32m✓[39m src/utils/__tests__/quantumComputing.test.js [2m([22m[2m31 tests[22m[2m)[22m[32m 68[2mms[22m[39m
+stderr | src/tests/unit/components/CommandPalette.test.jsx > CommandPalette > opens with Ctrl+K and shows search input
+⚠️ React Router Future Flag Warning: React Router will begin wrapping state updates in `React.startTransition` in v7. You can use the `v7_startTransition` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_starttransition.
+⚠️ React Router Future Flag Warning: Relative route resolution within Splat routes is changing in v7. You can use the `v7_relativeSplatPath` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_relativesplatpath.
+
+ [32m✓[39m src/tests/unit/components/CommandPalette.test.jsx [2m([22m[2m2 tests[22m[2m)[22m[33m 800[2mms[22m[39m
+     [33m[2m✓[22m[39m opens with Ctrl+K and shows search input [33m 511[2mms[22m[39m
+ [32m✓[39m src/utils/__tests__/apiRateLimit.test.js [2m([22m[2m29 tests[22m[2m)[22m[32m 129[2mms[22m[39m
+ [32m✓[39m src/utils/__tests__/searchIndexing.test.js [2m([22m[2m33 tests[22m[2m)[22m[32m 43[2mms[22m[39m
+ [32m✓[39m src/services/analytics.test.js [2m([22m[2m20 tests[22m[2m)[22m[32m 118[2mms[22m[39m
+ [32m✓[39m src/utils/__tests__/advancedPermissions.test.js [2m([22m[2m37 tests[22m[2m)[22m[32m 60[2mms[22m[39m
+[90mstdout[2m | src/lib/__tests__/wasmLoader.test.ts[2m > [22m[2m🕸️ Quantum Core WASM Loader (JS Fallback)[2m > [22m[2mInitialization[2m > [22m[2mshould load without throwing when WASM unavailable
+[22m[39m⚛️ Quantum Core WASM accelerated ✓
+
+ [32m✓[39m src/lib/teamInvites.test.js [2m([22m[2m18 tests[22m[2m)[22m[32m 22[2mms[22m[39m
+ [32m✓[39m src/lib/__tests__/wasmLoader.test.ts [2m([22m[2m13 tests[22m[2m)[22m[32m 28[2mms[22m[39m
+ [32m✓[39m src/utils/__tests__/analytics.test.js [2m([22m[2m24 tests[22m[2m)[22m[32m 48[2mms[22m[39m
+ [32m✓[39m src/utils/__tests__/teamCollaboration.test.js [2m([22m[2m23 tests[22m[2m)[22m[32m 51[2mms[22m[39m
+ [32m✓[39m src/utils/__tests__/collaboration.test.js [2m([22m[2m27 tests[22m[2m)[22m[32m 29[2mms[22m[39m
+[90mstdout[2m | src/utils/__tests__/performance.test.js[2m > [22m[2mPerformance Monitor[2m > [22m[2mrecords metrics
+[22m[39m📊 Performance [test]: { duration: [33m100[39m }
+
+[90mstdout[2m | src/utils/__tests__/performance.test.js[2m > [22m[2mPerformance Monitor[2m > [22m[2mmeasures render time
+[22m[39m📊 Performance [render]: { component: [32m'TestComponent'[39m, duration: [33m0.026799999999639113[39m }
+
+[90mstdout[2m | src/utils/__tests__/performance.test.js[2m > [22m[2mPerformance Monitor[2m > [22m[2mhandles async operations
+[22m[39m📊 Performance [render]: { component: [32m'AsyncComponent'[39m, duration: [33m11.173099999999977[39m }
+
+[90mstdout[2m | src/utils/__tests__/performance.test.js[2m > [22m[2mPerformance Monitor[2m > [22m[2mmarks and measures custom timings
+[22m[39m📊 Performance [custom]: { name: [32m'operation'[39m, duration: [33m0.4621999999999389[39m }
+
+[90mstdout[2m | src/utils/__tests__/performance.test.js[2m > [22m[2mPerformance Monitor[2m > [22m[2mgenerates performance report
+[22m[39m📊 Performance [render]: { duration: [33m50[39m }
+📊 Performance [render]: { duration: [33m100[39m }
+📊 Performance [api]: { duration: [33m200[39m }
+
+[90mstdout[2m | src/utils/__tests__/performance.test.js[2m > [22m[2mPerformance Monitor[2m > [22m[2mcalculates average metrics
+[22m[39m📊 Performance [render]: { duration: [33m50[39m }
+📊 Performance [render]: { duration: [33m100[39m }
+
+ [32m✓[39m src/utils/__tests__/performance.test.js [2m([22m[2m6 tests[22m[2m)[22m[32m 39[2mms[22m[39m
+ [32m✓[39m src/lib/search.test.js [2m([22m[2m25 tests[22m[2m)[22m[32m 131[2mms[22m[39m
+ [32m✓[39m src/utils/__tests__/searchAnalytics.test.js [2m([22m[2m21 tests[22m[2m)[22m[32m 49[2mms[22m[39m
+ [32m✓[39m src/lib/deploymentHistory.test.js [2m([22m[2m18 tests[22m[2m)[22m[32m 25[2mms[22m[39m
+ [32m✓[39m src/lib/__tests__/quantumZeno.test.ts [2m([22m[2m22 tests[22m[2m)[22m[32m 29[2mms[22m[39m
+ [32m✓[39m src/lib/__tests__/quantumTunneling.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 21[2mms[22m[39m
+ [32m✓[39m src/lib/__tests__/holographicConsensus.test.ts [2m([22m[2m17 tests[22m[2m)[22m[32m 27[2mms[22m[39m
+ [32m✓[39m scripts/archive/verify_quantum_collapse.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 31[2mms[22m[39m
+ [32m✓[39m src/lib/environmentVariables.test.js [2m([22m[2m21 tests[22m[2m)[22m[32m 25[2mms[22m[39m
+ [32m✓[39m src/lib/projectCloning.test.js [2m([22m[2m10 tests[22m[2m)[22m[32m 33[2mms[22m[39m
+ [32m✓[39m src/lib/favorites.test.js [2m([22m[2m16 tests[22m[2m)[22m[32m 23[2mms[22m[39m
+ [32m✓[39m src/store/useCausalStore.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 14[2mms[22m[39m
+ [32m✓[39m scripts/archive/verify_timeline.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 19[2mms[22m[39m
+ [32m✓[39m scripts/archive/verify_prediction.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 14[2mms[22m[39m
+ [32m✓[39m scripts/archive/verify_entanglement.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 14[2mms[22m[39m
+[90mstdout[2m | src/tests/App.test.jsx[2m > [22m[2mApp[2m > [22m[2mrenders without crashing
+[22m[39m[AuthContext] Starting app state check...
+[AuthContext] Fetching public settings...
+[AuthContext] Starting app state check...
+[AuthContext] Fetching public settings...
+
+stderr | src/tests/App.test.jsx > App > renders without crashing
+Warning: An update to SovereignStatus inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at SovereignStatus (C:/Users/ferna/Downloads/appforge-main/src/components/SovereignStatus.tsx:7:61)
+    at div
+    at AppShell (C:/Users/ferna/Downloads/appforge-main/src/App.jsx:356:93)
+    at ViewModeProvider (C:/Users/ferna/Downloads/appforge-main/src/contexts/ViewModeContext.jsx:18:29)
+    at NavigationProvider (C:/Users/ferna/Downloads/appforge-main/src/contexts/NavigationContext.jsx:22:31)
+    at div
+    at WalletModalProvider (C:/Users/ferna/Downloads/appforge-main/src/stubs/solana-adapters/index.tsx:48:32)
+    at WalletProvider (C:/Users/ferna/Downloads/appforge-main/src/stubs/solana-adapters/index.tsx:41:27)
+    at ConnectionProvider (C:/Users/ferna/Downloads/appforge-main/src/stubs/solana-adapters/index.tsx:34:31)
+    at SovereignWallet (C:/Users/ferna/Downloads/appforge-main/src/components/auth/SovereignWallet.tsx:14:28)
+    at Router (C:\Users\ferna\Downloads\appforge-main\node_modules\react-router\dist\umd\react-router.development.js:1207:17)
+    at BrowserRouter (C:\Users\ferna\Downloads\appforge-main\node_modules\react-router-dom\dist\umd\react-router-dom.development.js:695:7)
+    at QueryClientProvider (file:///C:/Users/ferna/Downloads/appforge-main/node_modules/@tanstack/react-query/build/modern/QueryClientProvider.js:20:3)
+    at CollaborationProvider (C:/Users/ferna/Downloads/appforge-main/src/contexts/CollaborationContext.jsx:10:34)
+    at ActivityProvider (C:/Users/ferna/Downloads/appforge-main/src/contexts/ActivityContext.jsx:7:29)
+    at BackendAuthProvider (C:/Users/ferna/Downloads/appforge-main/src/contexts/BackendAuthContext.jsx:8:32)
+    at AuthProvider (C:/Users/ferna/Downloads/appforge-main/src/lib/AuthContext.jsx:10:25)
+    at LLMProvider (C:/Users/ferna/Downloads/appforge-main/src/contexts/LLMContext.jsx:124:24)
+    at ThemeProvider (C:/Users/ferna/Downloads/appforge-main/src/context/ThemeContext.jsx:21:26)
+    at ErrorBoundary (C:/Users/ferna/Downloads/appforge-main/src/components/ErrorBoundary.jsx:8:5)
+    at App (C:/Users/ferna/Downloads/appforge-main/src/App.jsx:409:39)
+Warning: An update to SovereignStatus inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at SovereignStatus (C:/Users/ferna/Downloads/appforge-main/src/components/SovereignStatus.tsx:7:61)
+    at div
+    at AppShell (C:/Users/ferna/Downloads/appforge-main/src/App.jsx:356:93)
+    at ViewModeProvider (C:/Users/ferna/Downloads/appforge-main/src/contexts/ViewModeContext.jsx:18:29)
+    at NavigationProvider (C:/Users/ferna/Downloads/appforge-main/src/contexts/NavigationContext.jsx:22:31)
+    at div
+    at WalletModalProvider (C:/Users/ferna/Downloads/appforge-main/src/stubs/solana-adapters/index.tsx:48:32)
+    at WalletProvider (C:/Users/ferna/Downloads/appforge-main/src/stubs/solana-adapters/index.tsx:41:27)
+    at ConnectionProvider (C:/Users/ferna/Downloads/appforge-main/src/stubs/solana-adapters/index.tsx:34:31)
+    at SovereignWallet (C:/Users/ferna/Downloads/appforge-main/src/components/auth/SovereignWallet.tsx:14:28)
+    at Router (C:\Users\ferna\Downloads\appforge-main\node_modules\react-router\dist\umd\react-router.development.js:1207:17)
+    at BrowserRouter (C:\Users\ferna\Downloads\appforge-main\node_modules\react-router-dom\dist\umd\react-router-dom.development.js:695:7)
+    at QueryClientProvider (file:///C:/Users/ferna/Downloads/appforge-main/node_modules/@tanstack/react-query/build/modern/QueryClientProvider.js:20:3)
+    at CollaborationProvider (C:/Users/ferna/Downloads/appforge-main/src/contexts/CollaborationContext.jsx:10:34)
+    at ActivityProvider (C:/Users/ferna/Downloads/appforge-main/src/contexts/ActivityContext.jsx:7:29)
+    at BackendAuthProvider (C:/Users/ferna/Downloads/appforge-main/src/contexts/BackendAuthContext.jsx:8:32)
+    at AuthProvider (C:/Users/ferna/Downloads/appforge-main/src/lib/AuthContext.jsx:10:25)
+    at LLMProvider (C:/Users/ferna/Downloads/appforge-main/src/contexts/LLMContext.jsx:124:24)
+    at ThemeProvider (C:/Users/ferna/Downloads/appforge-main/src/context/ThemeContext.jsx:21:26)
+    at ErrorBoundary (C:/Users/ferna/Downloads/appforge-main/src/components/ErrorBoundary.jsx:8:5)
+    at App (C:/Users/ferna/Downloads/appforge-main/src/App.jsx:409:39)
+
+[90mstdout[2m | src/tests/App.test.jsx
+[22m[39m[AuthContext] Public settings loaded: {}
+[AuthContext] No token, user not authenticated
+[AuthContext] App state check complete
+
+[90mstdout[2m | src/tests/App.test.jsx
+[22m[39m[AuthContext] Public settings loaded: {}
+[AuthContext] No token, user not authenticated
+[AuthContext] App state check complete
+
+ [32m✓[39m src/tests/App.test.jsx [2m([22m[2m1 test[22m[2m)[22m[33m 633[2mms[22m[39m
+     [33m[2m✓[22m[39m renders without crashing [33m 563[2mms[22m[39m
+ [32m✓[39m src/tests/unit/utils/env.test.js [2m([22m[2m2 tests[22m[2m)[22m[32m 14[2mms[22m[39m
+ [32m✓[39m src/utils/__tests__/env.test.js [2m([22m[2m3 tests[22m[2m)[22m[32m 16[2mms[22m[39m
+ [32m✓[39m scripts/archive/verify_security.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 14[2mms[22m[39m
+ [32m✓[39m src/utils/__tests__/mlIntegration.test.js [2m([22m[2m4 tests[22m[2m)[22m[32m 13[2mms[22m[39m
+ [32m✓[39m src/utils/__tests__/refactoringEngine.test.js [2m([22m[2m3 tests[22m[2m)[22m[32m 12[2mms[22m[39m
+ [32m✓[39m src/store/usePermissionStore.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 11[2mms[22m[39m
+ [32m✓[39m src/utils/__tests__/observability.test.js [2m([22m[2m3 tests[22m[2m)[22m[32m 12[2mms[22m[39m
+ [32m✓[39m src/tests/unit/utils/slackIntegration.test.js [2m([22m[2m2 tests[22m[2m)[22m[32m 11[2mms[22m[39m
+ [32m✓[39m swarm/core/__tests__/dummy.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 8[2mms[22m[39m
+[90mstdout[2m | swarm/core/__tests__/collective_reasoning.test.ts
+[22m[39m🌌 Quantum Engine v3.5 [Deep Resonance] Online
+
+[90mstdout[2m | swarm/core/__tests__/collective_reasoning.test.ts
+[22m[39m📚 [Quantum] Loaded 1 saved states
+
+ [32m✓[39m swarm/core/__tests__/collective_reasoning.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 8[2mms[22m[39m
+ [32m✓[39m swarm/core/orchestrator.antibody.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 6[2mms[22m[39m
+ [32m✓[39m scripts/sick_file.antibody.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 5[2mms[22m[39m
+ [2m[90m↓[39m[22m tests/integration/payment-integration.test.ts [2m([22m[2m5 tests[22m[2m | [22m[33m5 skipped[39m[2m)[22m
+
+⎯⎯⎯⎯⎯⎯ Failed Tests 17 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  scripts/archive/verify_quantum_cycle.test.ts > Quantum Evolution: The Grand Cycle > should execute the full quantum loop: Entangle -> Predict -> Measure -> Collapse -> Remediate
+AssertionError: expected 5 to be greater than 10
+ ❯ scripts/archive/verify_quantum_cycle.test.ts:79:53
+     77|         expect(currentState.quantumMetrics).toBeDefined();
+     78|         // Base entropy 10 + 2 (1 node) = 12
+     79|         expect(currentState.quantumMetrics.entropy).toBeGreaterThan(10…
+       |                                                     ^
+     80| 
+     81|         // 4. Prediction (Superposition)
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/17]⎯
+
+ FAIL  src/lib/__tests__/quantumRenormalization.test.ts > QuantumRenormalizationEngine > Criticality Prediction > should initialize with default parameters
+AssertionError: expected undefined to deeply equal []
+
+- Expected: 
+[]
+
++ Received: 
+undefined
+
+ ❯ src/lib/__tests__/quantumRenormalization.test.ts:13:30
+     11|     test('should initialize with default parameters', () => {
+     12|       expect(engine).toBeDefined();
+     13|       expect(engine.metrics).toEqual([]);
+       |                              ^
+     14|       expect(engine.correlationLength).toBe(1.0);
+     15|     });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/17]⎯
+
+ FAIL  src/lib/__tests__/quantumRenormalization.test.ts > QuantumRenormalizationEngine > Criticality Prediction > should predict low criticality for stable metrics
+AssertionError: expected 0.6216747932956159 to be less than 0.3
+ ❯ src/lib/__tests__/quantumRenormalization.test.ts:21:27
+     19|       const criticality = engine.predictCriticality(metrics);
+     20| 
+     21|       expect(criticality).toBeLessThan(0.3);
+       |                           ^
+     22|     });
+     23| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/17]⎯
+
+ FAIL  src/lib/__tests__/quantumRenormalization.test.ts > QuantumRenormalizationEngine > Phase Transition Detection > should detect approaching phase transition
+TypeError: engine.isApproachingPhaseTransition is not a function
+ ❯ src/lib/__tests__/quantumRenormalization.test.ts:44:36
+     42|       // Metrics showing pre-transition behavior
+     43|       const metrics = [10, 15, 25, 45, 90];
+     44|       const isApproaching = engine.isApproachingPhaseTransition(metric…
+       |                                    ^
+     45| 
+     46|       expect(isApproaching).toBe(true);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/17]⎯
+
+ FAIL  src/lib/__tests__/quantumRenormalization.test.ts > QuantumRenormalizationEngine > Phase Transition Detection > should identify stable phase
+TypeError: engine.isApproachingPhaseTransition is not a function
+ ❯ src/lib/__tests__/quantumRenormalization.test.ts:51:36
+     49|     test('should identify stable phase', () => {
+     50|       const metrics = [50, 50, 51, 49, 50]; // Stable plateau
+     51|       const isApproaching = engine.isApproachingPhaseTransition(metric…
+       |                                    ^
+     52| 
+     53|       expect(isApproaching).toBe(false);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/17]⎯
+
+ FAIL  src/lib/__tests__/quantumRenormalization.test.ts > QuantumRenormalizationEngine > Phase Transition Detection > should calculate critical exponent
+TypeError: engine.calculateCriticalExponent is not a function
+ ❯ src/lib/__tests__/quantumRenormalization.test.ts:58:31
+     56|     test('should calculate critical exponent', () => {
+     57|       const metrics = [10, 20, 40, 80, 160]; // Exponential growth
+     58|       const exponent = engine.calculateCriticalExponent(metrics);
+       |                               ^
+     59| 
+     60|       expect(exponent).toBeGreaterThan(1);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/17]⎯
+
+ FAIL  src/lib/__tests__/quantumRenormalization.test.ts > QuantumRenormalizationEngine > RG Flow Analysis > should track fixed points
+AssertionError: expected 0.2689414213699951 to be less than 0.1
+ ❯ src/lib/__tests__/quantumRenormalization.test.ts:104:20
+    102|       const flow = engine.flowEvolution(metrics);
+    103| 
+    104|       expect(flow).toBeLessThan(0.1);
+       |                    ^
+    105|     });
+    106| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/17]⎯
+
+ FAIL  src/lib/__tests__/quantumRenormalization.test.ts > QuantumRenormalizationEngine > RG Flow Analysis > should measure coupling constants
+TypeError: engine.measureCouplingConstant is not a function
+ ❯ src/lib/__tests__/quantumRenormalization.test.ts:109:31
+    107|     test('should measure coupling constants', () => {
+    108|       const metrics = [10, 20, 30, 40, 50];
+    109|       const coupling = engine.measureCouplingConstant(metrics);
+       |                               ^
+    110| 
+    111|       expect(coupling).toBeGreaterThanOrEqual(0);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/17]⎯
+
+ FAIL  src/lib/__tests__/quantumRenormalization.test.ts > QuantumRenormalizationEngine > Time to Failure Estimation > should estimate short time for rapid degradation
+AssertionError: expected 85 to be less than 85
+ ❯ src/lib/__tests__/quantumRenormalization.test.ts:130:25
+    128|       const longTime = engine.estimateTimeToCriticality(metrics2, 0.1);
+    129| 
+    130|       expect(shortTime).toBeLessThan(longTime);
+       |                         ^
+    131|     });
+    132| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/17]⎯
+
+ FAIL  src/lib/__tests__/quantumRenormalization.test.ts > QuantumRenormalizationEngine > Time to Failure Estimation > should return infinity for stable systems
+AssertionError: expected 85 to be greater than 1000
+ ❯ src/lib/__tests__/quantumRenormalization.test.ts:137:20
+    135|       const time = engine.estimateTimeToCriticality(metrics, 0.1);
+    136| 
+    137|       expect(time).toBeGreaterThan(1000); // Very large time
+       |                    ^
+    138|     });
+    139|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[10/17]⎯
+
+ FAIL  src/lib/__tests__/quantumRenormalization.test.ts > QuantumRenormalizationEngine > Correlation Length > should calculate correlation length
+TypeError: engine.calculateCorrelationLength is not a function
+ ❯ src/lib/__tests__/quantumRenormalization.test.ts:144:34
+    142|     test('should calculate correlation length', () => {
+    143|       const metrics = [10, 20, 30, 40, 50];
+    144|       const correlation = engine.calculateCorrelationLength(metrics);
+       |                                  ^
+    145| 
+    146|       expect(correlation).toBeGreaterThan(0);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[11/17]⎯
+
+ FAIL  src/lib/__tests__/quantumRenormalization.test.ts > QuantumRenormalizationEngine > Correlation Length > should detect short correlation lengths
+TypeError: engine.calculateCorrelationLength is not a function
+ ❯ src/lib/__tests__/quantumRenormalization.test.ts:151:34
+    149|     test('should detect short correlation lengths', () => {
+    150|       const metrics = [1, 100, 2, 99, 3]; // No correlation
+    151|       const correlation = engine.calculateCorrelationLength(metrics);
+       |                                  ^
+    152| 
+    153|       expect(correlation).toBeLessThan(2);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[12/17]⎯
+
+ FAIL  src/lib/__tests__/quantumRenormalization.test.ts > QuantumRenormalizationEngine > Correlation Length > should detect long correlation lengths
+TypeError: engine.calculateCorrelationLength is not a function
+ ❯ src/lib/__tests__/quantumRenormalization.test.ts:158:34
+    156|     test('should detect long correlation lengths', () => {
+    157|       const metrics = [10, 20, 30, 40, 50, 60]; // Strong correlation
+    158|       const correlation = engine.calculateCorrelationLength(metrics);
+       |                                  ^
+    159| 
+    160|       expect(correlation).toBeGreaterThan(2);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[13/17]⎯
+
+ FAIL  src/lib/__tests__/quantumRenormalization.test.ts > QuantumRenormalizationEngine > Health Status > should report HEALTHY for low criticality
+TypeError: engine.getHealthStatus is not a function
+ ❯ src/lib/__tests__/quantumRenormalization.test.ts:167:29
+    165|     test('should report HEALTHY for low criticality', () => {
+    166|       const metrics = [50, 50, 51, 49, 50];
+    167|       const status = engine.getHealthStatus(metrics);
+       |                             ^
+    168| 
+    169|       expect(status).toBe('HEALTHY');
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[14/17]⎯
+
+ FAIL  src/lib/__tests__/quantumRenormalization.test.ts > QuantumRenormalizationEngine > Health Status > should report WARNING for medium criticality
+TypeError: engine.getHealthStatus is not a function
+ ❯ src/lib/__tests__/quantumRenormalization.test.ts:174:29
+    172|     test('should report WARNING for medium criticality', () => {
+    173|       const metrics = [10, 20, 30, 40, 50];
+    174|       const status = engine.getHealthStatus(metrics);
+       |                             ^
+    175| 
+    176|       expect(['WARNING', 'HEALTHY']).toContain(status);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[15/17]⎯
+
+ FAIL  src/lib/__tests__/quantumRenormalization.test.ts > QuantumRenormalizationEngine > Health Status > should report CRITICAL for high criticality
+TypeError: engine.getHealthStatus is not a function
+ ❯ src/lib/__tests__/quantumRenormalization.test.ts:181:29
+    179|     test('should report CRITICAL for high criticality', () => {
+    180|       const metrics = [1, 10, 100, 1000, 10000];
+    181|       const status = engine.getHealthStatus(metrics);
+       |                             ^
+    182| 
+    183|       expect(['CRITICAL', 'WARNING']).toContain(status);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[16/17]⎯
+
+ FAIL  src/lib/__tests__/quantumRenormalization.test.ts > QuantumRenormalizationEngine > Singleton Pattern > singleton should maintain metric history
+TypeError: __vite_ssr_import_0__.renormalization.clearMetrics is not a function
+ ❯ src/lib/__tests__/quantumRenormalization.test.ts:194:23
+    192| 
+    193|     test('singleton should maintain metric history', () => {
+    194|       renormalization.clearMetrics();
+       |                       ^
+    195|       renormalization.recordMetric(50);
+    196| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[17/17]⎯
+
+
+[2m Test Files [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m64 passed[39m[22m[2m | [22m[33m1 skipped[39m[90m (67)[39m
+[2m      Tests [22m [1m[31m17 failed[39m[22m[2m | [22m[1m[32m831 passed[39m[22m[2m | [22m[33m5 skipped[39m[90m (853)[39m
+[2m   Start at [22m 11:23:12
+[2m   Duration [22m 94.63s[2m (transform 41.23s, setup 48.46s, import 116.06s, tests 42.98s, environment 313.28s)[22m
+
