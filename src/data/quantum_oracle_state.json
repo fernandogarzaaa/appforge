@@ -1,17 +1,31 @@
 {
-  "timestamp": "2026-02-20T17:06:35.960Z",
+  "timestamp": "2026-02-20T18:01:27.237Z",
   "state": {
     "version": "3.5",
     "learningParams": {
-      "bias": 1,
-      "exploration": 0.2
+      "bias": 1.0510100501,
+      "exploration": 0.18078415936
     },
     "feedbackStats": {
-      "total": 0,
-      "success": 0
+      "total": 5,
+      "success": 5
     },
-    "optionWeights": {},
-    "criteriaWeights": {},
+    "optionWeights": {
+      "expert": 0.18,
+      "architect": 0.18,
+      "refactor": 0.18,
+      "core": 0.18,
+      "axioms": 0.06,
+      "passed": 0.06
+    },
+    "criteriaWeights": {
+      "proactivity": 1.09,
+      "sovereignty": 1.09,
+      "collective": 1.09,
+      "intelligence": 1.09,
+      "effectiveness": 1.03,
+      "efficiency": 1.03
+    },
     "memoryDump": {
       "solve_5fc6c991": {
         "data": {
@@ -794,6 +808,137 @@
           }
         },
         "timestamp": 1771607195959
+      },
+      "solve_7f7aff86": {
+        "data": {
+          "predictionId": "Q3-1771610486693-37",
+          "optimizedBest": "EXPERT_ARCHITECT: Refactor core",
+          "confidence": 0.99,
+          "alternatives": [
+            "EXPERT_SECURITY: Patch vulnerability",
+            "EXPERT_ADAPTER: Optimize logic"
+          ],
+          "engineVersion": "3.5",
+          "consensus": {
+            "qubitCount": 8,
+            "fidelity": 1.008807387744898
+          }
+        },
+        "timestamp": 1771610486693
+      },
+      "solve_4d88ce83": {
+        "data": {
+          "predictionId": "Q3-1771610486717-566",
+          "optimizedBest": "EXPERT_ARCHITECT: Refactor core",
+          "confidence": 0.99,
+          "alternatives": [
+            "EXPERT_SECURITY: Patch vulnerability",
+            "EXPERT_ADAPTER: Optimize logic"
+          ],
+          "engineVersion": "3.5",
+          "consensus": {
+            "qubitCount": 8,
+            "fidelity": 1.1177030384684625
+          }
+        },
+        "timestamp": 1771610486717
+      },
+      "solve_7f6922b7": {
+        "data": {
+          "predictionId": "Q3-1771610486735-770",
+          "optimizedBest": "EXPERT_ARCHITECT: Refactor core",
+          "confidence": 0.99,
+          "alternatives": [
+            "EXPERT_SECURITY: Patch vulnerability",
+            "EXPERT_ADAPTER: Optimize logic"
+          ],
+          "engineVersion": "3.5",
+          "consensus": {
+            "qubitCount": 8,
+            "fidelity": 1.658840454003474
+          }
+        },
+        "timestamp": 1771610486735
+      },
+      "solve_258a78db": {
+        "data": {
+          "predictionId": "Q3-1771610487048-169",
+          "optimizedBest": "reasoning",
+          "confidence": 0.20034531049023913,
+          "alternatives": [
+            "learning",
+            "adaptation"
+          ],
+          "engineVersion": "3.5",
+          "consensus": {
+            "qubitCount": 8,
+            "fidelity": 0.20034531049023913
+          }
+        },
+        "timestamp": 1771610487048
+      },
+      "solve_28104300": {
+        "data": {
+          "predictionId": "Q3-1771610487062-474",
+          "optimizedBest": "GENERATE_PATCH",
+          "confidence": 0.633123811354436,
+          "alternatives": [],
+          "engineVersion": "3.5",
+          "consensus": {
+            "qubitCount": 8,
+            "fidelity": 0.633123811354436
+          }
+        },
+        "timestamp": 1771610487062
+      },
+      "solve_115b4951": {
+        "data": {
+          "predictionId": "Q3-1771610487072-560",
+          "optimizedBest": "AXIOMS_PASSED",
+          "confidence": 0.99,
+          "alternatives": [
+            "AXIOMS_FAILED"
+          ],
+          "engineVersion": "3.5",
+          "consensus": {
+            "qubitCount": 8,
+            "fidelity": 1.6186896385782927
+          }
+        },
+        "timestamp": 1771610487072
+      },
+      "solve_1cd4cf93": {
+        "data": {
+          "predictionId": "Q3-1771610487090-578",
+          "optimizedBest": "EXPLORE_NEW_FRONTIERS",
+          "confidence": 0.37619713630915375,
+          "alternatives": [
+            "OPTIMIZE_EXISTING_COGNITION"
+          ],
+          "engineVersion": "3.5",
+          "consensus": {
+            "qubitCount": 8,
+            "fidelity": 0.37619713630915375
+          }
+        },
+        "timestamp": 1771610487090
+      },
+      "solve_5adb17fb": {
+        "data": {
+          "predictionId": "Q3-1771610487236-399",
+          "optimizedBest": "REALITY_LOCK",
+          "confidence": 0.768072081619299,
+          "alternatives": [
+            "UNIFIED_INTELLIGENCE_PULSE",
+            "DEEP_QUANTUM_COHERENCE"
+          ],
+          "engineVersion": "3.5",
+          "consensus": {
+            "qubitCount": 8,
+            "fidelity": 0.768072081619299
+          }
+        },
+        "timestamp": 1771610487236
       }
     }
   }

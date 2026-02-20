@@ -70,9 +70,11 @@ export class CuriosityEngine {
             });
             console.log(`   ✅ Bounty Created: Exlpore ${path.basename(bounty.file)}`);
         } catch (error: any) {
+            const message = error?.message || '';
             const status = error?.status || error?.response?.status;
-            if (status === 401 || status === 403) {
-                console.warn(`   ⚠️ [Curiosity] Auth Failure: ${error.message}. Persisting bounty locally only.`);
+
+            if (status === 401 || status === 403 || message.includes('401') || message.includes('Authentication')) {
+                console.warn(`   ⚠️ [Curiosity] Auth Failure: ${message}. Persisting bounty locally only.`);
                 // Fallback: append to a local curiosity log if cloud is unavailable
                 const localLog = path.join(this.projectRoot, 'src/data/local_bounties.json');
                 let bounties = [];

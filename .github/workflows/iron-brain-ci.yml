@@ -44,7 +44,7 @@ jobs:
         run: |
           mkdir -p models
           pip install huggingface-hub
-          huggingface-cli download ${{ env.NANO_MODEL }} ${{ env.NANO_MODEL_FILE }} --local-dir models
+          python3 -m huggingface_hub.commands.huggingface_cli download ${{ env.NANO_MODEL }} ${{ env.NANO_MODEL_FILE }} --local-dir models
 
       - name: "⚡ Download llama.cpp Server"
         run: |
