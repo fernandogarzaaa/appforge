@@ -218,8 +218,8 @@ async function runIntelligencePulse() {
         return Math.max(0, 100 - (tempDist / 100) - (rateDist * 1000));
     };
     const evo = new QuantumGeneticAlgorithm(10, 0.1);
-    const signals = realitySensor.getSignals();
-    const stress = signals.find(s => s.type === 'HARDWARE_STRESS')?.intensity || 0;
+    const telemetrySignals = realitySensor.getSignals();
+    const stress = telemetrySignals.find(s => s.type === 'HARDWARE_STRESS')?.intensity || 0;
 
     // Derived hyperparams based on system stress and health
     const evoResult = {

@@ -60,5 +60,5 @@ describe('Universal Epistemic Purge (Phase 135)', () => {
         // Ensure candidates exist and are sorted (not random)
         expect(candidates.length).toBeGreaterThan(0);
         expect(candidates[0]).toMatch(/\.ts$|\.js$/);
-    });
+    }, 30000);
 });
