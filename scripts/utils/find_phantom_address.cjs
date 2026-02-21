@@ -1,6 +1,6 @@
 const { Keypair } = require('@solana/web3.js');
 const { mnemonicToSeedSync } = require('bip39');
-const hdkey = require('hdkey');
+const { derivePath } = require('ed25519-hd-key');
 
 const mnemonic = (process.env.SOLANA_MNEMONIC || '').trim();
 const targetAddress = (process.env.TARGET_ADDRESS || process.argv[2] || '').trim();
@@ -11,8 +11,7 @@ if (!mnemonic || !targetAddress) {
     process.exit(1);
 }
 
-const seed = mnemonicToSeedSync(mnemonic);
-const hd = hdkey.fromMasterSeed(seed);
+const seed = mnemonicToSeedSync(mnemonic).toString('hex');
 
 console.log('Searching for:', targetAddress);
 console.log('');
@@ -22,24 +21,24 @@ const paths = [
     // Standard Solana
     { path: "m/44'/501'/0'/0'", name: 'Solana Standard' },
     { path: "m/44'/501'/0'/0'", name: 'Solana Standard 2' },
-    
+
     // Different account indices
     { path: "m/44'/501'/0'/0'", name: 'Account 0' },
     { path: "m/44'/501'/1'/0'", name: 'Account 1' },
     { path: "m/44'/501'/2'/0'", name: 'Account 2' },
     { path: "m/44'/501'/0'/1'", name: 'Change 1' },
     { path: "m/44'/501'/1'/1'", name: 'Account 1, Change 1' },
-    
+
     // Without hardened
     { path: "m/44'/501'/0'/0'", name: 'Hardened' },
-    
+
     // Alternative paths
     { path: "m/44'/501'/0'/0'", name: 'Alt 1' },
     { path: "m/44'/60'/0'/0'/0'", name: 'Ethereum' },
     { path: "m/44'/60'/0'/0'", name: 'Ethereum Simple' },
     { path: "m/0'/0'/0'/0'", name: 'Simple BIP32' },
     { path: "m/0'/0'/0'", name: 'Simple BIP32 No Change' },
-    
+
     // Phantom specific
     { path: "m/44'/501'/0'/0'", name: 'Phantom' },
 ];
@@ -47,8 +46,8 @@ const paths = [
 let found = false;
 for (const { path, name } of paths) {
     try {
-        const derived = hd.derive(path);
-        const keypair = Keypair.fromSeed(derived.privateKey);
+        const derived = derivePath(path, seed);
+        const keypair = Keypair.fromSeed(derived.key);
         const addr = keypair.publicKey.toString();
         const match = addr === targetAddress ? ' <-- MATCH!!!' : '';
         console.log(`${name.padEnd(15)}: ${addr}${match}`);

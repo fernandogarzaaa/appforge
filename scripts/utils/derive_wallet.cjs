@@ -1,6 +1,6 @@
 const { Keypair } = require('@solana/web3.js');
 const { mnemonicToSeedSync } = require('bip39');
-const hdkey = require('hdkey');
+const { derivePath } = require('ed25519-hd-key');
 const fs = require('fs');
 
 // SECURITY:
@@ -17,15 +17,14 @@ const writeEnvLocal = args.has('--write-env-local');
 
 if (!mnemonic) {
   console.error('Missing SOLANA_MNEMONIC.');
-  console.error('Usage: SOLANA_MNEMONIC=\"... twelve words ...\" node derive_wallet.cjs');
+  console.error('Usage: SOLANA_MNEMONIC="..." node derive_wallet.cjs');
   process.exit(1);
 }
 
 // Derive keypair from mnemonic using standard Solana derivation path.
-const seed = mnemonicToSeedSync(mnemonic);
-const hd = hdkey.fromMasterSeed(seed);
-const derived = hd.derive("m/44'/501'/0'/0'");
-const keypair = Keypair.fromSeed(derived.privateKey);
+const seed = mnemonicToSeedSync(mnemonic).toString('hex');
+const derived = derivePath("m/44'/501'/0'/0'", seed);
+const keypair = Keypair.fromSeed(derived.key);
 
 const publicKey = keypair.publicKey.toString();
 

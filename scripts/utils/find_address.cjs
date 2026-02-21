@@ -1,22 +1,17 @@
 const { Keypair } = require('@solana/web3.js');
 const { mnemonicToSeedSync } = require('bip39');
-const hdkey = require('hdkey');
-
-// SECURITY:
-// - Do not hardcode mnemonics in this repo.
-// - Provide via SOLANA_MNEMONIC env var.
+const { derivePath } = require('ed25519-hd-key');
 
 const mnemonic = (process.env.SOLANA_MNEMONIC || '').trim();
 const targetAddress = (process.env.TARGET_ADDRESS || process.argv[2] || '').trim();
 
 if (!mnemonic || !targetAddress) {
   console.error('Missing SOLANA_MNEMONIC or TARGET_ADDRESS.');
-  console.error('Usage: SOLANA_MNEMONIC=\"...\" node find_address.cjs <TARGET_ADDRESS>');
+  console.error('Usage: SOLANA_MNEMONIC="..." node find_address.cjs <TARGET_ADDRESS>');
   process.exit(1);
 }
 
-const seed = mnemonicToSeedSync(mnemonic);
-const hd = hdkey.fromMasterSeed(seed);
+const seed = mnemonicToSeedSync(mnemonic).toString('hex');
 
 console.log('Searching for address:', targetAddress);
 console.log('');
@@ -31,8 +26,8 @@ const paths = [
 let found = false;
 for (const { path, name } of paths) {
   try {
-    const derived = hd.derive(path);
-    const keypair = Keypair.fromSeed(derived.privateKey);
+    const derived = derivePath(path, seed);
+    const keypair = Keypair.fromSeed(derived.key);
     const addr = keypair.publicKey.toString();
     const match = addr === targetAddress ? ' <-- MATCH' : '';
     console.log(`${name.padEnd(16)} ${path.padEnd(18)} ${addr}${match}`);
