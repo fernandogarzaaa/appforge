@@ -1,6 +1,7 @@
 import * as fs from 'fs/promises';
 import * as path from 'path';
 import { WebSocket, WebSocketServer } from 'ws';
+import * as crypto from 'crypto';
 
 // Robust path resolution for Node and Test environments
 const PROJECT_ROOT = process.cwd();
@@ -85,11 +86,29 @@ export class P2PResonance {
      * Broadcast local state evolution to the mesh
      */
     public async broadcastState(type: string, payload: any) {
+        const origin = process.env.NODE_ID || 'sovereign-node';
+        const timestamp = new Date().toISOString();
+
+        const payloadString = JSON.stringify({
+            type,
+            data: payload,
+            timestamp,
+            origin
+        });
+
+        // Generate Signature
+        let signature = 'unverified';
+        try {
+            const secret = process.env.PRODUCTION_SECRET || 'SOVEREIGN_RESERVE';
+            signature = crypto.createHmac('sha256', secret).update(payloadString).digest('hex');
+        } catch (e) { }
+
         const fullPayload = JSON.stringify({
             type,
             data: payload,
-            timestamp: new Date().toISOString(),
-            origin: process.env.NODE_ID || 'sovereign-node'
+            timestamp,
+            origin,
+            signature
         });
 
         console.log(`📡[P2P - RESONANCE] Broadcasting ${type} to ${this.clients.size} peers...`);
@@ -103,25 +122,48 @@ export class P2PResonance {
     }
 
     /**
+     * Validate incoming mesh messages cryptographically
+     */
+    private validateSignature(message: any): boolean {
+        if (!message.signature || !message.origin) return false;
+
+        try {
+            const secret = process.env.PRODUCTION_SECRET || 'SOVEREIGN_RESERVE';
+            const payloadString = JSON.stringify({ type: message.type, data: message.data, timestamp: message.timestamp, origin: message.origin });
+
+            const expectedSig = crypto.createHmac('sha256', secret).update(payloadString).digest('hex');
+
+            return message.signature === expectedSig;
+        } catch {
+            return false;
+        }
+    }
+
+    /**
      * Handle incoming synchronization data from peers
      */
     private async handleIncomingSync(message: any) {
-        const { type, data, timestamp } = message;
-        console.log(`📥[P2P] Received ${type} sync(Timestamp: ${timestamp})`);
+        if (!this.validateSignature(message)) {
+            console.warn(`   ⚠️[P2P] Rejected message from ${message.origin}: Invalid Cryptographic Signature.`);
+            return;
+        }
+
+        const { type, data, timestamp, origin } = message;
+        console.log(`📥[P2P] Received verified ${type} sync from ${origin} (Timestamp: ${timestamp})`);
 
         // fold peer findings into local cognitive context or file system
         this.ingest({ type, data, timestamp });
 
-        // Simple file-based merge for specific types
+        // CRDT/Vector Merge for specific types
         if (type === 'BOUNTY_SYNC' || type === 'ECONOMY_SYNC' || type === 'HOLOGRAPHIC_SYNC') {
             await this.mergeState(type, data);
         }
     }
 
     /**
-     * Merge incoming peer state with local storage
+     * Deterministic CRDT Merge using Vector Clocks
      */
-    private async mergeState(type: string, data: any) {
+    private async mergeState(type: string, incomingData: any) {
         const fileMap: Record<string, string> = {
             'BOUNTY_SYNC': 'src/data/bounty_ledger.json',
             'ECONOMY_SYNC': 'src/data/economic_state.json',
@@ -133,10 +175,62 @@ export class P2PResonance {
 
         try {
             const fullPath = path.resolve(PROJECT_ROOT, targetFile);
-            // Basic LWW (Last Write Wins) implementation for now
-            // Future phases: CRDT or Consensus Voting
-            await fs.writeFile(fullPath, JSON.stringify(data, null, 2));
-            console.log(`   ✅[Mesh - Sync] Merged peer ${type} into ${targetFile} `);
+            let localData: any = {};
+
+            try {
+                const content = await fs.readFile(fullPath, 'utf8');
+                localData = JSON.parse(content);
+            } catch (e) {
+                // Local file doesn't exist or is empty
+            }
+
+            // CRDT Vector Clock Compare
+            const localClock = localData._vectorClock || {};
+            const incomingClock = incomingData._vectorClock || {};
+
+            // Determine if incoming dominates local (is strictly greater in at least one, and >= in all)
+            const nodes = Array.from(new Set([...Object.keys(localClock), ...Object.keys(incomingClock)]));
+
+            let incomingDominates = false;
+            let localDominates = false;
+            let conflict = false;
+
+            for (const node of nodes) {
+                const l = localClock[node] || 0;
+                const i = incomingClock[node] || 0;
+                if (i > l) incomingDominates = true;
+                if (l > i) localDominates = true;
+            }
+
+            if (incomingDominates && localDominates) conflict = true;
+
+            let finalData;
+
+            if (conflict) {
+                console.log(`   ⚡[Mesh - CRDT] Conflict detected for ${targetFile}. Resolving deterministically.`);
+                // In a conflict, deterministic tie-breaker: larger JSON string length wins, fallback to exact timestamp
+                const localStrLen = JSON.stringify(localData).length;
+                const incomingStrLen = JSON.stringify(incomingData).length;
+
+                finalData = (incomingStrLen > localStrLen) ? incomingData : localData;
+
+                // Merge vectors conservatively (takes the max of both)
+                finalData._vectorClock = {};
+                for (const node of nodes) {
+                    finalData._vectorClock[node] = Math.max(localClock[node] || 0, incomingClock[node] || 0);
+                }
+            } else if (incomingDominates || Object.keys(localClock).length === 0) {
+                // Incoming strictly supercedes local
+                finalData = incomingData;
+                console.log(`   ✅[Mesh - CRDT] Adopted peer state for ${targetFile} (Vector supercedes active)`);
+            } else {
+                // Local is ahead or identical. Do nothing.
+                console.log(`   🛡️[Mesh - CRDT] Local state for ${targetFile} retained (Local dominates or identical)`);
+                return;
+            }
+
+            await fs.writeFile(fullPath, JSON.stringify(finalData, null, 2));
+
         } catch (e) {
             console.error(`   ❌[Mesh - Sync] Failed to merge ${type}: `, (e as any).message);
         }

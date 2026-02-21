@@ -26,6 +26,8 @@ export class BountyRegistry {
     private ledgerPath: string;
     private bounties: Bounty[] = [];
 
+    private vectorClock: Record<string, number> = { [process.env.NODE_ID || 'CORE']: 1 };
+
     constructor() {
         this.ledgerPath = path.join(PROJECT_ROOT, 'src/data/bounty_ledger.json');
     }
@@ -36,7 +38,15 @@ export class BountyRegistry {
     async init(): Promise<void> {
         try {
             const content = await fs.readFile(this.ledgerPath, 'utf8');
-            this.bounties = JSON.parse(content);
+            const loaded = JSON.parse(content);
+            if (Array.isArray(loaded)) {
+                // Legacy migration
+                this.bounties = loaded;
+            } else {
+                // New format with vector clocks
+                this.bounties = loaded.bounties || [];
+                if (loaded._vectorClock) this.vectorClock = loaded._vectorClock;
+            }
         } catch (error) {
             this.bounties = [];
             await this.save();
@@ -85,7 +95,14 @@ export class BountyRegistry {
      * Save the ledger to disk.
      */
     private async save(): Promise<void> {
-        await fs.writeFile(this.ledgerPath, JSON.stringify(this.bounties, null, 2), 'utf8');
+        const nodeId = process.env.NODE_ID || 'CORE';
+        this.vectorClock[nodeId] = (this.vectorClock[nodeId] || 0) + 1;
+
+        const payload = {
+            _vectorClock: this.vectorClock,
+            bounties: this.bounties
+        };
+        await fs.writeFile(this.ledgerPath, JSON.stringify(payload, null, 2), 'utf8');
     }
 
     /**

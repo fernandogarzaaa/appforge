@@ -18,6 +18,7 @@ export interface EconomicState {
     };
     excellenceIndex: number; // 0.0 to 1.0 (Quality score)
     lastUpdate: string;
+    _vectorClock?: Record<string, number>;
 }
 
 /**
@@ -41,7 +42,8 @@ export class EconomicEngine {
                 totalInceptionValue: 0
             },
             excellenceIndex: 0.5, // Start at baseline
-            lastUpdate: new Date().toISOString()
+            lastUpdate: new Date().toISOString(),
+            _vectorClock: { [process.env.NODE_ID || 'CORE']: 1 }
         };
     }
 
@@ -134,6 +136,10 @@ export class EconomicEngine {
      * Save the state to disk.
      */
     private async save(): Promise<void> {
+        const nodeId = process.env.NODE_ID || 'CORE';
+        if (!this.state._vectorClock) this.state._vectorClock = {};
+        this.state._vectorClock[nodeId] = (this.state._vectorClock[nodeId] || 0) + 1;
+
         await fs.writeFile(this.statePath, JSON.stringify(this.state, null, 2), 'utf8');
     }
 
