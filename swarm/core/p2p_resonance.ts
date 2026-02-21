@@ -1,6 +1,6 @@
 import * as fs from 'fs/promises';
-import path from 'path';
-import { WebSocketServer, WebSocket } from 'ws';
+import * as path from 'path';
+import { WebSocket, WebSocketServer } from 'ws';
 
 // Robust path resolution for Node and Test environments
 const PROJECT_ROOT = process.cwd();
@@ -35,13 +35,13 @@ export class P2PResonance {
      * Start the local resonance listener (Sovereign Node)
      */
     async start(port: number = 11435) {
-        console.log(`📡 [P2P-RESONANCE] Starting Sovereign Node on port ${port}...`);
+        console.log(`📡[P2P - RESONANCE] Starting Sovereign Node on port ${port}...`);
 
         this.server = new WebSocketServer({ port });
 
         this.server.on('connection', (ws, req) => {
             const remoteAddr = req.socket.remoteAddress;
-            console.log(`   🤝 [P2P] New peer connection from ${remoteAddr}`);
+            console.log(`   🤝[P2P] New peer connection from ${remoteAddr} `);
 
             ws.on('message', async (data) => {
                 try {
@@ -53,7 +53,7 @@ export class P2PResonance {
             });
         });
 
-        console.log(`   ✅ Node online. Core Synchronization active.`);
+        console.log(`   ✅ Node online.Core Synchronization active.`);
     }
 
     /**
@@ -62,17 +62,17 @@ export class P2PResonance {
     async connectToPeer(peerUrl: string) {
         if (this.clients.has(peerUrl)) return;
 
-        console.log(`   🔗 [P2P] Connecting to Peer: ${peerUrl}`);
+        console.log(`   🔗[P2P] Connecting to Peer: ${peerUrl} `);
         const ws = new WebSocket(peerUrl);
 
         ws.on('open', () => {
-            console.log(`   ✅ [P2P] Connected to ${peerUrl}`);
+            console.log(`   ✅[P2P] Connected to ${peerUrl} `);
             this.clients.set(peerUrl, ws);
             this.peers.push(peerUrl);
         });
 
         ws.on('error', (err) => {
-            console.warn(`   ⚠️ [P2P] Peer ${peerUrl} unreachable: ${err.message}`);
+            console.warn(`   ⚠️[P2P] Peer ${peerUrl} unreachable: ${err.message} `);
         });
 
         ws.on('close', () => {
@@ -84,22 +84,22 @@ export class P2PResonance {
     /**
      * Broadcast local state evolution to the mesh
      */
-    async broadcastState(type: string, data: any) {
-        const payload = JSON.stringify({
+    public async broadcastState(type: string, payload: any) {
+        const fullPayload = JSON.stringify({
             type,
-            data,
+            data: payload,
             timestamp: new Date().toISOString(),
             origin: process.env.NODE_ID || 'sovereign-node'
         });
 
-        console.log(`📡 [P2P-RESONANCE] Broadcasting ${type} to ${this.clients.size} peers...`);
+        console.log(`📡[P2P - RESONANCE] Broadcasting ${type} to ${this.clients.size} peers...`);
 
-        for (const [url, ws] of this.clients.entries()) {
-            if (ws.readyState === WebSocket.OPEN) {
-                ws.send(payload);
-                console.log(`   → Sync sent to ${url}`);
+        this.clients.forEach((socket, url) => {
+            if (socket.readyState === WebSocket.OPEN) {
+                socket.send(fullPayload);
+                console.log(`   → Sync sent to ${url} `);
             }
-        }
+        });
     }
 
     /**
@@ -107,7 +107,7 @@ export class P2PResonance {
      */
     private async handleIncomingSync(message: any) {
         const { type, data, timestamp } = message;
-        console.log(`📥 [P2P] Received ${type} sync (Timestamp: ${timestamp})`);
+        console.log(`📥[P2P] Received ${type} sync(Timestamp: ${timestamp})`);
 
         // fold peer findings into local cognitive context or file system
         this.ingest({ type, data, timestamp });
@@ -136,9 +136,9 @@ export class P2PResonance {
             // Basic LWW (Last Write Wins) implementation for now
             // Future phases: CRDT or Consensus Voting
             await fs.writeFile(fullPath, JSON.stringify(data, null, 2));
-            console.log(`   ✅ [Mesh-Sync] Merged peer ${type} into ${targetFile}`);
+            console.log(`   ✅[Mesh - Sync] Merged peer ${type} into ${targetFile} `);
         } catch (e) {
-            console.error(`   ❌ [Mesh-Sync] Failed to merge ${type}:`, (e as any).message);
+            console.error(`   ❌[Mesh - Sync] Failed to merge ${type}: `, (e as any).message);
         }
     }
 
@@ -148,7 +148,7 @@ export class P2PResonance {
     async synergize() {
         if (this.resonanceBuffer.length === 0) return;
 
-        console.log(`🌀 [P2P-RESONANCE] Synergizing ${this.resonanceBuffer.length} peer findings...`);
+        console.log(`🌀[P2P - RESONANCE] Synergizing ${this.resonanceBuffer.length} peer findings...`);
         // Logic to fold peer findings into local cognitive context
         this.resonanceBuffer = [];
     }
