@@ -293,4 +293,12 @@ async function runIntelligencePulse() {
     }
 }
 
-runIntelligencePulse().catch(console.error);
+runIntelligencePulse()
+    .then(() => {
+        console.log('🏁 Intelligence Pulse Process Terminated.');
+        process.exit(0);
+    })
+    .catch((e) => {
+        console.error('🏁 [FATAL] Intelligence Pulse Crashed: ', e);
+        process.exit(1);
+    });

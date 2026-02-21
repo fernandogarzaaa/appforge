@@ -25,6 +25,9 @@ async function trigger() {
         } else {
             console.log('   🤷 No neglected files found (or heuristic limit reached).');
         }
+
+        console.log('🏁 Manual Curiosity Scan Complete.');
+        process.exit(0);
     } catch (error) {
         console.error('   ❌ Scan failed:', error);
         process.exit(1);
