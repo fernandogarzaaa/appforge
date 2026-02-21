@@ -34,6 +34,10 @@ async function createPR() {
         run(`git commit -m "auto: swarm evolution cycle"`);
         run(`git push origin ${branch}`);
 
+        // [Phase 600] Version tagging per cycle
+        run(`git tag -a ${branch} -m "Autonomous Evolution Cycle"`);
+        run(`git push origin ${branch} --tags`);
+
         console.log(`📡 [Evolution PR] Opening Pull Request for ${repo}...`);
 
         const response = await fetch(

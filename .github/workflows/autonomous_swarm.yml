@@ -162,6 +162,23 @@ jobs:
         env:
           TRUE_AI_INDEPENDENCE: "true"
 
+      # 📊 DETERMINISTIC SCORING: Benchmark & Output Persistence
+      - name: Benchmark Swarm Intelligence
+        run: npm run swarm:benchmark
+        env:
+          TRUE_AI_INDEPENDENCE: "true"
+
+      # ⚖️ REGRESSION GATE 1: Enforce Deterministic Upgrades
+      - name: Enforce Deterministic Score
+        run: npx tsx scripts/enforce_deterministic_score.ts
+
+      # ⚖️ REGRESSION GATE 2: Global Test Suite Run
+      - name: Run Global Regression Tests
+        run: |
+          npm install
+          npm run test:all
+        continue-on-error: false
+
       # 📡 Upload evolution artifacts for persistence
       - name: Upload Swarm Artifacts
         uses: actions/upload-artifact@v4

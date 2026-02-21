@@ -644,15 +644,27 @@ function classifyBenchmark(results: DimensionResult[], overallScore: number, con
     return { overallPassed, trueHyperIntelligence, verdict };
 }
 
-async function writeReport(report: Record<string, unknown>, customPath?: string): Promise<{ latestPath: string; timestampPath: string; customPath?: string }> {
+async function writeReport(report: Record<string, unknown>, customPath?: string): Promise<{ latestPath: string; timestampPath: string; historyPath: string; customPath?: string }> {
     await fs.mkdir(REPORT_DIR, { recursive: true });
     const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
     const timestampPath = path.join(REPORT_DIR, `swarm_intelligence_report_${timestamp}.json`);
     const latestPath = path.join(REPORT_DIR, 'latest_intelligence_report.json');
+    const historyPath = path.join(REPORT_DIR, 'metrics_history.json');
 
     const content = JSON.stringify(report, null, 2);
     await fs.writeFile(timestampPath, content, 'utf8');
     await fs.writeFile(latestPath, content, 'utf8');
+
+    // [Phase 600] Append to Persistent Metrics History
+    let history: any[] = [];
+    try {
+        const historyData = await fs.readFile(historyPath, 'utf8');
+        history = JSON.parse(historyData);
+    } catch {
+        // File doesn't exist or is invalid, start fresh
+    }
+    history.push(report);
+    await fs.writeFile(historyPath, JSON.stringify(history, null, 2), 'utf8');
 
     let resolvedCustomPath: string | undefined;
     if (customPath) {
@@ -661,7 +673,7 @@ async function writeReport(report: Record<string, unknown>, customPath?: string)
         await fs.writeFile(resolvedCustomPath, content, 'utf8');
     }
 
-    return { latestPath, timestampPath, customPath: resolvedCustomPath };
+    return { latestPath, timestampPath, historyPath, customPath: resolvedCustomPath };
 }
 
 async function main(): Promise<void> {
