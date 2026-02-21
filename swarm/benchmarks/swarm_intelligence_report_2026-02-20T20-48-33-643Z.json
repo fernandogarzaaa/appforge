@@ -1,0 +1,99 @@
+{
+  "generatedAt": "2026-02-20T20:48:33.596Z",
+  "profile": "strict",
+  "overall": {
+    "score": 91.29,
+    "threshold": 90,
+    "passed": false,
+    "verdict": "DEVELOPING",
+    "trueHyperIntelligence": false
+  },
+  "dimensions": [
+    {
+      "name": "reasoning",
+      "score": 100,
+      "threshold": 80,
+      "passed": true,
+      "durationMs": 2195.14,
+      "details": {
+        "directTasks": 8,
+        "directAccuracy": 100,
+        "adversarialTasks": 8,
+        "adversarialAccuracy": 100,
+        "avgConfidence": 99,
+        "failures": []
+      }
+    },
+    {
+      "name": "planning",
+      "score": 100,
+      "threshold": 90,
+      "passed": true,
+      "durationMs": 445.99,
+      "details": {
+        "checksPassed": "8/8",
+        "statusesCount": 4,
+        "godMessages": 2,
+        "financeMessages": 1,
+        "cryptoMessages": 1
+      }
+    },
+    {
+      "name": "coding",
+      "score": 70,
+      "threshold": 90,
+      "passed": false,
+      "durationMs": 35397.12,
+      "details": {
+        "filesChecked": 10,
+        "filesPassed": 7,
+        "failingFiles": [
+          {
+            "file": "swarm/core/real_hyper_intelligence_v2.ts",
+            "reason": "file not found"
+          },
+          {
+            "file": "swarm/agents/RevenueHunter.ts",
+            "reason": "file not found"
+          },
+          {
+            "file": "QuantumEnginePortable.js",
+            "reason": "file not found"
+          }
+        ]
+      }
+    },
+    {
+      "name": "autonomy",
+      "score": 83.33,
+      "threshold": 90,
+      "passed": false,
+      "durationMs": 541.96,
+      "details": {
+        "checksPassed": "5/6",
+        "callbackHits": 8,
+        "pendingSignalsForBenchAgentB": 2,
+        "totalSignals": 4
+      }
+    },
+    {
+      "name": "reliability",
+      "score": 98.57,
+      "threshold": 95,
+      "passed": true,
+      "durationMs": 6591.8,
+      "details": {
+        "operations": 70,
+        "success": 69,
+        "failures": 1,
+        "avgLatencyMs": 93.06,
+        "p95LatencyMs": 208.9
+      }
+    }
+  ],
+  "benchmarkDurationMs": 45172.01,
+  "notes": [
+    "This suite is local and reproducible; it does not claim scientific AGI certification.",
+    "Reasoning includes adversarial tasks to avoid keyword-only inflation."
+  ]
+}
