@@ -1,3 +1,4 @@
+import React, { useState, useEffect, useRef } from 'react';
 import { Terminal, Zap, Cpu } from 'lucide-react';
 import { io } from 'socket.io-client';
 
