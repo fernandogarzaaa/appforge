@@ -134,11 +134,11 @@ jobs:
           git config --global user.name "Quantum Engine"
           git config --global user.email "quantum@appforge.bot"
           git add -f src/data/*.json
-          git add -f src/**/*.ts
-          git add -f apps/**/*.ts
-          git add -f backend/**/*.ts
-          git add -f swarm/**/*.ts
-          git add -f docs/brain/*.md
+          git add -f src/**/*.ts || true
+          git add -f apps/**/*.ts || true
+          git add -f backend/**/*.js backend/**/*.cjs backend/**/*.ts || true
+          git add -f swarm/**/*.ts || true
+          git add -f docs/brain/*.md || true
           git add -f build_logs.txt || true
           git add -f lint_output.json || true
           git commit -m "chore: quantum self-evolution [Inception] [Bounty Sync] [Synergy] [skip ci]" || echo "No changes to commit"

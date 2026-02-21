@@ -1,0 +1,1105 @@
+quantum-evolution	Set up job	﻿2026-02-21T14:34:29.1519104Z Current runner version: '2.331.0'
+quantum-evolution	Set up job	2026-02-21T14:34:29.1557082Z ##[group]Runner Image Provisioner
+quantum-evolution	Set up job	2026-02-21T14:34:29.1558512Z Hosted Compute Agent
+quantum-evolution	Set up job	2026-02-21T14:34:29.1559628Z Version: 20260123.484
+quantum-evolution	Set up job	2026-02-21T14:34:29.1560706Z Commit: 6bd6555ca37d84114959e1c76d2c01448ff61c5d
+quantum-evolution	Set up job	2026-02-21T14:34:29.1562100Z Build Date: 2026-01-23T19:41:17Z
+quantum-evolution	Set up job	2026-02-21T14:34:29.1563257Z Worker ID: {e8550175-35b2-4df2-a218-5271d4447418}
+quantum-evolution	Set up job	2026-02-21T14:34:29.1564734Z Azure Region: northcentralus
+quantum-evolution	Set up job	2026-02-21T14:34:29.1565968Z ##[endgroup]
+quantum-evolution	Set up job	2026-02-21T14:34:29.1568098Z ##[group]Operating System
+quantum-evolution	Set up job	2026-02-21T14:34:29.1569194Z Ubuntu
+quantum-evolution	Set up job	2026-02-21T14:34:29.1570196Z 24.04.3
+quantum-evolution	Set up job	2026-02-21T14:34:29.1571076Z LTS
+quantum-evolution	Set up job	2026-02-21T14:34:29.1571945Z ##[endgroup]
+quantum-evolution	Set up job	2026-02-21T14:34:29.1573029Z ##[group]Runner Image
+quantum-evolution	Set up job	2026-02-21T14:34:29.1574424Z Image: ubuntu-24.04
+quantum-evolution	Set up job	2026-02-21T14:34:29.1575344Z Version: 20260201.15.1
+quantum-evolution	Set up job	2026-02-21T14:34:29.1577890Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260201.15/images/ubuntu/Ubuntu2404-Readme.md
+quantum-evolution	Set up job	2026-02-21T14:34:29.1580953Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20260201.15
+quantum-evolution	Set up job	2026-02-21T14:34:29.1582656Z ##[endgroup]
+quantum-evolution	Set up job	2026-02-21T14:34:29.1584752Z ##[group]GITHUB_TOKEN Permissions
+quantum-evolution	Set up job	2026-02-21T14:34:29.1587505Z Contents: write
+quantum-evolution	Set up job	2026-02-21T14:34:29.1588072Z Metadata: read
+quantum-evolution	Set up job	2026-02-21T14:34:29.1588578Z ##[endgroup]
+quantum-evolution	Set up job	2026-02-21T14:34:29.1590665Z Secret source: Actions
+quantum-evolution	Set up job	2026-02-21T14:34:29.1591607Z Prepare workflow directory
+quantum-evolution	Set up job	2026-02-21T14:34:29.1974313Z Prepare all required actions
+quantum-evolution	Set up job	2026-02-21T14:34:29.2029467Z Getting action download info
+quantum-evolution	Set up job	2026-02-21T14:34:29.5976682Z Download action repository 'actions/checkout@v4' (SHA:34e114876b0b11c390a56381ad16ebd13914f8d5)
+quantum-evolution	Set up job	2026-02-21T14:34:29.7161537Z Download action repository 'actions/setup-node@v4' (SHA:49933ea5288caeca8642d1e84afbd3f7d6820020)
+quantum-evolution	Set up job	2026-02-21T14:34:29.8126522Z Download action repository 'actions/cache@v4' (SHA:0057852bfaa89a56745cba8c7296529d2fc39830)
+quantum-evolution	Set up job	2026-02-21T14:34:29.9135020Z Download action repository 'dtolnay/rust-toolchain@stable' (SHA:631a55b12751854ce901bb631d5902ceb48146f7)
+quantum-evolution	Set up job	2026-02-21T14:34:30.1697787Z Download action repository 'actions/upload-artifact@v4' (SHA:ea165f8d65b6e75b540449e92b4886f43607fa02)
+quantum-evolution	Set up job	2026-02-21T14:34:30.4329405Z Complete job name: quantum-evolution
+quantum-evolution	Checkout Code	﻿2026-02-21T14:34:30.5068289Z ##[group]Run actions/checkout@v4
+quantum-evolution	Checkout Code	2026-02-21T14:34:30.5069150Z with:
+quantum-evolution	Checkout Code	2026-02-21T14:34:30.5069764Z   token: ***
+quantum-evolution	Checkout Code	2026-02-21T14:34:30.5070170Z   fetch-depth: 0
+quantum-evolution	Checkout Code	2026-02-21T14:34:30.5070610Z   repository: fernandogarzaaa/appforge
+quantum-evolution	Checkout Code	2026-02-21T14:34:30.5071130Z   ssh-strict: true
+quantum-evolution	Checkout Code	2026-02-21T14:34:30.5071543Z   ssh-user: git
+quantum-evolution	Checkout Code	2026-02-21T14:34:30.5071956Z   persist-credentials: true
+quantum-evolution	Checkout Code	2026-02-21T14:34:30.5072415Z   clean: true
+quantum-evolution	Checkout Code	2026-02-21T14:34:30.5072832Z   sparse-checkout-cone-mode: true
+quantum-evolution	Checkout Code	2026-02-21T14:34:30.5073318Z   fetch-tags: false
+quantum-evolution	Checkout Code	2026-02-21T14:34:30.5073739Z   show-progress: true
+quantum-evolution	Checkout Code	2026-02-21T14:34:30.5074380Z   lfs: false
+quantum-evolution	Checkout Code	2026-02-21T14:34:30.5074767Z   submodules: false
+quantum-evolution	Checkout Code	2026-02-21T14:34:30.5075182Z   set-safe-directory: true
+quantum-evolution	Checkout Code	2026-02-21T14:34:30.5075917Z ##[endgroup]
+quantum-evolution	Checkout Code	2026-02-21T14:34:30.6144864Z Syncing repository: fernandogarzaaa/appforge
+quantum-evolution	Checkout Code	2026-02-21T14:34:30.6146725Z ##[group]Getting Git version info
+quantum-evolution	Checkout Code	2026-02-21T14:34:30.6147449Z Working directory is '/home/runner/work/appforge/appforge'
+quantum-evolution	Checkout Code	2026-02-21T14:34:30.6148413Z [command]/usr/bin/git version
+quantum-evolution	Checkout Code	2026-02-21T14:34:30.6238920Z git version 2.52.0
+quantum-evolution	Checkout Code	2026-02-21T14:34:30.6265888Z ##[endgroup]
+quantum-evolution	Checkout Code	2026-02-21T14:34:30.6280255Z Temporarily overriding HOME='/home/runner/work/_temp/020015f1-5a78-40c0-b869-0150f36320b9' before making global git config changes
+quantum-evolution	Checkout Code	2026-02-21T14:34:30.6281726Z Adding repository directory to the temporary git global config as a safe directory
+quantum-evolution	Checkout Code	2026-02-21T14:34:30.6286243Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/appforge/appforge
+quantum-evolution	Checkout Code	2026-02-21T14:34:30.6393556Z Deleting the contents of '/home/runner/work/appforge/appforge'
+quantum-evolution	Checkout Code	2026-02-21T14:34:30.6395953Z ##[group]Initializing the repository
+quantum-evolution	Checkout Code	2026-02-21T14:34:30.6397096Z [command]/usr/bin/git init /home/runner/work/appforge/appforge
+quantum-evolution	Checkout Code	2026-02-21T14:34:30.6452112Z hint: Using 'master' as the name for the initial branch. This default branch name
+quantum-evolution	Checkout Code	2026-02-21T14:34:30.6453470Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+quantum-evolution	Checkout Code	2026-02-21T14:34:30.6455347Z hint: to use in all of your new repositories, which will suppress this warning,
+quantum-evolution	Checkout Code	2026-02-21T14:34:30.6456696Z hint: call:
+quantum-evolution	Checkout Code	2026-02-21T14:34:30.6457351Z hint:
+quantum-evolution	Checkout Code	2026-02-21T14:34:30.6458136Z hint: 	git config --global init.defaultBranch <name>
+quantum-evolution	Checkout Code	2026-02-21T14:34:30.6459100Z hint:
+quantum-evolution	Checkout Code	2026-02-21T14:34:30.6459909Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+quantum-evolution	Checkout Code	2026-02-21T14:34:30.6460840Z hint: 'development'. The just-created branch can be renamed via this command:
+quantum-evolution	Checkout Code	2026-02-21T14:34:30.6461556Z hint:
+quantum-evolution	Checkout Code	2026-02-21T14:34:30.6461953Z hint: 	git branch -m <name>
+quantum-evolution	Checkout Code	2026-02-21T14:34:30.6462436Z hint:
+quantum-evolution	Checkout Code	2026-02-21T14:34:30.6463037Z hint: Disable this message with "git config set advice.defaultBranchName false"
+quantum-evolution	Checkout Code	2026-02-21T14:34:30.6464424Z Initialized empty Git repository in /home/runner/work/appforge/appforge/.git/
+quantum-evolution	Checkout Code	2026-02-21T14:34:30.6470494Z [command]/usr/bin/git remote add origin https://github.com/fernandogarzaaa/appforge
+quantum-evolution	Checkout Code	2026-02-21T14:34:30.6508685Z ##[endgroup]
+quantum-evolution	Checkout Code	2026-02-21T14:34:30.6509856Z ##[group]Disabling automatic garbage collection
+quantum-evolution	Checkout Code	2026-02-21T14:34:30.6512519Z [command]/usr/bin/git config --local gc.auto 0
+quantum-evolution	Checkout Code	2026-02-21T14:34:30.6541160Z ##[endgroup]
+quantum-evolution	Checkout Code	2026-02-21T14:34:30.6542258Z ##[group]Setting up auth
+quantum-evolution	Checkout Code	2026-02-21T14:34:30.6548233Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+quantum-evolution	Checkout Code	2026-02-21T14:34:30.6578472Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+quantum-evolution	Checkout Code	2026-02-21T14:34:30.6942420Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+quantum-evolution	Checkout Code	2026-02-21T14:34:30.6973302Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+quantum-evolution	Checkout Code	2026-02-21T14:34:30.7193047Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+quantum-evolution	Checkout Code	2026-02-21T14:34:30.7224107Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+quantum-evolution	Checkout Code	2026-02-21T14:34:30.7443459Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+quantum-evolution	Checkout Code	2026-02-21T14:34:30.7479942Z ##[endgroup]
+quantum-evolution	Checkout Code	2026-02-21T14:34:30.7481418Z ##[group]Fetching the repository
+quantum-evolution	Checkout Code	2026-02-21T14:34:30.7489779Z [command]/usr/bin/git -c protocol.version=2 fetch --prune --no-recurse-submodules origin +refs/heads/*:refs/remotes/origin/* +refs/tags/*:refs/tags/*
+quantum-evolution	Checkout Code	2026-02-21T14:34:36.6512207Z From https://github.com/fernandogarzaaa/appforge
+quantum-evolution	Checkout Code	2026-02-21T14:34:36.6513438Z  * [new branch]        copilot/check-project-integrity -> origin/copilot/check-project-integrity
+quantum-evolution	Checkout Code	2026-02-21T14:34:36.6514838Z  * [new branch]        copilot/create-evolution-state-and-swarm-guard -> origin/copilot/create-evolution-state-and-swarm-guard
+quantum-evolution	Checkout Code	2026-02-21T14:34:36.6515819Z  * [new branch]        copilot/implement-self-evolution-system -> origin/copilot/implement-self-evolution-system
+quantum-evolution	Checkout Code	2026-02-21T14:34:36.6516801Z  * [new branch]        copilot/resolve-security-issues-583 -> origin/copilot/resolve-security-issues-583
+quantum-evolution	Checkout Code	2026-02-21T14:34:36.6517387Z  * [new branch]        main       -> origin/main
+quantum-evolution	Checkout Code	2026-02-21T14:34:36.6517761Z  * [new branch]        v2         -> origin/v2
+quantum-evolution	Checkout Code	2026-02-21T14:34:36.6562461Z [command]/usr/bin/git branch --list --remote origin/main
+quantum-evolution	Checkout Code	2026-02-21T14:34:36.6589857Z   origin/main
+quantum-evolution	Checkout Code	2026-02-21T14:34:36.6599251Z [command]/usr/bin/git rev-parse refs/remotes/origin/main
+quantum-evolution	Checkout Code	2026-02-21T14:34:36.6621770Z 1b5f5c8b16ff01cf45d18911d79237f2d78b1115
+quantum-evolution	Checkout Code	2026-02-21T14:34:36.6626785Z ##[endgroup]
+quantum-evolution	Checkout Code	2026-02-21T14:34:36.6627394Z ##[group]Determining the checkout info
+quantum-evolution	Checkout Code	2026-02-21T14:34:36.6630903Z ##[endgroup]
+quantum-evolution	Checkout Code	2026-02-21T14:34:36.6635112Z [command]/usr/bin/git sparse-checkout disable
+quantum-evolution	Checkout Code	2026-02-21T14:34:36.6680684Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+quantum-evolution	Checkout Code	2026-02-21T14:34:36.6710367Z ##[group]Checking out the ref
+quantum-evolution	Checkout Code	2026-02-21T14:34:36.6716019Z [command]/usr/bin/git checkout --progress --force -B main refs/remotes/origin/main
+quantum-evolution	Checkout Code	2026-02-21T14:34:37.7189571Z Updating files:  37% (2535/6774)
+quantum-evolution	Checkout Code	2026-02-21T14:34:37.7868684Z Updating files:  38% (2575/6774)
+quantum-evolution	Checkout Code	2026-02-21T14:34:38.0261838Z Updating files:  39% (2642/6774)
+quantum-evolution	Checkout Code	2026-02-21T14:34:38.2507399Z Updating files:  40% (2710/6774)
+quantum-evolution	Checkout Code	2026-02-21T14:34:38.2534662Z Updating files:  41% (2778/6774)
+quantum-evolution	Checkout Code	2026-02-21T14:34:38.2560494Z Updating files:  42% (2846/6774)
+quantum-evolution	Checkout Code	2026-02-21T14:34:38.2587712Z Updating files:  43% (2913/6774)
+quantum-evolution	Checkout Code	2026-02-21T14:34:38.4219843Z Updating files:  44% (2981/6774)
+quantum-evolution	Checkout Code	2026-02-21T14:34:38.7040310Z Updating files:  45% (3049/6774)
+quantum-evolution	Checkout Code	2026-02-21T14:34:38.7192086Z Updating files:  45% (3098/6774)
+quantum-evolution	Checkout Code	2026-02-21T14:34:38.7379298Z Updating files:  46% (3117/6774)
+quantum-evolution	Checkout Code	2026-02-21T14:34:38.7414589Z Updating files:  47% (3184/6774)
+quantum-evolution	Checkout Code	2026-02-21T14:34:38.7444410Z Updating files:  48% (3252/6774)
+quantum-evolution	Checkout Code	2026-02-21T14:34:38.7483705Z Updating files:  49% (3320/6774)
+quantum-evolution	Checkout Code	2026-02-21T14:34:38.7519566Z Updating files:  50% (3387/6774)
+quantum-evolution	Checkout Code	2026-02-21T14:34:38.7556672Z Updating files:  51% (3455/6774)
+quantum-evolution	Checkout Code	2026-02-21T14:34:38.7583347Z Updating files:  52% (3523/6774)
+quantum-evolution	Checkout Code	2026-02-21T14:34:38.7616738Z Updating files:  53% (3591/6774)
+quantum-evolution	Checkout Code	2026-02-21T14:34:38.7654387Z Updating files:  54% (3658/6774)
+quantum-evolution	Checkout Code	2026-02-21T14:34:38.7689702Z Updating files:  55% (3726/6774)
+quantum-evolution	Checkout Code	2026-02-21T14:34:38.7726171Z Updating files:  56% (3794/6774)
+quantum-evolution	Checkout Code	2026-02-21T14:34:38.7759020Z Updating files:  57% (3862/6774)
+quantum-evolution	Checkout Code	2026-02-21T14:34:38.7791674Z Updating files:  58% (3929/6774)
+quantum-evolution	Checkout Code	2026-02-21T14:34:38.7825883Z Updating files:  59% (3997/6774)
+quantum-evolution	Checkout Code	2026-02-21T14:34:38.7861000Z Updating files:  60% (4065/6774)
+quantum-evolution	Checkout Code	2026-02-21T14:34:38.7895363Z Updating files:  61% (4133/6774)
+quantum-evolution	Checkout Code	2026-02-21T14:34:38.7919295Z Updating files:  62% (4200/6774)
+quantum-evolution	Checkout Code	2026-02-21T14:34:38.7949565Z Updating files:  63% (4268/6774)
+quantum-evolution	Checkout Code	2026-02-21T14:34:38.7982775Z Updating files:  64% (4336/6774)
+quantum-evolution	Checkout Code	2026-02-21T14:34:38.8018028Z Updating files:  65% (4404/6774)
+quantum-evolution	Checkout Code	2026-02-21T14:34:38.8044505Z Updating files:  66% (4471/6774)
+quantum-evolution	Checkout Code	2026-02-21T14:34:38.8072682Z Updating files:  67% (4539/6774)
+quantum-evolution	Checkout Code	2026-02-21T14:34:38.8101955Z Updating files:  68% (4607/6774)
+quantum-evolution	Checkout Code	2026-02-21T14:34:38.8127908Z Updating files:  69% (4675/6774)
+quantum-evolution	Checkout Code	2026-02-21T14:34:38.8156616Z Updating files:  70% (4742/6774)
+quantum-evolution	Checkout Code	2026-02-21T14:34:38.8185135Z Updating files:  71% (4810/6774)
+quantum-evolution	Checkout Code	2026-02-21T14:34:38.8215635Z Updating files:  72% (4878/6774)
+quantum-evolution	Checkout Code	2026-02-21T14:34:38.8247566Z Updating files:  73% (4946/6774)
+quantum-evolution	Checkout Code	2026-02-21T14:34:38.8281604Z Updating files:  74% (5013/6774)
+quantum-evolution	Checkout Code	2026-02-21T14:34:38.8320519Z Updating files:  75% (5081/6774)
+quantum-evolution	Checkout Code	2026-02-21T14:34:38.8351956Z Updating files:  76% (5149/6774)
+quantum-evolution	Checkout Code	2026-02-21T14:34:38.8387151Z Updating files:  77% (5216/6774)
+quantum-evolution	Checkout Code	2026-02-21T14:34:38.8425889Z Updating files:  78% (5284/6774)
+quantum-evolution	Checkout Code	2026-02-21T14:34:38.8451699Z Updating files:  79% (5352/6774)
+quantum-evolution	Checkout Code	2026-02-21T14:34:38.8487983Z Updating files:  80% (5420/6774)
+quantum-evolution	Checkout Code	2026-02-21T14:34:38.8518454Z Updating files:  81% (5487/6774)
+quantum-evolution	Checkout Code	2026-02-21T14:34:38.8550312Z Updating files:  82% (5555/6774)
+quantum-evolution	Checkout Code	2026-02-21T14:34:38.8588526Z Updating files:  83% (5623/6774)
+quantum-evolution	Checkout Code	2026-02-21T14:34:38.8632582Z Updating files:  84% (5691/6774)
+quantum-evolution	Checkout Code	2026-02-21T14:34:38.8654616Z Updating files:  85% (5758/6774)
+quantum-evolution	Checkout Code	2026-02-21T14:34:38.8677777Z Updating files:  86% (5826/6774)
+quantum-evolution	Checkout Code	2026-02-21T14:34:38.8700967Z Updating files:  87% (5894/6774)
+quantum-evolution	Checkout Code	2026-02-21T14:34:38.8725062Z Updating files:  88% (5962/6774)
+quantum-evolution	Checkout Code	2026-02-21T14:34:38.8746484Z Updating files:  89% (6029/6774)
+quantum-evolution	Checkout Code	2026-02-21T14:34:38.8769370Z Updating files:  90% (6097/6774)
+quantum-evolution	Checkout Code	2026-02-21T14:34:38.8792934Z Updating files:  91% (6165/6774)
+quantum-evolution	Checkout Code	2026-02-21T14:34:38.8830281Z Updating files:  92% (6233/6774)
+quantum-evolution	Checkout Code	2026-02-21T14:34:38.8867335Z Updating files:  93% (6300/6774)
+quantum-evolution	Checkout Code	2026-02-21T14:34:38.8893279Z Updating files:  94% (6368/6774)
+quantum-evolution	Checkout Code	2026-02-21T14:34:38.9955025Z Updating files:  95% (6436/6774)
+quantum-evolution	Checkout Code	2026-02-21T14:34:38.9993131Z Updating files:  96% (6504/6774)
+quantum-evolution	Checkout Code	2026-02-21T14:34:39.0099960Z Updating files:  97% (6571/6774)
+quantum-evolution	Checkout Code	2026-02-21T14:34:39.0150210Z Updating files:  98% (6639/6774)
+quantum-evolution	Checkout Code	2026-02-21T14:34:39.0310871Z Updating files:  99% (6707/6774)
+quantum-evolution	Checkout Code	2026-02-21T14:34:39.0311353Z Updating files: 100% (6774/6774)
+quantum-evolution	Checkout Code	2026-02-21T14:34:39.0311846Z Updating files: 100% (6774/6774), done.
+quantum-evolution	Checkout Code	2026-02-21T14:34:39.0388682Z Switched to a new branch 'main'
+quantum-evolution	Checkout Code	2026-02-21T14:34:39.0392128Z branch 'main' set up to track 'origin/main'.
+quantum-evolution	Checkout Code	2026-02-21T14:34:39.0491539Z ##[endgroup]
+quantum-evolution	Checkout Code	2026-02-21T14:34:39.0538008Z [command]/usr/bin/git log -1 --format=%H
+quantum-evolution	Checkout Code	2026-02-21T14:34:39.0562125Z 1b5f5c8b16ff01cf45d18911d79237f2d78b1115
+quantum-evolution	Setup Node.js (v22 Required)	﻿2026-02-21T14:34:39.0779666Z ##[group]Run actions/setup-node@v4
+quantum-evolution	Setup Node.js (v22 Required)	2026-02-21T14:34:39.0779965Z with:
+quantum-evolution	Setup Node.js (v22 Required)	2026-02-21T14:34:39.0780165Z   node-version: 22
+quantum-evolution	Setup Node.js (v22 Required)	2026-02-21T14:34:39.0780377Z   always-auth: false
+quantum-evolution	Setup Node.js (v22 Required)	2026-02-21T14:34:39.0780594Z   check-latest: false
+quantum-evolution	Setup Node.js (v22 Required)	2026-02-21T14:34:39.0780934Z   token: ***
+quantum-evolution	Setup Node.js (v22 Required)	2026-02-21T14:34:39.0781132Z ##[endgroup]
+quantum-evolution	Setup Node.js (v22 Required)	2026-02-21T14:34:39.2541734Z Found in cache @ /opt/hostedtoolcache/node/22.22.0/x64
+quantum-evolution	Setup Node.js (v22 Required)	2026-02-21T14:34:39.2548144Z ##[group]Environment details
+quantum-evolution	Setup Node.js (v22 Required)	2026-02-21T14:34:39.6421825Z node: v22.22.0
+quantum-evolution	Setup Node.js (v22 Required)	2026-02-21T14:34:39.6422332Z npm: 10.9.4
+quantum-evolution	Setup Node.js (v22 Required)	2026-02-21T14:34:39.6422694Z yarn: 1.22.22
+quantum-evolution	Setup Node.js (v22 Required)	2026-02-21T14:34:39.6423677Z ##[endgroup]
+quantum-evolution	Run Resonance Check	﻿2026-02-21T14:34:39.6545805Z ##[group]Run npx tsx scripts/resonance_check.ts
+quantum-evolution	Run Resonance Check	2026-02-21T14:34:39.6546240Z [36;1mnpx tsx scripts/resonance_check.ts[0m
+quantum-evolution	Run Resonance Check	2026-02-21T14:34:39.6590895Z shell: /usr/bin/bash -e {0}
+quantum-evolution	Run Resonance Check	2026-02-21T14:34:39.6591156Z env:
+quantum-evolution	Run Resonance Check	2026-02-21T14:34:39.6591357Z   TRUE_AI_INDEPENDENCE: true
+quantum-evolution	Run Resonance Check	2026-02-21T14:34:39.6591596Z ##[endgroup]
+quantum-evolution	Run Resonance Check	2026-02-21T14:34:40.7413159Z npm warn exec The following package was not found and will be installed: tsx@4.21.0
+quantum-evolution	Run Resonance Check	2026-02-21T14:34:41.9488034Z 📡 [ResonanceCheck] Verifying Workflow Affinity...
+quantum-evolution	Run Resonance Check	2026-02-21T14:34:41.9489736Z ❌ Reality Pulse missing. Hive mind is blind to physical reality.
+quantum-evolution	Run Resonance Check	2026-02-21T14:34:41.9492212Z ✅ Quantum State present and loaded.
+quantum-evolution	Run Resonance Check	2026-02-21T14:34:42.0074487Z ✨ [ResonanceCheck] System affinity confirmed.
+quantum-evolution	Cache Node Modules	﻿2026-02-21T14:34:42.0706936Z ##[group]Run actions/cache@v4
+quantum-evolution	Cache Node Modules	2026-02-21T14:34:42.0707240Z with:
+quantum-evolution	Cache Node Modules	2026-02-21T14:34:42.0707434Z   path: node_modules
+quantum-evolution	Cache Node Modules	2026-02-21T14:34:42.0707832Z   key: Linux-node-root-7e72647099c5794518fd6bcc3fd1ec3483c5de56264a765d399d52b41dfba54d
+quantum-evolution	Cache Node Modules	2026-02-21T14:34:42.0708319Z   restore-keys: Linux-node-root-
+quantum-evolution	Cache Node Modules	
+quantum-evolution	Cache Node Modules	2026-02-21T14:34:42.0708597Z   enableCrossOsArchive: false
+quantum-evolution	Cache Node Modules	2026-02-21T14:34:42.0708850Z   fail-on-cache-miss: false
+quantum-evolution	Cache Node Modules	2026-02-21T14:34:42.0709086Z   lookup-only: false
+quantum-evolution	Cache Node Modules	2026-02-21T14:34:42.0709300Z   save-always: false
+quantum-evolution	Cache Node Modules	2026-02-21T14:34:42.0709505Z ##[endgroup]
+quantum-evolution	Cache Node Modules	2026-02-21T14:34:42.3477484Z Cache hit for restore-key: Linux-node-root-d3393598d0e33940af4ab6fdcb7cc22392b0c20b189aa0af3106701b396e78d6
+quantum-evolution	Cache Node Modules	2026-02-21T14:34:43.2771735Z Received 129943405 of 129943405 (100.0%), 150.9 MBs/sec
+quantum-evolution	Cache Node Modules	2026-02-21T14:34:43.2772721Z Cache Size: ~124 MB (129943405 B)
+quantum-evolution	Cache Node Modules	2026-02-21T14:34:43.2804035Z [command]/usr/bin/tar -xf /home/runner/work/_temp/af71520f-ab2e-4d87-a5fc-4bfb854d0730/cache.tzst -P -C /home/runner/work/appforge/appforge --use-compress-program unzstd
+quantum-evolution	Cache Node Modules	2026-02-21T14:34:46.5568708Z Cache restored successfully
+quantum-evolution	Cache Node Modules	2026-02-21T14:34:46.5914935Z Cache restored from key: Linux-node-root-d3393598d0e33940af4ab6fdcb7cc22392b0c20b189aa0af3106701b396e78d6
+quantum-evolution	Cache Evolution State	﻿2026-02-21T14:34:46.6063152Z ##[group]Run actions/cache@v4
+quantum-evolution	Cache Evolution State	2026-02-21T14:34:46.6063443Z with:
+quantum-evolution	Cache Evolution State	2026-02-21T14:34:46.6064699Z   path: src/data/quantum_state.json
+quantum-evolution	Cache Evolution State	src/data/quantum_predictions.json
+quantum-evolution	Cache Evolution State	src/data/quantum_weights.json
+quantum-evolution	Cache Evolution State	src/data/bounty_ledger.json
+quantum-evolution	Cache Evolution State	src/data/economic_state.json
+quantum-evolution	Cache Evolution State	src/data/synergy_scout.json
+quantum-evolution	Cache Evolution State	src/data/antigravity_blueprint.json
+quantum-evolution	Cache Evolution State	
+quantum-evolution	Cache Evolution State	2026-02-21T14:34:46.6065658Z   key: quantum-evolution-191
+quantum-evolution	Cache Evolution State	2026-02-21T14:34:46.6065927Z   restore-keys: quantum-evolution-
+quantum-evolution	Cache Evolution State	
+quantum-evolution	Cache Evolution State	2026-02-21T14:34:46.6066211Z   enableCrossOsArchive: false
+quantum-evolution	Cache Evolution State	2026-02-21T14:34:46.6066463Z   fail-on-cache-miss: false
+quantum-evolution	Cache Evolution State	2026-02-21T14:34:46.6066694Z   lookup-only: false
+quantum-evolution	Cache Evolution State	2026-02-21T14:34:46.6066906Z   save-always: false
+quantum-evolution	Cache Evolution State	2026-02-21T14:34:46.6067111Z ##[endgroup]
+quantum-evolution	Cache Evolution State	2026-02-21T14:34:46.8621121Z Cache not found for input keys: quantum-evolution-191, quantum-evolution-
+quantum-evolution	Setup Rust (Latest)	﻿2026-02-21T14:34:46.8832671Z ##[group]Run dtolnay/rust-toolchain@stable
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:46.8832989Z with:
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:46.8833181Z   toolchain: stable
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:46.8833394Z ##[endgroup]
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:46.8904850Z ##[group]Run : parse toolchain version
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:46.8905195Z [36;1m: parse toolchain version[0m
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:46.8905464Z [36;1mif [[ -z $toolchain ]]; then[0m
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:46.8905999Z [36;1m  # GitHub does not enforce `required: true` inputs itself. https://github.com/actions/runner/issues/1070[0m
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:46.8906572Z [36;1m  echo "'toolchain' is a required input" >&2[0m
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:46.8906875Z [36;1m  exit 1[0m
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:46.8907214Z [36;1melif [[ $toolchain =~ ^stable' '[0-9]+' '(year|month|week|day)s?' 'ago$ ]]; then[0m
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:46.8907635Z [36;1m  if [[ Linux == macOS ]]; then[0m
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:46.8908176Z [36;1m    echo "toolchain=1.$((($(date -v-$(sed 's/stable \([0-9]*\) \(.\).*/\1\2/' <<< $toolchain) +%s)/60/60/24-16569)/7/6))" >> $GITHUB_OUTPUT[0m
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:46.8908749Z [36;1m  else[0m
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:46.8909151Z [36;1m    echo "toolchain=1.$((($(date --date "${toolchain#stable }" +%s)/60/60/24-16569)/7/6))" >> $GITHUB_OUTPUT[0m
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:46.8909611Z [36;1m  fi[0m
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:46.8909909Z [36;1melif [[ $toolchain =~ ^stable' 'minus' '[0-9]+' 'releases?$ ]]; then[0m
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:46.8910451Z [36;1m  echo "toolchain=1.$((($(date +%s)/60/60/24-16569)/7/6-${toolchain//[^0-9]/}))" >> $GITHUB_OUTPUT[0m
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:46.8910920Z [36;1melif [[ $toolchain =~ ^1\.[0-9]+$ ]]; then[0m
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:46.8911450Z [36;1m  echo "toolchain=1.$((i=${toolchain#1.}, c=($(date +%s)/60/60/24-16569)/7/6, i+9*i*(10*i<=c)+90*i*(100*i<=c)))" >> $GITHUB_OUTPUT[0m
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:46.8911977Z [36;1melse[0m
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:46.8912235Z [36;1m  echo "toolchain=$toolchain" >> $GITHUB_OUTPUT[0m
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:46.8912544Z [36;1mfi[0m
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:46.8945164Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:46.8945512Z env:
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:46.8945699Z   toolchain: stable
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:46.8945918Z ##[endgroup]
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:46.9040570Z ##[group]Run : construct rustup command line
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:46.9040912Z [36;1m: construct rustup command line[0m
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:46.9041381Z [36;1mecho "targets=$(for t in ${targets//,/ }; do echo -n ' --target' $t; done)" >> $GITHUB_OUTPUT[0m
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:46.9042038Z [36;1mecho "components=$(for c in ${components//,/ }; do echo -n ' --component' $c; done)" >> $GITHUB_OUTPUT[0m
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:46.9042554Z [36;1mecho "downgrade=" >> $GITHUB_OUTPUT[0m
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:46.9070557Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:46.9070903Z env:
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:46.9071090Z   targets: 
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:46.9071285Z   components: 
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:46.9071478Z ##[endgroup]
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:46.9148894Z ##[group]Run : set $CARGO_HOME
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:46.9149185Z [36;1m: set $CARGO_HOME[0m
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:46.9149517Z [36;1mecho CARGO_HOME=${CARGO_HOME:-"$HOME/.cargo"} >> $GITHUB_ENV[0m
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:46.9177823Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:46.9178184Z ##[endgroup]
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:46.9251876Z ##[group]Run : install rustup if needed
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:46.9252198Z [36;1m: install rustup if needed[0m
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:46.9252493Z [36;1mif ! command -v rustup &>/dev/null; then[0m
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:46.9253285Z [36;1m  curl --proto '=https' --tlsv1.2 --retry 10 --retry-connrefused --location --silent --show-error --fail https://sh.rustup.rs | sh -s -- --default-toolchain none -y[0m
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:46.9254285Z [36;1m  echo "$CARGO_HOME/bin" >> $GITHUB_PATH[0m
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:46.9254581Z [36;1mfi[0m
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:46.9282282Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:46.9282625Z env:
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:46.9282828Z   CARGO_HOME: /home/runner/.cargo
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:46.9283368Z ##[endgroup]
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:46.9356330Z ##[group]Run rustup toolchain install stable --profile minimal --no-self-update
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:46.9357096Z [36;1mrustup toolchain install stable --profile minimal --no-self-update[0m
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:46.9385330Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:46.9385676Z env:
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:46.9385880Z   CARGO_HOME: /home/runner/.cargo
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:46.9386156Z   RUSTUP_PERMIT_COPY_RENAME: 1
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:46.9386403Z ##[endgroup]
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:48.1855818Z info: syncing channel updates for 'stable-x86_64-unknown-linux-gnu'
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:48.2936145Z info: latest update on 2026-02-12, rust version 1.93.1 (01f6ddf75 2026-02-11)
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:48.3186583Z info: downloading component 'clippy'
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:48.3398690Z info: downloading component 'rustfmt'
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:48.3572629Z info: downloading component 'cargo'
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:48.4030465Z info: downloading component 'rust-std'
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:48.4903755Z info: downloading component 'rustc'
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:48.6831345Z info: removing previous version of component 'clippy'
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:48.6850278Z info: removing previous version of component 'rustfmt'
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:48.6862500Z info: removing previous version of component 'cargo'
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:48.6914694Z info: removing previous version of component 'rust-std'
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:48.6946654Z info: removing previous version of component 'rustc'
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:48.7003005Z info: installing component 'clippy'
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:49.0722864Z info: installing component 'rustfmt'
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:49.3019616Z info: installing component 'cargo'
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:49.9951504Z info: installing component 'rust-std'
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:51.8873706Z info: installing component 'rustc'
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:56.4960906Z 
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:56.5064568Z   stable-x86_64-unknown-linux-gnu updated - rustc 1.93.1 (01f6ddf75 2026-02-11) (from rustc 1.93.0 (254b59607 2026-01-19))
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:56.5065503Z 
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:56.5112005Z ##[group]Run rustup default stable
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:56.5112316Z [36;1mrustup default stable[0m
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:56.5145597Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:56.5145942Z env:
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:56.5146145Z   CARGO_HOME: /home/runner/.cargo
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:56.5146404Z ##[endgroup]
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:56.5250098Z info: using existing install for 'stable-x86_64-unknown-linux-gnu'
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:56.5658633Z info: default toolchain set to 'stable-x86_64-unknown-linux-gnu'
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:56.5659177Z 
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:56.5763158Z   stable-x86_64-unknown-linux-gnu unchanged - rustc 1.93.1 (01f6ddf75 2026-02-11)
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:56.5763961Z 
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:56.5804629Z ##[group]Run : create cachekey
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:56.5804938Z [36;1m: create cachekey[0m
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:56.5805468Z [36;1mDATE=$(rustc +stable --version --verbose | sed -ne 's/^commit-date: \(20[0-9][0-9]\)-\([01][0-9]\)-\([0-3][0-9]\)$/\1\2\3/p')[0m
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:56.5806167Z [36;1mHASH=$(rustc +stable --version --verbose | sed -ne 's/^commit-hash: //p')[0m
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:56.5806802Z [36;1mecho "cachekey=$(echo $DATE$HASH | head -c12)" >> $GITHUB_OUTPUT[0m
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:56.5838210Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:56.5838560Z env:
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:56.5838758Z   CARGO_HOME: /home/runner/.cargo
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:56.5839021Z ##[endgroup]
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:56.6270508Z ##[group]Run : disable incremental compilation
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:56.6271098Z [36;1m: disable incremental compilation[0m
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:56.6271659Z [36;1mif [ -z "${CARGO_INCREMENTAL+set}" ]; then[0m
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:56.6272240Z [36;1m  echo CARGO_INCREMENTAL=0 >> $GITHUB_ENV[0m
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:56.6272734Z [36;1mfi[0m
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:56.6313738Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:56.6314466Z env:
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:56.6314787Z   CARGO_HOME: /home/runner/.cargo
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:56.6315209Z ##[endgroup]
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:56.6409142Z ##[group]Run : enable colors in Cargo output
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:56.6409824Z [36;1m: enable colors in Cargo output[0m
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:56.6410655Z [36;1mif [ -z "${CARGO_TERM_COLOR+set}" ]; then[0m
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:56.6411497Z [36;1m  echo CARGO_TERM_COLOR=always >> $GITHUB_ENV[0m
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:56.6412337Z [36;1mfi[0m
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:56.6451088Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:56.6451862Z env:
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:56.6452374Z   CARGO_HOME: /home/runner/.cargo
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:56.6452929Z   CARGO_INCREMENTAL: 0
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:56.6453419Z ##[endgroup]
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:56.6579895Z ##[group]Run : enable Cargo sparse registry
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:56.6580489Z [36;1m: enable Cargo sparse registry[0m
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:56.6581214Z [36;1m# implemented in 1.66, stabilized in 1.68, made default in 1.70[0m
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:56.6582544Z [36;1mif [ -z "${CARGO_REGISTRIES_CRATES_IO_PROTOCOL+set}" -o -f "/home/runner/work/_temp"/.implicit_cargo_registries_crates_io_protocol ]; then[0m
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:56.6584160Z [36;1m  if rustc +stable --version --verbose | grep -q '^release: 1\.6[89]\.'; then[0m
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:56.6585315Z [36;1m    touch "/home/runner/work/_temp"/.implicit_cargo_registries_crates_io_protocol || true[0m
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:56.6586340Z [36;1m    echo CARGO_REGISTRIES_CRATES_IO_PROTOCOL=sparse >> $GITHUB_ENV[0m
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:56.6587259Z [36;1m  elif rustc +stable --version --verbose | grep -q '^release: 1\.6[67]\.'; then[0m
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:56.6588327Z [36;1m    touch "/home/runner/work/_temp"/.implicit_cargo_registries_crates_io_protocol || true[0m
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:56.6589331Z [36;1m    echo CARGO_REGISTRIES_CRATES_IO_PROTOCOL=git >> $GITHUB_ENV[0m
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:56.6589972Z [36;1m  fi[0m
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:56.6590310Z [36;1mfi[0m
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:56.6632121Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:56.6632480Z env:
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:56.6632686Z   CARGO_HOME: /home/runner/.cargo
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:56.6632976Z   CARGO_INCREMENTAL: 0
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:56.6633206Z   CARGO_TERM_COLOR: always
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:56.6633428Z ##[endgroup]
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:56.7006175Z ##[group]Run : work around spurious network errors in curl 8.0
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:56.7006643Z [36;1m: work around spurious network errors in curl 8.0[0m
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:56.7007212Z [36;1m# https://rust-lang.zulipchat.com/#narrow/stream/246057-t-cargo/topic/timeout.20investigation[0m
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:56.7007853Z [36;1mif rustc +stable --version --verbose | grep -q '^release: 1\.7[01]\.'; then[0m
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:56.7008329Z [36;1m  echo CARGO_HTTP_MULTIPLEXING=false >> $GITHUB_ENV[0m
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:56.7008649Z [36;1mfi[0m
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:56.7040052Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:56.7040402Z env:
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:56.7040599Z   CARGO_HOME: /home/runner/.cargo
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:56.7040874Z   CARGO_INCREMENTAL: 0
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:56.7041109Z   CARGO_TERM_COLOR: always
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:56.7041349Z ##[endgroup]
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:56.7254668Z ##[group]Run rustc +stable --version --verbose
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:56.7255040Z [36;1mrustc +stable --version --verbose[0m
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:56.7285053Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:56.7285400Z env:
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:56.7285595Z   CARGO_HOME: /home/runner/.cargo
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:56.7285868Z   CARGO_INCREMENTAL: 0
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:56.7286099Z   CARGO_TERM_COLOR: always
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:56.7286330Z ##[endgroup]
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:56.7458047Z rustc 1.93.1 (01f6ddf75 2026-02-11)
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:56.7458801Z binary: rustc
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:56.7459472Z commit-hash: 01f6ddf7588f42ae2d7eb0a2f21d44e8e96674cf
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:56.7460984Z commit-date: 2026-02-11
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:56.7461482Z host: x86_64-unknown-linux-gnu
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:56.7461904Z release: 1.93.1
+quantum-evolution	Setup Rust (Latest)	2026-02-21T14:34:56.7462266Z LLVM version: 21.1.8
+quantum-evolution	Build Quantum Bridge	﻿2026-02-21T14:34:56.7531558Z ##[group]Run cargo build --release
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:34:56.7531886Z [36;1mcargo build --release[0m
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:34:56.7561910Z shell: /usr/bin/bash -e {0}
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:34:56.7562165Z env:
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:34:56.7562364Z   CARGO_HOME: /home/runner/.cargo
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:34:56.7562636Z   CARGO_INCREMENTAL: 0
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:34:56.7562870Z   CARGO_TERM_COLOR: always
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:34:56.7563091Z ##[endgroup]
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:34:56.8377729Z [1m[92m    Updating[0m crates.io index
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:34:57.0137390Z [1m[92m     Locking[0m 78 packages to latest Rust 1.93.1 compatible versions
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:34:57.0147033Z [1m[92m      Adding[0m axum v0.7.9 [1m[33m(available: v0.8.8)[0m
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:34:57.0153177Z [1m[92m      Adding[0m base64 v0.21.7 [1m[33m(available: v0.22.1)[0m
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:34:57.0272851Z [1m[92m Downloading[0m crates ...
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:34:57.0564060Z [1m[92m  Downloaded[0m async-trait v0.1.89
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:34:57.0607055Z [1m[92m  Downloaded[0m atomic-waker v1.1.2
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:34:57.0622013Z [1m[92m  Downloaded[0m errno v0.3.14
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:34:57.0640784Z [1m[92m  Downloaded[0m cfg-if v1.0.4
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:34:57.0655709Z [1m[92m  Downloaded[0m tower v0.5.3
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:34:57.0765208Z [1m[92m  Downloaded[0m tower-service v0.3.3
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:34:57.0781766Z [1m[92m  Downloaded[0m tower-layer v0.3.3
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:34:57.0794655Z [1m[92m  Downloaded[0m signal-hook-registry v1.4.8
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:34:57.0811142Z [1m[92m  Downloaded[0m zmij v1.0.21
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:34:57.0831191Z [1m[92m  Downloaded[0m unicode-ident v1.0.24
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:34:57.0860277Z [1m[92m  Downloaded[0m once_cell v1.21.3
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:34:57.0885823Z [1m[92m  Downloaded[0m serde v1.0.228
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:34:57.0920808Z [1m[92m  Downloaded[0m hyper-util v0.1.20
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:34:57.0981719Z [1m[92m  Downloaded[0m mio v1.1.1
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:34:57.1039931Z [1m[92m  Downloaded[0m http v1.4.0
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:34:57.1076294Z [1m[92m  Downloaded[0m serde_json v1.0.149
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:34:57.1148256Z [1m[92m  Downloaded[0m hyper v1.8.1
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:34:57.1213176Z [1m[92m  Downloaded[0m futures-util v0.3.32
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:34:57.1342719Z [1m[92m  Downloaded[0m httparse v1.10.1
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:34:57.1368264Z [1m[92m  Downloaded[0m tracing-core v0.1.36
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:34:57.1395660Z [1m[92m  Downloaded[0m syn v2.0.117
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:34:57.1500062Z [1m[92m  Downloaded[0m tinyvec v1.10.0
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:34:57.1525522Z [1m[92m  Downloaded[0m smallvec v1.15.1
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:34:57.1546284Z [1m[92m  Downloaded[0m serde_derive v1.0.228
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:34:57.1576599Z [1m[92m  Downloaded[0m proc-macro2 v1.0.106
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:34:57.1605403Z [1m[92m  Downloaded[0m log v0.4.29
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:34:57.1630870Z [1m[92m  Downloaded[0m tokio-macros v2.6.0
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:34:57.1642033Z [1m[92m  Downloaded[0m slab v0.4.12
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:34:57.1655128Z [1m[92m  Downloaded[0m quote v1.0.44
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:34:57.1681711Z [1m[92m  Downloaded[0m parking_lot_core v0.9.12
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:34:57.1702410Z [1m[92m  Downloaded[0m memchr v2.8.0
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:34:57.1755499Z [1m[92m  Downloaded[0m tracing v0.1.44
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:34:57.1919735Z [1m[92m  Downloaded[0m matchit v0.7.3
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:34:57.1939217Z [1m[92m  Downloaded[0m lock_api v0.4.14
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:34:57.1952348Z [1m[92m  Downloaded[0m serde_path_to_error v0.1.20
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:34:57.1968626Z [1m[92m  Downloaded[0m scopeguard v1.2.0
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:34:57.1980486Z [1m[92m  Downloaded[0m mime v0.3.17
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:34:57.1993567Z [1m[92m  Downloaded[0m futures-core v0.3.32
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:34:57.2007212Z [1m[92m  Downloaded[0m tinyvec_macros v0.1.1
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:34:57.2015736Z [1m[92m  Downloaded[0m sync_wrapper v1.0.2
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:34:57.2023740Z [1m[92m  Downloaded[0m serde_urlencoded v0.7.1
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:34:57.2040329Z [1m[92m  Downloaded[0m pin-utils v0.1.0
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:34:57.2056302Z [1m[92m  Downloaded[0m pin-project-lite v0.2.16
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:34:57.2112129Z [1m[92m  Downloaded[0m parking_lot v0.12.5
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:34:57.2136496Z [1m[92m  Downloaded[0m itoa v1.0.17
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:34:57.2150515Z [1m[92m  Downloaded[0m http-body-util v0.1.3
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:34:57.2167758Z [1m[92m  Downloaded[0m http-body v1.0.1
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:34:57.2177207Z [1m[92m  Downloaded[0m futures-task v0.3.32
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:34:57.2188620Z [1m[92m  Downloaded[0m libc v0.2.182
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:34:57.2574613Z [1m[92m  Downloaded[0m futures-channel v0.3.32
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:34:57.2592469Z [1m[92m  Downloaded[0m socket2 v0.6.2
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:34:57.2610835Z [1m[92m  Downloaded[0m serde_core v1.0.228
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:34:57.2637670Z [1m[92m  Downloaded[0m tokio v1.49.0
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:34:57.3060719Z [1m[92m  Downloaded[0m ryu v1.0.23
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:34:57.3091985Z [1m[92m  Downloaded[0m rustversion v1.0.22
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:34:57.3118685Z [1m[92m  Downloaded[0m httpdate v1.0.3
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:34:57.3130325Z [1m[92m  Downloaded[0m form_urlencoded v1.2.2
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:34:57.3137941Z [1m[92m  Downloaded[0m bytes v1.11.1
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:34:57.3178685Z [1m[92m  Downloaded[0m axum v0.7.9
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:34:57.3252629Z [1m[92m  Downloaded[0m percent-encoding v2.3.2
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:34:57.3260382Z [1m[92m  Downloaded[0m base64 v0.21.7
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:34:57.3297446Z [1m[92m  Downloaded[0m axum-core v0.4.5
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:34:57.3316417Z [1m[92m  Downloaded[0m bs58 v0.5.1
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:34:57.3504071Z [1m[92m   Compiling[0m proc-macro2 v1.0.106
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:34:57.3504986Z [1m[92m   Compiling[0m quote v1.0.44
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:34:57.3506091Z [1m[92m   Compiling[0m unicode-ident v1.0.24
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:34:57.3507378Z [1m[92m   Compiling[0m libc v0.2.182
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:34:57.4217292Z [1m[92m   Compiling[0m itoa v1.0.17
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:34:57.5711213Z [1m[92m   Compiling[0m bytes v1.11.1
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:34:57.6497328Z [1m[92m   Compiling[0m pin-project-lite v0.2.16
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:34:57.6884868Z [1m[92m   Compiling[0m futures-core v0.3.32
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:34:57.7826200Z [1m[92m   Compiling[0m parking_lot_core v0.9.12
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:34:57.9370832Z [1m[92m   Compiling[0m smallvec v1.15.1
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:34:58.2747100Z [1m[92m   Compiling[0m syn v2.0.117
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:34:58.3269843Z [1m[92m   Compiling[0m cfg-if v1.0.4
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:34:58.3564911Z [1m[92m   Compiling[0m serde_core v1.0.228
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:34:58.5104265Z [1m[92m   Compiling[0m scopeguard v1.2.0
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:34:58.5562948Z [1m[92m   Compiling[0m lock_api v0.4.14
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:34:58.5635942Z [1m[92m   Compiling[0m errno v0.3.14
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:34:58.6538103Z [1m[92m   Compiling[0m http v1.4.0
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:34:58.7521578Z [1m[92m   Compiling[0m parking_lot v0.12.5
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:34:58.7763506Z [1m[92m   Compiling[0m signal-hook-registry v1.4.8
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:34:59.7002863Z [1m[92m   Compiling[0m http-body v1.0.1
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:34:59.7848885Z [1m[92m   Compiling[0m mio v1.1.1
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:35:00.4495072Z [1m[92m   Compiling[0m socket2 v0.6.2
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:35:00.6889588Z [1m[92m   Compiling[0m once_cell v1.21.3
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:35:00.8620459Z [1m[92m   Compiling[0m httparse v1.10.1
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:35:01.0657199Z [1m[92m   Compiling[0m tracing-core v0.1.36
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:35:01.4270970Z [1m[92m   Compiling[0m log v0.4.29
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:35:01.5851196Z [1m[92m   Compiling[0m serde v1.0.228
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:35:01.7426503Z [1m[92m   Compiling[0m rustversion v1.0.22
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:35:01.7806025Z [1m[92m   Compiling[0m futures-task v0.3.32
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:35:01.8780114Z [1m[92m   Compiling[0m zmij v1.0.21
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:35:01.9212813Z [1m[92m   Compiling[0m tower-service v0.3.3
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:35:01.9605255Z [1m[92m   Compiling[0m slab v0.4.12
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:35:02.0554530Z [1m[92m   Compiling[0m tracing v0.1.44
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:35:02.0905399Z [1m[92m   Compiling[0m futures-util v0.3.32
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:35:02.0961039Z [1m[92m   Compiling[0m tokio-macros v2.6.0
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:35:02.1245683Z [1m[92m   Compiling[0m serde_derive v1.0.228
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:35:02.5902541Z [1m[92m   Compiling[0m tokio v1.49.0
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:35:02.9016744Z [1m[92m   Compiling[0m futures-channel v0.3.32
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:35:03.1552262Z [1m[92m   Compiling[0m httpdate v1.0.3
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:35:03.4857122Z [1m[92m   Compiling[0m tower-layer v0.3.3
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:35:03.7344715Z [1m[92m   Compiling[0m percent-encoding v2.3.2
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:35:03.9806018Z [1m[92m   Compiling[0m pin-utils v0.1.0
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:35:04.0111570Z [1m[92m   Compiling[0m serde_json v1.0.149
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:35:04.0937281Z [1m[92m   Compiling[0m sync_wrapper v1.0.2
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:35:04.1373092Z [1m[92m   Compiling[0m atomic-waker v1.1.2
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:35:04.2047422Z [1m[92m   Compiling[0m form_urlencoded v1.2.2
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:35:04.4610001Z [1m[92m   Compiling[0m async-trait v0.1.89
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:35:05.2593629Z [1m[92m   Compiling[0m http-body-util v0.1.3
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:35:05.2630974Z [1m[92m   Compiling[0m memchr v2.8.0
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:35:05.7474364Z [1m[92m   Compiling[0m ryu v1.0.23
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:35:06.0243772Z [1m[92m   Compiling[0m mime v0.3.17
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:35:06.4763651Z [1m[92m   Compiling[0m serde_urlencoded v0.7.1
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:35:06.5025090Z [1m[92m   Compiling[0m axum-core v0.4.5
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:35:06.6932356Z [1m[92m   Compiling[0m serde_path_to_error v0.1.20
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:35:07.1445628Z [1m[92m   Compiling[0m matchit v0.7.3
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:35:07.5755857Z [1m[92m   Compiling[0m hyper v1.8.1
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:35:09.3970177Z [1m[92m   Compiling[0m hyper-util v0.1.20
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:35:09.7061392Z [1m[92m   Compiling[0m tower v0.5.3
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:35:09.7947502Z [1m[92m   Compiling[0m bs58 v0.5.1
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:35:09.9847146Z [1m[92m   Compiling[0m base64 v0.21.7
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:35:10.1180872Z [1m[92m   Compiling[0m axum v0.7.9
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:35:13.6983176Z [1m[92m   Compiling[0m quantum_bridge v0.1.0 (/home/runner/work/appforge/appforge/swarm/core/quantum_bridge)
+quantum-evolution	Build Quantum Bridge	2026-02-21T14:35:16.7276388Z [1m[92m    Finished[0m `release` profile [optimized] target(s) in 19.92s
+quantum-evolution	Install Dependencies	﻿2026-02-21T14:35:16.7521277Z ##[group]Run npm install --legacy-peer-deps
+quantum-evolution	Install Dependencies	2026-02-21T14:35:16.7521693Z [36;1mnpm install --legacy-peer-deps[0m
+quantum-evolution	Install Dependencies	2026-02-21T14:35:16.7522032Z [36;1mcd swarm && npm install --legacy-peer-deps[0m
+quantum-evolution	Install Dependencies	2026-02-21T14:35:16.7552924Z shell: /usr/bin/bash -e {0}
+quantum-evolution	Install Dependencies	2026-02-21T14:35:16.7553179Z env:
+quantum-evolution	Install Dependencies	2026-02-21T14:35:16.7553378Z   CARGO_HOME: /home/runner/.cargo
+quantum-evolution	Install Dependencies	2026-02-21T14:35:16.7553644Z   CARGO_INCREMENTAL: 0
+quantum-evolution	Install Dependencies	2026-02-21T14:35:16.7554086Z   CARGO_TERM_COLOR: always
+quantum-evolution	Install Dependencies	2026-02-21T14:35:16.7554328Z ##[endgroup]
+quantum-evolution	Install Dependencies	2026-02-21T14:35:20.0602427Z npm warn deprecated boolean@3.2.0: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
+quantum-evolution	Install Dependencies	2026-02-21T14:35:21.3001936Z npm warn deprecated glob@10.5.0: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
+quantum-evolution	Install Dependencies	2026-02-21T14:35:30.1931374Z 
+quantum-evolution	Install Dependencies	2026-02-21T14:35:30.1932491Z added 351 packages, removed 12 packages, changed 5 packages, and audited 2064 packages in 13s
+quantum-evolution	Install Dependencies	2026-02-21T14:35:30.1936862Z 
+quantum-evolution	Install Dependencies	2026-02-21T14:35:30.1937382Z 369 packages are looking for funding
+quantum-evolution	Install Dependencies	2026-02-21T14:35:30.1939364Z   run `npm fund` for details
+quantum-evolution	Install Dependencies	2026-02-21T14:35:30.2911811Z 
+quantum-evolution	Install Dependencies	2026-02-21T14:35:30.2912567Z 92 vulnerabilities (4 low, 21 moderate, 66 high, 1 critical)
+quantum-evolution	Install Dependencies	2026-02-21T14:35:30.2913748Z 
+quantum-evolution	Install Dependencies	2026-02-21T14:35:30.2915231Z To address issues that do not require attention, run:
+quantum-evolution	Install Dependencies	2026-02-21T14:35:30.2918661Z   npm audit fix
+quantum-evolution	Install Dependencies	2026-02-21T14:35:30.2918927Z 
+quantum-evolution	Install Dependencies	2026-02-21T14:35:30.2919410Z To address all issues possible (including breaking changes), run:
+quantum-evolution	Install Dependencies	2026-02-21T14:35:30.2920121Z   npm audit fix --force
+quantum-evolution	Install Dependencies	2026-02-21T14:35:30.2920393Z 
+quantum-evolution	Install Dependencies	2026-02-21T14:35:30.2920718Z Some issues need review, and may require choosing
+quantum-evolution	Install Dependencies	2026-02-21T14:35:30.2921304Z a different dependency.
+quantum-evolution	Install Dependencies	2026-02-21T14:35:30.2921596Z 
+quantum-evolution	Install Dependencies	2026-02-21T14:35:30.2921812Z Run `npm audit` for details.
+quantum-evolution	Install Dependencies	2026-02-21T14:35:33.6090843Z npm warn deprecated node-domexception@1.0.0: Use your platform's native DOMException instead
+quantum-evolution	Install Dependencies	2026-02-21T14:35:34.8839688Z npm warn deprecated glob@10.5.0: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
+quantum-evolution	Install Dependencies	2026-02-21T14:35:42.3321877Z 
+quantum-evolution	Install Dependencies	2026-02-21T14:35:42.3322774Z added 655 packages, and audited 656 packages in 12s
+quantum-evolution	Install Dependencies	2026-02-21T14:35:42.3323166Z 
+quantum-evolution	Install Dependencies	2026-02-21T14:35:42.3323476Z 108 packages are looking for funding
+quantum-evolution	Install Dependencies	2026-02-21T14:35:42.3324295Z   run `npm fund` for details
+quantum-evolution	Install Dependencies	2026-02-21T14:35:42.3438926Z 
+quantum-evolution	Install Dependencies	2026-02-21T14:35:42.3439641Z 13 vulnerabilities (2 low, 3 moderate, 7 high, 1 critical)
+quantum-evolution	Install Dependencies	2026-02-21T14:35:42.3440129Z 
+quantum-evolution	Install Dependencies	2026-02-21T14:35:42.3440410Z To address issues that do not require attention, run:
+quantum-evolution	Install Dependencies	2026-02-21T14:35:42.3440781Z   npm audit fix
+quantum-evolution	Install Dependencies	2026-02-21T14:35:42.3440912Z 
+quantum-evolution	Install Dependencies	2026-02-21T14:35:42.3441147Z To address all issues (including breaking changes), run:
+quantum-evolution	Install Dependencies	2026-02-21T14:35:42.3441530Z   npm audit fix --force
+quantum-evolution	Install Dependencies	2026-02-21T14:35:42.3441684Z 
+quantum-evolution	Install Dependencies	2026-02-21T14:35:42.3441806Z Run `npm audit` for details.
+quantum-evolution	Run Reality Pulse 2.0	﻿2026-02-21T14:35:42.3880151Z ##[group]Run npx tsx scripts/reality_pulse.ts
+quantum-evolution	Run Reality Pulse 2.0	2026-02-21T14:35:42.3880558Z [36;1mnpx tsx scripts/reality_pulse.ts[0m
+quantum-evolution	Run Reality Pulse 2.0	2026-02-21T14:35:42.3911488Z shell: /usr/bin/bash -e {0}
+quantum-evolution	Run Reality Pulse 2.0	2026-02-21T14:35:42.3911750Z env:
+quantum-evolution	Run Reality Pulse 2.0	2026-02-21T14:35:42.3911950Z   CARGO_HOME: /home/runner/.cargo
+quantum-evolution	Run Reality Pulse 2.0	2026-02-21T14:35:42.3912217Z   CARGO_INCREMENTAL: 0
+quantum-evolution	Run Reality Pulse 2.0	2026-02-21T14:35:42.3912442Z   CARGO_TERM_COLOR: always
+quantum-evolution	Run Reality Pulse 2.0	2026-02-21T14:35:42.3912673Z   TRUE_AI_INDEPENDENCE: true
+quantum-evolution	Run Reality Pulse 2.0	2026-02-21T14:35:42.3912919Z   NODE_ID: GH-ACTIONS-EVO
+quantum-evolution	Run Reality Pulse 2.0	2026-02-21T14:35:42.3913151Z   MESH_ENABLED: true
+quantum-evolution	Run Reality Pulse 2.0	2026-02-21T14:35:42.3913360Z ##[endgroup]
+quantum-evolution	Run Reality Pulse 2.0	2026-02-21T14:35:42.9559442Z 🌌 Quantum Engine v3.5 [Deep Resonance] Online
+quantum-evolution	Run Reality Pulse 2.0	2026-02-21T14:35:42.9565652Z 🌍 [RealityPulse] Harvesting Reality Injection 2.0...
+quantum-evolution	Run Reality Pulse 2.0	2026-02-21T14:35:42.9627000Z 🔮 [RealityPulse] Consulting Iron Brain for evolutionary directive...
+quantum-evolution	Run Reality Pulse 2.0	2026-02-21T14:35:42.9637912Z 📚 [Quantum] Loaded 1 saved states
+quantum-evolution	Run Reality Pulse 2.0	2026-02-21T14:35:42.9640705Z 📚 [Quantum] Loaded Oracle learning state
+quantum-evolution	Run Reality Pulse 2.0	2026-02-21T14:35:42.9642617Z 🔮 Consulting Oracle (v3.0): Analyze the current project state and recent evolution. 
+quantum-evolution	Run Reality Pulse 2.0	2026-02-21T14:35:42.9643598Z     Git History:
+quantum-evolution	Run Reality Pulse 2.0	2026-02-21T14:35:42.9644432Z     1b5f5c8b fix: explicit script termination to resolve CI Action hangs
+quantum-evolution	Run Reality Pulse 2.0	2026-02-21T14:35:42.9645395Z 927459fe feat(swarm): Enforce deterministic autonomous execution pipeline
+quantum-evolution	Run Reality Pulse 2.0	2026-02-21T14:35:42.9646384Z 2bcbb097 fix(swarm): Resolve benchmark loop array iteration and missing mock files
+quantum-evolution	Run Reality Pulse 2.0	2026-02-21T14:35:42.9647293Z e415ffc3 Merge branch 'main' of https://github.com/fernandogarzaaa/appforge
+quantum-evolution	Run Reality Pulse 2.0	2026-02-21T14:35:42.9647862Z 26d1d595 chore(pulse): auto-deploy blessed coherence pulse
+quantum-evolution	Run Reality Pulse 2.0	2026-02-21T14:35:42.9648336Z 7d7de24d chore(pulse): auto-deploy blessed coherence pulse
+quantum-evolution	Run Reality Pulse 2.0	2026-02-21T14:35:42.9648800Z ca15e413 chore(pulse): auto-deploy blessed coherence pulse
+quantum-evolution	Run Reality Pulse 2.0	2026-02-21T14:35:42.9649253Z 4c21b95a chore(pulse): auto-deploy blessed coherence pulse
+quantum-evolution	Run Reality Pulse 2.0	2026-02-21T14:35:42.9649709Z a9de00bf chore(pulse): auto-deploy blessed coherence pulse
+quantum-evolution	Run Reality Pulse 2.0	2026-02-21T14:35:42.9650169Z e4692760 chore(pulse): auto-deploy blessed coherence pulse
+quantum-evolution	Run Reality Pulse 2.0	2026-02-21T14:35:42.9650443Z 
+quantum-evolution	Run Reality Pulse 2.0	2026-02-21T14:35:42.9650522Z     
+quantum-evolution	Run Reality Pulse 2.0	2026-02-21T14:35:42.9650708Z     Project Map:
+quantum-evolution	Run Reality Pulse 2.0	2026-02-21T14:35:42.9652152Z     src: [App.jsx, App.jsx.geometry.json, Layout.jsx, Layout.jsx.geometry.json, api, components, config, context, contexts, core], swarm: [MULTI_SWARM_ARCHITECTURE.md, REAL_MODE_CLEANUP.md, REAL_MODE_STATUS.md, accelerated_singularity.ts, agents, audit_replication.ts, benchmark_results.json, benchmarks, challenge_50sol.ts, channels_help.txt]
+quantum-evolution	Run Reality Pulse 2.0	2026-02-21T14:35:42.9653536Z     
+quantum-evolution	Run Reality Pulse 2.0	2026-02-21T14:35:42.9654245Z     Which evolutionary focus should the Swarm prioritize next?
+quantum-evolution	Run Reality Pulse 2.0	2026-02-21T14:35:43.0017764Z 📡[P2P - RESONANCE] Broadcasting HOLOGRAPHIC_SYNC to 0 peers...
+quantum-evolution	Run Reality Pulse 2.0	2026-02-21T14:35:43.0019383Z    🌌 [DistributedPersistence] Broadcasted holographic memory to mesh.
+quantum-evolution	Run Reality Pulse 2.0	2026-02-21T14:35:43.0020661Z    ✨ Local Oracle recommends: Autonomous feature generation for the Sovereign UI
+quantum-evolution	Run Reality Pulse 2.0	2026-02-21T14:35:43.0021677Z    📊 Confidence: 11.9%
+quantum-evolution	Run Reality Pulse 2.0	2026-02-21T14:35:43.0022478Z    ⚛️ Consensus Fidelity: 11.9% (8 qubits)
+quantum-evolution	Run Reality Pulse 2.0	2026-02-21T14:35:43.0024573Z ✨ [RealityPulse] Directive: Autonomous feature generation for the Sovereign UI
+quantum-evolution	Run Reality Pulse 2.0	2026-02-21T14:35:43.0025740Z 📊 [RealityPulse] Confidence: 11.9%
+quantum-evolution	Run Reality Pulse 2.0	2026-02-21T14:35:43.0042655Z ✅ [RealityPulse] Reality Pulse persisted to: /home/runner/work/appforge/appforge/src/data/reality_pulse.json
+quantum-evolution	Pre-Pulse Diagnostics	﻿2026-02-21T14:35:43.0282985Z ##[group]Run npm ci --legacy-peer-deps
+quantum-evolution	Pre-Pulse Diagnostics	2026-02-21T14:35:43.0283359Z [36;1mnpm ci --legacy-peer-deps[0m
+quantum-evolution	Pre-Pulse Diagnostics	2026-02-21T14:35:43.0284105Z [36;1mnpm run build > ../build_logs.txt 2>&1 || echo "Build failed (as expected for diagnosis)" > ../build_logs.txt[0m
+quantum-evolution	Pre-Pulse Diagnostics	2026-02-21T14:35:43.0284803Z [36;1mnpm run lint -- --format json > ../lint_output.json 2>&1 || echo "[]" > ../lint_output.json[0m
+quantum-evolution	Pre-Pulse Diagnostics	2026-02-21T14:35:43.0319855Z shell: /usr/bin/bash -e {0}
+quantum-evolution	Pre-Pulse Diagnostics	2026-02-21T14:35:43.0320122Z env:
+quantum-evolution	Pre-Pulse Diagnostics	2026-02-21T14:35:43.0320332Z   CARGO_HOME: /home/runner/.cargo
+quantum-evolution	Pre-Pulse Diagnostics	2026-02-21T14:35:43.0320611Z   CARGO_INCREMENTAL: 0
+quantum-evolution	Pre-Pulse Diagnostics	2026-02-21T14:35:43.0320846Z   CARGO_TERM_COLOR: always
+quantum-evolution	Pre-Pulse Diagnostics	2026-02-21T14:35:43.0321092Z ##[endgroup]
+quantum-evolution	Pre-Pulse Diagnostics	2026-02-21T14:35:51.4922167Z npm warn deprecated boolean@3.2.0: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
+quantum-evolution	Pre-Pulse Diagnostics	2026-02-21T14:35:51.5328773Z npm warn deprecated whatwg-encoding@3.1.1: Use @exodus/bytes instead for a more spec-conformant and faster implementation
+quantum-evolution	Pre-Pulse Diagnostics	2026-02-21T14:35:52.3258740Z npm warn deprecated node-domexception@1.0.0: Use your platform's native DOMException instead
+quantum-evolution	Pre-Pulse Diagnostics	2026-02-21T14:35:53.2278550Z npm warn deprecated lodash.isequal@4.5.0: This package is deprecated. Use require('node:util').isDeepStrictEqual instead.
+quantum-evolution	Pre-Pulse Diagnostics	2026-02-21T14:35:53.7691337Z npm warn deprecated inflight@1.0.6: This module is not supported, and leaks memory. Do not use it. Check out lru-cache if you want a good and tested way to coalesce async requests by a key value, which is much more comprehensive and powerful.
+quantum-evolution	Pre-Pulse Diagnostics	2026-02-21T14:35:53.9606090Z npm warn deprecated glob@7.2.3: Glob versions prior to v9 are no longer supported
+quantum-evolution	Pre-Pulse Diagnostics	2026-02-21T14:35:54.3291461Z npm warn deprecated domexception@4.0.0: Use your platform's native DOMException instead
+quantum-evolution	Pre-Pulse Diagnostics	2026-02-21T14:35:54.8849304Z npm warn deprecated glob@10.5.0: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
+quantum-evolution	Pre-Pulse Diagnostics	2026-02-21T14:35:54.8960187Z npm warn deprecated abab@2.0.6: Use your platform's native atob() and btoa() methods instead
+quantum-evolution	Pre-Pulse Diagnostics	2026-02-21T14:35:58.1080239Z npm warn deprecated whatwg-encoding@2.0.0: Use @exodus/bytes instead for a more spec-conformant and faster implementation
+quantum-evolution	Pre-Pulse Diagnostics	2026-02-21T14:35:58.2361290Z npm warn deprecated @apollo/server-gateway-interface@1.1.1: @apollo/server-gateway-interface v1 is part of Apollo Server v4, which is deprecated and will transition to end-of-life on January 26, 2026. As long as you are already using a non-EOL version of Node.js, upgrading to v2 should take only a few minutes. See https://www.apollographql.com/docs/apollo-server/previous-versions for details.
+quantum-evolution	Pre-Pulse Diagnostics	2026-02-21T14:36:04.1281691Z npm warn deprecated @apollo/server@4.12.2: Apollo Server v4 is deprecated and will transition to end-of-life on January 26, 2026. As long as you are already using a non-EOL version of Node.js, upgrading to v5 should take only a few minutes. See https://www.apollographql.com/docs/apollo-server/previous-versions for details.
+quantum-evolution	Pre-Pulse Diagnostics	2026-02-21T14:36:15.5535379Z 
+quantum-evolution	Pre-Pulse Diagnostics	2026-02-21T14:36:15.5536198Z added 2063 packages, and audited 2064 packages in 32s
+quantum-evolution	Pre-Pulse Diagnostics	2026-02-21T14:36:15.5538912Z 
+quantum-evolution	Pre-Pulse Diagnostics	2026-02-21T14:36:15.5539715Z 369 packages are looking for funding
+quantum-evolution	Pre-Pulse Diagnostics	2026-02-21T14:36:15.5540344Z   run `npm fund` for details
+quantum-evolution	Pre-Pulse Diagnostics	2026-02-21T14:36:15.6501103Z 
+quantum-evolution	Pre-Pulse Diagnostics	2026-02-21T14:36:15.6502103Z 92 vulnerabilities (4 low, 21 moderate, 66 high, 1 critical)
+quantum-evolution	Pre-Pulse Diagnostics	2026-02-21T14:36:15.6502627Z 
+quantum-evolution	Pre-Pulse Diagnostics	2026-02-21T14:36:15.6502981Z To address issues that do not require attention, run:
+quantum-evolution	Pre-Pulse Diagnostics	2026-02-21T14:36:15.6503514Z   npm audit fix
+quantum-evolution	Pre-Pulse Diagnostics	2026-02-21T14:36:15.6503710Z 
+quantum-evolution	Pre-Pulse Diagnostics	2026-02-21T14:36:15.6504477Z To address all issues possible (including breaking changes), run:
+quantum-evolution	Pre-Pulse Diagnostics	2026-02-21T14:36:15.6505470Z   npm audit fix --force
+quantum-evolution	Pre-Pulse Diagnostics	2026-02-21T14:36:15.6505678Z 
+quantum-evolution	Pre-Pulse Diagnostics	2026-02-21T14:36:15.6505950Z Some issues need review, and may require choosing
+quantum-evolution	Pre-Pulse Diagnostics	2026-02-21T14:36:15.6506423Z a different dependency.
+quantum-evolution	Pre-Pulse Diagnostics	2026-02-21T14:36:15.6506625Z 
+quantum-evolution	Pre-Pulse Diagnostics	2026-02-21T14:36:15.6506786Z Run `npm audit` for details.
+quantum-evolution	Configure Git Identity	﻿2026-02-21T14:37:19.7628295Z ##[group]Run git config --global user.email "fernando@appforge.ai"
+quantum-evolution	Configure Git Identity	2026-02-21T14:37:19.7628845Z [36;1mgit config --global user.email "fernando@appforge.ai"[0m
+quantum-evolution	Configure Git Identity	2026-02-21T14:37:19.7629303Z [36;1mgit config --global user.name "Fernando Garza (Sovereign Swarm)"[0m
+quantum-evolution	Configure Git Identity	2026-02-21T14:37:19.7660627Z shell: /usr/bin/bash -e {0}
+quantum-evolution	Configure Git Identity	2026-02-21T14:37:19.7660879Z env:
+quantum-evolution	Configure Git Identity	2026-02-21T14:37:19.7661080Z   CARGO_HOME: /home/runner/.cargo
+quantum-evolution	Configure Git Identity	2026-02-21T14:37:19.7661345Z   CARGO_INCREMENTAL: 0
+quantum-evolution	Configure Git Identity	2026-02-21T14:37:19.7661568Z   CARGO_TERM_COLOR: always
+quantum-evolution	Configure Git Identity	2026-02-21T14:37:19.7661792Z ##[endgroup]
+quantum-evolution	Run Quantum Evolution	﻿2026-02-21T14:37:19.7767276Z ##[group]Run npx tsx intelligence_pulse.ts
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:19.7767638Z [36;1mnpx tsx intelligence_pulse.ts[0m
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:19.7795244Z shell: /usr/bin/bash -e {0}
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:19.7795496Z env:
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:19.7795694Z   CARGO_HOME: /home/runner/.cargo
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:19.7795959Z   CARGO_INCREMENTAL: 0
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:19.7796187Z   CARGO_TERM_COLOR: always
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:19.7797427Z   OPENAI_API_KEY: ***
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:19.7797798Z   GEMINI_API_KEY: ***
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:19.7798025Z   TRUE_AI_INDEPENDENCE: true
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:19.7798355Z   QCORE_PATH: ./core/quantum_bridge/target/release/quantum_bridge
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:19.7798711Z   NODE_ID: GA-EVOLUTION
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:19.7798931Z   MESH_ENABLED: true
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:19.7799145Z   RESONANCE_PORT: 11435
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:19.7799391Z   WHATSAPP_PHONE_NUMBER: ***
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:19.7799635Z   DISCORD_TOKEN: 
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:19.7799840Z   TELEGRAM_BOT_TOKEN: 
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:19.7800059Z   QUANTUM_GENERATIONS: 50
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:19.7800314Z   QUANTUM_EPOCHS: 100
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:19.7800530Z ##[endgroup]
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.3698228Z 🌌 Quantum Engine v3.5 [Deep Resonance] Online
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.3709134Z ======================================================================
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.3710326Z ⚛️  INITIATING UNIFIED REALITY PULSE [PHASE 72] (NODE:GA-EVOLUTION)
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.3711243Z ======================================================================
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.3711665Z 
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.3712098Z 📡 Step 0: Initializing Quantum Mesh...
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.3713224Z 📡[P2P - RESONANCE] Starting Sovereign Node on port 11435...
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.3724695Z    ✅ Node online.Core Synchronization active.
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.3725666Z 🔍 [NexusGateway] Scanning for Quantum Mesh peers...
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.3727453Z 🤝 [NexusGateway] Initiating Handshake with ws://localhost:11436...
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.3728556Z    🔗[P2P] Connecting to Peer: ws://localhost:11436 
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.3803654Z 🤝 [NexusGateway] Initiating Handshake with ws://localhost:11437...
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.3806129Z    🔗[P2P] Connecting to Peer: ws://localhost:11437 
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.3848906Z    ⚠️[P2P] Peer ws://localhost:11436 unreachable:  
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.3852336Z    ⚠️[P2P] Peer ws://localhost:11437 unreachable:  
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.3862676Z 📡 [RealitySensor] Scanning Quantum Mesh environment...
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.4384454Z    🔍 [GitHub] Monitoring repository health...
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.4390742Z    ⚠️ [RealitySensor] Failed to parse lint output: Unexpected token '>', "
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.4391673Z > base44-a"... is not valid JSON
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.4392369Z    🤖 [CI] Active Run detected: 22258579738
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.5600370Z ⚠️ [Jupiter] Wallet/RPC not configured - simulation fallback remains enabled.
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.6858455Z    📈 [Market] Real SOL Price: $86.33
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.6868379Z    🔋 [System] Hardware Stress detected: Load=2.63
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.6869585Z 📊 Reality Scan: Build=✅, Lint Errors=0, Signals=4
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.6871727Z 🌍 Reality Pulse 2.0: Directive="Autonomous feature generation for the Sovereign UI" (Confidence=11.9%)
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.6872885Z 
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.6873359Z 🌾 Step 0: Growth Harvesting (Bounty Identification)...
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.6874202Z 
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.6874760Z 🌌 Step 1: Quantum Singularity Learning (Self-Assessment)...
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.6875698Z ⚡ [SingularityEngine] Starting self-improvement cycle...
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.6876531Z    🎯 Phase 0: Reality sensing & objective synthesis...
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.6877378Z 📡 [RealitySensor] Scanning Quantum Mesh environment...
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.7087003Z    🔍 [GitHub] Monitoring repository health...
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.7091983Z    ⚠️ [RealitySensor] Failed to parse lint output: Unexpected token '>', "
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.7092935Z    🤖 [CI] Active Run detected: 22258579738
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.7093536Z > base44-a"... is not valid JSON
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.7467843Z    📈 [Market] Real SOL Price: $86.33
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.7472712Z    🔋 [System] Hardware Stress detected: Load=2.63
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.7473729Z    🎯 [Inception] Synthesizing objectives from 4 environmental signals...
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.7474952Z    ✨ [Consensus] Multi-node reasoning score: 1.00
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.7478711Z 🔮 Consulting Oracle (v3.0): Think step-by-step to incept a DOMAIN-SPECIFIC EXPERT objective for signal: {"source":"github","type":"UNCOMMITTED_CHANGES","intensity":0.6,"payload":{"files":["M src/data/quantum_oracle_state.json"]},"timestamp":"2026-02-21T14:37:20.708Z"}. 
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.7480738Z                 Peer Insights: [].
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.7481382Z                 Format: EXPERT_[ExpertName]: [Action]
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.7867550Z    ✨ Local Oracle recommends: EXPERT_SECURITY: Patch vulnerability
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.7868450Z    📊 Confidence: 22.4%
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.7869103Z    ⚛️ Consensus Fidelity: 22.4% (8 qubits)
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.7870103Z    ✨ [Expert Swarm] New Objective: EXPERT_SECURITY: Patch vulnerability
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.7877020Z    ✨ [Consensus] Multi-node reasoning score: 1.00
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.7880087Z 🔮 Consulting Oracle (v3.0): Think step-by-step to incept a DOMAIN-SPECIFIC EXPERT objective for signal: {"source":"system","type":"CI_ACTIVE","intensity":0.5,"payload":{"runId":"22258579738","event":"schedule","actor":"fernandogarzaaa"},"timestamp":"2026-02-21T14:37:20.708Z"}. 
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.7882132Z                 Peer Insights: [].
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.7882724Z                 Format: EXPERT_[ExpertName]: [Action]
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.8254922Z    ✨ Local Oracle recommends: EXPERT_SECURITY: Patch vulnerability
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.8255906Z    📊 Confidence: 52.5%
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.8256631Z    ⚛️ Consensus Fidelity: 52.5% (8 qubits)
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.8257666Z    ✨ [Expert Swarm] New Objective: EXPERT_SECURITY: Patch vulnerability
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.8262102Z    ✨ [Consensus] Multi-node reasoning score: 1.00
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.8264603Z 🔮 Consulting Oracle (v3.0): Think step-by-step to incept a DOMAIN-SPECIFIC EXPERT objective for signal: {"source":"market","type":"SOL_PRICE_PULSE","intensity":0.1726670176958195,"payload":{"asset":"SOL","priceUsd":86.33350884790974},"timestamp":"2026-02-21T14:37:20.746Z"}. 
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.8265788Z                 Peer Insights: [].
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.8266132Z                 Format: EXPERT_[ExpertName]: [Action]
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.8295437Z    ✨ Local Oracle recommends: EXPERT_GROWTH: Market capture
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.8296100Z    📊 Confidence: 99.0%
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.8296668Z    ⚛️ Consensus Fidelity: 106.0% (8 qubits)
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.8297465Z    ✨ [Expert Swarm] New Objective: EXPERT_GROWTH: Market capture
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.8302070Z    ✨ [Consensus] Multi-node reasoning score: 1.00
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.8305027Z 🔮 Consulting Oracle (v3.0): Think step-by-step to incept a DOMAIN-SPECIFIC EXPERT objective for signal: {"source":"system","type":"HARDWARE_STRESS","intensity":0.32875,"payload":{"load":2.63,"freeMemPct":93.1358332787771},"timestamp":"2026-02-21T14:37:20.747Z"}. 
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.8306475Z                 Peer Insights: [].
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.8306843Z                 Format: EXPERT_[ExpertName]: [Action]
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.8335863Z    ✨ Local Oracle recommends: EXPERT_GROWTH: Market capture
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.8336717Z    📊 Confidence: 99.0%
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.8337382Z    ⚛️ Consensus Fidelity: 127.0% (8 qubits)
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.8338325Z    ✨ [Expert Swarm] New Objective: EXPERT_GROWTH: Market capture
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.8343534Z    🧠 Phase 1: Self-assessment...
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.8346828Z    🔍 Phase 2: Identifying improvement areas...
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.8348297Z 🔮 Consulting Oracle (v3.0): Identify the most critical evolutionary track to improve the Swarm's overall coherence and efficiency.
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.8369649Z    ✨ Local Oracle recommends: learning
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.8370245Z    📊 Confidence: 8.1%
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.8370792Z    ⚛️ Consensus Fidelity: 8.1% (8 qubits)
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.8371445Z    ⚙️ Phase 3: Executing improvements...
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.8373743Z    🛠️ Phase 3.5: Realizing improvements in source code...
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.8387929Z    💎 [Bounty] Selected high-priority task: [Neural Accelerator] EXPERT_SECURITY: Patch vulnerability (Coherence: 1.00) (Reward: 60)
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.8391117Z 🔮 Consulting Oracle (v3.0): Generate a specific, safe, and effective code improvement for the file 'swarm/core/quantum_core.ts' to achieve the goal: [Neural Accelerator] EXPERT_SECURITY: Patch vulnerability (Coherence: 1.00). 
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.8393736Z         🛡️ SOVEREIGN AXIOMS: Ensure the change promotes Decentralization, Local-First operation, and Privacy.
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.8395881Z         Return ONLY a JSON object with 'targetContent' (existing code block to replace) and 'replacementContent' (new code block).
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.8397163Z         Ensure whitespace and indentation match exactly what is in the repository.
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.8415327Z    ✨ Local Oracle recommends: GENERATE_PATCH
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.8415923Z    📊 Confidence: 74.9%
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.8416442Z    ⚛️ Consensus Fidelity: 74.9% (8 qubits)
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.8417418Z 🔮 Consulting Oracle (v3.0): Does the following patch for 'swarm/core/quantum_core.ts' align with Sovereign Axioms (Decentralization, Local-First, Security)?
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.8418102Z         PATCH: GENERATE_PATCH
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.8418420Z         Reply with AXIOMS_PASSED or AXIOMS_FAILED.
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.8436588Z    ✨ Local Oracle recommends: AXIOMS_PASSED
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.8437164Z    📊 Confidence: 41.7%
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.8437691Z    ⚛️ Consensus Fidelity: 41.7% (8 qubits)
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.8438347Z    🔍 [Realization] Oracle raw patch: GENERATE_PATCH...
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.8439050Z    ⚠️ [Realization] Oracle provided placeholder. Applying synthetic heartbeat.
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.8447777Z ✅ [AtomicPatcher] Patched swarm/core/quantum_core.ts successfully.
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.8456915Z    ⚛️ Phase 4: Quantum enhancement...
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.8458239Z 🔮 Consulting Oracle (v3.0): Determine the next quantum enhancement strategy for the Singularity Engine.
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.8481087Z    ✨ Local Oracle recommends: OPTIMIZE_EXISTING_COGNITION
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.8481745Z    📊 Confidence: 19.9%
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.8482238Z    ⚛️ Consensus Fidelity: 19.9% (8 qubits)
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.8482652Z    ⚛️ Quantum decision: OPTIMIZE_EXISTING_COGNITION
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.8483070Z    🌱 Phase 5: Evolving singularity state...
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.8484149Z 🔄 Reporting Outcome to Oracle 2.0: SUCCESS (singularity_cycle)
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.8489989Z ⚡ [SingularityEngine] Cycle complete! Progress: 16.1%
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.8490709Z    ✅ Cycle 1 complete. Progress: 16.1%
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.8491032Z 
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.8491530Z 🧠 Step 2: Recalibrating Quantum Neural Network (Neural Recalibration)...
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.8494265Z    🛠️ Prioritizing 1 files for Cognitive Complexity reduction.
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.8495306Z    ✨ Absorbed 6 patterns (Physical + Multiverse).
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.8496380Z 🧠 Quantum Neural Network: Training on 6 samples...
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.8502340Z Epoch 0: Error = 0.2932
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.8569173Z Epoch 20: Error = 0.2867
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.8626216Z Epoch 40: Error = 0.2867
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.8689076Z Epoch 60: Error = 0.2882
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.8712462Z Epoch 80: Error = 0.2894
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.8725379Z Epoch 100: Error = 0.2897
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.8736188Z Epoch 120: Error = 0.2884
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.8755351Z Epoch 140: Error = 0.2884
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.8772811Z Epoch 160: Error = 0.2889
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.8783920Z Epoch 180: Error = 0.2912
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.8794725Z ✅ Quantum training complete
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.8798798Z    ✅ Brain weight recalibration complete.
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.8799179Z 
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.8799615Z 🧬 Step 3: Evolving Quantum Hyperparameters...
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.8801850Z    ✅ Hyperparameter evolution complete.
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.8802234Z 
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.8802773Z 🔮 Step 4: Refreshing Oracle Guidance (Truth Anchor Axioms)...
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.8804746Z 🔮 Consulting Oracle (v3.0): Reality Scan Results: Build=true, LintErrors=0, SolanaPresent=true. FlaggedFiles count=1. 
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.8805792Z     Axiom: Confidence > 90% ONLY if solving verified build errors.
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.8806326Z     Direct the swarm for Phase 54 recursive healing loop.
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.8824862Z    ✨ Local Oracle recommends: REALITY_LOCK
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.8825479Z    📊 Confidence: 76.5%
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.8826039Z    ⚛️ Consensus Fidelity: 76.5% (8 qubits)
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.8826667Z    ✨ Oracle specifies: REALITY_LOCK
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.8827327Z    📊 Confidence: 98.8% (Truth Anchor Verified)
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.8827713Z 
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.8828069Z ======================================================================
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.8828877Z ✅ INTELLIGENCE PULSE COMPLETE - SYSTEM COHERENT
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.8829578Z ======================================================================
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.8830001Z 
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.8830599Z 💰 Sovereign Economy: TotalValue=10.0, Budget=105.0, Resolved=0
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.8876114Z 🌌 [Gateway] Initializing Multi-Transport Sovereign Gateway (OpenClaw Synthesis)...
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.8877624Z 📱 [Gateway] Caching update: "⚛️ *Intelligence Pulse*: Reality Scan Complete (Bu..."
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.8878234Z 
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.8878477Z 🔗 Step 6: Synchronizing Mesh State...
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.8881303Z 📡[P2P - RESONANCE] Broadcasting BOUNTY_SYNC to 0 peers...
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.8882227Z 📡[P2P - RESONANCE] Broadcasting ECONOMY_SYNC to 0 peers...
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.8884466Z 📡[P2P - RESONANCE] Broadcasting BRAIN_SYNC to 0 peers...
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.8885244Z    ✅ Mesh Sync Complete. Connected Peers: 0
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.8885593Z 
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.8886355Z 🚀 [EVOLUTION READY] Conditions met. Local states evolved. Pending Verification Pipeline...
+quantum-evolution	Run Quantum Evolution	2026-02-21T14:37:20.8887334Z 🏁 Intelligence Pulse Process Terminated.
+quantum-evolution	Run Synergy Scouting	﻿2026-02-21T14:37:20.9201516Z ##[group]Run npm run swarm:scout
+quantum-evolution	Run Synergy Scouting	2026-02-21T14:37:20.9202055Z [36;1mnpm run swarm:scout[0m
+quantum-evolution	Run Synergy Scouting	2026-02-21T14:37:20.9238350Z shell: /usr/bin/bash -e {0}
+quantum-evolution	Run Synergy Scouting	2026-02-21T14:37:20.9238617Z env:
+quantum-evolution	Run Synergy Scouting	2026-02-21T14:37:20.9238847Z   CARGO_HOME: /home/runner/.cargo
+quantum-evolution	Run Synergy Scouting	2026-02-21T14:37:20.9239116Z   CARGO_INCREMENTAL: 0
+quantum-evolution	Run Synergy Scouting	2026-02-21T14:37:20.9239338Z   CARGO_TERM_COLOR: always
+quantum-evolution	Run Synergy Scouting	2026-02-21T14:37:20.9239824Z   GH_TOKEN: ***
+quantum-evolution	Run Synergy Scouting	2026-02-21T14:37:20.9240026Z ##[endgroup]
+quantum-evolution	Run Synergy Scouting	2026-02-21T14:37:21.0180245Z 
+quantum-evolution	Run Synergy Scouting	2026-02-21T14:37:21.0180800Z > base44-app@0.0.0 swarm:scout
+quantum-evolution	Run Synergy Scouting	2026-02-21T14:37:21.0181546Z > npx tsx scripts/scout_synergy.ts
+quantum-evolution	Run Synergy Scouting	2026-02-21T14:37:21.0181830Z 
+quantum-evolution	Run Synergy Scouting	2026-02-21T14:37:21.4969281Z 🛰️ [Scout] Initiating GitHub Synergy Harvesting...
+quantum-evolution	Run Synergy Scouting	2026-02-21T14:37:21.4970297Z    🔍 Searching topic: autonomous agents
+quantum-evolution	Run Synergy Scouting	2026-02-21T14:37:21.9880648Z    🔍 Searching topic: quantum-inspired ai
+quantum-evolution	Run Synergy Scouting	2026-02-21T14:37:22.2937002Z    🔍 Searching topic: self-healing code
+quantum-evolution	Run Synergy Scouting	2026-02-21T14:37:22.6869569Z    🔍 Searching topic: multi-agent systems
+quantum-evolution	Run Synergy Scouting	2026-02-21T14:37:23.0277608Z    🔍 Searching topic: local-first software
+quantum-evolution	Run Synergy Scouting	2026-02-21T14:37:23.6238552Z ✅ [Scout] Synergy harvested: 15 potentials stored in src/data/synergy_scout.json
+quantum-evolution	Run Architectural Analysis	﻿2026-02-21T14:37:23.6535992Z ##[group]Run npm run swarm:analyze
+quantum-evolution	Run Architectural Analysis	2026-02-21T14:37:23.6536322Z [36;1mnpm run swarm:analyze[0m
+quantum-evolution	Run Architectural Analysis	2026-02-21T14:37:23.6568718Z shell: /usr/bin/bash -e {0}
+quantum-evolution	Run Architectural Analysis	2026-02-21T14:37:23.6568974Z env:
+quantum-evolution	Run Architectural Analysis	2026-02-21T14:37:23.6569174Z   CARGO_HOME: /home/runner/.cargo
+quantum-evolution	Run Architectural Analysis	2026-02-21T14:37:23.6569440Z   CARGO_INCREMENTAL: 0
+quantum-evolution	Run Architectural Analysis	2026-02-21T14:37:23.6569659Z   CARGO_TERM_COLOR: always
+quantum-evolution	Run Architectural Analysis	2026-02-21T14:37:23.6569891Z ##[endgroup]
+quantum-evolution	Run Architectural Analysis	2026-02-21T14:37:23.7510032Z 
+quantum-evolution	Run Architectural Analysis	2026-02-21T14:37:23.7510622Z > base44-app@0.0.0 swarm:analyze
+quantum-evolution	Run Architectural Analysis	2026-02-21T14:37:23.7511181Z > npx tsx scripts/analyze_antigravity.ts
+quantum-evolution	Run Architectural Analysis	2026-02-21T14:37:23.7511472Z 
+quantum-evolution	Run Architectural Analysis	2026-02-21T14:37:24.2162012Z 🔍 [Reverse-Engineer] Analyzing Repository-Wide Antigravity Patterns...
+quantum-evolution	Run Architectural Analysis	2026-02-21T14:37:24.2786497Z ✅ [Reverse-Engineer] Blueprint generated: /home/runner/work/appforge/appforge/src/data/antigravity_blueprint.json
+quantum-evolution	Run Singularity Verification	﻿2026-02-21T14:37:24.3110098Z ##[group]Run npx tsx scripts/verify_evolution.ts
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:24.3110837Z [36;1mnpx tsx scripts/verify_evolution.ts[0m
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:24.3154725Z shell: /usr/bin/bash -e {0}
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:24.3155150Z env:
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:24.3155474Z   CARGO_HOME: /home/runner/.cargo
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:24.3155931Z   CARGO_INCREMENTAL: 0
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:24.3175655Z   CARGO_TERM_COLOR: always
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:24.3176137Z   TRUE_AI_INDEPENDENCE: true
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:24.3176393Z ##[endgroup]
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:24.8879394Z 🌌 Quantum Engine v3.5 [Deep Resonance] Online
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:24.8897749Z 🧬 [VerifyEvolution] Initializing Singularity Verification...
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:24.8902220Z 📊 Initial Progress: 11.0%
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:24.8902835Z 🌱 Initial Phase: awakening
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:24.8903248Z 
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:24.8903695Z 🔄 Executing manual Self-Improvement Cycle...
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:24.8904856Z ⚡ [SingularityEngine] Starting self-improvement cycle...
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:24.8905794Z    🎯 Phase 0: Reality sensing & objective synthesis...
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:24.8907529Z 📡 [RealitySensor] Scanning Quantum Mesh environment...
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:24.9114323Z    🔍 [GitHub] Monitoring repository health...
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:24.9120572Z    ⚠️ [RealitySensor] Failed to parse lint output: Unexpected token '>', "
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:24.9121481Z > base44-a"... is not valid JSON
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:24.9122457Z    🤖 [CI] Active Run detected: 22258579738
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:24.9124058Z     telescope [Synergy] Harvested Pattern: cherry-studio (39994 stars)
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:24.9136206Z 📚 [Quantum] Loaded 1 saved states
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:24.9139420Z 📚 [Quantum] Loaded Oracle learning state
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.0452241Z ⚠️ [Jupiter] Wallet/RPC not configured - simulation fallback remains enabled.
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.1474004Z    📈 [Market] Real SOL Price: $86.32
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.1483463Z    🔋 [System] Hardware Stress detected: Load=2.42
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.1484736Z    🎯 [Inception] Synthesizing objectives from 5 environmental signals...
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.1485696Z    ✨ [Consensus] Multi-node reasoning score: 1.00
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.1489691Z 🔮 Consulting Oracle (v3.0): Think step-by-step to incept a DOMAIN-SPECIFIC EXPERT objective for signal: {"source":"github","type":"UNCOMMITTED_CHANGES","intensity":0.6,"payload":{"files":["M src/data/quantum_brain_state.json"," M src/data/quantum_hyperparameters.json"," M src/data/quantum_oracle_state.json"," M swarm/core/quantum_core.ts"]},"timestamp":"2026-02-21T14:37:24.911Z"}. 
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.1492488Z                 Peer Insights: [].
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.1493060Z                 Format: EXPERT_[ExpertName]: [Action]
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.1563307Z 📡[P2P - RESONANCE] Broadcasting HOLOGRAPHIC_SYNC to 0 peers...
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.1564574Z    🌌 [DistributedPersistence] Broadcasted holographic memory to mesh.
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.1565550Z    ✨ Local Oracle recommends: EXPERT_ARCHITECT: Refactor core
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.1566208Z    📊 Confidence: 99.0%
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.1566753Z    ⚛️ Consensus Fidelity: 99.5% (8 qubits)
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.1567850Z    ✨ [Expert Swarm] New Objective: EXPERT_ARCHITECT: Refactor core
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.1574694Z    ✨ [Consensus] Multi-node reasoning score: 1.00
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.1577695Z 🔮 Consulting Oracle (v3.0): Think step-by-step to incept a DOMAIN-SPECIFIC EXPERT objective for signal: {"source":"system","type":"CI_ACTIVE","intensity":0.5,"payload":{"runId":"22258579738","event":"schedule","actor":"fernandogarzaaa"},"timestamp":"2026-02-21T14:37:24.912Z"}. 
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.1579722Z                 Peer Insights: [].
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.1580323Z                 Format: EXPERT_[ExpertName]: [Action]
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.1634515Z 📡[P2P - RESONANCE] Broadcasting HOLOGRAPHIC_SYNC to 0 peers...
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.1635711Z    🌌 [DistributedPersistence] Broadcasted holographic memory to mesh.
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.1636812Z    ✨ Local Oracle recommends: EXPERT_ARCHITECT: Refactor core
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.1637587Z    📊 Confidence: 99.0%
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.1638225Z    ⚛️ Consensus Fidelity: 128.2% (8 qubits)
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.1639574Z    ✨ [Expert Swarm] New Objective: EXPERT_ARCHITECT: Refactor core
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.1642556Z    ✨ [Consensus] Multi-node reasoning score: 1.00
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.1647895Z 🔮 Consulting Oracle (v3.0): Think step-by-step to incept a DOMAIN-SPECIFIC EXPERT objective for signal: {"source":"synergy","type":"SYNERGY_HARVESTED","intensity":0.85,"payload":{"topic":"autonomous agents","name":"cherry-studio","description":"AI productivity studio with smart chat, autonomous agents, and 300+ assistants. Unified access to frontier LLMs","stars":39994,"url":"https://github.com/CherryHQ/cherry-studio","scoutedAt":"2026-02-21T14:37:21.987Z"},"timestamp":"2026-02-21T14:37:24.912Z"}. 
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.1651444Z                 Peer Insights: [].
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.1652037Z                 Format: EXPERT_[ExpertName]: [Action]
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.1705565Z 📡[P2P - RESONANCE] Broadcasting HOLOGRAPHIC_SYNC to 0 peers...
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.1706765Z    🌌 [DistributedPersistence] Broadcasted holographic memory to mesh.
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.1707969Z    ✨ Local Oracle recommends: EXPERT_ARCHITECT: Refactor core
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.1708706Z    📊 Confidence: 99.0%
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.1709438Z    ⚛️ Consensus Fidelity: 150.5% (8 qubits)
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.1710356Z    ✨ [Expert Swarm] New Objective: EXPERT_ARCHITECT: Refactor core
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.1714331Z    ✨ [Consensus] Multi-node reasoning score: 1.00
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.1717334Z 🔮 Consulting Oracle (v3.0): Think step-by-step to incept a DOMAIN-SPECIFIC EXPERT objective for signal: {"source":"market","type":"SOL_PRICE_PULSE","intensity":0.17263637012046304,"payload":{"asset":"SOL","priceUsd":86.31818506023151},"timestamp":"2026-02-21T14:37:25.147Z"}. 
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.1719368Z                 Peer Insights: [].
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.1719955Z                 Format: EXPERT_[ExpertName]: [Action]
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.1745970Z 📡[P2P - RESONANCE] Broadcasting HOLOGRAPHIC_SYNC to 0 peers...
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.1747154Z    🌌 [DistributedPersistence] Broadcasted holographic memory to mesh.
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.1748012Z    ✨ Local Oracle recommends: EXPERT_ARCHITECT: Refactor core
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.1748650Z    📊 Confidence: 99.0%
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.1749153Z    ⚛️ Consensus Fidelity: 204.2% (8 qubits)
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.1749793Z    ✨ [Expert Swarm] New Objective: EXPERT_ARCHITECT: Refactor core
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.1752716Z    ✨ [Consensus] Multi-node reasoning score: 1.00
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.1755688Z 🔮 Consulting Oracle (v3.0): Think step-by-step to incept a DOMAIN-SPECIFIC EXPERT objective for signal: {"source":"system","type":"HARDWARE_STRESS","intensity":0.3025,"payload":{"load":2.42,"freeMemPct":93.32862032677063},"timestamp":"2026-02-21T14:37:25.148Z"}. 
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.1757070Z                 Peer Insights: [].
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.1757417Z                 Format: EXPERT_[ExpertName]: [Action]
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.1800306Z 📡[P2P - RESONANCE] Broadcasting HOLOGRAPHIC_SYNC to 0 peers...
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.1801402Z    🌌 [DistributedPersistence] Broadcasted holographic memory to mesh.
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.1802696Z    ✨ Local Oracle recommends: EXPERT_ARCHITECT: Refactor core
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.1803385Z    📊 Confidence: 99.0%
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.1804131Z    ⚛️ Consensus Fidelity: 241.3% (8 qubits)
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.1804957Z    ✨ [Expert Swarm] New Objective: EXPERT_ARCHITECT: Refactor core
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.1808274Z    🧠 Phase 1: Self-assessment...
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.1811918Z    🔍 Phase 2: Identifying improvement areas...
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.1813451Z 🔮 Consulting Oracle (v3.0): Identify the most critical evolutionary track to improve the Swarm's overall coherence and efficiency.
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.1850096Z 📡[P2P - RESONANCE] Broadcasting HOLOGRAPHIC_SYNC to 0 peers...
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.1851118Z    🌌 [DistributedPersistence] Broadcasted holographic memory to mesh.
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.1851920Z    ✨ Local Oracle recommends: creativity
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.1852453Z    📊 Confidence: 10.2%
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.1853229Z    ⚛️ Consensus Fidelity: 10.2% (8 qubits)
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.1854028Z    ⚙️ Phase 3: Executing improvements...
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.1854792Z    🛠️ Phase 3.5: Realizing improvements in source code...
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.1869058Z    💎 [Bounty] Selected high-priority task: [Neural Accelerator] EXPERT_ARCHITECT: Refactor core (Coherence: 1.00) (Reward: 85)
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.1872635Z 🔮 Consulting Oracle (v3.0): Generate a specific, safe, and effective code improvement for the file 'swarm/core/quantum_core.ts' to achieve the goal: [Neural Accelerator] EXPERT_ARCHITECT: Refactor core (Coherence: 1.00). 
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.1874314Z         🛡️ SOVEREIGN AXIOMS: Ensure the change promotes Decentralization, Local-First operation, and Privacy.
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.1875332Z         Return ONLY a JSON object with 'targetContent' (existing code block to replace) and 'replacementContent' (new code block).
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.1876186Z         Ensure whitespace and indentation match exactly what is in the repository.
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.1910437Z 📡[P2P - RESONANCE] Broadcasting HOLOGRAPHIC_SYNC to 0 peers...
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.1911549Z    🌌 [DistributedPersistence] Broadcasted holographic memory to mesh.
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.1912276Z    ✨ Local Oracle recommends: GENERATE_PATCH
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.1912660Z    📊 Confidence: 64.9%
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.1913016Z    ⚛️ Consensus Fidelity: 64.9% (8 qubits)
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.1914399Z 🔮 Consulting Oracle (v3.0): Does the following patch for 'swarm/core/quantum_core.ts' align with Sovereign Axioms (Decentralization, Local-First, Security)?
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.1915302Z         PATCH: GENERATE_PATCH
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.1915701Z         Reply with AXIOMS_PASSED or AXIOMS_FAILED.
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.1952683Z 📡[P2P - RESONANCE] Broadcasting HOLOGRAPHIC_SYNC to 0 peers...
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.1954055Z    🌌 [DistributedPersistence] Broadcasted holographic memory to mesh.
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.1955072Z    ✨ Local Oracle recommends: AXIOMS_PASSED
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.1955736Z    📊 Confidence: 65.5%
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.1956391Z    ⚛️ Consensus Fidelity: 65.5% (8 qubits)
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.1957145Z    🔍 [Realization] Oracle raw patch: GENERATE_PATCH...
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.1957954Z    ⚠️ [Realization] Oracle provided placeholder. Applying synthetic heartbeat.
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.1964456Z ✅ [AtomicPatcher] Patched swarm/core/quantum_core.ts successfully.
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.1974541Z    ⚛️ Phase 4: Quantum enhancement...
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.1976037Z 🔮 Consulting Oracle (v3.0): Determine the next quantum enhancement strategy for the Singularity Engine.
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.1995934Z 📡[P2P - RESONANCE] Broadcasting HOLOGRAPHIC_SYNC to 0 peers...
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.1997267Z    🌌 [DistributedPersistence] Broadcasted holographic memory to mesh.
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.1998471Z    ✨ Local Oracle recommends: EXPLORE_NEW_FRONTIERS
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.1999356Z    📊 Confidence: 33.2%
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.2000124Z    ⚛️ Consensus Fidelity: 33.2% (8 qubits)
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.2000782Z    ⚛️ Quantum decision: EXPLORE_NEW_FRONTIERS
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.2001629Z    🌱 Phase 5: Evolving singularity state...
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.2002216Z 🔄 Reporting Outcome to Oracle 2.0: SUCCESS (singularity_cycle)
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.2011611Z 📡[P2P - RESONANCE] Broadcasting HOLOGRAPHIC_SYNC to 0 peers...
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.2012635Z    🌌 [DistributedPersistence] Broadcasted holographic memory to mesh.
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.2013617Z ⚡ [SingularityEngine] Cycle complete! Progress: 16.1%
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.2014430Z ✅ Cycle successful.
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.2014892Z ✨ Improvements applied:
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.2015478Z    → Track reasoning: Performance score 60.0%
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.2016136Z    → Track creativity: Performance score 60.0%
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.2016780Z    → Track learning: Performance score 60.0%
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.2017403Z    → Track adaptation: Performance score 60.0%
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.2018117Z    → Track optimization: Performance score 60.0%
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.2018860Z    → Track kimi_acceleration: Performance score 60.0%
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.2019768Z    → Overall intelligence level: 66.0%
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.2020235Z    → Self-awareness level: 15.0%
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.2020551Z    → Selected focus: creativity
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.2020834Z    → Divergent thinking
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.2021104Z    → Metaphor generation
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.2021383Z    → Creative synthesis
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.2021711Z    → Track reasoning: 3 real improvements applied
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.2022119Z    → Track creativity: 3 real improvements applied
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.2022545Z    → Track learning: 3 real improvements applied
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.2022940Z    → Track adaptation: 3 real improvements applied
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.2023346Z    → Track optimization: 3 real improvements applied
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.2023778Z    → Track kimi_acceleration: 1 real improvements applied
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.2024649Z    → Applied synthetic heartbeat to swarm/core/quantum_core.ts (Sovereign Continuity)
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.2025005Z 
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.2025151Z 📊 Final Progress: 16.1%
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.2025484Z 🌱 Final Phase: awakening
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.2025643Z 
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.2025820Z 🚀 SUCCESS: The Swarm has evolved.
+quantum-evolution	Run Singularity Verification	2026-02-21T14:37:25.2026187Z ✅ Reality Pulse context found in memory.
+quantum-evolution	Upload Evolution Artifacts	﻿2026-02-21T14:37:25.2362681Z ##[group]Run actions/upload-artifact@v4
+quantum-evolution	Upload Evolution Artifacts	2026-02-21T14:37:25.2362993Z with:
+quantum-evolution	Upload Evolution Artifacts	2026-02-21T14:37:25.2363200Z   name: quantum-evolution-191
+quantum-evolution	Upload Evolution Artifacts	2026-02-21T14:37:25.2363554Z   path: src/data/quantum_state.json
+quantum-evolution	Upload Evolution Artifacts	src/data/quantum_predictions.json
+quantum-evolution	Upload Evolution Artifacts	
+quantum-evolution	Upload Evolution Artifacts	2026-02-21T14:37:25.2364236Z   retention-days: 30
+quantum-evolution	Upload Evolution Artifacts	2026-02-21T14:37:25.2364468Z   if-no-files-found: warn
+quantum-evolution	Upload Evolution Artifacts	2026-02-21T14:37:25.2364706Z   compression-level: 6
+quantum-evolution	Upload Evolution Artifacts	2026-02-21T14:37:25.2364921Z   overwrite: false
+quantum-evolution	Upload Evolution Artifacts	2026-02-21T14:37:25.2365131Z   include-hidden-files: false
+quantum-evolution	Upload Evolution Artifacts	2026-02-21T14:37:25.2365356Z env:
+quantum-evolution	Upload Evolution Artifacts	2026-02-21T14:37:25.2365545Z   CARGO_HOME: /home/runner/.cargo
+quantum-evolution	Upload Evolution Artifacts	2026-02-21T14:37:25.2365786Z   CARGO_INCREMENTAL: 0
+quantum-evolution	Upload Evolution Artifacts	2026-02-21T14:37:25.2366001Z   CARGO_TERM_COLOR: always
+quantum-evolution	Upload Evolution Artifacts	2026-02-21T14:37:25.2366221Z ##[endgroup]
+quantum-evolution	Upload Evolution Artifacts	2026-02-21T14:37:25.4506573Z Multiple search paths detected. Calculating the least common ancestor of all paths
+quantum-evolution	Upload Evolution Artifacts	2026-02-21T14:37:25.4510894Z The least common ancestor is /home/runner/work/appforge/appforge/src/data. This will be the root directory of the artifact
+quantum-evolution	Upload Evolution Artifacts	2026-02-21T14:37:25.4512241Z With the provided path, there will be 2 files uploaded
+quantum-evolution	Upload Evolution Artifacts	2026-02-21T14:37:25.4518057Z Artifact name is valid!
+quantum-evolution	Upload Evolution Artifacts	2026-02-21T14:37:25.4519391Z Root directory input is valid!
+quantum-evolution	Upload Evolution Artifacts	2026-02-21T14:37:25.5857725Z Beginning upload of artifact content to blob storage
+quantum-evolution	Upload Evolution Artifacts	2026-02-21T14:37:25.6914509Z Uploaded bytes 688
+quantum-evolution	Upload Evolution Artifacts	2026-02-21T14:37:25.7208926Z Finished uploading artifact content to blob storage!
+quantum-evolution	Upload Evolution Artifacts	2026-02-21T14:37:25.7213449Z SHA256 digest of uploaded artifact zip is 4752ef25e7e3983ff269d49fe317d054ea6726486aa715959d40ce51b39758c1
+quantum-evolution	Upload Evolution Artifacts	2026-02-21T14:37:25.7216587Z Finalizing artifact upload
+quantum-evolution	Upload Evolution Artifacts	2026-02-21T14:37:25.8157935Z Artifact quantum-evolution-191.zip successfully finalized. Artifact ID 5601724110
+quantum-evolution	Upload Evolution Artifacts	2026-02-21T14:37:25.8160370Z Artifact quantum-evolution-191 has been successfully uploaded! Final size is 688 bytes. Artifact ID is 5601724110
+quantum-evolution	Upload Evolution Artifacts	2026-02-21T14:37:25.8168002Z Artifact download URL: https://github.com/fernandogarzaaa/appforge/actions/runs/22258579738/artifacts/5601724110
+quantum-evolution	Commit Evolution Results	﻿2026-02-21T14:37:25.8288121Z ##[group]Run git config --global user.name "Quantum Engine"
+quantum-evolution	Commit Evolution Results	2026-02-21T14:37:25.8288848Z [36;1mgit config --global user.name "Quantum Engine"[0m
+quantum-evolution	Commit Evolution Results	2026-02-21T14:37:25.8289579Z [36;1mgit config --global user.email "quantum@appforge.bot"[0m
+quantum-evolution	Commit Evolution Results	2026-02-21T14:37:25.8290251Z [36;1mgit pull --rebase origin main[0m
+quantum-evolution	Commit Evolution Results	2026-02-21T14:37:25.8290778Z [36;1mgit add -f src/data/*.json[0m
+quantum-evolution	Commit Evolution Results	2026-02-21T14:37:25.8291277Z [36;1mgit add -f src/**/*.ts[0m
+quantum-evolution	Commit Evolution Results	2026-02-21T14:37:25.8291747Z [36;1mgit add -f apps/**/*.ts[0m
+quantum-evolution	Commit Evolution Results	2026-02-21T14:37:25.8292220Z [36;1mgit add -f backend/**/*.ts[0m
+quantum-evolution	Commit Evolution Results	2026-02-21T14:37:25.8292706Z [36;1mgit add -f swarm/**/*.ts[0m
+quantum-evolution	Commit Evolution Results	2026-02-21T14:37:25.8293187Z [36;1mgit add -f docs/brain/*.md[0m
+quantum-evolution	Commit Evolution Results	2026-02-21T14:37:25.8293669Z [36;1mgit add -f build_logs.txt[0m
+quantum-evolution	Commit Evolution Results	2026-02-21T14:37:25.8294390Z [36;1mgit add -f lint_output.json[0m
+quantum-evolution	Commit Evolution Results	2026-02-21T14:37:25.8295466Z [36;1mgit commit -m "chore: quantum self-evolution [Inception] [Bounty Sync] [Synergy] [skip ci]" || echo "No changes to commit"[0m
+quantum-evolution	Commit Evolution Results	2026-02-21T14:37:25.8296592Z [36;1mgit push[0m
+quantum-evolution	Commit Evolution Results	2026-02-21T14:37:25.8341965Z shell: /usr/bin/bash -e {0}
+quantum-evolution	Commit Evolution Results	2026-02-21T14:37:25.8342411Z env:
+quantum-evolution	Commit Evolution Results	2026-02-21T14:37:25.8342769Z   CARGO_HOME: /home/runner/.cargo
+quantum-evolution	Commit Evolution Results	2026-02-21T14:37:25.8343261Z   CARGO_INCREMENTAL: 0
+quantum-evolution	Commit Evolution Results	2026-02-21T14:37:25.8343682Z   CARGO_TERM_COLOR: always
+quantum-evolution	Commit Evolution Results	2026-02-21T14:37:25.8344302Z ##[endgroup]
+quantum-evolution	Commit Evolution Results	2026-02-21T14:37:25.8524436Z error: cannot pull with rebase: You have unstaged changes.
+quantum-evolution	Commit Evolution Results	2026-02-21T14:37:25.8527669Z error: Please commit or stash them.
+quantum-evolution	Commit Evolution Results	2026-02-21T14:37:25.8544222Z ##[error]Process completed with exit code 128.
+quantum-evolution	Post Checkout Code	﻿2026-02-21T14:37:25.8628147Z Post job cleanup.
+quantum-evolution	Post Checkout Code	2026-02-21T14:37:25.9576512Z [command]/usr/bin/git version
+quantum-evolution	Post Checkout Code	2026-02-21T14:37:25.9612826Z git version 2.52.0
+quantum-evolution	Post Checkout Code	2026-02-21T14:37:25.9649176Z Copying '/home/runner/.gitconfig' to '/home/runner/work/_temp/582dddee-0e1a-402f-8bed-ba6ef0514a74/.gitconfig'
+quantum-evolution	Post Checkout Code	2026-02-21T14:37:25.9659462Z Temporarily overriding HOME='/home/runner/work/_temp/582dddee-0e1a-402f-8bed-ba6ef0514a74' before making global git config changes
+quantum-evolution	Post Checkout Code	2026-02-21T14:37:25.9660810Z Adding repository directory to the temporary git global config as a safe directory
+quantum-evolution	Post Checkout Code	2026-02-21T14:37:25.9664846Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/appforge/appforge
+quantum-evolution	Post Checkout Code	2026-02-21T14:37:25.9700265Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+quantum-evolution	Post Checkout Code	2026-02-21T14:37:25.9731508Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+quantum-evolution	Post Checkout Code	2026-02-21T14:37:25.9970264Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+quantum-evolution	Post Checkout Code	2026-02-21T14:37:25.9991348Z http.https://github.com/.extraheader
+quantum-evolution	Post Checkout Code	2026-02-21T14:37:26.0003966Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+quantum-evolution	Post Checkout Code	2026-02-21T14:37:26.0034492Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+quantum-evolution	Post Checkout Code	2026-02-21T14:37:26.0266202Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+quantum-evolution	Post Checkout Code	2026-02-21T14:37:26.0297670Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+quantum-evolution	Complete job	﻿2026-02-21T14:37:26.0637704Z Cleaning up orphan processes

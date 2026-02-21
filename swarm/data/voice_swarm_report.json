@@ -1,31 +1,31 @@
 {
-  "timestamp": "2026-02-20T20:44:09.866Z",
+  "timestamp": "2026-02-21T19:41:13.013Z",
   "processed": 4,
-  "autoResolved": 4,
+  "autoResolved": 3,
   "escalated": 0,
   "upgradeOffers": 0,
-  "followUps": 0,
+  "followUps": 1,
   "recommendations": [
     {
-      "ticketId": "voice_1771618417796_1",
+      "ticketId": "voice_1771702872700_1",
+      "action": "create_followup",
+      "confidence": 0.11099545864758767,
+      "recommendation": "AUTO_RESOLVE with clear instructions and confirmation follow-up"
+    },
+    {
+      "ticketId": "voice_1771702872700_2",
+      "action": "auto_resolve",
+      "confidence": 0.9530529058103612,
+      "recommendation": "AUTO_RESOLVE with clear instructions and confirmation follow-up"
+    },
+    {
+      "ticketId": "voice_1771702872700_3",
       "action": "auto_resolve",
       "confidence": 0.99,
       "recommendation": "AUTO_RESOLVE with clear instructions and confirmation follow-up"
     },
     {
-      "ticketId": "voice_1771618417796_2",
-      "action": "auto_resolve",
-      "confidence": 0.99,
-      "recommendation": "AUTO_RESOLVE with clear instructions and confirmation follow-up"
-    },
-    {
-      "ticketId": "voice_1771618417796_3",
-      "action": "auto_resolve",
-      "confidence": 0.99,
-      "recommendation": "AUTO_RESOLVE with clear instructions and confirmation follow-up"
-    },
-    {
-      "ticketId": "voice_1771618417796_4",
+      "ticketId": "voice_1771702872700_4",
       "action": "auto_resolve",
       "confidence": 0.99,
       "recommendation": "AUTO_RESOLVE with clear instructions and confirmation follow-up"

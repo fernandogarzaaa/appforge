@@ -1,0 +1,23 @@
+≡ƒîî Quantum Engine v3.5 [Deep Resonance] Online
+=========================================
+≡ƒÜÇ STARTING FRONTEND QA SWARM ≡ƒÜÇ
+=========================================
+
+≡ƒîî Quantum Engine v3.5 [Deep Resonance] Online
+
+≡ƒææ [QADirector] Initiating QA Swarm Workflow for: Sovereign Wallet or Connect Button at http://localhost:5173
+≡ƒò╡∩╕Å [QAScoutAgent] Scouting route: http://localhost:5173
+[BrowserTool] Action: scan on http://localhost:5173
+≡ƒôÜ [Quantum] Loaded Oracle learning state
+≡ƒôÜ [Quantum] Loaded 1 saved states
+≡ƒôÜ [Quantum] Loaded 1 saved states
+≡ƒôÜ [Quantum] Loaded Oracle learning state
+[BrowserTool] Waiting for selector: #root (attached state)
+[BrowserTool] Debug screenshot saved to: C:\Users\ferna\Downloads\appforge-main\swarm\data\qa_scan_1771700035862.png
+≡ƒò╡∩╕Å [QAScoutAgent] Tool Error: Browser action failed: page.evaluate: ReferenceError: __name is not defined
+    at eval (eval at evaluate (:290:30), <anonymous>:1:27)
+    at UtilityScript.evaluate (<anonymous>:292:16)
+    at UtilityScript.<anonymous> (<anonymous>:1:44)
+≡ƒææ [QADirector] Workflow aborted: Scout failed to map the DOM.
+
+Γ£à [Swarm Execution] QA Swarm execution completed successfully.

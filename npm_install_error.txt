@@ -1,0 +1,7 @@
+npm error code EBUSY
+npm error syscall rename
+npm error path C:\Users\ferna\Downloads\appforge-main\node_modules\electron\dist\v8_context_snapshot.bin
+npm error dest C:\Users\ferna\Downloads\appforge-main\node_modules\.electron-j0mZphZP\dist\v8_context_snapshot.bin
+npm error errno -4082
+npm error EBUSY: resource busy or locked, rename 'C:\Users\ferna\Downloads\appforge-main\node_modules\electron\dist\v8_context_snapshot.bin' -> 'C:\Users\ferna\Downloads\appforge-main\node_modules\.electron-j0mZphZP\dist\v8_context_snapshot.bin'
+npm error A complete log of this run can be found in: C:\Users\ferna\AppData\Local\npm-cache\_logs\2026-02-21T15_38_37_823Z-debug-0.log
