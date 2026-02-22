@@ -1,4 +1,4 @@
-"""Minimal MCP-compatible JSON-RPC server with HTTP and WebSocket transports.
+"""AppForge MCP server: JSON-RPC 2.0 over HTTP/WebSocket.
 
 Run:
   uvicorn mcp_server.server:app --host 0.0.0.0 --port 8000
@@ -17,10 +17,36 @@ from jsonschema import ValidationError, validate
 from pydantic import BaseModel
 
 JSONRPC_VERSION = "2.0"
-SERVER_INFO = {"name": "appforge-mcp", "version": "0.1.0"}
-
+PROTOCOL_VERSION = "2024-11-05"
 APP_ROOT = Path(__file__).resolve().parents[1]
-SAFE_READ_ROOT = APP_ROOT
+
+SERVER_INFO = {
+    "name": "appforge-mcp",
+    "version": "0.2.0",
+    "description": "Repo-aware MCP server for AppForge",
+}
+
+TOOL_RESULT_SCHEMA = {
+    "type": "object",
+    "properties": {
+        "content": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "type": {"type": "string"},
+                    "text": {"type": "string"},
+                },
+                "required": ["type", "text"],
+                "additionalProperties": True,
+            },
+        },
+        "structuredContent": {"type": "object"},
+        "isError": {"type": "boolean"},
+    },
+    "required": ["content", "structuredContent", "isError"],
+    "additionalProperties": True,
+}
 
 
 class JsonRpcEnvelope(BaseModel):
@@ -61,10 +87,55 @@ class ToolRegistry:
             raise ValueError(f"Unknown tool: {name}")
         definition, handler = self._tools[name]
         validate(instance=arguments, schema=definition.input_schema)
-        return await handler(arguments)
+        result = await handler(arguments)
+        validate(instance=result, schema=TOOL_RESULT_SCHEMA)
+        return result
 
 
 registry = ToolRegistry()
+
+
+def _load_package_json() -> dict[str, Any]:
+    pkg_file = APP_ROOT / "package.json"
+    if not pkg_file.exists():
+        return {}
+    return json.loads(pkg_file.read_text(encoding="utf-8"))
+
+
+def _project_scan() -> dict[str, Any]:
+    pkg = _load_package_json()
+    scripts = pkg.get("scripts", {})
+    deps = pkg.get("dependencies", {})
+    dev_deps = pkg.get("devDependencies", {})
+
+    swarm_scripts = sorted([k for k in scripts if k.startswith("swarm:")])
+    test_scripts = sorted([k for k in scripts if k.startswith("test")])
+
+    key_paths = [
+        "backend",
+        "docs",
+        "functions",
+        "quantum-core",
+        "scripts",
+        "src",
+        "swarm",
+        "sovereign-ui",
+    ]
+    existing_paths = [p for p in key_paths if (APP_ROOT / p).exists()]
+
+    return {
+        "name": pkg.get("name", "unknown"),
+        "version": pkg.get("version", "unknown"),
+        "scriptCount": len(scripts),
+        "dependencyCount": len(deps),
+        "devDependencyCount": len(dev_deps),
+        "swarmScripts": swarm_scripts,
+        "testScripts": test_scripts,
+        "keyPaths": existing_paths,
+    }
+
+
+PROJECT_SCAN = _project_scan()
 
 
 async def tool_calculator(args: dict[str, Any]) -> dict[str, Any]:
@@ -92,71 +163,146 @@ async def tool_calculator(args: dict[str, Any]) -> dict[str, Any]:
     value = eval(compile(parsed, "<calculator>", "eval"), {"__builtins__": {}}, {})
     return {
         "content": [{"type": "text", "text": str(value)}],
-        "structuredContent": {"value": value},
+        "structuredContent": {"value": value, "expression": expression},
         "isError": False,
     }
 
 
-async def tool_web_search(args: dict[str, Any]) -> dict[str, Any]:
-    query = args["query"].strip().lower()
-    corpus = [
-        {"title": "Model Context Protocol", "url": "https://modelcontextprotocol.io", "snippet": "Open protocol for tool and context exchange."},
-        {"title": "JSON-RPC 2.0", "url": "https://www.jsonrpc.org/specification", "snippet": "Lightweight remote procedure call protocol."},
-        {"title": "FastAPI", "url": "https://fastapi.tiangolo.com", "snippet": "Modern async web framework for Python APIs."},
-    ]
-    hits = [item for item in corpus if query in item["title"].lower() or query in item["snippet"].lower()]
+async def tool_repo_overview(_: dict[str, Any]) -> dict[str, Any]:
+    summary = {
+        "repo": PROJECT_SCAN["name"],
+        "version": PROJECT_SCAN["version"],
+        "scriptCount": PROJECT_SCAN["scriptCount"],
+        "dependencyCount": PROJECT_SCAN["dependencyCount"],
+        "devDependencyCount": PROJECT_SCAN["devDependencyCount"],
+        "keyPaths": PROJECT_SCAN["keyPaths"],
+        "swarmScriptCount": len(PROJECT_SCAN["swarmScripts"]),
+    }
     return {
-        "content": [{"type": "text", "text": json.dumps(hits, indent=2)}],
-        "structuredContent": {"results": hits},
+        "content": [{"type": "text", "text": json.dumps(summary, indent=2)}],
+        "structuredContent": summary,
+        "isError": False,
+    }
+
+
+async def tool_swarm_scripts(args: dict[str, Any]) -> dict[str, Any]:
+    keyword = args.get("keyword", "").lower()
+    scripts = PROJECT_SCAN["swarmScripts"]
+    if keyword:
+        scripts = [s for s in scripts if keyword in s.lower()]
+    payload = {"count": len(scripts), "scripts": scripts}
+    return {
+        "content": [{"type": "text", "text": json.dumps(payload, indent=2)}],
+        "structuredContent": payload,
+        "isError": False,
+    }
+
+
+async def tool_repo_search(args: dict[str, Any]) -> dict[str, Any]:
+    query = args["query"].lower()
+    subpath = args.get("path", ".")
+    max_hits = args.get("max_hits", 20)
+
+    base = (APP_ROOT / subpath).resolve()
+    if not str(base).startswith(str(APP_ROOT.resolve())):
+        raise ValueError("Search path escapes repository root")
+    if not base.exists() or not base.is_dir():
+        raise ValueError("Search path not found")
+
+    hits: list[dict[str, Any]] = []
+    for file in base.rglob("*"):
+        if len(hits) >= max_hits:
+            break
+        if not file.is_file():
+            continue
+        if any(part in {"node_modules", ".git", "dist", "coverage"} for part in file.parts):
+            continue
+        try:
+            text = file.read_text(encoding="utf-8", errors="ignore")
+        except OSError:
+            continue
+        idx = text.lower().find(query)
+        if idx == -1:
+            continue
+        snippet_start = max(0, idx - 80)
+        snippet_end = min(len(text), idx + 160)
+        snippet = text[snippet_start:snippet_end].replace("\n", " ")
+        hits.append({"file": str(file.relative_to(APP_ROOT)), "snippet": snippet})
+
+    payload = {"query": query, "count": len(hits), "hits": hits}
+    return {
+        "content": [{"type": "text", "text": json.dumps(payload, indent=2)}],
+        "structuredContent": payload,
         "isError": False,
     }
 
 
 async def tool_file_read(args: dict[str, Any]) -> dict[str, Any]:
-    rel_path = Path(args["path"]).as_posix()
-    target = (SAFE_READ_ROOT / rel_path).resolve()
-    if not str(target).startswith(str(SAFE_READ_ROOT.resolve())):
-        raise ValueError("Path escapes allowed root")
+    rel_path = Path(args["path"])
+    max_chars = args.get("max_chars", 4000)
+    target = (APP_ROOT / rel_path).resolve()
+    if not str(target).startswith(str(APP_ROOT.resolve())):
+        raise ValueError("Path escapes repository root")
     if not target.exists() or not target.is_file():
         raise ValueError("File not found")
-    text = target.read_text(encoding="utf-8")
+    text = target.read_text(encoding="utf-8", errors="ignore")
+    payload = {
+        "path": str(rel_path.as_posix()),
+        "chars": len(text),
+        "truncated": len(text) > max_chars,
+    }
     return {
-        "content": [{"type": "text", "text": text[: args.get("max_chars", 4000)]}],
-        "structuredContent": {"path": rel_path, "chars": len(text)},
+        "content": [{"type": "text", "text": text[:max_chars]}],
+        "structuredContent": payload,
         "isError": False,
     }
 
 
 registry.register(
     ToolDef(
-        name="calculator",
-        description="Evaluate a safe arithmetic expression",
+        name="repo_overview",
+        description="Return AppForge repository metadata: scripts, dependencies, and key directories",
         input_schema={
             "type": "object",
-            "properties": {"expression": {"type": "string"}},
-            "required": ["expression"],
+            "properties": {},
             "additionalProperties": False,
         },
     ),
-    tool_calculator,
+    tool_repo_overview,
 )
 registry.register(
     ToolDef(
-        name="web_search",
-        description="Search a local demonstration index and return matching snippets",
+        name="swarm_scripts",
+        description="List npm swarm scripts from package.json with optional keyword filtering",
         input_schema={
             "type": "object",
-            "properties": {"query": {"type": "string", "minLength": 1}},
+            "properties": {"keyword": {"type": "string"}},
+            "additionalProperties": False,
+        },
+    ),
+    tool_swarm_scripts,
+)
+registry.register(
+    ToolDef(
+        name="repo_search",
+        description="Search repository text for a query and return contextual snippets",
+        input_schema={
+            "type": "object",
+            "properties": {
+                "query": {"type": "string", "minLength": 1},
+                "path": {"type": "string"},
+                "max_hits": {"type": "integer", "minimum": 1, "maximum": 100},
+            },
             "required": ["query"],
             "additionalProperties": False,
         },
     ),
-    tool_web_search,
+    tool_repo_search,
 )
 registry.register(
     ToolDef(
         name="file_read",
-        description="Read UTF-8 file content from within the server workspace",
+        description="Read UTF-8 file content from within the AppForge repository",
         input_schema={
             "type": "object",
             "properties": {
@@ -169,18 +315,43 @@ registry.register(
     ),
     tool_file_read,
 )
+registry.register(
+    ToolDef(
+        name="calculator",
+        description="Evaluate a safe arithmetic expression for quick numeric reasoning",
+        input_schema={
+            "type": "object",
+            "properties": {"expression": {"type": "string"}},
+            "required": ["expression"],
+            "additionalProperties": False,
+        },
+    ),
+    tool_calculator,
+)
 
 RESOURCES = [
     {
         "uri": "file://README.md",
-        "name": "Project README",
-        "description": "Top-level project readme",
+        "name": "AppForge Root README",
+        "description": "Top-level project overview",
         "mimeType": "text/markdown",
     },
     {
-        "uri": "text://server/info",
-        "name": "Server Info",
-        "description": "MCP server metadata",
+        "uri": "file://backend/README.md",
+        "name": "Backend README",
+        "description": "Backend architecture and APIs",
+        "mimeType": "text/markdown",
+    },
+    {
+        "uri": "file://quantum-core/README.md",
+        "name": "Quantum Core README",
+        "description": "Quantum core module notes",
+        "mimeType": "text/markdown",
+    },
+    {
+        "uri": "text://appforge/scan",
+        "name": "AppForge scan",
+        "description": "Repository summary generated by MCP server",
         "mimeType": "application/json",
     },
 ]
@@ -190,7 +361,7 @@ async def dispatch(method: str, params: dict[str, Any] | None) -> dict[str, Any]
     params = params or {}
     if method == "initialize":
         return {
-            "protocolVersion": "2024-11-05",
+            "protocolVersion": PROTOCOL_VERSION,
             "serverInfo": SERVER_INFO,
             "capabilities": {
                 "tools": {"listChanged": False},
@@ -211,19 +382,38 @@ async def dispatch(method: str, params: dict[str, Any] | None) -> dict[str, Any]
         return {"resources": RESOURCES}
     if method == "resources/read":
         uri = params.get("uri")
-        if uri == "text://server/info":
+        if uri == "text://appforge/scan":
             return {
                 "contents": [
                     {
                         "uri": uri,
                         "mimeType": "application/json",
-                        "text": json.dumps(SERVER_INFO),
+                        "text": json.dumps(PROJECT_SCAN),
                     }
                 ]
             }
-        if uri == "file://README.md":
-            text = (APP_ROOT / "README.md").read_text(encoding="utf-8")
-            return {"contents": [{"uri": uri, "mimeType": "text/markdown", "text": text[:4000]}]}
+        if isinstance(uri, str) and uri.startswith("file://"):
+            rel = uri.removeprefix("file://")
+            target = (APP_ROOT / rel).resolve()
+            if not str(target).startswith(str(APP_ROOT.resolve())):
+                raise ValueError("Resource path escapes repository root")
+            if not target.exists() or not target.is_file():
+                raise ValueError("Resource not found")
+            text = target.read_text(encoding="utf-8", errors="ignore")
+            mime = "text/plain"
+            if rel.endswith(".md"):
+                mime = "text/markdown"
+            elif rel.endswith(".json"):
+                mime = "application/json"
+            return {
+                "contents": [
+                    {
+                        "uri": uri,
+                        "mimeType": mime,
+                        "text": text[:4000],
+                    }
+                ]
+            }
         raise ValueError(f"Unknown resource uri: {uri}")
     raise ValueError(f"Method not found: {method}")
 
@@ -261,7 +451,7 @@ async def handle_rpc(payload: dict[str, Any]) -> dict[str, Any]:
         return error_response(payload.get("id"), -32000, "Server error", str(exc))
 
 
-app = FastAPI(title="AppForge MCP Server", version="0.1.0")
+app = FastAPI(title="AppForge MCP Server", version="0.2.0")
 
 
 @app.post("/rpc")

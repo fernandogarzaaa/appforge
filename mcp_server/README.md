@@ -1,61 +1,64 @@
-# MCP Server (Python + FastAPI + JSON-RPC 2.0)
+# AppForge MCP Server (Repo-Aware, JSON-RPC 2.0)
 
-This folder contains a starter **Model Context Protocol (MCP)** server implementation.
+This MCP server is customized for the **AppForge** repository and provides safe, local-logic APIs for:
 
-## Features
+- tool discovery and invocation
+- resource listing and reading
+- repository-aware analysis (scripts, swarm commands, docs)
 
-- JSON-RPC 2.0 transport over:
-  - HTTP `POST /rpc`
-  - WebSocket `/ws`
-- MCP-style methods:
-  - `initialize`
-  - `tools/list`
-  - `tools/call`
-  - `resources/list`
-  - `resources/read`
-- Example tools:
-  - `web_search`
-  - `calculator`
-  - `file_read`
-- Input validation with JSON Schema (`jsonschema.validate`)
-- MCP-compatible `content` / `structuredContent` tool result format
+## Why this is AppForge-specific
 
-## Install
+At startup, the server scans `package.json` and key repo paths (`backend`, `docs`, `quantum-core`, `scripts`, `swarm`, `src`, etc.) to expose repository-aware context via tools/resources.
 
-```bash
-python -m venv .venv
-source .venv/bin/activate
-pip install fastapi uvicorn jsonschema pydantic
-```
+## Transport
 
-## Run
+- HTTP JSON-RPC: `POST /rpc`
+- WebSocket JSON-RPC: `/ws`
 
-```bash
-uvicorn mcp_server.server:app --host 0.0.0.0 --port 8000
-```
+## MCP Methods
+
+- `initialize`
+- `tools/list`
+- `tools/call`
+- `resources/list`
+- `resources/read`
 
 ## Tool Schemas
 
-### `calculator`
+### `repo_overview`
+Returns core repository metadata inferred from root `package.json`.
 
 ```json
 {
   "type": "object",
-  "properties": {
-    "expression": { "type": "string" }
-  },
-  "required": ["expression"],
+  "properties": {},
   "additionalProperties": false
 }
 ```
 
-### `web_search`
+### `swarm_scripts`
+Lists `swarm:*` scripts, optionally filtered by keyword.
 
 ```json
 {
   "type": "object",
   "properties": {
-    "query": { "type": "string", "minLength": 1 }
+    "keyword": { "type": "string" }
+  },
+  "additionalProperties": false
+}
+```
+
+### `repo_search`
+Searches repo text and returns snippets.
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "query": { "type": "string", "minLength": 1 },
+    "path": { "type": "string" },
+    "max_hits": { "type": "integer", "minimum": 1, "maximum": 100 }
   },
   "required": ["query"],
   "additionalProperties": false
@@ -63,6 +66,7 @@ uvicorn mcp_server.server:app --host 0.0.0.0 --port 8000
 ```
 
 ### `file_read`
+Reads UTF-8 text from repo root with path traversal protection.
 
 ```json
 {
@@ -76,9 +80,40 @@ uvicorn mcp_server.server:app --host 0.0.0.0 --port 8000
 }
 ```
 
-## Example JSON-RPC Requests / Responses
+### `calculator`
+Safe arithmetic expression evaluator.
 
-### 1) `tools/list`
+```json
+{
+  "type": "object",
+  "properties": {
+    "expression": { "type": "string" }
+  },
+  "required": ["expression"],
+  "additionalProperties": false
+}
+```
+
+## Output validation
+
+Every tool response is validated against a standard MCP-style result envelope:
+
+- `content[]`
+- `structuredContent`
+- `isError`
+
+This enforces stable tool output shape for MCP clients.
+
+## Resources
+
+- `file://README.md`
+- `file://backend/README.md`
+- `file://quantum-core/README.md`
+- `text://appforge/scan` (generated repository scan)
+
+## Example Requests/Responses
+
+### 1) Repo overview
 
 Request:
 
@@ -86,8 +121,11 @@ Request:
 {
   "jsonrpc": "2.0",
   "id": 1,
-  "method": "tools/list",
-  "params": {}
+  "method": "tools/call",
+  "params": {
+    "name": "repo_overview",
+    "arguments": {}
+  }
 }
 ```
 
@@ -98,20 +136,19 @@ Response (shape):
   "jsonrpc": "2.0",
   "id": 1,
   "result": {
-    "tools": [
-      {
-        "name": "calculator",
-        "description": "Evaluate a safe arithmetic expression",
-        "inputSchema": { "type": "object", "properties": { "expression": { "type": "string" } }, "required": ["expression"], "additionalProperties": false }
-      }
-    ]
+    "content": [{ "type": "text", "text": "{...}" }],
+    "structuredContent": {
+      "repo": "base44-app",
+      "scriptCount": 50,
+      "swarmScriptCount": 20,
+      "keyPaths": ["backend", "docs", "swarm", "src"]
+    },
+    "isError": false
   }
 }
 ```
 
-### 2) `tools/call` for calculator
-
-Request:
+### 2) Filter swarm scripts
 
 ```json
 {
@@ -119,74 +156,42 @@ Request:
   "id": 2,
   "method": "tools/call",
   "params": {
-    "name": "calculator",
-    "arguments": {
-      "expression": "(8 + 4) * 3"
-    }
+    "name": "swarm_scripts",
+    "arguments": { "keyword": "benchmark" }
   }
 }
 ```
 
-Response:
-
-```json
-{
-  "jsonrpc": "2.0",
-  "id": 2,
-  "result": {
-    "content": [{ "type": "text", "text": "36" }],
-    "structuredContent": { "value": 36 },
-    "isError": false
-  }
-}
-```
-
-### 3) `resources/read`
-
-Request:
+### 3) Read generated repo scan resource
 
 ```json
 {
   "jsonrpc": "2.0",
   "id": 3,
   "method": "resources/read",
-  "params": {
-    "uri": "text://server/info"
-  }
+  "params": { "uri": "text://appforge/scan" }
 }
 ```
 
-Response:
+## Run
 
-```json
-{
-  "jsonrpc": "2.0",
-  "id": 3,
-  "result": {
-    "contents": [
-      {
-        "uri": "text://server/info",
-        "mimeType": "application/json",
-        "text": "{\"name\":\"appforge-mcp\",\"version\":\"0.1.0\"}"
-      }
-    ]
-  }
-}
+```bash
+pip install fastapi uvicorn jsonschema pydantic
+uvicorn mcp_server.server:app --host 0.0.0.0 --port 8000
 ```
 
 ## How an LLM/MCP client connects
 
-1. Start the server (`uvicorn ...`).
-2. Connect with either:
-   - HTTP JSON-RPC endpoint: `http://localhost:8000/rpc`
-   - WebSocket JSON-RPC endpoint: `ws://localhost:8000/ws`
-3. Send `initialize` first to discover capabilities.
-4. Call `tools/list` and `resources/list`.
-5. Use `tools/call` with a known tool name and JSON arguments matching each tool's schema.
-6. Parse `result.content` for display text and `result.structuredContent` for machine-usable values.
+1. Connect to `http://localhost:8000/rpc` or `ws://localhost:8000/ws`.
+2. Call `initialize`.
+3. Call `tools/list` and `resources/list`.
+4. Use `tools/call` with schema-valid arguments.
+5. Use `resources/read` for doc/scan ingestion.
+6. Parse `result.content` for user display and `result.structuredContent` for machine decisions.
 
-## Notes
+## Security posture
 
-- The `file_read` tool is sandboxed to the repo root and rejects path traversal.
-- `web_search` uses a static in-code corpus; replace with your own local index or service.
-- Error responses follow JSON-RPC 2.0 conventions (`error.code`, `error.message`, optional `error.data`).
+- No external LLM API dependency.
+- File operations are root-scoped to this repository.
+- Search skips heavy/generated directories (`node_modules`, `.git`, `dist`, `coverage`).
+- JSON-RPC errors use standard codes (`-32601`, `-32602`, `-32000`).
