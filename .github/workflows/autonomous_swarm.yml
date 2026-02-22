@@ -87,8 +87,8 @@ jobs:
       # 🦀 TRANSCENDENCE: Build Rust Quantum Bridge
       - name: Build Quantum Bridge
         run: |
-          cd swarm/core/quantum_bridge
-          cargo build --release
+          cargo generate-lockfile --manifest-path swarm/core/quantum_bridge/Cargo.toml
+          cargo build --release --locked --manifest-path swarm/core/quantum_bridge/Cargo.toml
           echo "🦀 Quantum Bridge compiled for cloud execution"
 
       # 📡 REALITY INJECTION 2.0: Harvest context before execution
