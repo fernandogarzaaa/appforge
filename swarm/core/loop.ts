@@ -53,6 +53,25 @@ function parseBoolean(value: string | undefined, fallback = false): boolean {
     return ['1', 'true', 'yes', 'on'].includes(normalized);
 }
 
+
+function isOneShotMode(): boolean {
+    return parseBoolean(process.env.ONE_SHOT, false);
+}
+
+const ONE_SHOT_SOFT_EXIT_PATTERNS: RegExp[] = [
+    /BASE44_API_KEY not found/i,
+    /OPENAI_API_KEY not found/i,
+    /Wallet\/RPC not configured/i,
+    /ECONNREFUSED/i,
+    /ETIMEDOUT/i,
+    /fetch failed/i,
+    /network/i
+];
+
+function shouldSoftExitOneShot(errorMessage: string): boolean {
+    return ONE_SHOT_SOFT_EXIT_PATTERNS.some((pattern) => pattern.test(errorMessage));
+}
+
 /**
  * 🛡️ SOVEREIGN IDENTITY PROTOCOL
  * Verifies the system's ability to communicate and coordinate.
@@ -1044,9 +1063,13 @@ async function main() {
         } catch (error: any) {
             const errorMessage = error?.message || String(error);
             console.error('❌ Loop Error:', errorMessage);
-            if (process.env.ONE_SHOT === 'true') {
-                console.warn('⚠️ One-Shot Mode: Encountered loop error. Exiting gracefully to keep CI resilient.');
-                process.exit(0);
+            if (isOneShotMode()) {
+                if (shouldSoftExitOneShot(errorMessage)) {
+                    console.warn('⚠️ One-Shot Mode: Non-critical runtime issue detected. Exiting gracefully for CI continuity.');
+                    process.exit(0);
+                }
+                console.error('💥 One-Shot Mode: Critical runtime failure detected. Exiting with failure status.');
+                process.exit(1);
             }
         }
 
@@ -1107,4 +1130,14 @@ async function generateCycleReport(cycleCount: number, results: any, quantumStat
     return report;
 }
 
-main().catch(console.error);
+main().catch((error: any) => {
+    const errorMessage = error?.message || String(error);
+    console.error('❌ Fatal startup error:', errorMessage);
+
+    if (isOneShotMode() && shouldSoftExitOneShot(errorMessage)) {
+        console.warn('⚠️ One-Shot Mode: Startup dependency missing or transient issue detected. Exiting gracefully.');
+        process.exit(0);
+    }
+
+    process.exit(1);
+});
