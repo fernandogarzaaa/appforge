@@ -1,43 +1,18 @@
 {
-  "timestamp": "2026-02-20T20:55:09.633Z",
+  "timestamp": "2026-02-21T20:27:18.637Z",
   "reportPath": "C:\\Users\\ferna\\Downloads\\appforge-main\\swarm\\benchmarks\\latest_intelligence_report.json",
   "benchmark": {
-    "overallScore": 91.5,
+    "overallScore": 97.5,
     "verdict": "DEVELOPING",
-    "weakestDimension": "coding",
-    "weakestScore": 70,
+    "weakestDimension": "autonomy",
+    "weakestScore": 83.33,
     "dimensions": [
-      {
-        "name": "coding",
-        "score": 70,
-        "threshold": 90,
-        "passed": false,
-        "durationMs": 6829.21,
-        "details": {
-          "filesChecked": 10,
-          "filesPassed": 7,
-          "failingFiles": [
-            {
-              "file": "swarm/core/real_hyper_intelligence_v2.ts",
-              "reason": "file not found"
-            },
-            {
-              "file": "swarm/agents/RevenueHunter.ts",
-              "reason": "file not found"
-            },
-            {
-              "file": "QuantumEnginePortable.js",
-              "reason": "file not found"
-            }
-          ]
-        }
-      },
       {
         "name": "autonomy",
         "score": 83.33,
         "threshold": 90,
         "passed": false,
-        "durationMs": 73.95,
+        "durationMs": 97.8,
         "details": {
           "checksPassed": "5/6",
           "callbackHits": 8,
@@ -50,7 +25,7 @@
         "score": 100,
         "threshold": 80,
         "passed": true,
-        "durationMs": 112.81,
+        "durationMs": 86.1,
         "details": {
           "directTasks": 8,
           "directAccuracy": 100,
@@ -65,7 +40,7 @@
         "score": 100,
         "threshold": 90,
         "passed": true,
-        "durationMs": 60.73,
+        "durationMs": 135.43,
         "details": {
           "checksPassed": "8/8",
           "statusesCount": 4,
@@ -75,17 +50,29 @@
         }
       },
       {
+        "name": "coding",
+        "score": 100,
+        "threshold": 90,
+        "passed": true,
+        "durationMs": 6831.18,
+        "details": {
+          "filesChecked": 10,
+          "filesPassed": 10,
+          "failingFiles": []
+        }
+      },
+      {
         "name": "reliability",
         "score": 100,
         "threshold": 95,
         "passed": true,
-        "durationMs": 516.53,
+        "durationMs": 623.19,
         "details": {
           "operations": 70,
           "success": 70,
           "failures": 0,
-          "avgLatencyMs": 7.27,
-          "p95LatencyMs": 18.64
+          "avgLatencyMs": 8.77,
+          "p95LatencyMs": 21.47
         }
       }
     ]

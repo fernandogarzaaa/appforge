@@ -13,7 +13,7 @@ import { Slider } from '@/components/ui/slider';
 import { AlertCircle, Plus, Trash2, Edit, TestTube } from 'lucide-react';
 import { toast } from 'sonner';
 
-export default function AlertConfigManager({ monitoringRuleId }) {
+export default function AlertConfigManager({ monitoringRuleId = null }) {
   const queryClient = useQueryClient();
   const [isOpen, setIsOpen] = useState(false);
   const [editingId, setEditingId] = useState(null);

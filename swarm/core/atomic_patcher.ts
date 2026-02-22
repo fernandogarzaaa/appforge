@@ -29,6 +29,7 @@ export class AtomicPatcher {
 
         try {
             let content = await fs.readFile(fullPath, 'utf8');
+            await this.createSnapshot(relativeFilePath);
 
             for (const patch of patches) {
                 if (!content.includes(patch.targetContent)) {
@@ -77,6 +78,7 @@ export class AtomicPatcher {
             for (const item of filePatches) {
                 const fullPath = path.resolve(this.projectRoot, item.relativeFilePath);
                 let content = await fs.readFile(fullPath, 'utf8');
+                await this.createSnapshot(item.relativeFilePath);
 
                 for (const patch of item.patches) {
                     if (!content.includes(patch.targetContent)) {
@@ -109,6 +111,33 @@ export class AtomicPatcher {
                 } catch (e) { }
             }
             return { success: false, error: error.message };
+        }
+    }
+
+    /**
+     * Create a backup of a file before modification.
+     */
+    private async createSnapshot(relativeFilePath: string): Promise<string> {
+        const fullPath = path.resolve(this.projectRoot, relativeFilePath);
+        const snapshotPath = `${fullPath}.bak`;
+        await fs.copyFile(fullPath, snapshotPath);
+        return snapshotPath;
+    }
+
+    /**
+     * Rollback a file to its previous state.
+     */
+    async rollback(relativeFilePath: string): Promise<{ success: boolean; error?: string }> {
+        const fullPath = path.resolve(this.projectRoot, relativeFilePath);
+        const snapshotPath = `${fullPath}.bak`;
+
+        try {
+            await fs.access(snapshotPath);
+            await fs.rename(snapshotPath, fullPath);
+            console.log(`⏪ [AtomicPatcher] Rolled back ${relativeFilePath} successfully.`);
+            return { success: true };
+        } catch (error: any) {
+            return { success: false, error: `Rollback failed: ${error.message}` };
         }
     }
 }
