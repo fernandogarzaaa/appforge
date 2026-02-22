@@ -5,6 +5,10 @@ on:
     - cron: "0 * * * *" # Run every hour on the hour
   workflow_dispatch: # Manual trigger
 
+concurrency:
+  group: quantum-self-evolution
+  cancel-in-progress: false
+
 jobs:
   quantum-evolution:
     runs-on: ubuntu-latest
@@ -21,11 +25,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "22"
-
-      - name: Run Resonance Check
-        run: npx tsx scripts/resonance_check.ts
-        env:
-          TRUE_AI_INDEPENDENCE: "true"
 
       # ⚡ CACHE: Node.js dependencies
       - name: Cache Node Modules
@@ -61,8 +60,13 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          npm install --legacy-peer-deps
-          cd swarm && npm install --legacy-peer-deps
+          npm ci --legacy-peer-deps
+          cd swarm && npm ci --legacy-peer-deps
+
+      - name: Run Resonance Check
+        run: npx tsx scripts/resonance_check.ts
+        env:
+          TRUE_AI_INDEPENDENCE: "true"
 
       - name: Run Reality Pulse 2.0
         working-directory: ./
@@ -76,8 +80,8 @@ jobs:
       - name: Pre-Pulse Diagnostics
         run: |
           npm ci --legacy-peer-deps
-          npm run build > ../build_logs.txt 2>&1 || echo "Build failed (as expected for diagnosis)" > ../build_logs.txt
-          npm run lint -- --format json > ../lint_output.json 2>&1 || echo "[]" > ../lint_output.json
+          npm run build > build_logs.txt 2>&1 || echo "Build failed (as expected for diagnosis)" > build_logs.txt
+          npm run lint -- --format json > lint_output.json 2>&1 || echo "[]" > lint_output.json
         continue-on-error: true
 
       - name: Configure Git Identity
@@ -105,11 +109,13 @@ jobs:
           QUANTUM_EPOCHS: "100"
 
       - name: Run Synergy Scouting
+        working-directory: ./
         run: npm run swarm:scout
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Run Architectural Analysis
+        working-directory: ./
         run: npm run swarm:analyze
 
       - name: Run Singularity Verification
@@ -142,5 +148,5 @@ jobs:
           git add -f build_logs.txt || true
           git add -f lint_output.json || true
           git commit -m "chore: quantum self-evolution [Inception] [Bounty Sync] [Synergy] [skip ci]" || echo "No changes to commit"
-          git pull --rebase origin main
-          git push
+          git pull --rebase origin "${GITHUB_REF_NAME}"
+          git push origin HEAD:"${GITHUB_REF_NAME}"
