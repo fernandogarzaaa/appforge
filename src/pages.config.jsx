@@ -297,7 +297,7 @@ const PAGES = {
 }
 
 export const pagesConfig = {
-  mainPage: "Dashboard",
+  mainPage: "CommandCenter",
   Pages: PAGES,
   Layout: __Layout,
   publicPages: ['LandingNew', 'Login', 'Register', 'Pricing', 'Guide']

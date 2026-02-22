@@ -29,7 +29,7 @@ import errorTracker, { setUser, clearUser } from '@/utils/errorTracking';
 import { startHealthMonitoring } from '@/utils/healthCheck';
 import { useToast } from '@/components/ui/use-toast';
 import { initVitals } from '@/lib/vitals';
-import { ViewModeProvider } from '@/contexts/ViewModeContext';
+import { ViewModeProvider, useViewMode } from '@/contexts/ViewModeContext';
 import { NavigationProvider, useNavigation } from '@/contexts/NavigationContext';
 import { ViewModeToggle } from '@/components/navigation/ViewModeToggle';
 import { SovereignWallet } from './components/auth/SovereignWallet';
@@ -58,9 +58,13 @@ const AdminSovereign = lazy(() => import('@/pages/AdminSovereign'));
 
 const { Pages, Layout, mainPage, publicPages = [] } = pagesConfig;
 const mainPageKey = mainPage ?? Object.keys(Pages)[0];
-// If Vibe Mode is active, we don't default to the complex dashboard
+const DashboardNew = lazy(() => import('@/pages/DashboardNew'));
 const CommandCenter = lazy(() => import('@/pages/CommandCenter'));
-const MainPage = CommandCenter;
+
+const MainPage = () => {
+  const { isBeginnerMode } = useViewMode();
+  return isBeginnerMode ? <DashboardNew /> : <CommandCenter />;
+};
 
 const LayoutWrapper = ({ children, currentPageName, onSearchOpen }) => Layout ?
   <Layout currentPageName={currentPageName} onSearchOpen={onSearchOpen}>{children}</Layout>

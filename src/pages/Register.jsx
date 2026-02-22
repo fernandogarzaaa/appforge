@@ -10,7 +10,7 @@ import { Loader2 } from 'lucide-react';
 export default function Register() {
   useEffect(() => {
     // Redirect to Base44's login page (which includes registration)
-    base44.auth.redirectToLogin(window.location.origin + '/Dashboard');
+    base44.auth.redirectToLogin(window.location.origin + '/');
   }, []);
 
   return (

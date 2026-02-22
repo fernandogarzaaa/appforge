@@ -25,6 +25,7 @@ function NodeField({ count = 200 }) {
     const navigationRef = useRef<THREE.Group>(null!);
 
     useFrame((state) => {
+        if (!ref.current) return;
         const time = state.clock.getElapsedTime();
         ref.current.rotation.y += 0.0005;
 
