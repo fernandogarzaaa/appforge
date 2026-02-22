@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-02-20T20:44:09.863Z",
+  "timestamp": "2026-02-21T20:24:33.342Z",
   "accountsProcessed": 4,
   "highRiskAccounts": 0,
   "upsellTargets": 0,
@@ -10,7 +10,7 @@
       "churnRisk": 0.556,
       "action": "inapp_nudge",
       "recommendation": "INAPP_NUDGE with guided adoption checklist and health tips",
-      "confidence": 0.9680485261488313
+      "confidence": 0.9657692598626973
     },
     {
       "accountId": "acct_002",

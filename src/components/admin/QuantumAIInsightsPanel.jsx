@@ -9,7 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
-    Sparkles, Target, Clock, ChevronRight
+    Sparkles, Target, Clock, ChevronRight, TrendingUp, Brain, Lightbulb
 } from 'lucide-react';
 import { QuantumInspiredAI, EntanglementAnalyzer, SuperpositionProcessor } from '@/lib/QuantumEngine';
 
