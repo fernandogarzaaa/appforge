@@ -81,7 +81,7 @@ export class FreelanceSwarm {
         } else {
             await this.base44.logActivity(
                 'FREELANCE_SWARM',
-                `Applied to ${jobsApplied} jobs (${this.metrics.highTicketApplied} high-ticket), found ${jobsFound} opportunities`
+                `Applied to ${this.metrics.jobsApplied} jobs (${this.metrics.highTicketApplied} high-ticket), found ${jobsFound} opportunities`
             );
         }
 
