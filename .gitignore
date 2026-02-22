@@ -91,6 +91,7 @@ static-analyzer-core/target/
 **/target/.rustc_info.json
 **/*.rs.bk
 Cargo.lock
+!swarm/core/quantum_bridge/Cargo.lock
 
 # Backup files
 *.bak
