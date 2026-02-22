@@ -2,60 +2,60 @@
   "learning:LearningSwarm:drill:deploy_safety": {
     "key": "learning:LearningSwarm:drill:deploy_safety",
     "value": {
-      "attempts": 137,
-      "successes": 137,
-      "totalReward": 1370
+      "attempts": 291,
+      "successes": 291,
+      "totalReward": 2910
     },
-    "timestamp": 1771701635962,
+    "timestamp": 1771705477466,
     "ttl": 604800
   },
   "learning:LearningSwarm:drill:queue_stability": {
     "key": "learning:LearningSwarm:drill:queue_stability",
     "value": {
-      "attempts": 125,
-      "successes": 125,
-      "totalReward": 1250
+      "attempts": 221,
+      "successes": 221,
+      "totalReward": 2210
     },
-    "timestamp": 1771701635973,
+    "timestamp": 1771705241435,
     "ttl": 604800
   },
   "learning:LearningSwarm:drill:api_rollout": {
     "key": "learning:LearningSwarm:drill:api_rollout",
     "value": {
-      "attempts": 120,
-      "successes": 120,
-      "totalReward": 1200
+      "attempts": 203,
+      "successes": 203,
+      "totalReward": 2030
     },
-    "timestamp": 1771701635983,
+    "timestamp": 1771705473756,
     "ttl": 604800
   },
   "learning:LearningSwarm:drill:auth_incident": {
     "key": "learning:LearningSwarm:drill:auth_incident",
     "value": {
-      "attempts": 83,
-      "successes": 83,
-      "totalReward": 830
+      "attempts": 141,
+      "successes": 141,
+      "totalReward": 1410
     },
-    "timestamp": 1771701636236,
+    "timestamp": 1771705415236,
     "ttl": 604800
   },
   "learning:LearningSwarm:drill:data_conflict": {
     "key": "learning:LearningSwarm:drill:data_conflict",
     "value": {
-      "attempts": 54,
-      "successes": 54,
-      "totalReward": 540
+      "attempts": 104,
+      "successes": 104,
+      "totalReward": 1040
     },
-    "timestamp": 1771701636519,
+    "timestamp": 1771705431308,
     "ttl": 604800
   },
   "learning_swarm:last_report": {
     "key": "learning_swarm:last_report",
     "value": {
-      "timestamp": "2026-02-21T19:20:36.542Z",
+      "timestamp": "2026-02-21T20:19:35.214Z",
       "benchmark": {
         "overallScore": 97.5,
-        "verdict": "ADVANCED_AUTONOMOUS",
+        "verdict": "DEVELOPING",
         "weakestDimension": "autonomy",
         "weakestScore": 83.33
       },
@@ -66,92 +66,92 @@
       "successRate": 1,
       "failedDrills": []
     },
-    "timestamp": 1771701636544,
+    "timestamp": 1771705228204,
     "ttl": 604800
   },
   "learning:VoiceAgentSwarm:intent:billing": {
     "key": "learning:VoiceAgentSwarm:intent:billing",
     "value": {
-      "attempts": 214,
-      "successes": 214,
-      "totalReward": 856
+      "attempts": 391,
+      "successes": 391,
+      "totalReward": 1564
     },
-    "timestamp": 1771702872979,
+    "timestamp": 1771705502287,
     "ttl": 604800
   },
   "learning:VoiceAgentSwarm:intent:technical": {
     "key": "learning:VoiceAgentSwarm:intent:technical",
     "value": {
-      "attempts": 205,
-      "successes": 205,
-      "totalReward": 820
+      "attempts": 359,
+      "successes": 359,
+      "totalReward": 1436
     },
-    "timestamp": 1771702872989,
+    "timestamp": 1771705416633,
     "ttl": 604800
   },
   "learning:VoiceAgentSwarm:intent:onboarding": {
     "key": "learning:VoiceAgentSwarm:intent:onboarding",
     "value": {
-      "attempts": 125,
-      "successes": 125,
-      "totalReward": 500
+      "attempts": 219,
+      "successes": 219,
+      "totalReward": 876
     },
-    "timestamp": 1771702873001,
+    "timestamp": 1771705124068,
     "ttl": 604800
   },
   "learning:VoiceAgentSwarm:intent:retention": {
     "key": "learning:VoiceAgentSwarm:intent:retention",
     "value": {
-      "attempts": 120,
-      "successes": 120,
-      "totalReward": 480
+      "attempts": 200,
+      "successes": 200,
+      "totalReward": 800
     },
-    "timestamp": 1771702873011,
+    "timestamp": 1771705473351,
     "ttl": 604800
   },
   "voice_swarm:last_report": {
     "key": "voice_swarm:last_report",
     "value": {
-      "timestamp": "2026-02-21T19:41:13.013Z",
+      "timestamp": "2026-02-21T20:18:44.201Z",
       "processed": 4,
-      "autoResolved": 3,
+      "autoResolved": 4,
       "escalated": 0,
       "upgradeOffers": 0,
-      "followUps": 1,
+      "followUps": 0,
       "recommendations": [
         {
-          "ticketId": "voice_1771702872700_1",
-          "action": "create_followup",
-          "confidence": 0.11099545864758767,
-          "recommendation": "AUTO_RESOLVE with clear instructions and confirmation follow-up"
-        },
-        {
-          "ticketId": "voice_1771702872700_2",
-          "action": "auto_resolve",
-          "confidence": 0.9530529058103612,
-          "recommendation": "AUTO_RESOLVE with clear instructions and confirmation follow-up"
-        },
-        {
-          "ticketId": "voice_1771702872700_3",
+          "ticketId": "voice_1771704478016_1",
           "action": "auto_resolve",
           "confidence": 0.99,
           "recommendation": "AUTO_RESOLVE with clear instructions and confirmation follow-up"
         },
         {
-          "ticketId": "voice_1771702872700_4",
+          "ticketId": "voice_1771704478016_2",
+          "action": "auto_resolve",
+          "confidence": 0.9530529058103612,
+          "recommendation": "AUTO_RESOLVE with clear instructions and confirmation follow-up"
+        },
+        {
+          "ticketId": "voice_1771704478016_3",
+          "action": "auto_resolve",
+          "confidence": 0.99,
+          "recommendation": "AUTO_RESOLVE with clear instructions and confirmation follow-up"
+        },
+        {
+          "ticketId": "voice_1771704478016_4",
           "action": "auto_resolve",
           "confidence": 0.99,
           "recommendation": "AUTO_RESOLVE with clear instructions and confirmation follow-up"
         }
       ]
     },
-    "timestamp": 1771702873016,
+    "timestamp": 1771705156132,
     "ttl": 604800
   },
   "compliance_swarm:last_report": {
     "key": "compliance_swarm:last_report",
     "value": {
-      "timestamp": "2026-02-20T20:45:35.712Z",
+      "timestamp": "2026-02-21T20:20:15.425Z",
       "checks": [
         {
           "name": "policy_docs",
@@ -172,13 +172,13 @@
       "recommendation": "Expand audit logging and change-management traceability",
       "confidence": 0.99
     },
-    "timestamp": 1771620421488,
+    "timestamp": 1771705346969,
     "ttl": 604800
   },
   "qa_swarm:last_report": {
     "key": "qa_swarm:last_report",
     "value": {
-      "timestamp": "2026-02-20T20:45:13.239Z",
+      "timestamp": "2026-02-21T20:19:55.796Z",
       "gatePassed": false,
       "passed": 1,
       "failed": 3,
@@ -201,41 +201,41 @@
         {
           "name": "artifact_integrity",
           "passed": false,
-          "summary": "Invalid/missing: research_swarm_report.json, knowledge_graph_swarm_report.json"
+          "summary": "Invalid/missing: knowledge_graph_swarm_report.json, experimentation_swarm_report.json"
         }
       ]
     },
-    "timestamp": 1771620400477,
+    "timestamp": 1771705245612,
     "ttl": 604800
   },
   "learning:CustomerSuccessSwarm:tier:enterprise": {
     "key": "learning:CustomerSuccessSwarm:tier:enterprise",
     "value": {
-      "attempts": 335,
-      "successes": 335,
-      "totalReward": 1675
+      "attempts": 618,
+      "successes": 618,
+      "totalReward": 3090
     },
-    "timestamp": 1771620264977,
+    "timestamp": 1771705502296,
     "ttl": 604800
   },
   "learning:CustomerSuccessSwarm:tier:pro": {
     "key": "learning:CustomerSuccessSwarm:tier:pro",
     "value": {
-      "attempts": 530,
-      "successes": 530,
-      "totalReward": 2650
+      "attempts": 930,
+      "successes": 930,
+      "totalReward": 4650
     },
-    "timestamp": 1771620414921,
+    "timestamp": 1771705473013,
     "ttl": 604800
   },
   "experimentation_swarm:last_report": {
     "key": "experimentation_swarm:last_report",
     "value": {
-      "timestamp": "2026-02-20T20:46:23.023Z",
+      "timestamp": "2026-02-21T20:20:57.922Z",
       "internalAgents": 4,
       "experimentsEvaluated": 4,
       "topRecommendation": "Promote quarterly_anchor for pricing_anchor_packaging_v2 with staged rollout (25% -> 50% -> 100%)",
-      "oracleRecommendation": "Prioritize content_offer_cta_mix_v4 (content) - winner=offer_led_cta, uplift=22.4%, consensus=77.1%",
+      "oracleRecommendation": "Prioritize pricing_anchor_packaging_v2 (pricing) - winner=quarterly_anchor, uplift=15.5%, consensus=85.5%",
       "executedHandovers": 2,
       "rankings": [
         {
@@ -288,13 +288,13 @@
         }
       ]
     },
-    "timestamp": 1771620524549,
+    "timestamp": 1771705432299,
     "ttl": 604800
   },
   "devops_swarm:last_report": {
     "key": "devops_swarm:last_report",
     "value": {
-      "timestamp": "2026-02-20T20:44:59.176Z",
+      "timestamp": "2026-02-21T20:20:00.558Z",
       "checks": [
         {
           "name": "ci_workflows",
@@ -309,7 +309,7 @@
         {
           "name": "qa_gate",
           "status": "warning",
-          "details": "No QA gate report available yet"
+          "details": "QA gate passed=false (1 passed / 3 failed)"
         }
       ],
       "action": {
@@ -318,13 +318,13 @@
         "recommendation": "Harden CI/CD with stricter pipeline gates and rollback checks"
       }
     },
-    "timestamp": 1771620383082,
+    "timestamp": 1771705257922,
     "ttl": 604800
   },
   "knowledge_graph_swarm:last_report": {
     "key": "knowledge_graph_swarm:last_report",
     "value": {
-      "timestamp": "2026-02-20T20:44:58.977Z",
+      "timestamp": "2026-02-21T20:20:41.518Z",
       "nodes": [
         {
           "id": "learning",
@@ -349,6 +349,12 @@
           "domain": "retention",
           "signal": "HighRisk:0 UpsellTargets:0",
           "score": 100
+        },
+        {
+          "id": "devops",
+          "domain": "infrastructure",
+          "signal": "Harden CI/CD with stricter pipeline gates and rollback checks",
+          "score": 33.33333333333333
         }
       ],
       "edges": [
@@ -371,6 +377,12 @@
           "weight": 1
         },
         {
+          "from": "learning",
+          "to": "devops",
+          "relation": "weak_correlation",
+          "weight": 0.333
+        },
+        {
           "from": "research",
           "to": "voice",
           "relation": "moderate_correlation",
@@ -383,72 +395,90 @@
           "weight": 0.738
         },
         {
+          "from": "research",
+          "to": "devops",
+          "relation": "moderate_correlation",
+          "weight": 0.596
+        },
+        {
           "from": "voice",
           "to": "customer_success",
           "relation": "strong_correlation",
           "weight": 1
+        },
+        {
+          "from": "voice",
+          "to": "devops",
+          "relation": "weak_correlation",
+          "weight": 0.333
+        },
+        {
+          "from": "customer_success",
+          "to": "devops",
+          "relation": "weak_correlation",
+          "weight": 0.333
         }
       ],
       "strategyRecommendation": "Prioritize reliability hardening before revenue expansion",
       "confidence": 0.99
     },
-    "timestamp": 1771620375489,
+    "timestamp": 1771705416302,
     "ttl": 604800
   },
   "ai_economy_swarm:last_report": {
     "key": "ai_economy_swarm:last_report",
     "value": {
-      "timestamp": "2026-02-20T20:44:55.808Z",
+      "timestamp": "2026-02-21T20:20:00.725Z",
       "grossInflow": 58120,
-      "operatingCost": 900,
-      "netInflow": 57220,
-      "reserveBefore": 137228,
-      "reserveAfter": 147952,
+      "operatingCost": 1140,
+      "netInflow": 56980,
+      "reserveBefore": 0,
+      "reserveAfter": 25014,
       "activeSources": 3,
-      "strategy": "aggressive_expansion",
+      "strategy": "defensive_compounding",
       "strategySource": "oracle",
-      "oracleRecommendation": "AGGRESSIVE_EXPANSION - maximize growth and experimentation despite lower reserve",
+      "oracleRecommendation": "DEFENSIVE_COMPOUNDING - prioritize reserve runway and stable compounding",
       "oracleConfidence": 0.99,
       "oracleMinConfidence": 0.55,
       "oracleAccepted": true,
-      "sustainabilityScore": 0.82,
+      "sustainabilityScore": 0.73,
       "allocation": {
-        "strategy": "aggressive_expansion",
-        "reserveAmount": 11624,
-        "growthAmount": 23248,
-        "experimentationAmount": 14530,
-        "infrastructureAmount": 8718,
+        "strategy": "defensive_compounding",
+        "reserveAmount": 26154,
+        "growthAmount": 11624,
+        "experimentationAmount": 8718,
+        "infrastructureAmount": 11624,
         "percentages": {
-          "reserve": 0.2,
-          "growth": 0.4,
-          "experimentation": 0.25,
-          "infrastructure": 0.15
+          "reserve": 0.45,
+          "growth": 0.2,
+          "experimentation": 0.15,
+          "infrastructure": 0.2
         }
       },
       "milestones": [
-        "Reserve treasury to +$11624.00 for runway extension",
-        "Fund retention and upsell execution with $23248.00",
-        "Fund experiment velocity with $14530.00",
-        "Harden reliability and deployment with $8718.00"
+        "Reserve treasury to +$26154.00 for runway extension",
+        "Fund retention and upsell execution with $11624.00",
+        "Fund experiment velocity with $8718.00",
+        "Harden reliability and deployment with $11624.00"
       ]
     },
-    "timestamp": 1771620439351,
+    "timestamp": 1771705432219,
     "ttl": 604800
   },
   "learning:CustomerSuccessSwarm:tier:free": {
     "key": "learning:CustomerSuccessSwarm:tier:free",
     "value": {
-      "attempts": 182,
-      "successes": 182,
-      "totalReward": 910
+      "attempts": 312,
+      "successes": 312,
+      "totalReward": 1560
     },
-    "timestamp": 1771620522586,
+    "timestamp": 1771705473381,
     "ttl": 604800
   },
   "customer_success_swarm:last_report": {
     "key": "customer_success_swarm:last_report",
     "value": {
-      "timestamp": "2026-02-20T20:44:09.863Z",
+      "timestamp": "2026-02-21T20:18:44.201Z",
       "accountsProcessed": 4,
       "highRiskAccounts": 0,
       "upsellTargets": 0,
@@ -459,7 +489,7 @@
           "churnRisk": 0.556,
           "action": "inapp_nudge",
           "recommendation": "INAPP_NUDGE with guided adoption checklist and health tips",
-          "confidence": 0.9680485261488313
+          "confidence": 0.9657692598626973
         },
         {
           "accountId": "acct_002",
@@ -484,13 +514,13 @@
         }
       ]
     },
-    "timestamp": 1771620298876,
+    "timestamp": 1771705156132,
     "ttl": 604800
   },
   "research_swarm:last_report": {
     "key": "research_swarm:last_report",
     "value": {
-      "timestamp": "2026-02-20T20:44:59.896Z",
+      "timestamp": "2026-02-21T20:18:41.175Z",
       "signalsAnalyzed": 10,
       "competitorsTracked": 8,
       "topFocus": "Creator Revenue Studio",
@@ -558,7 +588,7 @@
         }
       ]
     },
-    "timestamp": 1771620388694,
+    "timestamp": 1771705143242,
     "ttl": 604800
   }
 }

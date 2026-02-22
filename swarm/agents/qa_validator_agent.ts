@@ -7,8 +7,8 @@ export class QAValidatorAgent {
         this.quantumCore = new QuantumSwarmCore();
     }
 
-    async generateTestScript(domMap: any, targetFeature: string): Promise<string> {
-        console.log(`🛡️ [QAValidatorAgent] Analyzing DOM map to assert feature: ${targetFeature}`);
+    async generateTestScript(domMap: any, targetFeature: string, mutationSequence: any[] = []): Promise<string> {
+        console.log(`🛡️ [QAValidatorAgent] Analyzing DOM map and mutation sequence to assert feature: ${targetFeature}`);
 
         if (!domMap || !domMap.interactables) {
             return `// Error: Invalid DOM Map provided`;
@@ -17,12 +17,14 @@ export class QAValidatorAgent {
         const simplifiedMap = JSON.stringify({
             title: domMap.title,
             headings: domMap.headings,
-            interactables: domMap.interactables.slice(0, 15) // take top 15 to avoid massive prompts
+            interactables: domMap.interactables.slice(0, 15)
         });
 
-        const prompt = `Based on the following semantic DOM map, write a complete Playwright test block that verifies the "${targetFeature}". 
-CRITICAL: Use the exact 'text' or 'id' found in the 'interactables' list below to create locators. DO NOT make up text.
-If you see a button that looks like a wallet or connect button, use its exact text (e.g., "Select Wallet").
+        const prompt = `Based on the following semantic DOM map and mutation sequence, write a complete Playwright test block that verifies the "${targetFeature}". 
+CRITICAL: Use the exact 'text' or 'id' found in the 'interactables' list below to create locators. 
+
+Mutation Sequence (Target Actions):
+${JSON.stringify(mutationSequence, null, 2)}
 
 DOM Context: ${simplifiedMap}`;
 

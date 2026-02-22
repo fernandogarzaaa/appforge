@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-02-20T20:45:12.586Z",
-  "reserveBalance": 147712,
-  "strategy": "aggressive_expansion"
+  "updatedAt": "2026-02-21T20:20:00.725Z",
+  "reserveBalance": 25014,
+  "strategy": "defensive_compounding"
 }

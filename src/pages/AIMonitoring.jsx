@@ -12,7 +12,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { toast } from 'sonner';
 import {
   Eye, Plus, TrendingUp, AlertTriangle, Lightbulb,
-  Activity, Database, Mail, Code, CheckCircle, Zap, Target, Brain, Play, Pause
+  Activity, Database, Mail, Code, CheckCircle2, Zap, Target, Brain, Play, Pause
 } from 'lucide-react';
 import { InsightsTrendChart, SeverityDistribution, InsightTypeChart } from '@/components/monitoring/InsightsChart';
 import { TaskPriorityChart, UrgencyFactorsRadar, PriorityScatterPlot } from '@/components/monitoring/TaskAnalyticsChart';
@@ -37,33 +37,33 @@ export default function AIMonitoring() {
     connector_id: ''
   });
 
-  const { data: workflows = [], isLoading } = useQuery({
+  const { data: workflows = [] } = useQuery({
     queryKey: ['workflows'],
-    queryFn: () => base44.entities.Workflow.list('-created_date', 50)
+    queryFn: () => base44.entities.Workflow?.list('-created_date', 50)
   });
 
-  const { data: dataConnectors = [], isLoading: isLoadingConnectors } = useQuery({
+  const { data: dataConnectors = [] } = useQuery({
     queryKey: ['data-connectors'],
-    queryFn: () => base44.entities.DataSourceConnector.list('-created_date', 50)
+    queryFn: () => base44.entities.DataSourceConnector?.list('-created_date', 50)
   });
 
-  const { data: rules = [], isLoading: isLoadingRules } = useQuery({
+  const { data: rules = [] } = useQuery({
     queryKey: ['monitoring-rules'],
-    queryFn: () => base44.entities.MonitoringRule.list('-created_date')
+    queryFn: () => base44.entities.MonitoringRule?.list('-created_date')
   });
 
-  const { data: insights = [], isLoading: isLoadingInsights } = useQuery({
+  const { data: insights = [] } = useQuery({
     queryKey: ['ai-insights'],
-    queryFn: () => base44.entities.AIInsight.list('-created_date', 50)
+    queryFn: () => base44.entities.AIInsight?.list('-created_date', 50)
   });
 
-  const { data: aiTasks = [], isLoading: isLoadingTasks } = useQuery({
+  const { data: aiTasks = [] } = useQuery({
     queryKey: ['ai-tasks'],
-    queryFn: () => base44.entities.AITask.list('-ai_priority_score', 20)
+    queryFn: () => base44.entities.AITask?.list('-ai_priority_score', 20)
   });
 
   const createRuleMutation = useMutation({
-    mutationFn: (data) => base44.entities.MonitoringRule.create(data),
+    mutationFn: (data) => base44.entities.MonitoringRule?.create(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['monitoring-rules'] });
       setShowRuleDialog(false);
@@ -72,7 +72,7 @@ export default function AIMonitoring() {
   });
 
   const updateRuleMutation = useMutation({
-    mutationFn: ({ id, data }) => base44.entities.MonitoringRule.update(id, data),
+    mutationFn: ({ id, data }) => base44.entities.MonitoringRule?.update(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['monitoring-rules'] });
       toast.success('Rule updated!');
@@ -80,7 +80,7 @@ export default function AIMonitoring() {
   });
 
   const updateInsightMutation = useMutation({
-    mutationFn: ({ id, data }) => base44.entities.AIInsight.update(id, data),
+    mutationFn: ({ id, data }) => base44.entities.AIInsight?.update(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['ai-insights'] });
       toast.success('Insight updated!');
@@ -508,7 +508,7 @@ Calculate:
                       </div>
                       <div className="flex gap-2">
                         <Button size="sm" variant="outline">
-                          <CheckCircle className="w-4 h-4" />
+                          <CheckCircle2 className="w-4 h-4" />
                         </Button>
                         <FeedbackWidget
                           type="task"

@@ -3,30 +3,34 @@ import { browserNavigationTool } from '../tools/browser_navigation_tool.js';
 export class QAScoutAgent {
     constructor() { }
 
-    async scoutRoute(url: string): Promise<any> {
-        console.log(`🕵️ [QAScoutAgent] Scouting route: ${url}`);
+    async scoutRoutes(urls: string[]): Promise<Record<string, any>> {
+        const results: Record<string, any> = {};
 
-        try {
-            const rawMap = await browserNavigationTool.execute({
-                url,
-                action: 'scan',
-                waitSelector: '#root'
-            });
+        for (const url of urls) {
+            console.log(`🕵️ [QAScoutAgent] Scouting route: ${url}`);
+            try {
+                const rawMap = await browserNavigationTool.execute({
+                    url,
+                    action: 'scan',
+                    waitSelector: '#root'
+                });
 
-            const parsedMap = JSON.parse(rawMap);
+                const parsedMap = JSON.parse(rawMap);
+                if (parsedMap.error) {
+                    console.error(`🕵️ [QAScoutAgent] Tool Error for ${url}: ${parsedMap.error}`);
+                    continue;
+                }
 
-            if (parsedMap.error) {
-                console.error(`🕵️ [QAScoutAgent] Tool Error: ${parsedMap.error}`);
-                return null;
+                console.log(`🕵️ [QAScoutAgent] Success: ${parsedMap.title} (${parsedMap.interactables?.length || 0} elements)`);
+                results[new URL(url).pathname] = parsedMap;
+
+                // Add a small jittered sleep to prevent overwhelming the local server
+                await new Promise(r => setTimeout(r, 500 + Math.random() * 500));
+            } catch (error) {
+                console.error(`🕵️ [QAScoutAgent] Navigation failed for ${url}:`, error);
             }
-
-            console.log(`🕵️ [QAScoutAgent] Page Title: ${parsedMap.title}`);
-            console.log(`🕵️ [QAScoutAgent] Discovered ${parsedMap.interactables?.length || 0} interactable elements.`);
-
-            return parsedMap;
-        } catch (error) {
-            console.error(`🕵️ [QAScoutAgent] Navigation failed:`, error);
-            return null;
         }
+
+        return results;
     }
 }

@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-02-20T20:44:58.977Z",
+  "timestamp": "2026-02-21T20:23:52.196Z",
   "nodes": [
     {
       "id": "learning",
@@ -24,6 +24,12 @@
       "domain": "retention",
       "signal": "HighRisk:0 UpsellTargets:0",
       "score": 100
+    },
+    {
+      "id": "qa",
+      "domain": "quality",
+      "signal": "GatePassed:false (2/4)",
+      "score": 50
     }
   ],
   "edges": [
@@ -46,27 +52,9 @@
       "weight": 1
     },
     {
-      "from": "research",
-      "to": "voice",
-      "relation": "moderate_correlation",
-      "weight": 0.738
-    },
-    {
-      "from": "research",
-      "to": "customer_success",
-      "relation": "moderate_correlation",
-      "weight": 0.738
-    },
-    {
-      "from": "voice",
-      "to": "customer_success",
-      "relation": "strong_correlation",
-      "weight": 1
-    }
-  ],
-  "strategyRecommendation": "Prioritize reliability hardening before revenue expansion",
-  "confidence": 0.99
-}elation",
+      "from": "learning",
+      "to": "qa",
+      "relation": "weak_correlation",
       "weight": 0.5
     },
     {
@@ -80,12 +68,6 @@
       "to": "customer_success",
       "relation": "moderate_correlation",
       "weight": 0.738
-    },
-    {
-      "from": "research",
-      "to": "devops",
-      "relation": "moderate_correlation",
-      "weight": 0.596
     },
     {
       "from": "research",
@@ -101,33 +83,15 @@
     },
     {
       "from": "voice",
-      "to": "devops",
-      "relation": "weak_correlation",
-      "weight": 0.333
-    },
-    {
-      "from": "voice",
       "to": "qa",
       "relation": "weak_correlation",
       "weight": 0.5
     },
     {
       "from": "customer_success",
-      "to": "devops",
-      "relation": "weak_correlation",
-      "weight": 0.333
-    },
-    {
-      "from": "customer_success",
       "to": "qa",
       "relation": "weak_correlation",
       "weight": 0.5
-    },
-    {
-      "from": "devops",
-      "to": "qa",
-      "relation": "strong_correlation",
-      "weight": 0.833
     }
   ],
   "strategyRecommendation": "Prioritize reliability hardening before revenue expansion",

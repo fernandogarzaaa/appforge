@@ -1,6 +1,6 @@
 /**
  * Reality guard check for swarm runtime.
- * Verifies strict real-mode settings and integration readiness.
+ * Verifies strict real-mode settings, integration readiness, and holographic integrity.
  */
 
 import fs from 'fs/promises';
@@ -10,6 +10,7 @@ import { jupiter } from '../swarm/integrations/jupiter.js';
 import { binance } from '../swarm/integrations/binance.js';
 import { twitter } from '../swarm/integrations/twitter.js';
 import { youtube } from '../swarm/integrations/youtube.js';
+import { QuantumSwarmCore } from '../swarm/core/quantum_core.js';
 
 async function main(): Promise<void> {
   console.log('SWARM REALITY GUARD CHECK');
@@ -73,6 +74,26 @@ async function main(): Promise<void> {
     }
   } catch {
     warnings.push('No real trading benchmark report found yet');
+  }
+
+  // --- HOLOGRAPHIC INTEGRITY CHECK (Phase 1060) ---
+  console.log('\n--- HOLOGRAPHIC INTEGRITY ---');
+  try {
+    const core = new QuantumSwarmCore();
+    const stats = core.getStats();
+    console.log(`coherence_level: ${stats.quantum_coherence.toFixed(4)}`);
+    console.log(`swarm_integrity: ${stats.swarm_integrity}`);
+    console.log(`coherence_lock: ${stats.coherence_lock}`);
+
+    if (stats.quantum_coherence < 0.9) {
+      warnings.push(`Low quantum coherence detected: ${stats.quantum_coherence.toFixed(4)}. Stability might be compromised.`);
+    }
+
+    if (stats.swarm_integrity !== 'Peak') {
+      failures.push('Swarm integrity is not at Peak state.');
+    }
+  } catch (error: any) {
+    warnings.push(`Holographic integrity check failed to initialize: ${error.message}`);
   }
 
   if (warnings.length > 0) {
