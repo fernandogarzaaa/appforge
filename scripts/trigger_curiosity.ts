@@ -13,15 +13,28 @@ async function trigger() {
         const base44 = new Base44Tool();
         const engine = new CuriosityEngine(base44);
 
-        const bounties = await engine.scanForNovelty(1);
+        const scanLimit = Math.max(1, Number.parseInt(process.env.CURIOSITY_SCAN_LIMIT ?? '5', 10) || 5);
+        const synthesisLimit = Math.max(1, Number.parseInt(process.env.CURIOSITY_SYNTHESIS_LIMIT ?? '3', 10) || 3);
+
+        console.log(`   🔍 scanLimit=${scanLimit}, synthesisLimit=${synthesisLimit}`);
+
+        const bounties = await engine.scanForNovelty(scanLimit);
+
+        console.log(`   📦 Candidates found: ${bounties.length}`);
 
         if (bounties.length > 0) {
-            const bounty = bounties[0];
-            console.log(`   ✨ Found Candidate: ${bounty.file}`);
-            console.log(`   🤔 Hypothesis: ${bounty.hypothesis}`);
+            for (const [index, bounty] of bounties.entries()) {
+                console.log(`   ${index + 1}. ✨ Candidate: ${bounty.file}`);
+                console.log(`      🤔 Hypothesis: ${bounty.hypothesis}`);
+                console.log(`      🧠 WhyInteresting: ${bounty.whyInteresting}`);
+                console.log(`      📈 Priority: ${bounty.priority.toFixed(2)}`);
+            }
 
-            await engine.synthesizeBounty(bounty);
-            console.log('   ✅ Bounty Synthesized & Logged.');
+            const selected = bounties.slice(0, synthesisLimit);
+            for (const bounty of selected) {
+                await engine.synthesizeBounty(bounty);
+            }
+            console.log(`   ✅ Synthesized ${selected.length} bount${selected.length === 1 ? 'y' : 'ies'} & logged.`);
         } else {
             console.log('   🤷 No neglected files found (or heuristic limit reached).');
         }
