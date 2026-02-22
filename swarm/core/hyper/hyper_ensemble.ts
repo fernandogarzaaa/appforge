@@ -192,7 +192,7 @@ export class QuantumConsensusEnsemble {
       if (modelId === 'ollama_local' || modelId === 'sovereign') {
         const res = await sovereignModel.chat(request);
         content = res.choices[0].message.content;
-      } else if (modelId === 'willow' || modelId === 'hyper_brain') {
+      } else if (modelId === 'willow') {
         content = await hyperBrain.chat(request);
       } else {
         // Fallback to synthetic if allowed, or restricted external

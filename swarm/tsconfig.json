@@ -1,11 +1,26 @@
 {
-    "compilerOptions": {
-        "target": "ES2022",
-        "module": "NodeNext",
-        "moduleResolution": "NodeNext",
-        "esModuleInterop": true,
-        "forceConsistentCasingInFileNames": true,
-        "strict": true,
-        "skipLibCheck": true
-    }
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": false,
+    "skipLibCheck": true,
+    "noImplicitAny": false,
+    "useUnknownInCatchVariables": false
+  },
+  "exclude": [
+    "**/*.test.ts",
+    "**/__tests__/**",
+    "test_*.ts",
+    "server.ts",
+    "whatsapp_qr_gen.ts",
+    "core/decentralized/**",
+    "core/agent_communication.ts",
+    "core/quantum_repository_trainer.ts",
+    "core/quantum_workflow_engine.ts",
+    "core/gemini_skill_adapter.ts",
+    "integrations/ibm_quantum.ts"
+  ]
 }

@@ -441,4 +441,3 @@ export class ClaudeProvider extends BaseLLMProvider {
 // Export
 // ============================================================================
 
-export { ClaudeProvider };

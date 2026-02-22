@@ -264,7 +264,6 @@ export class ProviderRegistry {
           question_answer: this.envConfig.PHI3_MODEL!,
           fast_response: this.envConfig.PHI3_MODEL!,
           // Embedding model for embeddings
-          embedding: this.envConfig.EMBEDDING_MODEL!,
         },
       });
 

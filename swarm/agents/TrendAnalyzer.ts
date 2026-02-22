@@ -124,8 +124,9 @@ export class TrendAnalyzer {
                 'Accept': 'application/vnd.github.v3+json'
             };
             
-            if (githubConfig?.token) {
-                headers['Authorization'] = `token ${githubConfig.token}`;
+            const ghToken = githubConfig && typeof githubConfig === 'object' && 'token' in githubConfig ? (githubConfig as any).token : undefined;
+            if (ghToken) {
+                headers['Authorization'] = `token ${ghToken}`;
                 console.log('[TrendAnalyzer] ✅ Using authenticated GitHub API');
             }
             

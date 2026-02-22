@@ -8,6 +8,7 @@
 
 import * as fs from 'fs/promises';
 import path from 'path';
+import { Base44Tool } from '../tools/base44.js';
 
 interface TradePosition {
     id: string;

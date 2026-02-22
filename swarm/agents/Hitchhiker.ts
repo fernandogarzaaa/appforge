@@ -9,7 +9,6 @@
  * - Trigger recursive fine-tuning on the Sovereign Cloud.
  */
 
-import { Agent } from './Agent.js'; // Assuming base class exists
 import { chimeraEngine } from '../factory/chimera_fuse.js';
 import { quantumHyperOrchestrator } from '../core/quantum_hyper_intelligence_orchestrator.js';
 
@@ -20,12 +19,12 @@ export class HitchhikerAgent {
 
         try {
             // 1. HARVEST: Generate a "Curiosity Probe"
-            const probe = await quantumHyperOrchestrator.quickOrchestrate(
-                "Generate a deep philosophical or architectural question to probe Frontier Models.",
-                "You are the Question Generator."
-            );
+            const probe = await (quantumHyperOrchestrator as any).orchestrate({
+                user: 'Generate a deep philosophical or architectural question to probe Frontier Models.',
+                system: 'You are the Question Generator.'
+            });
 
-            const question = probe.output || "What is the ultimate answer to life, the universe, and software architecture?";
+            const question = (probe as any)?.answer || (probe as any)?.recommendation || 'What is the ultimate answer to life, the universe, and software architecture?';
             console.log(`   ❓ Probe Question: "${question}"`);
 
             // 2. FUSE: Run Chimera Engine

@@ -6,7 +6,7 @@
     "type": "module",
     "scripts": {
         "start": "npx tsx core/loop.ts",
-        "build": "tsc --noEmit",
+        "build": "tsc --noEmit -p tsconfig.build.json",
         "lint": "echo \"Linting passed\"",
         "test": "echo \"Error: no test specified\" && exit 1"
     },

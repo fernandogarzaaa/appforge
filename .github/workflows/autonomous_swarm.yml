@@ -123,6 +123,26 @@ jobs:
           cd swarm
           npx tsx intelligence_pulse.ts
 
+      - name: Validate required secrets (masked)
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          BASE44_API_KEY: ${{ secrets.BASE44_API_KEY }}
+          BASE44_APP_ID: ${{ secrets.BASE44_APP_ID }}
+        run: |
+          check_secret() {
+            local name="$1"
+            local value="$2"
+            if [ -z "$value" ]; then
+              echo "❌ Missing required secret: $name"
+              exit 1
+            fi
+            echo "✅ $name is configured"
+          }
+
+          check_secret "OPENAI_API_KEY" "$OPENAI_API_KEY"
+          check_secret "BASE44_API_KEY" "$BASE44_API_KEY"
+          check_secret "BASE44_APP_ID" "$BASE44_APP_ID"
+
       - name: Run Swarm (One-Shot)
         env:
           # AI Keys
@@ -138,6 +158,7 @@ jobs:
           # 📡 GATEWAY: Multi-Transport Sovereign Bridge
           WHATSAPP_PHONE_NUMBER: ${{ secrets.WHATSAPP_PHONE_NUMBER }}
           DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN }}
+          DISCORD_BOT_TOKEN: ${{ secrets.DISCORD_TOKEN }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
 
           # 🏦 SOLANA REALITY MODE (Requires GitHub Secrets)

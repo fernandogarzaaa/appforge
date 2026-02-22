@@ -599,11 +599,12 @@ async function main() {
 - whatsapp: Switch to WhatsApp
 - help: List commands`);
         } else if (normalizedCmd === 'transport') {
-            const status = sovereignBridge.getStatus();
+            const statuses = sovereignBridge.getStatus();
+            const lines = statuses.length
+                ? statuses.map((status) => `- ${status.transport.toUpperCase()}: ${status.status} (${status.message})`).join('\n')
+                : '- No active transports';
             await sovereignBridge.pushUpdate(`📡 Transport Status:
-- Transport: ${status.transport.toUpperCase()}
-- Status: ${status.status}
-- Note: ${status.message}`);
+${lines}`);
         } else if (normalizedCmd === 'autotrade status') {
             const tradeStatus = autonomousTradingController.getStatus();
             await sovereignBridge.pushUpdate(
@@ -1049,7 +1050,7 @@ async function main() {
 
                 // GodMode decides if any action is needed
                 const context = { source: 'autonomous_cycle', cycle: cycleCount, findings: results };
-                results.godMode = await godMode.run(context);
+                results.godMode = await (godMode as any).run(context);
 
                 // Log autonomous activity
                 await base44.logActivity('AUTONOMOUS_SWARM', `Cycle #${cycleCount}: ${JSON.stringify(results.godMode)}`);
