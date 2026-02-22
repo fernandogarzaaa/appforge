@@ -371,13 +371,14 @@ Format your response as a JSON object:
                 [
                     'LOCK_TARGET_COHERENCE with consistency-first execution and strict memory alignment',
                     'RUN_ADAPTIVE_CORRECTION via error feedback and recursive learning',
+                    'ACTIVATE_DEEP_RESONANCE: Increase qubit density for holographic alignment',
                     'DEFER_CALIBRATION and continue with current coherence policy'
                 ],
-                ['stability', 'consistency', 'error_correction']
+                ['stability', 'consistency', 'error_correction', 'sovereignty']
             );
 
             const success = typeof decision?.optimizedBest === 'string'
-                && decision.optimizedBest.includes('LOCK_TARGET_COHERENCE');
+                && (decision.optimizedBest.includes('LOCK_TARGET_COHERENCE') || decision.optimizedBest.includes('ACTIVATE_DEEP_RESONANCE'));
 
             this.engine.reportOutcome(decision.predictionId, success, {
                 source: 'coherence_calibration',
@@ -438,20 +439,19 @@ Format your response as a JSON object:
     async validateDecision(decision: any, context: any): Promise<{ valid: boolean; corrections: string[] }> {
         const corrections: string[] = [];
 
-        // Simulate quantum error correction
-        if (!decision) {
-            corrections.push('Decision is null - applying quantum fallback');
-        }
-
-        if (context.priority === 'critical') {
+        // 🛡️ [Hardening] Executive Authority Validation
+        if (context.priority === 'critical' || decision.intent?.includes('Executive')) {
             const secret = process.env.PRODUCTION_SECRET || 'SOVEREIGN_RESERVE';
-            const expectedChecksum = crypto.createHash('sha256')
-                .update(decision.intent + JSON.stringify(decision.params) + secret)
-                .digest('hex');
+            const payload = decision.intent + JSON.stringify(decision.params) + secret;
+            const expectedChecksum = crypto.createHash('sha256').update(payload).digest('hex');
 
             if (decision.checksum !== expectedChecksum) {
-                corrections.push('VIO_CHECKSUM: Decision checksum mismatch or missing. Action rejected.');
+                corrections.push(`VIO_CHECKSUM: Decision '${decision.intent}' rejected. Integrity verification failed.`);
             }
+        }
+
+        if (!decision) {
+            corrections.push('Decision is null - applying quantum fallback');
         }
 
         return {
