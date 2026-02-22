@@ -1,11 +1,11 @@
 {
-  "analyzedAt": "2026-02-22T11:31:44.675Z",
+  "analyzedAt": "2026-02-22T13:06:42.085Z",
   "coreHealth": "Robust",
   "repoScope": 130,
   "insights": [
     {
       "file": "swarm/core/singularity_engine.ts",
-      "complexity": 27583,
+      "complexity": 27609,
       "logicDensity": 0.8333333333333334,
       "patterns": {
         "hasOracleConsultation": true,
@@ -31,7 +31,7 @@
     },
     {
       "file": "swarm/core/quantum_core.ts",
-      "complexity": 23900,
+      "complexity": 23984,
       "logicDensity": 0.5,
       "patterns": {
         "hasOracleConsultation": true,
@@ -57,7 +57,7 @@
     },
     {
       "file": "swarm/core/loop.ts",
-      "complexity": 53401,
+      "complexity": 53538,
       "logicDensity": 0.3333333333333333,
       "patterns": {
         "hasOracleConsultation": true,
@@ -109,7 +109,7 @@
     },
     {
       "file": "swarm/core/curiosity_engine.ts",
-      "complexity": 5815,
+      "complexity": 5864,
       "logicDensity": 0.16666666666666666,
       "patterns": {
         "hasOracleConsultation": true,
@@ -226,7 +226,7 @@
     },
     {
       "file": "swarm/core/quantum_hyper_intelligence_orchestrator.ts",
-      "complexity": 20695,
+      "complexity": 20643,
       "logicDensity": 0.16666666666666666,
       "patterns": {
         "hasOracleConsultation": false,
@@ -694,7 +694,7 @@
     },
     {
       "file": "swarm/core/discord_bridge.ts",
-      "complexity": 1219,
+      "complexity": 1299,
       "logicDensity": 0,
       "patterns": {
         "hasOracleConsultation": false,
@@ -772,7 +772,7 @@
     },
     {
       "file": "swarm/core/hyper/hyper_ensemble.ts",
-      "complexity": 12555,
+      "complexity": 12526,
       "logicDensity": 0,
       "patterns": {
         "hasOracleConsultation": false,
@@ -941,7 +941,7 @@
     },
     {
       "file": "swarm/core/market_intelligence_engine.ts",
-      "complexity": 13236,
+      "complexity": 13285,
       "logicDensity": 0,
       "patterns": {
         "hasOracleConsultation": false,
@@ -1058,7 +1058,7 @@
     },
     {
       "file": "swarm/core/providers/claude_provider.ts",
-      "complexity": 12450,
+      "complexity": 12423,
       "logicDensity": 0,
       "patterns": {
         "hasOracleConsultation": false,
@@ -1071,7 +1071,7 @@
     },
     {
       "file": "swarm/core/providers/codex_provider.ts",
-      "complexity": 7803,
+      "complexity": 7777,
       "logicDensity": 0,
       "patterns": {
         "hasOracleConsultation": false,
@@ -1084,7 +1084,7 @@
     },
     {
       "file": "swarm/core/providers/gemini_provider.ts",
-      "complexity": 9495,
+      "complexity": 9468,
       "logicDensity": 0,
       "patterns": {
         "hasOracleConsultation": false,
@@ -1097,7 +1097,7 @@
     },
     {
       "file": "swarm/core/providers/grok_provider.ts",
-      "complexity": 8729,
+      "complexity": 8704,
       "logicDensity": 0,
       "patterns": {
         "hasOracleConsultation": false,
@@ -1123,7 +1123,7 @@
     },
     {
       "file": "swarm/core/providers/llamacpp_provider.ts",
-      "complexity": 9921,
+      "complexity": 9892,
       "logicDensity": 0,
       "patterns": {
         "hasOracleConsultation": false,
@@ -1162,7 +1162,7 @@
     },
     {
       "file": "swarm/core/providers/ollama_provider.ts",
-      "complexity": 10549,
+      "complexity": 10522,
       "logicDensity": 0,
       "patterns": {
         "hasOracleConsultation": false,
@@ -1175,7 +1175,7 @@
     },
     {
       "file": "swarm/core/providers/openai_provider.ts",
-      "complexity": 9856,
+      "complexity": 9658,
       "logicDensity": 0,
       "patterns": {
         "hasOracleConsultation": false,
@@ -1188,7 +1188,7 @@
     },
     {
       "file": "swarm/core/providers/provider_registry.ts",
-      "complexity": 26598,
+      "complexity": 26544,
       "logicDensity": 0,
       "patterns": {
         "hasOracleConsultation": false,
@@ -1201,7 +1201,7 @@
     },
     {
       "file": "swarm/core/providers/synthetic_provider.ts",
-      "complexity": 11168,
+      "complexity": 11138,
       "logicDensity": 0,
       "patterns": {
         "hasOracleConsultation": false,
@@ -1370,7 +1370,7 @@
     },
     {
       "file": "swarm/core/repository_trainer.ts",
-      "complexity": 26905,
+      "complexity": 26879,
       "logicDensity": 0,
       "patterns": {
         "hasOracleConsultation": false,
