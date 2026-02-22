@@ -88,7 +88,7 @@ jobs:
       - name: Build Quantum Bridge
         run: |
           cd swarm/core/quantum_bridge
-          cargo build --release --locked
+          cargo build --release
           echo "🦀 Quantum Bridge compiled for cloud execution"
 
       # 📡 REALITY INJECTION 2.0: Harvest context before execution
