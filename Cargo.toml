@@ -1,7 +1,8 @@
 [workspace]
 members = [
   "quantum-core",
-  "static-analyzer-core"
+  "static-analyzer-core",
+  "swarm/core/quantum_bridge"
 ]
 resolver = "2"
 
