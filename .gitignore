@@ -90,7 +90,9 @@ static-analyzer-core/target/
 **/target/release/
 **/target/.rustc_info.json
 **/*.rs.bk
-Cargo.lock
+# Cargo.lock is tracked for deterministic CI builds
+!Cargo.lock
+!swarm/core/quantum_bridge/Cargo.lock
 
 # Backup files
 *.bak

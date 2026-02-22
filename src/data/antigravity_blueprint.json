@@ -1,0 +1,1703 @@
+{
+  "analyzedAt": "2026-02-22T13:09:50.611Z",
+  "coreHealth": "Robust",
+  "repoScope": 130,
+  "insights": [
+    {
+      "file": "swarm/core/singularity_engine.ts",
+      "complexity": 27609,
+      "logicDensity": 0.8333333333333334,
+      "patterns": {
+        "hasOracleConsultation": true,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": true,
+        "hasBlockchainIntegration": true,
+        "hasRecursiveSelfPatching": true,
+        "hasSovereignAxioms": true
+      }
+    },
+    {
+      "file": "swarm/core/autonomous_bug_fixer.ts",
+      "complexity": 3439,
+      "logicDensity": 0.5,
+      "patterns": {
+        "hasOracleConsultation": true,
+        "hasRealitySignals": true,
+        "hasQuantumLogic": false,
+        "hasBlockchainIntegration": false,
+        "hasRecursiveSelfPatching": true,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "swarm/core/quantum_core.ts",
+      "complexity": 24026,
+      "logicDensity": 0.5,
+      "patterns": {
+        "hasOracleConsultation": true,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": true,
+        "hasBlockchainIntegration": false,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": true
+      }
+    },
+    {
+      "file": "swarm/core/brain_v1.ts",
+      "complexity": 15899,
+      "logicDensity": 0.3333333333333333,
+      "patterns": {
+        "hasOracleConsultation": true,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": false,
+        "hasBlockchainIntegration": true,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "swarm/core/loop.ts",
+      "complexity": 53538,
+      "logicDensity": 0.3333333333333333,
+      "patterns": {
+        "hasOracleConsultation": true,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": false,
+        "hasBlockchainIntegration": true,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "swarm/core/reality_sensor.ts",
+      "complexity": 7756,
+      "logicDensity": 0.3333333333333333,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": true,
+        "hasQuantumLogic": false,
+        "hasBlockchainIntegration": true,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "swarm/core/atomic_patcher.ts",
+      "complexity": 4072,
+      "logicDensity": 0.16666666666666666,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": false,
+        "hasBlockchainIntegration": false,
+        "hasRecursiveSelfPatching": true,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "swarm/core/coherent_market_intelligence.ts",
+      "complexity": 12940,
+      "logicDensity": 0.16666666666666666,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": true,
+        "hasBlockchainIntegration": false,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "swarm/core/curiosity_engine.ts",
+      "complexity": 5864,
+      "logicDensity": 0.16666666666666666,
+      "patterns": {
+        "hasOracleConsultation": true,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": false,
+        "hasBlockchainIntegration": false,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "swarm/core/economic_engine.ts",
+      "complexity": 5601,
+      "logicDensity": 0.16666666666666666,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": false,
+        "hasBlockchainIntegration": true,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "swarm/core/enhanced_quantum_engine_v2.ts",
+      "complexity": 21378,
+      "logicDensity": 0.16666666666666666,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": true,
+        "hasBlockchainIntegration": false,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "swarm/core/hyper_brain.ts",
+      "complexity": 3831,
+      "logicDensity": 0.16666666666666666,
+      "patterns": {
+        "hasOracleConsultation": true,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": false,
+        "hasBlockchainIntegration": false,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "swarm/core/oracle_api_service.ts",
+      "complexity": 11976,
+      "logicDensity": 0.16666666666666666,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": true,
+        "hasBlockchainIntegration": false,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "swarm/core/oracle_enhanced.ts",
+      "complexity": 11978,
+      "logicDensity": 0.16666666666666666,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": true,
+        "hasBlockchainIntegration": false,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "swarm/core/providers/quantum_optimized_router.ts",
+      "complexity": 31346,
+      "logicDensity": 0.16666666666666666,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": true,
+        "hasBlockchainIntegration": false,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "swarm/core/quantum_consensus.ts",
+      "complexity": 2592,
+      "logicDensity": 0.16666666666666666,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": true,
+        "hasBlockchainIntegration": false,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "swarm/core/quantum_engine_launcher.ts",
+      "complexity": 4856,
+      "logicDensity": 0.16666666666666666,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": true,
+        "hasBlockchainIntegration": false,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "swarm/core/quantum_hyper_intelligence_orchestrator.ts",
+      "complexity": 20643,
+      "logicDensity": 0.16666666666666666,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": true,
+        "hasBlockchainIntegration": false,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "swarm/core/quantum_repository_trainer.ts",
+      "complexity": 42733,
+      "logicDensity": 0.16666666666666666,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": true,
+        "hasBlockchainIntegration": false,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "swarm/core/sovereign_llm.ts",
+      "complexity": 6479,
+      "logicDensity": 0.16666666666666666,
+      "patterns": {
+        "hasOracleConsultation": true,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": false,
+        "hasBlockchainIntegration": false,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "swarm/core/swarm_collectives.ts",
+      "complexity": 3363,
+      "logicDensity": 0.16666666666666666,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": false,
+        "hasBlockchainIntegration": true,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "src/config/payment.config.ts",
+      "complexity": 3825,
+      "logicDensity": 0.16666666666666666,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": false,
+        "hasBlockchainIntegration": true,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "src/functions/createSubscription.ts",
+      "complexity": 2303,
+      "logicDensity": 0.16666666666666666,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": false,
+        "hasBlockchainIntegration": true,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "src/functions/getSolanaConfig.ts",
+      "complexity": 1676,
+      "logicDensity": 0.16666666666666666,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": false,
+        "hasBlockchainIntegration": true,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "src/functions/getSolanaReceipt.ts",
+      "complexity": 852,
+      "logicDensity": 0.16666666666666666,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": false,
+        "hasBlockchainIntegration": true,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "src/functions/processSolanaPayment.ts",
+      "complexity": 3837,
+      "logicDensity": 0.16666666666666666,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": false,
+        "hasBlockchainIntegration": true,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "src/functions/purchaseTemplate.ts",
+      "complexity": 2556,
+      "logicDensity": 0.16666666666666666,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": false,
+        "hasBlockchainIntegration": true,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "src/functions/quantumAnalysis.ts",
+      "complexity": 946,
+      "logicDensity": 0.16666666666666666,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": true,
+        "hasBlockchainIntegration": false,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "src/functions/upsertSolanaConfig.ts",
+      "complexity": 2167,
+      "logicDensity": 0.16666666666666666,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": false,
+        "hasBlockchainIntegration": true,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "src/lib/QuantumEngine.js",
+      "complexity": 39137,
+      "logicDensity": 0.16666666666666666,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": true,
+        "hasBlockchainIntegration": false,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "src/lib/integrations.ts",
+      "complexity": 15115,
+      "logicDensity": 0.16666666666666666,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": false,
+        "hasBlockchainIntegration": true,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "src/services/QuantumCollapse.js",
+      "complexity": 2166,
+      "logicDensity": 0.16666666666666666,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": true,
+        "hasBlockchainIntegration": false,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "src/services/QuantumStream.js",
+      "complexity": 1028,
+      "logicDensity": 0.16666666666666666,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": true,
+        "hasBlockchainIntegration": false,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "src/store/useCausalStore.ts",
+      "complexity": 8416,
+      "logicDensity": 0.16666666666666666,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": true,
+        "hasBlockchainIntegration": false,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "src/swarm/agents/Distiller.ts",
+      "complexity": 4726,
+      "logicDensity": 0.16666666666666666,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": false,
+        "hasBlockchainIntegration": true,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "src/swarm/agents/LogicMapper.ts",
+      "complexity": 2208,
+      "logicDensity": 0.16666666666666666,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": false,
+        "hasBlockchainIntegration": true,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "src/types/quantum_engine.d.ts",
+      "complexity": 2006,
+      "logicDensity": 0.16666666666666666,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": true,
+        "hasBlockchainIntegration": false,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "src/utils/QuantumChannel.js",
+      "complexity": 6121,
+      "logicDensity": 0.16666666666666666,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": true,
+        "hasBlockchainIntegration": false,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "src/utils/QuantumEngine.js",
+      "complexity": 40910,
+      "logicDensity": 0.16666666666666666,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": true,
+        "hasBlockchainIntegration": false,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "src/utils/aiAgentCore.js",
+      "complexity": 16415,
+      "logicDensity": 0.16666666666666666,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": true,
+        "hasBlockchainIntegration": false,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "backend/src/controllers/paymentController.js",
+      "complexity": 5505,
+      "logicDensity": 0.16666666666666666,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": false,
+        "hasBlockchainIntegration": true,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "backend/src/routes/paymentRoutes.js",
+      "complexity": 360,
+      "logicDensity": 0.16666666666666666,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": false,
+        "hasBlockchainIntegration": true,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "apps/mobile/src/engine/SynthesisEngine.ts",
+      "complexity": 6283,
+      "logicDensity": 0.16666666666666666,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": false,
+        "hasBlockchainIntegration": true,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "swarm/core/SafetyGuard.ts",
+      "complexity": 3299,
+      "logicDensity": 0,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": false,
+        "hasBlockchainIntegration": false,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "swarm/core/__tests__/collective_reasoning.test.ts",
+      "complexity": 1886,
+      "logicDensity": 0,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": false,
+        "hasBlockchainIntegration": false,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "swarm/core/__tests__/dummy.test.ts",
+      "complexity": 91,
+      "logicDensity": 0,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": false,
+        "hasBlockchainIntegration": false,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "swarm/core/__tests__/truth_anchor.test.ts",
+      "complexity": 2746,
+      "logicDensity": 0,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": false,
+        "hasBlockchainIntegration": false,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "swarm/core/agent_communication.ts",
+      "complexity": 19296,
+      "logicDensity": 0,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": false,
+        "hasBlockchainIntegration": false,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "swarm/core/api_keys.ts",
+      "complexity": 6022,
+      "logicDensity": 0,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": false,
+        "hasBlockchainIntegration": false,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "swarm/core/autonomous_trading_controller.ts",
+      "complexity": 23639,
+      "logicDensity": 0,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": false,
+        "hasBlockchainIntegration": false,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "swarm/core/bounty_registry.ts",
+      "complexity": 3383,
+      "logicDensity": 0,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": false,
+        "hasBlockchainIntegration": false,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "swarm/core/decentralized/akash_provider.ts",
+      "complexity": 8733,
+      "logicDensity": 0,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": false,
+        "hasBlockchainIntegration": false,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "swarm/core/differentiable_circuits.ts",
+      "complexity": 20533,
+      "logicDensity": 0,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": false,
+        "hasBlockchainIntegration": false,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "swarm/core/discord_bridge.ts",
+      "complexity": 1299,
+      "logicDensity": 0,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": false,
+        "hasBlockchainIntegration": false,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "swarm/core/distributed_persistence.ts",
+      "complexity": 1525,
+      "logicDensity": 0,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": false,
+        "hasBlockchainIntegration": false,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "swarm/core/evolution_state.ts",
+      "complexity": 1270,
+      "logicDensity": 0,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": false,
+        "hasBlockchainIntegration": false,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "swarm/core/feedback_learning.ts",
+      "complexity": 19395,
+      "logicDensity": 0,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": false,
+        "hasBlockchainIntegration": false,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "swarm/core/gemini_skill_adapter.ts",
+      "complexity": 3454,
+      "logicDensity": 0,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": false,
+        "hasBlockchainIntegration": false,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "swarm/core/god_swarm.ts",
+      "complexity": 16582,
+      "logicDensity": 0,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": false,
+        "hasBlockchainIntegration": false,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "swarm/core/hyper/hyper_ensemble.ts",
+      "complexity": 12526,
+      "logicDensity": 0,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": false,
+        "hasBlockchainIntegration": false,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "swarm/core/hyper/hyper_model_router.ts",
+      "complexity": 12820,
+      "logicDensity": 0,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": false,
+        "hasBlockchainIntegration": false,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "swarm/core/hyper/hyper_safety.ts",
+      "complexity": 13487,
+      "logicDensity": 0,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": false,
+        "hasBlockchainIntegration": false,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "swarm/core/hyper/hyper_willow.ts",
+      "complexity": 12117,
+      "logicDensity": 0,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": false,
+        "hasBlockchainIntegration": false,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "swarm/core/hyper/index.ts",
+      "complexity": 7605,
+      "logicDensity": 0,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": false,
+        "hasBlockchainIntegration": false,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "swarm/core/hyper/types.ts",
+      "complexity": 7266,
+      "logicDensity": 0,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": false,
+        "hasBlockchainIntegration": false,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "swarm/core/hyper_intelligence.ts",
+      "complexity": 13590,
+      "logicDensity": 0,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": false,
+        "hasBlockchainIntegration": false,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "swarm/core/imessage_bridge.ts",
+      "complexity": 8484,
+      "logicDensity": 0,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": false,
+        "hasBlockchainIntegration": false,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "swarm/core/inference_server.py",
+      "complexity": 4385,
+      "logicDensity": 0,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": false,
+        "hasBlockchainIntegration": false,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "swarm/core/knowledge.ts",
+      "complexity": 7430,
+      "logicDensity": 0,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": false,
+        "hasBlockchainIntegration": false,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "swarm/core/llm.js",
+      "complexity": 2368,
+      "logicDensity": 0,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": false,
+        "hasBlockchainIntegration": false,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "swarm/core/llm.ts",
+      "complexity": 8451,
+      "logicDensity": 0,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": false,
+        "hasBlockchainIntegration": false,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "swarm/core/maintenance_guard.ts",
+      "complexity": 1238,
+      "logicDensity": 0,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": false,
+        "hasBlockchainIntegration": false,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "swarm/core/market_intelligence_engine.ts",
+      "complexity": 13285,
+      "logicDensity": 0,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": false,
+        "hasBlockchainIntegration": false,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "swarm/core/mcp_tool_registry.ts",
+      "complexity": 24715,
+      "logicDensity": 0,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": false,
+        "hasBlockchainIntegration": false,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "swarm/core/memory.ts",
+      "complexity": 4397,
+      "logicDensity": 0,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": false,
+        "hasBlockchainIntegration": false,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "swarm/core/multi_swarm_coordinator.ts",
+      "complexity": 7139,
+      "logicDensity": 0,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": false,
+        "hasBlockchainIntegration": false,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "swarm/core/nas.ts",
+      "complexity": 2170,
+      "logicDensity": 0,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": false,
+        "hasBlockchainIntegration": false,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "swarm/core/neural_bridge.ts",
+      "complexity": 2174,
+      "logicDensity": 0,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": false,
+        "hasBlockchainIntegration": false,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "swarm/core/nexus_gateway.ts",
+      "complexity": 2147,
+      "logicDensity": 0,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": false,
+        "hasBlockchainIntegration": false,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "swarm/core/p2p_resonance.ts",
+      "complexity": 9780,
+      "logicDensity": 0,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": false,
+        "hasBlockchainIntegration": false,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "swarm/core/persistent_memory.ts",
+      "complexity": 5497,
+      "logicDensity": 0,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": false,
+        "hasBlockchainIntegration": false,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "swarm/core/providers/claude_provider.ts",
+      "complexity": 12423,
+      "logicDensity": 0,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": false,
+        "hasBlockchainIntegration": false,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "swarm/core/providers/codex_provider.ts",
+      "complexity": 7777,
+      "logicDensity": 0,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": false,
+        "hasBlockchainIntegration": false,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "swarm/core/providers/gemini_provider.ts",
+      "complexity": 9468,
+      "logicDensity": 0,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": false,
+        "hasBlockchainIntegration": false,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "swarm/core/providers/grok_provider.ts",
+      "complexity": 8704,
+      "logicDensity": 0,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": false,
+        "hasBlockchainIntegration": false,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "swarm/core/providers/index.ts",
+      "complexity": 1088,
+      "logicDensity": 0,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": false,
+        "hasBlockchainIntegration": false,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "swarm/core/providers/llamacpp_provider.ts",
+      "complexity": 9892,
+      "logicDensity": 0,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": false,
+        "hasBlockchainIntegration": false,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "swarm/core/providers/llm_provider_interface.ts",
+      "complexity": 8877,
+      "logicDensity": 0,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": false,
+        "hasBlockchainIntegration": false,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "swarm/core/providers/ollama_model_router.ts",
+      "complexity": 14093,
+      "logicDensity": 0,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": false,
+        "hasBlockchainIntegration": false,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "swarm/core/providers/ollama_provider.ts",
+      "complexity": 10522,
+      "logicDensity": 0,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": false,
+        "hasBlockchainIntegration": false,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "swarm/core/providers/openai_provider.ts",
+      "complexity": 9658,
+      "logicDensity": 0,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": false,
+        "hasBlockchainIntegration": false,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "swarm/core/providers/provider_registry.ts",
+      "complexity": 26544,
+      "logicDensity": 0,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": false,
+        "hasBlockchainIntegration": false,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "swarm/core/providers/synthetic_provider.ts",
+      "complexity": 11138,
+      "logicDensity": 0,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": false,
+        "hasBlockchainIntegration": false,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "swarm/core/qsharp_compiler.ts",
+      "complexity": 25438,
+      "logicDensity": 0,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": false,
+        "hasBlockchainIntegration": false,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "swarm/core/quantum.ts",
+      "complexity": 1293,
+      "logicDensity": 0,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": false,
+        "hasBlockchainIntegration": false,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "swarm/core/quantum_bridge/mock_oracle.js",
+      "complexity": 1683,
+      "logicDensity": 0,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": false,
+        "hasBlockchainIntegration": false,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "swarm/core/quantum_bridge/test_oracle_client.js",
+      "complexity": 1804,
+      "logicDensity": 0,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": false,
+        "hasBlockchainIntegration": false,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "swarm/core/quantum_bridge_ts.ts",
+      "complexity": 2161,
+      "logicDensity": 0,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": false,
+        "hasBlockchainIntegration": false,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "swarm/core/quantum_inference_batcher.ts",
+      "complexity": 18373,
+      "logicDensity": 0,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": false,
+        "hasBlockchainIntegration": false,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "swarm/core/quantum_layers.ts",
+      "complexity": 15356,
+      "logicDensity": 0,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": false,
+        "hasBlockchainIntegration": false,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "swarm/core/quantum_workflow_engine.ts",
+      "complexity": 22604,
+      "logicDensity": 0,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": false,
+        "hasBlockchainIntegration": false,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "swarm/core/real_hyper_intelligence.ts",
+      "complexity": 10214,
+      "logicDensity": 0,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": false,
+        "hasBlockchainIntegration": false,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "swarm/core/real_hyper_intelligence_v2.ts",
+      "complexity": 126,
+      "logicDensity": 0,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": false,
+        "hasBlockchainIntegration": false,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "swarm/core/reality_mode.ts",
+      "complexity": 1628,
+      "logicDensity": 0,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": false,
+        "hasBlockchainIntegration": false,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "swarm/core/replicate.ts",
+      "complexity": 3578,
+      "logicDensity": 0,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": false,
+        "hasBlockchainIntegration": false,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "swarm/core/repository_trainer.ts",
+      "complexity": 26879,
+      "logicDensity": 0,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": false,
+        "hasBlockchainIntegration": false,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "swarm/core/resonance_engine.ts",
+      "complexity": 1545,
+      "logicDensity": 0,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": false,
+        "hasBlockchainIntegration": false,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "swarm/core/revenue_pipeline.ts",
+      "complexity": 8180,
+      "logicDensity": 0,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": false,
+        "hasBlockchainIntegration": false,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "swarm/core/secure_entropy.ts",
+      "complexity": 6442,
+      "logicDensity": 0,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": false,
+        "hasBlockchainIntegration": false,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "swarm/core/shadow_swarm.ts",
+      "complexity": 3524,
+      "logicDensity": 0,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": false,
+        "hasBlockchainIntegration": false,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "swarm/core/sovereign_bridge.ts",
+      "complexity": 3484,
+      "logicDensity": 0,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": false,
+        "hasBlockchainIntegration": false,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "swarm/core/sovereign_hyper_brain.ts",
+      "complexity": 2743,
+      "logicDensity": 0,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": false,
+        "hasBlockchainIntegration": false,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "swarm/core/sovereign_model.ts",
+      "complexity": 8848,
+      "logicDensity": 0,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": false,
+        "hasBlockchainIntegration": false,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "swarm/core/swarm_collaboration.ts",
+      "complexity": 9202,
+      "logicDensity": 0,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": false,
+        "hasBlockchainIntegration": false,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "swarm/core/swarm_configs.ts",
+      "complexity": 2186,
+      "logicDensity": 0,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": false,
+        "hasBlockchainIntegration": false,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "swarm/core/swarm_coordinator_launcher.ts",
+      "complexity": 11854,
+      "logicDensity": 0,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": false,
+        "hasBlockchainIntegration": false,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "swarm/core/swarm_guard.ts",
+      "complexity": 1185,
+      "logicDensity": 0,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": false,
+        "hasBlockchainIntegration": false,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "swarm/core/swarm_reporter.ts",
+      "complexity": 6406,
+      "logicDensity": 0,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": false,
+        "hasBlockchainIntegration": false,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "swarm/core/swarm_status_logger.ts",
+      "complexity": 1474,
+      "logicDensity": 0,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": false,
+        "hasBlockchainIntegration": false,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "swarm/core/telegram_bridge.ts",
+      "complexity": 1178,
+      "logicDensity": 0,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": false,
+        "hasBlockchainIntegration": false,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "swarm/core/universal_hyper_intelligence.ts",
+      "complexity": 14668,
+      "logicDensity": 0,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": false,
+        "hasBlockchainIntegration": false,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "swarm/core/whatsapp_ai_chat.ts",
+      "complexity": 3230,
+      "logicDensity": 0,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": false,
+        "hasBlockchainIntegration": false,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "swarm/core/whatsapp_bridge.ts",
+      "complexity": 21216,
+      "logicDensity": 0,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": false,
+        "hasBlockchainIntegration": false,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "swarm/core/whatsapp_commands.ts",
+      "complexity": 6982,
+      "logicDensity": 0,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": false,
+        "hasBlockchainIntegration": false,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "swarm/core/willow_patterns.ts",
+      "complexity": 3200,
+      "logicDensity": 0,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": false,
+        "hasBlockchainIntegration": false,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "src/swarm/core/Adapter.ts",
+      "complexity": 988,
+      "logicDensity": 0,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": false,
+        "hasBlockchainIntegration": false,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "src/swarm/core/Fractal.ts",
+      "complexity": 2595,
+      "logicDensity": 0,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": false,
+        "hasBlockchainIntegration": false,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "src/swarm/core/ImmuneSystem.ts",
+      "complexity": 3374,
+      "logicDensity": 0,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": false,
+        "hasBlockchainIntegration": false,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "src/swarm/core/Inference.ts",
+      "complexity": 2958,
+      "logicDensity": 0,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": false,
+        "hasBlockchainIntegration": false,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "src/swarm/core/src/oracle/validators/UniversalValidators.ts",
+      "complexity": 1950,
+      "logicDensity": 0,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": false,
+        "hasBlockchainIntegration": false,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    }
+  ],
+  "recommendations": [
+    "Normalize Oracle consultation across all leaf agents.",
+    "Standardize RealitySignal ingestion for proactive response.",
+    "Deepen Quantum Resonance in decision-making paths.",
+    "Enforce Sovereign Axioms in new cross-module refactors."
+  ]
+}

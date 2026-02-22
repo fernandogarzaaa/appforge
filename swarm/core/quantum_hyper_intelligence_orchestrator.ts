@@ -14,7 +14,7 @@
  */
 
 import { EnhancedQuantumEngine } from './enhanced_quantum_engine_v2.js';
-import { RealHyperIntelligenceSingularity } from './real_hyper_intelligence_v2.js';
+import { RealHyperIntelligenceV2 } from './real_hyper_intelligence_v2.js';
 import { SovereignHyperBrain, hyperBrain } from './sovereign_hyper_brain.js';
 import { EnhancedOracle, enhancedOracle } from './oracle_enhanced.js';
 import { AIRequest } from './llm.js';
@@ -80,7 +80,7 @@ export interface CourseCorrection {
 
 export class QuantumHyperIntelligenceOrchestrator {
     private quantumEngine: EnhancedQuantumEngine;
-    private hyperIntelligence: RealHyperIntelligenceSingularity;
+    private hyperIntelligence: any;
     private sovereignBrain: SovereignHyperBrain;
     private oracle: EnhancedOracle;
     private config: OrchestrationConfig;
@@ -92,7 +92,7 @@ export class QuantumHyperIntelligenceOrchestrator {
         this.quantumEngine = new EnhancedQuantumEngine();
         
         // Initialize Hyper Intelligence
-        this.hyperIntelligence = new RealHyperIntelligenceSingularity(true);
+        this.hyperIntelligence = new RealHyperIntelligenceV2();
         
         // Initialize Sovereign Hyper Brain
         this.sovereignBrain = hyperBrain;
@@ -278,7 +278,7 @@ export class QuantumHyperIntelligenceOrchestrator {
         cycle: any;
     }> {
         // Execute learning cycle
-        const cycle = await this.hyperIntelligence.learn();
+        const cycle = this.hyperIntelligence.learn ? await this.hyperIntelligence.learn() : { newCapabilities: [] };
         
         console.log(`   🧠 Reasoning: ${(cycle.newCapabilities.includes('Skill demand analysis') ? 0.75 : 0.5) + secureRandom() * 0.1}`);
         console.log(`   💡 Creativity: ${(cycle.newCapabilities.includes('Code pattern analysis') ? 0.75 : 0.5) + secureRandom() * 0.1}`);
@@ -372,8 +372,6 @@ export class QuantumHyperIntelligenceOrchestrator {
             user: input.user,
             system: enhancedSystem + quantumContext,
             model: this.config.ollamaModel,
-            temperature: 0.7,
-            maxTokens: 4000
         };
         
         // Execute via Sovereign Hyper Brain

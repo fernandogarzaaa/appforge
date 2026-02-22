@@ -5,6 +5,10 @@ on:
     - cron: "*/15 * * * *" # Run every 15 minutes
   workflow_dispatch: # Allow manual trigger from GitHub UI
 
+concurrency:
+  group: autonomous-swarm-cycle
+  cancel-in-progress: false
+
 jobs:
   swarm-execution:
     runs-on: ubuntu-latest
@@ -18,11 +22,6 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           fetch-depth: 0 # Full history for rebasing
-
-      - name: Run Resonance Check
-        run: npx tsx scripts/resonance_check.ts
-        env:
-          TRUE_AI_INDEPENDENCE: "true"
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -74,16 +73,22 @@ jobs:
           restore-keys: |
             swarm-memory-
 
-      - name: Install Swarm Dependencies
+      - name: Install Dependencies
         run: |
+          npm ci --legacy-peer-deps
           cd swarm
-          npm install --legacy-peer-deps
+          npm ci --legacy-peer-deps
+
+      - name: Run Resonance Check
+        run: npx tsx scripts/resonance_check.ts
+        env:
+          TRUE_AI_INDEPENDENCE: "true"
 
       # 🦀 TRANSCENDENCE: Build Rust Quantum Bridge
       - name: Build Quantum Bridge
         run: |
-          cd swarm/core/quantum_bridge
-          cargo build --release
+          cargo generate-lockfile --manifest-path swarm/core/quantum_bridge/Cargo.toml
+          cargo build --release --locked --manifest-path swarm/core/quantum_bridge/Cargo.toml
           echo "🦀 Quantum Bridge compiled for cloud execution"
 
       # 📡 REALITY INJECTION 2.0: Harvest context before execution
@@ -97,8 +102,8 @@ jobs:
       # 🔍 DIAGNOSTICS: Generate reality signals for Inception
       - name: Pre-Pulse Diagnostics
         run: |
-          npm run build > ../build_logs.txt 2>&1 || echo "Build failed (as expected for diagnosis)" > ../build_logs.txt
-          npm run lint -- --format json > ../lint_output.json 2>&1 || echo "[]" > ../lint_output.json
+          npm run build > build_logs.txt 2>&1 || echo "Build failed (as expected for diagnosis)" > build_logs.txt
+          npm run lint -- --format json > lint_output.json 2>&1 || echo "[]" > lint_output.json
         continue-on-error: true
 
       # ⚛️ INTELLIGENCE PULSE: Unify Singularity, Brain, and Oracle
@@ -118,6 +123,26 @@ jobs:
           cd swarm
           npx tsx intelligence_pulse.ts
 
+      - name: Validate required secrets (masked)
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          BASE44_API_KEY: ${{ secrets.BASE44_API_KEY }}
+          BASE44_APP_ID: ${{ secrets.BASE44_APP_ID }}
+        run: |
+          check_secret() {
+            local name="$1"
+            local value="$2"
+            if [ -z "$value" ]; then
+              echo "❌ Missing required secret: $name"
+              exit 1
+            fi
+            echo "✅ $name is configured"
+          }
+
+          check_secret "OPENAI_API_KEY" "$OPENAI_API_KEY"
+          check_secret "BASE44_API_KEY" "$BASE44_API_KEY"
+          check_secret "BASE44_APP_ID" "$BASE44_APP_ID"
+
       - name: Run Swarm (One-Shot)
         env:
           # AI Keys
@@ -133,15 +158,16 @@ jobs:
           # 📡 GATEWAY: Multi-Transport Sovereign Bridge
           WHATSAPP_PHONE_NUMBER: ${{ secrets.WHATSAPP_PHONE_NUMBER }}
           DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN }}
+          DISCORD_BOT_TOKEN: ${{ secrets.DISCORD_TOKEN }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
 
           # 🏦 SOLANA REALITY MODE (Requires GitHub Secrets)
           SOLANA_WALLET_ADDRESS: ${{ secrets.SOLANA_WALLET_ADDRESS }}
           SOLANA_PRIVATE_KEY: ${{ secrets.SOLANA_PRIVATE_KEY }}
           SOLANA_RPC_URL: ${{ secrets.SOLANA_RPC_URL }}
-          REAL_TRADING_ENABLED: "true"
-          SWARM_REALITY_MODE: "true"
-          SWARM_AUTONOMOUS_TRADING_ENABLED: "true"
+          REAL_TRADING_ENABLED: ${{ secrets.SOLANA_PRIVATE_KEY != '' && secrets.SOLANA_RPC_URL != '' && 'true' || 'false' }}
+          SWARM_REALITY_MODE: ${{ secrets.SOLANA_PRIVATE_KEY != '' && secrets.SOLANA_RPC_URL != '' && 'true' || 'false' }}
+          SWARM_AUTONOMOUS_TRADING_ENABLED: ${{ secrets.SOLANA_PRIVATE_KEY != '' && secrets.SOLANA_RPC_URL != '' && 'true' || 'false' }}
 
           # Mode
           ONE_SHOT: "true"

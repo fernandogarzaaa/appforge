@@ -1,0 +1,14 @@
+[workspace]
+members = [
+  "quantum-core",
+  "static-analyzer-core",
+  "swarm/core/quantum_bridge"
+]
+resolver = "2"
+
+[workspace.package]
+edition = "2021"
+license = "Apache-2.0"
+
+[workspace.metadata]
+description = "AppForge Rust workspace for WASM and native migration efforts"

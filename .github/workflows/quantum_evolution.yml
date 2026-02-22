@@ -5,9 +5,14 @@ on:
     - cron: "0 * * * *" # Run every hour on the hour
   workflow_dispatch: # Manual trigger
 
+concurrency:
+  group: quantum-self-evolution
+  cancel-in-progress: false
+
 jobs:
   quantum-evolution:
     runs-on: ubuntu-latest
+    timeout-minutes: 45
     permissions:
       contents: write
     steps:
@@ -21,20 +26,10 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "22"
-
-      - name: Run Resonance Check
-        run: npx tsx scripts/resonance_check.ts
-        env:
-          TRUE_AI_INDEPENDENCE: "true"
-
-      # ⚡ CACHE: Node.js dependencies
-      - name: Cache Node Modules
-        uses: actions/cache@v4
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-node-root-${{ hashFiles('package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-root-
+          cache: "npm"
+          cache-dependency-path: |
+            package-lock.json
+            swarm/package-lock.json
 
       # 📦 CACHE: Quantum evolution state
       - name: Cache Evolution State
@@ -57,12 +52,29 @@ jobs:
 
       - name: Build Quantum Bridge
         working-directory: ./swarm/core/quantum_bridge
-        run: cargo build --release
+        run: cargo build --release --locked
 
       - name: Install Dependencies
         run: |
-          npm install --legacy-peer-deps
-          cd swarm && npm install --legacy-peer-deps
+          npm ci --legacy-peer-deps
+          cd swarm && npm ci --legacy-peer-deps
+
+      - name: Validate AI Provider Secrets
+        id: ai-secrets
+        run: |
+          has_openai="${{ secrets.OPENAI_API_KEY != '' }}"
+          has_gemini="${{ secrets.GEMINI_API_KEY != '' }}"
+          if [ "$has_openai" = "true" ] || [ "$has_gemini" = "true" ]; then
+            echo "has_provider=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          echo "has_provider=false" >> "$GITHUB_OUTPUT"
+          echo "::warning::OPENAI_API_KEY and GEMINI_API_KEY are both missing. Skipping AI-dependent evolution steps."
+
+      - name: Run Resonance Check
+        run: npx tsx scripts/resonance_check.ts
+        env:
+          TRUE_AI_INDEPENDENCE: "true"
 
       - name: Run Reality Pulse 2.0
         working-directory: ./
@@ -75,9 +87,8 @@ jobs:
       # 🔍 DIAGNOSTICS: Generate reality signals for Inception
       - name: Pre-Pulse Diagnostics
         run: |
-          npm ci --legacy-peer-deps
-          npm run build > ../build_logs.txt 2>&1 || echo "Build failed (as expected for diagnosis)" > ../build_logs.txt
-          npm run lint -- --format json > ../lint_output.json 2>&1 || echo "[]" > ../lint_output.json
+          npm run build > build_logs.txt 2>&1 || echo "Build failed (as expected for diagnosis)" > build_logs.txt
+          npm run lint -- --format json > lint_output.json 2>&1 || echo "[]" > lint_output.json
         continue-on-error: true
 
       - name: Configure Git Identity
@@ -86,6 +97,7 @@ jobs:
           git config --global user.name "Fernando Garza (Sovereign Swarm)"
 
       - name: Run Quantum Evolution
+        if: steps.ai-secrets.outputs.has_provider == 'true'
         working-directory: ./swarm
         run: npx tsx intelligence_pulse.ts
         env:
@@ -105,11 +117,14 @@ jobs:
           QUANTUM_EPOCHS: "100"
 
       - name: Run Synergy Scouting
+        if: steps.ai-secrets.outputs.has_provider == 'true'
+        working-directory: ./
         run: npm run swarm:scout
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Run Architectural Analysis
+        working-directory: ./
         run: npm run swarm:analyze
 
       - name: Run Singularity Verification
@@ -127,6 +142,8 @@ jobs:
           path: |
             src/data/quantum_state.json
             src/data/quantum_predictions.json
+            build_logs.txt
+            lint_output.json
           retention-days: 30
 
       - name: Commit Evolution Results
@@ -141,6 +158,18 @@ jobs:
           git add -f docs/brain/*.md || true
           git add -f build_logs.txt || true
           git add -f lint_output.json || true
-          git commit -m "chore: quantum self-evolution [Inception] [Bounty Sync] [Synergy] [skip ci]" || echo "No changes to commit"
-          git pull --rebase origin main
-          git push
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+            exit 0
+          fi
+          git commit -m "chore: quantum self-evolution [Inception] [Bounty Sync] [Synergy] [skip ci]"
+          git pull --rebase origin "${GITHUB_REF_NAME}"
+          for attempt in 1 2 3; do
+            if git push origin HEAD:"${GITHUB_REF_NAME}"; then
+              exit 0
+            fi
+            echo "Push attempt ${attempt} failed. Rebasing and retrying..."
+            git pull --rebase origin "${GITHUB_REF_NAME}"
+          done
+          echo "Failed to push after 3 attempts"
+          exit 1

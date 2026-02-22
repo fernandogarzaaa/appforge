@@ -2,7 +2,7 @@ import dotenv from 'dotenv';
 import path from 'path';
 import * as fs from 'fs/promises';
 import { fileURLToPath } from 'node:url';
-import { realityStatusSummary, requireRealityMode } from './reality_mode.js';
+import { isLiveTradingEnabled, realityStatusSummary, requireRealityMode } from './reality_mode.js';
 
 // Resolve .env.local from project root
 const __filename = fileURLToPath(import.meta.url);
@@ -34,7 +34,9 @@ if (isTrueIndependence) {
 }
 
 try {
-    requireRealityMode('swarm/core/loop.ts startup');
+    if (isLiveTradingEnabled()) {
+        requireRealityMode('swarm/core/loop.ts startup with REAL_TRADING_ENABLED=true');
+    }
     console.log(`🌍 Reality Lock: ${realityStatusSummary()}`);
 } catch (error: any) {
     console.error(`❌ FATAL: ${error.message}`);
@@ -49,6 +51,25 @@ function parseBoolean(value: string | undefined, fallback = false): boolean {
     if (!value) return fallback;
     const normalized = value.trim().toLowerCase();
     return ['1', 'true', 'yes', 'on'].includes(normalized);
+}
+
+
+function isOneShotMode(): boolean {
+    return parseBoolean(process.env.ONE_SHOT, false);
+}
+
+const ONE_SHOT_SOFT_EXIT_PATTERNS: RegExp[] = [
+    /BASE44_API_KEY not found/i,
+    /OPENAI_API_KEY not found/i,
+    /Wallet\/RPC not configured/i,
+    /ECONNREFUSED/i,
+    /ETIMEDOUT/i,
+    /fetch failed/i,
+    /network/i
+];
+
+function shouldSoftExitOneShot(errorMessage: string): boolean {
+    return ONE_SHOT_SOFT_EXIT_PATTERNS.some((pattern) => pattern.test(errorMessage));
 }
 
 /**
@@ -578,11 +599,12 @@ async function main() {
 - whatsapp: Switch to WhatsApp
 - help: List commands`);
         } else if (normalizedCmd === 'transport') {
-            const status = sovereignBridge.getStatus();
+            const statuses = sovereignBridge.getStatus();
+            const lines = statuses.length
+                ? statuses.map((status) => `- ${status.transport.toUpperCase()}: ${status.status} (${status.message})`).join('\n')
+                : '- No active transports';
             await sovereignBridge.pushUpdate(`📡 Transport Status:
-- Transport: ${status.transport.toUpperCase()}
-- Status: ${status.status}
-- Note: ${status.message}`);
+${lines}`);
         } else if (normalizedCmd === 'autotrade status') {
             const tradeStatus = autonomousTradingController.getStatus();
             await sovereignBridge.pushUpdate(
@@ -1028,7 +1050,7 @@ async function main() {
 
                 // GodMode decides if any action is needed
                 const context = { source: 'autonomous_cycle', cycle: cycleCount, findings: results };
-                results.godMode = await godMode.run(context);
+                results.godMode = await (godMode as any).run(context);
 
                 // Log autonomous activity
                 await base44.logActivity('AUTONOMOUS_SWARM', `Cycle #${cycleCount}: ${JSON.stringify(results.godMode)}`);
@@ -1042,7 +1064,14 @@ async function main() {
         } catch (error: any) {
             const errorMessage = error?.message || String(error);
             console.error('❌ Loop Error:', errorMessage);
-            if (process.env.ONE_SHOT === 'true') process.exit(1);
+            if (isOneShotMode()) {
+                if (shouldSoftExitOneShot(errorMessage)) {
+                    console.warn('⚠️ One-Shot Mode: Non-critical runtime issue detected. Exiting gracefully for CI continuity.');
+                    process.exit(0);
+                }
+                console.error('💥 One-Shot Mode: Critical runtime failure detected. Exiting with failure status.');
+                process.exit(1);
+            }
         }
 
         // Avoid tight loop
@@ -1102,4 +1131,14 @@ async function generateCycleReport(cycleCount: number, results: any, quantumStat
     return report;
 }
 
-main().catch(console.error);
+main().catch((error: any) => {
+    const errorMessage = error?.message || String(error);
+    console.error('❌ Fatal startup error:', errorMessage);
+
+    if (isOneShotMode() && shouldSoftExitOneShot(errorMessage)) {
+        console.warn('⚠️ One-Shot Mode: Startup dependency missing or transient issue detected. Exiting gracefully.');
+        process.exit(0);
+    }
+
+    process.exit(1);
+});

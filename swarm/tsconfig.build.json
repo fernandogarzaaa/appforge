@@ -1,0 +1,13 @@
+{
+  "extends": "./tsconfig.json",
+  "include": [
+    "agents/FreelanceSwarm.ts",
+    "agents/Hitchhiker.ts",
+    "agents/TradeOptimizer.ts",
+    "agents/TrendAnalyzer.ts",
+    "core/discord_bridge.ts",
+    "core/repository_trainer.ts",
+    "types/**/*.d.ts"
+  ],
+  "exclude": []
+}

@@ -11,8 +11,9 @@ export class DiscordBridge {
     }
 
     async start() {
-        if (!process.env.DISCORD_TOKEN) {
-            console.warn('⚠️ [Discord] DISCORD_TOKEN not found. Operating in restricted mode.');
+        const token = process.env.DISCORD_TOKEN || process.env.DISCORD_BOT_TOKEN;
+        if (!token) {
+            console.warn('⚠️ [Discord] DISCORD_TOKEN/DISCORD_BOT_TOKEN not found. Operating in restricted mode.');
             return;
         }
         console.log('📡 [Discord] Connecting to gateway...');
