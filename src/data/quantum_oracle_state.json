@@ -1,20 +1,20 @@
 {
-  "timestamp": "2026-02-21T19:46:15.756Z",
+  "timestamp": "2026-02-21T20:26:35.414Z",
   "state": {
     "version": "3.5",
     "learningParams": {
-      "bias": 1.5142248098573194,
-      "exploration": 0.23247474422134623
+      "bias": 1.8,
+      "exploration": 0.02
     },
     "feedbackStats": {
-      "total": 82,
-      "success": 66
+      "total": 358,
+      "success": 358
     },
     "optionWeights": {
-      "expert": 1.1400000000000006,
-      "architect": 1.1400000000000006,
-      "refactor": 1.1400000000000006,
-      "core": 1.1400000000000006,
+      "expert": 0.18,
+      "architect": 0.18,
+      "refactor": 0.18,
+      "core": 0.18,
       "simulation": 0.06,
       "only": 0.06,
       "conceptual": 0.06,
@@ -22,9 +22,9 @@
       "no": 0.12,
       "physical": 0.06,
       "effect": 0.06,
-      "gates": 0.06,
+      "gates": 2.5,
       "peak": 0.06,
-      "recursive": -1.0999999999999999,
+      "recursive": 0.06,
       "coherence": 0.06,
       "check": 0.06,
       "active": 0.06,
@@ -39,102 +39,43 @@
       "dependencies": 0.06,
       "rely": 0.06,
       "standard": 0.06,
-      "ci": 0.06,
-      "cd": 0.06,
+      "ci": 2.5,
+      "cd": 2.5,
       "focus": 0.06,
-      "swarms": 1.740000000000001,
+      "swarms": 0.06,
       "purely": 0.06,
       "logic": 0.06,
-      "run": -1.16,
-      "adaptive": -1.16,
-      "correction": -1.16,
-      "via": -1.16,
-      "error": -1.16,
-      "feedback": -1.16,
-      "learning": -1.16,
-      "prioritize": 1.740000000000001,
-      "revenue": 1.680000000000001,
-      "expansion": 1.680000000000001,
-      "socialmediaswarm": 1.680000000000001,
-      "researchswarm": 1.680000000000001,
-      "customersuccessswarm": 1.680000000000001,
-      "experimentationswarm": 1.680000000000001,
-      "aieconomyswarm": 1.680000000000001,
-      "improve": 0.06,
-      "user": 0.06,
-      "experience": 0.06,
-      "ui": 0.06,
-      "polish": 0.06,
-      "type": 0.06,
-      "errors": 0.06,
-      "null": 0.06,
-      "pointer": 0.06,
-      "exceptions": 0.06,
-      "process": 0.06,
-      "high": 0.06,
-      "priority": 0.06,
-      "requests": 0.06,
-      "first": 0.06,
-      "performance": 0.06,
-      "optimization": 0.06,
-      "open": 0.06,
-      "source": 0.06,
-      "package": 0.06,
-      "supply": 0.06,
-      "chain": 0.06,
-      "attacks": 0.06,
-      "axioms": 0.06,
-      "passed": 0.06,
-      "ai": 0.06,
-      "integration": 0.06,
-      "consulting": 0.06,
-      "enterprises": 0.06
+      "harden": 2.5,
+      "stricter": 2.5,
+      "pipeline": 2.5,
+      "rollback": 2.5,
+      "checks": 2.5
     },
     "criteriaWeights": {
-      "proactivity": 1.5700000000000005,
-      "sovereignty": 1.5700000000000005,
-      "collective": 1.5700000000000005,
-      "intelligence": 1.5700000000000005,
+      "proactivity": 1.09,
+      "sovereignty": 1.09,
+      "collective": 1.09,
+      "intelligence": 1.09,
       "physical": 1.03,
       "verification": 1.03,
       "process": 1.03,
       "entropy": 1.03,
       "computational": 1.03,
       "truth": 1.03,
-      "safety": 1.09,
+      "safety": 3,
       "coherence": 1.03,
-      "impact": 1.9000000000000008,
+      "impact": 1.03,
       "mitigation": 1.03,
-      "reliability": 1.03,
+      "reliability": 3,
       "maintainability": 1.03,
       "cloud-compatibility": 1.03,
-      "effectiveness": 1.06,
-      "efficiency": 1.09,
-      "stability": 0.5,
-      "consistency": 0.5,
-      "error": 0.5,
-      "correction": 0.5,
-      "strategic": 1.8400000000000007,
-      "value": 1.8700000000000008,
-      "execution": 1.8400000000000007,
-      "speed": 1.8400000000000007,
-      "risk": 1.8400000000000007,
-      "reduction": 1.8400000000000007,
-      "revenue": 1.8700000000000008,
-      "business": 1.03,
-      "user": 1.06,
-      "need": 1.03,
-      "feasibility": 1.03,
-      "severity": 1.03,
-      "frequency": 1.03,
-      "quality": 1.03,
-      "latency": 1.03,
-      "relevance": 1.06,
-      "confidence": 1.03,
-      "urgency": 1.03,
-      "scalability": 1.03,
-      "market": 1.03,
-      "demand": 1.03
+      "effectiveness": 1.03,
+      "efficiency": 1.03,
+      "deployment": 3,
+      "execution": 3,
+      "speed": 3,
+      "operational": 3,
+      "resilience": 3
     },
     "memoryDump": {
       "solve_db4a1f0": {
@@ -224,9 +165,9 @@
       },
       "solve_258a78db": {
         "data": {
-          "predictionId": "Q3-1771702557305-694",
+          "predictionId": "Q3-1771703478831-245",
           "optimizedBest": "reasoning",
-          "confidence": 0.5248493717920857,
+          "confidence": 0.26260206109629447,
           "alternatives": [
             "creativity",
             "adaptation"
@@ -234,24 +175,24 @@
           "engineVersion": "3.5",
           "consensus": {
             "qubitCount": 8,
-            "fidelity": 0.5248493717920857
+            "fidelity": 0.26260206109629447
           }
         },
-        "timestamp": 1771702557305
+        "timestamp": 1771703478831
       },
       "solve_28104300": {
         "data": {
-          "predictionId": "Q3-1771702557314-191",
+          "predictionId": "Q3-1771703478837-906",
           "optimizedBest": "GENERATE_PATCH",
-          "confidence": 0.6973436558491953,
+          "confidence": 0.7119459054823228,
           "alternatives": [],
           "engineVersion": "3.5",
           "consensus": {
             "qubitCount": 8,
-            "fidelity": 0.6973436558491953
+            "fidelity": 0.7119459054823228
           }
         },
-        "timestamp": 1771702557314
+        "timestamp": 1771703478837
       },
       "solve_115b4951": {
         "data": {
@@ -271,19 +212,19 @@
       },
       "solve_1cd4cf93": {
         "data": {
-          "predictionId": "Q3-1771702557328-918",
+          "predictionId": "Q3-1771703478849-96",
           "optimizedBest": "EXPLORE_NEW_FRONTIERS",
-          "confidence": 0.28726516852465345,
+          "confidence": 0.3219926826318782,
           "alternatives": [
             "OPTIMIZE_EXISTING_COGNITION"
           ],
           "engineVersion": "3.5",
           "consensus": {
             "qubitCount": 8,
-            "fidelity": 0.28726516852465345
+            "fidelity": 0.3219926826318782
           }
         },
-        "timestamp": 1771702557328
+        "timestamp": 1771703478849
       },
       "solve_7e693e24": {
         "data": {
@@ -423,20 +364,20 @@
       },
       "solve_1be3b147": {
         "data": {
-          "predictionId": "Q3-1771703175677-194",
+          "predictionId": "Q3-1771705472918-293",
           "optimizedBest": "Check for exposed secrets in code",
-          "confidence": 0.6464719639661444,
+          "confidence": 0.6913971502121712,
           "alternatives": [
-            "Check for exposed secrets in code",
-            "Monitor for suspicious activity patterns"
+            "Monitor for suspicious activity patterns",
+            "Scan for dependency vulnerabilities"
           ],
           "engineVersion": "3.5",
           "consensus": {
             "qubitCount": 8,
-            "fidelity": 0.6464719639661444
+            "fidelity": 0.6913971502121712
           }
         },
-        "timestamp": 1771703175677
+        "timestamp": 1771705472918
       },
       "solve_42e2885a": {
         "data": {
@@ -474,9 +415,9 @@
       },
       "solve_2870c3c2": {
         "data": {
-          "predictionId": "Q3-1771703175725-750",
+          "predictionId": "Q3-1771705472906-788",
           "optimizedBest": "Memory usage optimization",
-          "confidence": 0.7285456918697295,
+          "confidence": 0.7410733104563951,
           "alternatives": [
             "Database query optimization",
             "CPU and processing efficiency"
@@ -484,10 +425,10 @@
           "engineVersion": "3.5",
           "consensus": {
             "qubitCount": 8,
-            "fidelity": 0.7285456918697295
+            "fidelity": 0.7410733104563951
           }
         },
-        "timestamp": 1771703175725
+        "timestamp": 1771705472906
       },
       "solve_2b0170a6": {
         "data": {
@@ -1154,20 +1095,20 @@
       },
       "solve_13526a9c": {
         "data": {
-          "predictionId": "Q3-1771702872974-624",
+          "predictionId": "Q3-1771704105427-815",
           "optimizedBest": "AUTO_RESOLVE with clear instructions and confirmation follow-up",
-          "confidence": 0.11099545864758767,
+          "confidence": 0.99,
           "alternatives": [
             "ESCALATE_HUMAN to specialist with incident context",
-            "CREATE_FOLLOWUP task and monitor outcome"
+            "OFFER_UPGRADE with value-focused plan recommendation"
           ],
           "engineVersion": "3.5",
           "consensus": {
             "qubitCount": 8,
-            "fidelity": 0.11099545864758767
+            "fidelity": 3.3878744348768546
           }
         },
-        "timestamp": 1771702872974
+        "timestamp": 1771704105427
       },
       "solve_3aae636": {
         "data": {
@@ -1236,6 +1177,850 @@
           }
         },
         "timestamp": 1771703173830
+      },
+      "solve_106c27a1": {
+        "data": {
+          "predictionId": "Q3-1771703477203-955",
+          "optimizedBest": "Prioritize revenue and expansion swarms (SocialMediaSwarm, ResearchSwarm, CustomerSuccessSwarm, ExperimentationSwarm, AIEconomySwarm)",
+          "confidence": 0.99,
+          "alternatives": [
+            "Prioritize experimentation and conversion swarms (ExperimentationSwarm, CustomerSuccessSwarm, ProductOwner)",
+            "Prioritize reliability and quality swarms (LearningSwarm, QualityAssuranceSwarm)"
+          ],
+          "engineVersion": "3.5",
+          "consensus": {
+            "qubitCount": 8,
+            "fidelity": 22.398851843763374
+          }
+        },
+        "timestamp": 1771703477203
+      },
+      "solve_171c87c9": {
+        "data": {
+          "predictionId": "Q3-1771703478452-844",
+          "optimizedBest": "EXPERT_ARCHITECT: Refactor core",
+          "confidence": 0.99,
+          "alternatives": [
+            "EXPERT_SECURITY: Patch vulnerability",
+            "EXPERT_ADAPTER: Optimize logic"
+          ],
+          "engineVersion": "3.5",
+          "consensus": {
+            "qubitCount": 8,
+            "fidelity": 11.265308862201708
+          }
+        },
+        "timestamp": 1771703478452
+      },
+      "solve_3c29ae11": {
+        "data": {
+          "predictionId": "Q3-1771703478460-262",
+          "optimizedBest": "EXPERT_ARCHITECT: Refactor core",
+          "confidence": 0.99,
+          "alternatives": [
+            "EXPERT_SECURITY: Patch vulnerability",
+            "EXPERT_ADAPTER: Optimize logic"
+          ],
+          "engineVersion": "3.5",
+          "consensus": {
+            "qubitCount": 8,
+            "fidelity": 12.054546215468955
+          }
+        },
+        "timestamp": 1771703478460
+      },
+      "solve_7056020b": {
+        "data": {
+          "predictionId": "Q3-1771703478466-114",
+          "optimizedBest": "EXPERT_ARCHITECT: Refactor core",
+          "confidence": 0.99,
+          "alternatives": [
+            "EXPERT_SECURITY: Patch vulnerability",
+            "EXPERT_ADAPTER: Optimize logic"
+          ],
+          "engineVersion": "3.5",
+          "consensus": {
+            "qubitCount": 8,
+            "fidelity": 13.192891567872634
+          }
+        },
+        "timestamp": 1771703478466
+      },
+      "solve_22bd5e42": {
+        "data": {
+          "predictionId": "Q3-1771703779655-331",
+          "optimizedBest": "Prioritize revenue and expansion swarms (SocialMediaSwarm, ResearchSwarm, CustomerSuccessSwarm, ExperimentationSwarm, AIEconomySwarm)",
+          "confidence": 0.99,
+          "alternatives": [
+            "Prioritize experimentation and conversion swarms (ExperimentationSwarm, CustomerSuccessSwarm, ProductOwner)",
+            "Prioritize reliability and quality swarms (LearningSwarm, QualityAssuranceSwarm)"
+          ],
+          "engineVersion": "3.5",
+          "consensus": {
+            "qubitCount": 8,
+            "fidelity": 24.747535841772617
+          }
+        },
+        "timestamp": 1771703779655
+      },
+      "solve_350e94e3": {
+        "data": {
+          "predictionId": "Q3-1771704095838-521",
+          "optimizedBest": "Prioritize revenue and expansion swarms (SocialMediaSwarm, ResearchSwarm, CustomerSuccessSwarm, ExperimentationSwarm, AIEconomySwarm)",
+          "confidence": 0.99,
+          "alternatives": [
+            "Prioritize experimentation and conversion swarms (ExperimentationSwarm, CustomerSuccessSwarm, ProductOwner)",
+            "Prioritize reliability and quality swarms (LearningSwarm, QualityAssuranceSwarm)"
+          ],
+          "engineVersion": "3.5",
+          "consensus": {
+            "qubitCount": 8,
+            "fidelity": 26.441096618270933
+          }
+        },
+        "timestamp": 1771704095838
+      },
+      "solve_789bff7d": {
+        "data": {
+          "predictionId": "Q3-1771704097264-706",
+          "optimizedBest": "Expand audit logging and change-management traceability",
+          "confidence": 0.99,
+          "alternatives": [
+            "Enforce compliance gate in CI and block non-compliant releases",
+            "Harden secrets policy and environment governance"
+          ],
+          "engineVersion": "3.5",
+          "consensus": {
+            "qubitCount": 8,
+            "fidelity": 6.917526730988781
+          }
+        },
+        "timestamp": 1771704097264
+      },
+      "solve_32e5937b": {
+        "data": {
+          "predictionId": "Q3-1771704105427-578",
+          "optimizedBest": "Introduce usage-based pricing",
+          "confidence": 0.99,
+          "alternatives": [
+            "Raise Pro to $149, add more features",
+            "Add new Mid-tier at $199"
+          ],
+          "engineVersion": "3.5",
+          "consensus": {
+            "qubitCount": 8,
+            "fidelity": 1.2739287818984675
+          }
+        },
+        "timestamp": 1771704105427
+      },
+      "solve_7ed4ac60": {
+        "data": {
+          "predictionId": "Q3-1771704105427-937",
+          "optimizedBest": "INAPP_NUDGE with guided adoption checklist and health tips",
+          "confidence": 0.9657692598626973,
+          "alternatives": [
+            "RETAIN_CALL with proactive success manager outreach",
+            "UPSELL with higher-tier value pitch and ROI framing"
+          ],
+          "engineVersion": "3.5",
+          "consensus": {
+            "qubitCount": 8,
+            "fidelity": 0.9657692598626973
+          }
+        },
+        "timestamp": 1771704105427
+      },
+      "solve_5b62c786": {
+        "data": {
+          "predictionId": "Q3-1771704105444-496",
+          "optimizedBest": "DEFENSIVE_COMPOUNDING - prioritize reserve runway and stable compounding",
+          "confidence": 0.99,
+          "alternatives": [
+            "BALANCED_FLYWHEEL - balance reserve, growth reinvestment, and reliability",
+            "AGGRESSIVE_EXPANSION - maximize growth and experimentation despite lower reserve"
+          ],
+          "engineVersion": "3.5",
+          "consensus": {
+            "qubitCount": 8,
+            "fidelity": 2.2292105280776338
+          }
+        },
+        "timestamp": 1771704105444
+      },
+      "solve_7de17732": {
+        "data": {
+          "predictionId": "Q3-1771704106778-993",
+          "optimizedBest": "Prioritize pricing_anchor_packaging_v2 (pricing) - winner=quarterly_anchor, uplift=15.5%, consensus=85.5%",
+          "confidence": 0.99,
+          "alternatives": [
+            "Prioritize content_offer_cta_mix_v4 (content) - winner=offer_led_cta, uplift=22.4%, consensus=77.1%",
+            "Prioritize onboarding_value_prop_v3 (onboarding) - winner=roi_value_path, uplift=15.7%, consensus=72.4%"
+          ],
+          "engineVersion": "3.5",
+          "consensus": {
+            "qubitCount": 8,
+            "fidelity": 1.078502901691288
+          }
+        },
+        "timestamp": 1771704106778
+      },
+      "solve_79289fa": {
+        "data": {
+          "predictionId": "Q3-1771705472880-366",
+          "optimizedBest": "API endpoints in TypeScript",
+          "confidence": 0.5346796901463727,
+          "alternatives": [
+            "React components",
+            "Database schemas"
+          ],
+          "engineVersion": "3.5",
+          "consensus": {
+            "qubitCount": 8,
+            "fidelity": 0.5346796901463727
+          }
+        },
+        "timestamp": 1771705472880
+      },
+      "solve_1dbba232": {
+        "data": {
+          "predictionId": "Q3-1771704106614-282",
+          "optimizedBest": "Harden CI/CD with stricter pipeline gates and rollback checks",
+          "confidence": 0.99,
+          "alternatives": [
+            "Improve deployment reliability with environment verification and runbooks",
+            "Expand observability and incident response automation"
+          ],
+          "engineVersion": "3.5",
+          "consensus": {
+            "qubitCount": 8,
+            "fidelity": 7.070596871052698
+          }
+        },
+        "timestamp": 1771704106614
+      },
+      "solve_7b57c88b": {
+        "data": {
+          "predictionId": "Q3-1771704106745-763",
+          "optimizedBest": "Prioritize reliability hardening before revenue expansion",
+          "confidence": 0.99,
+          "alternatives": [
+            "Launch unified SaaS offer combining content automation, retention automation, and reliability guarantees",
+            "Prioritize market expansion and platform integrations before optimization"
+          ],
+          "engineVersion": "3.5",
+          "consensus": {
+            "qubitCount": 8,
+            "fidelity": 2.869758458723681
+          }
+        },
+        "timestamp": 1771704106745
+      },
+      "solve_34f8df1d": {
+        "data": {
+          "predictionId": "Q3-1771704106749-813",
+          "optimizedBest": "INAPP_NUDGE with guided adoption checklist and health tips",
+          "confidence": 0.99,
+          "alternatives": [
+            "RETAIN_CALL with proactive success manager outreach",
+            "UPSELL with higher-tier value pitch and ROI framing"
+          ],
+          "engineVersion": "3.5",
+          "consensus": {
+            "qubitCount": 8,
+            "fidelity": 1.796033224159501
+          }
+        },
+        "timestamp": 1771704106749
+      },
+      "solve_21e5cfff": {
+        "data": {
+          "predictionId": "Q3-1771704106794-769",
+          "optimizedBest": "INAPP_NUDGE with guided adoption checklist and health tips",
+          "confidence": 0.99,
+          "alternatives": [
+            "RETAIN_CALL with proactive success manager outreach",
+            "UPSELL with higher-tier value pitch and ROI framing"
+          ],
+          "engineVersion": "3.5",
+          "consensus": {
+            "qubitCount": 8,
+            "fidelity": 2.601629990852119
+          }
+        },
+        "timestamp": 1771704106794
+      },
+      "solve_52bf0505": {
+        "data": {
+          "predictionId": "Q3-1771704106871-616",
+          "optimizedBest": "INAPP_NUDGE with guided adoption checklist and health tips",
+          "confidence": 0.99,
+          "alternatives": [
+            "RETAIN_CALL with proactive success manager outreach",
+            "UPSELL with higher-tier value pitch and ROI framing"
+          ],
+          "engineVersion": "3.5",
+          "consensus": {
+            "qubitCount": 8,
+            "fidelity": 3.80434632964465
+          }
+        },
+        "timestamp": 1771704106871
+      },
+      "solve_20a92a11": {
+        "data": {
+          "predictionId": "Q3-1771704117539-373",
+          "optimizedBest": "DEFENSIVE_COMPOUNDING - prioritize reserve runway and stable compounding",
+          "confidence": 0.99,
+          "alternatives": [
+            "BALANCED_FLYWHEEL - balance reserve, growth reinvestment, and reliability",
+            "AGGRESSIVE_EXPANSION - maximize growth and experimentation despite lower reserve"
+          ],
+          "engineVersion": "3.5",
+          "consensus": {
+            "qubitCount": 8,
+            "fidelity": 3.877788069587287
+          }
+        },
+        "timestamp": 1771704117539
+      },
+      "solve_6ef0ea9a": {
+        "data": {
+          "predictionId": "Q3-1771704132416-134",
+          "optimizedBest": "DEFENSIVE_COMPOUNDING - prioritize reserve runway and stable compounding",
+          "confidence": 0.99,
+          "alternatives": [
+            "BALANCED_FLYWHEEL - balance reserve, growth reinvestment, and reliability",
+            "AGGRESSIVE_EXPANSION - maximize growth and experimentation despite lower reserve"
+          ],
+          "engineVersion": "3.5",
+          "consensus": {
+            "qubitCount": 8,
+            "fidelity": 6.089939340198361
+          }
+        },
+        "timestamp": 1771704132416
+      },
+      "solve_3752224b": {
+        "data": {
+          "predictionId": "Q3-1771704152184-736",
+          "optimizedBest": "Creator Revenue Studio (73.8)",
+          "confidence": 0.99,
+          "alternatives": [
+            "Freelance Pipeline IQ (39.8)",
+            "Autonomous Risk Desk (39.0)"
+          ],
+          "engineVersion": "3.5",
+          "consensus": {
+            "qubitCount": 8,
+            "fidelity": 2.764274362281575
+          }
+        },
+        "timestamp": 1771704152184
+      },
+      "solve_8117bc6": {
+        "data": {
+          "predictionId": "Q3-1771704155267-449",
+          "optimizedBest": "DEFENSIVE_COMPOUNDING - prioritize reserve runway and stable compounding",
+          "confidence": 0.99,
+          "alternatives": [
+            "BALANCED_FLYWHEEL - balance reserve, growth reinvestment, and reliability",
+            "AGGRESSIVE_EXPANSION - maximize growth and experimentation despite lower reserve"
+          ],
+          "engineVersion": "3.5",
+          "consensus": {
+            "qubitCount": 8,
+            "fidelity": 7.38217362890869
+          }
+        },
+        "timestamp": 1771704155267
+      },
+      "solve_bad7e09": {
+        "data": {
+          "predictionId": "Q3-1771704158303-918",
+          "optimizedBest": "Prioritize reliability hardening before revenue expansion",
+          "confidence": 0.99,
+          "alternatives": [
+            "Launch unified SaaS offer combining content automation, retention automation, and reliability guarantees",
+            "Prioritize market expansion and platform integrations before optimization"
+          ],
+          "engineVersion": "3.5",
+          "consensus": {
+            "qubitCount": 8,
+            "fidelity": 5.516304801921043
+          }
+        },
+        "timestamp": 1771704158303
+      },
+      "solve_51ac194e": {
+        "data": {
+          "predictionId": "Q3-1771704159101-662",
+          "optimizedBest": "DEFENSIVE_COMPOUNDING - prioritize reserve runway and stable compounding",
+          "confidence": 0.99,
+          "alternatives": [
+            "BALANCED_FLYWHEEL - balance reserve, growth reinvestment, and reliability",
+            "AGGRESSIVE_EXPANSION - maximize growth and experimentation despite lower reserve"
+          ],
+          "engineVersion": "3.5",
+          "consensus": {
+            "qubitCount": 8,
+            "fidelity": 9.735699652297837
+          }
+        },
+        "timestamp": 1771704159101
+      },
+      "solve_3021cf3a": {
+        "data": {
+          "predictionId": "Q3-1771704160487-981",
+          "optimizedBest": "DEFENSIVE_COMPOUNDING - prioritize reserve runway and stable compounding",
+          "confidence": 0.99,
+          "alternatives": [
+            "BALANCED_FLYWHEEL - balance reserve, growth reinvestment, and reliability",
+            "AGGRESSIVE_EXPANSION - maximize growth and experimentation despite lower reserve"
+          ],
+          "engineVersion": "3.5",
+          "consensus": {
+            "qubitCount": 8,
+            "fidelity": 10.638925141615237
+          }
+        },
+        "timestamp": 1771704160487
+      },
+      "solve_4382a34a": {
+        "data": {
+          "predictionId": "Q3-1771704176834-656",
+          "optimizedBest": "Prioritize reliability hardening before revenue expansion",
+          "confidence": 0.99,
+          "alternatives": [
+            "Launch unified SaaS offer combining content automation, retention automation, and reliability guarantees",
+            "Prioritize market expansion and platform integrations before optimization"
+          ],
+          "engineVersion": "3.5",
+          "consensus": {
+            "qubitCount": 8,
+            "fidelity": 7.06008260709264
+          }
+        },
+        "timestamp": 1771704176834
+      },
+      "solve_5cfd9c69": {
+        "data": {
+          "predictionId": "Q3-1771704177678-91",
+          "optimizedBest": "DEFENSIVE_COMPOUNDING - prioritize reserve runway and stable compounding",
+          "confidence": 0.99,
+          "alternatives": [
+            "BALANCED_FLYWHEEL - balance reserve, growth reinvestment, and reliability",
+            "AGGRESSIVE_EXPANSION - maximize growth and experimentation despite lower reserve"
+          ],
+          "engineVersion": "3.5",
+          "consensus": {
+            "qubitCount": 8,
+            "fidelity": 18.20477012840597
+          }
+        },
+        "timestamp": 1771704177678
+      },
+      "solve_32b2098b": {
+        "data": {
+          "predictionId": "Q3-1771704231285-615",
+          "optimizedBest": "DEFENSIVE_COMPOUNDING - prioritize reserve runway and stable compounding",
+          "confidence": 0.99,
+          "alternatives": [
+            "BALANCED_FLYWHEEL - balance reserve, growth reinvestment, and reliability",
+            "AGGRESSIVE_EXPANSION - maximize growth and experimentation despite lower reserve"
+          ],
+          "engineVersion": "3.5",
+          "consensus": {
+            "qubitCount": 8,
+            "fidelity": 20.57449180500288
+          }
+        },
+        "timestamp": 1771704231285
+      },
+      "solve_4ae82e03": {
+        "data": {
+          "predictionId": "Q3-1771704299285-570",
+          "optimizedBest": "DEFENSIVE_COMPOUNDING - prioritize reserve runway and stable compounding",
+          "confidence": 0.99,
+          "alternatives": [
+            "BALANCED_FLYWHEEL - balance reserve, growth reinvestment, and reliability",
+            "AGGRESSIVE_EXPANSION - maximize growth and experimentation despite lower reserve"
+          ],
+          "engineVersion": "3.5",
+          "consensus": {
+            "qubitCount": 8,
+            "fidelity": 22.280503509050394
+          }
+        },
+        "timestamp": 1771704299285
+      },
+      "solve_44b1e6a8": {
+        "data": {
+          "predictionId": "Q3-1771704356154-438",
+          "optimizedBest": "DEFENSIVE_COMPOUNDING - prioritize reserve runway and stable compounding",
+          "confidence": 0.99,
+          "alternatives": [
+            "BALANCED_FLYWHEEL - balance reserve, growth reinvestment, and reliability",
+            "AGGRESSIVE_EXPANSION - maximize growth and experimentation despite lower reserve"
+          ],
+          "engineVersion": "3.5",
+          "consensus": {
+            "qubitCount": 8,
+            "fidelity": 36.04657674889499
+          }
+        },
+        "timestamp": 1771704356154
+      },
+      "solve_2092b349": {
+        "data": {
+          "predictionId": "Q3-1771704478896-997",
+          "optimizedBest": "DEFENSIVE_COMPOUNDING - prioritize reserve runway and stable compounding",
+          "confidence": 0.99,
+          "alternatives": [
+            "BALANCED_FLYWHEEL - balance reserve, growth reinvestment, and reliability",
+            "AGGRESSIVE_EXPANSION - maximize growth and experimentation despite lower reserve"
+          ],
+          "engineVersion": "3.5",
+          "consensus": {
+            "qubitCount": 8,
+            "fidelity": 39.451965432998676
+          }
+        },
+        "timestamp": 1771704478896
+      },
+      "solve_6f338a8a": {
+        "data": {
+          "predictionId": "Q3-1771704482645-387",
+          "optimizedBest": "DEFENSIVE_COMPOUNDING - prioritize reserve runway and stable compounding",
+          "confidence": 0.99,
+          "alternatives": [
+            "BALANCED_FLYWHEEL - balance reserve, growth reinvestment, and reliability",
+            "AGGRESSIVE_EXPANSION - maximize growth and experimentation despite lower reserve"
+          ],
+          "engineVersion": "3.5",
+          "consensus": {
+            "qubitCount": 8,
+            "fidelity": 39.56537722626464
+          }
+        },
+        "timestamp": 1771704482645
+      },
+      "solve_1a26ea2c": {
+        "data": {
+          "predictionId": "Q3-1771704548594-783",
+          "optimizedBest": "DEFENSIVE_COMPOUNDING - prioritize reserve runway and stable compounding",
+          "confidence": 0.99,
+          "alternatives": [
+            "BALANCED_FLYWHEEL - balance reserve, growth reinvestment, and reliability",
+            "AGGRESSIVE_EXPANSION - maximize growth and experimentation despite lower reserve"
+          ],
+          "engineVersion": "3.5",
+          "consensus": {
+            "qubitCount": 8,
+            "fidelity": 40.17289355316214
+          }
+        },
+        "timestamp": 1771704548594
+      },
+      "solve_67afdd90": {
+        "data": {
+          "predictionId": "Q3-1771704580689-141",
+          "optimizedBest": "DEFENSIVE_COMPOUNDING - prioritize reserve runway and stable compounding",
+          "confidence": 0.99,
+          "alternatives": [
+            "BALANCED_FLYWHEEL - balance reserve, growth reinvestment, and reliability",
+            "AGGRESSIVE_EXPANSION - maximize growth and experimentation despite lower reserve"
+          ],
+          "engineVersion": "3.5",
+          "consensus": {
+            "qubitCount": 8,
+            "fidelity": 40.1731736402118
+          }
+        },
+        "timestamp": 1771704580689
+      },
+      "solve_33b34254": {
+        "data": {
+          "predictionId": "Q3-1771704591888-848",
+          "optimizedBest": "DEFENSIVE_COMPOUNDING - prioritize reserve runway and stable compounding",
+          "confidence": 0.99,
+          "alternatives": [
+            "BALANCED_FLYWHEEL - balance reserve, growth reinvestment, and reliability",
+            "AGGRESSIVE_EXPANSION - maximize growth and experimentation despite lower reserve"
+          ],
+          "engineVersion": "3.5",
+          "consensus": {
+            "qubitCount": 8,
+            "fidelity": 40.17360390243875
+          }
+        },
+        "timestamp": 1771704591888
+      },
+      "solve_28d046b1": {
+        "data": {
+          "predictionId": "Q3-1771704703312-23",
+          "optimizedBest": "Prioritize reliability hardening before revenue expansion",
+          "confidence": 0.99,
+          "alternatives": [
+            "Launch unified SaaS offer combining content automation, retention automation, and reliability guarantees",
+            "Prioritize market expansion and platform integrations before optimization"
+          ],
+          "engineVersion": "3.5",
+          "consensus": {
+            "qubitCount": 8,
+            "fidelity": 39.56458816332609
+          }
+        },
+        "timestamp": 1771704703312
+      },
+      "solve_70f1b94a": {
+        "data": {
+          "predictionId": "Q3-1771704693403-206",
+          "optimizedBest": "Reasoning hardening with adversarial drills and outcome feedback",
+          "confidence": 0.99,
+          "alternatives": [
+            "Planning/autonomy orchestration and multi-agent dependency checks",
+            "Reliability stress checks and latency regression detection"
+          ],
+          "engineVersion": "3.5",
+          "consensus": {
+            "qubitCount": 8,
+            "fidelity": 53.36084743484007
+          }
+        },
+        "timestamp": 1771704693403
+      },
+      "solve_6a1f363": {
+        "data": {
+          "predictionId": "Q3-1771704722597-604",
+          "optimizedBest": "DEFENSIVE_COMPOUNDING - prioritize reserve runway and stable compounding",
+          "confidence": 0.99,
+          "alternatives": [
+            "BALANCED_FLYWHEEL - balance reserve, growth reinvestment, and reliability",
+            "AGGRESSIVE_EXPANSION - maximize growth and experimentation despite lower reserve"
+          ],
+          "engineVersion": "3.5",
+          "consensus": {
+            "qubitCount": 8,
+            "fidelity": 40.17182745884959
+          }
+        },
+        "timestamp": 1771704722597
+      },
+      "solve_48bb56b1": {
+        "data": {
+          "predictionId": "Q3-1771704726421-353",
+          "optimizedBest": "DEFENSIVE_COMPOUNDING - prioritize reserve runway and stable compounding",
+          "confidence": 0.99,
+          "alternatives": [
+            "BALANCED_FLYWHEEL - balance reserve, growth reinvestment, and reliability",
+            "AGGRESSIVE_EXPANSION - maximize growth and experimentation despite lower reserve"
+          ],
+          "engineVersion": "3.5",
+          "consensus": {
+            "qubitCount": 8,
+            "fidelity": 40.17141370407538
+          }
+        },
+        "timestamp": 1771704726421
+      },
+      "solve_238448c3": {
+        "data": {
+          "predictionId": "Q3-1771704751631-381",
+          "optimizedBest": "DEFENSIVE_COMPOUNDING - prioritize reserve runway and stable compounding",
+          "confidence": 0.99,
+          "alternatives": [
+            "BALANCED_FLYWHEEL - balance reserve, growth reinvestment, and reliability",
+            "AGGRESSIVE_EXPANSION - maximize growth and experimentation despite lower reserve"
+          ],
+          "engineVersion": "3.5",
+          "consensus": {
+            "qubitCount": 8,
+            "fidelity": 40.17186830728797
+          }
+        },
+        "timestamp": 1771704751631
+      },
+      "solve_228aa25e": {
+        "data": {
+          "predictionId": "Q3-1771704984197-595",
+          "optimizedBest": "Prioritize reliability hardening before revenue expansion",
+          "confidence": 0.99,
+          "alternatives": [
+            "Launch unified SaaS offer combining content automation, retention automation, and reliability guarantees",
+            "Prioritize market expansion and platform integrations before optimization"
+          ],
+          "engineVersion": "3.5",
+          "consensus": {
+            "qubitCount": 8,
+            "fidelity": 40.17056263227621
+          }
+        },
+        "timestamp": 1771704984197
+      },
+      "solve_ac3d34e": {
+        "data": {
+          "predictionId": "Q3-1771704763719-962",
+          "optimizedBest": "DEFENSIVE_COMPOUNDING - prioritize reserve runway and stable compounding",
+          "confidence": 0.99,
+          "alternatives": [
+            "BALANCED_FLYWHEEL - balance reserve, growth reinvestment, and reliability",
+            "AGGRESSIVE_EXPANSION - maximize growth and experimentation despite lower reserve"
+          ],
+          "engineVersion": "3.5",
+          "consensus": {
+            "qubitCount": 8,
+            "fidelity": 40.17174483826694
+          }
+        },
+        "timestamp": 1771704763719
+      },
+      "solve_6b05bfba": {
+        "data": {
+          "predictionId": "Q3-1771705143068-52",
+          "optimizedBest": "DEFENSIVE_COMPOUNDING - prioritize reserve runway and stable compounding",
+          "confidence": 0.99,
+          "alternatives": [
+            "BALANCED_FLYWHEEL - balance reserve, growth reinvestment, and reliability",
+            "AGGRESSIVE_EXPANSION - maximize growth and experimentation despite lower reserve"
+          ],
+          "engineVersion": "3.5",
+          "consensus": {
+            "qubitCount": 8,
+            "fidelity": 40.16982693901347
+          }
+        },
+        "timestamp": 1771705143068
+      },
+      "solve_4ecb1ca9": {
+        "data": {
+          "predictionId": "Q3-1771705150555-638",
+          "optimizedBest": "DEFENSIVE_COMPOUNDING - prioritize reserve runway and stable compounding",
+          "confidence": 0.99,
+          "alternatives": [
+            "BALANCED_FLYWHEEL - balance reserve, growth reinvestment, and reliability",
+            "AGGRESSIVE_EXPANSION - maximize growth and experimentation despite lower reserve"
+          ],
+          "engineVersion": "3.5",
+          "consensus": {
+            "qubitCount": 8,
+            "fidelity": 40.17110033184501
+          }
+        },
+        "timestamp": 1771705150555
+      },
+      "solve_79747487": {
+        "data": {
+          "predictionId": "Q3-1771705187909-606",
+          "optimizedBest": "DEFENSIVE_COMPOUNDING - prioritize reserve runway and stable compounding",
+          "confidence": 0.99,
+          "alternatives": [
+            "BALANCED_FLYWHEEL - balance reserve, growth reinvestment, and reliability",
+            "AGGRESSIVE_EXPANSION - maximize growth and experimentation despite lower reserve"
+          ],
+          "engineVersion": "3.5",
+          "consensus": {
+            "qubitCount": 8,
+            "fidelity": 40.1708339869712
+          }
+        },
+        "timestamp": 1771705187909
+      },
+      "solve_2ff5ca27": {
+        "data": {
+          "predictionId": "Q3-1771705219533-95",
+          "optimizedBest": "DEFENSIVE_COMPOUNDING - prioritize reserve runway and stable compounding",
+          "confidence": 0.99,
+          "alternatives": [
+            "BALANCED_FLYWHEEL - balance reserve, growth reinvestment, and reliability",
+            "AGGRESSIVE_EXPANSION - maximize growth and experimentation despite lower reserve"
+          ],
+          "engineVersion": "3.5",
+          "consensus": {
+            "qubitCount": 8,
+            "fidelity": 40.17074882152502
+          }
+        },
+        "timestamp": 1771705219533
+      },
+      "solve_5a9f2205": {
+        "data": {
+          "predictionId": "Q3-1771705245382-56",
+          "optimizedBest": "DEFENSIVE_COMPOUNDING - prioritize reserve runway and stable compounding",
+          "confidence": 0.99,
+          "alternatives": [
+            "BALANCED_FLYWHEEL - balance reserve, growth reinvestment, and reliability",
+            "AGGRESSIVE_EXPANSION - maximize growth and experimentation despite lower reserve"
+          ],
+          "engineVersion": "3.5",
+          "consensus": {
+            "qubitCount": 8,
+            "fidelity": 40.17060367407773
+          }
+        },
+        "timestamp": 1771705245382
+      },
+      "solve_5e3de638": {
+        "data": {
+          "predictionId": "Q3-1771705305758-416",
+          "optimizedBest": "DEFENSIVE_COMPOUNDING - prioritize reserve runway and stable compounding",
+          "confidence": 0.99,
+          "alternatives": [
+            "BALANCED_FLYWHEEL - balance reserve, growth reinvestment, and reliability",
+            "AGGRESSIVE_EXPANSION - maximize growth and experimentation despite lower reserve"
+          ],
+          "engineVersion": "3.5",
+          "consensus": {
+            "qubitCount": 8,
+            "fidelity": 40.171866285708546
+          }
+        },
+        "timestamp": 1771705305758
+      }
+    }
+  }
+}5708546
+          }
+        },
+        "timestamp": 1771705305758
+      }
+    }
+  }
+}1771705219533
+      },
+      "solve_5a9f2205": {
+        "data": {
+          "predictionId": "Q3-1771705245382-56",
+          "optimizedBest": "DEFENSIVE_COMPOUNDING - prioritize reserve runway and stable compounding",
+          "confidence": 0.99,
+          "alternatives": [
+            "BALANCED_FLYWHEEL - balance reserve, growth reinvestment, and reliability",
+            "AGGRESSIVE_EXPANSION - maximize growth and experimentation despite lower reserve"
+          ],
+          "engineVersion": "3.5",
+          "consensus": {
+            "qubitCount": 8,
+            "fidelity": 40.17060367407773
+          }
+        },
+        "timestamp": 1771705245382
+      },
+      "solve_5e3de638": {
+        "data": {
+          "predictionId": "Q3-1771705305758-416",
+          "optimizedBest": "DEFENSIVE_COMPOUNDING - prioritize reserve runway and stable compounding",
+          "confidence": 0.99,
+          "alternatives": [
+            "BALANCED_FLYWHEEL - balance reserve, growth reinvestment, and reliability",
+            "AGGRESSIVE_EXPANSION - maximize growth and experimentation despite lower reserve"
+          ],
+          "engineVersion": "3.5",
+          "consensus": {
+            "qubitCount": 8,
+            "fidelity": 40.171866285708546
+          }
+        },
+        "timestamp": 1771705305758
       }
     }
   }

@@ -2,7 +2,7 @@ import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
-import { AlertTriangle, XCircle, AlertCircle } from 'lucide-react';
+import { AlertTriangle, XCircle, AlertCircle, CheckCircle2 } from 'lucide-react';
 
 export default function ErrorTracker({ timeRange, logs }) {
   const errorLogs = logs.filter(l => l.status === 'failed');

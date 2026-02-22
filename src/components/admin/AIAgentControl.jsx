@@ -9,7 +9,7 @@ import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {
   Bot, Settings, Mail, Clock, CheckCircle2,
-  Activity, TrendingUp, RefreshCw
+  Activity, TrendingUp, RefreshCw, Shield
 } from 'lucide-react';
 import { toast } from 'sonner';
 import GitHubIntegrationSetup from './GitHubIntegrationSetup';
@@ -189,8 +189,8 @@ export default function AIAgentControl() {
                     <div className="flex-1">
                       <div className="flex items-center gap-3 mb-2">
                         <Badge className={`${report.health_score >= 80 ? 'bg-green-100 text-green-700' :
-                            report.health_score >= 60 ? 'bg-yellow-100 text-yellow-700' :
-                              'bg-red-100 text-red-700'
+                          report.health_score >= 60 ? 'bg-yellow-100 text-yellow-700' :
+                            'bg-red-100 text-red-700'
                           } border-0`}>
                           {report.health_score}/100
                         </Badge>

@@ -1,0 +1,83 @@
+{
+  "messages": [
+    {
+      "id": "msg_1771705636949_zr2wbitup",
+      "from": "main",
+      "to": "god",
+      "type": "directive",
+      "payload": {
+        "task": "run-upgrade"
+      },
+      "timestamp": "2026-02-21T20:27:16.949Z",
+      "priority": "high"
+    },
+    {
+      "id": "msg_1771705636950_zuc1a26js",
+      "from": "main",
+      "to": "finance",
+      "type": "status",
+      "payload": {
+        "request": "status-report"
+      },
+      "timestamp": "2026-02-21T20:27:16.950Z",
+      "priority": "normal"
+    },
+    {
+      "id": "msg_1771705636952_mbc7zkddn",
+      "from": "main",
+      "to": "crypto",
+      "type": "status",
+      "payload": {
+        "request": "status-report"
+      },
+      "timestamp": "2026-02-21T20:27:16.952Z",
+      "priority": "normal"
+    },
+    {
+      "id": "msg_1771705636953_cpyd1tlco",
+      "from": "main",
+      "to": "god",
+      "type": "status",
+      "payload": {
+        "request": "status-report"
+      },
+      "timestamp": "2026-02-21T20:27:16.953Z",
+      "priority": "normal"
+    }
+  ],
+  "swarmStatuses": {
+    "main": {
+      "id": "main",
+      "name": "appforge-swarm-main",
+      "status": "online",
+      "uptime": 600,
+      "tasksCompleted": 100,
+      "lastUpdate": "2026-02-21T20:27:16.943Z"
+    },
+    "finance": {
+      "id": "finance",
+      "name": "appforge-swarm-finance",
+      "status": "online",
+      "uptime": 600,
+      "tasksCompleted": 100,
+      "lastUpdate": "2026-02-21T20:27:16.944Z"
+    },
+    "crypto": {
+      "id": "crypto",
+      "name": "appforge-swarm-crypto",
+      "status": "online",
+      "uptime": 600,
+      "tasksCompleted": 100,
+      "lastUpdate": "2026-02-21T20:27:16.946Z"
+    },
+    "god": {
+      "id": "god",
+      "name": "appforge-swarm-god",
+      "status": "online",
+      "uptime": 600,
+      "tasksCompleted": 100,
+      "lastUpdate": "2026-02-21T20:27:16.947Z"
+    }
+  },
+  "lastUpdated": "2026-02-21T20:27:16.953Z"
+}

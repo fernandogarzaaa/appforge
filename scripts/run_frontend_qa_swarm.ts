@@ -9,12 +9,13 @@ async function main() {
 
     // We target the locally running Vite dev server for E2E validation.
     const targetUrl = 'http://localhost:5173';
+    const activeRoutes = ['/', '/admin', '/swarm', '/quantum-dashboard'];
 
-    // In this cycle, the Swarm's goal is to find, interact with, and assert the presence of the Sovereign Wallet connect button.
-    const targetFeature = 'Select Wallet';
+    // In this cycle, the Swarm's goal is to find, interact with, and assert the presence of critical dashboard elements.
+    const targetFeature = 'Sovereign UI';
 
     try {
-        await director.executeQAWorkflow(targetUrl, targetFeature);
+        await director.executeQAWorkflow(targetUrl, activeRoutes, targetFeature);
         console.log("\n✅ [Swarm Execution] QA Swarm execution completed successfully.");
     } catch (error) {
         console.error("\n❌ [Swarm Execution] Fatal error inside QA Swarm:", error);
