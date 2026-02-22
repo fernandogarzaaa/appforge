@@ -1,22 +1,22 @@
 {
-  "timestamp": "2026-02-22T09:41:17.308Z",
-  "git_last_commit": "670d62cc ci: restore locked build and track workspace Cargo.lock",
-  "directive": "Expansion of the P2P resonance and decentralized coordination",
-  "confidence": 0.99,
+  "timestamp": "2026-02-22T10:36:25.956Z",
+  "git_last_commit": "4303e4d0 Refine one-shot failure policy with soft-exit classification",
+  "directive": "Deep hardening of the Quantum Engine's resilience",
+  "confidence": 0.9788100425331105,
   "reasoning": "No details provided",
   "options_considered": [
     "Recursive self-optimization of local inference (Neural Bridge)",
     "Autonomous feature generation for the Sovereign UI",
     "Deep hardening of the Quantum Engine's resilience",
-    "Expansion of the P2P resonance and decentralized coordination",
-    "Stabilize high-churn zone build_logs.txt with tests and safeguards"
+    "Stabilize high-churn zone .github/workflows/quantum_evolution.yml with tests and safeguards"
   ],
   "lint_hotspots": [],
   "commit_hotspots": [
-    "build_logs.txt",
-    "src/data/antigravity_blueprint.json",
-    "src/data/bounty_ledger.json",
-    "src/data/economic_state.json"
+    ".github/workflows/quantum_evolution.yml",
+    ".github/workflows/autonomous_swarm.yml",
+    "swarm/core/loop.ts",
+    "build_logs.txt"
   ],
-  "previous_directive": null
+  "previous_directive": "Expansion of the P2P resonance and decentralized coordination",
+  "novelty_shift": true
 }
