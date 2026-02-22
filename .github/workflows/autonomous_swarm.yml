@@ -144,9 +144,9 @@ jobs:
           SOLANA_WALLET_ADDRESS: ${{ secrets.SOLANA_WALLET_ADDRESS }}
           SOLANA_PRIVATE_KEY: ${{ secrets.SOLANA_PRIVATE_KEY }}
           SOLANA_RPC_URL: ${{ secrets.SOLANA_RPC_URL }}
-          REAL_TRADING_ENABLED: "true"
-          SWARM_REALITY_MODE: "true"
-          SWARM_AUTONOMOUS_TRADING_ENABLED: "true"
+          REAL_TRADING_ENABLED: ${{ secrets.SOLANA_PRIVATE_KEY != '' && secrets.SOLANA_RPC_URL != '' && 'true' || 'false' }}
+          SWARM_REALITY_MODE: ${{ secrets.SOLANA_PRIVATE_KEY != '' && secrets.SOLANA_RPC_URL != '' && 'true' || 'false' }}
+          SWARM_AUTONOMOUS_TRADING_ENABLED: ${{ secrets.SOLANA_PRIVATE_KEY != '' && secrets.SOLANA_RPC_URL != '' && 'true' || 'false' }}
 
           # Mode
           ONE_SHOT: "true"
