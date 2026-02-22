@@ -5,9 +5,14 @@ on:
         - cron: "0 */4 * * *" # Run every 4 hours
     workflow_dispatch: # Allow manual trigger
 
+concurrency:
+    group: curiosity-scan-${{ github.ref }}
+    cancel-in-progress: true
+
 jobs:
     curiosity-scan:
         runs-on: ubuntu-latest
+        timeout-minutes: 15
         permissions:
             contents: read
 
@@ -35,5 +40,7 @@ jobs:
                   BASE44_APP_ID: ${{ secrets.BASE44_APP_ID }}
                   BASE44_API_KEY: ${{ secrets.BASE44_API_KEY }}
                   OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+                  CURIOSITY_SCAN_LIMIT: "${{ vars.CURIOSITY_SCAN_LIMIT || '8' }}"
+                  CURIOSITY_SYNTHESIS_LIMIT: "${{ vars.CURIOSITY_SYNTHESIS_LIMIT || '3' }}"
               run: |
                   npx tsx scripts/trigger_curiosity.ts
