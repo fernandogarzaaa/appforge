@@ -123,27 +123,41 @@ jobs:
           cd swarm
           npx tsx intelligence_pulse.ts
 
-      - name: Validate required secrets (masked)
+      - name: Validate Swarm runtime secrets (masked)
+        id: swarm-secrets
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          XAI_API_KEY: ${{ secrets.XAI_API_KEY }}
           BASE44_API_KEY: ${{ secrets.BASE44_API_KEY }}
           BASE44_APP_ID: ${{ secrets.BASE44_APP_ID }}
         run: |
-          check_secret() {
+          check_required_secret() {
             local name="$1"
             local value="$2"
             if [ -z "$value" ]; then
-              echo "❌ Missing required secret: $name"
-              exit 1
+              echo "::warning::Missing required secret: $name"
+              echo "can_run_swarm=false" >> "$GITHUB_OUTPUT"
+              exit 0
             fi
             echo "✅ $name is configured"
           }
 
-          check_secret "OPENAI_API_KEY" "$OPENAI_API_KEY"
-          check_secret "BASE44_API_KEY" "$BASE44_API_KEY"
-          check_secret "BASE44_APP_ID" "$BASE44_APP_ID"
+          check_required_secret "BASE44_API_KEY" "$BASE44_API_KEY"
+          check_required_secret "BASE44_APP_ID" "$BASE44_APP_ID"
+
+          if [ -n "$OPENAI_API_KEY" ] || [ -n "$ANTHROPIC_API_KEY" ] || [ -n "$GEMINI_API_KEY" ] || [ -n "$XAI_API_KEY" ]; then
+            echo "✅ At least one AI provider key is configured"
+            echo "can_run_swarm=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          echo "::warning::No AI provider key configured (OPENAI/ANTHROPIC/GEMINI/XAI). Skipping swarm one-shot run."
+          echo "can_run_swarm=false" >> "$GITHUB_OUTPUT"
 
       - name: Run Swarm (One-Shot)
+        if: steps.swarm-secrets.outputs.can_run_swarm == 'true'
         env:
           # AI Keys
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
@@ -180,6 +194,10 @@ jobs:
           # Run the Daemon (One-Shot Cycle)
           cd swarm
           NODE_ID="GA-AUTONOMOUS" MESH_ENABLED="true" npm start
+
+      - name: Skip Swarm (One-Shot)
+        if: steps.swarm-secrets.outputs.can_run_swarm != 'true'
+        run: echo "::warning::Swarm (One-Shot) was skipped because required runtime secrets are not fully configured."
 
       # 🧬 SINGULARITY VERIFICATION: Validate evolutionary progress
       - name: Run Singularity Verification
