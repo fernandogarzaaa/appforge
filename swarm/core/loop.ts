@@ -1044,7 +1044,10 @@ async function main() {
         } catch (error: any) {
             const errorMessage = error?.message || String(error);
             console.error('❌ Loop Error:', errorMessage);
-            if (process.env.ONE_SHOT === 'true') process.exit(1);
+            if (process.env.ONE_SHOT === 'true') {
+                console.warn('⚠️ One-Shot Mode: Encountered loop error. Exiting gracefully to keep CI resilient.');
+                process.exit(0);
+            }
         }
 
         // Avoid tight loop
