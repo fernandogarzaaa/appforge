@@ -150,8 +150,9 @@ jobs:
             local name="$1"
             local value="$2"
             if [ -z "$value" ]; then
-              echo "❌ Missing required secret: $name"
-              exit 1
+              echo "::warning::Missing required secret: $name"
+              echo "can_run_swarm=false" >> "$GITHUB_OUTPUT"
+              exit 0
             fi
           }
 
@@ -220,6 +221,10 @@ jobs:
             echo "::warning::Swarm (One-Shot) exited with code $SWARM_EXIT_CODE. Continuing workflow so diagnostics and follow-up gates still run."
           fi
 
+
+      - name: Skip Swarm (One-Shot)
+        if: steps.swarm-secrets.outputs.can_run_swarm != 'true'
+        run: echo "::warning::Swarm (One-Shot) was skipped because required runtime secrets are not fully configured."
 
       # 🧬 SINGULARITY VERIFICATION: Validate evolutionary progress
       - name: Run Singularity Verification
