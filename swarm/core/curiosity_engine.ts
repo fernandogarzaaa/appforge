@@ -45,7 +45,7 @@ export class CuriosityEngine {
             bounties.push({
                 file,
                 whyInteresting: analysis.recommendation,
-                hypothesis: analysis.reasoning || 'Autonomous exploration of neglected code.',
+                hypothesis: ('reasoning' in analysis ? (analysis as any).reasoning : undefined) || 'Autonomous exploration of neglected code.',
                 priority: analysis.confidence
             });
         }

@@ -11,6 +11,7 @@ import { AtomicPatcher, PatchChunk } from './atomic_patcher.js';
 import { BountyRegistry, Bounty } from './bounty_registry.js';
 import { EconomicEngine } from './economic_engine.js';
 import path from 'path';
+import * as fs from 'fs';
 import { fileURLToPath } from 'node:url';
 import { realitySensor } from './reality_sensor.js';
 import { p2pResonance } from './p2p_resonance.js';

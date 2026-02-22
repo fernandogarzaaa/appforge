@@ -39,7 +39,7 @@ export interface MarketIntelligenceInput {
     question?: string;
     timeHorizon: 'short' | 'medium' | 'long';
     assetClass?: string;
-    risk tolerance?: 'low' | 'medium' | 'high';
+    riskTolerance?: 'low' | 'medium' | 'high';
 }
 
 export interface MarketDataPoint {
@@ -97,8 +97,8 @@ export class PredictiveMarketIntelligenceEngine {
     async initialize(): Promise<void> {
         try {
             this.providerRegistry = ProviderRegistry.getInstance();
-            const health = await this.providerRegistry.getHealthStatus();
-            console.log('   📊 Provider Registry:', JSON.stringify(health));
+            const health = await (this.providerRegistry as any).getHealthStatus?.();
+            console.log('   📊 Provider Registry:', JSON.stringify(health ?? { status: 'unknown' }));
         } catch (e) {
             console.log('   ⚠️ Provider Registry not available, using direct Ollama');
         }
@@ -158,7 +158,7 @@ Provide actionable insights with confidence levels.`,
                 hyperProcessing: quantumResult.hyperProcessing,
                 validation: {
                     oracleValidated: oracleValidation.passed,
-                    coherence: oracleValidation.coherence,
+                    coherence: (oracleValidation as any).coherence ?? 0,
                     recommendations: oracleValidation.recommendations
                 },
                 sources: [

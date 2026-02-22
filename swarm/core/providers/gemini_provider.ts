@@ -338,4 +338,3 @@ export class GeminiProvider extends BaseLLMProvider {
 // Export
 // ============================================================================
 
-export { GeminiProvider };

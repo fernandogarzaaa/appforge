@@ -401,4 +401,3 @@ I received your message but cannot provide a detailed response in synthetic fall
 // Export
 // ============================================================================
 
-export { SyntheticProvider };

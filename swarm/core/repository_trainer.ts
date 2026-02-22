@@ -691,8 +691,8 @@ export class RealTimeRenderer {
                 id: `GEN-${Date.now()}-1`,
                 category,
                 source: repoUrl,
-                description: \`Generic \${category} pattern\`,
-                code: `// Pattern extracted from \${repoUrl}`,
+                description: `Generic ${category} pattern`,
+                code: `// Pattern extracted from ${repoUrl}`,
                 language: 'typescript',
                 qualityScore: 0.5,
                 usefulFor: [category]
@@ -711,7 +711,7 @@ export class RealTimeRenderer {
         for (const repo of REPOSITORIES) {
             try {
                 const patterns = await this.trainOnRepository(
-                    \`https://github.com/\${repo.owner}/\${repo.repo}\`,
+                    `https://github.com/${repo.owner}/${repo.repo}`,
                     repo.category
                 );
                 
@@ -720,15 +720,15 @@ export class RealTimeRenderer {
                 this.skills.set(repo.category, [...new Set(skills)]);
                 
             } catch (error) {
-                console.log(\`   ⚠️ Failed to train on \${repo.owner}/\${repo.repo}: \${error.message}\`);
+                console.log(`   ⚠️ Failed to train on ${repo.owner}/${repo.repo}: ${error.message}`);
             }
         }
 
         // Save knowledge base
         await this.saveKnowledgeBase();
         
-        console.log(\`\n✅ Training complete! Extracted \${this.patterns.length} patterns\`);
-        console.log(\`   📚 Categories: \${this.skills.size}\`);
+        console.log(`\n✅ Training complete! Extracted ${this.patterns.length} patterns`);
+        console.log(`   📚 Categories: ${this.skills.size}`);
     }
 
     /**
@@ -743,7 +743,7 @@ export class RealTimeRenderer {
         };
         
         await fs.writeFile(KNOWLEDGE_BASE_PATH, JSON.stringify(this.knowledgeBase, null, 2));
-        console.log(\`   💾 Knowledge base saved to: \${KNOWLEDGE_BASE_PATH}\`);
+        console.log(`   💾 Knowledge base saved to: ${KNOWLEDGE_BASE_PATH}`);
     }
 
     /**
@@ -786,6 +786,6 @@ export const repositoryTrainer = new RepositoryTrainer();
 if (process.argv[1]?.includes('repository_trainer')) {
     (async () => {
         await repositoryTrainer.trainOnAllRepositories();
-        console.log(\`\\n📊 Total patterns extracted: \${repositoryTrainer.getPatterns().length}\`);
+        console.log(`\n📊 Total patterns extracted: ${repositoryTrainer.getPatterns().length}`);
     })();
 }

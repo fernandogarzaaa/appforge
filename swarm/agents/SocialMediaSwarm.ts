@@ -237,7 +237,7 @@ export class SocialMediaSwarm {
         const video = await this.contentGenerator.generateShortFormVideo(contentPlan);
         
         // Optimize for TikTok algorithm
-        const optimizedVideo = await this.tiktokAgent.optimizeForAlgorithm(video);
+        const optimizedVideo = await this.tiktokAgent.optimizeForAlgorithm(video as any);
         
         // Upload if auto-upload enabled
         if (this.config.tiktok.autoUpload) {
@@ -261,7 +261,7 @@ export class SocialMediaSwarm {
         const video = await this.contentGenerator.generateLongFormVideo(contentPlan);
         
         // Optimize for YouTube algorithm
-        const optimizedVideo = await this.youtubeAgent.optimizeForAlgorithm(video);
+        const optimizedVideo = await this.youtubeAgent.optimizeForAlgorithm(video as any);
         
         // Upload if auto-upload enabled
         if (this.config.youtube.autoUpload) {
@@ -285,7 +285,7 @@ export class SocialMediaSwarm {
         const video = await this.contentGenerator.generateFacebookVideo(contentPlan);
         
         // Optimize for Facebook algorithm
-        const optimizedVideo = await this.facebookAgent.optimizeForAlgorithm(video);
+        const optimizedVideo = await this.facebookAgent.optimizeForAlgorithm(video as any);
         
         // Upload if auto-upload enabled
         if (this.config.facebook.autoUpload) {
