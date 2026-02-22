@@ -12,6 +12,7 @@ concurrency:
 jobs:
   quantum-evolution:
     runs-on: ubuntu-latest
+    timeout-minutes: 45
     permissions:
       contents: write
     steps:
@@ -79,7 +80,6 @@ jobs:
       # 🔍 DIAGNOSTICS: Generate reality signals for Inception
       - name: Pre-Pulse Diagnostics
         run: |
-          npm ci --legacy-peer-deps
           npm run build > build_logs.txt 2>&1 || echo "Build failed (as expected for diagnosis)" > build_logs.txt
           npm run lint -- --format json > lint_output.json 2>&1 || echo "[]" > lint_output.json
         continue-on-error: true
@@ -147,6 +147,18 @@ jobs:
           git add -f docs/brain/*.md || true
           git add -f build_logs.txt || true
           git add -f lint_output.json || true
-          git commit -m "chore: quantum self-evolution [Inception] [Bounty Sync] [Synergy] [skip ci]" || echo "No changes to commit"
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+            exit 0
+          fi
+          git commit -m "chore: quantum self-evolution [Inception] [Bounty Sync] [Synergy] [skip ci]"
           git pull --rebase origin "${GITHUB_REF_NAME}"
-          git push origin HEAD:"${GITHUB_REF_NAME}"
+          for attempt in 1 2 3; do
+            if git push origin HEAD:"${GITHUB_REF_NAME}"; then
+              exit 0
+            fi
+            echo "Push attempt ${attempt} failed. Rebasing and retrying..."
+            git pull --rebase origin "${GITHUB_REF_NAME}"
+          done
+          echo "Failed to push after 3 attempts"
+          exit 1
