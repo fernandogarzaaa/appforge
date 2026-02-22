@@ -1,20 +1,20 @@
 {
-  "timestamp": "2026-02-21T19:46:15.756Z",
+  "timestamp": "2026-02-22T03:46:09.263Z",
   "state": {
     "version": "3.5",
     "learningParams": {
-      "bias": 1.5142248098573194,
-      "exploration": 0.23247474422134623
+      "bias": 1.6234539496855478,
+      "exploration": 0.20181726129355101
     },
     "feedbackStats": {
-      "total": 82,
-      "success": 66
+      "total": 89,
+      "success": 73
     },
     "optionWeights": {
-      "expert": 1.1400000000000006,
-      "architect": 1.1400000000000006,
-      "refactor": 1.1400000000000006,
-      "core": 1.1400000000000006,
+      "expert": 1.4400000000000008,
+      "architect": 1.4400000000000008,
+      "refactor": 1.4400000000000008,
+      "core": 1.4400000000000008,
       "simulation": 0.06,
       "only": 0.06,
       "conceptual": 0.06,
@@ -54,7 +54,7 @@
       "learning": -1.16,
       "prioritize": 1.740000000000001,
       "revenue": 1.680000000000001,
-      "expansion": 1.680000000000001,
+      "expansion": 1.740000000000001,
       "socialmediaswarm": 1.680000000000001,
       "researchswarm": 1.680000000000001,
       "customersuccessswarm": 1.680000000000001,
@@ -88,13 +88,17 @@
       "ai": 0.06,
       "integration": 0.06,
       "consulting": 0.06,
-      "enterprises": 0.06
+      "enterprises": 0.06,
+      "p2p": 0.06,
+      "resonance": 0.06,
+      "decentralized": 0.06,
+      "coordination": 0.06
     },
     "criteriaWeights": {
-      "proactivity": 1.5700000000000005,
-      "sovereignty": 1.5700000000000005,
-      "collective": 1.5700000000000005,
-      "intelligence": 1.5700000000000005,
+      "proactivity": 1.7200000000000006,
+      "sovereignty": 1.7200000000000006,
+      "collective": 1.7200000000000006,
+      "intelligence": 1.7200000000000006,
       "physical": 1.03,
       "verification": 1.03,
       "process": 1.03,
@@ -108,8 +112,8 @@
       "reliability": 1.03,
       "maintainability": 1.03,
       "cloud-compatibility": 1.03,
-      "effectiveness": 1.06,
-      "efficiency": 1.09,
+      "effectiveness": 1.09,
+      "efficiency": 1.12,
       "stability": 0.5,
       "consistency": 0.5,
       "error": 0.5,
@@ -224,9 +228,9 @@
       },
       "solve_258a78db": {
         "data": {
-          "predictionId": "Q3-1771702557305-694",
+          "predictionId": "Q3-1771731969246-826",
           "optimizedBest": "reasoning",
-          "confidence": 0.5248493717920857,
+          "confidence": 0.33368511517475696,
           "alternatives": [
             "creativity",
             "adaptation"
@@ -234,24 +238,24 @@
           "engineVersion": "3.5",
           "consensus": {
             "qubitCount": 8,
-            "fidelity": 0.5248493717920857
+            "fidelity": 0.33368511517475696
           }
         },
-        "timestamp": 1771702557305
+        "timestamp": 1771731969246
       },
       "solve_28104300": {
         "data": {
-          "predictionId": "Q3-1771702557314-191",
+          "predictionId": "Q3-1771731969252-752",
           "optimizedBest": "GENERATE_PATCH",
-          "confidence": 0.6973436558491953,
+          "confidence": 0.7016127324942295,
           "alternatives": [],
           "engineVersion": "3.5",
           "consensus": {
             "qubitCount": 8,
-            "fidelity": 0.6973436558491953
+            "fidelity": 0.7016127324942295
           }
         },
-        "timestamp": 1771702557314
+        "timestamp": 1771731969252
       },
       "solve_115b4951": {
         "data": {
@@ -271,19 +275,19 @@
       },
       "solve_1cd4cf93": {
         "data": {
-          "predictionId": "Q3-1771702557328-918",
+          "predictionId": "Q3-1771731969261-301",
           "optimizedBest": "EXPLORE_NEW_FRONTIERS",
-          "confidence": 0.28726516852465345,
+          "confidence": 0.29062458903855665,
           "alternatives": [
             "OPTIMIZE_EXISTING_COGNITION"
           ],
           "engineVersion": "3.5",
           "consensus": {
             "qubitCount": 8,
-            "fidelity": 0.28726516852465345
+            "fidelity": 0.29062458903855665
           }
         },
-        "timestamp": 1771702557328
+        "timestamp": 1771731969261
       },
       "solve_7e693e24": {
         "data": {
@@ -1236,6 +1240,108 @@
           }
         },
         "timestamp": 1771703173830
+      },
+      "solve_3009f231": {
+        "data": {
+          "predictionId": "Q3-1771731879923-353",
+          "optimizedBest": "Expansion of the P2P resonance and decentralized coordination",
+          "confidence": 0.99,
+          "alternatives": [
+            "Recursive self-optimization of local inference (Neural Bridge)",
+            "Autonomous feature generation for the Sovereign UI"
+          ],
+          "engineVersion": "3.5",
+          "consensus": {
+            "qubitCount": 8,
+            "fidelity": 3.5099645509085082
+          }
+        },
+        "timestamp": 1771731879923
+      },
+      "solve_496feddc": {
+        "data": {
+          "predictionId": "Q3-1771731969105-37",
+          "optimizedBest": "EXPERT_ARCHITECT: Refactor core",
+          "confidence": 0.99,
+          "alternatives": [
+            "EXPERT_SECURITY: Patch vulnerability",
+            "EXPERT_ADAPTER: Optimize logic"
+          ],
+          "engineVersion": "3.5",
+          "consensus": {
+            "qubitCount": 8,
+            "fidelity": 11.736334958144496
+          }
+        },
+        "timestamp": 1771731969105
+      },
+      "solve_4d1d0920": {
+        "data": {
+          "predictionId": "Q3-1771731969122-803",
+          "optimizedBest": "EXPERT_ARCHITECT: Refactor core",
+          "confidence": 0.99,
+          "alternatives": [
+            "EXPERT_SECURITY: Patch vulnerability",
+            "EXPERT_ADAPTER: Optimize logic"
+          ],
+          "engineVersion": "3.5",
+          "consensus": {
+            "qubitCount": 8,
+            "fidelity": 12.402504591399008
+          }
+        },
+        "timestamp": 1771731969122
+      },
+      "solve_1a786c08": {
+        "data": {
+          "predictionId": "Q3-1771731969133-827",
+          "optimizedBest": "EXPERT_ARCHITECT: Refactor core",
+          "confidence": 0.99,
+          "alternatives": [
+            "EXPERT_SECURITY: Patch vulnerability",
+            "EXPERT_ADAPTER: Optimize logic"
+          ],
+          "engineVersion": "3.5",
+          "consensus": {
+            "qubitCount": 8,
+            "fidelity": 12.989297403709902
+          }
+        },
+        "timestamp": 1771731969133
+      },
+      "solve_bbe46d2": {
+        "data": {
+          "predictionId": "Q3-1771731969169-352",
+          "optimizedBest": "EXPERT_ARCHITECT: Refactor core",
+          "confidence": 0.99,
+          "alternatives": [
+            "EXPERT_SECURITY: Patch vulnerability",
+            "EXPERT_ADAPTER: Optimize logic"
+          ],
+          "engineVersion": "3.5",
+          "consensus": {
+            "qubitCount": 8,
+            "fidelity": 14.156431364653475
+          }
+        },
+        "timestamp": 1771731969169
+      },
+      "solve_69e1b1f4": {
+        "data": {
+          "predictionId": "Q3-1771731969210-551",
+          "optimizedBest": "EXPERT_ARCHITECT: Refactor core",
+          "confidence": 0.99,
+          "alternatives": [
+            "EXPERT_SECURITY: Patch vulnerability",
+            "EXPERT_ADAPTER: Optimize logic"
+          ],
+          "engineVersion": "3.5",
+          "consensus": {
+            "qubitCount": 8,
+            "fidelity": 15.027580438889842
+          }
+        },
+        "timestamp": 1771731969210
       }
     }
   }
