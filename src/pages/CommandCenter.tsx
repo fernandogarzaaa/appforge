@@ -20,7 +20,7 @@ export default function CommandCenter() {
 
     return (
         <SovereignWallet>
-            <div className="flex flex-col h-screen bg-[#020617] text-[#f8fafc] overflow-hidden font-sans select-none">
+            <div className="flex flex-col h-screen bg-[#020617] text-[#f8fafc] overflow-hidden font-sans">
 
                 {/* 🏰 TRUTH-HUD (Phase 46) */}
                 <header className="h-14 border-b border-slate-800 bg-[#020617] flex items-center justify-between px-6 z-50 relative pointer-events-auto">

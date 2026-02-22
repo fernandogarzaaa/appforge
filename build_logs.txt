@@ -1,0 +1,244 @@
+
+> base44-app@0.0.0 build
+> vite build
+
+[base44] Proxy not enabled (VITE_BASE44_APP_BASE_URL not set)
+[36mvite v6.4.1 [32mbuilding for production...[36m[39m
+transforming...
+[32m✓[39m 5452 modules transformed.
+rendering chunks...
+computing gzip size...
+[2mdist/[22m[32mindex.html                                      [39m[1m[2m  1.19 kB[22m[1m[22m[2m │ gzip:   0.49 kB[22m
+[2mdist/[22m[2massets/[22m[32mquantum_core_bg-DaqLbN4H.wasm            [39m[1m[2m215.42 kB[22m[1m[22m[2m │ gzip:  95.92 kB[22m
+[2mdist/[22m[2massets/[22m[32mstatic_analyzer_core_bg-B5vnWHqE.wasm    [39m[1m[2m858.10 kB[22m[1m[22m[2m │ gzip: 319.02 kB[22m
+[2mdist/[22m[2massets/[22m[35mindex-D8FY1uWU.css                       [39m[1m[2m202.38 kB[22m[1m[22m[2m │ gzip:  28.58 kB[22m
+[2mdist/[22m[2massets/[22m[36mquantum_hyperparameters-ByTaTbff.js      [39m[1m[2m  0.20 kB[22m[1m[22m[2m │ gzip:   0.16 kB[22m
+[2mdist/[22m[2massets/[22m[36mquantum_predictions-YcJdqBf3.js          [39m[1m[2m  0.26 kB[22m[1m[22m[2m │ gzip:   0.18 kB[22m
+[2mdist/[22m[2massets/[22m[36mAnalytics-DMkmBOww.js                    [39m[1m[2m  0.42 kB[22m[1m[22m[2m │ gzip:   0.26 kB[22m
+[2mdist/[22m[2massets/[22m[36mpersistenceStore-YIxynO8_.js             [39m[1m[2m  0.66 kB[22m[1m[22m[2m │ gzip:   0.36 kB[22m
+[2mdist/[22m[2massets/[22m[36mEmptyState-DOovUUIQ.js                   [39m[1m[2m  0.74 kB[22m[1m[22m[2m │ gzip:   0.45 kB[22m
+[2mdist/[22m[2massets/[22m[36mCodeReview-CoTCxP5l.js                   [39m[1m[2m  0.82 kB[22m[1m[22m[2m │ gzip:   0.45 kB[22m
+[2mdist/[22m[2massets/[22m[36mAITemplates-Qt1S6vzb.js                  [39m[1m[2m  0.83 kB[22m[1m[22m[2m │ gzip:   0.44 kB[22m
+[2mdist/[22m[2massets/[22m[36mSuperiorAIStudio-PxyagGVA.js             [39m[1m[2m  0.84 kB[22m[1m[22m[2m │ gzip:   0.45 kB[22m
+[2mdist/[22m[2massets/[22m[36mAIDeployment-CaZCK9OI.js                 [39m[1m[2m  0.86 kB[22m[1m[22m[2m │ gzip:   0.46 kB[22m
+[2mdist/[22m[2massets/[22m[36mNetworkBadge-zEEe5PIU.js                 [39m[1m[2m  0.89 kB[22m[1m[22m[2m │ gzip:   0.51 kB[22m
+[2mdist/[22m[2massets/[22m[36mpayment.config-51A7n8GE.js               [39m[1m[2m  1.05 kB[22m[1m[22m[2m │ gzip:   0.53 kB[22m
+[2mdist/[22m[2massets/[22m[36mQuantumCollapse-CPSKPpwu.js              [39m[1m[2m  1.13 kB[22m[1m[22m[2m │ gzip:   0.64 kB[22m
+[2mdist/[22m[2massets/[22m[36mquantumIntegration-C3nYr5tj.js           [39m[1m[2m  1.58 kB[22m[1m[22m[2m │ gzip:   0.73 kB[22m
+[2mdist/[22m[2massets/[22m[36mIntelligentInterface-DoalW1M4.js         [39m[1m[2m  1.60 kB[22m[1m[22m[2m │ gzip:   0.69 kB[22m
+[2mdist/[22m[2massets/[22m[36mDeveloperExperience-qPYiVFSe.js          [39m[1m[2m  1.69 kB[22m[1m[22m[2m │ gzip:   0.73 kB[22m
+[2mdist/[22m[2massets/[22m[36mSystemDiagnostics-CngWlCfl.js            [39m[1m[2m  1.72 kB[22m[1m[22m[2m │ gzip:   0.78 kB[22m
+[2mdist/[22m[2massets/[22m[36mVoiceInput-Dp82ZqI2.js                   [39m[1m[2m  1.95 kB[22m[1m[22m[2m │ gzip:   0.98 kB[22m
+[2mdist/[22m[2massets/[22m[36mMarketplaceExtensions-BxalU5Ci.js        [39m[1m[2m  2.13 kB[22m[1m[22m[2m │ gzip:   0.98 kB[22m
+[2mdist/[22m[2massets/[22m[36mAPIDiscoveryPanel-C2_J8Wu8.js            [39m[1m[2m  2.17 kB[22m[1m[22m[2m │ gzip:   1.05 kB[22m
+[2mdist/[22m[2massets/[22m[36mMonetization-r25nwYEf.js                 [39m[1m[2m  2.20 kB[22m[1m[22m[2m │ gzip:   1.03 kB[22m
+[2mdist/[22m[2massets/[22m[36mCodeSnippetLibrary-DmbREnaS.js           [39m[1m[2m  2.22 kB[22m[1m[22m[2m │ gzip:   1.01 kB[22m
+[2mdist/[22m[2massets/[22m[36mDataPipeline-BX-FEkLD.js                 [39m[1m[2m  2.23 kB[22m[1m[22m[2m │ gzip:   1.04 kB[22m
+[2mdist/[22m[2massets/[22m[36mReportingAnalytics-CSBCwJ_T.js           [39m[1m[2m  2.24 kB[22m[1m[22m[2m │ gzip:   1.03 kB[22m
+[2mdist/[22m[2massets/[22m[36mRealtimeCollaboration-BkT44-oy.js        [39m[1m[2m  2.24 kB[22m[1m[22m[2m │ gzip:   1.04 kB[22m
+[2mdist/[22m[2massets/[22m[36mEnterpriseSecurity-qkffeUhv.js           [39m[1m[2m  2.25 kB[22m[1m[22m[2m │ gzip:   1.04 kB[22m
+[2mdist/[22m[2massets/[22m[36mPerformanceScalability-CvjzpNdA.js       [39m[1m[2m  2.27 kB[22m[1m[22m[2m │ gzip:   1.06 kB[22m
+[2mdist/[22m[2massets/[22m[36mIntelligentAutomation-s87CLtcd.js        [39m[1m[2m  2.28 kB[22m[1m[22m[2m │ gzip:   1.04 kB[22m
+[2mdist/[22m[2massets/[22m[36mComponentBuilder-CpeWHE5l.js             [39m[1m[2m  2.29 kB[22m[1m[22m[2m │ gzip:   1.01 kB[22m
+[2mdist/[22m[2massets/[22m[36mDeploymentChecklist-E3HgAvJ6.js          [39m[1m[2m  2.30 kB[22m[1m[22m[2m │ gzip:   0.99 kB[22m
+[2mdist/[22m[2massets/[22m[36mProductAnalytics-sIZQidZZ.js             [39m[1m[2m  2.44 kB[22m[1m[22m[2m │ gzip:   1.10 kB[22m
+[2mdist/[22m[2massets/[22m[36mswitch-DELS3fBj.js                       [39m[1m[2m  2.57 kB[22m[1m[22m[2m │ gzip:   1.27 kB[22m
+[2mdist/[22m[2massets/[22m[36mFunctionBuilder-BvlYlsjr.js              [39m[1m[2m  2.61 kB[22m[1m[22m[2m │ gzip:   1.16 kB[22m
+[2mdist/[22m[2massets/[22m[36mWalletConnect-CjdQ4Bu8.js                [39m[1m[2m  2.70 kB[22m[1m[22m[2m │ gzip:   1.17 kB[22m
+[2mdist/[22m[2massets/[22m[36mprogress-HxRoHupe.js                     [39m[1m[2m  2.80 kB[22m[1m[22m[2m │ gzip:   1.34 kB[22m
+[2mdist/[22m[2massets/[22m[36mIntegrationEcosystem-CXShJ4uf.js         [39m[1m[2m  2.80 kB[22m[1m[22m[2m │ gzip:   1.17 kB[22m
+[2mdist/[22m[2massets/[22m[36mstatic_analyzer_core-DlPeaj6m.js         [39m[1m[2m  3.00 kB[22m[1m[22m[2m │ gzip:   1.26 kB[22m
+[2mdist/[22m[2massets/[22m[36mSystemHealth-DbMg2crJ.js                 [39m[1m[2m  3.06 kB[22m[1m[22m[2m │ gzip:   1.18 kB[22m
+[2mdist/[22m[2massets/[22m[36mwebsocketService-B2OYDWNK.js             [39m[1m[2m  3.22 kB[22m[1m[22m[2m │ gzip:   0.92 kB[22m
+[2mdist/[22m[2massets/[22m[36mProactiveQuantumSuggestions-D7w3IQt4.js  [39m[1m[2m  3.26 kB[22m[1m[22m[2m │ gzip:   1.41 kB[22m
+[2mdist/[22m[2massets/[22m[36mRbacTenancy-LlK4aK3F.js                  [39m[1m[2m  3.27 kB[22m[1m[22m[2m │ gzip:   1.32 kB[22m
+[2mdist/[22m[2massets/[22m[36mCollaborationHub-D46sP7uH.js             [39m[1m[2m  3.34 kB[22m[1m[22m[2m │ gzip:   1.30 kB[22m
+[2mdist/[22m[2massets/[22m[36mVisualizationStudio-DCy0gclC.js          [39m[1m[2m  3.40 kB[22m[1m[22m[2m │ gzip:   1.25 kB[22m
+[2mdist/[22m[2massets/[22m[36mFeedbackSummary-BE3JFwQM.js              [39m[1m[2m  3.47 kB[22m[1m[22m[2m │ gzip:   1.19 kB[22m
+[2mdist/[22m[2massets/[22m[36mAdminDeployments-Ckp_YDDn.js             [39m[1m[2m  3.51 kB[22m[1m[22m[2m │ gzip:   1.22 kB[22m
+[2mdist/[22m[2massets/[22m[36mProactiveAnticipationEngine-DGjsAc7n.js  [39m[1m[2m  3.56 kB[22m[1m[22m[2m │ gzip:   1.34 kB[22m
+[2mdist/[22m[2massets/[22m[36mQuantumReportGenerator-CRgpkTks.js       [39m[1m[2m  3.57 kB[22m[1m[22m[2m │ gzip:   1.35 kB[22m
+[2mdist/[22m[2massets/[22m[36mQuantumLearningEngine-CZBRXX8V.js        [39m[1m[2m  3.61 kB[22m[1m[22m[2m │ gzip:   1.33 kB[22m
+[2mdist/[22m[2massets/[22m[36msearchAnalytics-8yW6eR9H.js              [39m[1m[2m  3.61 kB[22m[1m[22m[2m │ gzip:   1.29 kB[22m
+[2mdist/[22m[2massets/[22m[36mSmartDeployment-DD_yIlRU.js              [39m[1m[2m  3.68 kB[22m[1m[22m[2m │ gzip:   1.43 kB[22m
+[2mdist/[22m[2massets/[22m[36mQuantumQueryAnalyzer-Bn6cMCZi.js         [39m[1m[2m  3.70 kB[22m[1m[22m[2m │ gzip:   1.48 kB[22m
+[2mdist/[22m[2massets/[22m[36mAdminAIControl-CeaCK1DK.js               [39m[1m[2m  3.77 kB[22m[1m[22m[2m │ gzip:   1.41 kB[22m
+[2mdist/[22m[2massets/[22m[36mIncidentIntelligence-2FqyErEC.js         [39m[1m[2m  3.79 kB[22m[1m[22m[2m │ gzip:   1.62 kB[22m
+[2mdist/[22m[2massets/[22m[36mcheckbox-CYteWQL-.js                     [39m[1m[2m  3.88 kB[22m[1m[22m[2m │ gzip:   1.70 kB[22m
+[2mdist/[22m[2massets/[22m[36mAIComponentGenerator-Di6Xnd8e.js         [39m[1m[2m  4.00 kB[22m[1m[22m[2m │ gzip:   1.50 kB[22m
+[2mdist/[22m[2massets/[22m[36mCommandPalette-BAi6_-dn.js               [39m[1m[2m  4.03 kB[22m[1m[22m[2m │ gzip:   1.63 kB[22m
+[2mdist/[22m[2massets/[22m[36mDocumentUpload-DJGlNdrj.js               [39m[1m[2m  4.05 kB[22m[1m[22m[2m │ gzip:   1.58 kB[22m
+[2mdist/[22m[2massets/[22m[36mSubscriptionSuccess-BKgbPHMA.js          [39m[1m[2m  4.07 kB[22m[1m[22m[2m │ gzip:   1.35 kB[22m
+[2mdist/[22m[2massets/[22m[36mAgentCollaborationBuilder-CfoMZtOX.js    [39m[1m[2m  4.08 kB[22m[1m[22m[2m │ gzip:   1.63 kB[22m
+[2mdist/[22m[2massets/[22m[36mAdminAnalytics-YqE7VE9a.js               [39m[1m[2m  4.19 kB[22m[1m[22m[2m │ gzip:   1.54 kB[22m
+[2mdist/[22m[2massets/[22m[36mIntegrationTemplates-FhztVqfD.js         [39m[1m[2m  4.20 kB[22m[1m[22m[2m │ gzip:   1.79 kB[22m
+[2mdist/[22m[2massets/[22m[36mAutoAgentDeployer-Dob2kWXY.js            [39m[1m[2m  4.36 kB[22m[1m[22m[2m │ gzip:   1.53 kB[22m
+[2mdist/[22m[2massets/[22m[36mSuperIntelligenceDashboard-DeXNE2Rp.js   [39m[1m[2m  4.59 kB[22m[1m[22m[2m │ gzip:   1.54 kB[22m
+[2mdist/[22m[2massets/[22m[36mCodeEditorWithCompletion-PcJFzrSx.js     [39m[1m[2m  4.60 kB[22m[1m[22m[2m │ gzip:   1.90 kB[22m
+[2mdist/[22m[2massets/[22m[36mDataAnalytics-B4xu0HD9.js                [39m[1m[2m  4.60 kB[22m[1m[22m[2m │ gzip:   1.96 kB[22m
+[2mdist/[22m[2massets/[22m[36mIntegrationAnalytics-Dyovf0j6.js         [39m[1m[2m  4.68 kB[22m[1m[22m[2m │ gzip:   1.56 kB[22m
+[2mdist/[22m[2massets/[22m[36mAgentCollaborationDashboard-t-_sB4d4.js  [39m[1m[2m  4.81 kB[22m[1m[22m[2m │ gzip:   1.64 kB[22m
+[2mdist/[22m[2massets/[22m[36mProjectExport-CFW_X40C.js                [39m[1m[2m  4.84 kB[22m[1m[22m[2m │ gzip:   1.51 kB[22m
+[2mdist/[22m[2massets/[22m[36mAITemplateGenerator-COQai9d1.js          [39m[1m[2m  4.86 kB[22m[1m[22m[2m │ gzip:   1.70 kB[22m
+[2mdist/[22m[2massets/[22m[36malert-dialog-o07_RDmJ.js                 [39m[1m[2m  4.86 kB[22m[1m[22m[2m │ gzip:   1.79 kB[22m
+[2mdist/[22m[2massets/[22m[36mAIUXSuggestions-DeHmp-tD.js              [39m[1m[2m  4.89 kB[22m[1m[22m[2m │ gzip:   1.75 kB[22m
+[2mdist/[22m[2massets/[22m[36mAITestingDebugger-DhgiORXD.js            [39m[1m[2m  4.97 kB[22m[1m[22m[2m │ gzip:   1.76 kB[22m
+[2mdist/[22m[2massets/[22m[36mAdminUserManagement-CpJeXdR3.js          [39m[1m[2m  5.02 kB[22m[1m[22m[2m │ gzip:   1.71 kB[22m
+[2mdist/[22m[2massets/[22m[36mAdminAgentControl-DTA8DjvE.js            [39m[1m[2m  5.09 kB[22m[1m[22m[2m │ gzip:   1.59 kB[22m
+[2mdist/[22m[2massets/[22m[36mDesignSystem-DVU-96j9.js                 [39m[1m[2m  5.12 kB[22m[1m[22m[2m │ gzip:   1.53 kB[22m
+[2mdist/[22m[2massets/[22m[36mRateLimits-BM32LEv7.js                   [39m[1m[2m  5.14 kB[22m[1m[22m[2m │ gzip:   1.48 kB[22m
+[2mdist/[22m[2massets/[22m[36mProactiveBugDetection-D1n6EJ8l.js        [39m[1m[2m  5.16 kB[22m[1m[22m[2m │ gzip:   1.77 kB[22m
+[2mdist/[22m[2massets/[22m[36mAdminTemplates-p67QdfQS.js               [39m[1m[2m  5.27 kB[22m[1m[22m[2m │ gzip:   1.60 kB[22m
+[2mdist/[22m[2massets/[22m[36mCodeReview-arZksytD.js                   [39m[1m[2m  5.39 kB[22m[1m[22m[2m │ gzip:   1.90 kB[22m
+[2mdist/[22m[2massets/[22m[36mSettings-Bzmr7bMo.js                     [39m[1m[2m  5.51 kB[22m[1m[22m[2m │ gzip:   1.93 kB[22m
+[2mdist/[22m[2massets/[22m[36mAlertService-BkagxUQ4.js                 [39m[1m[2m  5.72 kB[22m[1m[22m[2m │ gzip:   2.36 kB[22m
+[2mdist/[22m[2massets/[22m[36mTwoFactorAuth-7A-JUKTK.js                [39m[1m[2m  5.74 kB[22m[1m[22m[2m │ gzip:   1.76 kB[22m
+[2mdist/[22m[2massets/[22m[36mRoadmap-Coew9eOW.js                      [39m[1m[2m  5.76 kB[22m[1m[22m[2m │ gzip:   2.10 kB[22m
+[2mdist/[22m[2massets/[22m[36mMediaStudio-BM4sDKj8.js                  [39m[1m[2m  5.85 kB[22m[1m[22m[2m │ gzip:   2.21 kB[22m
+[2mdist/[22m[2massets/[22m[36mDocumentationGenerator-BRRWdypu.js       [39m[1m[2m  5.92 kB[22m[1m[22m[2m │ gzip:   2.14 kB[22m
+[2mdist/[22m[2massets/[22m[36mFeedbackAnalytics-CRLpTW0i.js            [39m[1m[2m  5.94 kB[22m[1m[22m[2m │ gzip:   2.05 kB[22m
+[2mdist/[22m[2massets/[22m[36mDeFiHub-lx-rnCSA.js                      [39m[1m[2m  5.96 kB[22m[1m[22m[2m │ gzip:   2.00 kB[22m
+[2mdist/[22m[2massets/[22m[36mProjectAuditorEnhanced-Bbqzh4Xc.js       [39m[1m[2m  6.06 kB[22m[1m[22m[2m │ gzip:   1.83 kB[22m
+[2mdist/[22m[2massets/[22m[36mMedicalAI-CQ036vqu.js                    [39m[1m[2m  6.17 kB[22m[1m[22m[2m │ gzip:   2.49 kB[22m
+[2mdist/[22m[2massets/[22m[36mAuditLog-Btqdkwgl.js                     [39m[1m[2m  6.41 kB[22m[1m[22m[2m │ gzip:   2.00 kB[22m
+[2mdist/[22m[2massets/[22m[36mAgentDeploymentPanel-DPMCO9Rt.js         [39m[1m[2m  6.45 kB[22m[1m[22m[2m │ gzip:   2.23 kB[22m
+[2mdist/[22m[2massets/[22m[36mGovernmentTools-Bi6gVCgE.js              [39m[1m[2m  6.48 kB[22m[1m[22m[2m │ gzip:   2.59 kB[22m
+[2mdist/[22m[2massets/[22m[36mAIUsagePanel-7b0o-zLO.js                 [39m[1m[2m  6.51 kB[22m[1m[22m[2m │ gzip:   1.94 kB[22m
+[2mdist/[22m[2massets/[22m[36mQuantumLLMSettings-BdBG-_D7.js           [39m[1m[2m  6.53 kB[22m[1m[22m[2m │ gzip:   2.20 kB[22m
+[2mdist/[22m[2massets/[22m[36mCodeRefactoring-DHTEnUyZ.js              [39m[1m[2m  6.63 kB[22m[1m[22m[2m │ gzip:   1.92 kB[22m
+[2mdist/[22m[2massets/[22m[36mAdminAPIKeys-DCX483ey.js                 [39m[1m[2m  6.72 kB[22m[1m[22m[2m │ gzip:   2.44 kB[22m
+[2mdist/[22m[2massets/[22m[36mDeploymentModal-TDtg63EP.js              [39m[1m[2m  6.81 kB[22m[1m[22m[2m │ gzip:   2.11 kB[22m
+[2mdist/[22m[2massets/[22m[36mDAOGovernance-D9UcQTj4.js                [39m[1m[2m  6.81 kB[22m[1m[22m[2m │ gzip:   2.04 kB[22m
+[2mdist/[22m[2massets/[22m[36mwasmLoader-D4VfC5Ch.js                   [39m[1m[2m  6.84 kB[22m[1m[22m[2m │ gzip:   2.72 kB[22m
+[2mdist/[22m[2massets/[22m[36mGitHubIntegration-B5KWLEub.js            [39m[1m[2m  6.94 kB[22m[1m[22m[2m │ gzip:   2.28 kB[22m
+[2mdist/[22m[2massets/[22m[36mEmailCampaigns-DpANtUUY.js               [39m[1m[2m  6.94 kB[22m[1m[22m[2m │ gzip:   2.17 kB[22m
+[2mdist/[22m[2massets/[22m[36mAdminQuantumBackends-BNtx-JiG.js         [39m[1m[2m  7.12 kB[22m[1m[22m[2m │ gzip:   2.34 kB[22m
+[2mdist/[22m[2massets/[22m[36mOptimizationSuggestions-DW9RO44z.js      [39m[1m[2m  7.17 kB[22m[1m[22m[2m │ gzip:   2.58 kB[22m
+[2mdist/[22m[2massets/[22m[36mSuperiorAIStudio-CfJYq3OZ.js             [39m[1m[2m  7.17 kB[22m[1m[22m[2m │ gzip:   2.26 kB[22m
+[2mdist/[22m[2massets/[22m[36mCodeReviewSuggestions-avIkAeps.js        [39m[1m[2m  7.18 kB[22m[1m[22m[2m │ gzip:   2.47 kB[22m
+[2mdist/[22m[2massets/[22m[36mContentStudio-BTP5jI8Y.js                [39m[1m[2m  7.20 kB[22m[1m[22m[2m │ gzip:   2.57 kB[22m
+[2mdist/[22m[2massets/[22m[36mProjectDiagnostics-_SQXjMGW.js           [39m[1m[2m  7.28 kB[22m[1m[22m[2m │ gzip:   2.07 kB[22m
+[2mdist/[22m[2massets/[22m[36mSecurityFeatures-DPeNc9f4.js             [39m[1m[2m  7.44 kB[22m[1m[22m[2m │ gzip:   2.14 kB[22m
+[2mdist/[22m[2massets/[22m[36mFunctionValidator-BJN4dLCo.js            [39m[1m[2m  7.46 kB[22m[1m[22m[2m │ gzip:   2.61 kB[22m
+[2mdist/[22m[2massets/[22m[36mAdvancedAITools-DacEQbUe.js              [39m[1m[2m  7.57 kB[22m[1m[22m[2m │ gzip:   1.96 kB[22m
+[2mdist/[22m[2massets/[22m[36mGamingPlatform-Bkjy84Hn.js               [39m[1m[2m  7.62 kB[22m[1m[22m[2m │ gzip:   2.22 kB[22m
+[2mdist/[22m[2massets/[22m[36mCryptoGambling-BK0Y62jd.js               [39m[1m[2m  7.65 kB[22m[1m[22m[2m │ gzip:   2.33 kB[22m
+[2mdist/[22m[2massets/[22m[36mNotifications-Dyi_zPHy.js                [39m[1m[2m  7.75 kB[22m[1m[22m[2m │ gzip:   1.97 kB[22m
+[2mdist/[22m[2massets/[22m[36mReferralProgram-DpSQrp2L.js              [39m[1m[2m  7.91 kB[22m[1m[22m[2m │ gzip:   2.41 kB[22m
+[2mdist/[22m[2massets/[22m[36mProjectTasks-DuBzSz7_.js                 [39m[1m[2m  7.96 kB[22m[1m[22m[2m │ gzip:   2.62 kB[22m
+[2mdist/[22m[2massets/[22m[36mAdminMonitoring-C4aF4aei.js              [39m[1m[2m  8.07 kB[22m[1m[22m[2m │ gzip:   2.40 kB[22m
+[2mdist/[22m[2massets/[22m[36mslider-B1CF07_t.js                       [39m[1m[2m  8.09 kB[22m[1m[22m[2m │ gzip:   3.24 kB[22m
+[2mdist/[22m[2massets/[22m[36mFeatureFlags-CQR4gxun.js                 [39m[1m[2m  8.17 kB[22m[1m[22m[2m │ gzip:   2.41 kB[22m
+[2mdist/[22m[2massets/[22m[36mquantum_verification_report-CuNmwvHe.js  [39m[1m[2m  8.26 kB[22m[1m[22m[2m │ gzip:   1.66 kB[22m
+[2mdist/[22m[2massets/[22m[36mAccount-Bi1P3Gab.js                      [39m[1m[2m  8.27 kB[22m[1m[22m[2m │ gzip:   2.27 kB[22m
+[2mdist/[22m[2massets/[22m[36mAdminSecrets-PXDPvCUp.js                 [39m[1m[2m  8.29 kB[22m[1m[22m[2m │ gzip:   2.80 kB[22m
+[2mdist/[22m[2massets/[22m[36mGuide-DrnkXTR9.js                        [39m[1m[2m  8.36 kB[22m[1m[22m[2m │ gzip:   3.16 kB[22m
+[2mdist/[22m[2massets/[22m[36mMLIntegration-DUxdMTuJ.js                [39m[1m[2m  8.37 kB[22m[1m[22m[2m │ gzip:   2.19 kB[22m
+[2mdist/[22m[2massets/[22m[36mCodeReviewPanel-DBpjkwMG.js              [39m[1m[2m  8.39 kB[22m[1m[22m[2m │ gzip:   2.33 kB[22m
+[2mdist/[22m[2massets/[22m[36mAPIManagement-HigL_kl4.js                [39m[1m[2m  8.49 kB[22m[1m[22m[2m │ gzip:   2.38 kB[22m
+[2mdist/[22m[2massets/[22m[36mAIProjectGenerator-Bn8U0e0U.js           [39m[1m[2m  8.60 kB[22m[1m[22m[2m │ gzip:   2.38 kB[22m
+[2mdist/[22m[2massets/[22m[36mSuperIntelligenceDashboard-BUYkQtXe.js   [39m[1m[2m  8.69 kB[22m[1m[22m[2m │ gzip:   2.39 kB[22m
+[2mdist/[22m[2massets/[22m[36mGitHubConnect-ET7q1swD.js                [39m[1m[2m  8.75 kB[22m[1m[22m[2m │ gzip:   2.54 kB[22m
+[2mdist/[22m[2massets/[22m[36mindex-DJ3gUDnu.js                        [39m[1m[2m  8.77 kB[22m[1m[22m[2m │ gzip:   3.49 kB[22m
+[2mdist/[22m[2massets/[22m[36mWebhookMonitor-CG61zuuW.js               [39m[1m[2m  8.97 kB[22m[1m[22m[2m │ gzip:   2.86 kB[22m
+[2mdist/[22m[2massets/[22m[36mPersonalizationEngine-Cz_oxPmu.js        [39m[1m[2m  9.00 kB[22m[1m[22m[2m │ gzip:   2.73 kB[22m
+[2mdist/[22m[2massets/[22m[36mRoleManagement-BJgemmTh.js               [39m[1m[2m  9.02 kB[22m[1m[22m[2m │ gzip:   2.52 kB[22m
+[2mdist/[22m[2massets/[22m[36mProjectScaffolder-DpySDipI.js            [39m[1m[2m  9.03 kB[22m[1m[22m[2m │ gzip:   2.33 kB[22m
+[2mdist/[22m[2massets/[22m[36mModelSelector-4UsH2PFT.js                [39m[1m[2m  9.13 kB[22m[1m[22m[2m │ gzip:   2.52 kB[22m
+[2mdist/[22m[2massets/[22m[36mProjectSettings-DgRh2hSu.js              [39m[1m[2m  9.29 kB[22m[1m[22m[2m │ gzip:   2.96 kB[22m
+[2mdist/[22m[2massets/[22m[36mAGIStudio-DGCX0Enr.js                    [39m[1m[2m  9.30 kB[22m[1m[22m[2m │ gzip:   3.06 kB[22m
+[2mdist/[22m[2massets/[22m[36mNFTMarketplace-CUyOm2Jg.js               [39m[1m[2m  9.35 kB[22m[1m[22m[2m │ gzip:   2.43 kB[22m
+[2mdist/[22m[2massets/[22m[36mLLMSettings-BLHJORS3.js                  [39m[1m[2m  9.40 kB[22m[1m[22m[2m │ gzip:   3.04 kB[22m
+[2mdist/[22m[2massets/[22m[36mMobileAppBuilder-3-gICq3S.js             [39m[1m[2m  9.41 kB[22m[1m[22m[2m │ gzip:   3.16 kB[22m
+[2mdist/[22m[2massets/[22m[36mHelpSidebar-DIlygdxQ.js                  [39m[1m[2m  9.42 kB[22m[1m[22m[2m │ gzip:   3.39 kB[22m
+[2mdist/[22m[2massets/[22m[36mResourceMonitoringPanel-Cm5WtkZF.js      [39m[1m[2m  9.45 kB[22m[1m[22m[2m │ gzip:   2.24 kB[22m
+[2mdist/[22m[2massets/[22m[36mSidebarNew-CtoQMpt0.js                   [39m[1m[2m  9.54 kB[22m[1m[22m[2m │ gzip:   2.71 kB[22m
+[2mdist/[22m[2massets/[22m[36mComponents-wxpyDosG.js                   [39m[1m[2m  9.56 kB[22m[1m[22m[2m │ gzip:   3.00 kB[22m
+[2mdist/[22m[2massets/[22m[36mPredictiveModels-CAUjRNdw.js             [39m[1m[2m  9.62 kB[22m[1m[22m[2m │ gzip:   3.24 kB[22m
+[2mdist/[22m[2massets/[22m[36mAdminAgents-BsuPd9w0.js                  [39m[1m[2m  9.79 kB[22m[1m[22m[2m │ gzip:   2.76 kB[22m
+[2mdist/[22m[2massets/[22m[36mObservability-DqXG1shs.js                [39m[1m[2m  9.96 kB[22m[1m[22m[2m │ gzip:   2.50 kB[22m
+[2mdist/[22m[2massets/[22m[36mSearchAnalytics-C3-yCN0D.js              [39m[1m[2m  9.97 kB[22m[1m[22m[2m │ gzip:   2.55 kB[22m
+[2mdist/[22m[2massets/[22m[36mQuantumDashboard-DKim_DVH.js             [39m[1m[2m 10.07 kB[22m[1m[22m[2m │ gzip:   3.67 kB[22m
+[2mdist/[22m[2massets/[22m[36mAdvancedAIFunctions-Df0p47rn.js          [39m[1m[2m 10.13 kB[22m[1m[22m[2m │ gzip:   3.13 kB[22m
+[2mdist/[22m[2massets/[22m[36mSwarmDashboard-Dk8XFKsp.js               [39m[1m[2m 10.18 kB[22m[1m[22m[2m │ gzip:   2.95 kB[22m
+[2mdist/[22m[2massets/[22m[36mSystemStatus-CI8fHZGR.js                 [39m[1m[2m 10.19 kB[22m[1m[22m[2m │ gzip:   3.27 kB[22m
+[2mdist/[22m[2massets/[22m[36mCustomAgentBuilder-BuAEgafY.js           [39m[1m[2m 10.24 kB[22m[1m[22m[2m │ gzip:   2.51 kB[22m
+[2mdist/[22m[2massets/[22m[36mAIDeploymentWizard-CVyq22SO.js           [39m[1m[2m 10.26 kB[22m[1m[22m[2m │ gzip:   2.95 kB[22m
+[2mdist/[22m[2massets/[22m[36mProfile-BeEA9Ah4.js                      [39m[1m[2m 10.45 kB[22m[1m[22m[2m │ gzip:   2.72 kB[22m
+[2mdist/[22m[2massets/[22m[36mSecurityCenter-BWXdqpf_.js               [39m[1m[2m 10.75 kB[22m[1m[22m[2m │ gzip:   2.69 kB[22m
+[2mdist/[22m[2massets/[22m[36mAutomationBuilder-DNXArjKn.js            [39m[1m[2m 10.77 kB[22m[1m[22m[2m │ gzip:   3.04 kB[22m
+[2mdist/[22m[2massets/[22m[36mVSCodeIntegration-NKYGKJOR.js            [39m[1m[2m 10.81 kB[22m[1m[22m[2m │ gzip:   3.12 kB[22m
+[2mdist/[22m[2massets/[22m[36mAnalyticsPage-DLFS-OoL.js                [39m[1m[2m 11.46 kB[22m[1m[22m[2m │ gzip:   2.73 kB[22m
+[2mdist/[22m[2massets/[22m[36mAPIKeyManager-Bgopw0qW.js                [39m[1m[2m 11.50 kB[22m[1m[22m[2m │ gzip:   3.58 kB[22m
+[2mdist/[22m[2massets/[22m[36mCodeGenerator-B0srtIiH.js                [39m[1m[2m 11.54 kB[22m[1m[22m[2m │ gzip:   2.93 kB[22m
+[2mdist/[22m[2massets/[22m[36mCodePlayground-rGj78gdb.js               [39m[1m[2m 11.65 kB[22m[1m[22m[2m │ gzip:   3.71 kB[22m
+[2mdist/[22m[2massets/[22m[36mAdminSubscriptions-Z7qVJ7MP.js           [39m[1m[2m 11.65 kB[22m[1m[22m[2m │ gzip:   3.18 kB[22m
+[2mdist/[22m[2massets/[22m[36mAPIExplorer-CTPNYMfR.js                  [39m[1m[2m 11.83 kB[22m[1m[22m[2m │ gzip:   3.47 kB[22m
+[2mdist/[22m[2massets/[22m[36mEmailAssistant-D0RwscST.js               [39m[1m[2m 12.33 kB[22m[1m[22m[2m │ gzip:   3.42 kB[22m
+[2mdist/[22m[2massets/[22m[36mscroll-area-BPqYfZPj.js                  [39m[1m[2m 12.44 kB[22m[1m[22m[2m │ gzip:   3.94 kB[22m
+[2mdist/[22m[2massets/[22m[36mTeamCollaboration-BdeUKtfO.js            [39m[1m[2m 12.81 kB[22m[1m[22m[2m │ gzip:   3.72 kB[22m
+[2mdist/[22m[2massets/[22m[36mProactiveSuggestions-0OJJarmM.js         [39m[1m[2m 12.99 kB[22m[1m[22m[2m │ gzip:   4.46 kB[22m
+[2mdist/[22m[2massets/[22m[36mChatbotManager-b5ABRRgq.js               [39m[1m[2m 13.07 kB[22m[1m[22m[2m │ gzip:   3.78 kB[22m
+[2mdist/[22m[2massets/[22m[36mQuantumEngine-CXBSgJhy.js                [39m[1m[2m 13.08 kB[22m[1m[22m[2m │ gzip:   4.58 kB[22m
+[2mdist/[22m[2massets/[22m[36mEntityDesigner-DT2bDdd4.js               [39m[1m[2m 13.66 kB[22m[1m[22m[2m │ gzip:   4.16 kB[22m
+[2mdist/[22m[2massets/[22m[36mEnterpriseValuation-CZR5KvJJ.js          [39m[1m[2m 14.07 kB[22m[1m[22m[2m │ gzip:   3.08 kB[22m
+[2mdist/[22m[2massets/[22m[36mLandingNew-BdFW_825.js                   [39m[1m[2m 14.08 kB[22m[1m[22m[2m │ gzip:   3.19 kB[22m
+[2mdist/[22m[2massets/[22m[36mSupport-t4MNli0o.js                      [39m[1m[2m 14.09 kB[22m[1m[22m[2m │ gzip:   4.50 kB[22m
+[2mdist/[22m[2massets/[22m[36mPageEditor-BczkbX-R.js                   [39m[1m[2m 14.33 kB[22m[1m[22m[2m │ gzip:   4.39 kB[22m
+[2mdist/[22m[2massets/[22m[36mAdminSovereign-DXp0RhuJ.js               [39m[1m[2m 14.64 kB[22m[1m[22m[2m │ gzip:   4.30 kB[22m
+[2mdist/[22m[2massets/[22m[36mAdvancedSearch-Deze0MtA.js               [39m[1m[2m 14.80 kB[22m[1m[22m[2m │ gzip:   4.70 kB[22m
+[2mdist/[22m[2massets/[22m[36mConsolidatedAISidebar-CjdoB0Xs.js        [39m[1m[2m 15.27 kB[22m[1m[22m[2m │ gzip:   2.89 kB[22m
+[2mdist/[22m[2massets/[22m[36mTokenCreator-n3a2hFbn.js                 [39m[1m[2m 15.31 kB[22m[1m[22m[2m │ gzip:   4.34 kB[22m
+[2mdist/[22m[2massets/[22m[36mNFTStudio-DebCqiKM.js                    [39m[1m[2m 15.67 kB[22m[1m[22m[2m │ gzip:   3.88 kB[22m
+[2mdist/[22m[2massets/[22m[36mDeployments-CMLHSeeT.js                  [39m[1m[2m 15.89 kB[22m[1m[22m[2m │ gzip:   4.08 kB[22m
+[2mdist/[22m[2massets/[22m[36mAIAgentControl-CwenSL2O.js               [39m[1m[2m 16.44 kB[22m[1m[22m[2m │ gzip:   4.32 kB[22m
+[2mdist/[22m[2massets/[22m[36mWeb3Dashboard-DI-9m2Wh.js                [39m[1m[2m 16.79 kB[22m[1m[22m[2m │ gzip:   3.53 kB[22m
+[2mdist/[22m[2massets/[22m[36mContractBuilder-F1xZrEGF.js              [39m[1m[2m 17.61 kB[22m[1m[22m[2m │ gzip:   5.06 kB[22m
+[2mdist/[22m[2massets/[22m[36mSecurity-Dy-hTtZl.js                     [39m[1m[2m 17.78 kB[22m[1m[22m[2m │ gzip:   5.11 kB[22m
+[2mdist/[22m[2massets/[22m[36mAdminCoaching--BJ2QiNA.js                [39m[1m[2m 17.95 kB[22m[1m[22m[2m │ gzip:   4.55 kB[22m
+[2mdist/[22m[2massets/[22m[36mEnterpriseIntelligence-DrytKAfb.js       [39m[1m[2m 18.07 kB[22m[1m[22m[2m │ gzip:   4.07 kB[22m
+[2mdist/[22m[2massets/[22m[36mIntegrationHub-BXEIFt-H.js               [39m[1m[2m 18.93 kB[22m[1m[22m[2m │ gzip:   4.68 kB[22m
+[2mdist/[22m[2massets/[22m[36mDataPrivacy-DCJIvJ_6.js                  [39m[1m[2m 19.04 kB[22m[1m[22m[2m │ gzip:   5.57 kB[22m
+[2mdist/[22m[2massets/[22m[36mExternalBotIntegrations-lwhfIBjx.js      [39m[1m[2m 19.31 kB[22m[1m[22m[2m │ gzip:   4.92 kB[22m
+[2mdist/[22m[2massets/[22m[36mEnvironmentVariables-C5KgjRWu.js         [39m[1m[2m 19.46 kB[22m[1m[22m[2m │ gzip:   5.68 kB[22m
+[2mdist/[22m[2massets/[22m[36mIntegrations-Cccdw6Bt.js                 [39m[1m[2m 19.84 kB[22m[1m[22m[2m │ gzip:   4.89 kB[22m
+[2mdist/[22m[2massets/[22m[36mCentralAnalytics-6GNkZpDA.js             [39m[1m[2m 20.00 kB[22m[1m[22m[2m │ gzip:   4.51 kB[22m
+[2mdist/[22m[2massets/[22m[36mquantum_core-DQHvULGv.js                 [39m[1m[2m 21.60 kB[22m[1m[22m[2m │ gzip:   4.72 kB[22m
+[2mdist/[22m[2massets/[22m[36mTemplateMarketplace-Bqo9SXXd.js          [39m[1m[2m 21.66 kB[22m[1m[22m[2m │ gzip:   5.32 kB[22m
+[2mdist/[22m[2massets/[22m[36mTeamManagement-F8GWHiGS.js               [39m[1m[2m 23.15 kB[22m[1m[22m[2m │ gzip:   5.68 kB[22m
+[2mdist/[22m[2massets/[22m[36mAdminDashboard-BioMuXJk.js               [39m[1m[2m 23.82 kB[22m[1m[22m[2m │ gzip:   5.99 kB[22m
+[2mdist/[22m[2massets/[22m[36maiRouter-Dhv7sa7l.js                     [39m[1m[2m 24.76 kB[22m[1m[22m[2m │ gzip:   8.86 kB[22m
+[2mdist/[22m[2massets/[22m[36mCryptoExchange-CnB1pkDU.js               [39m[1m[2m 24.96 kB[22m[1m[22m[2m │ gzip:   5.66 kB[22m
+[2mdist/[22m[2massets/[22m[36mWorkflowBuilder-BClUi0XB.js              [39m[1m[2m 25.06 kB[22m[1m[22m[2m │ gzip:   6.80 kB[22m
+[2mdist/[22m[2massets/[22m[36mProjectViewer-CSVodje4.js                [39m[1m[2m 25.35 kB[22m[1m[22m[2m │ gzip:   7.48 kB[22m
+[2mdist/[22m[2massets/[22m[36mPredictiveAnalytics-CYA6I867.js          [39m[1m[2m 26.78 kB[22m[1m[22m[2m │ gzip:   5.96 kB[22m
+[2mdist/[22m[2massets/[22m[36mCollaboration-fQ_zMuAs.js                [39m[1m[2m 27.80 kB[22m[1m[22m[2m │ gzip:   7.35 kB[22m
+[2mdist/[22m[2massets/[22m[36mAdminSystemConfig-CVyqLyBF.js            [39m[1m[2m 28.85 kB[22m[1m[22m[2m │ gzip:   6.45 kB[22m
+[2mdist/[22m[2massets/[22m[36mMobileStudio-k1IXKr7O.js                 [39m[1m[2m 29.37 kB[22m[1m[22m[2m │ gzip:   7.78 kB[22m
+[2mdist/[22m[2massets/[22m[36mvendor-editor-CbzpiQF6.js                [39m[1m[2m 29.79 kB[22m[1m[22m[2m │ gzip:   8.98 kB[22m
+[2mdist/[22m[2massets/[22m[36mAdvancedAnomalyDetection-CQAvqP-r.js     [39m[1m[2m 35.36 kB[22m[1m[22m[2m │ gzip:   7.86 kB[22m
+[2mdist/[22m[2massets/[22m[36mvendor-query-DxU9P-fy.js                 [39m[1m[2m 42.23 kB[22m[1m[22m[2m │ gzip:  12.26 kB[22m
+[2mdist/[22m[2massets/[22m[36mCustomAgentStudio-DHeLtsLw.js            [39m[1m[2m 42.25 kB[22m[1m[22m[2m │ gzip:  10.13 kB[22m
+[2mdist/[22m[2massets/[22m[36mAIMonitoring-QzVwiXBW.js                 [39m[1m[2m 43.79 kB[22m[1m[22m[2m │ gzip:  10.05 kB[22m
+[2mdist/[22m[2massets/[22m[36mQuantumLab-DYGcqi-m.js                   [39m[1m[2m 47.16 kB[22m[1m[22m[2m │ gzip:  11.01 kB[22m
+[2mdist/[22m[2massets/[22m[36mvendor-utils-tR_efKP6.js                 [39m[1m[2m 50.98 kB[22m[1m[22m[2m │ gzip:  14.85 kB[22m
+[2mdist/[22m[2massets/[22m[36mProjectWizard-DB2corCv.js                [39m[1m[2m 51.18 kB[22m[1m[22m[2m │ gzip:  12.70 kB[22m
+[2mdist/[22m[2massets/[22m[36mvendor-icons-HUvJKOqw.js                 [39m[1m[2m 55.84 kB[22m[1m[22m[2m │ gzip:  18.63 kB[22m
+[2mdist/[22m[2massets/[22m[36mSocialMediaHub-x6KvIsjD.js               [39m[1m[2m 57.60 kB[22m[1m[22m[2m │ gzip:  16.60 kB[22m
+[2mdist/[22m[2massets/[22m[36mBotBuilder-kJMYTyS-.js                   [39m[1m[2m 62.78 kB[22m[1m[22m[2m │ gzip:  16.09 kB[22m
+[2mdist/[22m[2massets/[22m[36mdnd.esm-CQRSutMM.js                      [39m[1m[2m 96.10 kB[22m[1m[22m[2m │ gzip:  28.93 kB[22m
+[2mdist/[22m[2massets/[22m[36mvendor-motion-mZQ6NuwO.js                [39m[1m[2m114.40 kB[22m[1m[22m[2m │ gzip:  36.68 kB[22m
+[2mdist/[22m[2massets/[22m[36mindex-BAE0G76_.js                        [39m[1m[2m116.15 kB[22m[1m[22m[2m │ gzip:  34.46 kB[22m
+[2mdist/[22m[2massets/[22m[36mAIAssistant-B-RL020Q.js                  [39m[1m[2m121.27 kB[22m[1m[22m[2m │ gzip:  35.61 kB[22m
+[2mdist/[22m[2massets/[22m[36mvendor-ui-C13uRs-j.js                    [39m[1m[2m124.31 kB[22m[1m[22m[2m │ gzip:  36.81 kB[22m
+[2mdist/[22m[2massets/[22m[36mvendor-react-ZE7Tjxxk.js                 [39m[1m[2m152.33 kB[22m[1m[22m[2m │ gzip:  49.85 kB[22m
+[2mdist/[22m[2massets/[22m[36mPricing-aj7kwkes.js                      [39m[1m[2m272.79 kB[22m[1m[22m[2m │ gzip:  80.54 kB[22m
+[2mdist/[22m[2massets/[22m[36mvendor-charts-Bm9DUwaS.js                [39m[1m[2m444.76 kB[22m[1m[22m[2m │ gzip: 111.82 kB[22m
+[2mdist/[22m[2massets/[22m[36mindex-CT9ApdXd.js                        [39m[1m[33m738.42 kB[39m[22m[2m │ gzip: 229.95 kB[22m
+[2mdist/[22m[2massets/[22m[36mCommandCenter-B8tPr4fc.js                [39m[1m[33m849.04 kB[39m[22m[2m │ gzip: 223.38 kB[22m
+[33m
+(!) Some chunks are larger than 600 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.[39m
+[32m✓ built in 55.56s[39m

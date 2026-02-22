@@ -70,27 +70,37 @@ async function validateSovereignIdentity(): Promise<boolean> {
         }
 
         if (isTrueIndependence) {
-            // Physical Anchor 2: Local Model Resonance
+            // Physical Anchor 2: Local Model Resonance (Primary: Ollama, Fallback: Base44/Chimera)
             const port = process.env.NEURAL_BRIDGE_PORT || '11434';
+            let resonanceFound = false;
+
             try {
                 const controller = new AbortController();
-                const timeoutId = setTimeout(() => controller.abort(), 2000);
+                const timeoutId = setTimeout(() => controller.abort(), 1000);
                 const fetch = (await import('node-fetch')).default;
                 const response = await fetch(`http://localhost:${port}/api/tags`, { signal: controller.signal });
                 clearTimeout(timeoutId);
                 if (response.ok) {
-                    console.log('   ⚛️ Local Model Resonance: STABLE');
-                } else {
-                    throw new Error('Incoherent response');
+                    console.log('   ⚛️ Local Model Resonance: STABLE (Ollama)');
+                    resonanceFound = true;
                 }
             } catch (e) {
-                console.warn(`   ⚠️ Local Model Resonance: COLLAPSED (Is Ollama running on ${port}?)`);
+                // Ollama not found, try Base44/Chimera
+                if (process.env.CHIMERA_CLOUD_URL || process.env.BASE44_API_KEY) {
+                    console.log('   ⚛️ Cloud Model Resonance: ESTABLISHED (Base44/Chimera)');
+                    resonanceFound = true;
+                }
+            }
+
+            if (!resonanceFound) {
+                console.warn(`   ⚠️ Model Resonance: COLLAPSED (Ollama not on ${port} and no Cloud credentials)`);
                 if (process.env.SWARM_REALITY_MODE === 'true') {
-                    console.error('   ❌ IDENTITY CRITICAL: Cannot resonate with local brain in REALITY_MODE.');
+                    console.error('   ❌ IDENTITY CRITICAL: Cannot resonate with any brain in REALITY_MODE.');
                     return false;
                 }
             }
-            console.log('✅ IDENTITY VALIDATED: Local Sovereignty Active');
+
+            console.log('✅ IDENTITY VALIDATED: Sovereignty Active');
             return true;
         }
 

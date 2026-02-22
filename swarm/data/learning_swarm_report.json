@@ -1,10 +1,10 @@
 {
-  "timestamp": "2026-02-20T20:46:41.822Z",
+  "timestamp": "2026-02-21T19:20:36.542Z",
   "benchmark": {
-    "overallScore": 89.5,
-    "verdict": "DEVELOPING",
-    "weakestDimension": "coding",
-    "weakestScore": 60
+    "overallScore": 97.5,
+    "verdict": "ADVANCED_AUTONOMOUS",
+    "weakestDimension": "autonomy",
+    "weakestScore": 83.33
   },
   "focus": "Reasoning hardening with adversarial drills and outcome feedback",
   "strategicRecommendation": "Increase adversarial drill frequency and expand failure-mode coverage",

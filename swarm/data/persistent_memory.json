@@ -2,62 +2,62 @@
   "learning:LearningSwarm:drill:deploy_safety": {
     "key": "learning:LearningSwarm:drill:deploy_safety",
     "value": {
-      "attempts": 136,
-      "successes": 136,
-      "totalReward": 1360
+      "attempts": 137,
+      "successes": 137,
+      "totalReward": 1370
     },
-    "timestamp": 1771620535808,
+    "timestamp": 1771701635962,
     "ttl": 604800
   },
   "learning:LearningSwarm:drill:queue_stability": {
     "key": "learning:LearningSwarm:drill:queue_stability",
     "value": {
-      "attempts": 124,
-      "successes": 124,
-      "totalReward": 1240
+      "attempts": 125,
+      "successes": 125,
+      "totalReward": 1250
     },
-    "timestamp": 1771620239162,
+    "timestamp": 1771701635973,
     "ttl": 604800
   },
   "learning:LearningSwarm:drill:api_rollout": {
     "key": "learning:LearningSwarm:drill:api_rollout",
     "value": {
-      "attempts": 119,
-      "successes": 119,
-      "totalReward": 1190
+      "attempts": 120,
+      "successes": 120,
+      "totalReward": 1200
     },
-    "timestamp": 1771620522632,
+    "timestamp": 1771701635983,
     "ttl": 604800
   },
   "learning:LearningSwarm:drill:auth_incident": {
     "key": "learning:LearningSwarm:drill:auth_incident",
     "value": {
-      "attempts": 82,
-      "successes": 82,
-      "totalReward": 820
+      "attempts": 83,
+      "successes": 83,
+      "totalReward": 830
     },
-    "timestamp": 1771620313863,
+    "timestamp": 1771701636236,
     "ttl": 604800
   },
   "learning:LearningSwarm:drill:data_conflict": {
     "key": "learning:LearningSwarm:drill:data_conflict",
     "value": {
-      "attempts": 53,
-      "successes": 53,
-      "totalReward": 530
+      "attempts": 54,
+      "successes": 54,
+      "totalReward": 540
     },
-    "timestamp": 1771620218973,
+    "timestamp": 1771701636519,
     "ttl": 604800
   },
   "learning_swarm:last_report": {
     "key": "learning_swarm:last_report",
     "value": {
-      "timestamp": "2026-02-20T20:46:06.474Z",
+      "timestamp": "2026-02-21T19:20:36.542Z",
       "benchmark": {
-        "overallScore": 89.5,
-        "verdict": "DEVELOPING",
-        "weakestDimension": "coding",
-        "weakestScore": 60
+        "overallScore": 97.5,
+        "verdict": "ADVANCED_AUTONOMOUS",
+        "weakestDimension": "autonomy",
+        "weakestScore": 83.33
       },
       "focus": "Reasoning hardening with adversarial drills and outcome feedback",
       "strategicRecommendation": "Increase adversarial drill frequency and expand failure-mode coverage",
@@ -66,86 +66,86 @@
       "successRate": 1,
       "failedDrills": []
     },
-    "timestamp": 1771620522467,
+    "timestamp": 1771701636544,
     "ttl": 604800
   },
   "learning:VoiceAgentSwarm:intent:billing": {
     "key": "learning:VoiceAgentSwarm:intent:billing",
     "value": {
-      "attempts": 213,
-      "successes": 213,
-      "totalReward": 852
+      "attempts": 214,
+      "successes": 214,
+      "totalReward": 856
     },
-    "timestamp": 1771620265155,
+    "timestamp": 1771702872979,
     "ttl": 604800
   },
   "learning:VoiceAgentSwarm:intent:technical": {
     "key": "learning:VoiceAgentSwarm:intent:technical",
     "value": {
-      "attempts": 204,
-      "successes": 204,
-      "totalReward": 816
+      "attempts": 205,
+      "successes": 205,
+      "totalReward": 820
     },
-    "timestamp": 1771620382897,
+    "timestamp": 1771702872989,
     "ttl": 604800
   },
   "learning:VoiceAgentSwarm:intent:onboarding": {
     "key": "learning:VoiceAgentSwarm:intent:onboarding",
     "value": {
-      "attempts": 124,
-      "successes": 124,
-      "totalReward": 496
+      "attempts": 125,
+      "successes": 125,
+      "totalReward": 500
     },
-    "timestamp": 1771620240670,
+    "timestamp": 1771702873001,
     "ttl": 604800
   },
   "learning:VoiceAgentSwarm:intent:retention": {
     "key": "learning:VoiceAgentSwarm:intent:retention",
     "value": {
-      "attempts": 119,
-      "successes": 119,
-      "totalReward": 476
+      "attempts": 120,
+      "successes": 120,
+      "totalReward": 480
     },
-    "timestamp": 1771620522579,
+    "timestamp": 1771702873011,
     "ttl": 604800
   },
   "voice_swarm:last_report": {
     "key": "voice_swarm:last_report",
     "value": {
-      "timestamp": "2026-02-20T20:44:09.866Z",
+      "timestamp": "2026-02-21T19:41:13.013Z",
       "processed": 4,
-      "autoResolved": 4,
+      "autoResolved": 3,
       "escalated": 0,
       "upgradeOffers": 0,
-      "followUps": 0,
+      "followUps": 1,
       "recommendations": [
         {
-          "ticketId": "voice_1771618417796_1",
+          "ticketId": "voice_1771702872700_1",
+          "action": "create_followup",
+          "confidence": 0.11099545864758767,
+          "recommendation": "AUTO_RESOLVE with clear instructions and confirmation follow-up"
+        },
+        {
+          "ticketId": "voice_1771702872700_2",
+          "action": "auto_resolve",
+          "confidence": 0.9530529058103612,
+          "recommendation": "AUTO_RESOLVE with clear instructions and confirmation follow-up"
+        },
+        {
+          "ticketId": "voice_1771702872700_3",
           "action": "auto_resolve",
           "confidence": 0.99,
           "recommendation": "AUTO_RESOLVE with clear instructions and confirmation follow-up"
         },
         {
-          "ticketId": "voice_1771618417796_2",
-          "action": "auto_resolve",
-          "confidence": 0.99,
-          "recommendation": "AUTO_RESOLVE with clear instructions and confirmation follow-up"
-        },
-        {
-          "ticketId": "voice_1771618417796_3",
-          "action": "auto_resolve",
-          "confidence": 0.99,
-          "recommendation": "AUTO_RESOLVE with clear instructions and confirmation follow-up"
-        },
-        {
-          "ticketId": "voice_1771618417796_4",
+          "ticketId": "voice_1771702872700_4",
           "action": "auto_resolve",
           "confidence": 0.99,
           "recommendation": "AUTO_RESOLVE with clear instructions and confirmation follow-up"
         }
       ]
     },
-    "timestamp": 1771620298878,
+    "timestamp": 1771702873016,
     "ttl": 604800
   },
   "compliance_swarm:last_report": {
