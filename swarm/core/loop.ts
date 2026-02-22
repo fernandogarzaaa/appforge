@@ -2,7 +2,7 @@ import dotenv from 'dotenv';
 import path from 'path';
 import * as fs from 'fs/promises';
 import { fileURLToPath } from 'node:url';
-import { realityStatusSummary, requireRealityMode } from './reality_mode.js';
+import { isLiveTradingEnabled, realityStatusSummary, requireRealityMode } from './reality_mode.js';
 
 // Resolve .env.local from project root
 const __filename = fileURLToPath(import.meta.url);
@@ -34,7 +34,9 @@ if (isTrueIndependence) {
 }
 
 try {
-    requireRealityMode('swarm/core/loop.ts startup');
+    if (isLiveTradingEnabled()) {
+        requireRealityMode('swarm/core/loop.ts startup with REAL_TRADING_ENABLED=true');
+    }
     console.log(`🌍 Reality Lock: ${realityStatusSummary()}`);
 } catch (error: any) {
     console.error(`❌ FATAL: ${error.message}`);
