@@ -65,6 +65,7 @@ jobs:
             swarm/swarm_memory.json
             src/data/quantum_state.json
             src/data/quantum_predictions.json
+            swarm_one_shot.log
             src/data/bounty_ledger.json
             src/data/economic_state.json
             src/data/synergy_scout.json
@@ -87,8 +88,8 @@ jobs:
       # 🦀 TRANSCENDENCE: Build Rust Quantum Bridge
       - name: Build Quantum Bridge
         run: |
-          cargo generate-lockfile --manifest-path swarm/core/quantum_bridge/Cargo.toml
-          cargo build --release --locked --manifest-path swarm/core/quantum_bridge/Cargo.toml
+          cd swarm/core/quantum_bridge
+          cargo build --release --locked
           echo "🦀 Quantum Bridge compiled for cloud execution"
 
       # 📡 REALITY INJECTION 2.0: Harvest context before execution
@@ -123,27 +124,58 @@ jobs:
           cd swarm
           npx tsx intelligence_pulse.ts
 
-      - name: Validate required secrets (masked)
+      - name: Validate Swarm runtime secrets (masked)
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          XAI_API_KEY: ${{ secrets.XAI_API_KEY }}
           BASE44_API_KEY: ${{ secrets.BASE44_API_KEY }}
           BASE44_APP_ID: ${{ secrets.BASE44_APP_ID }}
+          DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
         run: |
-          check_secret() {
+          mask_and_report() {
+            local name="$1"
+            local value="$2"
+            if [ -n "$value" ]; then
+              echo "::add-mask::$value"
+              echo "✅ $name is configured"
+            else
+              echo "⚪ $name is not configured"
+            fi
+          }
+
+          require_secret() {
             local name="$1"
             local value="$2"
             if [ -z "$value" ]; then
               echo "❌ Missing required secret: $name"
               exit 1
             fi
-            echo "✅ $name is configured"
           }
 
-          check_secret "OPENAI_API_KEY" "$OPENAI_API_KEY"
-          check_secret "BASE44_API_KEY" "$BASE44_API_KEY"
-          check_secret "BASE44_APP_ID" "$BASE44_APP_ID"
+          mask_and_report "BASE44_API_KEY" "$BASE44_API_KEY"
+          mask_and_report "BASE44_APP_ID" "$BASE44_APP_ID"
+          mask_and_report "OPENAI_API_KEY" "$OPENAI_API_KEY"
+          mask_and_report "ANTHROPIC_API_KEY" "$ANTHROPIC_API_KEY"
+          mask_and_report "GEMINI_API_KEY" "$GEMINI_API_KEY"
+          mask_and_report "XAI_API_KEY" "$XAI_API_KEY"
+          mask_and_report "DISCORD_TOKEN" "$DISCORD_TOKEN"
+          mask_and_report "TELEGRAM_BOT_TOKEN" "$TELEGRAM_BOT_TOKEN"
+
+          require_secret "BASE44_API_KEY" "$BASE44_API_KEY"
+          require_secret "BASE44_APP_ID" "$BASE44_APP_ID"
+
+          if [ -z "$OPENAI_API_KEY" ] && [ -z "$ANTHROPIC_API_KEY" ] && [ -z "$GEMINI_API_KEY" ] && [ -z "$XAI_API_KEY" ]; then
+            echo "❌ Missing AI provider key. Configure at least one: OPENAI_API_KEY, ANTHROPIC_API_KEY, GEMINI_API_KEY, or XAI_API_KEY"
+            exit 1
+          fi
+
+          echo "✅ Swarm runtime secrets validated successfully"
 
       - name: Run Swarm (One-Shot)
+        continue-on-error: true
         env:
           # AI Keys
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
@@ -177,9 +209,17 @@ jobs:
           git config --global user.name "Fernando Garza (Sovereign Swarm)"
           git config --global user.email "fernando@appforge.ai"
 
-          # Run the Daemon (One-Shot Cycle)
+          # Run the Daemon (One-Shot Cycle) without failing the whole workflow on transient runtime issues
           cd swarm
-          NODE_ID="GA-AUTONOMOUS" MESH_ENABLED="true" npm start
+          set +e
+          NODE_ID="GA-AUTONOMOUS" MESH_ENABLED="true" npm start 2>&1 | tee ../swarm_one_shot.log
+          SWARM_EXIT_CODE=${PIPESTATUS[0]}
+          set -e
+
+          if [ "$SWARM_EXIT_CODE" -ne 0 ]; then
+            echo "::warning::Swarm (One-Shot) exited with code $SWARM_EXIT_CODE. Continuing workflow so diagnostics and follow-up gates still run."
+          fi
+
 
       # 🧬 SINGULARITY VERIFICATION: Validate evolutionary progress
       - name: Run Singularity Verification
@@ -215,6 +255,7 @@ jobs:
             swarm/swarm_memory.json
             src/data/quantum_state.json
             src/data/quantum_predictions.json
+            swarm_one_shot.log
           retention-days: 30
 
       - name: Open Evolution Pull Request
