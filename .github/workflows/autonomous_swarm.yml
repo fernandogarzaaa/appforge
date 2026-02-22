@@ -193,7 +193,15 @@ jobs:
 
           # Run the Daemon (One-Shot Cycle)
           cd swarm
+          set +e
           NODE_ID="GA-AUTONOMOUS" MESH_ENABLED="true" npm start
+          swarm_exit_code=$?
+
+          if [ "$swarm_exit_code" -ne 0 ]; then
+            echo "::warning::Swarm (One-Shot) exited with code $swarm_exit_code. Continuing CI cycle to preserve artifact upload and diagnostics."
+          fi
+
+          exit 0
 
       - name: Skip Swarm (One-Shot)
         if: steps.swarm-secrets.outputs.can_run_swarm != 'true'
