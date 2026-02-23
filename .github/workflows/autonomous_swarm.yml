@@ -157,6 +157,7 @@ jobs:
           echo "can_run_swarm=false" >> "$GITHUB_OUTPUT"
 
       - name: Run Swarm (One-Shot)
+        id: swarm-run
         if: steps.swarm-secrets.outputs.can_run_swarm == 'true'
         env:
           # AI Keys
@@ -196,6 +197,8 @@ jobs:
           set +e
           NODE_ID="GA-AUTONOMOUS" MESH_ENABLED="true" npm start
           swarm_exit_code=$?
+
+          echo "swarm_exit_code=$swarm_exit_code" >> "$GITHUB_OUTPUT"
 
           if [ "$swarm_exit_code" -ne 0 ]; then
             echo "::warning::Swarm (One-Shot) exited with code $swarm_exit_code. Continuing CI cycle to preserve artifact upload and diagnostics."
@@ -242,6 +245,22 @@ jobs:
             src/data/quantum_state.json
             src/data/quantum_predictions.json
           retention-days: 30
+
+      - name: Enforce Swarm Runtime Health
+        if: always() && steps.swarm-secrets.outputs.can_run_swarm == 'true'
+        run: |
+          code="${{ steps.swarm-run.outputs.swarm_exit_code }}"
+          if [ -z "$code" ]; then
+            echo "❌ Swarm runtime did not publish an exit code."
+            exit 1
+          fi
+
+          if [ "$code" -ne 0 ]; then
+            echo "❌ Swarm runtime exited with code $code. Failing workflow after artifact upload to prevent hidden runtime regressions."
+            exit 1
+          fi
+
+          echo "✅ Swarm runtime exited cleanly."
 
       - name: Open Evolution Pull Request
         if: success()
