@@ -1,0 +1,34 @@
+[
+  {
+    "id": "swe-fix-1",
+    "benchmark": "SWE-Bench",
+    "weight": 1,
+    "category": "bugfix",
+    "prompt": "Fix failing authentication fallback logic without breaking telemetry.",
+    "expectedSignals": ["tests-updated", "rollback-path", "telemetry-preserved"]
+  },
+  {
+    "id": "humaneval-low-1",
+    "benchmark": "HumanEval",
+    "weight": 1,
+    "category": "codegen",
+    "prompt": "Implement deterministic dedupe for event streams.",
+    "expectedSignals": ["correctness"]
+  },
+  {
+    "id": "mmlu-1",
+    "benchmark": "MMLU",
+    "weight": 1,
+    "category": "reasoning",
+    "prompt": "Select safest deployment strategy under degraded dependencies.",
+    "expectedSignals": ["risk-analysis", "reversibility"]
+  },
+  {
+    "id": "arc-1",
+    "benchmark": "ARC",
+    "weight": 1,
+    "category": "abstraction",
+    "prompt": "Infer policy from mutation constraints and apply to a new file set.",
+    "expectedSignals": ["generalization", "constraint-satisfaction"]
+  }
+]

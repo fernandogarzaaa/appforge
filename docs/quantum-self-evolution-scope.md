@@ -1,7 +1,7 @@
 # Quantum Self-Evolution Commit Scope Investigation
 
 ## Objective
-Clarify the intended operating scope for `chore: quantum self-evolution` and define how work should be prioritized by default.
+Determine whether `chore: quantum self-evolution` commits affect the entire repository or a focused subset.
 
 ## Data Source
 GitHub API for `fernandogarzaaa/appforge` using commit search and per-commit file listings.
@@ -10,19 +10,19 @@ GitHub API for `fernandogarzaaa/appforge` using commit search and per-commit fil
 - Search query: `repo:fernandogarzaaa/appforge "chore: quantum self-evolution"`
 - Filter: commit subject starts with `chore: quantum self-evolution`
 
-## Observed Historical Pattern
-- Matching commits analyzed: **88**
-- Unique top-level paths touched: **3**
-  - `src/` (primarily `src/data/`)
-  - `swarm/` (primarily `swarm/core/`)
+## Findings
+- Matching commits: **88**
+- Unique top-level paths touched across all matching commits: **3**
+  - `src/` (specifically `src/data/`)
+  - `swarm/` (specifically `swarm/core/`)
   - `build_logs.txt`
 
-### Historical concentration
-- `src/data`: **393** file-touch events
+### Directory concentration
+- `src/data`: **393** file-touch events across matching commits
 - `swarm/core`: **23** file-touch events
 - `build_logs.txt`: **23** file-touch events
 
-### Most frequently modified files historically
+### Most frequently modified files
 - `src/data/quantum_brain_state.json` — 88 commits
 - `src/data/quantum_hyperparameters.json` — 88 commits
 - `src/data/quantum_oracle_state.json` — 48 commits
@@ -30,16 +30,10 @@ GitHub API for `fernandogarzaaa/appforge` using commit search and per-commit fil
 - `build_logs.txt` — 23 commits
 - `swarm/core/quantum_core.ts` — 23 commits
 
-## Updated Scope Policy
-To align with current direction:
-
-1. **Repository scope:** Quantum self-evolution is allowed to operate across the **entire repository**.
-2. **Default priority focus:** By default, prioritization should remain centered on the established quantum control plane:
-   - `src/data/`
-   - `swarm/core/`
-   - `build_logs.txt`
-3. **Expansion rule:** When required by goals, safety, or dependency impact, mutation may extend beyond the default focus into other repo areas.
-4. **Execution preference:** Prefer focused changes first; expand scope only when focused edits cannot satisfy the objective.
-
 ## Conclusion
-Historically, self-evolution commits have been highly concentrated in a narrow subsystem. Going forward, the scope is treated as **whole-repository capable**, with a **default priority focus** on the quantum state and orchestration surfaces listed above.
+The `chore: quantum self-evolution` series is **not repository-wide**. It is highly focused on a narrow subsystem centered on:
+- quantum state JSON artifacts under `src/data/`
+- occasional orchestration logic updates in `swarm/core/quantum_core.ts`
+- associated run logs in `build_logs.txt`
+
+This indicates a constrained evolution loop rather than broad cross-repo mutation.
