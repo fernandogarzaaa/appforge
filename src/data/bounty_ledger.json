@@ -8,46 +8,46 @@
       "priority": 0.6,
       "reward": 60,
       "category": "architect",
-      "id": "BTY-1771815338184-801",
+      "id": "BTY-1771823292637-467",
       "status": "backlog",
-      "createdAt": "2026-02-23T02:55:38.184Z"
+      "createdAt": "2026-02-23T05:08:12.637Z"
     },
     {
       "description": "[Neural Accelerator] EXPERT_ARCHITECT: Refactor core (Coherence: 1.00)",
       "priority": 0.5,
       "reward": 50,
       "category": "architect",
-      "id": "BTY-1771815338217-195",
+      "id": "BTY-1771823292664-633",
       "status": "backlog",
-      "createdAt": "2026-02-23T02:55:38.217Z"
+      "createdAt": "2026-02-23T05:08:12.664Z"
     },
     {
       "description": "[Neural Accelerator] EXPERT_ARCHITECT: Refactor core (Coherence: 1.00)",
       "priority": 0.85,
       "reward": 85,
       "category": "architect",
-      "id": "BTY-1771815338252-795",
+      "id": "BTY-1771823292696-69",
       "status": "completed",
-      "createdAt": "2026-02-23T02:55:38.252Z",
-      "completedAt": "2026-02-23T02:55:38.358Z"
+      "createdAt": "2026-02-23T05:08:12.696Z",
+      "completedAt": "2026-02-23T05:08:12.806Z"
     },
     {
       "description": "[Neural Accelerator] EXPERT_ARCHITECT: Refactor core (Coherence: 1.00)",
-      "priority": 0.1553930835700601,
-      "reward": 16,
+      "priority": 0.15493881867846596,
+      "reward": 15,
       "category": "architect",
-      "id": "BTY-1771815338286-108",
+      "id": "BTY-1771823292730-64",
       "status": "backlog",
-      "createdAt": "2026-02-23T02:55:38.286Z"
+      "createdAt": "2026-02-23T05:08:12.730Z"
     },
     {
       "description": "[Neural Accelerator] EXPERT_ARCHITECT: Refactor core (Coherence: 1.00)",
-      "priority": 0.2875,
-      "reward": 29,
+      "priority": 0.27875,
+      "reward": 28,
       "category": "architect",
-      "id": "BTY-1771815338318-597",
+      "id": "BTY-1771823292767-50",
       "status": "backlog",
-      "createdAt": "2026-02-23T02:55:38.318Z"
+      "createdAt": "2026-02-23T05:08:12.767Z"
     }
   ]
 }
