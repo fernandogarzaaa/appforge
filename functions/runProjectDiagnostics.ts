@@ -1,5 +1,24 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.6';
 
+interface DiagnosticsStats {
+  total_integrations?: number;
+  active_integrations?: number;
+  failed_integrations?: number;
+  total_templates?: number;
+  featured_templates?: number;
+  total_feature_flags?: number;
+  enabled_flags?: number;
+}
+
+interface DiagnosticsResult {
+  timestamp: string;
+  overall_health: string;
+  errors: any[];
+  warnings: any[];
+  suggestions: any[];
+  stats: DiagnosticsStats;
+}
+
 Deno.serve(async (req) => {
   try {
     const base44 = createClientFromRequest(req);
@@ -9,7 +28,7 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const diagnostics = {
+    const diagnostics: DiagnosticsResult = {
       timestamp: new Date().toISOString(),
       overall_health: 'good',
       errors: [],
@@ -22,11 +41,11 @@ Deno.serve(async (req) => {
     try {
       const entities = await base44.asServiceRole.entities.ExternalBotIntegration.list();
       diagnostics.stats.total_integrations = entities.length;
-      diagnostics.stats.active_integrations = entities.filter(e => e.is_active).length;
-      diagnostics.stats.failed_integrations = entities.filter(e => e.last_sync_status === 'error').length;
+      diagnostics.stats.active_integrations = entities.filter((e: any) => e.is_active).length;
+      diagnostics.stats.failed_integrations = entities.filter((e: any) => e.last_sync_status === 'error').length;
 
       // Check for integrations with errors
-      entities.forEach(integration => {
+      entities.forEach((integration: any) => {
         if (integration.error_count > 10) {
           diagnostics.warnings.push({
             type: 'high_error_count',
@@ -49,7 +68,7 @@ Deno.serve(async (req) => {
           });
         }
       });
-    } catch (error) {
+    } catch (error: any) {
       diagnostics.warnings.push({
         type: 'entity_check_failed',
         severity: 'warning',
@@ -62,7 +81,7 @@ Deno.serve(async (req) => {
     try {
       const templates = await base44.asServiceRole.entities.BotTemplate.list();
       diagnostics.stats.total_templates = templates.length;
-      diagnostics.stats.featured_templates = templates.filter(t => t.is_featured).length;
+      diagnostics.stats.featured_templates = templates.filter((t: any) => t.is_featured).length;
 
       if (templates.length === 0) {
         diagnostics.warnings.push({
@@ -72,7 +91,7 @@ Deno.serve(async (req) => {
           suggestion: 'Create sample templates to help users get started'
         });
       }
-    } catch (error) {
+    } catch (error: any) {
       diagnostics.warnings.push({
         type: 'entity_check_failed',
         severity: 'warning',
@@ -85,8 +104,8 @@ Deno.serve(async (req) => {
     try {
       const flags = await base44.asServiceRole.entities.FeatureFlag.list();
       diagnostics.stats.total_feature_flags = flags.length;
-      diagnostics.stats.enabled_flags = flags.filter(f => f.enabled).length;
-    } catch (error) {
+      diagnostics.stats.enabled_flags = flags.filter((f: any) => f.enabled).length;
+    } catch (error: any) {
       diagnostics.warnings.push({
         type: 'entity_check_failed',
         severity: 'warning',
@@ -232,7 +251,7 @@ Deno.serve(async (req) => {
       success: true,
       diagnostics
     }, { status: 200 });
-  } catch (error) {
+  } catch (error: any) {
     console.error('Diagnostics error:', error);
     return Response.json({ 
       success: false,

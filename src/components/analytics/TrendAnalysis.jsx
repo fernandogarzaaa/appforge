@@ -18,7 +18,7 @@ export default function TrendAnalysis({ timeRange, data }) {
     if (data.length < 2) return 0;
     const recent = data.slice(-7).reduce((sum, d) => sum + d[key], 0);
     const previous = data.slice(-14, -7).reduce((sum, d) => sum + d[key], 0);
-    return previous > 0 ? (((recent - previous) / previous) * 100).toFixed(1) : 0;
+    return previous > 0 ? parseFloat((((recent - previous) / previous) * 100).toFixed(1)) : 0;
   };
 
   const executionGrowth = calculateGrowth(trendData, 'executions');

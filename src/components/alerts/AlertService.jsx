@@ -16,7 +16,7 @@ export async function checkAndTriggerAlerts(source) {
       // Check cooldown
       if (config.last_alert_time) {
         const lastAlertTime = new Date(config.last_alert_time);
-        const minutesSinceLastAlert = (now - lastAlertTime) / (1000 * 60);
+        const minutesSinceLastAlert = (now.getTime() - lastAlertTime.getTime()) / (1000 * 60);
         if (minutesSinceLastAlert < config.cooldown_minutes) {
           continue;
         }

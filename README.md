@@ -24,6 +24,7 @@ AppForge integrates a proprietary **Quantum Engine (`src/utils/quantumInspiredAI
 
 AppForge is maintained by a **Local Swarm** of specialized AI agents that run 24/7 in the background or via GitHub Actions.
 
+### Core Agents
 | Agent | Role | Capabilities |
 |-------|------|--------------|
 | **ProductOwner** | 🧠 The Brain | Reads `README.md`, invents new features, writes to `TODO.md`. |
@@ -31,6 +32,27 @@ AppForge is maintained by a **Local Swarm** of specialized AI agents that run 24
 | **Sentinel** | 🛡️ Security | Scans for hardcoded secrets, vulnerability patterns, and patches them. |
 | **BugHunter** | 🐞 QA | Writes and runs unit tests, fixing failures automatically. |
 | **Optimizer** | ⚡ Speed | Analyzes complexity (Big O) and refactors inefficient logic. |
+
+### 🆕 The Swarm Collective (New)
+AppForge now integrates with **OpenClaw's God Swarm** - a meta-orchestrator that creates and manages specialized swarms on demand:
+
+| Swarm | Best For |
+|-------|----------|
+| **God Swarm** | Meta-orchestration, complex multi-domain objectives |
+| **Feature Forge** | Building features end-to-end |
+| **Deep Research** | Research reports & synthesis |
+| **Code Archaeology** | Understanding/fixing legacy code |
+| **Content Studio** | Blogs, social media, marketing |
+| **Incident Response** | Production outages |
+| **Security Audit** | Vulnerability remediation |
+| **Knowledge Synthesis** | Documentation & wikis |
+| **DevOps Pipeline** | CI/CD, deployment |
+| **Design System** | UI/UX consistency |
+| **Data Engineering** | ETL, analytics |
+| **API Crafting** | API design & maintenance |
+| **Learning & Adaptation** | Agent performance improvement |
+
+**Documentation:** See `AGENTS.md` and `D:\openclaw\swarms\`
 
 ---
 

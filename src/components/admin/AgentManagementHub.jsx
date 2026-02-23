@@ -8,6 +8,7 @@ import { Bot, Settings, AlertCircle, CheckCircle } from 'lucide-react';
 import { toast } from 'sonner';
 
 const AGENT_CONFIGS = [
+  // Core AppForge Agents
   { id: 'admin_system', name: 'Admin System', icon: '⚙️', color: 'purple' },
   { id: 'project_auditor', name: 'Project Auditor', icon: '🔍', color: 'blue' },
   { id: 'github_automation', name: 'GitHub Automation', icon: '🐙', color: 'gray' },
@@ -15,7 +16,22 @@ const AGENT_CONFIGS = [
   { id: 'deployment_manager', name: 'Deployment Manager', icon: '🚀', color: 'orange' },
   { id: 'data_analyst', name: 'Data Analyst', icon: '📊', color: 'green' },
   { id: 'performance_optimizer', name: 'Performance Optimizer', icon: '⚡', color: 'yellow' },
-  { id: 'ai_assistant', name: 'AI Assistant', icon: '🤖', color: 'cyan' }
+  { id: 'ai_assistant', name: 'AI Assistant', icon: '🤖', color: 'cyan' },
+  
+  // God Swarm & Base Swarms (2026-02-24)
+  { id: 'god_swarm', name: 'God Swarm (Meta-Orchestrator)', icon: '👑', color: 'purple' },
+  { id: 'swarm_feature_forge', name: 'Feature Forge Swarm', icon: '🔨', color: 'blue' },
+  { id: 'swarm_deep_research', name: 'Deep Research Swarm', icon: '📚', color: 'green' },
+  { id: 'swarm_code_archaeology', name: 'Code Archaeology Swarm', icon: '🏛️', color: 'gray' },
+  { id: 'swarm_content_studio', name: 'Content Studio Swarm', icon: '🎨', color: 'pink' },
+  { id: 'swarm_incident_response', name: 'Incident Response Swarm', icon: '🚨', color: 'red' },
+  { id: 'swarm_security_audit', name: 'Security Audit Swarm', icon: '🛡️', color: 'red' },
+  { id: 'swarm_knowledge_synthesis', name: 'Knowledge Synthesis Swarm', icon: '🧠', color: 'cyan' },
+  { id: 'swarm_devops_pipeline', name: 'DevOps Pipeline Swarm', icon: '⚙️', color: 'orange' },
+  { id: 'swarm_design_system', name: 'Design System Swarm', icon: '🎯', color: 'purple' },
+  { id: 'swarm_data_engineering', name: 'Data Engineering Swarm', icon: '💾', color: 'blue' },
+  { id: 'swarm_api_crafting', name: 'API Crafting Swarm', icon: '🔌', color: 'green' },
+  { id: 'swarm_learning_adaptation', name: 'Learning & Adaptation Swarm', icon: '📈', color: 'yellow' },
 ];
 
 export default function AgentManagementHub() {
@@ -50,7 +66,8 @@ export default function AgentManagementHub() {
       orange: 'bg-orange-100 text-orange-800 border-orange-300',
       green: 'bg-green-100 text-green-800 border-green-300',
       yellow: 'bg-yellow-100 text-yellow-800 border-yellow-300',
-      cyan: 'bg-cyan-100 text-cyan-800 border-cyan-300'
+      cyan: 'bg-cyan-100 text-cyan-800 border-cyan-300',
+      pink: 'bg-pink-100 text-pink-800 border-pink-300',
     };
     return colors[color] || colors.blue;
   };

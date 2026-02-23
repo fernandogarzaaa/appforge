@@ -65,7 +65,8 @@ export const favoritesStorage = {
     return [...projects].sort((a, b) => {
       const aIsFav = favorites.has(a.id);
       const bIsFav = favorites.has(b.id);
-      return bIsFav - aIsFav; // Favorites come first
+      // Convert boolean to number for comparison
+      return (bIsFav ? 1 : 0) - (aIsFav ? 1 : 0);
     });
   }
 };

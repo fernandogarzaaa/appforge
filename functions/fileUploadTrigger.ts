@@ -16,18 +16,21 @@ Deno.serve(async (req) => {
     // Parse multipart form data
     const formData = await req.formData();
     const file = formData.get('file');
-    const directory = formData.get('directory') || '/uploads';
+    const directory = (formData.get('directory') as string) || '/uploads';
 
     if (!file) {
       return Response.json({ error: 'No file provided' }, { status: 400 });
     }
 
+    // Cast to File to access file properties
+    const fileObj = file as File;
+
     // Get file metadata
     const fileMetadata = {
-      name: file.name,
-      size: file.size,
-      type: file.type,
-      lastModified: file.lastModified,
+      name: fileObj.name,
+      size: fileObj.size,
+      type: fileObj.type,
+      lastModified: fileObj.lastModified,
       directory
     };
 
@@ -40,7 +43,7 @@ Deno.serve(async (req) => {
 
     for (const bot of bots) {
       try {
-        const config = bot.trigger?.config || {};
+        const config = (bot as any).trigger?.config || {};
 
         // Check if directory matches
         if (config.directory && !matchesDirectory(directory, config.directory)) {
@@ -49,7 +52,7 @@ Deno.serve(async (req) => {
 
         // Check file type filter
         if (config.fileTypes) {
-          if (!matchesFileType(file.name, config.fileTypes)) {
+          if (!matchesFileType(fileObj.name, config.fileTypes)) {
             continue;
           }
         }
@@ -57,7 +60,7 @@ Deno.serve(async (req) => {
         // Check file size limit
         if (config.maxSize) {
           const maxSizeBytes = parseInt(config.maxSize) * 1024 * 1024;
-          if (file.size > maxSizeBytes) {
+          if (fileObj.size > maxSizeBytes) {
             continue;
           }
         }
@@ -65,19 +68,19 @@ Deno.serve(async (req) => {
         // Check file name pattern
         if (config.filePattern) {
           const pattern = new RegExp(config.filePattern);
-          if (!pattern.test(file.name)) {
+          if (!pattern.test(fileObj.name)) {
             continue;
           }
         }
 
         // Upload file
-        const fileUrl = await uploadFile(file, base44);
+        const fileUrl = await uploadFile(fileObj, base44);
 
         // Prepare trigger data
         const triggerData = {
-          fileName: file.name,
-          fileSize: file.size,
-          fileType: file.type,
+          fileName: fileObj.name,
+          fileSize: fileObj.size,
+          fileType: fileObj.type,
           fileUrl,
           directory,
           uploadedAt: new Date().toISOString()
@@ -106,11 +109,11 @@ Deno.serve(async (req) => {
            status: result.success ? 'success' : 'failed',
            logs: result.logs
            });
-         } catch (logError) {
+         } catch (logError: any) {
            console.error(`Failed to create trigger log: ${logError.message}`);
          }
 
-      } catch (error) {
+      } catch (error: any) {
         console.error(`Failed to trigger bot ${bot.id}: ${error.message}`);
         triggeredBots.push({
           botId: bot.id,
@@ -123,13 +126,13 @@ Deno.serve(async (req) => {
 
     return Response.json({
       success: true,
-      fileName: file.name,
-      fileSize: file.size,
+      fileName: fileObj.name,
+      fileSize: fileObj.size,
       botsTriggered: triggeredBots.length,
       bots: triggeredBots
     });
 
-  } catch (error) {
+  } catch (error: any) {
     return Response.json(
       { error: error.message },
       { status: 500 }
@@ -140,7 +143,7 @@ Deno.serve(async (req) => {
 /**
  * Upload file to storage
  */
-async function uploadFile(file, base44) {
+async function uploadFile(file: File, base44: any) {
   try {
     const buffer = await file.arrayBuffer();
     const fileBlob = new Blob([buffer], { type: file.type });
@@ -150,7 +153,7 @@ async function uploadFile(file, base44) {
     });
 
     return result.file_url;
-  } catch (error) {
+  } catch (error: any) {
     throw new Error(`Failed to upload file: ${error.message}`);
   }
 }
@@ -158,7 +161,7 @@ async function uploadFile(file, base44) {
 /**
  * Check if directory matches (supports wildcards)
  */
-function matchesDirectory(actualDir, configDir) {
+function matchesDirectory(actualDir: string, configDir: string) {
   // Exact match
   if (actualDir === configDir) return true;
   
@@ -170,7 +173,7 @@ function matchesDirectory(actualDir, configDir) {
 /**
  * Check if file type matches allowed types
  */
-function matchesFileType(fileName, allowedTypes) {
+function matchesFileType(fileName: string, allowedTypes: string) {
   const extension = fileName.substring(fileName.lastIndexOf('.')).toLowerCase();
   const allowedExts = allowedTypes.split(',').map(t => t.trim());
   
