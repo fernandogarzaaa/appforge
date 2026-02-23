@@ -20,6 +20,18 @@ interface Bot {
   function_name?: string;
 }
 
+interface TriggerSetupResult {
+  success: boolean;
+  message?: string;
+  error?: string;
+  webhookUrl?: string;
+  methods?: string[];
+  requiresAuth?: boolean;
+  automation?: any;
+  emailAddress?: string;
+  triggerOn?: string;
+}
+
 /**
  * Deploy/activate a bot
  * Sets up triggers and validates configuration
@@ -57,7 +69,7 @@ Deno.serve(async (req) => {
     // Set up trigger-specific infrastructure
     let triggerSetup: TriggerSetupResult = { success: true };
 
-    switch (bot.trigger?.type) {
+    switch ((bot as any).trigger?.type) {
       case 'schedule':
         triggerSetup = await setupScheduleTrigger(bot, base44);
         break;
@@ -94,15 +106,14 @@ Deno.serve(async (req) => {
       botId,
       botName: bot.name,
       status: 'active',
-      triggerType: bot.trigger?.type,
+      triggerType: (bot as any).trigger?.type,
       deploymentDetails: triggerSetup,
       webhookUrl: triggerSetup.webhookUrl || null
     });
 
-  } catch (error: unknown) {
-    const errorMsg = error instanceof Error ? error.message : String(error);
+  } catch (error: any) {
     return Response.json(
-      { success: false, error: errorMsg },
+      { success: false, error: error.message },
       { status: 500 }
     );
   }
@@ -111,7 +122,7 @@ Deno.serve(async (req) => {
 /**
  * Set up scheduled trigger
  */
-async function setupScheduleTrigger(bot: Bot, base44: Base44Client): Promise<TriggerSetupResult> {
+async function setupScheduleTrigger(bot: any, base44: any): Promise<TriggerSetupResult> {
   try {
     const config = bot.trigger?.config || {};
     
@@ -130,16 +141,15 @@ async function setupScheduleTrigger(bot: Bot, base44: Base44Client): Promise<Tri
       message: `Schedule trigger set for ${config.frequency}`,
       automation
     };
-  } catch (error: unknown) {
-    const errorMsg = error instanceof Error ? error.message : String(error);
-    return { success: false, error: errorMsg };
+  } catch (error: any) {
+    return { success: false, error: error.message };
   }
 }
 
 /**
  * Set up webhook trigger
  */
-async function setupWebhookTrigger(bot: Bot, _base44: Base44Client): Promise<TriggerSetupResult> {
+async function setupWebhookTrigger(bot: any, base44: any): Promise<TriggerSetupResult> {
   try {
     const webhookUrl = `${Deno.env.get('BASE44_API_URL')}/webhooks/bot?bot_id=${bot.id}`;
 
@@ -150,16 +160,15 @@ async function setupWebhookTrigger(bot: Bot, _base44: Base44Client): Promise<Tri
       methods: bot.trigger?.config?.methods || ['POST'],
       requiresAuth: bot.trigger?.config?.requireApiKey === true
     };
-  } catch (error: unknown) {
-    const errorMsg = error instanceof Error ? error.message : String(error);
-    return { success: false, error: errorMsg };
+  } catch (error: any) {
+    return { success: false, error: error.message };
   }
 }
 
 /**
  * Set up email trigger
  */
-async function setupEmailTrigger(bot: Bot, _base44: Base44Client): Promise<TriggerSetupResult> {
+async function setupEmailTrigger(bot: any, base44: any): Promise<TriggerSetupResult> {
   try {
     const config = bot.trigger?.config || {};
 
@@ -169,16 +178,15 @@ async function setupEmailTrigger(bot: Bot, _base44: Base44Client): Promise<Trigg
       emailAddress: config.emailAddress,
       triggerOn: config.trigger
     };
-  } catch (error: unknown) {
-    const errorMsg = error instanceof Error ? error.message : String(error);
-    return { success: false, error: errorMsg };
+  } catch (error: any) {
+    return { success: false, error: error.message };
   }
 }
 
 /**
  * Get schedule interval from frequency
  */
-function getScheduleInterval(frequency: string | undefined): number {
+function getScheduleInterval(frequency: string): number {
   const intervals: Record<string, number> = {
     'hourly': 1,
     'daily': 1,
@@ -191,12 +199,12 @@ function getScheduleInterval(frequency: string | undefined): number {
 /**
  * Get schedule unit from frequency
  */
-function getScheduleUnit(frequency: string | undefined): string {
+function getScheduleUnit(frequency: string): string {
   const units: Record<string, string> = {
     'hourly': 'hours',
     'daily': 'days',
     'weekly': 'weeks',
     'monthly': 'months'
   };
-  return units[frequency || ''] || 'days';
+  return units[frequency] || 'days';
 }

@@ -7,6 +7,16 @@ interface ExecutionLogEntry {
   timestamp: string;
 }
 
+interface WorkflowNode {
+  id: string;
+  type: string;
+  config: any;
+}
+
+interface WorkflowContext {
+  [key: string]: any;
+}
+
 Deno.serve(async (req) => {
   try {
     const base44: Base44Client = createClientFromRequest(req);
@@ -26,10 +36,10 @@ Deno.serve(async (req) => {
     }
 
     let context: WorkflowContext = { ...initialContext };
-    const executionLog: ExecutionLogEntry[] = [];
+    const executionLog: Array<{ nodeId: string; type: string; timestamp: string }> = [];
 
     // Build node map for quick lookup
-    const nodeMap = nodes.reduce((map: Record<string, AdvancedWorkflowNode>, node: AdvancedWorkflowNode) => {
+    const nodeMap = nodes.reduce((map: Record<string, WorkflowNode>, node: WorkflowNode) => {
       map[node.id] = node;
       return map;
     }, {});
@@ -70,7 +80,7 @@ Deno.serve(async (req) => {
       }
     }
 
-    function executeCondition(node: AdvancedWorkflowNode, ctx: WorkflowContext): Promise<WorkflowContext> {
+    function executeCondition(node: WorkflowNode, ctx: WorkflowContext): Promise<WorkflowContext> {
       const { conditions, elseNodeId } = node.config;
       
       for (const condition of conditions || []) {
@@ -91,11 +101,7 @@ Deno.serve(async (req) => {
       return Promise.resolve(ctx);
     }
 
-    async function executeLoop(
-      node: AdvancedWorkflowNode, 
-      ctx: WorkflowContext, 
-      executor: (id: string) => Promise<WorkflowContext>
-    ): Promise<WorkflowContext> {
+    async function executeLoop(node: WorkflowNode, ctx: WorkflowContext, executor: (id: string) => Promise<WorkflowContext>): Promise<WorkflowContext> {
       const { arrayField, itemVariableName, loopNodeId, maxIterations } = node.config;
       const array = getNestedValue(ctx, arrayField || '') || [];
       
@@ -117,21 +123,17 @@ Deno.serve(async (req) => {
       return loopContext;
     }
 
-    async function executeParallel(
-      node: AdvancedWorkflowNode, 
-      ctx: WorkflowContext, 
-      executor: (id: string) => Promise<WorkflowContext>
-    ): Promise<WorkflowContext> {
+    async function executeParallel(node: WorkflowNode, ctx: WorkflowContext, executor: (id: string) => Promise<WorkflowContext>): Promise<WorkflowContext> {
       const { paths } = node.config;
       const promises = (paths || [])
-        .filter((p: { nodeId?: string }) => p.nodeId)
-        .map((p: { nodeId?: string }) => executor(p.nodeId!));
+        .filter((p: any) => p.nodeId)
+        .map((p: any) => executor(p.nodeId));
 
       await Promise.all(promises);
       return ctx;
     }
 
-    async function executeApiCall(node: AdvancedWorkflowNode, ctx: WorkflowContext): Promise<WorkflowContext> {
+    async function executeApiCall(node: WorkflowNode, ctx: WorkflowContext): Promise<WorkflowContext> {
       const { method, url, headers = {}, body, responseVariableName } = node.config;
       
       if (!url) {
@@ -143,8 +145,8 @@ Deno.serve(async (req) => {
         return getNestedValue(ctx, key) || match;
       });
 
-      const options: RequestInit & { body?: string } = {
-        method: method || 'GET',
+      const options: RequestInit = {
+        method,
         headers: { 'Content-Type': 'application/json', ...headers }
       };
 
@@ -162,11 +164,7 @@ Deno.serve(async (req) => {
       };
     }
 
-    async function executeDatabaseQuery(
-      node: AdvancedWorkflowNode, 
-      ctx: WorkflowContext, 
-      base44Client: Base44Client
-    ): Promise<WorkflowContext> {
+    async function executeDatabaseQuery(node: WorkflowNode, ctx: WorkflowContext, base44Client: any): Promise<WorkflowContext> {
       const { entityName, operation, filter, data, variableName } = node.config;
       
       if (!entityName) throw new Error('Entity name required for database query');
@@ -204,12 +202,12 @@ Deno.serve(async (req) => {
       };
     }
 
-    function executeDataTransform(node: AdvancedWorkflowNode, ctx: WorkflowContext): WorkflowContext {
+    function executeDataTransform(node: WorkflowNode, ctx: WorkflowContext): WorkflowContext {
       const { sourceVariable, transformations = [], outputVariable } = node.config;
       let value = getNestedValue(ctx, sourceVariable || '');
 
       for (const trans of transformations) {
-        value = applyTransformation(value, trans.type, trans.params || {}, ctx);
+        value = applyTransformation(value, trans.type, trans.params, ctx);
       }
 
       return {
@@ -218,12 +216,12 @@ Deno.serve(async (req) => {
       };
     }
 
-    function executeFilter(node: AdvancedWorkflowNode, ctx: WorkflowContext): WorkflowContext {
+    function executeFilter(node: WorkflowNode, ctx: WorkflowContext): WorkflowContext {
       const { arrayVariable, conditions, outputVariable } = node.config;
       const array = getNestedValue(ctx, arrayVariable || '') || [];
 
-      const filtered = array.filter((item: unknown) => {
-        return (conditions || []).every((cond: { field: string; operator: string; value: unknown }) => {
+      const filtered = array.filter((item: any) => {
+        return (conditions || []).every((cond: any) => {
           const itemValue = getNestedValue(item, cond.field);
           return evaluateCondition(itemValue, cond.operator, cond.value);
         });
@@ -235,8 +233,8 @@ Deno.serve(async (req) => {
       };
     }
 
-    async function executeDelay(node: AdvancedWorkflowNode, ctx: WorkflowContext): Promise<WorkflowContext> {
-      const { duration = 0, unit = 'seconds' } = node.config;
+    async function executeDelay(node: WorkflowNode, ctx: WorkflowContext): Promise<WorkflowContext> {
+      const { duration, unit = 'seconds' } = node.config;
       let ms = duration * 1000;
       if (unit === 'minutes') ms = duration * 60 * 1000;
       if (unit === 'hours') ms = duration * 60 * 60 * 1000;
@@ -245,28 +243,13 @@ Deno.serve(async (req) => {
       return ctx;
     }
 
-    function applyTransformation(
-      value: unknown, 
-      type: string, 
-      params: {
-        expression?: string;
-        parts?: string[];
-        separator?: string;
-        pattern?: string;
-        decimalPlaces?: number;
-      } = {}, 
-      ctx: WorkflowContext = {}
-    ): unknown {
+    function applyTransformation(value: any, type: string, params: any = {}, ctx: WorkflowContext = {}): any {
       switch (type) {
         case 'format_date':
           return new Date(value as string | number).toISOString();
         case 'calculate':
-          const expression = params.expression?.replace(/\{(\w+)\}/g, (_: string, k: string) => {
-            const val = getNestedValue(ctx, k);
-            return typeof val === 'number' ? String(val) : `"${val}"`;
-          });
-          // eslint-disable-next-line no-new-func
-          return expression ? new Function(`return ${expression}`)() : value;
+          const expression = (params.expression as string)?.replace(/\{(\w+)\}/g, (m: string, k: string) => getNestedValue(ctx, k));
+          return expression ? eval(expression) : value;
         case 'concatenate':
           const parts: string[] = params.parts || [];
           return parts.join(params.separator || '');
@@ -279,14 +262,14 @@ Deno.serve(async (req) => {
         case 'trim':
           return String(value).trim();
         case 'round':
-          const decimalPlaces = params.decimalPlaces ?? 0;
-          return Math.round((value as number) * Math.pow(10, decimalPlaces)) / Math.pow(10, decimalPlaces);
+          const decimalPlaces = params.decimalPlaces || 0;
+          return Math.round(value * Math.pow(10, decimalPlaces)) / Math.pow(10, decimalPlaces);
         default:
           return value;
       }
     }
 
-    function evaluateCondition(fieldValue: unknown, operator: string, condValue: unknown): boolean {
+    function evaluateCondition(fieldValue: any, operator: string, condValue: any): boolean {
       switch (operator) {
         case 'equals': return fieldValue == condValue;
         case 'notEquals': return fieldValue != condValue;
@@ -302,7 +285,7 @@ Deno.serve(async (req) => {
       }
     }
 
-    function getNestedValue(obj: unknown, path: string): unknown {
+    function getNestedValue(obj: any, path: string): any {
       if (!path) return obj;
       return path.split('.').reduce((curr: unknown, prop: string) => {
         if (curr && typeof curr === 'object') {
@@ -321,8 +304,7 @@ Deno.serve(async (req) => {
       context: finalContext,
       executionLog
     });
-  } catch (error: unknown) {
-    const errorMsg = error instanceof Error ? error.message : String(error);
-    return Response.json({ error: errorMsg }, { status: 500 });
+  } catch (error: any) {
+    return Response.json({ error: error.message }, { status: 500 });
   }
 });

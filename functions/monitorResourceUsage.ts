@@ -18,6 +18,35 @@ interface MetricsData {
   alerts: AlertItem[];
 }
 
+interface AutomationMetrics {
+  name: string;
+  status: string;
+  cpu_percent: number;
+  memory_mb: number;
+  execution_count_24h: number;
+  network_io_kb: number;
+  health_score: number;
+}
+
+interface WorkflowMetrics {
+  name: string;
+  status: string;
+  cpu_percent: number;
+  memory_mb: number;
+  execution_count_24h: number;
+  avg_duration_ms: number;
+  network_io_kb: number;
+  health_score: number;
+}
+
+interface SystemSummary {
+  total_cpu_percent: number;
+  total_memory_mb: number;
+  total_network_io_kb: number;
+  active_processes: number;
+  utilization_trend: string;
+}
+
 Deno.serve(async (req) => {
   try {
     const base44: Base44Client = createClientFromRequest(req);
@@ -27,7 +56,13 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const metrics: MetricsData = {
+    const metrics: {
+      timestamp: string;
+      automations: Record<string, AutomationMetrics>;
+      workflows: Record<string, WorkflowMetrics>;
+      system_summary: SystemSummary;
+      alerts: any[];
+    } = {
       timestamp: new Date().toISOString(),
       automations: {},
       workflows: {},
@@ -90,9 +125,8 @@ Deno.serve(async (req) => {
           }
         }
       }
-    } catch (e: unknown) {
-      const errorMsg = e instanceof Error ? e.message : String(e);
-      console.error('Error monitoring automations:', errorMsg);
+    } catch (e: any) {
+      console.error('Error monitoring automations:', e.message);
     }
 
     // Fetch execution data for workflows
@@ -105,8 +139,8 @@ Deno.serve(async (req) => {
           50
         ).catch(() => []);
 
-        const avgDuration = Array.isArray(executions) && executions.length > 0
-          ? executions.reduce((sum: number, e: { duration_ms?: number }) => sum + (e.duration_ms || 0), 0) / executions.length
+        const avgDuration = executions.length > 0
+          ? executions.reduce((sum: number, e: any) => sum + (e.duration_ms || 0), 0) / executions.length
           : 0;
 
         const estimatedCpuPercent = Math.min(3 + (avgDuration / 1000), 80);
@@ -123,9 +157,8 @@ Deno.serve(async (req) => {
           health_score: Math.max(0, 100 - estimatedCpuPercent)
         };
       }
-    } catch (e: unknown) {
-      const errorMsg = e instanceof Error ? e.message : String(e);
-      console.error('Error monitoring workflows:', errorMsg);
+    } catch (e: any) {
+      console.error('Error monitoring workflows:', e.message);
     }
 
     // Calculate system summary
@@ -133,12 +166,9 @@ Deno.serve(async (req) => {
     const allWorkflowResources = Object.values(metrics.workflows);
     
     metrics.system_summary = {
-      total_cpu_percent: [...allAutomationResources, ...allWorkflowResources]
-        .reduce((sum, r) => sum + r.cpu_percent, 0),
-      total_memory_mb: [...allAutomationResources, ...allWorkflowResources]
-        .reduce((sum, r) => sum + r.memory_mb, 0),
-      total_network_io_kb: [...allAutomationResources, ...allWorkflowResources]
-        .reduce((sum, r) => sum + r.network_io_kb, 0),
+      total_cpu_percent: [...allAutomationResources, ...allWorkflowResources].reduce((sum, r) => sum + r.cpu_percent, 0),
+      total_memory_mb: [...allAutomationResources, ...allWorkflowResources].reduce((sum, r) => sum + r.memory_mb, 0),
+      total_network_io_kb: [...allAutomationResources, ...allWorkflowResources].reduce((sum, r) => sum + r.network_io_kb, 0),
       active_processes: allAutomationResources.length + allWorkflowResources.length,
       utilization_trend: 'stable'
     };
@@ -159,8 +189,7 @@ Deno.serve(async (req) => {
       metrics,
       timestamp: new Date().toISOString()
     });
-  } catch (error: unknown) {
-    const errorMsg = error instanceof Error ? error.message : String(error);
-    return Response.json({ error: errorMsg }, { status: 500 });
+  } catch (error: any) {
+    return Response.json({ error: error.message }, { status: 500 });
   }
 });

@@ -3,25 +3,25 @@
     "topic": "autonomous agents",
     "name": "cherry-studio",
     "description": "AI productivity studio with smart chat, autonomous agents, and 300+ assistants. Unified access to frontier LLMs",
-    "stars": 40058,
+    "stars": 40085,
     "url": "https://github.com/CherryHQ/cherry-studio",
-    "scoutedAt": "2026-02-23T11:47:33.692Z"
+    "scoutedAt": "2026-02-23T20:55:54.101Z"
   },
   {
     "topic": "autonomous agents",
     "name": "awesome-ai-agents",
     "description": "A list of AI autonomous agents",
-    "stars": 25975,
+    "stars": 25986,
     "url": "https://github.com/e2b-dev/awesome-ai-agents",
-    "scoutedAt": "2026-02-23T11:47:33.692Z"
+    "scoutedAt": "2026-02-23T20:55:54.101Z"
   },
   {
     "topic": "autonomous agents",
     "name": "gpt-researcher",
     "description": "An autonomous agent that conducts deep research on any data using any LLM providers.",
-    "stars": 25390,
+    "stars": 25395,
     "url": "https://github.com/assafelovic/gpt-researcher",
-    "scoutedAt": "2026-02-23T11:47:33.692Z"
+    "scoutedAt": "2026-02-23T20:55:54.101Z"
   },
   {
     "topic": "quantum-inspired ai",
@@ -29,7 +29,7 @@
     "description": "NEBULA Evolving Towards AGI: Self-Evolving, Quantum-Inspired AI System",
     "stars": 9,
     "url": "https://github.com/Agnuxo1/NEBULA-EVOLUTION",
-    "scoutedAt": "2026-02-23T11:47:34.093Z"
+    "scoutedAt": "2026-02-23T20:55:54.488Z"
   },
   {
     "topic": "quantum-inspired ai",
@@ -37,7 +37,7 @@
     "description": "This repository contains the implementation of a Quantum-Inspired Evolutionary Algorithm (QIEA) + Particle Swarm Optimization (PSO) for high-speed image processing in astronomy. The project aims to enhance and analyze celestial images captured by telescopes by leveraging quantum-inspired AI techniques.",
     "stars": 2,
     "url": "https://github.com/QuantumYash/Quantum-AI-Based-Compiler-for-High-Speed-Image-Processing-in-Astronomy",
-    "scoutedAt": "2026-02-23T11:47:34.093Z"
+    "scoutedAt": "2026-02-23T20:55:54.488Z"
   },
   {
     "topic": "quantum-inspired ai",
@@ -45,7 +45,7 @@
     "description": "Quantum-Inspired AI Scheduler for PwD and Hearing-Handicapped students with AI-based stress prediction and smart scheduling.",
     "stars": 1,
     "url": "https://github.com/giri907/Quantum--AI-Scheduler--HH-PWD",
-    "scoutedAt": "2026-02-23T11:47:34.093Z"
+    "scoutedAt": "2026-02-23T20:55:54.488Z"
   },
   {
     "topic": "self-healing code",
@@ -53,7 +53,7 @@
     "description": "This Guidance helps software companies set up a automated system to detect error logs, generate bug fixes, and create pull requests. Helps companies balance addressing bugs while also competing with product and feature development pressure.",
     "stars": 29,
     "url": "https://github.com/aws-solutions-library-samples/guidance-for-self-healing-code-on-aws",
-    "scoutedAt": "2026-02-23T11:47:34.516Z"
+    "scoutedAt": "2026-02-23T20:55:54.810Z"
   },
   {
     "topic": "self-healing code",
@@ -61,7 +61,7 @@
     "description": "Experiment with self healing code and clojure.spec",
     "stars": 25,
     "url": "https://github.com/gigasquid/self-healing",
-    "scoutedAt": "2026-02-23T11:47:34.516Z"
+    "scoutedAt": "2026-02-23T20:55:54.810Z"
   },
   {
     "topic": "self-healing code",
@@ -69,31 +69,31 @@
     "description": "",
     "stars": 4,
     "url": "https://github.com/code-creations-io/create-self-healing-code-agent",
-    "scoutedAt": "2026-02-23T11:47:34.516Z"
+    "scoutedAt": "2026-02-23T20:55:54.810Z"
   },
   {
     "topic": "multi-agent systems",
     "name": "agno",
     "description": "The programming language for agentic software. Build, run, and manage multi-agent systems at scale.",
-    "stars": 38111,
+    "stars": 38127,
     "url": "https://github.com/agno-agi/agno",
-    "scoutedAt": "2026-02-23T11:47:34.847Z"
+    "scoutedAt": "2026-02-23T20:55:55.128Z"
   },
   {
     "topic": "multi-agent systems",
     "name": "RagaAI-Catalyst",
     "description": "Python SDK for Agent AI Observability, Monitoring and Evaluation Framework. Includes features like agent, llm and tools tracing, debugging multi-agentic system, self-hosted dashboard and advanced analytics with timeline and execution graph view ",
-    "stars": 16098,
+    "stars": 16099,
     "url": "https://github.com/raga-ai-hub/RagaAI-Catalyst",
-    "scoutedAt": "2026-02-23T11:47:34.847Z"
+    "scoutedAt": "2026-02-23T20:55:55.128Z"
   },
   {
     "topic": "multi-agent systems",
     "name": "Memori",
     "description": "SQL Native Memory Layer for LLMs, AI Agents & Multi-Agent Systems",
-    "stars": 12229,
+    "stars": 12231,
     "url": "https://github.com/MemoriLabs/Memori",
-    "scoutedAt": "2026-02-23T11:47:34.847Z"
+    "scoutedAt": "2026-02-23T20:55:55.128Z"
   },
   {
     "topic": "local-first software",
@@ -101,7 +101,7 @@
     "description": "A Redux-based state container for local-first software, offering seamless synchronization using Automerge CRDTs. (Formerly known as 🐟 Cevitxe).",
     "stars": 195,
     "url": "https://github.com/local-first-web/state",
-    "scoutedAt": "2026-02-23T11:47:35.223Z"
+    "scoutedAt": "2026-02-23T20:55:55.460Z"
   },
   {
     "topic": "local-first software",
@@ -109,7 +109,7 @@
     "description": "Dialog is an embeddable database designed for local-first software.",
     "stars": 124,
     "url": "https://github.com/dialog-db/dialog-db",
-    "scoutedAt": "2026-02-23T11:47:35.223Z"
+    "scoutedAt": "2026-02-23T20:55:55.460Z"
   },
   {
     "topic": "local-first software",
@@ -117,6 +117,6 @@
     "description": "Bolik Timeline is local-first software for keeping notes and files.",
     "stars": 38,
     "url": "https://github.com/zaynetro/timeline",
-    "scoutedAt": "2026-02-23T11:47:35.223Z"
+    "scoutedAt": "2026-02-23T20:55:55.460Z"
   }
 ]
