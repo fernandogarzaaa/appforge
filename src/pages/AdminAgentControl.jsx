@@ -24,6 +24,7 @@ export default function AdminAgentControl() {
     }
   });
 
+  /** @type {import('@tanstack/react-query').UseMutationResult<any, Error, {agentId: string; data: any; type?: string}>} */
   const updateAgentMutation = useMutation({
     mutationFn: async ({ agentId, data, type = 'CustomAgent' }) => {
       const entity = type === 'CustomAgent' ? 'CustomAgent' : 'AIAgentConfig';
@@ -34,6 +35,7 @@ export default function AdminAgentControl() {
     }
   });
 
+  /** @type {import('@tanstack/react-query').UseMutationResult<any, Error, {agentId: string; type?: string}>} */
   const deleteAgentMutation = useMutation({
     mutationFn: async ({ agentId, type = 'CustomAgent' }) => {
       const entity = type === 'CustomAgent' ? 'CustomAgent' : 'AIAgentConfig';
