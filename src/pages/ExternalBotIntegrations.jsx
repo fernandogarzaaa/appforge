@@ -37,7 +37,7 @@ export default function ExternalBotIntegrations() {
     mutationFn: ({ id, isActive }) => 
       base44.entities.ExternalBotIntegration.update(id, { is_active: !isActive }),
     onSuccess: () => {
-      queryClient.invalidateQueries(['externalBotIntegrations']);
+      queryClient.invalidateQueries({ queryKey: ['externalBotIntegrations'] });
       toast.success('Integration status updated');
     }
   });
@@ -45,7 +45,7 @@ export default function ExternalBotIntegrations() {
   const deleteMutation = useMutation({
     mutationFn: (id) => base44.entities.ExternalBotIntegration.delete(id),
     onSuccess: () => {
-      queryClient.invalidateQueries(['externalBotIntegrations']);
+      queryClient.invalidateQueries({ queryKey: ['externalBotIntegrations'] });
       toast.success('Integration deleted');
       setSelectedIntegration(null);
     }

@@ -1,3 +1,13 @@
+/**
+ * Base44 SDK Type Definitions
+ * 
+ * This file provides proper TypeScript type definitions for the base44 SDK
+ * to fix common errors like:
+ * - Property 'data' does not exist on type 'never'
+ * - Property 'data' does not exist on type 'void'
+ * - API response types returning void instead of actual types
+ */
+
 declare module 'npm:@base44/sdk@0.8.6' {
   export * from '@base44/sdk';
 }
@@ -11,6 +21,27 @@ declare module 'npm:@base44/sdk@0.8.18' {
 }
 
 declare module '@base44/sdk' {
+  /**
+   * Generic response wrapper for base44 API calls
+   * API responses may include a data property
+   */
+  export interface Base44Response<T> {
+    data: T;
+    error?: string;
+    message?: string;
+    success?: boolean;
+  }
+
+  /**
+   * Entity response that may have data wrapper
+   */
+  export type EntityResponse<T> = T | { data: T };
+
+  /**
+   * Entity list response that may have data wrapper
+   */
+  export type EntityListResponse<T> = T[] | { data: T[]; total?: number; page?: number; limit?: number };
+
   export interface AuthClient {
     me(): Promise<{ id?: string; email?: string; name?: string; role?: string; full_name?: string }>;
     getLoginUrl(redirect?: string): string;
@@ -87,6 +118,7 @@ declare module '@base44/sdk' {
     AlertPreference?: EntityCRUD;
     AnomalyAlert?: EntityCRUD;
     QuantumBackend?: EntityCRUD;
+    QuantumBackendConfig?: EntityCRUD;
     AIAgent?: EntityCRUD;
     Learning?: EntityCRUD;
     HyperparameterTuning?: EntityCRUD;
@@ -204,6 +236,7 @@ declare module '@base44/sdk' {
     JoiSchema?: EntityCRUD;
     YupSchema?: EntityCRUD;
     AjvSchema?: EntityCRUD;
+    users?: EntityCRUD;
   }
 
   export interface PagesModule {
@@ -262,6 +295,8 @@ declare module '@base44/sdk' {
     cleanup?: () => void;
     setToken?: (token: string) => void;
     getConfig?: () => any;
+    // Allow dynamic property access
+    [key: string]: any;
   }
 
   export interface CreateClientOptions {
@@ -275,4 +310,12 @@ declare module '@base44/sdk' {
 
   export function createClient(options: CreateClientOptions): Base44Client;
   export function createClientFromRequest(req: Request): Base44Client;
+}
+
+/**
+ * Helper type for extracting data from responses
+ * Usage: const data = extractData(response);
+ */
+declare global {
+  function extractData<T>(response: T | { data: T }): T;
 }

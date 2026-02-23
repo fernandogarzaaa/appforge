@@ -41,8 +41,8 @@ export default function TemplateReviews({ templateId }) {
         review_count: allReviews.length
       });
 
-      queryClient.invalidateQueries(['templateReviews', templateId]);
-      queryClient.invalidateQueries(['botTemplates']);
+      queryClient.invalidateQueries({ queryKey: ['templateReviews', templateId] });
+      queryClient.invalidateQueries({ queryKey: ['botTemplates'] });
       setShowForm(false);
       setFormData({ rating: 5, title: '', review_text: '' });
       toast.success('Review submitted!');
@@ -57,7 +57,7 @@ export default function TemplateReviews({ templateId }) {
       });
     },
     onSuccess: () => {
-      queryClient.invalidateQueries(['templateReviews', templateId]);
+      queryClient.invalidateQueries({ queryKey: ['templateReviews', templateId] });
     }
   });
 

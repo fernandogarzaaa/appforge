@@ -26,6 +26,7 @@
     "src/**/*",
     "functions/**/*",
     "types/**/*",
+    "src/types/**/*",
     "src/vite-env.d.ts"
   ],
   "exclude": [

@@ -41,7 +41,7 @@ export default function IntegrationSetupModal({ open, onClose }) {
       return response.data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries(['externalBotIntegrations']);
+      queryClient.invalidateQueries({ queryKey: ['externalBotIntegrations'] });
       toast.success('Integration created successfully!');
       onClose();
       resetForm();

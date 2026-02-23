@@ -1,0 +1,4 @@
+npm warn audit request to https://registry.npmjs.org/-/npm/v1/security/advisories/bulk failed, reason: read ECONNRESET
+undefined
+npm error audit endpoint returned an error
+npm error A complete log of this run can be found in: C:\Users\ferna\AppData\Local\npm-cache\_logs\2026-02-23T12_54_49_516Z-debug-0.log

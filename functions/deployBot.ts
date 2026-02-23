@@ -1,15 +1,23 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.6';
+import type { Base44Client, TriggerSetupResult, ValidationResult } from '../types/base44.d.ts';
 
-interface TriggerSetupResult {
-  success: boolean;
-  message?: string;
-  error?: string;
-  webhookUrl?: string;
-  methods?: string[];
-  requiresAuth?: boolean;
-  automation?: any;
-  emailAddress?: string;
-  triggerOn?: string;
+interface BotTrigger {
+  type?: string;
+  config?: {
+    frequency?: string;
+    time?: string;
+    methods?: string[];
+    requireApiKey?: boolean;
+    emailAddress?: string;
+    trigger?: string;
+  };
+}
+
+interface Bot {
+  id: string;
+  name: string;
+  trigger?: BotTrigger;
+  function_name?: string;
 }
 
 /**
@@ -18,27 +26,27 @@ interface TriggerSetupResult {
  */
 Deno.serve(async (req) => {
   try {
-    const base44 = createClientFromRequest(req);
+    const base44: Base44Client = createClientFromRequest(req);
     const user = await base44.auth.me();
 
     if (!user) {
       return Response.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { botId } = await req.json();
+    const { botId } = await req.json() as { botId?: string };
 
     if (!botId) {
       return Response.json({ error: 'Missing botId' }, { status: 400 });
     }
 
     // Fetch bot
-    const bot = await base44.entities.Automation.get(botId);
+    const bot: Bot | null = await base44.entities.Automation.get(botId);
     if (!bot) {
       return Response.json({ error: 'Bot not found' }, { status: 404 });
     }
 
     // Validate configuration
-    const validation = await base44.functions.invoke('validateBotConfig', bot);
+    const validation: ValidationResult = await base44.functions.invoke('validateBotConfig', bot);
     if (!validation.valid) {
       return Response.json(
         { success: false, error: 'Invalid bot configuration', details: validation.errors },
@@ -49,7 +57,7 @@ Deno.serve(async (req) => {
     // Set up trigger-specific infrastructure
     let triggerSetup: TriggerSetupResult = { success: true };
 
-    switch ((bot as any).trigger?.type) {
+    switch (bot.trigger?.type) {
       case 'schedule':
         triggerSetup = await setupScheduleTrigger(bot, base44);
         break;
@@ -86,14 +94,15 @@ Deno.serve(async (req) => {
       botId,
       botName: bot.name,
       status: 'active',
-      triggerType: (bot as any).trigger?.type,
+      triggerType: bot.trigger?.type,
       deploymentDetails: triggerSetup,
       webhookUrl: triggerSetup.webhookUrl || null
     });
 
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const errorMsg = error instanceof Error ? error.message : String(error);
     return Response.json(
-      { success: false, error: error.message },
+      { success: false, error: errorMsg },
       { status: 500 }
     );
   }
@@ -102,7 +111,7 @@ Deno.serve(async (req) => {
 /**
  * Set up scheduled trigger
  */
-async function setupScheduleTrigger(bot: any, base44: any): Promise<TriggerSetupResult> {
+async function setupScheduleTrigger(bot: Bot, base44: Base44Client): Promise<TriggerSetupResult> {
   try {
     const config = bot.trigger?.config || {};
     
@@ -121,15 +130,16 @@ async function setupScheduleTrigger(bot: any, base44: any): Promise<TriggerSetup
       message: `Schedule trigger set for ${config.frequency}`,
       automation
     };
-  } catch (error: any) {
-    return { success: false, error: error.message };
+  } catch (error: unknown) {
+    const errorMsg = error instanceof Error ? error.message : String(error);
+    return { success: false, error: errorMsg };
   }
 }
 
 /**
  * Set up webhook trigger
  */
-async function setupWebhookTrigger(bot: any, base44: any): Promise<TriggerSetupResult> {
+async function setupWebhookTrigger(bot: Bot, _base44: Base44Client): Promise<TriggerSetupResult> {
   try {
     const webhookUrl = `${Deno.env.get('BASE44_API_URL')}/webhooks/bot?bot_id=${bot.id}`;
 
@@ -140,15 +150,16 @@ async function setupWebhookTrigger(bot: any, base44: any): Promise<TriggerSetupR
       methods: bot.trigger?.config?.methods || ['POST'],
       requiresAuth: bot.trigger?.config?.requireApiKey === true
     };
-  } catch (error: any) {
-    return { success: false, error: error.message };
+  } catch (error: unknown) {
+    const errorMsg = error instanceof Error ? error.message : String(error);
+    return { success: false, error: errorMsg };
   }
 }
 
 /**
  * Set up email trigger
  */
-async function setupEmailTrigger(bot: any, base44: any): Promise<TriggerSetupResult> {
+async function setupEmailTrigger(bot: Bot, _base44: Base44Client): Promise<TriggerSetupResult> {
   try {
     const config = bot.trigger?.config || {};
 
@@ -158,33 +169,34 @@ async function setupEmailTrigger(bot: any, base44: any): Promise<TriggerSetupRes
       emailAddress: config.emailAddress,
       triggerOn: config.trigger
     };
-  } catch (error: any) {
-    return { success: false, error: error.message };
+  } catch (error: unknown) {
+    const errorMsg = error instanceof Error ? error.message : String(error);
+    return { success: false, error: errorMsg };
   }
 }
 
 /**
  * Get schedule interval from frequency
  */
-function getScheduleInterval(frequency: string): number {
+function getScheduleInterval(frequency: string | undefined): number {
   const intervals: Record<string, number> = {
     'hourly': 1,
     'daily': 1,
     'weekly': 1,
     'monthly': 1
   };
-  return intervals[frequency] || 1;
+  return intervals[frequency || ''] || 1;
 }
 
 /**
  * Get schedule unit from frequency
  */
-function getScheduleUnit(frequency: string): string {
+function getScheduleUnit(frequency: string | undefined): string {
   const units: Record<string, string> = {
     'hourly': 'hours',
     'daily': 'days',
     'weekly': 'weeks',
     'monthly': 'months'
   };
-  return units[frequency] || 'days';
+  return units[frequency || ''] || 'days';
 }

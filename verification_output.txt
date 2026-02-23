@@ -1,0 +1,26 @@
+ΓÜá∩╕Å [Jupiter] Wallet/RPC not configured - simulation fallback remains enabled.
+ΓÜá∩╕Å [Binance] API keys not configured - using simulation mode for authenticated endpoints
+ΓÜá∩╕Å [Twitter] API keys not configured - using simulation mode
+ΓÜá∩╕Å [YouTube] API keys not configured - using simulation mode
+≡ƒîî Quantum Engine v3.5 [Deep Resonance] Online
+SWARM REALITY GUARD CHECK
+================================================================
+env: SWARM_REALITY_MODE=false | REAL_TRADING_ENABLED=false
+jupiter: mode=SIMULATION, configured=false
+binance: mode=SIMULATION, configured=false
+twitter: mode=SIMULATION, configured=false
+youtube: mode=SIMULATION, configured=false
+autotrade: enabled=false
+
+--- HOLOGRAPHIC INTEGRITY ---
+≡ƒîî Quantum Engine v3.5 [Deep Resonance] Online
+coherence_level: 1.0000
+swarm_integrity: Peak
+coherence_lock: true
+
+WARNINGS
+- No real trading benchmark report found yet
+
+FAILURES
+- SWARM_REALITY_MODE must be true
+- Jupiter integration is not live-ready

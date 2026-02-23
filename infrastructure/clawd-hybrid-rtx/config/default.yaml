@@ -1,0 +1,93 @@
+# Configuration for Clawd Hybrid RTX
+
+# Cache Configuration
+cache:
+  # Semantic similarity threshold (0-1)
+  # Higher = stricter matching, fewer false positives
+  similarity_threshold: 0.92
+  
+  # Default TTL for cache entries (seconds)
+  default_ttl_seconds: 3600
+  
+  # Maximum number of cache entries
+  max_entries: 10000
+  
+  # Persistence path
+  persist_path: "./cache/semantic_cache.pkl"
+  
+  # Embedding model
+  embedding_model: "sentence-transformers/all-MiniLM-L6-v2"
+  embedding_dimension: 384
+  
+  # Use GPU for embeddings (set to false for RTX 2060 to save VRAM)
+  use_gpu: false
+
+# Batch Processing Configuration
+batch:
+  # Maximum queries per batch
+  max_batch_size: 5
+  
+  # Timeout to wait for batch to fill (milliseconds)
+  timeout_ms: 50
+  
+  # Maximum concurrent batches
+  max_concurrent_batches: 3
+  
+  # Enable request deduplication
+  deduplicate_requests: true
+  
+  # Enable adaptive batch sizing
+  adaptive_batching: true
+  
+  # Target response time for adaptive batching (milliseconds)
+  target_response_time_ms: 2000
+
+# Provider Configuration
+providers:
+  openrouter:
+    base_url: "https://openrouter.ai/api/v1"
+    default_model: "meta-llama/llama-3.1-8b-instruct:free"
+    timeout_seconds: 30
+    
+  together:
+    base_url: "https://api.together.xyz/v1"
+    default_model: "meta-llama/Meta-Llama-3.1-8B-Instruct-Turbo"
+    timeout_seconds: 30
+
+# Engine Configuration
+engine:
+  # Primary provider (openrouter or together)
+  primary_provider: openrouter
+  
+  # Fallback provider
+  fallback_provider: together
+  
+  # Request timeout
+  timeout_seconds: 30
+  
+  # Enable streaming responses
+  enable_streaming: true
+  
+  # Stream chunk size (characters)
+  stream_chunk_size: 64
+
+# Memory Monitoring
+monitoring:
+  # Enable memory monitoring
+  enabled: true
+  
+  # Check interval (seconds)
+  check_interval_seconds: 5.0
+  
+  # GPU memory thresholds (MB)
+  thresholds:
+    gpu_critical_mb: 5120      # 5GB - critical warning
+    gpu_warning_mb: 4096       # 4GB - warning
+    gpu_embed_max_mb: 1024     # 1GB max for embeddings
+    cpu_critical_percent: 90   # CPU critical threshold
+    cpu_warning_percent: 80    # CPU warning threshold
+
+# Logging
+logging:
+  level: INFO  # DEBUG, INFO, WARNING, ERROR
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"

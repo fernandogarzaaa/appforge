@@ -1,27 +1,21 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.6';
+import type { Base44Client, DiagnosticsStats, DiagnosticsResult } from '../types/base44.d.ts';
 
-interface DiagnosticsStats {
-  total_integrations?: number;
-  active_integrations?: number;
-  failed_integrations?: number;
-  total_templates?: number;
-  featured_templates?: number;
-  total_feature_flags?: number;
-  enabled_flags?: number;
+interface SuggestionItem {
+  title: string;
+  description: string;
+  implementation: string;
 }
 
-interface DiagnosticsResult {
-  timestamp: string;
-  overall_health: string;
-  errors: any[];
-  warnings: any[];
-  suggestions: any[];
-  stats: DiagnosticsStats;
+interface SuggestionCategory {
+  category: string;
+  priority: 'high' | 'medium' | 'low';
+  items: SuggestionItem[];
 }
 
 Deno.serve(async (req) => {
   try {
-    const base44 = createClientFromRequest(req);
+    const base44: Base44Client = createClientFromRequest(req);
     const user = await base44.auth.me();
 
     if (!user) {
@@ -41,12 +35,18 @@ Deno.serve(async (req) => {
     try {
       const entities = await base44.asServiceRole.entities.ExternalBotIntegration.list();
       diagnostics.stats.total_integrations = entities.length;
-      diagnostics.stats.active_integrations = entities.filter((e: any) => e.is_active).length;
-      diagnostics.stats.failed_integrations = entities.filter((e: any) => e.last_sync_status === 'error').length;
+      diagnostics.stats.active_integrations = entities.filter((e: { is_active?: boolean }) => e.is_active).length;
+      diagnostics.stats.failed_integrations = entities.filter((e: { last_sync_status?: string }) => e.last_sync_status === 'error').length;
 
       // Check for integrations with errors
-      entities.forEach((integration: any) => {
-        if (integration.error_count > 10) {
+      entities.forEach((integration: { 
+        error_count?: number; 
+        id: string; 
+        name: string; 
+        webhook_url?: string; 
+        api_endpoint?: string;
+      }) => {
+        if ((integration.error_count || 0) > 10) {
           diagnostics.warnings.push({
             type: 'high_error_count',
             severity: 'warning',
@@ -68,12 +68,13 @@ Deno.serve(async (req) => {
           });
         }
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const errorMsg = error instanceof Error ? error.message : String(error);
       diagnostics.warnings.push({
         type: 'entity_check_failed',
         severity: 'warning',
         message: 'Could not check ExternalBotIntegration entity',
-        error: error.message
+        error: errorMsg
       });
     }
 
@@ -81,7 +82,7 @@ Deno.serve(async (req) => {
     try {
       const templates = await base44.asServiceRole.entities.BotTemplate.list();
       diagnostics.stats.total_templates = templates.length;
-      diagnostics.stats.featured_templates = templates.filter((t: any) => t.is_featured).length;
+      diagnostics.stats.featured_templates = templates.filter((t: { is_featured?: boolean }) => t.is_featured).length;
 
       if (templates.length === 0) {
         diagnostics.warnings.push({
@@ -91,12 +92,13 @@ Deno.serve(async (req) => {
           suggestion: 'Create sample templates to help users get started'
         });
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const errorMsg = error instanceof Error ? error.message : String(error);
       diagnostics.warnings.push({
         type: 'entity_check_failed',
         severity: 'warning',
         message: 'Could not check BotTemplate entity',
-        error: error.message
+        error: errorMsg
       });
     }
 
@@ -104,18 +106,19 @@ Deno.serve(async (req) => {
     try {
       const flags = await base44.asServiceRole.entities.FeatureFlag.list();
       diagnostics.stats.total_feature_flags = flags.length;
-      diagnostics.stats.enabled_flags = flags.filter((f: any) => f.enabled).length;
-    } catch (error: any) {
+      diagnostics.stats.enabled_flags = flags.filter((f: { enabled?: boolean }) => f.enabled).length;
+    } catch (error: unknown) {
+      const errorMsg = error instanceof Error ? error.message : String(error);
       diagnostics.warnings.push({
         type: 'entity_check_failed',
         severity: 'warning',
         message: 'Could not check FeatureFlag entity',
-        error: error.message
+        error: errorMsg
       });
     }
 
     // API Suggestions
-    diagnostics.suggestions.push({
+    const apiSuggestions: SuggestionCategory = {
       category: 'API Architecture',
       priority: 'high',
       items: [
@@ -140,9 +143,10 @@ Deno.serve(async (req) => {
           implementation: 'Implement HMAC signature verification for each platform'
         }
       ]
-    });
+    };
+    diagnostics.suggestions.push(apiSuggestions);
 
-    diagnostics.suggestions.push({
+    const dataSuggestions: SuggestionCategory = {
       category: 'Data Management',
       priority: 'medium',
       items: [
@@ -162,9 +166,10 @@ Deno.serve(async (req) => {
           implementation: 'Create AuditLog entity and log all CRUD operations'
         }
       ]
-    });
+    };
+    diagnostics.suggestions.push(dataSuggestions);
 
-    diagnostics.suggestions.push({
+    const performanceSuggestions: SuggestionCategory = {
       category: 'Performance',
       priority: 'medium',
       items: [
@@ -184,9 +189,10 @@ Deno.serve(async (req) => {
           implementation: 'Configure fetch with keepalive and connection limits'
         }
       ]
-    });
+    };
+    diagnostics.suggestions.push(performanceSuggestions);
 
-    diagnostics.suggestions.push({
+    const securitySuggestions: SuggestionCategory = {
       category: 'Security',
       priority: 'high',
       items: [
@@ -206,10 +212,11 @@ Deno.serve(async (req) => {
           implementation: 'Set appropriate CORS headers based on environment'
         }
       ]
-    });
+    };
+    diagnostics.suggestions.push(securitySuggestions);
 
     // Best Practices
-    diagnostics.suggestions.push({
+    const bestPracticesSuggestions: SuggestionCategory = {
       category: 'Best Practices',
       priority: 'low',
       items: [
@@ -234,7 +241,8 @@ Deno.serve(async (req) => {
           implementation: 'Generate docs from code or write OpenAPI spec'
         }
       ]
-    });
+    };
+    diagnostics.suggestions.push(bestPracticesSuggestions);
 
     // Determine overall health
     if (diagnostics.errors.length > 0) {
@@ -251,11 +259,12 @@ Deno.serve(async (req) => {
       success: true,
       diagnostics
     }, { status: 200 });
-  } catch (error: any) {
-    console.error('Diagnostics error:', error);
+  } catch (error: unknown) {
+    const errorMsg = error instanceof Error ? error.message : String(error);
+    console.error('Diagnostics error:', errorMsg);
     return Response.json({ 
       success: false,
-      error: error.message 
+      error: errorMsg 
     }, { status: 500 });
   }
 });

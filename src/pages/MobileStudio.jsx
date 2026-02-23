@@ -25,7 +25,7 @@ export default function MobileStudio() {
       return response.data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries(['mobileApps']);
+      queryClient.invalidateQueries({ queryKey: ['mobileApps'] });
       toast.success('App build started!');
     },
     onError: (error) => {

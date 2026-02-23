@@ -1,0 +1,180 @@
+# =============================================================================
+# Clawd Hybrid RTX - Docker Compose Configuration
+# RTX 2060 GPU Passthrough with Monitoring Stack
+# =============================================================================
+
+version: '3.8'
+
+services:
+  # ---------------------------------------------------------------------------
+  # Main Application - Clawd Hybrid RTX
+  # ---------------------------------------------------------------------------
+  clawd-hybrid:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: runtime
+    image: clawd-hybrid-rtx:latest
+    container_name: clawd-hybrid-rtx
+    restart: unless-stopped
+    
+    # GPU access for RTX 2060
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    
+    environment:
+      # CUDA / GPU Settings
+      - NVIDIA_VISIBLE_DEVICES=0
+      - NVIDIA_DRIVER_CAPABILITIES=compute,utility
+      - CUDA_VISIBLE_DEVICES=0
+      
+      # Application Settings
+      - ENVIRONMENT=production
+      - LOG_LEVEL=INFO
+      - MODEL_OFFLOAD_CPU=true
+      - MODEL_QUANTIZE_8BIT=true
+      
+      # Redis Cache
+      - REDIS_URL=redis://redis:6379/0
+      - CACHE_TTL=3600
+      
+      # API Keys (loaded from .env)
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      - HUGGINGFACE_TOKEN=${HUGGINGFACE_TOKEN}
+      
+      # Monitoring
+      - PROMETHEUS_PORT=9090
+      - METRICS_ENABLED=true
+    
+    ports:
+      - "8000:8000"  # API port
+      - "9090:9090"  # Metrics port
+    
+    volumes:
+      - ./models:/app/models:ro
+      - clawd-cache:/app/cache
+      - clawd-logs:/app/logs
+      - ./config.yaml:/app/config.yaml:ro
+      - ./.env:/app/.env:ro
+    
+    networks:
+      - clawd-network
+    
+    depends_on:
+      redis:
+        condition: service_healthy
+    
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+  # ---------------------------------------------------------------------------
+  # Redis Cache - For model outputs and embeddings
+  # ---------------------------------------------------------------------------
+  redis:
+    image: redis:7-alpine
+    container_name: clawd-redis
+    restart: unless-stopped
+    
+    command: redis-server --maxmemory 2gb --maxmemory-policy allkeys-lru
+    
+    volumes:
+      - redis-data:/data
+    
+    networks:
+      - clawd-network
+    
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
+  # ---------------------------------------------------------------------------
+  # Prometheus - Metrics Collection
+  # ---------------------------------------------------------------------------
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: clawd-prometheus
+    restart: unless-stopped
+    
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--web.enable-lifecycle'
+    
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus-data:/prometheus
+    
+    ports:
+      - "9091:9090"  # Expose on 9091 to avoid conflict with app metrics
+    
+    networks:
+      - clawd-network
+    
+    depends_on:
+      - clawd-hybrid
+
+  # ---------------------------------------------------------------------------
+  # Grafana - Metrics Dashboard
+  # ---------------------------------------------------------------------------
+  grafana:
+    image: grafana/grafana:latest
+    container_name: clawd-grafana
+    restart: unless-stopped
+    
+    environment:
+      - GF_SECURITY_ADMIN_USER=${GRAFANA_ADMIN_USER:-admin}
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD:-admin}
+      - GF_USERS_ALLOW_SIGN_UP=false
+    
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./monitoring/grafana/dashboards:/etc/grafana/provisioning/dashboards:ro
+      - ./monitoring/grafana/datasources:/etc/grafana/provisioning/datasources:ro
+    
+    ports:
+      - "3000:3000"
+    
+    networks:
+      - clawd-network
+    
+    depends_on:
+      - prometheus
+
+# -----------------------------------------------------------------------------
+# Persistent Volumes
+# -----------------------------------------------------------------------------
+volumes:
+  clawd-cache:
+    driver: local
+  clawd-logs:
+    driver: local
+  redis-data:
+    driver: local
+  prometheus-data:
+    driver: local
+  grafana-data:
+    driver: local
+
+# -----------------------------------------------------------------------------
+# Networks
+# -----------------------------------------------------------------------------
+networks:
+  clawd-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16

@@ -80,7 +80,7 @@ export default function IntegrationTemplates() {
     },
     onSuccess: () => {
       toast.success('Integration created from template');
-      queryClient.invalidateQueries(['externalBotIntegrations']);
+      queryClient.invalidateQueries({ queryKey: ['externalBotIntegrations'] });
     }
   });
 

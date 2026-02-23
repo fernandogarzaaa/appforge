@@ -1,8 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { Shield, Search, Filter, Database, Clock } from 'lucide-react';
 
+interface Record {
+    id: number;
+    type: string;
+    status: string;
+    file: string;
+    gain?: string;
+    time: string;
+    msg?: string;
+}
+
 export default function RecordsVault() {
-    const [records, setRecords] = useState([]);
+    const [records, setRecords] = useState<Record[]>([]);
     const [searchTerm, setSearchTerm] = useState('');
 
     useEffect(() => {

@@ -1,0 +1,264 @@
+# =============================================================================
+# Clawd Hybrid RTX - Configuration Template
+# RTX 2060 Optimized Settings
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# Model Configuration
+# -----------------------------------------------------------------------------
+models:
+  # Primary local model (loaded on RTX 2060)
+  local:
+    name: "microsoft/DialoGPT-medium"  # ~350MB, fits in RTX 2060 VRAM
+    device: "cuda:0"
+    load_in_8bit: true
+    max_memory: {0: "5GiB", "cpu": "16GiB"}  # Leave 1GB buffer on GPU
+    offload_folder: "./offload"
+    
+  # Fallback models (cloud APIs)
+  cloud:
+    - provider: "openai"
+      model: "gpt-3.5-turbo"
+      priority: 1
+      max_tokens: 2048
+      temperature: 0.7
+      
+    - provider: "anthropic"
+      model: "claude-3-sonnet-20240229"
+      priority: 2
+      max_tokens: 4096
+      temperature: 0.7
+
+  # Embeddings model (local)
+  embeddings:
+    name: "sentence-transformers/all-MiniLM-L6-v2"  # ~80MB
+    device: "cuda:0"
+    normalize_embeddings: true
+
+# -----------------------------------------------------------------------------
+# GPU / Hardware Configuration
+# -----------------------------------------------------------------------------
+hardware:
+  gpu:
+    device_id: 0
+    name: "RTX 2060"
+    vram_mb: 6144  # 6GB
+    reserved_vram_mb: 512  # Keep 512MB free for system
+    
+  cpu:
+    max_threads: 4  # Limit to prevent system freeze
+    offload_when_gpu_full: true
+    
+  memory:
+    max_ram_gb: 16
+    swap_threshold: 0.85
+
+# -----------------------------------------------------------------------------
+# Caching Configuration
+# -----------------------------------------------------------------------------
+cache:
+  backend: "redis"  # Options: redis, memory, disk
+  
+  redis:
+    host: "localhost"
+    port: 6379
+    db: 0
+    password: null
+    ssl: false
+    socket_timeout: 5
+    socket_connect_timeout: 5
+    
+  memory:
+    max_size: 10000  # Max cached items
+    ttl_seconds: 3600  # 1 hour default
+    
+  disk:
+    path: "./cache"
+    max_size_gb: 10
+    
+  # Cache strategies
+  strategies:
+    embeddings:
+      ttl_seconds: 86400  # 24 hours - embeddings rarely change
+      key_prefix: "emb:"
+      
+    completions:
+      ttl_seconds: 300  # 5 minutes - completions context-dependent
+      key_prefix: "cmp:"
+      
+    chat_history:
+      ttl_seconds: 1800  # 30 minutes
+      key_prefix: "chat:"
+
+# -----------------------------------------------------------------------------
+# API Configuration
+# -----------------------------------------------------------------------------
+api:
+  # Local API server
+  server:
+    host: "0.0.0.0"
+    port: 8000
+    workers: 1  # RTX 2060: Single worker to manage VRAM
+    reload: false
+    
+  # Rate limiting
+  rate_limit:
+    enabled: true
+    requests_per_minute: 60
+    burst_size: 10
+    
+  # Request timeouts
+  timeout:
+    local_model_seconds: 30
+    cloud_api_seconds: 60
+    embedding_seconds: 10
+    
+  # Request routing
+  routing:
+    prefer_local: true
+    fallback_to_cloud: true
+    cloud_on_local_error: true
+    max_local_queue_size: 10
+
+# -----------------------------------------------------------------------------
+# Hybrid Strategy Configuration
+# -----------------------------------------------------------------------------
+hybrid:
+  # When to use local model vs cloud
+  strategy: "adaptive"  # Options: local_first, cloud_first, adaptive, cost_optimized
+  
+  # Adaptive strategy thresholds
+  adaptive:
+    # Use local when VRAM available
+    local_vram_threshold: 0.75  # 75% of 5.5GB = ~4.1GB
+    
+    # Use cloud for complex queries
+    cloud_token_threshold: 2000  # Use cloud if prompt > 2k tokens
+    cloud_complexity_threshold: 0.8  # Complexity score 0-1
+    
+    # Fallback conditions
+    fallback_on_timeout: true
+    fallback_on_oom: true
+    fallback_on_error: true
+    
+  # Cost optimization
+  cost_optimized:
+    local_cost_per_1k_tokens: 0.0
+    cloud_budget_daily_usd: 10.0
+    priority_local_when_under_budget: true
+
+# -----------------------------------------------------------------------------
+# Monitoring Configuration
+# -----------------------------------------------------------------------------
+monitoring:
+  enabled: true
+  
+  # Prometheus metrics
+  prometheus:
+    enabled: true
+    port: 9090
+    path: "/metrics"
+    
+  # GPU monitoring
+  gpu:
+    enabled: true
+    poll_interval_seconds: 1
+    vram_warning_threshold: 0.85
+    vram_critical_threshold: 0.95
+    temperature_warning_c: 80
+    temperature_critical_c: 85
+    
+  # Cache monitoring
+  cache:
+    enabled: true
+    stats_window: 1000
+    
+  # Cost tracking
+  costs:
+    enabled: true
+    track_per_request: true
+    
+  # Alerting
+  alerts:
+    enabled: true
+    webhook_url: null
+    email: null
+    slack_webhook: null
+    
+    # Alert conditions
+    on_gpu_overheat: true
+    on_vram_critical: true
+    on_high_error_rate: true
+    on_daily_budget_exceeded: true
+
+# -----------------------------------------------------------------------------
+# Logging Configuration
+# -----------------------------------------------------------------------------
+logging:
+  level: "INFO"  # DEBUG, INFO, WARNING, ERROR
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  
+  handlers:
+    console:
+      enabled: true
+      
+    file:
+      enabled: true
+      path: "./logs/clawd.log"
+      max_bytes: 10485760  # 10MB
+      backup_count: 5
+      
+    json:
+      enabled: true
+      path: "./logs/clawd.json"
+      
+  # Sensitive data filtering
+  filter_api_keys: true
+  mask_tokens_in_logs: true
+
+# -----------------------------------------------------------------------------
+# Security Configuration
+# -----------------------------------------------------------------------------
+security:
+  # API authentication
+  auth:
+    enabled: false
+    type: "bearer"  # bearer, api_key
+    secret_key: null  # Set via environment variable
+    token_expire_minutes: 60
+    
+  # CORS
+  cors:
+    enabled: true
+    allow_origins: ["*"]
+    allow_credentials: false
+    allow_methods: ["GET", "POST", "PUT", "DELETE"]
+    allow_headers: ["*"]
+    
+  # Request validation
+  max_request_size_mb: 10
+  max_prompt_length: 8000
+  max_completion_length: 4096
+  
+  # Rate limiting per IP
+  ip_rate_limit:
+    enabled: true
+    requests_per_hour: 1000
+
+# -----------------------------------------------------------------------------
+# Development / Debug
+# -----------------------------------------------------------------------------
+development:
+  debug_mode: false
+  reload_on_change: false
+  
+  # Profiling
+  profiling:
+    enabled: false
+    cpu_profiling: false
+    memory_profiling: false
+    
+  # Testing
+  test_mode: false
+  mock_gpu: false
+  mock_api_calls: false

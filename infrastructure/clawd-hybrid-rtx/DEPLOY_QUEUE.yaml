@@ -1,0 +1,53 @@
+# SWARM DEPLOYMENT QUEUE
+# Tasks to execute immediately after current build completes
+
+queue:
+  - id: "deploy-phase-2"
+    name: "OpenRouter Integration"
+    priority: critical
+    trigger: "on_swarm_complete"
+    
+    tasks:
+      # Task 1: API Crafting Swarm - Add OpenRouter routes
+      - swarm: api-hybrid
+        action: extend
+        deliverables:
+          - openrouter_routes.py
+          - quantum_consensus_endpoint.py
+          - coherence_monitor_api.py
+        
+      # Task 2: Feature Forge Swarm - Build consensus engine
+      - swarm: feature-hybrid
+        action: extend
+        deliverables:
+          - openrouter_client.py
+          - quantum_consensus.py
+          - model_router.py
+          
+      # Task 3: DevOps Pipeline - Deploy with OpenRouter
+      - swarm: devops-hybrid
+        action: extend
+        deliverables:
+          - docker-compose.openrouter.yml
+          - deploy_openrouter.bat
+          - setup_openrouter.sh
+          
+      # Task 4: Deep Research - Model benchmarking
+      - swarm: research-hybrid
+        action: extend
+        deliverables:
+          - openrouter_benchmarks.json
+          - coherence_test_results.md
+          - model_ranking.json
+
+integration_plan:
+  step_1: "Extend API routes with /ensemble/consensus endpoint"
+  step_2: "Implement OpenRouter client with rate limiting"
+  step_3: "Build quantum consensus engine for 5-model ensemble"
+  step_4: "Add coherence scoring and monitoring"
+  step_5: "Test with 100 real queries"
+  step_6: "Deploy to production"
+  
+estimated_time: "30 minutes"
+target_coherence: "95%"
+target_cost: "$0 (free tier)"

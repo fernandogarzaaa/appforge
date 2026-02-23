@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clawd Swarm Monitor - RTX 2060 Hybrid</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #eee;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(90deg, #00d4ff, #7b2cbf);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            color: #888;
+            font-size: 1.1rem;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        .stat-card {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+        }
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #00d4ff;
+        }
+        .stat-label {
+            color: #888;
+            margin-top: 5px;
+        }
+        .swarms {
+            background: rgba(255,255,255,0.03);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+        }
+        .swarm {
+            margin-bottom: 20px;
+        }
+        .swarm-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .swarm-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        .swarm-status {
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        .running { background: #00d4ff22; color: #00d4ff; }
+        .completed { background: #00ff8822; color: #00ff88; }
+        .progress-bar {
+            height: 8px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #00d4ff, #7b2cbf);
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+        .files-section {
+            background: rgba(255,255,255,0.03);
+            border-radius: 15px;
+            padding: 25px;
+        }
+        .file-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .file-item:last-child {
+            border-bottom: none;
+        }
+        .file-name {
+            color: #00ff88;
+        }
+        .file-meta {
+            color: #888;
+            font-size: 0.9rem;
+        }
+        .refresh-indicator {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(0,212,255,0.2);
+            border: 1px solid #00d4ff;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.7; }
+        }
+        .timestamp {
+            text-align: center;
+            color: #666;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🤖 Clawd Swarm Monitor</h1>
+            <p class="subtitle">RTX 2060 Hybrid Build - Live Progress</p>
+        </header>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value" id="file-count">6</div>
+                <div class="stat-label">Files Created</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="swarm-count">5</div>
+                <div class="stat-label">Active Swarms</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="agent-count">30</div>
+                <div class="stat-label">Total Agents</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="progress">35%</div>
+                <div class="stat-label">Overall Progress</div>
+            </div>
+        </div>
+
+        <div class="swarms">
+            <h2 style="margin-bottom: 20px;">🔄 Active Swarms</h2>
+            
+            <div class="swarm">
+                <div class="swarm-header">
+                    <span class="swarm-name">⚡ Feature Forge</span>
+                    <span class="swarm-status running">RUNNING</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 35%"></div>
+                </div>
+            </div>
+
+            <div class="swarm">
+                <div class="swarm-header">
+                    <span class="swarm-name">📚 Deep Research</span>
+                    <span class="swarm-status running">RUNNING</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 30%"></div>
+                </div>
+            </div>
+
+            <div class="swarm">
+                <div class="swarm-header">
+                    <span class="swarm-name">🏛️ Code Archaeology</span>
+                    <span class="swarm-status running">RUNNING</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 25%"></div>
+                </div>
+            </div>
+
+            <div class="swarm">
+                <div class="swarm-header">
+                    <span class="swarm-name">⚙️ DevOps Pipeline</span>
+                    <span class="swarm-status running">RUNNING</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 40%"></div>
+                </div>
+            </div>
+
+            <div class="swarm">
+                <div class="swarm-header">
+                    <span class="swarm-name">🔌 API Crafting</span>
+                    <span class="swarm-status running">RUNNING</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 45%"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="files-section">
+            <h2 style="margin-bottom: 20px;">📁 Recent Files</h2>
+            <div id="file-list">
+                <div class="file-item">
+                    <span class="file-name">api_routes.py</span>
+                    <span class="file-meta">22 KB • just now</span>
+                </div>
+                <div class="file-item">
+                    <span class="file-name">batch_manager.py</span>
+                    <span class="file-meta">14 KB • 30s ago</span>
+                </div>
+                <div class="file-item">
+                    <span class="file-name">semantic_cache.py</span>
+                    <span class="file-meta">14 KB • 30s ago</span>
+                </div>
+                <div class="file-item">
+                    <span class="file-name">docker-compose.yml</span>
+                    <span class="file-meta">5 KB • 1m ago</span>
+                </div>
+                <div class="file-item">
+                    <span class="file-name">Dockerfile</span>
+                    <span class="file-meta">3.6 KB • 1m ago</span>
+                </div>
+            </div>
+        </div>
+
+        <p class="timestamp">Last updated: <span id="timestamp">04:47:57 AM</span></p>
+    </div>
+
+    <div class="refresh-indicator" onclick="location.reload()">🔄</div>
+
+    <script>
+        // Auto-refresh every 10 seconds
+        setInterval(() => {
+            location.reload();
+        }, 10000);
+
+        // Update timestamp
+        document.getElementById('timestamp').textContent = new Date().toLocaleTimeString();
+    </script>
+</body>
+</html>

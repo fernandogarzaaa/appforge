@@ -98,8 +98,9 @@ export default function Projects() {
   });
 
   // Batch delete mutation
+  /** @type {import('@tanstack/react-query').UseMutationResult<void, Error, string[]>} */
   const batchDeleteMutation = useMutation({
-    mutationFn: async (ids) => {
+    mutationFn: async (/** @type {string[]} */ ids) => {
       await Promise.all(ids.map(id => base44.entities.Project.delete(id)));
     },
     onSuccess: () => {
@@ -110,8 +111,9 @@ export default function Projects() {
   });
 
   // Batch duplicate mutation
+  /** @type {import('@tanstack/react-query').UseMutationResult<void, Error, string[]>} */
   const batchDuplicateMutation = useMutation({
-    mutationFn: async (ids) => {
+    mutationFn: async (/** @type {string[]} */ ids) => {
       const projectsToDuplicate = projects.filter(p => ids.includes(p.id));
       await Promise.all(projectsToDuplicate.map(project =>
         base44.entities.Project.create({

@@ -1,0 +1,579 @@
+{
+  "metadata": {
+    "generated": "2026-02-24",
+    "purpose": "Clawd Hybrid RTX - Cloud LLM Provider Comparison",
+    "currency": "USD"
+  },
+  "providers": [
+    {
+      "name": "OpenRouter",
+      "website": "https://openrouter.ai",
+      "free_tier": {
+        "available": true,
+        "model_variant": ":free",
+        "description": "Free tier available via :free suffix on select models",
+        "limitations": [
+          "Limited to smaller models (1B-4B parameters)",
+          "Rate limits vary by provider",
+          "Queue times during peak usage"
+        ]
+      },
+      "pricing": {
+        "type": "variable",
+        "notes": "Routes to cheapest available provider"
+      },
+      "rate_limits": {
+        "type": "provider_dependent",
+        "notes": "Varies based on upstream provider"
+      },
+      "models": {
+        "free_tier": [
+          "google/gemma-3-4b-it:free",
+          "meta-llama/llama-3.2-3b:free",
+          "meta-llama/llama-3.2-1b:free",
+          "microsoft/phi-3:free"
+        ],
+        "coding": [
+          "qwen/qwen-2.5-coder-7b",
+          "meta-llama/llama-3.1-8b",
+          "deepseek/deepseek-coder"
+        ]
+      },
+      "features": [
+        "Automatic provider failover",
+        "Price optimization",
+        "OAuth PKCE",
+        "BYOK support",
+        "200+ models available"
+      ],
+      "pros": [
+        "Single API for all models",
+        "Intelligent routing",
+        "No vendor lock-in",
+        "Built-in fallback"
+      ],
+      "cons": [
+        "Free tier limited to small models",
+        "Variable latency",
+        "Dependency on upstream providers"
+      ]
+    },
+    {
+      "name": "Together AI",
+      "website": "https://www.together.ai",
+      "free_tier": {
+        "available": true,
+        "credit_amount": 5,
+        "currency": "USD",
+        "description": "$5 sign-up credit for new accounts"
+      },
+      "pricing": {
+        "unit": "per_1M_tokens",
+        "models": [
+          {
+            "model": "Llama 3.3 70B",
+            "input": 0.88,
+            "output": 0.88,
+            "type": "chat"
+          },
+          {
+            "model": "Llama 3.1 8B",
+            "input": 0.18,
+            "output": 0.18,
+            "type": "chat"
+          },
+          {
+            "model": "Llama 3.2 3B",
+            "input": 0.06,
+            "output": 0.06,
+            "type": "chat"
+          },
+          {
+            "model": "Llama 3.2 1B",
+            "input": 0.06,
+            "output": 0.06,
+            "type": "chat"
+          },
+          {
+            "model": "DeepSeek V3",
+            "input": 1.25,
+            "output": 1.25,
+            "type": "chat"
+          },
+          {
+            "model": "DeepSeek R1",
+            "input": 3.00,
+            "output": 7.00,
+            "type": "reasoning"
+          },
+          {
+            "model": "Qwen2.5 7B",
+            "input": 0.30,
+            "output": 0.30,
+            "type": "chat"
+          },
+          {
+            "model": "Qwen2.5-Coder 7B",
+            "input": 0.30,
+            "output": 0.30,
+            "type": "coding"
+          },
+          {
+            "model": "Qwen3 32B",
+            "input": 0.15,
+            "output": 1.50,
+            "type": "chat"
+          },
+          {
+            "model": "Mistral 7B",
+            "input": 0.20,
+            "output": 0.20,
+            "type": "chat"
+          },
+          {
+            "model": "Mistral Small 3",
+            "input": 0.10,
+            "output": 0.30,
+            "type": "chat"
+          },
+          {
+            "model": "Kimi K2.5",
+            "input": 0.50,
+            "output": 2.80,
+            "type": "chat"
+          },
+          {
+            "model": "Gemma 3n E4B",
+            "input": 0.02,
+            "output": 0.04,
+            "type": "chat"
+          }
+        ],
+        "discounts": {
+          "batch_api": 0.50,
+          "notes": "Batch API at 50% discount"
+        }
+      },
+      "rate_limits": {
+        "notes": "Rate limits depend on account tier and model"
+      },
+      "features": [
+        "Serverless inference",
+        "Batch API",
+        "Fine-tuning",
+        "Image generation",
+        "Code execution sandbox"
+      ],
+      "pros": [
+        "Good starting credit",
+        "Fast inference",
+        "Strong coding models",
+        "Batch discount"
+      ],
+      "cons": [
+        "Credits expire",
+        "No permanent free tier"
+      ]
+    },
+    {
+      "name": "Groq",
+      "website": "https://groq.com",
+      "free_tier": {
+        "available": true,
+        "description": "Free developer tier with generous limits",
+        "upgrade_option": "Developer plan for higher limits"
+      },
+      "pricing": {
+        "unit": "per_1M_tokens",
+        "models": [
+          {
+            "model": "GPT OSS 20B",
+            "input": 0.075,
+            "output": 0.30,
+            "speed_tps": 1000,
+            "notes": "13.3M input tokens per $1"
+          },
+          {
+            "model": "GPT OSS 120B",
+            "input": 0.15,
+            "output": 0.60,
+            "speed_tps": 500,
+            "notes": "6.67M input tokens per $1"
+          },
+          {
+            "model": "Llama 4 Scout",
+            "input": 0.11,
+            "output": 0.34,
+            "speed_tps": 594
+          },
+          {
+            "model": "Llama 4 Maverick",
+            "input": 0.20,
+            "output": 0.60,
+            "speed_tps": 562
+          },
+          {
+            "model": "Qwen3 32B",
+            "input": 0.30,
+            "output": 0.90,
+            "speed_tps": 662
+          },
+          {
+            "model": "Kimi K2",
+            "input": 1.00,
+            "output": 3.00,
+            "speed_tps": 200,
+            "context": "1T tokens"
+          },
+          {
+            "model": "Kimi K2.5",
+            "input": 1.00,
+            "output": 3.00,
+            "speed_tps": 200
+          },
+          {
+            "model": "Llama 3.1 8B Instant",
+            "input": 0.075,
+            "output": 0.30,
+            "speed_tps": 1000
+          },
+          {
+            "model": "Llama 3.3 70B Versatile",
+            "input": 0.10,
+            "output": 0.40,
+            "speed_tps": 330
+          },
+          {
+            "model": "Whisper Large V3",
+            "audio_per_minute": 0.0015,
+            "type": "audio"
+          },
+          {
+            "model": "Whisper Large V3 Turbo",
+            "audio_per_minute": 0.0009,
+            "type": "audio"
+          }
+        ]
+      },
+      "rate_limits": {
+        "free_tier": [
+          {
+            "model": "Llama 3.1 8B Instant",
+            "rpm": 30,
+            "rpd": 14400,
+            "tpm": 6000,
+            "tpd": 500000
+          },
+          {
+            "model": "Llama 3.3 70B Versatile",
+            "rpm": 30,
+            "rpd": 1000,
+            "tpm": 12000,
+            "tpd": 100000
+          },
+          {
+            "model": "Llama 4 Scout",
+            "rpm": 30,
+            "rpd": 1000,
+            "tpm": 30000,
+            "tpd": 500000
+          },
+          {
+            "model": "Llama 4 Maverick",
+            "rpm": 30,
+            "rpd": 1000,
+            "tpm": 6000,
+            "tpd": 500000
+          },
+          {
+            "model": "GPT OSS 20B",
+            "rpm": 30,
+            "rpd": 1000,
+            "tpm": 8000,
+            "tpd": 200000
+          },
+          {
+            "model": "GPT OSS 120B",
+            "rpm": 30,
+            "rpd": 1000,
+            "tpm": 8000,
+            "tpd": 200000
+          },
+          {
+            "model": "Kimi K2",
+            "rpm": 60,
+            "rpd": 1000,
+            "tpm": 10000,
+            "tpd": 300000
+          },
+          {
+            "model": "Whisper Large V3",
+            "rpm": 20,
+            "rpd": 2000,
+            "ash": 7200,
+            "asd": 28800
+          }
+        ],
+        "headers": [
+          "retry-after",
+          "x-ratelimit-limit-requests",
+          "x-ratelimit-limit-tokens",
+          "x-ratelimit-remaining-requests",
+          "x-ratelimit-remaining-tokens",
+          "x-ratelimit-reset-requests",
+          "x-ratelimit-reset-tokens"
+        ]
+      },
+      "features": [
+        "Fastest inference (up to 1000 TPS)",
+        "LPU architecture",
+        "Free tier available",
+        "Batch processing",
+        "Flex processing"
+      ],
+      "pros": [
+        "Fastest inference speeds",
+        "Excellent free tier",
+        "Competitive pricing",
+        "Real-time capable"
+      ],
+      "cons": [
+        "Smaller model selection",
+        "Rate limits on free tier"
+      ]
+    },
+    {
+      "name": "Fireworks AI",
+      "website": "https://fireworks.ai",
+      "free_tier": {
+        "available": true,
+        "type": "trial",
+        "description": "Free trial available upon registration"
+      },
+      "pricing": {
+        "unit": "per_1M_tokens",
+        "text_vision": {
+          "by_parameter_count": [
+            {
+              "range": "<4B",
+              "input": 0.10,
+              "output": 0.10
+            },
+            {
+              "range": "4B-16B",
+              "input": 0.20,
+              "output": 0.20
+            },
+            {
+              "range": ">16B",
+              "input": 0.90,
+              "output": 0.90
+            },
+            {
+              "range": "MoE 0-56B",
+              "input": 0.50,
+              "output": 0.50
+            },
+            {
+              "range": "MoE 56-176B",
+              "input": 1.20,
+              "output": 1.20
+            }
+          ],
+          "special_models": [
+            {
+              "model": "DeepSeek V3",
+              "input": 0.56,
+              "output": 1.68
+            },
+            {
+              "model": "GLM-4.7",
+              "input": 0.60,
+              "output": 2.20
+            },
+            {
+              "model": "GLM-5",
+              "input": 1.00,
+              "output": 3.20,
+              "cached_input": 0.20
+            },
+            {
+              "model": "Kimi K2",
+              "input": 0.60,
+              "output": 2.50
+            },
+            {
+              "model": "Kimi K2.5",
+              "input": 0.60,
+              "output": 3.00,
+              "cached_input": 0.10
+            },
+            {
+              "model": "GPT OSS 120B",
+              "input": 0.15,
+              "output": 0.60
+            },
+            {
+              "model": "GPT OSS 20B",
+              "input": 0.07,
+              "output": 0.30
+            },
+            {
+              "model": "MiniMax M2.5",
+              "input": 0.30,
+              "output": 1.20,
+              "cached_input": 0.03
+            }
+          ]
+        },
+        "embeddings": [
+          {
+            "range": "up to 150M",
+            "price": 0.008
+          },
+          {
+            "range": "150M-350M",
+            "price": 0.016
+          },
+          {
+            "model": "Qwen3 8B",
+            "price": 0.10
+          }
+        ],
+        "discounts": {
+          "cached_input": 0.50,
+          "batch_inference": 0.50,
+          "notes": "Cached input and batch at 50% discount"
+        }
+      },
+      "features": [
+        "Cached input pricing",
+        "Batch inference discount",
+        "Fine-tuning platform",
+        "On-demand GPU deployments",
+        "Image generation"
+      ],
+      "pros": [
+        "50% discount on cached inputs",
+        "Good for production workloads",
+        "Strong fine-tuning",
+        "Transparent pricing"
+      ],
+      "cons": [
+        "No permanent free tier",
+        "Complex pricing tiers"
+      ]
+    },
+    {
+      "name": "Anyscale",
+      "website": "https://www.anyscale.com",
+      "free_tier": {
+        "available": true,
+        "credit_amount": 100,
+        "currency": "USD",
+        "description": "$100 starting credits for new accounts"
+      },
+      "pricing": {
+        "unit": "per_hour",
+        "compute": [
+          {
+            "gpu": "CPU Only",
+            "price_per_hour": 0.0135
+          },
+          {
+            "gpu": "NVIDIA T4",
+            "price_per_hour": 0.5682
+          },
+          {
+            "gpu": "NVIDIA L4",
+            "price_per_hour": 0.9542
+          },
+          {
+            "gpu": "NVIDIA A10G",
+            "price_per_hour": 1.3635
+          },
+          {
+            "gpu": "NVIDIA A100",
+            "price_per_hour": 4.9591
+          },
+          {
+            "gpu": "NVIDIA H100",
+            "price_per_hour": 9.2880
+          },
+          {
+            "gpu": "NVIDIA H200",
+            "price_per_hour": 10.6812
+          }
+        ]
+      },
+      "features": [
+        "Ray-based distributed computing",
+        "Hosted and BYOC options",
+        "Custom model deployment",
+        "Fine-tuning workflows",
+        "Production Ray Serve"
+      ],
+      "pros": [
+        "$100 starting credit",
+        "Full infrastructure control",
+        "Good for scaling",
+        "Bring your own cloud"
+      ],
+      "cons": [
+        "More complex setup",
+        "GPU-based pricing",
+        "Best for larger deployments"
+      ]
+    }
+  ],
+  "recommendations": {
+    "best_free_tier": "Groq",
+    "fastest_inference": "Groq",
+    "best_coding_models": "Together AI",
+    "best_for_production": "Fireworks AI",
+    "most_models": "OpenRouter",
+    "best_for_custom_deploy": "Anyscale",
+    "hybrid_approach": {
+      "primary": "Groq",
+      "fallback": "OpenRouter",
+      "coding": "Together AI",
+      "heavy_workloads": "Fireworks AI"
+    }
+  },
+  "cost_comparisons": {
+    "coding_tasks": {
+      "budget": {
+        "provider": "Groq",
+        "model": "GPT OSS 20B",
+        "cost_per_1k": 0.000375
+      },
+      "value": {
+        "provider": "Together AI",
+        "model": "Qwen2.5-Coder 7B",
+        "cost_per_1k": 0.00030
+      },
+      "premium": {
+        "provider": "Fireworks AI",
+        "model": "DeepSeek V3",
+        "cost_per_1k": 0.00112
+      }
+    },
+    "general_chat": {
+      "budget": {
+        "provider": "Together AI",
+        "model": "Llama 3.2 3B",
+        "cost_per_1k": 0.00006
+      },
+      "value": {
+        "provider": "Groq",
+        "model": "Llama 4 Scout",
+        "cost_per_1k": 0.00011
+      },
+      "premium": {
+        "provider": "Groq",
+        "model": "Llama 4 Maverick",
+        "cost_per_1k": 0.00020
+      }
+    }
+  }
+}

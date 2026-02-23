@@ -31,7 +31,7 @@ export default function VibeGuide() {
         }
     ];
 
-    const handleVibeCheck = async (selectedPrompt) => {
+    const handleVibeCheck = async (selectedPrompt?: string) => {
         setIsThinking(true);
         // Simulate "synthesizing" the vibe before routing
         const agent = new AIAgent(base44);

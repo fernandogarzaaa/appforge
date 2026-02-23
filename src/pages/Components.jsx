@@ -58,6 +58,7 @@ export default function Components() {
   const [selectedComponent, setSelectedComponent] = useState(null);
   const [showNewDialog, setShowNewDialog] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [categoryFilter, setCategoryFilter] = useState('all');
 
   const [newComponent, setNewComponent] = useState({ name: '', description: '', category: 'custom' });
 
@@ -82,6 +83,7 @@ export default function Components() {
     },
   });
 
+  /** @type {import('@tanstack/react-query').UseMutationResult<any, Error, {id: string; data: any}>} */
   const updateMutation = useMutation({
     mutationFn: ({ id, data }) => base44.entities.Component.update(id, data),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['components', projectId] }),

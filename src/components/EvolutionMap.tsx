@@ -3,7 +3,11 @@ import { Canvas, useFrame } from '@react-three/fiber';
 import { Points, PointMaterial } from '@react-three/drei';
 import * as THREE from 'three';
 
-function NodeField({ count = 200 }) {
+interface NodeFieldProps {
+    count?: number;
+}
+
+function NodeField({ count = 200 }: NodeFieldProps) {
     const points = useMemo(() => {
         const p = new Float32Array(count * 3);
         const colors = new Float32Array(count * 3);

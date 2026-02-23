@@ -1,0 +1,58 @@
+[
+  {
+    "strategyType": "reflection",
+    "parameters": {
+      "treeDepth": 3,
+      "reflectionRounds": 2,
+      "reasoningBudget": 7,
+      "usesRetrieval": true,
+      "usesStaticAnalysis": true,
+      "usesTestLoop": true
+    },
+    "mutationIntensity": 0.3306
+  },
+  {
+    "strategyType": "tree_of_thought",
+    "parameters": {
+      "treeDepth": 3,
+      "reasoningBudget": 6,
+      "usesRetrieval": true,
+      "usesStaticAnalysis": true,
+      "usesTestLoop": true
+    },
+    "mutationIntensity": 0.3
+  },
+  {
+    "strategyType": "reflection",
+    "parameters": {
+      "treeDepth": 3,
+      "reasoningBudget": 6,
+      "usesRetrieval": false,
+      "usesStaticAnalysis": false,
+      "usesTestLoop": false
+    },
+    "mutationIntensity": 0.294
+  },
+  {
+    "strategyType": "tree_of_thought",
+    "parameters": {
+      "treeDepth": 3,
+      "reasoningBudget": 7,
+      "usesRetrieval": true,
+      "usesStaticAnalysis": true,
+      "usesTestLoop": false
+    },
+    "mutationIntensity": 0.3562
+  },
+  {
+    "strategyType": "tree_of_thought",
+    "parameters": {
+      "treeDepth": 3,
+      "reasoningBudget": 8,
+      "usesRetrieval": true,
+      "usesStaticAnalysis": true,
+      "usesTestLoop": false
+    },
+    "mutationIntensity": 0.3451
+  }
+]

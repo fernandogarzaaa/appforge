@@ -44,7 +44,7 @@ export default function CreateMobileAppModal({ open, onClose }) {
       });
     },
     onSuccess: () => {
-      queryClient.invalidateQueries(['mobileApps']);
+      queryClient.invalidateQueries({ queryKey: ['mobileApps'] });
       toast.success('Mobile app created!');
       onClose();
     }

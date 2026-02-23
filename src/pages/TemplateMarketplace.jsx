@@ -85,7 +85,7 @@ export default function TemplateMarketplace() {
     },
     onSuccess: (template) => {
       if (template) {
-        queryClient.invalidateQueries(['botTemplates']);
+        queryClient.invalidateQueries({ queryKey: ['botTemplates'] });
         toast.success('Template downloaded successfully!');
       }
     },
@@ -103,7 +103,7 @@ export default function TemplateMarketplace() {
       return response.data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries(['botTemplates']);
+      queryClient.invalidateQueries({ queryKey: ['botTemplates'] });
       toast.success('Purchase successful! You can now download the template.');
     }
   });

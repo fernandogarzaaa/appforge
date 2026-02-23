@@ -1,0 +1,47 @@
+# =============================================================================
+# Prometheus Configuration for Clawd Hybrid RTX Monitoring
+# =============================================================================
+
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+  external_labels:
+    monitor: 'clawd-hybrid-rtx'
+    cluster: 'local'
+
+# Alertmanager configuration (optional)
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets: []
+
+# Rule files for alerting
+rule_files:
+  # - "alerts.yml"
+
+# Scrape configurations
+scrape_configs:
+  # Clawd Hybrid API metrics
+  - job_name: 'clawd-hybrid'
+    static_configs:
+      - targets: ['clawd-hybrid:9090']
+    metrics_path: /metrics
+    scrape_interval: 5s
+    scrape_timeout: 3s
+    
+  # Prometheus self-monitoring
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+    
+  # Redis metrics (if redis_exporter is added)
+  - job_name: 'redis'
+    static_configs:
+      - targets: ['redis:6379']
+    metrics_path: /metrics
+    
+  # Node exporter for system metrics (optional)
+  - job_name: 'node-exporter'
+    static_configs:
+      - targets: ['node-exporter:9100']
+    scrape_interval: 10s

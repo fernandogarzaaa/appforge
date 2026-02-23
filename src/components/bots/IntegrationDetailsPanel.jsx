@@ -28,7 +28,7 @@ export default function IntegrationDetailsPanel({ integration, onClose }) {
   const updateMutation = useMutation({
     mutationFn: (updates) => base44.entities.ExternalBotIntegration.update(integration.id, updates),
     onSuccess: () => {
-      queryClient.invalidateQueries(['externalBotIntegrations']);
+      queryClient.invalidateQueries({ queryKey: ['externalBotIntegrations'] });
       toast.success('Integration updated');
     }
   });
@@ -37,7 +37,7 @@ export default function IntegrationDetailsPanel({ integration, onClose }) {
     mutationFn: () => base44.functions.invoke('triggerIntegrationSync', { integration_id: integration.id }),
     onSuccess: () => {
       toast.success('Sync triggered');
-      queryClient.invalidateQueries(['integrationLogs', integration.id]);
+      queryClient.invalidateQueries({ queryKey: ['integrationLogs', integration.id] });
     }
   });
 
@@ -166,7 +166,7 @@ export default function IntegrationDetailsPanel({ integration, onClose }) {
               <Button 
                 size="sm" 
                 variant="outline"
-                onClick={() => queryClient.invalidateQueries(['integrationLogs', integration.id])}
+                onClick={() => queryClient.invalidateQueries({ queryKey: ['integrationLogs', integration.id] })}
               >
                 <RefreshCw className="w-3 h-3" />
               </Button>

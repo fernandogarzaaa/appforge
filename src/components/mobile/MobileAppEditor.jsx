@@ -22,7 +22,7 @@ export default function MobileAppEditor({ app, onBack }) {
       return await base44.entities.MobileApp.update(app.id, data);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries(['mobileApps']);
+      queryClient.invalidateQueries({ queryKey: ['mobileApps'] });
       toast.success('App saved!');
     }
   });

@@ -42,7 +42,7 @@ export default function CreateTemplateModal({ open, onClose }) {
       });
     },
     onSuccess: () => {
-      queryClient.invalidateQueries(['botTemplates']);
+      queryClient.invalidateQueries({ queryKey: ['botTemplates'] });
       toast.success('Template created! Submit for review to publish.');
       onClose();
     }

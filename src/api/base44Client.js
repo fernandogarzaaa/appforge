@@ -1,3 +1,5 @@
+/// <reference types="../types/base44" />
+/// <reference types="../../types/base44" />
 import { createClient } from '@base44/sdk';
 import { appParams } from '@/lib/app-params';
 

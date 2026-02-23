@@ -92,6 +92,7 @@ export default function NFTStudio() {
     },
   });
 
+  /** @type {import('@tanstack/react-query').UseMutationResult<any, Error, {id: string; data: any}>} */
   const updateMutation = useMutation({
     mutationFn: ({ id, data }) => base44.entities.NFTCollection.update(id, data),
     onSuccess: () => {

@@ -2,6 +2,8 @@
  * AppForge front-end entrypoint
  * Licensed under the Apache License, Version 2.0. See LICENSE for details.
  */
+/// <reference types="./types" /
+/// <reference types="../types" /
 import './polyfills'
 import React from 'react'
 import ReactDOM from 'react-dom/client'
