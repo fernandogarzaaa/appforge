@@ -1,6 +1,6 @@
 {
   "_vectorClock": {
-    "CORE": 7
+    "CORE": 6
   },
   "bounties": [
     {
@@ -8,46 +8,37 @@
       "priority": 0.6,
       "reward": 60,
       "category": "architect",
-      "id": "BTY-1771887258599-258",
+      "id": "BTY-1771890119911-111",
       "status": "backlog",
-      "createdAt": "2026-02-23T22:54:18.599Z"
+      "createdAt": "2026-02-23T23:41:59.911Z"
     },
     {
       "description": "[Neural Accelerator] EXPERT_ARCHITECT: Refactor core (Coherence: 1.00)",
       "priority": 0.5,
       "reward": 50,
       "category": "architect",
-      "id": "BTY-1771887258634-42",
+      "id": "BTY-1771890119952-689",
       "status": "backlog",
-      "createdAt": "2026-02-23T22:54:18.634Z"
+      "createdAt": "2026-02-23T23:41:59.952Z"
     },
     {
       "description": "[Neural Accelerator] EXPERT_ARCHITECT: Refactor core (Coherence: 1.00)",
       "priority": 0.85,
       "reward": 85,
       "category": "architect",
-      "id": "BTY-1771887258674-963",
+      "id": "BTY-1771890119995-521",
       "status": "completed",
-      "createdAt": "2026-02-23T22:54:18.674Z",
-      "completedAt": "2026-02-23T22:54:18.794Z"
+      "createdAt": "2026-02-23T23:41:59.995Z",
+      "completedAt": "2026-02-23T23:42:00.071Z"
     },
     {
       "description": "[Neural Accelerator] EXPERT_ARCHITECT: Refactor core (Coherence: 1.00)",
-      "priority": 0.15728246907116697,
+      "priority": 0.15580367521563473,
       "reward": 16,
       "category": "architect",
-      "id": "BTY-1771887258711-161",
+      "id": "BTY-1771890120029-299",
       "status": "backlog",
-      "createdAt": "2026-02-23T22:54:18.711Z"
-    },
-    {
-      "description": "[Neural Accelerator] EXPERT_ARCHITECT: Refactor core (Coherence: 1.00)",
-      "priority": 0.31,
-      "reward": 31,
-      "category": "architect",
-      "id": "BTY-1771887258752-999",
-      "status": "backlog",
-      "createdAt": "2026-02-23T22:54:18.752Z"
+      "createdAt": "2026-02-23T23:42:00.029Z"
     }
   ]
 }
