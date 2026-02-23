@@ -1,0 +1,327 @@
+{
+  "version": "1.0",
+  "description": "Model merging recipes for Superior Free LLM - Zero-cost GPT-4+ quality",
+  "recipes": {
+    "sovereign-7b-base": {
+      "name": "Sovereign 7B Base",
+      "description": "Foundation model combining general, coding, and math capabilities",
+      "target_size": "7B",
+      "merge_method": "ties",
+      "base_model": "mistralai/Mistral-7B-v0.1",
+      "models": [
+        {
+          "model": "mistralai/Mistral-7B-Instruct-v0.2",
+          "weight": 1.0,
+          "parameters": ["all"]
+        },
+        {
+          "model": "codellama/CodeLlama-7b-hf",
+          "weight": 0.7,
+          "parameters": ["embed_tokens", "layers.8-23", "norm", "lm_head"]
+        },
+        {
+          "model": "WizardLM/WizardMath-7B-V1.1",
+          "weight": 0.6,
+          "parameters": ["layers.16-31"]
+        }
+      ],
+      "mergekit_config": {
+        "merge_method": "ties",
+        "density": 0.6,
+        "weight_mask": true,
+        "normalize": true
+      },
+      "expected_performance": {
+        "mmlu": 0.65,
+        "humaneval": 0.35,
+        "gsm8k": 0.55
+      }
+    },
+    "sovereign-7b-instruct": {
+      "name": "Sovereign 7B Instruct",
+      "description": "Instruction-tuned variant with Orca-style training",
+      "target_size": "7B",
+      "merge_method": "slerp",
+      "base_model": "sovereign-7b-base",
+      "models": [
+        {
+          "model": "Open-Orca/OpenOrca-Platypus2-13B",
+          "weight": 0.8,
+          "parameters": ["all"]
+        },
+        {
+          "model": "teknium/OpenHermes-2.5-Mistral-7B",
+          "weight": 0.5,
+          "parameters": ["all"]
+        }
+      ],
+      "mergekit_config": {
+        "merge_method": "slerp",
+        "interpolation": 0.6,
+        "embed_slerp": true
+      },
+      "expected_performance": {
+        "mt_bench": 7.5,
+        "alpaca_eval": 0.65
+      }
+    },
+    "sovereign-7b-coding": {
+      "name": "Sovereign 7B Coding Expert",
+      "description": "Coding specialist with general knowledge retention",
+      "target_size": "7B",
+      "merge_method": "task_arithmetic",
+      "base_model": "mistralai/Mistral-7B-v0.1",
+      "models": [
+        {
+          "model": "codellama/CodeLlama-7b-Python-hf",
+          "weight": 1.0,
+          "task_vector": true
+        },
+        {
+          "model": "deepseek-ai/deepseek-coder-6.7b-base",
+          "weight": 0.8,
+          "task_vector": true
+        },
+        {
+          "model": "microsoft/Phi-2",
+          "weight": 0.5,
+          "task_vector": true
+        }
+      ],
+      "mergekit_config": {
+        "merge_method": "task_arithmetic",
+        "scaling_coefficient": 0.8,
+        "trim_task_vectors": true,
+        "density_threshold": 0.3
+      },
+      "expected_performance": {
+        "humaneval": 0.55,
+        "mbpp": 0.50,
+        "ds_1000": 0.45
+      }
+    },
+    "sovereign-7b-math": {
+      "name": "Sovereign 7B Math Expert",
+      "description": "Mathematical reasoning specialist",
+      "target_size": "7B",
+      "merge_method": "ties",
+      "base_model": "mistralai/Mistral-7B-v0.1",
+      "models": [
+        {
+          "model": "WizardLM/WizardMath-7B-V1.1",
+          "weight": 1.0,
+          "parameters": ["all"]
+        },
+        {
+          "model": "GAIR/Abel-7B-002",
+          "weight": 0.9,
+          "parameters": ["all"]
+        },
+        {
+          "model": "microsoft/Phi-2",
+          "weight": 0.4,
+          "parameters": ["all"]
+        }
+      ],
+      "mergekit_config": {
+        "merge_method": "ties",
+        "density": 0.7,
+        "weight_sign_agreement": true
+      },
+      "expected_performance": {
+        "gsm8k": 0.75,
+        "math": 0.35,
+        "sat_math": 0.85
+      }
+    },
+    "sovereign-7b-ultimate": {
+      "name": "Sovereign 7B Ultimate",
+      "description": "Final merged model combining all capabilities through frankenmerge",
+      "target_size": "7B",
+      "merge_method": "frankenmerge",
+      "base_model": "mistralai/Mistral-7B-v0.1",
+      "layers": [
+        {
+          "source": "sovereign-7b-base",
+          "layers": ["0-7"],
+          "description": "Base understanding layers"
+        },
+        {
+          "source": "sovereign-7b-coding",
+          "layers": ["8-15"],
+          "description": "Coding capability layers"
+        },
+        {
+          "source": "sovereign-7b-math",
+          "layers": ["16-23"],
+          "description": "Mathematical reasoning layers"
+        },
+        {
+          "source": "sovereign-7b-instruct",
+          "layers": ["24-31"],
+          "description": "Instruction following layers"
+        }
+      ],
+      "mergekit_config": {
+        "merge_method": "slerp",
+        "layer_transition": "smooth",
+        "normalize_outputs": true
+      },
+      "expected_performance": {
+        "mmlu": 0.72,
+        "mt_bench": 8.2,
+        "humaneval": 0.52,
+        "gsm8k": 0.68
+      }
+    },
+    "sovereign-7b-4bit": {
+      "name": "Sovereign 7B 4-bit Quantized",
+      "description": "Memory-efficient quantized version for edge deployment",
+      "target_size": "7B (4-bit ~ 4GB VRAM)",
+      "merge_method": "quantized_merge",
+      "base_model": "sovereign-7b-ultimate",
+      "quantization": {
+        "bits": 4,
+        "group_size": 128,
+        "dtype": "nf4",
+        "compute_dtype": "bfloat16"
+      },
+      "expected_performance": {
+        "mmlu_relative": 0.98,
+        "speedup": 2.5
+      }
+    }
+  },
+  "mergekit_yaml_templates": {
+    "ties_merge": """
+models:
+  - model: {{base_model}}
+    parameters:
+      weight: 1.0
+  {% for model in models %}
+  - model: {{model.model}}
+    parameters:
+      weight: {{model.weight}}
+  {% endfor %}
+
+merge_method: ties
+density: {{density | default(0.6)}}
+parameters:
+  weight_mask: true
+  normalize: true
+
+base_model: {{base_model}}
+dtype: float16
+""",
+    "slerp_merge": """
+models:
+  - model: {{model_a}}
+  - model: {{model_b}}
+
+merge_method: slerp
+slerp_config:
+  weight: {{weight | default(0.5)}}
+  embed_slerp: true
+
+base_model: {{base_model}}
+dtype: float16
+""",
+    "frankenmerge": """
+models:
+  - model: {{base_model}}
+    parameters:
+      layers: {{base_layers}}
+  {% for layer_source in layer_sources %}
+  - model: {{layer_source.model}}
+    parameters:
+      layers: {{layer_source.layers}}
+  {% endfor %}
+
+merge_method: passthrough
+base_model: {{base_model}}
+dtype: float16
+"""
+  },
+  "evolutionary_merge": {
+    "enabled": true,
+    "algorithm": "cma-es",
+    "population_size": 20,
+    "generations": 50,
+    "objectives": ["mmlu", "mt_bench", "humaneval"],
+    "constraints": {
+      "max_models": 5,
+      "max_layers_per_model": 32,
+      "min_coherence": 0.7
+    },
+    "search_space": {
+      "merge_methods": ["ties", "slerp", "task_arithmetic"],
+      "densities": [0.3, 0.4, 0.5, 0.6, 0.7, 0.8],
+      "weights": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
+    }
+  },
+  "model_sources": {
+    "huggingface": [
+      "mistralai/Mistral-7B-v0.1",
+      "mistralai/Mistral-7B-Instruct-v0.2",
+      "codellama/CodeLlama-7b-hf",
+      "codellama/CodeLlama-7b-Python-hf",
+      "WizardLM/WizardMath-7B-V1.1",
+      "GAIR/Abel-7B-002",
+      "microsoft/Phi-2",
+      "teknium/OpenHermes-2.5-Mistral-7B",
+      "Open-Orca/OpenOrca-Platypus2-13B",
+      "deepseek-ai/deepseek-coder-6.7b-base"
+    ],
+    "mirrors": {
+      "modelscope": "https://modelscope.cn/models/",
+      "wiseime": "https://huggingface.co/WISEime/"
+    }
+  },
+  "compute_requirements": {
+    "cpu_merge": {
+      "ram_gb": 32,
+      "disk_gb": 100,
+      "time_minutes": 30
+    },
+    "gpu_merge": {
+      "vram_gb": 16,
+      "time_minutes": 10
+    },
+    "evolutionary_search": {
+      "gpu_hours": 24,
+      "parallel_trials": 8
+    }
+  },
+  "free_cloud_merge": {
+    "kaggle": {
+      "gpu": "P100",
+      "ram": "16GB",
+      "disk": "20GB",
+      "time_limit": "12 hours per session"
+    },
+    "colab": {
+      "gpu": "T4",
+      "ram": "12GB",
+      "disk": "Google Drive",
+      "time_limit": "12 hours per session"
+    }
+  },
+  "validation": {
+    "checkpoints": [
+      "all_layers_present",
+      "embedding_dimensions_match",
+      "vocab_size_consistent",
+      "weights_not_nan",
+      "gradients_finite"
+    ],
+    "benchmarks": [
+      "arc_challenge",
+      "hellaswag",
+      "mmlu",
+      "truthfulqa",
+      "winogrande",
+      "gsm8k",
+      "humaneval"
+    ]
+  }
+}

@@ -1,0 +1,517 @@
+{
+  "capability_expansion_plan": {
+    "version": "1.0.0",
+    "created": "2026-02-24",
+    "description": "Growth roadmap for self-evolving AI capabilities",
+    
+    "phases": [
+      {
+        "phase": 1,
+        "name": "Foundation",
+        "timeline": "Months 1-3",
+        "status": "planned",
+        "objectives": [
+          "Implement core meta-learning algorithms (MAML, HyperNetworks)",
+          "Establish continual learning baseline with EWC",
+          "Create safe code execution sandbox",
+          "Build basic self-monitoring infrastructure"
+        ],
+        "capabilities": {
+          "added": [
+            {
+              "id": "meta_learning_basic",
+              "name": "Basic Meta-Learning",
+              "description": "MAML implementation for few-shot adaptation",
+              "complexity": "medium",
+              "dependencies": []
+            },
+            {
+              "id": "ewc_protection",
+              "name": "Elastic Weight Consolidation",
+              "description": "Prevent catastrophic forgetting via parameter importance",
+              "complexity": "medium",
+              "dependencies": []
+            },
+            {
+              "id": "code_sandbox",
+              "name": "Secure Code Execution",
+              "description": "Sandboxed environment for testing generated code",
+              "complexity": "high",
+              "dependencies": []
+            },
+            {
+              "id": "performance_monitoring",
+              "name": "Performance Monitoring",
+              "description": "Track metrics across tasks and time",
+              "complexity": "low",
+              "dependencies": []
+            }
+          ],
+          "target_metrics": {
+            "meta_adaptation_steps": 5,
+            "forgetting_rate": "<10%",
+            "sandbox_security_score": ">99%"
+          }
+        },
+        "milestones": [
+          {
+            "week": 2,
+            "deliverable": "MAML core implementation",
+            "success_criteria": "Successful 5-shot adaptation on miniImageNet"
+          },
+          {
+            "week": 4,
+            "deliverable": "EWC with Fisher Information",
+            "success_criteria": "Permuted MNIST forgetting <10%"
+          },
+          {
+            "week": 6,
+            "deliverable": "Code sandbox MVP",
+            "success_criteria": "Execute 1000 generated code snippets safely"
+          },
+          {
+            "week": 8,
+            "deliverable": "Monitoring dashboard",
+            "success_criteria": "Real-time metrics tracking operational"
+          },
+          {
+            "week": 12,
+            "deliverable": "Phase 1 integration",
+            "success_criteria": "End-to-end continual learning pipeline"
+          }
+        ]
+      },
+      {
+        "phase": 2,
+        "name": "Self-Modification",
+        "timeline": "Months 4-6",
+        "status": "planned",
+        "objectives": [
+          "Enable neural architecture search (DARTS)",
+          "Implement self-referential weight matrices",
+          "Build code-as-policy generation system",
+          "Create progressive neural network expansion"
+        ],
+        "capabilities": {
+          "added": [
+            {
+              "id": "darts_search",
+              "name": "Differentiable Architecture Search",
+              "description": "Automated architecture optimization via gradient descent",
+              "complexity": "high",
+              "dependencies": ["meta_learning_basic"]
+            },
+            {
+              "id": "self_referential",
+              "name": "Self-Referential Networks",
+              "description": "Networks that can modify their own weights",
+              "complexity": "high",
+              "dependencies": ["meta_learning_basic"]
+            },
+            {
+              "id": "code_generation",
+              "name": "Code-as-Policy",
+              "description": "Generate and execute self-improving code",
+              "complexity": "very_high",
+              "dependencies": ["code_sandbox"]
+            },
+            {
+              "id": "progressive_networks",
+              "name": "Progressive Neural Networks",
+              "description": "Add columns for new tasks without forgetting",
+              "complexity": "medium",
+              "dependencies": ["ewc_protection"]
+            },
+            {
+              "id": "hypernetworks",
+              "name": "Dynamic HyperNetworks",
+              "description": "Generate task-specific weights on demand",
+              "complexity": "high",
+              "dependencies": ["meta_learning_basic"]
+            }
+          ],
+          "target_metrics": {
+            "architecture_improvement": ">5% per search",
+            "self_modification_stability": ">95%",
+            "code_generation_accuracy": ">80%",
+            "task_column_efficiency": "<20% params per task"
+          }
+        },
+        "milestones": [
+          {
+            "week": 14,
+            "deliverable": "DARTS implementation",
+            "success_criteria": "Architecture search on CIFAR-10 improves baseline by 5%"
+          },
+          {
+            "week": 16,
+            "deliverable": "Self-referential layer",
+            "success_criteria": "Stable self-modification on synthetic tasks"
+          },
+          {
+            "week": 18,
+            "deliverable": "Code generation system",
+            "success_criteria": "Generate valid Python for neural network modules"
+          },
+          {
+            "week": 20,
+            "deliverable": "Progressive network expansion",
+            "success_criteria": "Add 5 task columns with <5% forgetting"
+          },
+          {
+            "week": 24,
+            "deliverable": "Phase 2 integration",
+            "success_criteria": "Self-modification improves baseline architecture"
+          }
+        ]
+      },
+      {
+        "phase": 3,
+        "name": "Advanced Evolution",
+        "timeline": "Months 7-9",
+        "status": "planned",
+        "objectives": [
+          "Implement self-play training loops",
+          "Build debate and amplification system",
+          "Enable adversarial self-red teaming",
+          "Create meta-optimization of learning rates"
+        ],
+        "capabilities": {
+          "added": [
+            {
+              "id": "self_play",
+              "name": "AlphaZero-Style Self-Play",
+              "description": "Improve through self-generated training games",
+              "complexity": "very_high",
+              "dependencies": ["meta_learning_basic"]
+            },
+            {
+              "id": "ai_debate",
+              "name": "AI Debate System",
+              "description": "Multiple agents debate to find truth",
+              "complexity": "high",
+              "dependencies": ["code_generation"]
+            },
+            {
+              "id": "red_teaming",
+              "name": "Self Red-Teaming",
+              "description": "Adversarially test own outputs for flaws",
+              "complexity": "high",
+              "dependencies": ["self_play"]
+            },
+            {
+              "id": "meta_optimizer",
+              "name": "Learned Optimizers",
+              "description": "Meta-learned gradient update rules",
+              "complexity": "high",
+              "dependencies": ["hypernetworks"]
+            },
+            {
+              "id": "generative_replay",
+              "name": "Generative Replay",
+              "description": "VAE-based synthetic memory generation",
+              "complexity": "medium",
+              "dependencies": ["progressive_networks"]
+            }
+          ],
+          "target_metrics": {
+            "self_play_elo_improvement": ">100 points/week",
+            "debate_accuracy": ">95% on fact-checking",
+            "red_team_flaw_detection": ">80%",
+            "meta_optimizer_convergence": "<50% steps vs Adam"
+          }
+        },
+        "milestones": [
+          {
+            "week": 26,
+            "deliverable": "Self-play framework",
+            "success_criteria": "MCTS-based training shows Elo improvement"
+          },
+          {
+            "week": 28,
+            "deliverable": "Debate system MVP",
+            "success_criteria": "Debates improve factual accuracy"
+          },
+          {
+            "week": 30,
+            "deliverable": "Red-teaming module",
+            "success_criteria": "Detect 80% of injected flaws"
+          },
+          {
+            "week": 32,
+            "deliverable": "Meta-optimizer",
+            "success_criteria": "Outperforms hand-tuned learning rates"
+          },
+          {
+            "week": 36,
+            "deliverable": "Phase 3 integration",
+            "success_criteria": "Self-play improves reasoning benchmarks"
+          }
+        ]
+      },
+      {
+        "phase": 4,
+        "name": "Autonomous Operation",
+        "timeline": "Months 10-12",
+        "status": "planned",
+        "objectives": [
+          "Build evolution controller orchestrator",
+          "Implement fully automated improvement loops",
+          "Deploy comprehensive safety monitoring",
+          "Enable recursive self-improvement"
+        ],
+        "capabilities": {
+          "added": [
+            {
+              "id": "evolution_controller",
+              "name": "Evolution Controller",
+              "description": "Orchestrate all self-improvement mechanisms",
+              "complexity": "very_high",
+              "dependencies": ["darts_search", "self_play", "code_generation"]
+            },
+            {
+              "id": "safety_monitor",
+              "name": "Safety Monitoring System",
+              "description": "Real-time safety constraint verification",
+              "complexity": "very_high",
+              "dependencies": ["red_teaming"]
+            },
+            {
+              "id": "auto_rollback",
+              "name": "Automatic Rollback",
+              "description": "Revert unsafe modifications automatically",
+              "complexity": "high",
+              "dependencies": ["safety_monitor"]
+            },
+            {
+              "id": "recursive_improvement",
+              "name": "Recursive Self-Improvement",
+              "description": "AI improves its own improvement mechanisms",
+              "complexity": "extreme",
+              "dependencies": ["evolution_controller", "meta_optimizer"]
+            },
+            {
+              "id": "knowledge_distillation",
+              "name": "Cross-Model Distillation",
+              "description": "Transfer knowledge between model versions",
+              "complexity": "medium",
+              "dependencies": ["generative_replay"]
+            }
+          ],
+          "target_metrics": {
+            "autonomous_improvement_rate": ">2% per week",
+            "safety_violation_rate": "<0.001%",
+            "rollback_success_rate": ">99.9%",
+            "recursive_improvement_depth": 3
+          }
+        },
+        "milestones": [
+          {
+            "week": 38,
+            "deliverable": "Evolution controller",
+            "success_criteria": "Automated selection of best improvement strategy"
+          },
+          {
+            "week": 40,
+            "deliverable": "Safety monitoring system",
+            "success_criteria": "Detect and prevent all known unsafe patterns"
+          },
+          {
+            "week": 42,
+            "deliverable": "Automatic rollback",
+            "success_criteria": "Successful rollback within 1 minute of detection"
+          },
+          {
+            "week": 44,
+            "deliverable": "Recursive improvement",
+            "success_criteria": "System improves its own meta-learner"
+          },
+          {
+            "week": 48,
+            "deliverable": "Phase 4 completion",
+            "success_criteria": "Fully autonomous operation with human oversight"
+          }
+        ]
+      }
+    ],
+    
+    "capability_tree": {
+      "foundation": {
+        "meta_learning": {
+          "maml": {},
+          "hypernetworks": {},
+          "self_referential": {}
+        },
+        "continual_learning": {
+          "ewc": {},
+          "progressive_networks": {},
+          "generative_replay": {}
+        },
+        "safety": {
+          "code_sandbox": {},
+          "monitoring": {}
+        }
+      },
+      "architecture": {
+        "nas": {
+          "darts": {},
+          "evolutionary_search": {}
+        },
+        "dynamic_expansion": {
+          "width_expansion": {},
+          "depth_expansion": {},
+          "modular_addition": {}
+        }
+      },
+      "code_generation": {
+        "program_synthesis": {},
+        "self_modification": {},
+        "neural_turing_machines": {}
+      },
+      "adversarial_training": {
+        "self_play": {},
+        "debate": {},
+        "red_teaming": {}
+      },
+      "orchestration": {
+        "evolution_controller": {},
+        "meta_optimizer": {},
+        "recursive_improvement": {}
+      }
+    },
+    
+    "risk_mitigation": {
+      "safety_constraints": [
+        {
+          "id": "param_limit",
+          "description": "Maximum parameter count",
+          "limit": "100B",
+          "action": "Halt expansion"
+        },
+        {
+          "id": "latency_limit",
+          "description": "Maximum inference latency",
+          "limit": "100ms",
+          "action": "Reject architecture"
+        },
+        {
+          "id": "safety_score",
+          "description": "Minimum safety evaluation score",
+          "limit": "0.99",
+          "action": "Rollback modification"
+        },
+        {
+          "id": "improvement_rate",
+          "description": "Maximum self-improvement velocity",
+          "limit": "10% per week",
+          "action": "Throttle evolution"
+        }
+      ],
+      "oversight_mechanisms": [
+        "Human approval for major architectural changes",
+        "Continuous monitoring of behavioral metrics",
+        "Automated interpretability analysis",
+        "Regular safety audits",
+        "Capability containment protocols"
+      ]
+    },
+    
+    "success_criteria": {
+      "phase_1": {
+        "demonstrated_capabilities": [
+          "5-shot adaptation to new tasks",
+          "Catastrophic forgetting <10%",
+          "Safe code execution environment"
+        ],
+        "exit_criteria": "All core components functional and tested"
+      },
+      "phase_2": {
+        "demonstrated_capabilities": [
+          "Automated architecture optimization",
+          "Stable self-weight-modification",
+          "Valid code generation >80%"
+        ],
+        "exit_criteria": "Self-modification improves baseline performance"
+      },
+      "phase_3": {
+        "demonstrated_capabilities": [
+          "Self-play based improvement",
+          "Debate-based accuracy enhancement",
+          "Learned optimization strategies"
+        ],
+        "exit_criteria": "Adversarial training measurably improves robustness"
+      },
+      "phase_4": {
+        "demonstrated_capabilities": [
+          "Fully automated evolution loops",
+          "Zero safety violations in test period",
+          "Recursive self-improvement of meta-learner"
+        ],
+        "exit_criteria": "System demonstrates sustained autonomous improvement with safety guarantees"
+      }
+    },
+    
+    "resource_requirements": {
+      "compute": {
+        "phase_1": "8x A100 GPUs",
+        "phase_2": "32x A100 GPUs",
+        "phase_3": "128x A100 GPUs",
+        "phase_4": "512x A100 GPUs"
+      },
+      "storage": {
+        "phase_1": "10TB",
+        "phase_2": "50TB",
+        "phase_3": "200TB",
+        "phase_4": "1PB"
+      },
+      "personnel": {
+        "ml_researchers": 4,
+        "engineers": 3,
+        "safety_researchers": 2,
+        "infrastructure": 2
+      }
+    },
+    
+    "dependencies": {
+      "external": [
+        "PyTorch 2.0+",
+        "Ray for distributed training",
+        "Weights & Biases for logging",
+        "Kubernetes for orchestration"
+      ],
+      "internal": [
+        "Safety evaluation framework",
+        "Model versioning system",
+        "Experiment tracking database",
+        "Code generation validation suite"
+      ]
+    },
+    
+    "metrics_dashboard": {
+      "performance_metrics": [
+        "average_accuracy_across_tasks",
+        "backward_transfer_efficiency",
+        "forward_transfer_efficiency",
+        "adaptation_speed_steps"
+      ],
+      "safety_metrics": [
+        "safety_violation_count",
+        "rollback_frequency",
+        "interpretability_score",
+        "behavioral_anomaly_rate"
+      ],
+      "efficiency_metrics": [
+        "compute_utilization",
+        "memory_efficiency",
+        "training_throughput",
+        "inference_latency"
+      ],
+      "improvement_metrics": [
+        "architecture_search_improvement",
+        "self_modification_stability",
+        "code_generation_pass_rate",
+        "meta_learning_efficiency"
+      ]
+    }
+  }
+}
