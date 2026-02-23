@@ -1,5 +1,26 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.6';
 
+interface DiagnosticsResult {
+  timestamp: string;
+  user: string;
+  checks: Array<{ name: string; status: string; error?: string }>;
+  issues: Array<{ severity: string; type: string; entity?: string; message: string }>;
+  suggestions: Array<{ type: string; priority?: string; message: string }>;
+  stats: {
+    entities?: Record<string, number>;
+    aiWorking?: boolean;
+    agents?: Record<string, string>;
+  };
+  summary?: {
+    health: string;
+    score: number;
+    passedChecks: number;
+    totalChecks: number;
+    criticalIssues: number;
+    totalSuggestions: number;
+  };
+}
+
 Deno.serve(async (req) => {
   try {
     const base44 = createClientFromRequest(req);
@@ -9,7 +30,7 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const diagnostics = {
+    const diagnostics: DiagnosticsResult = {
       timestamp: new Date().toISOString(),
       user: user.email,
       checks: [],
@@ -27,12 +48,12 @@ Deno.serve(async (req) => {
         'Prediction', 'Workflow', 'WorkflowExecution', 'FeatureFlag'
       ];
       
-      const entityStats = {};
+      const entityStats: Record<string, number> = {};
       for (const entityName of entities) {
         try {
           const records = await base44.asServiceRole.entities[entityName].list();
           entityStats[entityName] = records.length;
-        } catch (e) {
+        } catch (e: any) {
           diagnostics.issues.push({
             severity: 'warning',
             type: 'entity_access',
@@ -44,7 +65,7 @@ Deno.serve(async (req) => {
       
       diagnostics.stats.entities = entityStats;
       diagnostics.checks.push({ name: 'Entity Access', status: 'passed' });
-    } catch (error) {
+    } catch (error: any) {
       diagnostics.checks.push({ name: 'Entity Access', status: 'failed', error: error.message });
       diagnostics.issues.push({
         severity: 'critical',
@@ -60,7 +81,7 @@ Deno.serve(async (req) => {
       });
       diagnostics.checks.push({ name: 'AI Integration', status: 'passed' });
       diagnostics.stats.aiWorking = true;
-    } catch (error) {
+    } catch (error: any) {
       diagnostics.checks.push({ name: 'AI Integration', status: 'failed', error: error.message });
       diagnostics.issues.push({
         severity: 'critical',
@@ -78,7 +99,7 @@ Deno.serve(async (req) => {
         try {
           const whatsappUrl = base44.agents.getWhatsAppConnectURL(agentName);
           diagnostics.stats.agents[agentName] = 'configured';
-        } catch (e) {
+        } catch (e: any) {
           diagnostics.stats.agents[agentName] = 'missing';
           diagnostics.suggestions.push({
             type: 'agent_setup',
@@ -87,7 +108,7 @@ Deno.serve(async (req) => {
         }
       }
       diagnostics.checks.push({ name: 'Agents', status: 'passed' });
-    } catch (error) {
+    } catch (error: any) {
       diagnostics.checks.push({ name: 'Agents', status: 'failed', error: error.message });
     }
 
@@ -166,7 +187,7 @@ Deno.serve(async (req) => {
     };
 
     return Response.json(diagnostics);
-  } catch (error) {
+  } catch (error: any) {
     return Response.json({ 
       error: error.message,
       stack: error.stack 

@@ -47,8 +47,8 @@ Deno.serve(async (req) => {
     const totalExecutions = logsInRange.length;
     const successfulExecutions = logsInRange.filter(l => l.status === 'success').length;
     const failedExecutions = logsInRange.filter(l => l.status === 'failed').length;
-    const successRate = totalExecutions > 0 ? (successfulExecutions / totalExecutions * 100).toFixed(1) : 0;
-    const errorRate = totalExecutions > 0 ? (failedExecutions / totalExecutions * 100).toFixed(1) : 0;
+    const successRate = totalExecutions > 0 ? (successfulExecutions / totalExecutions * 100).toFixed(1) : '0';
+    const errorRate = totalExecutions > 0 ? (failedExecutions / totalExecutions * 100).toFixed(1) : '0';
     
     const avgResponseTime = totalExecutions > 0 
       ? Math.round(logsInRange.reduce((sum, l) => sum + (l.duration_ms || 0), 0) / totalExecutions)
@@ -66,7 +66,7 @@ Deno.serve(async (req) => {
         totalCalls: intLogs.length,
         successRate: intLogs.length > 0 
           ? (intLogs.filter(l => l.status === 'success').length / intLogs.length * 100).toFixed(1)
-          : 0,
+          : '0',
         avgResponseTime: intLogs.length > 0
           ? Math.round(intLogs.reduce((sum, l) => sum + (l.duration_ms || 0), 0) / intLogs.length)
           : 0
@@ -76,8 +76,8 @@ Deno.serve(async (req) => {
     // Error breakdown
     const errorBreakdown = logsInRange
       .filter(l => l.status === 'failed')
-      .reduce((acc, log) => {
-        const errorType = log.error_message?.split(':')[0] || 'Unknown';
+      .reduce((acc: Record<string, number>, log) => {
+        const errorType = (log.error_message as string)?.split(':')[0] || 'Unknown';
         acc[errorType] = (acc[errorType] || 0) + 1;
         return acc;
       }, {});
@@ -100,7 +100,7 @@ Deno.serve(async (req) => {
         end: now.toISOString()
       }
     }, { status: 200 });
-  } catch (error) {
+  } catch (error: any) {
     console.error('Aggregate analytics error:', error);
     return Response.json({ error: error.message }, { status: 500 });
   }
