@@ -1,0 +1,38 @@
+[
+  {
+    "id": "rw-bugfix-auth-01",
+    "repo": "example/auth-lite",
+    "taskType": "bug-fix",
+    "prompt": "Fix the auth fallback null-check bug without changing API shape.",
+    "expected": {
+      "compilationSuccess": true,
+      "testPassRate": 1,
+      "diffCorrectness": 0.9,
+      "patchMinimality": 0.85
+    }
+  },
+  {
+    "id": "rw-tests-cache-01",
+    "repo": "example/cachekit",
+    "taskType": "test-generation",
+    "prompt": "Generate deterministic tests for cache eviction edge cases.",
+    "expected": {
+      "compilationSuccess": true,
+      "testPassRate": 0.95,
+      "diffCorrectness": 0.88,
+      "patchMinimality": 0.82
+    }
+  },
+  {
+    "id": "rw-refactor-parser-01",
+    "repo": "example/parser-mini",
+    "taskType": "refactoring",
+    "prompt": "Refactor parser branch selection to reduce complexity without changing behavior.",
+    "expected": {
+      "compilationSuccess": true,
+      "testPassRate": 0.97,
+      "diffCorrectness": 0.9,
+      "patchMinimality": 0.8
+    }
+  }
+]
