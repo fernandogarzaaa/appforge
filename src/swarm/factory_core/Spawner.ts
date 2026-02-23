@@ -68,6 +68,52 @@ export class Spawner {
             ]
         },
         {
+            id: 'ml_intelligence',
+            name: 'ML Intelligence Swarm',
+            description: 'Builds model-assisted workflows and data intelligence pipelines.',
+            keywords: ['ai', 'model', 'ml', 'rag', 'embedding', 'reasoning', 'inference'],
+            agents: [
+                {
+                    role: 'ModelArchitect',
+                    description: 'Designs model topology and serving boundaries.',
+                    directives: ['Define model capability envelope', 'Constrain unsafe generation paths']
+                },
+                {
+                    role: 'DataCurator',
+                    description: 'Prepares and validates training/retrieval data.',
+                    directives: ['Enforce data provenance', 'Reduce hallucination-prone context']
+                },
+                {
+                    role: 'EvaluationEngineer',
+                    description: 'Measures quality and regression behavior.',
+                    directives: ['Track benchmark drift', 'Gate releases with eval thresholds']
+                }
+            ]
+        },
+        {
+            id: 'growth_revenue',
+            name: 'Growth & Revenue Swarm',
+            description: 'Optimizes product growth loops, retention and monetization.',
+            keywords: ['growth', 'revenue', 'sales', 'funnel', 'retention', 'conversion', 'pricing'],
+            agents: [
+                {
+                    role: 'GrowthStrategist',
+                    description: 'Designs high-velocity experiment loops.',
+                    directives: ['Prioritize high-impact hypotheses', 'Optimize activation and retention loops']
+                },
+                {
+                    role: 'LifecycleOperator',
+                    description: 'Builds CRM and lifecycle automation logic.',
+                    directives: ['Segment by behavior signals', 'Automate re-engagement workflows']
+                },
+                {
+                    role: 'RevenueAnalyst',
+                    description: 'Aligns pricing, packaging and margin outcomes.',
+                    directives: ['Model unit economics', 'Guard against churn-inducing offers']
+                }
+            ]
+        },
+        {
             id: 'product_discovery',
             name: 'Product Discovery Swarm',
             description: 'Validates customer demand and product scope before implementation.',
@@ -115,6 +161,29 @@ export class Spawner {
                     role: 'DataEngineer',
                     description: 'Owns data models and migration quality.',
                     directives: ['Protect schema compatibility', 'Minimize query cost']
+                }
+            ]
+        },
+        {
+            id: 'automation_fabric',
+            name: 'Automation Fabric Swarm',
+            description: 'Designs event-driven automations and orchestration pathways.',
+            keywords: ['workflow', 'automation', 'trigger', 'pipeline', 'queue', 'orchestrate'],
+            agents: [
+                {
+                    role: 'WorkflowDesigner',
+                    description: 'Designs robust automation graph topology.',
+                    directives: ['Prevent cycle deadlocks', 'Define idempotent step semantics']
+                },
+                {
+                    role: 'IntegrationSpecialist',
+                    description: 'Implements secure third-party integrations.',
+                    directives: ['Harden webhook validation', 'Apply least-privilege credentials']
+                },
+                {
+                    role: 'ReliabilityEngineer',
+                    description: 'Protects retries, backoff and failure handling.',
+                    directives: ['Bound retry storms', 'Track runbook-quality error context']
                 }
             ]
         },
@@ -176,6 +245,14 @@ export class Spawner {
         }
     ];
 
+    private static readonly CORE_CYCLE_IDS = [
+        'product_discovery',
+        'implementation_forge',
+        'automation_fabric',
+        'verification_guard',
+        'release_ops'
+    ];
+
     /**
      * spawnSwarm:
      * Backward-compatible method that returns a flattened list of agents.
@@ -204,12 +281,9 @@ export class Spawner {
         const normalizedIntent = intent.toLowerCase();
         broadcastLog('SPAWNER', `Analyzing Intent: "${intent}" to assemble swarm cycle...`, 'INFO');
 
-        const domainSwarm = this.SWARM_LIBRARY.find((template) =>
-            template.keywords.some(keyword => normalizedIntent.includes(keyword))
-        ) ?? this.getDefaultDomainSwarm();
+        const domainSwarm = this.selectBestDomainSwarm(normalizedIntent) ?? this.getDefaultDomainSwarm();
 
-        const coreCycleIds = ['product_discovery', 'implementation_forge', 'verification_guard', 'release_ops'];
-        const coreSwarms = coreCycleIds
+        const coreSwarms = this.CORE_CYCLE_IDS
             .filter(id => id !== domainSwarm.id)
             .map(id => this.requireSwarm(id));
 
@@ -230,6 +304,29 @@ export class Spawner {
             description: `Ephemeral Fractal Agent: ${role}`,
             directives: ['Solve Micro-Task', 'Report back to FractalManager']
         };
+    }
+
+    private static selectBestDomainSwarm(intent: string): SwarmTemplate | null {
+        const excluded = new Set(this.CORE_CYCLE_IDS);
+        let bestMatch: SwarmTemplate | null = null;
+        let bestScore = 0;
+
+        for (const template of this.SWARM_LIBRARY) {
+            if (excluded.has(template.id)) {
+                continue;
+            }
+
+            const score = template.keywords.reduce((acc, keyword) => (
+                intent.includes(keyword) ? acc + 1 : acc
+            ), 0);
+
+            if (score > bestScore) {
+                bestScore = score;
+                bestMatch = template;
+            }
+        }
+
+        return bestMatch;
     }
 
     private static getDefaultDomainSwarm(): SwarmTemplate {
