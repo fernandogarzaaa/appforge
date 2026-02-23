@@ -1,0 +1,91 @@
+name: Evolution Benchmark Gate
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+      - master
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  benchmark-gate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run evolution tests
+        run: npx vitest run tests/evolution
+
+      - name: Run destructive mutation guard
+        run: |
+          ! rg -n "rm -rf /|execSync\(|fs\.readFileSync\(" src/swarm/evolution tests/evolution || (echo "Blocked mutation pattern detected" && exit 1)
+
+      - name: Evaluate benchmark score gate
+        id: score_gate
+        run: |
+          npx tsx --eval "import fs from 'fs/promises'; import { executeEvolutionCycle } from './src/swarm/evolution/evolutionCoordinator.ts'; const out = await executeEvolutionCycle({ suitePath: 'benchmarks/evolution/benchmark_suite.json', baseline: { finalScore: 0.80, benchmarkAggregate: { 'SWE-Bench': 0.80, HumanEval: 0.80, MMLU: 0.80, ARC: 0.80 } }, mutationProposal: { touchedFiles: ['src/swarm/evolution/evolutionCoordinator.ts'], generatedCode: 'safe_update=true;' } }); await fs.writeFile('benchmark_gate_result.json', JSON.stringify(out, null, 2)); console.log(JSON.stringify(out));"
+          should_open_pr=$(node -e "const fs=require('fs'); const out=JSON.parse(fs.readFileSync('benchmark_gate_result.json','utf8')); process.stdout.write(String(out.shouldOpenPr));")
+          non_regression=$(node -e "const fs=require('fs'); const out=JSON.parse(fs.readFileSync('benchmark_gate_result.json','utf8')); process.stdout.write(String(out.nonRegressionPassed));")
+          min_delta_met=$(node -e "const fs=require('fs'); const out=JSON.parse(fs.readFileSync('benchmark_gate_result.json','utf8')); process.stdout.write(String(out.minDeltaMet));")
+          plateaued=$(node -e "const fs=require('fs'); const out=JSON.parse(fs.readFileSync('benchmark_gate_result.json','utf8')); process.stdout.write(String(out.plateaued));")
+          selected_strategy=$(node -e "const fs=require('fs'); const out=JSON.parse(fs.readFileSync('benchmark_gate_result.json','utf8')); process.stdout.write(String(out.selectedStrategyId||'unknown'));")
+          best_genome=$(node -e "const fs=require('fs'); const out=JSON.parse(fs.readFileSync('benchmark_gate_result.json','utf8')); process.stdout.write(JSON.stringify(out.bestGenome||{}));")
+          regression_failures=$(node -e "const fs=require('fs'); const out=JSON.parse(fs.readFileSync('benchmark_gate_result.json','utf8')); process.stdout.write((out.regressionFailures||[]).join(' | '));")
+          frontier_changes=$(node -e "const fs=require('fs'); const out=JSON.parse(fs.readFileSync('benchmark_gate_result.json','utf8')); process.stdout.write(String(out.paretoSummary?.frontierChangesPerCycle ?? 0));")
+          non_dominated=$(node -e "const fs=require('fs'); const out=JSON.parse(fs.readFileSync('benchmark_gate_result.json','utf8')); process.stdout.write((out.paretoSummary?.nonDominatedGenomes||[]).join(','));")
+
+          echo "should_open_pr=$should_open_pr" >> "$GITHUB_OUTPUT"
+          echo "non_regression=$non_regression" >> "$GITHUB_OUTPUT"
+          echo "min_delta_met=$min_delta_met" >> "$GITHUB_OUTPUT"
+          echo "plateaued=$plateaued" >> "$GITHUB_OUTPUT"
+          echo "::notice title=Strategy selection::Selected strategy=$selected_strategy"
+          echo "::notice title=Best genome::$best_genome"
+          echo "::notice title=Pareto frontier::changes=$frontier_changes nonDominated=$non_dominated"
+
+          if [ "$non_regression" != "true" ]; then
+            echo "::error title=Non-regression gate failed::$regression_failures"
+            exit 1
+          fi
+
+          if [ "$min_delta_met" != "true" ]; then
+            echo "::error title=Min delta gate failed::Relative improvement below threshold"
+            exit 1
+          fi
+
+          if [ "$plateaued" = "true" ]; then
+            echo "::warning title=Plateau detected::No-improvement streak reached escalation threshold"
+          fi
+
+          if [ "$frontier_changes" = "0" ]; then
+            echo "::error title=Pareto gate failed::No Pareto frontier improvement detected"
+            exit 1
+          fi
+
+      - name: Create pull request when score improves
+        if: steps.score_gate.outputs.should_open_pr == 'true'
+        uses: peter-evans/create-pull-request@v6
+        with:
+          commit-message: "chore: evolve benchmark-scored swarm mutation"
+          title: "chore: benchmark-gated evolution improvement"
+          body: |
+            This PR was automatically generated because the evolution benchmark gate reported an intelligence score improvement.
+
+            - Includes benchmark + guardrail validation
+            - Blocks unsafe mutation patterns
+            - Enforces non-regression and minimum delta constraints
+            - Opens PR only when `shouldOpenPr=true`
+          branch: ci/evolution-benchmark-gate
