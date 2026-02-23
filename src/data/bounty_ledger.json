@@ -8,46 +8,46 @@
       "priority": 0.6,
       "reward": 60,
       "category": "architect",
-      "id": "BTY-1771866832961-573",
+      "id": "BTY-1771874416646-629",
       "status": "backlog",
-      "createdAt": "2026-02-23T17:13:52.961Z"
+      "createdAt": "2026-02-23T19:20:16.647Z"
     },
     {
       "description": "[Neural Accelerator] EXPERT_ARCHITECT: Refactor core (Coherence: 1.00)",
       "priority": 0.5,
       "reward": 50,
       "category": "architect",
-      "id": "BTY-1771866832998-174",
+      "id": "BTY-1771874416684-413",
       "status": "backlog",
-      "createdAt": "2026-02-23T17:13:52.998Z"
+      "createdAt": "2026-02-23T19:20:16.684Z"
     },
     {
       "description": "[Neural Accelerator] EXPERT_ARCHITECT: Refactor core (Coherence: 1.00)",
       "priority": 0.85,
       "reward": 85,
       "category": "architect",
-      "id": "BTY-1771866833040-797",
+      "id": "BTY-1771874416719-89",
       "status": "completed",
-      "createdAt": "2026-02-23T17:13:53.040Z",
-      "completedAt": "2026-02-23T17:13:53.166Z"
+      "createdAt": "2026-02-23T19:20:16.719Z",
+      "completedAt": "2026-02-23T19:20:16.837Z"
     },
     {
       "description": "[Neural Accelerator] EXPERT_ARCHITECT: Refactor core (Coherence: 1.00)",
-      "priority": 0.15782829545713034,
+      "priority": 0.15753651917825412,
       "reward": 16,
       "category": "architect",
-      "id": "BTY-1771866833078-594",
+      "id": "BTY-1771874416758-914",
       "status": "backlog",
-      "createdAt": "2026-02-23T17:13:53.078Z"
+      "createdAt": "2026-02-23T19:20:16.758Z"
     },
     {
       "description": "[Neural Accelerator] EXPERT_ARCHITECT: Refactor core (Coherence: 1.00)",
-      "priority": 0.34,
-      "reward": 34,
+      "priority": 0.28875,
+      "reward": 29,
       "category": "architect",
-      "id": "BTY-1771866833117-930",
+      "id": "BTY-1771874416794-824",
       "status": "backlog",
-      "createdAt": "2026-02-23T17:13:53.117Z"
+      "createdAt": "2026-02-23T19:20:16.794Z"
     }
   ]
 }
