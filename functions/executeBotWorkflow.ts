@@ -1,5 +1,34 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.6';
 
+interface ExecutionContext {
+  botId: string;
+  botName: string;
+  startTime: string;
+  variables: Record<string, any>;
+  logs: Array<{
+    nodeId: string;
+    nodeName: string;
+    timestamp: string;
+    status: string;
+    message: string;
+  }>;
+  results: any[];
+}
+
+interface NodeResult {
+  success: boolean;
+  message?: string;
+  error?: string;
+  output?: any;
+  conditionMet?: boolean;
+}
+
+interface WorkflowResult {
+  success: boolean;
+  context: ExecutionContext;
+  error?: string;
+}
+
 /**
  * Execute a bot's workflow
  * Processes nodes, handles conditions, loops, and parallel execution
@@ -20,7 +49,7 @@ Deno.serve(async (req) => {
     }
 
     // Fetch bot configuration
-    let bot;
+    let bot: any;
     try {
       bot = await base44.entities.Automation.get(botId);
     } catch {
@@ -28,7 +57,7 @@ Deno.serve(async (req) => {
     }
 
     // Create execution context
-    const executionContext = {
+    const executionContext: ExecutionContext = {
       botId,
       botName: bot.name,
       startTime: new Date().toISOString(),
@@ -39,7 +68,7 @@ Deno.serve(async (req) => {
 
     // Execute workflow nodes
     const nodes = bot.nodes || [];
-    let executionResult = { success: true, context: executionContext };
+    let executionResult: WorkflowResult = { success: true, context: executionContext };
 
     for (let i = 0; i < nodes.length; i++) {
       const node = nodes[i];
@@ -50,7 +79,7 @@ Deno.serve(async (req) => {
         nodeName: node.name,
         timestamp: new Date().toISOString(),
         status: nodeResult.success ? 'completed' : 'failed',
-        message: nodeResult.message
+        message: nodeResult.message || ''
       });
 
       executionContext.results.push(nodeResult);
@@ -62,7 +91,7 @@ Deno.serve(async (req) => {
     }
 
     // Store execution log
-    const executionTime = new Date() - new Date(executionContext.startTime);
+    const executionTime = new Date().getTime() - new Date(executionContext.startTime).getTime();
     try {
       await base44.entities.WorkflowExecution.create({
         bot_id: botId,
@@ -72,7 +101,7 @@ Deno.serve(async (req) => {
         results: executionContext.results,
         logs: executionContext.logs
       });
-    } catch (logError) {
+    } catch (logError: any) {
       console.error(`Failed to log execution: ${logError.message}`);
     }
 
@@ -83,9 +112,9 @@ Deno.serve(async (req) => {
       logs: executionContext.logs,
       results: executionContext.results
     });
-  } catch (error) {
+  } catch (error: any) {
     return Response.json(
-      { error: error.message },
+      { success: false, error: error.message, context: { botId: '', botName: '', startTime: new Date().toISOString(), variables: {}, logs: [], results: [] } },
       { status: 500 }
     );
   }
@@ -94,7 +123,7 @@ Deno.serve(async (req) => {
 /**
  * Execute a single workflow node
  */
-async function executeNode(node, context, base44) {
+async function executeNode(node: any, context: ExecutionContext, base44: any): Promise<NodeResult> {
   try {
     switch (node.type) {
       case 'action':
@@ -110,7 +139,7 @@ async function executeNode(node, context, base44) {
       default:
         return { success: false, error: `Unknown node type: ${node.type}` };
     }
-  } catch (error) {
+  } catch (error: any) {
     return { success: false, error: error.message };
   }
 }
@@ -118,7 +147,7 @@ async function executeNode(node, context, base44) {
 /**
  * Execute action node (API call, email, database query, etc.)
  */
-async function executeActionNode(node, context, base44) {
+async function executeActionNode(node: any, context: ExecutionContext, base44: any): Promise<NodeResult> {
   const actionType = node.config?.actionType || 'api_call';
   const details = node.config?.details || '';
 
@@ -148,7 +177,7 @@ async function executeActionNode(node, context, base44) {
       message: `${actionType} executed successfully`,
       output: result
     };
-  } catch (error) {
+  } catch (error: any) {
     return { success: false, error: error.message };
   }
 }
@@ -156,7 +185,7 @@ async function executeActionNode(node, context, base44) {
 /**
  * Execute condition node (if/else branching)
  */
-async function executeConditionNode(node, context) {
+async function executeConditionNode(node: any, context: ExecutionContext): Promise<NodeResult> {
   try {
     const condition = node.config?.condition || '';
     const result = evaluateCondition(condition, context.variables);
@@ -167,7 +196,7 @@ async function executeConditionNode(node, context) {
       conditionMet: result,
       output: { result }
     };
-  } catch (error) {
+  } catch (error: any) {
     return { success: false, error: `Condition evaluation failed: ${error.message}` };
   }
 }
@@ -175,7 +204,7 @@ async function executeConditionNode(node, context) {
 /**
  * Execute loop node
  */
-async function executeLoopNode(node, context, base44) {
+async function executeLoopNode(node: any, context: ExecutionContext, base44: any): Promise<NodeResult> {
   try {
     const loopVar = node.config?.loopVar || '';
     const iterator = node.config?.iterator || 'item';
@@ -200,7 +229,7 @@ async function executeLoopNode(node, context, base44) {
       message: `Loop executed ${results.length} times`,
       output: { iterations: results.length }
     };
-  } catch (error) {
+  } catch (error: any) {
     return { success: false, error: error.message };
   }
 }
@@ -208,11 +237,11 @@ async function executeLoopNode(node, context, base44) {
 /**
  * Execute parallel node (concurrent execution)
  */
-async function executeParallelNode(node, context, base44) {
+async function executeParallelNode(node: any, context: ExecutionContext, base44: any): Promise<NodeResult> {
   try {
-    const branches = (node.config?.branches || '').split(',').map(b => b.trim());
+    const branches = (node.config?.branches || '').split(',').map((b: string) => b.trim());
 
-    const promises = branches.map(async (branch) => {
+    const promises = branches.map(async (branch: string) => {
       // Execute branch asynchronously
       return { branch, status: 'completed' };
     });
@@ -225,7 +254,7 @@ async function executeParallelNode(node, context, base44) {
       message: `Executed ${results.length} branches in parallel`,
       output: { branches: results.length }
     };
-  } catch (error) {
+  } catch (error: any) {
     return { success: false, error: error.message };
   }
 }
@@ -233,7 +262,7 @@ async function executeParallelNode(node, context, base44) {
 /**
  * Make an API call
  */
-async function makeApiCall(details, variables) {
+async function makeApiCall(details: string, variables: Record<string, any>) {
   // Parse API call details (URL, method, headers, body)
   const apiConfig = parseApiConfig(details, variables);
   
@@ -253,7 +282,7 @@ async function makeApiCall(details, variables) {
 /**
  * Send email
  */
-async function sendEmail(details, variables, base44) {
+async function sendEmail(details: string, variables: Record<string, any>, base44: any) {
    // Parse email details (to, subject, body)
    const emailConfig = parseEmailConfig(details, variables);
 
@@ -274,7 +303,7 @@ async function sendEmail(details, variables, base44) {
 /**
  * Execute database query
  */
-async function executeDatabaseQuery(details, variables, base44) {
+async function executeDatabaseQuery(details: string, variables: Record<string, any>, base44: any) {
   // Parse query details
   const query = interpolateVariables(details, variables);
   
@@ -289,7 +318,7 @@ async function executeDatabaseQuery(details, variables, base44) {
 /**
  * Create a task/record
  */
-async function createTask(details, variables, base44) {
+async function createTask(details: string, variables: Record<string, any>, base44: any) {
   const taskConfig = parseTaskConfig(details, variables);
   
   // Create task in database
@@ -306,7 +335,7 @@ async function createTask(details, variables, base44) {
 /**
  * Evaluate a condition expression
  */
-function evaluateCondition(condition, variables) {
+function evaluateCondition(condition: string, variables: Record<string, any>): boolean {
   // Simple condition evaluator
   // Replace variables in condition
   let expr = condition;
@@ -326,7 +355,7 @@ function evaluateCondition(condition, variables) {
 /**
  * Interpolate variables in a string
  */
-function interpolateVariables(text, variables) {
+function interpolateVariables(text: string, variables: Record<string, any>): string {
   let result = text;
   
   for (const [key, value] of Object.entries(variables)) {
@@ -340,7 +369,7 @@ function interpolateVariables(text, variables) {
 /**
  * Helper functions to parse configuration
  */
-function parseApiConfig(details, variables) {
+function parseApiConfig(details: string, variables: Record<string, any>) {
   try {
     return JSON.parse(interpolateVariables(details, variables));
   } catch {
@@ -348,7 +377,7 @@ function parseApiConfig(details, variables) {
   }
 }
 
-function parseEmailConfig(details, variables) {
+function parseEmailConfig(details: string, variables: Record<string, any>) {
   try {
     return JSON.parse(interpolateVariables(details, variables));
   } catch {
@@ -356,7 +385,7 @@ function parseEmailConfig(details, variables) {
   }
 }
 
-function parseTaskConfig(details, variables) {
+function parseTaskConfig(details: string, variables: Record<string, any>) {
   try {
     return JSON.parse(interpolateVariables(details, variables));
   } catch {

@@ -19,8 +19,9 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 export default function Profile() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
   const [profileData, setProfileData] = useState({
-    username: '',
+    full_name: '',
     email: ''
   });
   const { user: backendUser, isAuthenticated } = useBackendAuth();

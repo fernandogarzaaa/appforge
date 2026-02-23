@@ -9,7 +9,7 @@
 // Example 1: AI Assistant with Holographic Consensus
 // ============================================================================
 
-import { executeHolographicConsensus, AIRouter } from '@/lib/aiRouter';
+import { executeHolographicConsensus } from '@/lib/aiRouter';
 
 export async function askAIWithConsensus(
     userQuery: string,
@@ -443,17 +443,3 @@ function extractIssues(response: string): string[] {
         .filter(line => line.trim().startsWith('-') || line.trim().startsWith('•'))
         .map(line => line.replace(/^[-•]\s*/, '').trim());
 }
-
-// ============================================================================
-// Export
-// ============================================================================
-
-export {
-    askAIWithConsensus,
-    validateStatementWithConsensus,
-    generateBestContent,
-    reviewCodeWithConsensus,
-    validateAPIResponse,
-    HolographicStreamingConsensus,
-    processQueriesWithConsensus,
-};

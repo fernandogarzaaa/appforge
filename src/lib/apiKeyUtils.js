@@ -58,7 +58,7 @@ export function formatDate(date) {
 export function getKeyAge(createdDate) {
   const now = new Date();
   const created = new Date(createdDate);
-  const diffTime = Math.abs(now - created);
+  const diffTime = Math.abs(now.getTime() - created.getTime());
   const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
   return Math.max(1, diffDays);
 }

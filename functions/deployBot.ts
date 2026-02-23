@@ -1,5 +1,17 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.6';
 
+interface TriggerSetupResult {
+  success: boolean;
+  message?: string;
+  error?: string;
+  webhookUrl?: string;
+  methods?: string[];
+  requiresAuth?: boolean;
+  automation?: any;
+  emailAddress?: string;
+  triggerOn?: string;
+}
+
 /**
  * Deploy/activate a bot
  * Sets up triggers and validates configuration
@@ -29,15 +41,15 @@ Deno.serve(async (req) => {
     const validation = await base44.functions.invoke('validateBotConfig', bot);
     if (!validation.valid) {
       return Response.json(
-        { error: 'Invalid bot configuration', details: validation.errors },
+        { success: false, error: 'Invalid bot configuration', details: validation.errors },
         { status: 400 }
       );
     }
 
     // Set up trigger-specific infrastructure
-    let triggerSetup = { success: true };
+    let triggerSetup: TriggerSetupResult = { success: true };
 
-    switch (bot.trigger?.type) {
+    switch ((bot as any).trigger?.type) {
       case 'schedule':
         triggerSetup = await setupScheduleTrigger(bot, base44);
         break;
@@ -57,7 +69,7 @@ Deno.serve(async (req) => {
 
     if (!triggerSetup.success) {
       return Response.json(
-        { error: 'Failed to set up trigger', details: triggerSetup.error },
+        { success: false, error: 'Failed to set up trigger', details: triggerSetup.error },
         { status: 500 }
       );
     }
@@ -74,14 +86,14 @@ Deno.serve(async (req) => {
       botId,
       botName: bot.name,
       status: 'active',
-      triggerType: bot.trigger?.type,
+      triggerType: (bot as any).trigger?.type,
       deploymentDetails: triggerSetup,
       webhookUrl: triggerSetup.webhookUrl || null
     });
 
-  } catch (error) {
+  } catch (error: any) {
     return Response.json(
-      { error: error.message },
+      { success: false, error: error.message },
       { status: 500 }
     );
   }
@@ -90,7 +102,7 @@ Deno.serve(async (req) => {
 /**
  * Set up scheduled trigger
  */
-async function setupScheduleTrigger(bot, base44) {
+async function setupScheduleTrigger(bot: any, base44: any): Promise<TriggerSetupResult> {
   try {
     const config = bot.trigger?.config || {};
     
@@ -109,7 +121,7 @@ async function setupScheduleTrigger(bot, base44) {
       message: `Schedule trigger set for ${config.frequency}`,
       automation
     };
-  } catch (error) {
+  } catch (error: any) {
     return { success: false, error: error.message };
   }
 }
@@ -117,7 +129,7 @@ async function setupScheduleTrigger(bot, base44) {
 /**
  * Set up webhook trigger
  */
-async function setupWebhookTrigger(bot, base44) {
+async function setupWebhookTrigger(bot: any, base44: any): Promise<TriggerSetupResult> {
   try {
     const webhookUrl = `${Deno.env.get('BASE44_API_URL')}/webhooks/bot?bot_id=${bot.id}`;
 
@@ -128,7 +140,7 @@ async function setupWebhookTrigger(bot, base44) {
       methods: bot.trigger?.config?.methods || ['POST'],
       requiresAuth: bot.trigger?.config?.requireApiKey === true
     };
-  } catch (error) {
+  } catch (error: any) {
     return { success: false, error: error.message };
   }
 }
@@ -136,7 +148,7 @@ async function setupWebhookTrigger(bot, base44) {
 /**
  * Set up email trigger
  */
-async function setupEmailTrigger(bot, base44) {
+async function setupEmailTrigger(bot: any, base44: any): Promise<TriggerSetupResult> {
   try {
     const config = bot.trigger?.config || {};
 
@@ -146,7 +158,7 @@ async function setupEmailTrigger(bot, base44) {
       emailAddress: config.emailAddress,
       triggerOn: config.trigger
     };
-  } catch (error) {
+  } catch (error: any) {
     return { success: false, error: error.message };
   }
 }
@@ -154,8 +166,8 @@ async function setupEmailTrigger(bot, base44) {
 /**
  * Get schedule interval from frequency
  */
-function getScheduleInterval(frequency) {
-  const intervals = {
+function getScheduleInterval(frequency: string): number {
+  const intervals: Record<string, number> = {
     'hourly': 1,
     'daily': 1,
     'weekly': 1,
@@ -167,8 +179,8 @@ function getScheduleInterval(frequency) {
 /**
  * Get schedule unit from frequency
  */
-function getScheduleUnit(frequency) {
-  const units = {
+function getScheduleUnit(frequency: string): string {
+  const units: Record<string, string> = {
     'hourly': 'hours',
     'daily': 'days',
     'weekly': 'weeks',

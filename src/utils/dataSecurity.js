@@ -8,6 +8,7 @@
  * @typedef {Object} EncryptedData
  * @property {string} iv - Initialization vector
  * @property {string} encryptedValue - Encrypted value
+ * @property {string} salt - Salt for key derivation
  * @property {string} algorithm - Algorithm used
  * @property {number} timestamp - Encryption timestamp
  */
