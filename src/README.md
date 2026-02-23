@@ -26,7 +26,3 @@ PR eligibility now requires:
 
 ## How to run
 - `npx vitest run tests/evolution`
-
-## Manual rebase/merge note
-- This branch is intended to be reviewed as a PR and merged manually when desired.
-- Evolution gate outputs include Pareto frontier and selected-strategy summaries to simplify reviewer validation.
