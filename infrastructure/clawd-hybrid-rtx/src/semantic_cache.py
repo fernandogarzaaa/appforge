@@ -1,171 +1,93 @@
-"""
-Clawd Hybrid RTX LLM - Semantic Cache
-Uses sentence-transformers + FAISS on RTX 2060 for fast semantic caching.
-"""
-import hashlib
-import json
-import os
+"""Simple dict-based semantic cache using numpy cosine similarity."""
+
+import logging
 import time
+from dataclasses import dataclass, field
+
 import numpy as np
-from pathlib import Path
-from typing import Optional
 
-try:
-    import faiss
-    FAISS_AVAILABLE = True
-except ImportError:
-    FAISS_AVAILABLE = False
+from .config import CACHE_SIMILARITY_THRESHOLD
 
-try:
-    from sentence_transformers import SentenceTransformer
-    ST_AVAILABLE = True
-except ImportError:
-    ST_AVAILABLE = False
+logger = logging.getLogger(__name__)
 
-from .config import settings
+# Cache TTL in seconds (1 hour)
+CACHE_TTL: float = 3600.0
+
+
+@dataclass
+class CacheEntry:
+    key_vector: np.ndarray
+    response: dict
+    timestamp: float = field(default_factory=time.time)
 
 
 class SemanticCache:
-    """
-    Semantic cache using sentence-transformers for embeddings
-    and FAISS for fast similarity search.
-    Runs on RTX 2060 for GPU-accelerated embeddings.
-    """
+    """In-memory semantic cache with cosine similarity matching."""
 
-    def __init__(self):
-        self.enabled = settings.cache_enabled and FAISS_AVAILABLE and ST_AVAILABLE
-        self.threshold = settings.cache_threshold
-        self.max_size = settings.cache_max_size
-        self.cache_dir = Path(settings.cache_dir)
-        self.cache_dir.mkdir(parents=True, exist_ok=True)
+    def __init__(self, threshold: float = CACHE_SIMILARITY_THRESHOLD, dim: int = 256):
+        self.threshold = threshold
+        self.dim = dim
+        self._entries: list[CacheEntry] = []
 
-        self.entries: dict[str, dict] = {}  # hash -> {response, timestamp, hits}
-        self.embeddings: list[np.ndarray] = []
-        self.keys: list[str] = []
-        self.index: Optional[object] = None
-        self.model: Optional[object] = None
+    def _messages_to_vector(self, messages: list[dict]) -> np.ndarray:
+        """Convert chat messages to a vector for similarity comparison."""
+        # Concatenate all message contents
+        text = " ".join(
+            msg.get("content", "") for msg in messages if isinstance(msg.get("content"), str)
+        ).lower()
 
-        if self.enabled:
-            try:
-                device = settings.embedding_device
-                self.model = SentenceTransformer(settings.embedding_model, device=device)
-                self.dim = self.model.get_sentence_embedding_dimension()
-                self.index = faiss.IndexFlatIP(self.dim)  # Inner product (cosine sim with normalized vectors)
-                self._load_cache()
-                print(f"[Cache] Initialized on {device} with {len(self.entries)} entries")
-            except Exception as e:
-                print(f"[Cache] Failed to initialize: {e}")
-                self.enabled = False
+        vec = np.zeros(self.dim, dtype=np.float64)
+        for i in range(len(text) - 1):
+            bigram_hash = hash(text[i : i + 2]) % self.dim
+            vec[bigram_hash] += 1.0
 
-    def _hash_query(self, messages: list[dict]) -> str:
-        """Create a hash of the query for exact matching."""
-        content = json.dumps(messages, sort_keys=True)
-        return hashlib.sha256(content.encode()).hexdigest()[:16]
+        norm = np.linalg.norm(vec)
+        if norm > 0:
+            vec /= norm
+        return vec
 
-    def _embed(self, text: str) -> np.ndarray:
-        """Generate embedding using sentence-transformers on RTX 2060."""
-        if not self.model:
-            return np.zeros(384)
-        embedding = self.model.encode(text, normalize_embeddings=True)
-        return np.array(embedding, dtype=np.float32)
+    def _cosine_sim(self, a: np.ndarray, b: np.ndarray) -> float:
+        dot = np.dot(a, b)
+        na, nb = np.linalg.norm(a), np.linalg.norm(b)
+        if na == 0 or nb == 0:
+            return 0.0
+        return float(dot / (na * nb))
 
-    def _messages_to_text(self, messages: list[dict]) -> str:
-        """Convert messages to a single text for embedding."""
-        return " ".join(m.get("content", "") for m in messages if m.get("role") != "system")
+    def _evict_expired(self) -> None:
+        """Remove entries older than TTL."""
+        now = time.time()
+        self._entries = [e for e in self._entries if (now - e.timestamp) < CACHE_TTL]
 
-    def get(self, messages: list[dict]) -> Optional[dict]:
-        """Check cache for a semantically similar query."""
-        if not self.enabled or not self.index or self.index.ntotal == 0:
-            return None
+    def get(self, messages: list[dict]) -> dict | None:
+        """Look up a cached response by semantic similarity."""
+        self._evict_expired()
+        query_vec = self._messages_to_vector(messages)
 
-        text = self._messages_to_text(messages)
-        query_embedding = self._embed(text).reshape(1, -1)
+        best_sim = 0.0
+        best_entry: CacheEntry | None = None
 
-        # Search FAISS index
-        scores, indices = self.index.search(query_embedding, 1)
+        for entry in self._entries:
+            sim = self._cosine_sim(query_vec, entry.key_vector)
+            if sim > best_sim:
+                best_sim = sim
+                best_entry = entry
 
-        if scores[0][0] >= self.threshold:
-            idx = indices[0][0]
-            key = self.keys[idx]
-            if key in self.entries:
-                self.entries[key]["hits"] += 1
-                return self.entries[key]["response"]
+        if best_entry is not None and best_sim >= self.threshold:
+            logger.info(f"Cache hit (similarity={best_sim:.4f})")
+            return best_entry.response
 
         return None
 
-    def put(self, messages: list[dict], response: dict):
+    def put(self, messages: list[dict], response: dict) -> None:
         """Store a response in the cache."""
-        if not self.enabled or not self.model or not self.index:
-            return
+        key_vec = self._messages_to_vector(messages)
+        self._entries.append(CacheEntry(key_vector=key_vec, response=response))
+        logger.debug(f"Cached response (total entries: {len(self._entries)})")
 
-        # Evict oldest entries if at capacity
-        if len(self.entries) >= self.max_size:
-            oldest_key = min(self.entries, key=lambda k: self.entries[k]["timestamp"])
-            self._remove_entry(oldest_key)
-
-        text = self._messages_to_text(messages)
-        key = self._hash_query(messages)
-
-        embedding = self._embed(text).reshape(1, -1)
-
-        self.entries[key] = {
-            "response": response,
-            "timestamp": time.time(),
-            "hits": 0,
-        }
-        self.embeddings.append(embedding.flatten())
-        self.keys.append(key)
-        self.index.add(embedding)
-
-    def _remove_entry(self, key: str):
-        """Remove an entry from cache."""
-        if key in self.entries:
-            del self.entries[key]
-            if key in self.keys:
-                idx = self.keys.index(key)
-                self.keys.pop(idx)
-                self.embeddings.pop(idx)
-                # Rebuild FAISS index
-                self.index = faiss.IndexFlatIP(self.dim)
-                if self.embeddings:
-                    matrix = np.array(self.embeddings, dtype=np.float32)
-                    self.index.add(matrix)
-
-    def _save_cache(self):
-        """Persist cache to disk."""
-        cache_file = self.cache_dir / "cache_entries.json"
-        serializable = {}
-        for key, entry in self.entries.items():
-            serializable[key] = {
-                "response": entry["response"],
-                "timestamp": entry["timestamp"],
-                "hits": entry["hits"],
-            }
-        with open(cache_file, "w") as f:
-            json.dump(serializable, f)
-
-    def _load_cache(self):
-        """Load cache from disk."""
-        cache_file = self.cache_dir / "cache_entries.json"
-        if cache_file.exists():
-            try:
-                with open(cache_file) as f:
-                    data = json.load(f)
-                self.entries = data
-                print(f"[Cache] Loaded {len(data)} entries from disk")
-            except Exception:
-                pass
+    def clear(self) -> None:
+        """Clear all cache entries."""
+        self._entries.clear()
 
     @property
-    def stats(self) -> dict:
-        total_hits = sum(e.get("hits", 0) for e in self.entries.values())
-        return {
-            "enabled": self.enabled,
-            "entries": len(self.entries),
-            "total_hits": total_hits,
-            "max_size": self.max_size,
-            "threshold": self.threshold,
-        }
-
-
-semantic_cache = SemanticCache()
+    def size(self) -> int:
+        return len(self._entries)

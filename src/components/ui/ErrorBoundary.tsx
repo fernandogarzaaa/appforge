@@ -163,13 +163,14 @@ export function InlineErrorFallback({
 // Main Error Boundary Component
 // ============================================================================
 
-export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
+export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState & { prevResetKeys?: Array<string | number> }> {
   private resetTimeoutId: NodeJS.Timeout | null = null;
 
-  public state: ErrorBoundaryState = {
+  public state: ErrorBoundaryState & { prevResetKeys?: Array<string | number> } = {
     hasError: false,
     error: null,
-    errorInfo: null
+    errorInfo: null,
+    prevResetKeys: undefined
   };
 
   public static getDerivedStateFromError(error: Error): Partial<ErrorBoundaryState> {
@@ -178,18 +179,38 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
 
   public static getDerivedStateFromProps(
     props: ErrorBoundaryProps,
-    state: ErrorBoundaryState
-  ): Partial<ErrorBoundaryState> | null {
-    const { hasError, error } = state;
+    state: ErrorBoundaryState & { prevResetKeys?: Array<string | number> }
+  ): Partial<ErrorBoundaryState & { prevResetKeys?: Array<string | number> }> | null {
+    const { hasError } = state;
     const { resetKeys } = props;
 
-    if (hasError && resetKeys) {
-      // If resetKeys change, reset the error boundary
-      return {
-        hasError: false,
-        error: null,
-        errorInfo: null
-      };
+    // Only reset when resetKeys actually change (not on every render)
+    if (hasError && resetKeys && state.prevResetKeys) {
+      const keysChanged =
+        resetKeys.length !== state.prevResetKeys.length ||
+        resetKeys.some((key, i) => key !== state.prevResetKeys![i]);
+
+      if (keysChanged) {
+        return {
+          hasError: false,
+          error: null,
+          errorInfo: null,
+          prevResetKeys: resetKeys
+        };
+      }
+    }
+
+    // Track current resetKeys for comparison on next render
+    if (resetKeys && !state.prevResetKeys) {
+      return { prevResetKeys: resetKeys };
+    }
+    if (resetKeys && state.prevResetKeys) {
+      const keysChanged =
+        resetKeys.length !== state.prevResetKeys.length ||
+        resetKeys.some((key, i) => key !== state.prevResetKeys![i]);
+      if (keysChanged && !hasError) {
+        return { prevResetKeys: resetKeys };
+      }
     }
 
     return null;

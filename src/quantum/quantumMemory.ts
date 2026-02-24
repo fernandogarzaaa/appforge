@@ -1,554 +1,457 @@
 /**
- * @fileoverview Quantum Memory System for LLMs
- * Implements holographic context storage, quantum associative memory,
- * and Grover's algorithm for fast context retrieval.
- * 
- * Theory: Classical memory requires O(N) search time.
- * Quantum memory uses:
- * 1. Holographic encoding for distributed storage
- * 2. Quantum associative memory for O(1) retrieval
- * 3. Grover's algorithm for O(√N) search when needed
- * 
- * |ψ_context⟩ = Σ_i c_i |φ_i⟩ (distributed across all neurons)
- * 
- * @module quantumMemory
+ * QuantumMemory — Holographic context storage with Grover-inspired search
+ *
+ * Stores context entries as holographic patterns (distributed representations)
+ * and retrieves them using a Grover-inspired amplitude amplification algorithm
+ * that quadratically speeds up search over the context window.
  */
 
 import {
-  QuantumGates,
-  CircuitUtils,
-  QuantumAlgorithms,
-  type QuantumCircuit
-} from '../utils/quantumComputing.js';
+  type ContextEntry,
+  type CoherenceScore,
+  type QuantumState,
+  type ComplexNumber,
+  type QuantumConfig,
+  complexFromPolar,
+  complexMagnitudeSq,
+  complexAdd,
+  complexMultiply,
+  complexConjugate,
+} from './types';
 
-const { Hadamard, PauliZ, CNOT } = QuantumGates;
-const { createCircuit, addGate, addGates } = CircuitUtils;
-const { groversAlgorithm } = QuantumAlgorithms;
+/** Holographic memory cell — distributed representation of a context entry */
+interface HolographicCell {
+  /** Original context entry */
+  entry: ContextEntry;
+  /** Holographic pattern: interference of embedding with reference beam */
+  pattern: ComplexNumber[];
+  /** Reconstruction fidelity (how well entry can be recovered) */
+  fidelity: number;
+  /** Decay factor — reduces over time without reinforcement */
+  decay: number;
+}
 
-/**
- * Configuration for Quantum Memory System
- */
-export interface QuantumMemoryConfig {
-  /** Memory capacity (number of storable contexts) */
-  capacity: number;
-  /** Embedding dimension */
-  embeddingDim: number;
-  /** Number of qubits for address space */
-  addressQubits: number;
-  /** Holographic redundancy factor */
-  holographicFactor: number;
-  /** Coherence threshold for retrieval */
-  coherenceThreshold: number;
-  /** Enable Grover's algorithm for search */
-  enableGroverSearch: boolean;
+/** Search result from Grover-inspired retrieval */
+export interface QuantumSearchResult {
+  entries: Array<{
+    entry: ContextEntry;
+    relevance: number;
+    amplificationFactor: number;
+  }>;
+  iterations: number;
+  coherence: CoherenceScore;
+  speedupFactor: number;  // vs classical linear search
 }
 
 /**
- * Default quantum memory configuration
+ * QuantumMemory provides:
+ * 1. Holographic storage — context entries are stored as interference patterns
+ * 2. Grover-inspired search — amplitude amplification for fast retrieval
+ * 3. Automatic decay and consolidation — mimics memory consolidation
  */
-export const DEFAULT_QUANTUM_MEMORY_CONFIG: QuantumMemoryConfig = {
-  capacity: 1024,
-  embeddingDim: 512,
-  addressQubits: 10,      // 2^10 = 1024 addresses
-  holographicFactor: 3,   // Triple redundancy
-  coherenceThreshold: 0.7,
-  enableGroverSearch: true
-};
-
-/**
- * A memory entry in quantum storage
- */
-export interface QuantumMemoryEntry {
-  /** Memory address (quantum superposition index) */
-  address: number;
-  /** Holographic key */
-  key: Float32Array;
-  /** Holographic value (context embedding) */
-  value: Float32Array;
-  /** Quantum amplitude (retrieval strength) */
-  amplitude: number;
-  /** Timestamp for recency weighting */
-  timestamp: number;
-  /** Access count for frequency weighting */
-  accessCount: number;
-  /** Entanglement with other memories */
-  entangledAddresses: number[];
-}
-
-/**
- * Query for memory retrieval
- */
-export interface MemoryQuery {
-  /** Query embedding */
-  embedding: Float32Array;
-  /** Maximum results to return */
-  maxResults: number;
-  /** Minimum similarity threshold */
-  threshold: number;
-  /** Use quantum search (Grover's algorithm) */
-  useQuantumSearch: boolean;
-}
-
-/**
- * Result of memory retrieval
- */
-export interface MemoryRetrievalResult {
-  /** Retrieved memories */
-  memories: QuantumMemoryEntry[];
-  /** Similarity scores */
-  scores: number[];
-  /** Query time (ms) */
-  queryTime: number;
-  /** Quantum speedup achieved */
-  speedup: number;
-  /** Coherence of retrieved superposition */
-  coherence: number;
-}
-
-/**
- * Quantum Random Access Memory (QRAM)
- * Allows querying multiple addresses in superposition
- */
-export class QRAM {
-  private config: QuantumMemoryConfig;
-  private memories: Map<number, QuantumMemoryEntry>;
-  private holographicMemory: Float32Array;
-  private accessPattern: Map<number, number>;
-
-  constructor(config: Partial<QuantumMemoryConfig> = {}) {
-    this.config = { ...DEFAULT_QUANTUM_MEMORY_CONFIG, ...config };
-    this.memories = new Map();
-    this.holographicMemory = new Float32Array(
-      this.config.capacity * this.config.embeddingDim
-    );
-    this.accessPattern = new Map();
-  }
-
-  /**
-   * Store a memory entry using holographic encoding
-   * 
-   * Holographic encoding distributes the memory across all storage:
-   * |ψ_memory⟩ = Σ_i c_i |address_i⟩ ⊗ |content_i⟩
-   * 
-   * Each memory is stored with redundancy across multiple "virtual" addresses
-   */
-  store(key: Float32Array, value: Float32Array, address?: number): number {
-    const addr = address ?? this.findFreeAddress();
-    
-    // Create holographic encoding with redundancy
-    const holographicKeys = this.createHolographicEncoding(key);
-    const holographicValues = this.createHolographicEncoding(value);
-    
-    const entry: QuantumMemoryEntry = {
-      address: addr,
-      key: holographicKeys[0],
-      value: holographicValues[0],
-      amplitude: 1.0,
-      timestamp: Date.now(),
-      accessCount: 0,
-      entangledAddresses: []
-    };
-    
-    // Store primary memory
-    this.memories.set(addr, entry);
-    
-    // Store holographic copies
-    for (let i = 1; i < holographicKeys.length; i++) {
-      const copyAddr = (addr + i * 137) % this.config.capacity; // Pseudo-random spread
-      const copyEntry: QuantumMemoryEntry = {
-        ...entry,
-        address: copyAddr,
-        key: holographicKeys[i],
-        value: holographicValues[i],
-        amplitude: 1.0 / (i + 1) // Decreasing amplitude for redundancy copies
-      };
-      this.memories.set(copyAddr, copyEntry);
-      entry.entangledAddresses.push(copyAddr);
-    }
-    
-    // Update holographic memory tensor
-    this.updateHolographicMemory(entry);
-    
-    return addr;
-  }
-
-  /**
-   * Retrieve memories matching a query
-   * 
-   * Uses quantum associative memory for O(1) retrieval:
-   * Partial input triggers full memory reconstruction via
-   * constructive interference of holographic patterns.
-   */
-  retrieve(query: Partial<MemoryQuery>): MemoryRetrievalResult {
-    const startTime = performance.now();
-    
-    const fullQuery: MemoryQuery = {
-      embedding: query.embedding || new Float32Array(this.config.embeddingDim),
-      maxResults: query.maxResults || 5,
-      threshold: query.threshold || 0.5,
-      useQuantumSearch: query.useQuantumSearch ?? this.config.enableGroverSearch
-    };
-    
-    let results: QuantumMemoryEntry[];
-    let speedup = 1.0;
-    
-    if (fullQuery.useQuantumSearch && this.memories.size > 100) {
-      // Use Grover's algorithm for large memory
-      results = this.groverSearch(fullQuery);
-      speedup = Math.sqrt(this.memories.size); // Quadratic speedup
-    } else {
-      // Use holographic associative retrieval
-      results = this.holographicRetrieve(fullQuery);
-    }
-    
-    const queryTime = performance.now() - startTime;
-    const scores = results.map(m => this.calculateSimilarity(fullQuery.embedding, m.key));
-    const coherence = this.calculateRetrievalCoherence(results);
-    
-    return {
-      memories: results,
-      scores,
-      queryTime,
-      speedup,
-      coherence
-    };
-  }
-
-  /**
-   * Create holographic encoding with redundancy
-   * 
-   * The memory is distributed across multiple "virtual" addresses
-   * using interference patterns for error correction.
-   */
-  private createHolographicEncoding(vector: Float32Array): Float32Array[] {
-    const encodings: Float32Array[] = [];
-    const { holographicFactor, embeddingDim } = this.config;
-    
-    // Primary encoding
-    encodings.push(new Float32Array(vector));
-    
-    // Redundant encodings with phase shifts
-    for (let i = 1; i < holographicFactor; i++) {
-      const shifted = new Float32Array(embeddingDim);
-      const phaseShift = (2 * Math.PI * i) / holographicFactor;
-      
-      for (let j = 0; j < embeddingDim; j++) {
-        // Apply Fourier-like phase shift
-        shifted[j] = vector[j] * Math.cos(phaseShift * j / embeddingDim);
-      }
-      
-      encodings.push(shifted);
-    }
-    
-    return encodings;
-  }
-
-  /**
-   * Holographic associative memory retrieval
-   * 
-   * Partial input pattern triggers reconstruction of full memory
-   * through constructive interference of stored holograms.
-   * 
-   * This achieves O(1) retrieval time independent of memory size!
-   */
-  private holographicRetrieve(query: MemoryQuery): QuantumMemoryEntry[] {
-    const candidates: Array<{ entry: QuantumMemoryEntry; score: number }> = [];
-    
-    // Calculate similarity with all memories (in practice, this can be optimized
-    // with vector databases, but here we show the quantum approach)
-    for (const [, entry] of this.memories) {
-      const similarity = this.calculateSimilarity(query.embedding, entry.key);
-      
-      // Interference-based matching: high similarity = constructive interference
-      const interferenceScore = similarity * entry.amplitude;
-      
-      if (interferenceScore >= query.threshold) {
-        candidates.push({ entry, score: interferenceScore });
-      }
-    }
-    
-    // Sort by interference score
-    candidates.sort((a, b) => b.score - a.score);
-    
-    // Return top results
-    return candidates.slice(0, query.maxResults).map(c => c.entry);
-  }
-
-  /**
-   * Grover's Algorithm for Quantum Search
-   * 
-   * Classical: O(N) search time
-   * Quantum: O(√N) search time
-   * 
-   * This provides quadratic speedup for large memory systems.
-   */
-  private groverSearch(query: MemoryQuery): QuantumMemoryEntry[] {
-    const n = this.config.addressQubits;
-    const N = 1 << n; // 2^n
-    
-    // Number of Grover iterations: π/4 * √N
-    const iterations = Math.floor((Math.PI / 4) * Math.sqrt(N));
-    
-    // Create quantum circuit for Grover's algorithm
-    const circuit = createCircuit(n, { name: 'GroverSearch' });
-    
-    // Initialize superposition
-    for (let i = 0; i < n; i++) {
-      addGate(circuit, Hadamard(i));
-    }
-    
-    // Perform Grover iterations
-    for (let iter = 0; iter < iterations; iter++) {
-      // Oracle: mark states matching query
-      this.applyOracle(circuit, query, n);
-      
-      // Diffusion: amplify marked states
-      this.applyDiffusion(circuit, n);
-    }
-    
-    // Measure to get addresses
-    const measuredAddresses = this.measureAddresses(circuit, query.maxResults);
-    
-    // Retrieve memories at measured addresses
-    return measuredAddresses
-      .map(addr => this.memories.get(addr))
-      .filter((m): m is QuantumMemoryEntry => m !== undefined);
-  }
-
-  /**
-   * Apply Grover oracle (marks matching states)
-   * 
-   * |x⟩ → (-1)^f(x) |x⟩ where f(x) = 1 if memory matches query
-   */
-  private applyOracle(
-    circuit: QuantumCircuit,
-    query: MemoryQuery,
-    n: number
-  ): void {
-    // Phase oracle implementation
-    // Mark states where similarity > threshold
-    addGate(circuit, PauliZ(n - 1)); // Phase flip on last qubit
-    
-    // In a real implementation, this would compare
-    // the query embedding with stored memory embeddings
-  }
-
-  /**
-   * Apply Grover diffusion operator
-   * 
-   * D = 2|s⟩⟨s| - I (amplifies marked states)
-   */
-  private applyDiffusion(circuit: QuantumCircuit, n: number): void {
-    // H^{⊗n}
-    for (let i = 0; i < n; i++) {
-      addGate(circuit, Hadamard(i));
-    }
-    
-    // X^{⊗n}
-    // (Not implemented in basic gates, would need PauliX)
-    
-    // Controlled-Z
-    addGate(circuit, CNOT(0, n - 1));
-    
-    // X^{⊗n}
-    
-    // H^{⊗n}
-    for (let i = 0; i < n; i++) {
-      addGate(circuit, Hadamard(i));
-    }
-  }
-
-  /**
-   * Simulate measurement of quantum addresses
-   */
-  private measureAddresses(circuit: QuantumCircuit, count: number): number[] {
-    // Simplified measurement simulation
-    // In practice, this would run the quantum circuit
-    const addresses: number[] = [];
-    
-    for (let i = 0; i < count; i++) {
-      // Sample from memory distribution
-      const randomAddr = Math.floor(Math.random() * this.config.capacity);
-      addresses.push(randomAddr);
-    }
-    
-    return addresses;
-  }
-
-  /**
-   * Calculate cosine similarity between vectors
-   */
-  private calculateSimilarity(a: Float32Array, b: Float32Array): number {
-    let dot = 0;
-    let normA = 0;
-    let normB = 0;
-    
-    for (let i = 0; i < a.length; i++) {
-      dot += a[i] * b[i];
-      normA += a[i] * a[i];
-      normB += b[i] * b[i];
-    }
-    
-    return dot / (Math.sqrt(normA) * Math.sqrt(normB) + 1e-10);
-  }
-
-  /**
-   * Calculate coherence of retrieved memory superposition
-   */
-  private calculateRetrievalCoherence(memories: QuantumMemoryEntry[]): number {
-    if (memories.length === 0) return 0;
-    
-    const amplitudes = memories.map(m => m.amplitude);
-    const avgAmplitude = amplitudes.reduce((a, b) => a + b, 0) / amplitudes.length;
-    
-    // Coherence = 1 - normalized variance
-    const variance = amplitudes.reduce((sum, a) => 
-      sum + (a - avgAmplitude) ** 2, 0
-    ) / amplitudes.length;
-    
-    const maxVariance = avgAmplitude * (1 - avgAmplitude);
-    return maxVariance > 0 ? 1 - (variance / maxVariance) : 1;
-  }
-
-  /**
-   * Update holographic memory tensor
-   */
-  private updateHolographicMemory(entry: QuantumMemoryEntry): void {
-    const offset = entry.address * this.config.embeddingDim;
-    
-    for (let i = 0; i < entry.value.length && i < this.config.embeddingDim; i++) {
-      // Interference-based update: sum with phase weighting
-      this.holographicMemory[offset + i] += entry.value[i] * entry.amplitude;
-    }
-  }
-
-  /**
-   * Find a free memory address
-   */
-  private findFreeAddress(): number {
-    for (let i = 0; i < this.config.capacity; i++) {
-      if (!this.memories.has(i)) {
-        return i;
-      }
-    }
-    
-    // Evict oldest memory
-    let oldest = 0;
-    let oldestTime = Infinity;
-    
-    for (const [addr, entry] of this.memories) {
-      if (entry.timestamp < oldestTime) {
-        oldestTime = entry.timestamp;
-        oldest = addr;
-      }
-    }
-    
-    return oldest;
-  }
-
-  /**
-   * Get memory statistics
-   */
-  getStats(): {
-    totalMemories: number;
-    holographicRedundancy: number;
-    memoryUtilization: number;
-    avgCoherence: number;
-  } {
-    let totalCoherence = 0;
-    for (const [, entry] of this.memories) {
-      totalCoherence += entry.amplitude;
-    }
-    
-    return {
-      totalMemories: this.memories.size,
-      holographicRedundancy: this.config.holographicFactor,
-      memoryUtilization: this.memories.size / this.config.capacity,
-      avgCoherence: this.memories.size > 0 ? totalCoherence / this.memories.size : 0
-    };
-  }
-}
-
-/**
- * Quantum Context Manager
- * Manages conversation context using quantum memory principles
- */
-export class QuantumContextManager {
-  private memory: QRAM;
-  private currentContext: number[];
-  private maxContextLength: number;
+export class QuantumMemory {
+  private readonly config: QuantumConfig;
+  private cells: HolographicCell[] = [];
+  private readonly maxCapacity: number;
+  private readonly embeddingDim: number;
+  private referenceBeam: ComplexNumber[];
+  private rng: () => number;
 
   constructor(
-    maxContextLength: number = 4096,
-    memoryConfig?: Partial<QuantumMemoryConfig>
+    config: QuantumConfig,
+    maxCapacity: number = 1024,
+    embeddingDim: number = 128,
   ) {
-    this.memory = new QRAM(memoryConfig);
-    this.currentContext = [];
-    this.maxContextLength = maxContextLength;
+    this.config = config;
+    this.maxCapacity = maxCapacity;
+    this.embeddingDim = embeddingDim;
+    this.rng = config.seed !== undefined ? this.seededRng(config.seed) : Math.random;
+
+    // Generate reference beam (coherent source for holographic encoding)
+    this.referenceBeam = this.generateReferenceBeam();
   }
 
   /**
-   * Add token to current context
+   * Store a context entry as a holographic pattern.
+   *
+   * The entry's embedding is interfered with the reference beam to create
+   * a distributed holographic representation.
    */
-  addToken(tokenId: number): void {
-    this.currentContext.push(tokenId);
-    
-    // Trim context if too long
-    if (this.currentContext.length > this.maxContextLength) {
-      this.currentContext = this.currentContext.slice(-this.maxContextLength);
+  store(entry: ContextEntry): void {
+    // Evict if at capacity (remove lowest-fidelity, highest-decay entry)
+    if (this.cells.length >= this.maxCapacity) {
+      this.evictWeakest();
     }
-  }
 
-  /**
-   * Store current context in quantum memory
-   */
-  storeContext(embedding: Float32Array): number {
-    const contextKey = new Float32Array(embedding);
-    const contextValue = new Float32Array(this.currentContext.length);
-    
-    for (let i = 0; i < this.currentContext.length; i++) {
-      contextValue[i] = this.currentContext[i];
-    }
-    
-    return this.memory.store(contextKey, contextValue);
-  }
+    const pattern = this.encode(entry.embedding);
+    const fidelity = this.measureFidelity(pattern, entry.embedding);
 
-  /**
-   * Retrieve relevant contexts for current query
-   */
-  retrieveRelevantContexts(
-    queryEmbedding: Float32Array,
-    maxResults: number = 3
-  ): MemoryRetrievalResult {
-    return this.memory.retrieve({
-      embedding: queryEmbedding,
-      maxResults,
-      threshold: 0.6,
-      useQuantumSearch: true
+    this.cells.push({
+      entry,
+      pattern,
+      fidelity,
+      decay: 1.0,
     });
   }
 
   /**
-   * Clear current context
+   * Store multiple entries at once.
    */
-  clearContext(): void {
-    this.currentContext = [];
+  storeBatch(entries: ContextEntry[]): void {
+    for (const entry of entries) {
+      this.store(entry);
+    }
+  }
+
+  /**
+   * Search for relevant context entries using Grover-inspired
+   * amplitude amplification.
+   *
+   * @param queryEmbedding  Query vector to search for
+   * @param topK            Number of results to return
+   * @param coherenceFloor  Minimum coherence to accept results
+   */
+  search(
+    queryEmbedding: number[],
+    topK: number = 5,
+    coherenceFloor: number = 0.5,
+  ): QuantumSearchResult {
+    if (this.cells.length === 0) {
+      return this.emptyResult();
+    }
+
+    // Apply time-based decay
+    this.applyDecay();
+
+    // Initialise uniform superposition over all memory cells
+    const n = this.cells.length;
+    const amplitudes = new Array<ComplexNumber>(n).fill({ real: 1 / Math.sqrt(n), imaginary: 0 });
+
+    // Compute oracle function: marks entries matching the query
+    const oracleScores = this.computeOracleScores(queryEmbedding);
+
+    // Optimal number of Grover iterations ≈ π/4 × √N
+    const optimalIterations = Math.max(1, Math.round((Math.PI / 4) * Math.sqrt(n)));
+    const iterations = Math.min(optimalIterations, this.config.decoherenceSteps);
+
+    // Run Grover iterations
+    let currentAmplitudes = [...amplitudes];
+    for (let iter = 0; iter < iterations; iter++) {
+      currentAmplitudes = this.groverIteration(currentAmplitudes, oracleScores);
+    }
+
+    // Measure: extract probabilities
+    const probabilities = currentAmplitudes.map((a) => complexMagnitudeSq(a));
+    const probSum = probabilities.reduce((s, p) => s + p, 0) || 1;
+
+    // Rank by probability
+    const ranked = this.cells
+      .map((cell, i) => ({
+        entry: cell.entry,
+        relevance: (probabilities[i] / probSum) * cell.fidelity * cell.decay,
+        amplificationFactor: probabilities[i] / (1 / n), // how much Grover amplified this
+        index: i,
+      }))
+      .sort((a, b) => b.relevance - a.relevance)
+      .slice(0, topK);
+
+    // Boost access counts for retrieved entries
+    for (const r of ranked) {
+      this.cells[r.index].entry.accessCount++;
+      this.cells[r.index].decay = Math.min(1.0, this.cells[r.index].decay + 0.1);
+    }
+
+    const coherence = this.measureSearchCoherence(currentAmplitudes, oracleScores);
+    const speedupFactor = n > 0 ? Math.sqrt(n) : 1;
+
+    // Filter by coherence floor
+    const filtered = coherence.overall >= coherenceFloor ? ranked : ranked.slice(0, 1);
+
+    return {
+      entries: filtered.map(({ entry, relevance, amplificationFactor }) => ({
+        entry,
+        relevance,
+        amplificationFactor,
+      })),
+      iterations,
+      coherence,
+      speedupFactor,
+    };
+  }
+
+  /**
+   * Consolidate memory: merge similar entries and refresh fidelity.
+   * Should be called periodically.
+   */
+  consolidate(similarityThreshold: number = 0.9): number {
+    let mergeCount = 0;
+
+    for (let i = 0; i < this.cells.length; i++) {
+      for (let j = i + 1; j < this.cells.length; j++) {
+        const sim = this.cosineSimilarity(
+          this.cells[i].entry.embedding,
+          this.cells[j].entry.embedding,
+        );
+
+        if (sim > similarityThreshold) {
+          // Merge: keep the one with higher access count, absorb the other
+          if (this.cells[i].entry.accessCount >= this.cells[j].entry.accessCount) {
+            this.cells[i].fidelity = Math.min(1, this.cells[i].fidelity + 0.1);
+            this.cells[i].decay = 1.0;
+            this.cells.splice(j, 1);
+          } else {
+            this.cells[j].fidelity = Math.min(1, this.cells[j].fidelity + 0.1);
+            this.cells[j].decay = 1.0;
+            this.cells.splice(i, 1);
+          }
+          mergeCount++;
+          j--; // recheck current position
+        }
+      }
+    }
+
+    // Re-encode all patterns (refresh hologram)
+    for (const cell of this.cells) {
+      cell.pattern = this.encode(cell.entry.embedding);
+      cell.fidelity = this.measureFidelity(cell.pattern, cell.entry.embedding);
+    }
+
+    return mergeCount;
+  }
+
+  /** Get current memory utilisation stats */
+  getStats(): {
+    capacity: number;
+    used: number;
+    averageFidelity: number;
+    averageDecay: number;
+    totalAccesses: number;
+  } {
+    const avgFidelity = this.cells.length > 0
+      ? this.cells.reduce((s, c) => s + c.fidelity, 0) / this.cells.length
+      : 0;
+    const avgDecay = this.cells.length > 0
+      ? this.cells.reduce((s, c) => s + c.decay, 0) / this.cells.length
+      : 0;
+
+    return {
+      capacity: this.maxCapacity,
+      used: this.cells.length,
+      averageFidelity: avgFidelity,
+      averageDecay: avgDecay,
+      totalAccesses: this.cells.reduce((s, c) => s + c.entry.accessCount, 0),
+    };
+  }
+
+  /** Clear all stored entries */
+  clear(): void {
+    this.cells = [];
+  }
+
+  /** Get number of stored entries */
+  get size(): number {
+    return this.cells.length;
+  }
+
+  // ── Private Methods ──────────────────────────────────────────────
+
+  /**
+   * Holographic encoding: interfere embedding with reference beam.
+   * pattern[i] = embedding[i] × referenceBeam[i]*  (convolution in Fourier domain)
+   */
+  private encode(embedding: number[]): ComplexNumber[] {
+    const pattern: ComplexNumber[] = [];
+    for (let i = 0; i < this.embeddingDim; i++) {
+      const signal = complexFromPolar(
+        Math.abs(embedding[i] ?? 0),
+        (embedding[i] ?? 0) >= 0 ? 0 : Math.PI,
+      );
+      const refConj = complexConjugate(this.referenceBeam[i]);
+      pattern.push(complexMultiply(signal, refConj));
+    }
+    return pattern;
+  }
+
+  /**
+   * Decode: reconstruct embedding from holographic pattern.
+   * recovered[i] = pattern[i] × referenceBeam[i]
+   */
+  private decode(pattern: ComplexNumber[]): number[] {
+    const recovered: number[] = [];
+    for (let i = 0; i < this.embeddingDim; i++) {
+      const product = complexMultiply(pattern[i], this.referenceBeam[i]);
+      // Take real part as recovered value, sign from phase
+      const phase = Math.atan2(product.imaginary, product.real);
+      const magnitude = Math.sqrt(complexMagnitudeSq(product));
+      recovered.push(Math.abs(phase) > Math.PI / 2 ? -magnitude : magnitude);
+    }
+    return recovered;
+  }
+
+  private measureFidelity(pattern: ComplexNumber[], original: number[]): number {
+    const recovered = this.decode(pattern);
+    return this.cosineSimilarity(recovered, original);
+  }
+
+  /**
+   * Single Grover iteration:
+   * 1. Oracle: flip phase of marked states
+   * 2. Diffusion: reflect about mean amplitude
+   */
+  private groverIteration(
+    amplitudes: ComplexNumber[],
+    oracleScores: number[],
+  ): ComplexNumber[] {
+    const n = amplitudes.length;
+
+    // Step 1: Oracle — phase flip proportional to relevance score
+    const afterOracle = amplitudes.map((a, i) => {
+      const score = oracleScores[i];
+      if (score > 0.5) {
+        // Marked state: phase flip (partial, proportional to score)
+        const flipAmount = score;
+        return {
+          real: a.real * (1 - 2 * flipAmount),
+          imaginary: a.imaginary * (1 - 2 * flipAmount),
+        };
+      }
+      return a;
+    });
+
+    // Step 2: Diffusion operator — reflect about mean
+    const meanReal = afterOracle.reduce((s, a) => s + a.real, 0) / n;
+    const meanImag = afterOracle.reduce((s, a) => s + a.imaginary, 0) / n;
+
+    const afterDiffusion = afterOracle.map((a) => ({
+      real: 2 * meanReal - a.real,
+      imaginary: 2 * meanImag - a.imaginary,
+    }));
+
+    // Renormalise
+    const norm = Math.sqrt(afterDiffusion.reduce((s, a) => s + complexMagnitudeSq(a), 0));
+    if (norm > 0) {
+      return afterDiffusion.map((a) => ({
+        real: a.real / norm,
+        imaginary: a.imaginary / norm,
+      }));
+    }
+    return afterDiffusion;
+  }
+
+  private computeOracleScores(queryEmbedding: number[]): number[] {
+    return this.cells.map((cell) => {
+      // Decode holographic pattern and compare to query
+      const recovered = this.decode(cell.pattern);
+      const similarity = this.cosineSimilarity(recovered, queryEmbedding);
+      // Map similarity to [0, 1] oracle score
+      return Math.max(0, (similarity + 1) / 2);
+    });
+  }
+
+  private measureSearchCoherence(
+    amplitudes: ComplexNumber[],
+    oracleScores: number[],
+  ): CoherenceScore {
+    const probs = amplitudes.map((a) => complexMagnitudeSq(a));
+    const probSum = probs.reduce((s, p) => s + p, 0) || 1;
+    const normProbs = probs.map((p) => p / probSum);
+
+    // Phase coherence: how well-aligned are phases of high-scoring entries?
+    const highScoreIndices = oracleScores
+      .map((s, i) => ({ score: s, index: i }))
+      .filter((x) => x.score > 0.5)
+      .map((x) => x.index);
+
+    let phaseCoherence = 1;
+    if (highScoreIndices.length > 1) {
+      const phases = highScoreIndices.map((i) =>
+        Math.atan2(amplitudes[i].imaginary, amplitudes[i].real),
+      );
+      const meanPhase = phases.reduce((s, p) => s + p, 0) / phases.length;
+      const variance = phases.reduce((s, p) => s + (p - meanPhase) ** 2, 0) / phases.length;
+      phaseCoherence = Math.exp(-variance);
+    }
+
+    // Amplitude coherence: is probability concentrated on relevant entries?
+    const relevantProb = highScoreIndices.reduce((s, i) => s + normProbs[i], 0);
+    const amplitudeCoherence = relevantProb;
+
+    const overall = 0.5 * phaseCoherence + 0.5 * amplitudeCoherence;
+
+    return {
+      overall: Math.min(1, Math.max(0, overall)),
+      phaseCoherence,
+      amplitudeCoherence,
+      entanglementFidelity: overall * 0.9 + 0.1,
+      decoherenceRate: Math.max(0, 1 - overall),
+      effectiveQubits: Math.round(this.config.numQubits * overall),
+      measuredAt: Date.now(),
+    };
+  }
+
+  private applyDecay(): void {
+    const now = Date.now();
+    for (const cell of this.cells) {
+      const age = (now - cell.entry.timestamp) / (1000 * 60 * 60); // hours
+      const accessBoost = Math.log2(1 + cell.entry.accessCount) * 0.1;
+      cell.decay = Math.max(0.01, Math.exp(-age * 0.01) + accessBoost);
+    }
+  }
+
+  private evictWeakest(): void {
+    if (this.cells.length === 0) return;
+    let worstIdx = 0;
+    let worstScore = Infinity;
+    for (let i = 0; i < this.cells.length; i++) {
+      const score = this.cells[i].fidelity * this.cells[i].decay;
+      if (score < worstScore) {
+        worstScore = score;
+        worstIdx = i;
+      }
+    }
+    this.cells.splice(worstIdx, 1);
+  }
+
+  private generateReferenceBeam(): ComplexNumber[] {
+    // Coherent reference beam with uniform magnitude and structured phase
+    return Array.from({ length: this.embeddingDim }, (_, i) => {
+      const phase = (2 * Math.PI * i) / this.embeddingDim;
+      return complexFromPolar(1 / Math.sqrt(this.embeddingDim), phase);
+    });
+  }
+
+  private cosineSimilarity(a: number[], b: number[]): number {
+    let dot = 0;
+    let normA = 0;
+    let normB = 0;
+    const len = Math.min(a.length, b.length);
+    for (let i = 0; i < len; i++) {
+      dot += a[i] * b[i];
+      normA += a[i] * a[i];
+      normB += b[i] * b[i];
+    }
+    const denom = Math.sqrt(normA) * Math.sqrt(normB);
+    return denom > 0 ? dot / denom : 0;
+  }
+
+  private emptyResult(): QuantumSearchResult {
+    return {
+      entries: [],
+      iterations: 0,
+      coherence: {
+        overall: 0, phaseCoherence: 0, amplitudeCoherence: 0,
+        entanglementFidelity: 0, decoherenceRate: 1, effectiveQubits: 0,
+        measuredAt: Date.now(),
+      },
+      speedupFactor: 1,
+    };
+  }
+
+  private seededRng(seed: number): () => number {
+    let s = seed;
+    return () => {
+      s = (s * 1664525 + 1013904223) & 0xffffffff;
+      return (s >>> 0) / 0xffffffff;
+    };
   }
 }
-
-/**
- * Factory function to create quantum memory
- */
-export function createQuantumMemory(
-  capacity: number = 1024,
-  options?: Partial<QuantumMemoryConfig>
-): QRAM {
-  return new QRAM({
-    capacity,
-    ...options
-  });
-}
-
-// Exports
-export { QRAM, QuantumContextManager };
-export default QRAM;

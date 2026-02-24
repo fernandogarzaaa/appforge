@@ -1,650 +1,425 @@
 /**
- * @fileoverview Quantum Annealing Decoder for LLMs
- * Replaces beam search with quantum annealing for global optimization
- * of token sequences. Uses quantum tunneling to escape local minima
- * and parallel universe exploration.
- * 
- * Theory: Standard autoregressive decoding is greedy/local optimal.
- * Quantum annealing finds globally optimal token sequences by:
- * 1. Exploring energy landscape with quantum tunneling
- * 2. Escaping local minima via tunneling probability
- * 3. Parallel universe exploration of multiple trajectories
- * 
- * E(sequence) = E_lm(sequence) + E_coherence(sequence) + E_constraint(sequence)
- * 
- * @module quantumDecoder
+ * QuantumDecoder — Simulated-annealing token selection
+ *
+ * Uses simulated annealing over a quantum-inspired energy landscape
+ * to select tokens. Tokens are treated as quantum states; the decoder
+ * explores superpositions and gradually cools to collapse onto the
+ * optimal sequence, avoiding greedy local minima.
  */
 
-import type { QuantumAnnealer as WasmAnnealer } from '../../quantum-core/pkg/quantum_core.js';
+import {
+  type TokenCandidate,
+  type SuperpositionResult,
+  type CoherenceScore,
+  type QuantumConfig,
+  type ComplexNumber,
+  complexFromPolar,
+  complexMagnitudeSq,
+  complexAdd,
+} from './types';
 
-/**
- * Configuration for Quantum Annealing Decoder
- */
-export interface QuantumDecoderConfig {
-  /** Initial temperature (quantum fluctuation strength) */
+/** Annealing schedule configuration */
+export interface AnnealingSchedule {
   initialTemperature: number;
-  /** Cooling rate (decoherence rate) */
   coolingRate: number;
-  /** Minimum temperature (thermal equilibrium) */
   minTemperature: number;
-  /** Number of parallel universes */
-  numUniverses: number;
-  /** Maximum sequence length */
-  maxLength: number;
-  /** Coherence weight in energy function */
-  coherenceWeight: number;
-  /** Constraint penalty weight */
-  constraintWeight: number;
-  /** Enable quantum tunneling */
-  enableTunneling: boolean;
-  /** Tunneling amplitude */
-  tunnelingGamma: number;
+  stepsPerTemperature: number;
+  reheatingEnabled: boolean;
+  reheatingThreshold: number;
 }
 
-/**
- * Default quantum decoder configuration
- */
-export const DEFAULT_QUANTUM_DECODER_CONFIG: QuantumDecoderConfig = {
-  initialTemperature: 100.0,
-  coolingRate: 0.99,
-  minTemperature: 0.01,
-  numUniverses: 100,
-  maxLength: 256,
-  coherenceWeight: 0.3,
-  constraintWeight: 0.2,
-  enableTunneling: true,
-  tunnelingGamma: 0.5
-};
-
-/**
- * Represents a token in the quantum superposition
- */
-export interface QuantumToken {
-  /** Token ID */
-  id: number;
-  /** Token text */
-  text: string;
-  /** Quantum amplitude */
-  amplitude: number;
-  /** Phase for interference */
-  phase: number;
-  /** Log probability from LM */
-  logProb: number;
-  /** Energy contribution */
+/** Energy function result for a candidate sequence */
+interface EnergyState {
   energy: number;
+  tokenIndices: number[];
+  amplitudes: ComplexNumber[];
 }
 
 /**
- * Represents a parallel universe (decoding trajectory)
+ * QuantumDecoder selects tokens by treating the vocabulary as a
+ * quantum system and using simulated annealing to find the
+ * minimum-energy (maximum-coherence) token sequence.
  */
-export interface Universe {
-  /** Universe ID */
-  id: string;
-  /** Current token sequence */
-  sequence: QuantumToken[];
-  /** Current energy */
-  energy: number;
-  /** Temperature */
-  temperature: number;
-  /** Coherence measure */
-  coherence: number;
-  /** Entropy (uncertainty) */
-  entropy: number;
-  /** Generation step */
-  step: number;
-  /** Viability score */
-  viability: number;
-}
+export class QuantumDecoder {
+  private readonly config: QuantumConfig;
+  private readonly schedule: AnnealingSchedule;
+  private rng: () => number;
+  private stepCount = 0;
 
-/**
- * Result of quantum annealing decode
- */
-export interface QuantumDecodeResult {
-  /** Best sequence found */
-  bestSequence: QuantumToken[];
-  /** Final energy */
-  finalEnergy: number;
-  /** Number of iterations */
-  iterations: number;
-  /** All universes at end state */
-  finalUniverses: Universe[];
-  /** Convergence metrics */
-  convergence: {
-    initialEnergy: number;
-    finalEnergy: number;
-    energyDelta: number;
-    universesConverged: number;
-  };
-  /** Performance metrics */
-  metrics: {
-    avgCoherence: number;
-    avgEntropy: number;
-    tunnelingEvents: number;
-    branchingEvents: number;
-  };
-}
-
-/**
- * Language model interface for scoring sequences
- */
-export interface LanguageModelScorer {
-  /** Score a sequence and return log probability */
-  scoreSequence(tokens: number[]): Promise<number>;
-  /** Get next token probabilities */
-  getNextTokenProbs(prefix: number[]): Promise<Float32Array>;
-  /** Get vocabulary size */
-  vocabSize: number;
-}
-
-/**
- * Quantum Annealing Decoder
- * 
- * Uses simulated quantum annealing to find globally optimal token sequences.
- * Advantages over beam search:
- * - Tunneling through energy barriers (escapes local minima)
- * - Parallel exploration of multiple universes
- * - Natural temperature schedule via quantum fluctuations
- */
-export class QuantumAnnealingDecoder {
-  private config: QuantumDecoderConfig;
-  private scorer: LanguageModelScorer;
-  private universes: Universe[];
-  private tunnelingCount: number;
-  private branchingCount: number;
-  private wasmAnnealer?: WasmAnnealer;
-
-  constructor(
-    scorer: LanguageModelScorer,
-    config: Partial<QuantumDecoderConfig> = {}
-  ) {
-    this.config = { ...DEFAULT_QUANTUM_DECODER_CONFIG, ...config };
-    this.scorer = scorer;
-    this.universes = [];
-    this.tunnelingCount = 0;
-    this.branchingCount = 0;
+  constructor(config: QuantumConfig, schedule?: Partial<AnnealingSchedule>) {
+    this.config = config;
+    this.schedule = {
+      initialTemperature: schedule?.initialTemperature ?? config.temperature,
+      coolingRate: schedule?.coolingRate ?? 0.995,
+      minTemperature: schedule?.minTemperature ?? 0.01,
+      stepsPerTemperature: schedule?.stepsPerTemperature ?? 10,
+      reheatingEnabled: schedule?.reheatingEnabled ?? true,
+      reheatingThreshold: schedule?.reheatingThreshold ?? 0.3,
+    };
+    this.rng = config.seed !== undefined ? this.seededRng(config.seed) : Math.random;
   }
 
   /**
-   * Initialize WASM quantum annealer if available
+   * Select a single token from candidates using quantum annealing.
+   *
+   * @param candidates  Scored token candidates from the LLM
+   * @param context     Previous tokens for coherence evaluation
+   * @returns SuperpositionResult with the selected token
    */
-  async initializeWasm(): Promise<void> {
-    try {
-      const { QuantumAnnealer } = await import('../../quantum-core/pkg/quantum_core.js');
-      this.wasmAnnealer = new QuantumAnnealer(
-        this.config.initialTemperature,
-        this.config.coolingRate
-      );
-    } catch (e) {
-      console.warn('WASM quantum annealer not available, using JS fallback');
+  selectToken(
+    candidates: TokenCandidate[],
+    context: string[] = [],
+  ): SuperpositionResult<TokenCandidate> {
+    if (candidates.length === 0) {
+      throw new Error('Cannot select from empty candidate list');
     }
+    if (candidates.length === 1) {
+      return this.trivialResult(candidates[0]);
+    }
+
+    // Prune to manageable superposition width
+    const pruned = this.pruneCandiates(candidates);
+
+    // Initialise quantum state: put all candidates in superposition
+    const initialState = this.initSuperposition(pruned);
+
+    // Run simulated annealing
+    const { bestState, allStates } = this.anneal(initialState, pruned, context);
+
+    // Build result
+    return this.buildResult(bestState, pruned, allStates);
   }
 
   /**
-   * Decode using quantum annealing
-   * 
-   * Algorithm:
-   * 1. Initialize superposition of possible continuations
-   * 2. For each temperature step:
-   *    a. Propose modifications to each universe
-   *    b. Calculate energy changes
-   *    c. Accept/reject based on quantum tunneling probability
-   *    d. Cool the system
-   * 3. Apply interference between similar universes
-   * 4. Return best universe
+   * Decode a full sequence of N tokens autoregressively.
+   *
+   * @param getCandidates  Function that returns next-token candidates given context
+   * @param initialContext Starting context tokens
+   * @param maxTokens      Maximum tokens to generate
+   * @param stopTokens     Tokens that terminate generation
    */
-  async decode(
-    promptTokens: number[],
-    maxLength: number = this.config.maxLength
-  ): Promise<QuantumDecodeResult> {
-    // Initialize universes
-    this.initializeUniverses(promptTokens);
-    
-    const initialEnergy = this.calculateAverageEnergy();
-    let iteration = 0;
-    let temperature = this.config.initialTemperature;
-    
-    // Annealing schedule
-    while (temperature > this.config.minTemperature && iteration < maxLength) {
-      // Parallel evolution of all universes
-      await this.evolveUniverses(temperature, iteration);
-      
-      // Apply interference between similar universes
-      if (iteration % 5 === 0) {
-        this.applyInterference();
-      }
-      
-      // Prune low-viability universes
-      if (iteration % 10 === 0) {
-        this.pruneUniverses();
-      }
-      
-      // Cool the system
-      temperature *= this.config.coolingRate;
-      iteration++;
+  async decodeSequence(
+    getCandidates: (context: string[]) => Promise<TokenCandidate[]> | TokenCandidate[],
+    initialContext: string[],
+    maxTokens: number = 100,
+    stopTokens: Set<string> = new Set(['<eos>', '<|endoftext|>']),
+  ): Promise<{
+    tokens: string[];
+    totalCoherence: CoherenceScore;
+    perTokenResults: SuperpositionResult<TokenCandidate>[];
+  }> {
+    const tokens: string[] = [...initialContext];
+    const perTokenResults: SuperpositionResult<TokenCandidate>[] = [];
+    const coherences: CoherenceScore[] = [];
+
+    for (let i = 0; i < maxTokens; i++) {
+      const candidates = await getCandidates(tokens);
+      if (candidates.length === 0) break;
+
+      const result = this.selectToken(candidates, tokens);
+      const selectedToken = result.selected.token;
+
+      if (stopTokens.has(selectedToken)) break;
+
+      tokens.push(selectedToken);
+      perTokenResults.push(result);
+      coherences.push(result.coherence);
     }
-    
-    // Select best universe
-    const bestUniverse = this.selectBestUniverse();
-    const finalEnergy = bestUniverse.energy;
-    
+
     return {
-      bestSequence: bestUniverse.sequence,
-      finalEnergy,
-      iterations: iteration,
-      finalUniverses: this.universes,
-      convergence: {
-        initialEnergy,
-        finalEnergy,
-        energyDelta: initialEnergy - finalEnergy,
-        universesConverged: this.countConvergedUniverses()
-      },
-      metrics: {
-        avgCoherence: this.calculateAverageCoherence(),
-        avgEntropy: this.calculateAverageEntropy(),
-        tunnelingEvents: this.tunnelingCount,
-        branchingEvents: this.branchingCount
-      }
+      tokens: tokens.slice(initialContext.length),
+      totalCoherence: this.aggregateCoherence(coherences),
+      perTokenResults,
     };
   }
 
-  /**
-   * Initialize parallel universes with prompt
-   */
-  private initializeUniverses(promptTokens: number[]): void {
-    this.universes = [];
-    
-    for (let i = 0; i < this.config.numUniverses; i++) {
-      const sequence: QuantumToken[] = promptTokens.map((id, idx) => ({
-        id,
-        text: `tok_${id}`,
-        amplitude: 1.0,
-        phase: (idx / promptTokens.length) * 2 * Math.PI,
-        logProb: 0,
-        energy: 0
-      }));
-      
-      this.universes.push({
-        id: `universe_${i}`,
-        sequence: [...sequence],
-        energy: 0,
-        temperature: this.config.initialTemperature,
-        coherence: 1.0,
-        entropy: 0,
-        step: promptTokens.length,
-        viability: 1.0
-      });
-    }
+  /** Reset internal step counter */
+  reset(): void {
+    this.stepCount = 0;
   }
 
-  /**
-   * Evolve all universes at current temperature
-   */
-  private async evolveUniverses(
-    temperature: number,
-    step: number
-  ): Promise<void> {
-    const promises = this.universes.map(async (universe) => {
-      await this.evolveUniverse(universe, temperature, step);
-    });
-    
-    await Promise.all(promises);
-  }
+  // ── Private Methods ──────────────────────────────────────────────
 
-  /**
-   * Evolve a single universe
-   */
-  private async evolveUniverse(
-    universe: Universe,
-    temperature: number,
-    step: number
-  ): Promise<void> {
-    // Generate next token candidates
-    const tokenIds = universe.sequence.map(t => t.id);
-    const nextProbs = await this.scorer.getNextTokenProbs(tokenIds);
-    
-    // Sample next token with quantum fluctuations
-    const nextToken = this.sampleTokenWithFluctuation(nextProbs, temperature);
-    
-    // Propose new sequence
-    const newSequence = [...universe.sequence, nextToken];
-    const newEnergy = await this.calculateEnergy(newSequence);
-    
-    const deltaE = newEnergy - universe.energy;
-    
-    // Quantum annealing acceptance
-    if (this.shouldAcceptMove(deltaE, temperature)) {
-      universe.sequence = newSequence;
-      universe.energy = newEnergy;
-      
-      if (deltaE > 0) {
-        this.tunnelingCount++;
-      }
-    }
-    
-    universe.temperature = temperature;
-    universe.step = step;
-    universe.coherence = this.calculateSequenceCoherence(universe.sequence);
-    universe.entropy = this.calculateSequenceEntropy(universe.sequence);
-    universe.viability = this.calculateViability(universe);
-  }
-
-  /**
-   * Sample next token with quantum thermal fluctuations
-   */
-  private sampleTokenWithFluctuation(
-    probs: Float32Array,
-    temperature: number
-  ): QuantumToken {
-    // Apply temperature scaling (softmax with temperature)
-    const scaledProbs = new Float32Array(probs.length);
-    let sum = 0;
-    
-    for (let i = 0; i < probs.length; i++) {
-      scaledProbs[i] = Math.exp(probs[i] / temperature);
-      sum += scaledProbs[i];
-    }
-    
-    // Normalize
-    for (let i = 0; i < scaledProbs.length; i++) {
-      scaledProbs[i] /= sum;
-    }
-    
-    // Sample
-    const r = Math.random();
-    let cumsum = 0;
-    let selectedId = 0;
-    
-    for (let i = 0; i < scaledProbs.length; i++) {
-      cumsum += scaledProbs[i];
-      if (r <= cumsum) {
-        selectedId = i;
-        break;
-      }
-    }
-    
-    // Add quantum phase based on position
-    const phase = Math.random() * 2 * Math.PI;
-    
+  private initSuperposition(candidates: TokenCandidate[]): EnergyState {
+    const n = candidates.length;
+    const uniformAmp = 1 / Math.sqrt(n);
     return {
-      id: selectedId,
-      text: `tok_${selectedId}`,
-      amplitude: Math.sqrt(scaledProbs[selectedId]),
-      phase,
-      logProb: Math.log(scaledProbs[selectedId] + 1e-10),
-      energy: -Math.log(scaledProbs[selectedId] + 1e-10)
+      energy: this.computeEnergy(
+        candidates.map((_, i) => i),
+        candidates,
+      ),
+      tokenIndices: candidates.map((_, i) => i),
+      amplitudes: candidates.map((c, i) => {
+        // Bias initial phase by log-probability for faster convergence
+        const phase = c.logProbability * Math.PI;
+        return complexFromPolar(uniformAmp, phase);
+      }),
     };
   }
 
-  /**
-   * Calculate energy of a token sequence
-   * 
-   * E(sequence) = E_lm(sequence) + E_coherence(sequence) + E_constraint(sequence)
-   */
-  private async calculateEnergy(sequence: QuantumToken[]): Promise<number> {
-    // Language model energy (negative log probability)
-    const tokenIds = sequence.map(t => t.id);
-    const lmScore = await this.scorer.scoreSequence(tokenIds);
-    const lmEnergy = -lmScore;
-    
-    // Coherence energy (higher coherence = lower energy)
-    const coherence = this.calculateSequenceCoherence(sequence);
-    const coherenceEnergy = -this.config.coherenceWeight * coherence;
-    
-    // Constraint energy (penalty for constraint violations)
-    const constraintViolations = this.checkConstraints(sequence);
-    const constraintEnergy = this.config.constraintWeight * constraintViolations;
-    
-    return lmEnergy + coherenceEnergy + constraintEnergy;
-  }
+  private anneal(
+    initial: EnergyState,
+    candidates: TokenCandidate[],
+    context: string[],
+  ): { bestState: EnergyState; allStates: EnergyState[] } {
+    let current = { ...initial };
+    let best = { ...initial };
+    let temperature = this.schedule.initialTemperature;
+    const allStates: EnergyState[] = [initial];
+    let stuckCounter = 0;
 
-  /**
-   * Determine if a move should be accepted
-   * 
-   * Quantum tunneling probability:
-   * P(accept) = exp(-ΔE / T) for classical thermal jump
-   * P(tunnel) ∝ exp(-√(ΔE) / Γ) for quantum tunneling
-   */
-  private shouldAcceptMove(deltaE: number, temperature: number): boolean {
-    if (deltaE < 0) {
-      return true; // Always accept downhill moves
-    }
-    
-    // Classical thermal jump probability
-    const thermalProb = Math.exp(-deltaE / temperature);
-    
-    if (!this.config.enableTunneling) {
-      return Math.random() < thermalProb;
-    }
-    
-    // Quantum tunneling probability
-    const tunnelProb = Math.exp(
-      -Math.sqrt(deltaE) / Math.sqrt(this.config.tunnelingGamma * temperature)
-    );
-    
-    // Accept if either mechanism allows
-    const acceptProb = Math.max(thermalProb, tunnelProb);
-    return Math.random() < acceptProb;
-  }
+    while (temperature > this.schedule.minTemperature) {
+      for (let step = 0; step < this.schedule.stepsPerTemperature; step++) {
+        this.stepCount++;
 
-  /**
-   * Calculate sequence coherence (how well tokens fit together)
-   */
-  private calculateSequenceCoherence(sequence: QuantumToken[]): number {
-    if (sequence.length < 2) return 1.0;
-    
-    // Coherence based on phase alignment
-    let totalAlignment = 0;
-    for (let i = 1; i < sequence.length; i++) {
-      const phaseDiff = Math.abs(sequence[i].phase - sequence[i - 1].phase);
-      totalAlignment += Math.cos(phaseDiff); // 1 when aligned, -1 when opposite
-    }
-    
-    return (totalAlignment / (sequence.length - 1) + 1) / 2; // Normalize to [0,1]
-  }
+        // Generate neighbour by perturbing amplitudes (quantum tunnelling)
+        const neighbour = this.perturb(current, candidates, temperature);
 
-  /**
-   * Calculate sequence entropy (measure of uncertainty)
-   */
-  private calculateSequenceEntropy(sequence: QuantumToken[]): number {
-    // Entropy based on amplitude distribution
-    let entropy = 0;
-    for (const token of sequence) {
-      const p = token.amplitude * token.amplitude;
-      if (p > 1e-10) {
-        entropy -= p * Math.log2(p);
-      }
-    }
-    return entropy;
-  }
+        const deltaE = neighbour.energy - current.energy;
 
-  /**
-   * Calculate universe viability score
-   */
-  private calculateViability(universe: Universe): number {
-    // Viability based on low energy, high coherence, and appropriate entropy
-    const energyScore = 1 / (1 + universe.energy);
-    const coherenceScore = universe.coherence;
-    const entropyScore = Math.exp(-universe.entropy / 10); // Penalize high entropy
-    
-    return (energyScore + coherenceScore + entropyScore) / 3;
-  }
-
-  /**
-   * Check constraint violations
-   */
-  private checkConstraints(sequence: QuantumToken[]): number {
-    // Simplified constraint checking
-    let violations = 0;
-    
-    // Check for repetition
-    const lastTokens = sequence.slice(-5);
-    const uniqueTokens = new Set(lastTokens.map(t => t.id));
-    if (uniqueTokens.size < lastTokens.length * 0.5) {
-      violations += 1;
-    }
-    
-    // Check sequence length
-    if (sequence.length > this.config.maxLength) {
-      violations += (sequence.length - this.config.maxLength) * 0.1;
-    }
-    
-    return violations;
-  }
-
-  /**
-   * Apply interference between similar universes
-   * Similar universes constructively interfere, dissimilar ones destructively
-   */
-  private applyInterference(): void {
-    for (let i = 0; i < this.universes.length; i++) {
-      for (let j = i + 1; j < this.universes.length; j++) {
-        const u1 = this.universes[i];
-        const u2 = this.universes[j];
-        
-        const similarity = this.calculateUniverseSimilarity(u1, u2);
-        
-        if (similarity > 0.8) {
-          // Constructive interference: boost both
-          u1.viability *= 1.1;
-          u2.viability *= 1.1;
-        } else if (similarity < 0.3) {
-          // Destructive interference: reduce both
-          u1.viability *= 0.9;
-          u2.viability *= 0.9;
+        // Metropolis criterion
+        if (deltaE < 0 || this.rng() < Math.exp(-deltaE / temperature)) {
+          current = neighbour;
+          if (current.energy < best.energy) {
+            best = { ...current };
+            stuckCounter = 0;
+          } else {
+            stuckCounter++;
+          }
         }
+
+        allStates.push(current);
+      }
+
+      // Cool down
+      temperature *= this.schedule.coolingRate;
+
+      // Reheat if stuck
+      if (
+        this.schedule.reheatingEnabled &&
+        stuckCounter > this.schedule.stepsPerTemperature * 3
+      ) {
+        temperature = Math.min(
+          this.schedule.initialTemperature * this.schedule.reheatingThreshold,
+          temperature * 5,
+        );
+        stuckCounter = 0;
       }
     }
+
+    return { bestState: best, allStates };
   }
 
-  /**
-   * Calculate similarity between two universes
-   */
-  private calculateUniverseSimilarity(u1: Universe, u2: Universe): number {
-    const minLen = Math.min(u1.sequence.length, u2.sequence.length);
-    if (minLen === 0) return 0;
-    
-    let matches = 0;
-    for (let i = 0; i < minLen; i++) {
-      if (u1.sequence[i].id === u2.sequence[i].id) {
-        matches++;
-      }
-    }
-    
-    return matches / minLen;
-  }
+  private perturb(
+    state: EnergyState,
+    candidates: TokenCandidate[],
+    temperature: number,
+  ): EnergyState {
+    const newAmplitudes = state.amplitudes.map((amp) => {
+      // Random phase kick proportional to temperature
+      const phaseKick = (this.rng() - 0.5) * 2 * Math.PI * temperature;
+      const magnitudeJitter = 1 + (this.rng() - 0.5) * temperature * 0.5;
+      const currentMag = Math.sqrt(complexMagnitudeSq(amp));
+      const currentPhase = Math.atan2(amp.imaginary, amp.real);
+      return complexFromPolar(
+        Math.max(0, currentMag * magnitudeJitter),
+        currentPhase + phaseKick,
+      );
+    });
 
-  /**
-   * Prune low-viability universes
-   */
-  private pruneUniverses(): void {
-    const minViability = 0.1;
-    this.universes = this.universes.filter(u => u.viability > minViability);
-    
-    // Ensure minimum number of universes
-    while (this.universes.length < this.config.numUniverses / 2) {
-      const best = this.selectBestUniverse();
-      this.universes.push({
-        ...best,
-        id: `universe_${this.universes.length}_branched`,
-        sequence: [...best.sequence]
-      });
-      this.branchingCount++;
-    }
-  }
-
-  /**
-   * Select best universe by energy
-   */
-  private selectBestUniverse(): Universe {
-    return this.universes.reduce((best, current) => 
-      current.energy < best.energy ? current : best
+    // Renormalise
+    const norm = Math.sqrt(
+      newAmplitudes.reduce((s, a) => s + complexMagnitudeSq(a), 0),
     );
+    const normalised = norm > 0
+      ? newAmplitudes.map((a) => ({ real: a.real / norm, imaginary: a.imaginary / norm }))
+      : newAmplitudes;
+
+    return {
+      energy: this.computeEnergy(state.tokenIndices, candidates, normalised),
+      tokenIndices: state.tokenIndices,
+      amplitudes: normalised,
+    };
   }
 
-  /**
-   * Calculate average energy across all universes
-   */
-  private calculateAverageEnergy(): number {
-    if (this.universes.length === 0) return 0;
-    return this.universes.reduce((sum, u) => sum + u.energy, 0) / this.universes.length;
+  private computeEnergy(
+    indices: number[],
+    candidates: TokenCandidate[],
+    amplitudes?: ComplexNumber[],
+  ): number {
+    let energy = 0;
+
+    for (let i = 0; i < indices.length; i++) {
+      const candidate = candidates[indices[i]];
+      if (!candidate) continue;
+
+      // Base energy: negative log-probability (lower is better)
+      const baseEnergy = -candidate.logProbability;
+
+      if (amplitudes?.[i]) {
+        // Quantum correction: penalise low-amplitude states
+        const prob = complexMagnitudeSq(amplitudes[i]);
+        energy += baseEnergy * prob;
+
+        // Interference bonus: reward coherent phase alignment
+        if (i > 0 && amplitudes[i - 1]) {
+          const phaseDiff = Math.atan2(amplitudes[i].imaginary, amplitudes[i].real) -
+            Math.atan2(amplitudes[i - 1].imaginary, amplitudes[i - 1].real);
+          energy -= 0.1 * Math.cos(phaseDiff); // constructive interference reduces energy
+        }
+      } else {
+        energy += baseEnergy / indices.length;
+      }
+    }
+
+    return energy;
   }
 
-  /**
-   * Calculate average coherence
-   */
-  private calculateAverageCoherence(): number {
-    if (this.universes.length === 0) return 0;
-    return this.universes.reduce((sum, u) => sum + u.coherence, 0) / this.universes.length;
+  private pruneCandiates(candidates: TokenCandidate[]): TokenCandidate[] {
+    const maxWidth = this.config.maxSuperpositionWidth;
+    if (candidates.length <= maxWidth) return candidates;
+
+    // Keep top candidates by probability
+    return [...candidates]
+      .sort((a, b) => b.classicalProbability - a.classicalProbability)
+      .slice(0, maxWidth);
   }
 
-  /**
-   * Calculate average entropy
-   */
-  private calculateAverageEntropy(): number {
-    if (this.universes.length === 0) return 0;
-    return this.universes.reduce((sum, u) => sum + u.entropy, 0) / this.universes.length;
+  private buildResult(
+    bestState: EnergyState,
+    candidates: TokenCandidate[],
+    allStates: EnergyState[],
+  ): SuperpositionResult<TokenCandidate> {
+    // Convert final amplitudes to probability distribution
+    const probs = bestState.amplitudes.map((a) => complexMagnitudeSq(a));
+    const probSum = probs.reduce((s, p) => s + p, 0) || 1;
+    const normalised = probs.map((p) => p / probSum);
+
+    // Select token with highest probability after annealing
+    let bestIdx = 0;
+    let bestProb = 0;
+    for (let i = 0; i < normalised.length; i++) {
+      if (normalised[i] > bestProb) {
+        bestProb = normalised[i];
+        bestIdx = i;
+      }
+    }
+
+    const selected = candidates[bestState.tokenIndices[bestIdx]];
+
+    // Compute coherence
+    const coherence = this.computeCoherence(bestState, allStates);
+
+    // Count interference patterns
+    let constructive = 0;
+    let destructive = 0;
+    for (let i = 1; i < bestState.amplitudes.length; i++) {
+      const prevPhase = Math.atan2(bestState.amplitudes[i - 1].imaginary, bestState.amplitudes[i - 1].real);
+      const currPhase = Math.atan2(bestState.amplitudes[i].imaginary, bestState.amplitudes[i].real);
+      const diff = Math.abs(currPhase - prevPhase);
+      if (diff < Math.PI / 2) constructive++;
+      else destructive++;
+    }
+    const total = constructive + destructive || 1;
+
+    return {
+      selected,
+      selectedProbability: bestProb,
+      distribution: candidates.map((c, i) => ({
+        outcome: c,
+        probability: normalised[i] ?? 0,
+        amplitude: bestState.amplitudes[i] ?? { real: 0, imaginary: 0 },
+      })),
+      coherence,
+      superpositionWidth: candidates.length,
+      interferencePattern: {
+        constructive: constructive / total,
+        destructive: destructive / total,
+        netEffect: (constructive - destructive) / total,
+      },
+    };
   }
 
-  /**
-   * Count converged universes (low entropy and similar energy)
-   */
-  private countConvergedUniverses(): number {
-    const avgEnergy = this.calculateAverageEnergy();
-    const energyThreshold = 0.1;
-    
-    return this.universes.filter(u => 
-      Math.abs(u.energy - avgEnergy) < energyThreshold && u.entropy < 0.5
-    ).length;
+  private computeCoherence(best: EnergyState, history: EnergyState[]): CoherenceScore {
+    const energies = history.map((s) => s.energy);
+    const minE = Math.min(...energies);
+    const maxE = Math.max(...energies);
+    const range = maxE - minE || 1;
+
+    // Convergence quality = how close best is to minimum
+    const convergence = 1 - (best.energy - minE) / range;
+
+    // Phase coherence from amplitude distribution
+    const phases = best.amplitudes.map((a) => Math.atan2(a.imaginary, a.real));
+    const meanPhase = phases.reduce((s, p) => s + p, 0) / phases.length;
+    const phaseVariance = phases.reduce((s, p) => s + (p - meanPhase) ** 2, 0) / phases.length;
+    const phaseCoherence = Math.exp(-phaseVariance / Math.PI);
+
+    // Amplitude coherence
+    const mags = best.amplitudes.map((a) => Math.sqrt(complexMagnitudeSq(a)));
+    const meanMag = mags.reduce((s, m) => s + m, 0) / mags.length;
+    const magVariance = mags.reduce((s, m) => s + (m - meanMag) ** 2, 0) / mags.length;
+    const amplitudeCoherence = Math.exp(-magVariance);
+
+    const overall = 0.4 * convergence + 0.3 * phaseCoherence + 0.3 * amplitudeCoherence;
+
+    return {
+      overall: Math.min(1, Math.max(0, overall)),
+      phaseCoherence,
+      amplitudeCoherence,
+      entanglementFidelity: convergence,
+      decoherenceRate: 1 - convergence,
+      effectiveQubits: Math.round(this.config.numQubits * overall),
+      measuredAt: Date.now(),
+    };
+  }
+
+  private trivialResult(candidate: TokenCandidate): SuperpositionResult<TokenCandidate> {
+    return {
+      selected: candidate,
+      selectedProbability: 1,
+      distribution: [{ outcome: candidate, probability: 1, amplitude: { real: 1, imaginary: 0 } }],
+      coherence: {
+        overall: 1,
+        phaseCoherence: 1,
+        amplitudeCoherence: 1,
+        entanglementFidelity: 1,
+        decoherenceRate: 0,
+        effectiveQubits: this.config.numQubits,
+        measuredAt: Date.now(),
+      },
+      superpositionWidth: 1,
+      interferencePattern: { constructive: 1, destructive: 0, netEffect: 1 },
+    };
+  }
+
+  private aggregateCoherence(scores: CoherenceScore[]): CoherenceScore {
+    if (scores.length === 0) {
+      return {
+        overall: 0, phaseCoherence: 0, amplitudeCoherence: 0,
+        entanglementFidelity: 0, decoherenceRate: 1, effectiveQubits: 0,
+        measuredAt: Date.now(),
+      };
+    }
+    const avg = (fn: (c: CoherenceScore) => number) =>
+      scores.reduce((s, c) => s + fn(c), 0) / scores.length;
+
+    return {
+      overall: avg((c) => c.overall),
+      phaseCoherence: avg((c) => c.phaseCoherence),
+      amplitudeCoherence: avg((c) => c.amplitudeCoherence),
+      entanglementFidelity: avg((c) => c.entanglementFidelity),
+      decoherenceRate: avg((c) => c.decoherenceRate),
+      effectiveQubits: Math.round(avg((c) => c.effectiveQubits)),
+      measuredAt: Date.now(),
+    };
+  }
+
+  private seededRng(seed: number): () => number {
+    let s = seed;
+    return () => {
+      s = (s * 1664525 + 1013904223) & 0xffffffff;
+      return (s >>> 0) / 0xffffffff;
+    };
   }
 }
-
-/**
- * Multiverse Decoder
- * Explores exponentially many possible outputs in parallel
- */
-export class MultiverseDecoder extends QuantumAnnealingDecoder {
-  private branchThreshold: number;
-
-  constructor(
-    scorer: LanguageModelScorer,
-    config: Partial<QuantumDecoderConfig> = {}
-  ) {
-    super(scorer, config);
-    this.branchThreshold = 2.0; // Entropy threshold for branching
-  }
-
-  /**
-   * Decode with multiverse branching
-   * Universes split on high uncertainty, merge on convergence
-   */
-  async decodeWithBranching(
-    promptTokens: number[],
-    maxLength: number = 256
-  ): Promise<QuantumDecodeResult> {
-    // Standard decode with additional branching
-    const result = await this.decode(promptTokens, maxLength);
-    
-    // Record branching events
-    (this as unknown as { branchingCount: number }).branchingCount = 
-      result.metrics.branchingEvents;
-    
-    return result;
-  }
-}
-
-/**
- * Factory function to create quantum decoder
- */
-export function createQuantumDecoder(
-  scorer: LanguageModelScorer,
-  options?: Partial<QuantumDecoderConfig> & { useMultiverse?: boolean }
-): QuantumAnnealingDecoder {
-  if (options?.useMultiverse) {
-    return new MultiverseDecoder(scorer, options);
-  }
-  return new QuantumAnnealingDecoder(scorer, options);
-}
-
-// Exports
-export { QuantumAnnealingDecoder, MultiverseDecoder };
-export default QuantumAnnealingDecoder;

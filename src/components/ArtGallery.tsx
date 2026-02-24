@@ -1,12 +1,17 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
+interface Artwork {
+  image: string;
+  title?: string;
+}
+
 interface ArtGalleryProps {
   apiUrl: string;
 }
 
 const ArtGallery: React.FC<ArtGalleryProps> = ({ apiUrl }) => {
-  const [artworks, setArtworks] = useState([]);
+  const [artworks, setArtworks] = useState<Artwork[]>([]);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {

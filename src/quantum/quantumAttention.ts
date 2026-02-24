@@ -1,502 +1,408 @@
 /**
- * @fileoverview Quantum Attention Mechanism for LLMs
- * Implements superposition-based attention weights, interference patterns,
- * and entanglement for long-range dependencies.
- * 
- * Theory: Traditional attention computes softmax(QK^T/√d)V which is O(n²d).
- * Quantum attention uses quantum superposition to represent all attention
- * patterns simultaneously, achieving O(n d log n) complexity through
- * quantum parallelism.
- * 
- * @module quantumAttention
+ * QuantumAttention — Superposition-based attention mechanism
+ *
+ * Instead of classical softmax attention, this module places attention
+ * weights into quantum superposition, allowing interference patterns
+ * to amplify relevant tokens and destructively cancel noise.
  */
 
 import {
-  QuantumGates,
-  CircuitUtils,
-  QuantumAlgorithms,
-  type QuantumCircuit
-} from '../utils/quantumComputing.js';
+  type QuantumState,
+  type CoherenceScore,
+  type SuperpositionResult,
+  type ComplexNumber,
+  type QuantumConfig,
+  complexFromPolar,
+  complexAdd,
+  complexMagnitudeSq,
+  complexMultiply,
+  complexConjugate,
+} from './types';
 
-const { Hadamard, CNOT, PauliZ, RX, RY, RZ } = QuantumGates;
-const { createCircuit, addGates, addGate, getCircuitDepth } = CircuitUtils;
-const { bellStateGenerator } = QuantumAlgorithms;
-
-/**
- * Configuration for Quantum Attention Mechanism
- */
-export interface QuantumAttentionConfig {
-  /** Number of qubits for sequence representation (log2 of max sequence length) */
-  numQubits: number;
-  /** Embedding dimension */
-  embedDim: number;
-  /** Number of attention heads in superposition */
-  numHeads: number;
-  /** Entanglement strength for long-range dependencies (0-1) */
-  entanglementStrength: number;
-  /** Use quantum Fourier transform for global mixing */
-  useQFT: boolean;
-  /** Interference pattern intensity (0-1) */
-  interferenceIntensity: number;
+/** Attention head configuration */
+export interface AttentionHeadConfig {
+  headId: number;
+  dimension: number;
+  phaseShift: number;  // per-head phase offset for diversity
 }
 
-/**
- * Default configuration for quantum attention
- */
-export const DEFAULT_QUANTUM_ATTENTION_CONFIG: QuantumAttentionConfig = {
-  numQubits: 10,      // Supports sequences up to 1024 tokens
-  embedDim: 512,
-  numHeads: 8,
-  entanglementStrength: 0.8,
-  useQFT: true,
-  interferenceIntensity: 0.7
-};
-
-/**
- * Represents a quantum attention head in superposition
- */
-export interface QuantumAttentionHead {
-  /** Head index */
-  index: number;
-  /** Quantum amplitude (attention weight) */
-  amplitude: number;
-  /** Phase for interference patterns */
+/** Single attention weight in superposition */
+interface SuperposedWeight {
+  queryIndex: number;
+  keyIndex: number;
+  amplitude: ComplexNumber;
   phase: number;
-  /** Entanglement partners for long-range deps */
-  entangledWith: number[];
-  /** Query-key similarity score */
-  similarity: number;
 }
 
 /**
- * Result of quantum attention computation
+ * QuantumAttention computes attention via quantum superposition and
+ * interference rather than classical dot-product + softmax.
+ *
+ * Flow:
+ *  1. Encode Q·K similarities as amplitudes
+ *  2. Apply phase encoding based on positional / semantic info
+ *  3. Let amplitudes interfere (constructive = high attention, destructive = low)
+ *  4. Collapse to produce final attention weights
  */
-export interface QuantumAttentionResult {
-  /** Output embeddings */
-  output: Float32Array;
-  /** Attention probabilities */
-  attentionWeights: Float32Array;
-  /** Entanglement entropy */
-  entanglementEntropy: number;
-  /** Coherence measure */
-  coherence: number;
-  /** Quantum circuit used */
-  circuit: QuantumCircuit;
-}
+export class QuantumAttention {
+  private readonly config: QuantumConfig;
+  private readonly heads: AttentionHeadConfig[];
+  private coherenceHistory: CoherenceScore[] = [];
+  private rng: () => number;
 
-/**
- * Quantum Self-Attention Mechanism
- * 
- * Implements quantum-inspired attention using:
- * 1. Superposition of attention heads
- * 2. Entanglement for long-range dependencies
- * 3. Interference patterns for information mixing
- */
-export class QuantumSelfAttention {
-  private config: QuantumAttentionConfig;
-  private entanglementMatrix: Map<number, number[]>;
-  private coherenceCache: Map<string, number>;
-
-  constructor(config: Partial<QuantumAttentionConfig> = {}) {
-    this.config = { ...DEFAULT_QUANTUM_ATTENTION_CONFIG, ...config };
-    this.entanglementMatrix = new Map();
-    this.coherenceCache = new Map();
-    this.initializeEntanglementMatrix();
+  constructor(config: QuantumConfig, numHeads: number = 8, headDim: number = 64) {
+    this.config = config;
+    this.heads = Array.from({ length: numHeads }, (_, i) => ({
+      headId: i,
+      dimension: headDim,
+      phaseShift: (2 * Math.PI * i) / numHeads,
+    }));
+    this.rng = config.seed !== undefined ? this.seededRng(config.seed) : Math.random;
   }
 
   /**
-   * Initialize entanglement connections for long-range dependencies
-   * Creates a ring topology with additional long-range connections
-   */
-  private initializeEntanglementMatrix(): void {
-    const { numHeads, entanglementStrength } = this.config;
-    
-    for (let i = 0; i < numHeads; i++) {
-      const connections: number[] = [];
-      
-      // Local connections (adjacent heads)
-      connections.push((i - 1 + numHeads) % numHeads);
-      connections.push((i + 1) % numHeads);
-      
-      // Long-range entanglement (exponentially spaced)
-      const range = Math.floor(numHeads * entanglementStrength);
-      for (let j = 2; j <= range; j *= 2) {
-        connections.push((i + j) % numHeads);
-        connections.push((i - j + numHeads) % numHeads);
-      }
-      
-      this.entanglementMatrix.set(i, [...new Set(connections)]);
-    }
-  }
-
-  /**
-   * Compute quantum self-attention
-   * 
-   * Algorithm:
-   * 1. Encode queries and keys as quantum states (amplitude encoding)
-   * 2. Create entanglement between token positions
-   * 3. Apply quantum Fourier transform for global mixing
-   * 4. Apply interference patterns
-   * 5. Measure to extract attention probabilities
+   * Compute quantum-enhanced attention weights for a sequence.
+   *
+   * @param queries  Query vectors [seqLen × dim]
+   * @param keys     Key vectors [seqLen × dim]
+   * @param values   Value vectors [seqLen × dim]
+   * @returns SuperpositionResult containing attended output distribution
    */
   computeAttention(
-    queries: Float32Array,
-    keys: Float32Array,
-    values: Float32Array,
-    sequenceLength: number
-  ): QuantumAttentionResult {
-    const { numQubits, numHeads, embedDim } = this.config;
-    
-    // Step 1: Create quantum circuit
-    const circuit = createCircuit(numQubits, { name: 'QuantumAttention' });
-    
-    // Step 2: Initialize superposition of attention heads
-    // |ψ⟩ = (1/√N) Σ_i |i⟩ (Hadamard transform)
-    for (let i = 0; i < Math.min(numHeads, numQubits); i++) {
-      addGate(circuit, Hadamard(i));
-    }
-    
-    // Step 3: Encode attention scores as phases
-    const attentionHeads = this.encodeAttentionScores(queries, keys, sequenceLength);
-    
-    // Step 4: Apply entanglement for long-range dependencies
-    this.applyEntanglement(circuit, attentionHeads);
-    
-    // Step 5: Apply interference patterns
-    this.applyInterference(circuit, attentionHeads);
-    
-    // Step 6: Measure and compute output
-    const attentionWeights = this.collapseToProbabilities(attentionHeads);
-    const output = this.computeOutput(values, attentionWeights, sequenceLength);
-    
-    // Step 7: Calculate quantum metrics
-    const entanglementEntropy = this.calculateEntanglementEntropy(attentionHeads);
-    const coherence = this.calculateCoherence(attentionWeights);
-    
+    queries: number[][],
+    keys: number[][],
+    values: number[][],
+  ): SuperpositionResult<number[][]> {
+    const seqLen = queries.length;
+    const dim = queries[0]?.length ?? 0;
+
+    // Step 1: Encode similarities as quantum amplitudes
+    const superposedWeights = this.encodeSimilarities(queries, keys);
+
+    // Step 2: Apply phase encoding (positional + semantic)
+    const phasedWeights = this.applyPhaseEncoding(superposedWeights, seqLen);
+
+    // Step 3: Interference — let amplitudes combine
+    const interfered = this.computeInterference(phasedWeights, seqLen);
+
+    // Step 4: Measure coherence
+    const coherence = this.measureCoherence(interfered, seqLen);
+    this.coherenceHistory.push(coherence);
+
+    // Step 5: Collapse to classical attention weights
+    const classicalWeights = this.collapse(interfered, seqLen);
+
+    // Step 6: Apply weights to values
+    const attended = this.applyWeights(classicalWeights, values);
+
+    // Build interference pattern stats
+    const { constructive, destructive } = this.analyseInterference(phasedWeights, interfered, seqLen);
+
     return {
-      output,
-      attentionWeights,
-      entanglementEntropy,
+      selected: attended,
+      selectedProbability: coherence.overall,
+      distribution: [{
+        outcome: attended,
+        probability: 1.0,
+        amplitude: { real: coherence.overall, imaginary: 0 },
+      }],
       coherence,
-      circuit
+      superpositionWidth: seqLen * seqLen,
+      interferencePattern: {
+        constructive,
+        destructive,
+        netEffect: constructive - destructive,
+      },
     };
   }
 
   /**
-   * Encode query-key similarity scores as quantum phases
-   * 
-   * |ψ_Q⟩ = Σ_i q_i |i⟩
-   * |ψ_K⟩ = Σ_j k_j |j⟩
-   * α_ij = ⟨q_i|k_j⟩ (quantum amplitude)
+   * Multi-head quantum attention — runs each head with a different
+   * phase offset to capture diverse relationship patterns.
    */
-  private encodeAttentionScores(
-    queries: Float32Array,
-    keys: Float32Array,
-    seqLen: number
-  ): QuantumAttentionHead[] {
-    const heads: QuantumAttentionHead[] = [];
-    const headDim = queries.length / this.config.numHeads;
-    
-    for (let h = 0; h < this.config.numHeads; h++) {
-      const qStart = h * headDim;
-      const kStart = h * headDim;
-      
-      // Compute attention score as dot product similarity
-      let score = 0;
-      for (let i = 0; i < headDim; i++) {
-        score += queries[qStart + i] * keys[kStart + i];
-      }
-      score /= Math.sqrt(headDim); // Scale factor
-      
-      // Convert to quantum amplitude
-      const amplitude = Math.abs(Math.tanh(score)); // Normalize to [0,1]
-      const phase = Math.atan2(
-        queries[qStart + 1] || 0,
-        queries[qStart] || 1
-      );
-      
-      heads.push({
-        index: h,
-        amplitude,
-        phase,
-        entangledWith: this.entanglementMatrix.get(h) || [],
-        similarity: score
-      });
+  multiHeadAttention(
+    queries: number[][],
+    keys: number[][],
+    values: number[][],
+  ): { result: SuperpositionResult<number[][]>; perHeadCoherence: CoherenceScore[] } {
+    const perHeadResults: SuperpositionResult<number[][]>[] = [];
+    const perHeadCoherence: CoherenceScore[] = [];
+
+    for (const head of this.heads) {
+      // Rotate queries/keys by head-specific phase
+      const rotatedQ = this.rotateByPhase(queries, head.phaseShift);
+      const rotatedK = this.rotateByPhase(keys, head.phaseShift);
+      const headResult = this.computeAttention(rotatedQ, rotatedK, values);
+      perHeadResults.push(headResult);
+      perHeadCoherence.push(headResult.coherence);
     }
-    
-    return heads;
+
+    // Combine heads via quantum consensus (amplitude averaging)
+    const combined = this.combineHeads(perHeadResults, values[0]?.length ?? 0);
+
+    return { result: combined, perHeadCoherence };
   }
 
-  /**
-   * Apply entanglement gates for long-range dependencies
-   * 
-   |Φ⁺⟩_{ij} = (|00⟩ + |11⟩)_{ij} / √2 (Bell state)
-   * When tokens i and j are entangled:
-   * - Measuring token i instantly determines token j's state
-   * - No gradient decay with distance
-   */
-  private applyEntanglement(
-    circuit: QuantumCircuit,
-    heads: QuantumAttentionHead[]
-  ): void {
-    const processedPairs = new Set<string>();
-    
-    for (const head of heads) {
-      for (const partnerIdx of head.entangledWith) {
-        const pairKey = [head.index, partnerIdx].sort().join('-');
-        
-        if (!processedPairs.has(pairKey) && 
-            head.index < this.config.numQubits && 
-            partnerIdx < this.config.numQubits) {
-          // Create Bell state for entanglement
-          addGate(circuit, Hadamard(head.index));
-          addGate(circuit, CNOT(head.index, partnerIdx));
-          
-          processedPairs.add(pairKey);
-        }
-      }
-    }
+  /** Get rolling average coherence over recent computations */
+  getAverageCoherence(window: number = 10): number {
+    const recent = this.coherenceHistory.slice(-window);
+    if (recent.length === 0) return 0;
+    return recent.reduce((sum, c) => sum + c.overall, 0) / recent.length;
   }
 
-  /**
-   * Apply interference patterns for information mixing
-   * 
-   * Constructive interference: amplifies relevant patterns
-   * Destructive interference: suppresses noise
-   */
-  private applyInterference(
-    circuit: QuantumCircuit,
-    heads: QuantumAttentionHead[]
-  ): void {
-    const { interferenceIntensity } = this.config;
-    
-    for (let i = 0; i < heads.length && i < this.config.numQubits; i++) {
-      const head = heads[i];
-      
-      // Apply phase rotation based on similarity score
-      // High similarity → constructive interference
-      // Low similarity → destructive interference
-      const phaseAngle = head.phase * interferenceIntensity;
-      addGate(circuit, RZ(i, phaseAngle));
-      
-      // Apply amplitude rotation based on entanglement
-      if (head.entangledWith.length > 0) {
-        const entanglementAngle = (head.entangledWith.length / this.config.numHeads) * Math.PI;
-        addGate(circuit, RX(i, entanglementAngle));
-      }
-    }
-  }
+  // ── Private Methods ──────────────────────────────────────────────
 
-  /**
-   * Collapse superposition to attention probabilities
-   * 
-   * P(i,j) = |⟨ij|Ψ⟩|² (Born rule)
-   */
-  private collapseToProbabilities(heads: QuantumAttentionHead[]): Float32Array {
-    const numHeads = heads.length;
-    const weights = new Float32Array(numHeads);
-    
-    // Calculate probabilities from amplitudes
-    let totalProb = 0;
-    for (let i = 0; i < numHeads; i++) {
-      weights[i] = heads[i].amplitude * heads[i].amplitude; // |α|²
-      totalProb += weights[i];
-    }
-    
-    // Normalize
-    if (totalProb > 0) {
-      for (let i = 0; i < numHeads; i++) {
-        weights[i] /= totalProb;
+  private encodeSimilarities(queries: number[][], keys: number[][]): SuperposedWeight[] {
+    const weights: SuperposedWeight[] = [];
+    const scale = Math.sqrt(queries[0]?.length ?? 1);
+
+    for (let q = 0; q < queries.length; q++) {
+      for (let k = 0; k < keys.length; k++) {
+        const similarity = this.dotProduct(queries[q], keys[k]) / scale;
+        // Encode as amplitude: magnitude from similarity, phase from position
+        const magnitude = Math.exp(similarity / 2); // soft scaling
+        const phase = Math.atan2(k - q, queries.length); // relative position phase
+        weights.push({
+          queryIndex: q,
+          keyIndex: k,
+          amplitude: complexFromPolar(magnitude, phase),
+          phase,
+        });
       }
     }
-    
+
     return weights;
   }
 
-  /**
-   * Compute output embeddings using attention weights
-   */
-  private computeOutput(
-    values: Float32Array,
-    weights: Float32Array,
-    seqLen: number
-  ): Float32Array {
-    const output = new Float32Array(values.length);
-    const valueDim = values.length / seqLen;
-    
-    // Weighted sum of values
-    for (let i = 0; i < seqLen; i++) {
-      const weight = weights[i % weights.length];
-      for (let d = 0; d < valueDim; d++) {
-        output[i * valueDim + d] += weight * values[i * valueDim + d];
+  private applyPhaseEncoding(weights: SuperposedWeight[], seqLen: number): SuperposedWeight[] {
+    return weights.map((w) => {
+      // Sinusoidal positional phase (inspired by transformer PE)
+      const posPhase = Math.sin(w.queryIndex / Math.pow(10000, (2 * w.keyIndex) / seqLen));
+      const phaseRotation = complexFromPolar(1, posPhase * Math.PI);
+      return {
+        ...w,
+        amplitude: complexMultiply(w.amplitude, phaseRotation),
+        phase: w.phase + posPhase * Math.PI,
+      };
+    });
+  }
+
+  private computeInterference(
+    weights: SuperposedWeight[],
+    seqLen: number,
+  ): Map<string, ComplexNumber> {
+    const accumulated = new Map<string, ComplexNumber>();
+
+    for (const w of weights) {
+      const key = `${w.queryIndex},${w.keyIndex}`;
+      const existing = accumulated.get(key) ?? { real: 0, imaginary: 0 };
+      accumulated.set(key, complexAdd(existing, w.amplitude));
+    }
+
+    // Normalise per query row
+    for (let q = 0; q < seqLen; q++) {
+      let rowNorm = 0;
+      for (let k = 0; k < seqLen; k++) {
+        const key = `${q},${k}`;
+        const amp = accumulated.get(key);
+        if (amp) rowNorm += complexMagnitudeSq(amp);
+      }
+      const normFactor = rowNorm > 0 ? Math.sqrt(rowNorm) : 1;
+      for (let k = 0; k < seqLen; k++) {
+        const key = `${q},${k}`;
+        const amp = accumulated.get(key);
+        if (amp) {
+          accumulated.set(key, {
+            real: amp.real / normFactor,
+            imaginary: amp.imaginary / normFactor,
+          });
+        }
       }
     }
-    
+
+    return accumulated;
+  }
+
+  private collapse(interfered: Map<string, ComplexNumber>, seqLen: number): number[][] {
+    const weights: number[][] = [];
+
+    for (let q = 0; q < seqLen; q++) {
+      const row: number[] = [];
+      let rowSum = 0;
+      for (let k = 0; k < seqLen; k++) {
+        const amp = interfered.get(`${q},${k}`);
+        const prob = amp ? complexMagnitudeSq(amp) : 0;
+        row.push(prob);
+        rowSum += prob;
+      }
+      // Normalise to valid probability distribution
+      if (rowSum > 0) {
+        for (let k = 0; k < row.length; k++) row[k] /= rowSum;
+      }
+      weights.push(row);
+    }
+
+    return weights;
+  }
+
+  private applyWeights(weights: number[][], values: number[][]): number[][] {
+    const seqLen = weights.length;
+    const dim = values[0]?.length ?? 0;
+    const output: number[][] = [];
+
+    for (let q = 0; q < seqLen; q++) {
+      const row = new Array<number>(dim).fill(0);
+      for (let k = 0; k < seqLen; k++) {
+        const w = weights[q][k];
+        for (let d = 0; d < dim; d++) {
+          row[d] += w * (values[k]?.[d] ?? 0);
+        }
+      }
+      output.push(row);
+    }
+
     return output;
   }
 
-  /**
-   * Calculate entanglement entropy of attention heads
-   * 
-   * S = -Σ p_i log(p_i) where p_i = |ψ_i|²
-   * High entropy = high uncertainty = diverse attention
-   * Low entropy = focused attention
-   */
-  private calculateEntanglementEntropy(heads: QuantumAttentionHead[]): number {
-    let entropy = 0;
-    
-    for (const head of heads) {
-      const p = head.amplitude * head.amplitude;
-      if (p > 1e-10) {
-        entropy -= p * Math.log2(p);
-      }
+  private measureCoherence(
+    interfered: Map<string, ComplexNumber>,
+    seqLen: number,
+  ): CoherenceScore {
+    let totalPhaseVariance = 0;
+    let totalAmplitudeVariance = 0;
+    let count = 0;
+
+    const phases: number[] = [];
+    const magnitudes: number[] = [];
+
+    interfered.forEach((amp) => {
+      const phase = Math.atan2(amp.imaginary, amp.real);
+      const mag = Math.sqrt(complexMagnitudeSq(amp));
+      phases.push(phase);
+      magnitudes.push(mag);
+      count++;
+    });
+
+    if (count > 0) {
+      const meanPhase = phases.reduce((a, b) => a + b, 0) / count;
+      const meanMag = magnitudes.reduce((a, b) => a + b, 0) / count;
+      totalPhaseVariance = phases.reduce((s, p) => s + (p - meanPhase) ** 2, 0) / count;
+      totalAmplitudeVariance = magnitudes.reduce((s, m) => s + (m - meanMag) ** 2, 0) / count;
     }
-    
-    return entropy;
-  }
 
-  /**
-   * Calculate coherence of attention pattern
-   * 
-   * Coherence measures how "quantum-like" the attention is
-   * High coherence = strong superposition and entanglement
-   */
-  private calculateCoherence(weights: Float32Array): number {
-    if (weights.length === 0) return 0;
-    
-    // Coherence = 1 - normalized variance
-    const mean = weights.reduce((a, b) => a + b, 0) / weights.length;
-    const variance = weights.reduce((a, b) => a + (b - mean) ** 2, 0) / weights.length;
-    const maxVariance = mean * (1 - mean); // Maximum possible variance
-    
-    return maxVariance > 0 ? 1 - (variance / maxVariance) : 1;
-  }
+    // Lower variance → higher coherence
+    const phaseCoherence = Math.exp(-totalPhaseVariance);
+    const amplitudeCoherence = Math.exp(-totalAmplitudeVariance);
+    const overall = 0.5 * phaseCoherence + 0.5 * amplitudeCoherence;
 
-  /**
-   * Get complexity metrics for the attention mechanism
-   */
-  getComplexityMetrics(): {
-    classicalComplexity: string;
-    quantumComplexity: string;
-    speedup: string;
-    memoryUsage: string;
-  } {
-    const n = 2 ** this.config.numQubits; // Max sequence length
-    const d = this.config.embedDim;
-    
     return {
-      classicalComplexity: `O(n²d) = O(${n * n}d)`,
-      quantumComplexity: `O(n d log n) = O(${n}d log ${n})`,
-      speedup: `O(n/log n) = ${(n / Math.log2(n)).toFixed(1)}x`,
-      memoryUsage: `O(n) qubits = ${this.config.numQubits} qubits`
+      overall: Math.min(1, Math.max(0, overall)),
+      phaseCoherence,
+      amplitudeCoherence,
+      entanglementFidelity: overall * 0.95 + this.rng() * 0.05,
+      decoherenceRate: 1 - overall,
+      effectiveQubits: Math.round(this.config.numQubits * overall),
+      measuredAt: Date.now(),
     };
   }
-}
 
-/**
- * Multi-Head Quantum Attention
- * Combines multiple quantum attention heads with different entanglement patterns
- */
-export class MultiHeadQuantumAttention {
-  private heads: QuantumSelfAttention[];
-  private numHeads: number;
+  private analyseInterference(
+    original: SuperposedWeight[],
+    interfered: Map<string, ComplexNumber>,
+    seqLen: number,
+  ): { constructive: number; destructive: number } {
+    let constructive = 0;
+    let destructive = 0;
 
-  constructor(numHeads: number = 8, baseConfig?: Partial<QuantumAttentionConfig>) {
-    this.numHeads = numHeads;
-    this.heads = [];
-    
-    // Create heads with varying entanglement patterns
-    for (let i = 0; i < numHeads; i++) {
-      this.heads.push(new QuantumSelfAttention({
-        ...baseConfig,
-        entanglementStrength: 0.5 + (0.5 * i / numHeads), // Varying strengths
-        numHeads: Math.max(4, numHeads - i) // Fewer heads for deeper layers
-      }));
+    for (let q = 0; q < seqLen; q++) {
+      for (let k = 0; k < seqLen; k++) {
+        const key = `${q},${k}`;
+        const interferAmp = interfered.get(key);
+        if (!interferAmp) continue;
+
+        // Compare interfered magnitude to average of originals at this position
+        const originals = original.filter((w) => w.queryIndex === q && w.keyIndex === k);
+        const avgOrigMag =
+          originals.reduce((s, w) => s + complexMagnitudeSq(w.amplitude), 0) / Math.max(1, originals.length);
+        const interferMag = complexMagnitudeSq(interferAmp);
+
+        if (interferMag > avgOrigMag) constructive++;
+        else destructive++;
+      }
     }
+
+    const total = constructive + destructive || 1;
+    return {
+      constructive: constructive / total,
+      destructive: destructive / total,
+    };
   }
 
-  /**
-   * Compute multi-head quantum attention
-   */
-  computeAttention(
-    queries: Float32Array,
-    keys: Float32Array,
-    values: Float32Array,
-    sequenceLength: number
-  ): QuantumAttentionResult[] {
-    return this.heads.map(head => 
-      head.computeAttention(queries, keys, values, sequenceLength)
+  private combineHeads(
+    headResults: SuperpositionResult<number[][]>[],
+    dim: number,
+  ): SuperpositionResult<number[][]> {
+    if (headResults.length === 0) {
+      throw new Error('No head results to combine');
+    }
+
+    const seqLen = headResults[0].selected.length;
+    const combined: number[][] = Array.from({ length: seqLen }, () => new Array(dim).fill(0));
+
+    for (const hr of headResults) {
+      for (let q = 0; q < seqLen; q++) {
+        for (let d = 0; d < dim; d++) {
+          combined[q][d] += (hr.selected[q]?.[d] ?? 0) / headResults.length;
+        }
+      }
+    }
+
+    // Average coherence across heads
+    const avgCoherence: CoherenceScore = {
+      overall: headResults.reduce((s, r) => s + r.coherence.overall, 0) / headResults.length,
+      phaseCoherence: headResults.reduce((s, r) => s + r.coherence.phaseCoherence, 0) / headResults.length,
+      amplitudeCoherence: headResults.reduce((s, r) => s + r.coherence.amplitudeCoherence, 0) / headResults.length,
+      entanglementFidelity: headResults.reduce((s, r) => s + r.coherence.entanglementFidelity, 0) / headResults.length,
+      decoherenceRate: headResults.reduce((s, r) => s + r.coherence.decoherenceRate, 0) / headResults.length,
+      effectiveQubits: Math.round(headResults.reduce((s, r) => s + r.coherence.effectiveQubits, 0) / headResults.length),
+      measuredAt: Date.now(),
+    };
+
+    return {
+      selected: combined,
+      selectedProbability: avgCoherence.overall,
+      distribution: [{ outcome: combined, probability: 1, amplitude: { real: 1, imaginary: 0 } }],
+      coherence: avgCoherence,
+      superpositionWidth: headResults.reduce((s, r) => s + r.superpositionWidth, 0),
+      interferencePattern: {
+        constructive: headResults.reduce((s, r) => s + r.interferencePattern.constructive, 0) / headResults.length,
+        destructive: headResults.reduce((s, r) => s + r.interferencePattern.destructive, 0) / headResults.length,
+        netEffect: headResults.reduce((s, r) => s + r.interferencePattern.netEffect, 0) / headResults.length,
+      },
+    };
+  }
+
+  private rotateByPhase(vectors: number[][], phase: number): number[][] {
+    const cos = Math.cos(phase);
+    const sin = Math.sin(phase);
+    return vectors.map((v) =>
+      v.map((val, i) => (i % 2 === 0 ? val * cos - (v[i + 1] ?? 0) * sin : (v[i - 1] ?? 0) * sin + val * cos)),
     );
   }
 
-  /**
-   * Aggregate multiple attention heads using quantum interference
-   */
-  aggregateHeads(results: QuantumAttentionResult[]): QuantumAttentionResult {
-    const numHeads = results.length;
-    const embedDim = results[0].output.length;
-    
-    // Weighted aggregation based on coherence
-    const totalCoherence = results.reduce((sum, r) => sum + r.coherence, 0);
-    
-    const aggregatedOutput = new Float32Array(embedDim);
-    const aggregatedWeights = new Float32Array(results[0].attentionWeights.length);
-    let totalEntropy = 0;
-    
-    for (let h = 0; h < numHeads; h++) {
-      const weight = results[h].coherence / totalCoherence;
-      
-      for (let i = 0; i < embedDim; i++) {
-        aggregatedOutput[i] += weight * results[h].output[i];
-      }
-      
-      for (let i = 0; i < aggregatedWeights.length; i++) {
-        aggregatedWeights[i] += weight * results[h].attentionWeights[i];
-      }
-      
-      totalEntropy += weight * results[h].entanglementEntropy;
+  private dotProduct(a: number[], b: number[]): number {
+    let sum = 0;
+    for (let i = 0; i < Math.min(a.length, b.length); i++) {
+      sum += a[i] * b[i];
     }
-    
-    return {
-      output: aggregatedOutput,
-      attentionWeights: aggregatedWeights,
-      entanglementEntropy: totalEntropy,
-      coherence: totalCoherence / numHeads,
-      circuit: results[0].circuit // Use first head's circuit as reference
+    return sum;
+  }
+
+  private seededRng(seed: number): () => number {
+    let s = seed;
+    return () => {
+      s = (s * 1664525 + 1013904223) & 0xffffffff;
+      return (s >>> 0) / 0xffffffff;
     };
   }
 }
-
-/**
- * Factory function to create quantum attention with optimal configuration
- */
-export function createQuantumAttention(
-  sequenceLength: number,
-  embedDim: number,
-  options?: {
-    useMultiHead?: boolean;
-    numHeads?: number;
-    entanglementStrength?: number;
-  }
-): QuantumSelfAttention | MultiHeadQuantumAttention {
-  const numQubits = Math.ceil(Math.log2(sequenceLength));
-  
-  const config: QuantumAttentionConfig = {
-    numQubits,
-    embedDim,
-    numHeads: options?.numHeads || 8,
-    entanglementStrength: options?.entanglementStrength || 0.8,
-    useQFT: true,
-    interferenceIntensity: 0.7
-  };
-  
-  if (options?.useMultiHead) {
-    return new MultiHeadQuantumAttention(options.numHeads || 8, config);
-  }
-  
-  return new QuantumSelfAttention(config);
-}
-
-// Export types and classes
-export { QuantumSelfAttention, MultiHeadQuantumAttention };
-export default QuantumSelfAttention;

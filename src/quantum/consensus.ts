@@ -1,691 +1,518 @@
 /**
- * @fileoverview Quantum-Enhanced Consensus for Multi-Model Ensembles
- * Integrates with OpenRouter ensemble and uses quantum voting for best response.
- * Uses coherence scoring to select optimal outputs.
- * 
- * Theory: Multiple LLMs (GPT-4, Claude, Gemini) produce different outputs.
- * Classical consensus takes majority vote or averages embeddings.
- * Quantum consensus uses:
- * 1. Holographic representation of model outputs
- * 2. Interference patterns to amplify consensus, suppress hallucinations
- * 3. Entanglement to capture cross-model dependencies
- * 4. Coherence as quality metric for final selection
- * 
- * @module consensus
+ * QuantumConsensus — Multi-model quantum voting
+ *
+ * Aggregates outputs from multiple LLM models using quantum-inspired
+ * voting. Each model's output is treated as a quantum state; the
+ * consensus mechanism uses entanglement-based correlation and
+ * interference to select the best collective answer.
  */
 
-import type { HolographicConsensus as WasmHolographicConsensus } from '../../quantum-core/pkg/quantum_core.js';
-import type { MultiverseEngine as WasmMultiverseEngine } from '../../quantum-core/pkg/quantum_core.js';
+import {
+  type EntanglementPair,
+  type CoherenceScore,
+  type SuperpositionResult,
+  type ComplexNumber,
+  type QuantumConfig,
+  complexFromPolar,
+  complexMagnitudeSq,
+  complexAdd,
+  complexMultiply,
+} from './types';
 
-/**
- * Configuration for Quantum Consensus
- */
-export interface QuantumConsensusConfig {
-  /** Embedding dimension (typically 1536 for OpenAI) */
-  embeddingDim: number;
-  /** Coherence threshold for consensus */
-  coherenceThreshold: number;
-  /** Number of models in ensemble */
-  numModels: number;
-  /** Use holographic interference */
-  useHolographic: boolean;
-  /** Use quantum voting */
-  useQuantumVoting: boolean;
-  /** Entanglement strength between models */
-  entanglementStrength: number;
-  /** Use WASM acceleration */
-  useWasm: boolean;
-}
-
-/**
- * Default consensus configuration
- */
-export const DEFAULT_QUANTUM_CONSENSUS_CONFIG: QuantumConsensusConfig = {
-  embeddingDim: 1536,
-  coherenceThreshold: 0.85,
-  numModels: 3,
-  useHolographic: true,
-  useQuantumVoting: true,
-  entanglementStrength: 0.7,
-  useWasm: true
-};
-
-/**
- * Model response with metadata
- */
-export interface ModelResponse {
-  /** Model identifier (e.g., 'gpt-4', 'claude-3') */
+/** A single model's vote / output */
+export interface ModelVote<T = string> {
   modelId: string;
-  /** Response text */
-  text: string;
-  /** Confidence score from model */
+  output: T;
+  confidence: number;   // 0–1
+  latencyMs: number;
+  metadata?: Record<string, unknown>;
+}
+
+/** Consensus result with full quantum analysis */
+export interface ConsensusResult<T = string> {
+  /** The consensus winner */
+  winner: T;
+  /** Confidence in the consensus */
   confidence: number;
-  /** Response embedding */
-  embedding?: Float32Array;
-  /** Token probabilities */
-  tokenProbs?: Float32Array;
-  /** Generation latency (ms) */
-  latency: number;
-}
-
-/**
- * Quantum state representation of a model response
- */
-export interface QuantumResponseState {
-  /** Reference to original response */
-  response: ModelResponse;
-  /** Quantum amplitude (weight in superposition) */
-  amplitude: number;
-  /** Phase for interference */
-  phase: number;
-  /** Entanglement with other responses */
-  entangledWith: string[];
-  /** Coherence contribution */
-  coherenceContribution: number;
-}
-
-/**
- * Consensus result with quantum metrics
- */
-export interface QuantumConsensusResult {
-  /** Selected best response */
-  bestResponse: ModelResponse;
-  /** Consensus text (may be synthesized) */
-  consensusText: string;
-  /** Model responses ranked by quantum score */
-  rankedResponses: Array<{
-    response: ModelResponse;
-    quantumScore: number;
-    rank: number;
+  /** Full voting distribution */
+  votes: Array<{
+    output: T;
+    quantumWeight: number;
+    classicalWeight: number;
+    modelIds: string[];
   }>;
-  /** Quantum metrics */
-  metrics: {
-    /** Overall coherence (0-1) */
-    coherence: number;
-    /** Entanglement entropy */
-    entropy: number;
-    /** Interference strength */
-    interferenceStrength: number;
-    /** Consensus confidence */
-    consensusConfidence: number;
-  };
-  /** Analysis */
-  analysis: {
-    /** Models in agreement */
-    agreeingModels: string[];
-    /** Models with divergent outputs */
-    divergentModels: string[];
-    /** Hallucination risk assessment */
-    hallucinationRisk: 'low' | 'medium' | 'high';
-    /** Recommendation */
-    recommendation: string;
+  /** Entanglement pairs between agreeing models */
+  entanglements: EntanglementPair[];
+  /** Overall coherence of the consensus */
+  coherence: CoherenceScore;
+  /** Interference analysis */
+  interferencePattern: {
+    constructive: number;
+    destructive: number;
+    netEffect: number;
   };
 }
 
-/**
- * OpenRouter ensemble request
- */
-export interface EnsembleRequest {
-  /** Input prompt */
-  prompt: string;
-  /** Models to query */
-  models: string[];
-  /** Maximum tokens */
-  maxTokens?: number;
-  /** Temperature */
-  temperature?: number;
-  /** Require consensus */
-  requireConsensus?: boolean;
-  /** Minimum coherence threshold */
-  minCoherence?: number;
-}
+/** Strategy for resolving consensus */
+export type ConsensusStrategy =
+  | 'majority'         // Simple majority with quantum weighting
+  | 'amplitude'        // Pure amplitude-based selection
+  | 'entanglement'     // Favour highly-entangled (correlated) outputs
+  | 'adaptive';        // Dynamically choose based on vote distribution
 
 /**
- * Quantum-Enhanced Consensus Engine
- * 
- * Implements holographic consensus using quantum-inspired mechanisms:
- * 1. Superpose model embeddings into "Truth Tensor"
- * 2. Apply interference to amplify consensus, suppress outliers
- * 3. Measure coherence as quality metric
- * 4. Select optimal response via quantum voting
+ * QuantumConsensus aggregates multiple model outputs into a single
+ * high-confidence answer using quantum voting mechanics.
  */
-export class QuantumConsensusEngine {
-  private config: QuantumConsensusConfig;
-  private wasmConsensus: WasmHolographicConsensus | null;
-  private wasmMultiverse: WasmMultiverseEngine | null;
-  private responseHistory: ModelResponse[];
+export class QuantumConsensus {
+  private readonly config: QuantumConfig;
+  private readonly strategy: ConsensusStrategy;
+  private rng: () => number;
+  private roundHistory: ConsensusResult[] = [];
 
-  constructor(config: Partial<QuantumConsensusConfig> = {}) {
-    this.config = { ...DEFAULT_QUANTUM_CONSENSUS_CONFIG, ...config };
-    this.wasmConsensus = null;
-    this.wasmMultiverse = null;
-    this.responseHistory = [];
+  constructor(config: QuantumConfig, strategy: ConsensusStrategy = 'adaptive') {
+    this.config = config;
+    this.strategy = strategy;
+    this.rng = config.seed !== undefined ? this.seededRng(config.seed) : Math.random;
   }
 
   /**
-   * Initialize WASM modules for acceleration
+   * Run quantum consensus on a set of model votes.
+   *
+   * @param votes     Outputs from multiple models
+   * @param similarity  Function to compute similarity between two outputs (0–1)
+   * @returns ConsensusResult with the winning output
    */
-  async initializeWasm(): Promise<void> {
-    if (!this.config.useWasm) return;
-    
-    try {
-      const wasm = await import('../../quantum-core/pkg/quantum_core.js');
-      this.wasmConsensus = new wasm.HolographicConsensus(
-        this.config.embeddingDim,
-        this.config.coherenceThreshold
-      );
-      this.wasmMultiverse = new wasm.MultiverseEngine();
-    } catch (e) {
-      console.warn('WASM consensus not available, using JS fallback');
+  vote<T>(
+    votes: ModelVote<T>[],
+    similarity: (a: T, b: T) => number = this.defaultSimilarity as any,
+  ): ConsensusResult<T> {
+    if (votes.length === 0) {
+      throw new Error('Cannot reach consensus with zero votes');
     }
-  }
+    if (votes.length === 1) {
+      return this.singleVoteResult(votes[0]);
+    }
 
-  /**
-   * Reach consensus from multiple model responses
-   * 
-   * Algorithm:
-   * 1. Encode responses as quantum states
-   * 2. Create superposition of all responses
-   * 3. Apply interference patterns
-   * 4. Measure coherence
-   * 5. Select best response via quantum voting
-   */
-  async reachConsensus(
-    responses: ModelResponse[]
-  ): Promise<QuantumConsensusResult> {
-    if (responses.length === 0) {
-      throw new Error('No responses to reach consensus');
-    }
-    
-    if (responses.length === 1) {
-      return this.createSingleResponseResult(responses[0]);
-    }
-    
-    // Step 1: Create quantum states from responses
-    const quantumStates = this.createQuantumStates(responses);
-    
-    // Step 2: Apply holographic superposition
-    const superposedState = this.applyHolographicSuperposition(quantumStates);
-    
-    // Step 3: Apply interference
-    const interferenceResult = this.applyInterference(superposedState);
-    
-    // Step 4: Calculate coherence
-    const coherence = this.calculateCoherence(quantumStates);
-    const entropy = this.calculateEntropy(quantumStates);
-    
-    // Step 5: Quantum voting
-    const rankedResponses = this.quantumVote(quantumStates, interferenceResult);
-    
-    // Step 6: Select best response
-    const bestResponse = rankedResponses[0].response;
-    
-    // Step 7: Analyze agreement
-    const analysis = this.analyzeAgreement(rankedResponses, coherence);
-    
-    return {
-      bestResponse,
-      consensusText: bestResponse.text,
-      rankedResponses,
-      metrics: {
-        coherence,
-        entropy,
-        interferenceStrength: interferenceResult.strength,
-        consensusConfidence: rankedResponses[0].quantumScore
-      },
-      analysis
+    // Step 1: Group similar outputs
+    const groups = this.groupByOutput(votes, similarity);
+
+    // Step 2: Compute entanglement between models
+    const entanglements = this.computeEntanglements(votes, similarity);
+
+    // Step 3: Assign quantum amplitudes to each group
+    const amplitudes = this.assignAmplitudes(groups, votes, entanglements);
+
+    // Step 4: Apply interference
+    const interfered = this.applyInterference(amplitudes, groups, entanglements);
+
+    // Step 5: Select winner based on strategy
+    const effectiveStrategy = this.strategy === 'adaptive'
+      ? this.selectAdaptiveStrategy(groups, entanglements)
+      : this.strategy;
+
+    const winner = this.selectWinner(interfered, groups, effectiveStrategy);
+
+    // Step 6: Measure coherence
+    const coherence = this.measureConsensusCoherence(interfered, groups, entanglements);
+
+    // Build result
+    const result: ConsensusResult<T> = {
+      winner: winner.output,
+      confidence: winner.weight,
+      votes: interfered.map((amp, i) => ({
+        output: groups[i].representative,
+        quantumWeight: amp.quantumWeight,
+        classicalWeight: amp.classicalWeight,
+        modelIds: groups[i].modelIds,
+      })),
+      entanglements,
+      coherence,
+      interferencePattern: this.computeInterferencePattern(amplitudes, interfered),
     };
+
+    this.roundHistory.push(result as ConsensusResult<any>);
+    return result;
   }
 
   /**
-   * Query OpenRouter ensemble with quantum consensus
-   * 
-   * Sends request to multiple models and uses quantum consensus
-   * to select the best response.
+   * Iterative consensus: run multiple rounds, letting quantum
+   * weights evolve until convergence.
    */
-  async queryEnsemble(
-    request: EnsembleRequest,
-    apiKey: string
-  ): Promise<QuantumConsensusResult> {
-    // Fetch responses from all models
-    const responses = await this.fetchModelResponses(request, apiKey);
-    
-    // Reach consensus
-    return this.reachConsensus(responses);
-  }
+  iterativeConsensus<T>(
+    votes: ModelVote<T>[],
+    rounds: number = 3,
+    similarity: (a: T, b: T) => number = this.defaultSimilarity as any,
+  ): ConsensusResult<T> {
+    let currentVotes = [...votes];
 
-  /**
-   * Create quantum states from model responses
-   */
-  private createQuantumStates(
-    responses: ModelResponse[]
-  ): QuantumResponseState[] {
-    return responses.map((response, index) => {
-      // Convert confidence to quantum amplitude
-      const amplitude = Math.sqrt(response.confidence);
-      
-      // Phase based on model position and latency
-      // Models with lower latency get constructive interference
-      const phase = (index / responses.length) * 2 * Math.PI 
-        + (response.latency / 1000) * Math.PI;
-      
-      return {
-        response,
-        amplitude,
-        phase,
-        entangledWith: [],
-        coherenceContribution: 0
-      };
-    });
-  }
+    for (let round = 0; round < rounds - 1; round++) {
+      const result = this.vote(currentVotes, similarity);
 
-  /**
-   * Apply holographic superposition to model states
-   * 
-   * |Ψ_Truth⟩ = Trace(ρ_ensemble ⋅ H_coherence)
-   * 
-   * Creates a "Truth Vector" where:
-   * - Hallucinations cause destructive interference
-   * - Facts cause constructive interference
-   */
-  private applyHolographicSuperposition(
-    states: QuantumResponseState[]
-  ): { truthVector: Float32Array; superposedEmbeddings: Float32Array[] } {
-    const { embeddingDim } = this.config;
-    const numModels = states.length;
-    
-    // Initialize truth vector
-    const truthVector = new Float32Array(embeddingDim);
-    const superposedEmbeddings: Float32Array[] = [];
-    
-    // Use WASM if available
-    if (this.wasmConsensus && states[0].response.embedding) {
-      const flatEmbeddings: number[] = [];
-      
-      for (const state of states) {
-        const embedding = state.response.embedding || new Float32Array(embeddingDim);
-        flatEmbeddings.push(...embedding);
-      }
-      
-      const result = this.wasmConsensus.superpose_models(
-        new Float64Array(flatEmbeddings),
-        numModels
-      );
-      
-      for (let i = 0; i < embeddingDim; i++) {
-        truthVector[i] = result[i];
-      }
-      
-      return { truthVector, superposedEmbeddings };
+      // Re-weight votes based on quantum consensus
+      currentVotes = currentVotes.map((v) => {
+        const matchingGroup = result.votes.find((g) => g.modelIds.includes(v.modelId));
+        const quantumBoost = matchingGroup?.quantumWeight ?? 0;
+        return {
+          ...v,
+          confidence: Math.min(1, v.confidence * (1 + quantumBoost)),
+        };
+      });
     }
-    
-    // JavaScript fallback implementation
-    for (let i = 0; i < numModels; i++) {
-      const state = states[i];
-      const embedding = state.response.embedding || new Float32Array(embeddingDim);
-      
-      // Apply phase weighting
-      const phaseWeight = Math.cos(state.phase);
-      const weightedEmbedding = new Float32Array(embeddingDim);
-      
-      for (let d = 0; d < embeddingDim; d++) {
-        weightedEmbedding[d] = embedding[d] * phaseWeight * state.amplitude;
-      }
-      
-      superposedEmbeddings.push(weightedEmbedding);
-      
-      // Add to superposition
-      for (let d = 0; d < embeddingDim; d++) {
-        truthVector[d] += weightedEmbedding[d];
-      }
-    }
-    
-    // Normalize
-    const norm = Math.sqrt(truthVector.reduce((sum, v) => sum + v * v, 0));
-    if (norm > 0) {
-      for (let d = 0; d < embeddingDim; d++) {
-        truthVector[d] /= norm;
-      }
-    }
-    
-    return { truthVector, superposedEmbeddings };
+
+    return this.vote(currentVotes, similarity);
   }
 
-  /**
-   * Apply interference patterns
-   * 
-   * Constructive interference: similar responses amplify each other
-   * Destructive interference: divergent responses cancel out
-   */
-  private applyInterference(states: { truthVector: Float32Array }): {
-    strength: number;
-    constructivePairs: number;
-    destructivePairs: number;
+  /** Get historical consensus quality */
+  getHistory(): {
+    rounds: number;
+    averageCoherence: number;
+    averageConfidence: number;
   } {
-    // Simplified interference calculation
-    // In practice, this would compare all pairs of embeddings
-    
-    const vector = states.truthVector;
-    const energy = vector.reduce((sum, v) => sum + v * v, 0);
-    
+    if (this.roundHistory.length === 0) {
+      return { rounds: 0, averageCoherence: 0, averageConfidence: 0 };
+    }
     return {
-      strength: energy,
-      constructivePairs: Math.floor(energy * 10),
-      destructivePairs: Math.floor((1 - energy) * 10)
+      rounds: this.roundHistory.length,
+      averageCoherence: this.roundHistory.reduce((s, r) => s + r.coherence.overall, 0) / this.roundHistory.length,
+      averageConfidence: this.roundHistory.reduce((s, r) => s + r.confidence, 0) / this.roundHistory.length,
     };
   }
 
-  /**
-   * Calculate coherence of the ensemble
-   * 
-   * Coherence measures how much models agree with each other.
-   * High coherence = models generating similar outputs
-   * Low coherence = models diverging (potential hallucination)
-   */
-  private calculateCoherence(states: QuantumResponseState[]): number {
-    const numStates = states.length;
-    if (numStates < 2) return 1.0;
-    
-    // Calculate pairwise cosine similarities
-    let totalSimilarity = 0;
-    let pairCount = 0;
-    
-    for (let i = 0; i < numStates; i++) {
-      for (let j = i + 1; j < numStates; j++) {
-        const emb1 = states[i].response.embedding;
-        const emb2 = states[j].response.embedding;
-        
-        if (emb1 && emb2) {
-          const similarity = this.cosineSimilarity(emb1, emb2);
-          totalSimilarity += similarity;
-          pairCount++;
+  // ── Private Methods ──────────────────────────────────────────────
+
+  private groupByOutput<T>(
+    votes: ModelVote<T>[],
+    similarity: (a: T, b: T) => number,
+  ): Array<{ representative: T; modelIds: string[]; totalConfidence: number }> {
+    const groups: Array<{ representative: T; modelIds: string[]; totalConfidence: number }> = [];
+    const threshold = 0.85; // similarity threshold for grouping
+
+    for (const vote of votes) {
+      let merged = false;
+      for (const group of groups) {
+        if (similarity(vote.output, group.representative) >= threshold) {
+          group.modelIds.push(vote.modelId);
+          group.totalConfidence += vote.confidence;
+          merged = true;
+          break;
+        }
+      }
+      if (!merged) {
+        groups.push({
+          representative: vote.output,
+          modelIds: [vote.modelId],
+          totalConfidence: vote.confidence,
+        });
+      }
+    }
+
+    return groups;
+  }
+
+  private computeEntanglements<T>(
+    votes: ModelVote<T>[],
+    similarity: (a: T, b: T) => number,
+  ): EntanglementPair[] {
+    const pairs: EntanglementPair[] = [];
+    let pairId = 0;
+
+    for (let i = 0; i < votes.length; i++) {
+      for (let j = i + 1; j < votes.length; j++) {
+        const sim = similarity(votes[i].output, votes[j].output);
+
+        if (sim > 0.5) {
+          // Determine Bell state based on similarity pattern
+          const bellState = this.determineBellState(sim, votes[i].confidence, votes[j].confidence);
+          const concurrence = sim * Math.min(votes[i].confidence, votes[j].confidence);
+
+          pairs.push({
+            id: `ep-${pairId++}`,
+            subsystemA: votes[i].modelId,
+            subsystemB: votes[j].modelId,
+            bellState,
+            concurrence,
+            measured: false,
+            correlationStrength: sim,
+            createdAt: Date.now(),
+          });
         }
       }
     }
-    
-    return pairCount > 0 ? totalSimilarity / pairCount : 0;
+
+    return pairs;
   }
 
-  /**
-   * Calculate entanglement entropy
-   * 
-   * S = -Σ p_i ln(p_i) where p_i = |ψ_i|²
-   * High entropy = high uncertainty
-   * Low entropy = focused consensus
-   */
-  private calculateEntropy(states: QuantumResponseState[]): number {
-    let entropy = 0;
-    
-    for (const state of states) {
-      const p = state.amplitude * state.amplitude;
-      if (p > 1e-10) {
-        entropy -= p * Math.log(p);
-      }
-    }
-    
-    return entropy;
+  private determineBellState(
+    similarity: number,
+    confA: number,
+    confB: number,
+  ): EntanglementPair['bellState'] {
+    // Map similarity and confidence patterns to Bell states
+    if (similarity > 0.9 && Math.abs(confA - confB) < 0.2) return 'Φ+';  // Strong agreement, similar confidence
+    if (similarity > 0.9) return 'Φ-';  // Strong agreement, different confidence
+    if (similarity > 0.7) return 'Ψ+';  // Moderate agreement
+    return 'Ψ-';                          // Weak agreement
   }
 
-  /**
-   * Quantum voting to rank responses
-   * 
-   * Each model casts "votes" weighted by quantum amplitude.
-   * Responses with high amplitude and constructive interference win.
-   */
-  private quantumVote(
-    states: QuantumResponseState[],
-    interference: { strength: number }
-  ): Array<{ response: ModelResponse; quantumScore: number; rank: number }> {
-    const scored = states.map(state => {
-      // Quantum score combines multiple factors
-      const amplitudeScore = state.amplitude;
-      const phaseAlignment = Math.cos(state.phase); // 1 = aligned, -1 = opposite
-      const interferenceBonus = interference.strength;
-      
-      const quantumScore = 
-        amplitudeScore * 0.4 +
-        (phaseAlignment + 1) / 2 * 0.3 +
-        interferenceBonus * 0.3;
-      
+  private assignAmplitudes<T>(
+    groups: Array<{ representative: T; modelIds: string[]; totalConfidence: number }>,
+    votes: ModelVote<T>[],
+    entanglements: EntanglementPair[],
+  ): Array<{ amplitude: ComplexNumber; classicalWeight: number }> {
+    const totalVotes = votes.length;
+
+    return groups.map((group) => {
+      // Classical weight: proportion of votes × average confidence
+      const classicalWeight = (group.modelIds.length / totalVotes) * (group.totalConfidence / group.modelIds.length);
+
+      // Quantum amplitude: encode entanglement strength
+      const entanglementBoost = this.computeEntanglementBoost(group.modelIds, entanglements);
+      const magnitude = Math.sqrt(classicalWeight) * (1 + entanglementBoost);
+      const phase = (2 * Math.PI * group.totalConfidence) / (groups.length + 1);
+
       return {
-        response: state.response,
-        quantumScore: Math.min(1, Math.max(0, quantumScore)),
-        rank: 0 // Will be set after sorting
+        amplitude: complexFromPolar(magnitude, phase),
+        classicalWeight,
       };
     });
-    
-    // Sort by quantum score descending
-    scored.sort((a, b) => b.quantumScore - a.quantumScore);
-    
-    // Assign ranks
-    scored.forEach((item, index) => {
-      item.rank = index + 1;
-    });
-    
-    return scored;
   }
 
-  /**
-   * Analyze model agreement patterns
-   */
-  private analyzeAgreement(
-    ranked: Array<{ response: ModelResponse; quantumScore: number }>,
-    coherence: number
-  ): QuantumConsensusResult['analysis'] {
-    const threshold = this.config.coherenceThreshold;
-    
-    const agreeingModels = ranked
-      .filter(r => r.quantumScore > threshold)
-      .map(r => r.response.modelId);
-    
-    const divergentModels = ranked
-      .filter(r => r.quantumScore <= threshold * 0.7)
-      .map(r => r.response.modelId);
-    
-    const hallucinationRisk: 'low' | 'medium' | 'high' = 
-      coherence > threshold 
-        ? 'low' 
-        : coherence > threshold * 0.7 
-          ? 'medium' 
-          : 'high';
-    
-    let recommendation = '';
-    if (coherence > threshold) {
-      recommendation = 'Strong consensus reached. Output is highly reliable.';
-    } else if (coherence > threshold * 0.7) {
-      recommendation = 'Moderate consensus. Verify key facts before using.';
-    } else {
-      recommendation = 'Weak consensus. Models disagree significantly. Human review recommended.';
+  private computeEntanglementBoost(modelIds: string[], entanglements: EntanglementPair[]): number {
+    let boost = 0;
+    for (const ep of entanglements) {
+      const aIn = modelIds.includes(ep.subsystemA);
+      const bIn = modelIds.includes(ep.subsystemB);
+      if (aIn && bIn) {
+        // Internal entanglement: agreement within group
+        boost += ep.concurrence * 0.5;
+      } else if (aIn || bIn) {
+        // Cross-group entanglement: mild penalty (reduces distinctiveness)
+        boost -= ep.concurrence * 0.1;
+      }
     }
-    
+    return Math.max(0, boost);
+  }
+
+  private applyInterference(
+    amplitudes: Array<{ amplitude: ComplexNumber; classicalWeight: number }>,
+    groups: Array<{ representative: any; modelIds: string[]; totalConfidence: number }>,
+    entanglements: EntanglementPair[],
+  ): Array<{ quantumWeight: number; classicalWeight: number }> {
+    // Pairwise interference between groups
+    const interferedAmps = amplitudes.map((a) => ({ ...a.amplitude }));
+
+    for (let i = 0; i < interferedAmps.length; i++) {
+      for (let j = i + 1; j < interferedAmps.length; j++) {
+        // Check if groups share entangled models
+        const sharedEntanglement = entanglements.some(
+          (ep) =>
+            (groups[i].modelIds.includes(ep.subsystemA) && groups[j].modelIds.includes(ep.subsystemB)) ||
+            (groups[i].modelIds.includes(ep.subsystemB) && groups[j].modelIds.includes(ep.subsystemA)),
+        );
+
+        if (sharedEntanglement) {
+          // Constructive interference between entangled groups
+          const interference = complexMultiply(interferedAmps[i], { real: 0.1, imaginary: 0 });
+          interferedAmps[i] = complexAdd(interferedAmps[i], interference);
+        }
+      }
+    }
+
+    // Convert to probabilities
+    const probs = interferedAmps.map((a) => complexMagnitudeSq(a));
+    const probSum = probs.reduce((s, p) => s + p, 0) || 1;
+
+    return amplitudes.map((a, i) => ({
+      quantumWeight: probs[i] / probSum,
+      classicalWeight: a.classicalWeight,
+    }));
+  }
+
+  private selectWinner<T>(
+    weights: Array<{ quantumWeight: number; classicalWeight: number }>,
+    groups: Array<{ representative: T; modelIds: string[]; totalConfidence: number }>,
+    strategy: Exclude<ConsensusStrategy, 'adaptive'>,
+  ): { output: T; weight: number } {
+    let bestIdx = 0;
+    let bestScore = -Infinity;
+
+    for (let i = 0; i < groups.length; i++) {
+      let score: number;
+
+      switch (strategy) {
+        case 'majority':
+          score = groups[i].modelIds.length + weights[i].quantumWeight * 0.5;
+          break;
+        case 'amplitude':
+          score = weights[i].quantumWeight;
+          break;
+        case 'entanglement':
+          score = weights[i].quantumWeight * 1.5 + weights[i].classicalWeight * 0.5;
+          break;
+        default:
+          score = weights[i].quantumWeight;
+      }
+
+      if (score > bestScore) {
+        bestScore = score;
+        bestIdx = i;
+      }
+    }
+
     return {
-      agreeingModels,
-      divergentModels,
-      hallucinationRisk,
-      recommendation
+      output: groups[bestIdx].representative,
+      weight: weights[bestIdx].quantumWeight,
     };
   }
 
-  /**
-   * Fetch responses from multiple models via OpenRouter
-   */
-  private async fetchModelResponses(
-    request: EnsembleRequest,
-    apiKey: string
-  ): Promise<ModelResponse[]> {
-    const responses: ModelResponse[] = [];
-    
-    // Fetch from each model in parallel
-    const promises = request.models.map(async (modelId) => {
-      const startTime = performance.now();
-      
-      try {
-        const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${apiKey}`,
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            model: modelId,
-            messages: [{ role: 'user', content: request.prompt }],
-            max_tokens: request.maxTokens || 256,
-            temperature: request.temperature || 0.7
-          })
-        });
-        
-        const data = await response.json();
-        const latency = performance.now() - startTime;
-        
-        return {
-          modelId,
-          text: data.choices?.[0]?.message?.content || '',
-          confidence: data.choices?.[0]?.logprobs?.[0] || 0.8,
-          latency
-        };
-      } catch (e) {
-        return {
-          modelId,
-          text: `Error: ${e}`,
-          confidence: 0,
-          latency: performance.now() - startTime
-        };
-      }
-    });
-    
-    const results = await Promise.all(promises);
-    responses.push(...results);
-    
-    return responses;
-  }
+  private selectAdaptiveStrategy(
+    groups: Array<{ representative: any; modelIds: string[]; totalConfidence: number }>,
+    entanglements: EntanglementPair[],
+  ): Exclude<ConsensusStrategy, 'adaptive'> {
+    // If clear majority exists, use majority voting
+    const maxGroupSize = Math.max(...groups.map((g) => g.modelIds.length));
+    const totalModels = groups.reduce((s, g) => s + g.modelIds.length, 0);
 
-  /**
-   * Calculate cosine similarity between embeddings
-   */
-  private cosineSimilarity(a: Float32Array, b: Float32Array): number {
-    let dot = 0;
-    let normA = 0;
-    let normB = 0;
-    
-    for (let i = 0; i < a.length; i++) {
-      dot += a[i] * b[i];
-      normA += a[i] * a[i];
-      normB += b[i] * b[i];
+    if (maxGroupSize > totalModels * 0.6) {
+      return 'majority';
     }
-    
-    return dot / (Math.sqrt(normA) * Math.sqrt(normB) + 1e-10);
+
+    // If strong entanglement, use entanglement-based
+    const avgConcurrence = entanglements.length > 0
+      ? entanglements.reduce((s, e) => s + e.concurrence, 0) / entanglements.length
+      : 0;
+
+    if (avgConcurrence > 0.7) {
+      return 'entanglement';
+    }
+
+    // Default to amplitude-based
+    return 'amplitude';
   }
 
-  /**
-   * Create result for single response
-   */
-  private createSingleResponseResult(
-    response: ModelResponse
-  ): QuantumConsensusResult {
+  private measureConsensusCoherence(
+    weights: Array<{ quantumWeight: number; classicalWeight: number }>,
+    groups: Array<{ representative: any; modelIds: string[]; totalConfidence: number }>,
+    entanglements: EntanglementPair[],
+  ): CoherenceScore {
+    // Agreement level: how concentrated are the votes?
+    const maxWeight = Math.max(...weights.map((w) => w.quantumWeight));
+    const entropy = -weights.reduce(
+      (s, w) => s + (w.quantumWeight > 0 ? w.quantumWeight * Math.log2(w.quantumWeight) : 0),
+      0,
+    );
+    const maxEntropy = Math.log2(weights.length) || 1;
+    const agreement = 1 - entropy / maxEntropy;
+
+    // Entanglement fidelity
+    const avgConcurrence = entanglements.length > 0
+      ? entanglements.reduce((s, e) => s + e.concurrence, 0) / entanglements.length
+      : 0;
+
+    const overall = 0.4 * agreement + 0.3 * maxWeight + 0.3 * avgConcurrence;
+
     return {
-      bestResponse: response,
-      consensusText: response.text,
-      rankedResponses: [{
-        response,
-        quantumScore: response.confidence,
-        rank: 1
+      overall: Math.min(1, Math.max(0, overall)),
+      phaseCoherence: agreement,
+      amplitudeCoherence: maxWeight,
+      entanglementFidelity: avgConcurrence,
+      decoherenceRate: 1 - overall,
+      effectiveQubits: Math.round(this.config.numQubits * overall),
+      measuredAt: Date.now(),
+    };
+  }
+
+  private computeInterferencePattern(
+    before: Array<{ amplitude: ComplexNumber; classicalWeight: number }>,
+    after: Array<{ quantumWeight: number; classicalWeight: number }>,
+  ): { constructive: number; destructive: number; netEffect: number } {
+    let constructive = 0;
+    let destructive = 0;
+
+    for (let i = 0; i < before.length; i++) {
+      const beforeMag = complexMagnitudeSq(before[i].amplitude);
+      const afterMag = after[i].quantumWeight;
+      if (afterMag > beforeMag) constructive++;
+      else destructive++;
+    }
+
+    const total = constructive + destructive || 1;
+    return {
+      constructive: constructive / total,
+      destructive: destructive / total,
+      netEffect: (constructive - destructive) / total,
+    };
+  }
+
+  private singleVoteResult<T>(vote: ModelVote<T>): ConsensusResult<T> {
+    return {
+      winner: vote.output,
+      confidence: vote.confidence,
+      votes: [{
+        output: vote.output,
+        quantumWeight: 1,
+        classicalWeight: 1,
+        modelIds: [vote.modelId],
       }],
-      metrics: {
-        coherence: response.confidence,
-        entropy: 0,
-        interferenceStrength: 1,
-        consensusConfidence: response.confidence
+      entanglements: [],
+      coherence: {
+        overall: vote.confidence,
+        phaseCoherence: 1,
+        amplitudeCoherence: vote.confidence,
+        entanglementFidelity: 0,
+        decoherenceRate: 1 - vote.confidence,
+        effectiveQubits: this.config.numQubits,
+        measuredAt: Date.now(),
       },
-      analysis: {
-        agreeingModels: [response.modelId],
-        divergentModels: [],
-        hallucinationRisk: 'low',
-        recommendation: 'Single model response. No consensus possible.'
-      }
+      interferencePattern: { constructive: 1, destructive: 0, netEffect: 1 },
     };
   }
 
-  /**
-   * Get consensus statistics
-   */
-  getStats(): {
-    totalConsensusRuns: number;
-    avgCoherence: number;
-    highConsensusRate: number;
-  } {
-    // Simplified stats
-    return {
-      totalConsensusRuns: this.responseHistory.length,
-      avgCoherence: 0.85,
-      highConsensusRate: 0.75
+  private defaultSimilarity(a: unknown, b: unknown): number {
+    if (typeof a === 'string' && typeof b === 'string') {
+      return this.stringSimilarity(a, b);
+    }
+    return a === b ? 1 : 0;
+  }
+
+  private stringSimilarity(a: string, b: string): number {
+    if (a === b) return 1;
+    if (a.length === 0 || b.length === 0) return 0;
+
+    // Normalised Levenshtein-like similarity using bigrams
+    const bigramsA = this.getBigrams(a.toLowerCase());
+    const bigramsB = this.getBigrams(b.toLowerCase());
+
+    let matches = 0;
+    const used = new Set<number>();
+
+    for (const bg of bigramsA) {
+      for (let j = 0; j < bigramsB.length; j++) {
+        if (!used.has(j) && bg === bigramsB[j]) {
+          matches++;
+          used.add(j);
+          break;
+        }
+      }
+    }
+
+    return (2 * matches) / (bigramsA.length + bigramsB.length);
+  }
+
+  private getBigrams(str: string): string[] {
+    const bigrams: string[] = [];
+    for (let i = 0; i < str.length - 1; i++) {
+      bigrams.push(str.slice(i, i + 2));
+    }
+    return bigrams;
+  }
+
+  private seededRng(seed: number): () => number {
+    let s = seed;
+    return () => {
+      s = (s * 1664525 + 1013904223) & 0xffffffff;
+      return (s >>> 0) / 0xffffffff;
     };
   }
 }
-
-/**
- * Coherence-based model selector
- * Selects the best model based on historical coherence
- */
-export class CoherenceModelSelector {
-  private coherenceHistory: Map<string, number[]>;
-
-  constructor() {
-    this.coherenceHistory = new Map();
-  }
-
-  /**
-   * Record coherence score for a model
-   */
-  recordCoherence(modelId: string, coherence: number): void {
-    if (!this.coherenceHistory.has(modelId)) {
-      this.coherenceHistory.set(modelId, []);
-    }
-    this.coherenceHistory.get(modelId)!.push(coherence);
-  }
-
-  /**
-   * Get best model based on historical coherence
-   */
-  getBestModel(): string | null {
-    let bestModel: string | null = null;
-    let bestScore = -1;
-    
-    for (const [modelId, scores] of this.coherenceHistory) {
-      const avgScore = scores.reduce((a, b) => a + b, 0) / scores.length;
-      if (avgScore > bestScore) {
-        bestScore = avgScore;
-        bestModel = modelId;
-      }
-    }
-    
-    return bestModel;
-  }
-
-  /**
-   * Get model rankings
-   */
-  getRankings(): Array<{ modelId: string; avgCoherence: number }> {
-    const rankings: Array<{ modelId: string; avgCoherence: number }> = [];
-    
-    for (const [modelId, scores] of this.coherenceHistory) {
-      const avgCoherence = scores.reduce((a, b) => a + b, 0) / scores.length;
-      rankings.push({ modelId, avgCoherence });
-    }
-    
-    rankings.sort((a, b) => b.avgCoherence - a.avgCoherence);
-    return rankings;
-  }
-}
-
-/**
- * Factory function to create consensus engine
- */
-export function createQuantumConsensus(
-  options?: Partial<QuantumConsensusConfig>
-): QuantumConsensusEngine {
-  return new QuantumConsensusEngine(options);
-}
-
-// Exports
-export { QuantumConsensusEngine, CoherenceModelSelector };
-export default QuantumConsensusEngine;
