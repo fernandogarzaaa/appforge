@@ -1,6 +1,6 @@
 {
-  "temperature": 5000,
-  "coolingRate": 0.95,
+  "temperature": 3512.5,
+  "coolingRate": 0.9619,
   "fitness": 100,
-  "timestamp": "2026-02-24T02:44:56.672Z"
+  "timestamp": "2026-02-24T02:52:11.273Z"
 }
