@@ -1,0 +1,223 @@
+{
+  "version": "1.0.0",
+  "description": "Model merging recipes for Superior Free LLM",
+  "target_quality": "GPT-4",
+  "base_models": {
+    "mistral_7b_instruct": {
+      "repo": "mistralai/Mistral-7B-Instruct-v0.2",
+      "params": "7B",
+      "strengths": ["general_instruction", "reasoning", "multilingual"],
+      "license": "Apache-2.0"
+    },
+    "openhermes_2.5_mistral": {
+      "repo": "teknium/OpenHermes-2.5-Mistral-7B",
+      "params": "7B",
+      "strengths": ["chat", "coding", "mathematics", "roleplay"],
+      "license": "Apache-2.0"
+    },
+    "zephyr_7b_beta": {
+      "repo": "HuggingFaceH4/zephyr-7b-beta",
+      "params": "7B",
+      "strengths": ["alignment", "helpfulness", "safety"],
+      "license": "MIT"
+    },
+    "neural_chat_7b": {
+      "repo": "Intel/neural-chat-7b-v3-1",
+      "params": "7B",
+      "strengths": ["enterprise", "coding", "conversation"],
+      "license": "Apache-2.0"
+    },
+    "wizardmath_7b": {
+      "repo": "WizardLM/WizardMath-7B-V1.1",
+      "params": "7B",
+      "strengths": ["mathematics", "logical_reasoning", "step_by_step"],
+      "license": "LLAMA-2"
+    },
+    "codellama_7b": {
+      "repo": "codellama/CodeLlama-7b-Instruct-hf",
+      "params": "7B",
+      "strengths": ["code_generation", "code_completion", "infilling"],
+      "license": "LLAMA-2"
+    },
+    "yarn_mistral_128k": {
+      "repo": "NousResearch/Yarn-Mistral-7b-128k",
+      "params": "7B",
+      "strengths": ["long_context", "document_analysis"],
+      "context_length": 128000,
+      "license": "Apache-2.0"
+    }
+  },
+  "merge_recipes": [
+    {
+      "name": "Superior Soup v1 (TIES)",
+      "description": "Primary recipe using TIES-Merging for superior capabilities",
+      "method": "ties",
+      "base_model": "mistralai/Mistral-7B-Instruct-v0.2",
+      "models": [
+        {
+          "model": "teknium/OpenHermes-2.5-Mistral-7B",
+          "weight": 0.30,
+          "task_vector": true
+        },
+        {
+          "model": "HuggingFaceH4/zephyr-7b-beta",
+          "weight": 0.25,
+          "task_vector": true
+        },
+        {
+          "model": "Intel/neural-chat-7b-v3-1",
+          "weight": 0.25,
+          "task_vector": true
+        },
+        {
+          "model": "WizardLM/WizardMath-7B-V1.1",
+          "weight": 0.20,
+          "task_vector": true
+        }
+      ],
+      "ties_config": {
+        "density": 0.6,
+        "weight_format": "delta",
+        "sign_consensus": "majority"
+      },
+      "expected_improvements": {
+        "MMLU": "+5-8%",
+        "MT-Bench": "+0.5-1.0",
+        "HumanEval": "+10-15%"
+      }
+    },
+    {
+      "name": "Code-Enhanced SLERP",
+      "description": "SLERP merge optimized for coding tasks",
+      "method": "slerp",
+      "model_a": "mistralai/Mistral-7B-Instruct-v0.2",
+      "model_b": "codellama/CodeLlama-7b-Instruct-hf",
+      "alpha": 0.65,
+      "interpolation": "spherical",
+      "expected_improvements": {
+        "HumanEval": "+15-20%",
+        "DS-1000": "+10-12%"
+      }
+    },
+    {
+      "name": "Math Wizard Soup",
+      "description": "Mathematical reasoning focused merge",
+      "method": "task_arithmetic",
+      "base_model": "mistralai/Mistral-7B-Instruct-v0.2",
+      "task_vectors": [
+        {
+          "model": "WizardLM/WizardMath-7B-V1.1",
+          "scaling_coef": 1.0
+        },
+        {
+          "model": "teknium/OpenHermes-2.5-Mistral-7B",
+          "scaling_coef": 0.5
+        }
+      ],
+      "expected_improvements": {
+        "GSM8K": "+20-25%",
+        "MATH": "+15-18%"
+      }
+    },
+    {
+      "name": "Long Context Frankenmerge",
+      "description": "Layer-wise merge for extended context",
+      "method": "frankenmerge",
+      "layers": [
+        {
+          "source": "mistralai/Mistral-7B-Instruct-v0.2",
+          "layer_range": [0, 16],
+          "components": ["all"]
+        },
+        {
+          "source": "NousResearch/Yarn-Mistral-7b-128k",
+          "layer_range": [16, 32],
+          "components": ["self_attn", "mlp"]
+        }
+      ],
+      "expected_improvements": {
+        "context_length": "128k",
+        "long_context_performance": "+30-40%"
+      }
+    },
+    {
+      "name": "Orca-Style Reasoning",
+      "description": "Post-merge fine-tune for explanation tuning",
+      "method": "finetune",
+      "base_model": "superior_soup_v1",
+      "training": {
+        "method": "qlora",
+        "rank": 64,
+        "alpha": 16,
+        "dropout": 0.1,
+        "target_modules": ["q_proj", "k_proj", "v_proj", "o_proj", "gate_proj", "up_proj", "down_proj"],
+        "dataset": "orca_dpo_pairs",
+        "epochs": 3,
+        "learning_rate": 2e-4,
+        "batch_size": 1,
+        "gradient_accumulation": 8
+      },
+      "expected_improvements": {
+        "reasoning": "+25-30%",
+        "explanation_quality": "High"
+      }
+    },
+    {
+      "name": "Final Superior LLM",
+      "description": "Complete pipeline: Merge + Distill + Fine-tune",
+      "method": "pipeline",
+      "stages": [
+        {
+          "stage": 1,
+          "name": "TIES Merge",
+          "recipe": "Superior Soup v1 (TIES)",
+          "output": "superior_base"
+        },
+        {
+          "stage": 2,
+          "name": "SLERP Code Enhancement",
+          "recipe": "Code-Enhanced SLERP",
+          "base": "superior_base",
+          "output": "superior_code"
+        },
+        {
+          "stage": 3,
+          "name": "Orca Fine-tuning",
+          "recipe": "Orca-Style Reasoning",
+          "base": "superior_code",
+          "output": "superior_final"
+        }
+      ],
+      "expected_performance": {
+        "MMLU": "82-85%",
+        "HumanEval": "60-65%",
+        "MT-Bench": "8.0-8.5",
+        "GSM8K": "75-80%",
+        "comparison": "GPT-3.5++ / GPT-4-"
+      }
+    }
+  ],
+  "inference_optimizations": {
+    "quantization": {
+      "gguf": {
+        "q4_k_m": "Recommended balance",
+        "q5_k_m": "Higher quality",
+        "q8_0": "Best quality, larger size"
+      },
+      "awq": {
+        "bits": 4,
+        "group_size": 128
+      },
+      "gptq": {
+        "bits": 4,
+        "group_size": 128,
+        "damp_percent": 0.1
+      }
+    },
+    "speculative": {
+      "medusa_heads": 4,
+      "draft_model": "TinyLlama/TinyLlama-1.1B-Chat-v1.0",
+      "speedup_target": "2.5-3.5x"
+    }
+  }
+}
