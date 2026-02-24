@@ -159,3 +159,4 @@ unsloth_compiled_cache/
 *.gguf
 *.safetensors
 *.bin
+__pycache__/

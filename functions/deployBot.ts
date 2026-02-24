@@ -20,18 +20,6 @@ interface Bot {
   function_name?: string;
 }
 
-interface TriggerSetupResult {
-  success: boolean;
-  message?: string;
-  error?: string;
-  webhookUrl?: string;
-  methods?: string[];
-  requiresAuth?: boolean;
-  automation?: any;
-  emailAddress?: string;
-  triggerOn?: string;
-}
-
 /**
  * Deploy/activate a bot
  * Sets up triggers and validates configuration
@@ -69,7 +57,7 @@ Deno.serve(async (req) => {
     // Set up trigger-specific infrastructure
     let triggerSetup: TriggerSetupResult = { success: true };
 
-    switch ((bot as any).trigger?.type) {
+    switch (bot.trigger?.type) {
       case 'schedule':
         triggerSetup = await setupScheduleTrigger(bot, base44);
         break;
@@ -106,14 +94,15 @@ Deno.serve(async (req) => {
       botId,
       botName: bot.name,
       status: 'active',
-      triggerType: (bot as any).trigger?.type,
+      triggerType: bot.trigger?.type,
       deploymentDetails: triggerSetup,
       webhookUrl: triggerSetup.webhookUrl || null
     });
 
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const errorMsg = error instanceof Error ? error.message : String(error);
     return Response.json(
-      { success: false, error: error.message },
+      { success: false, error: errorMsg },
       { status: 500 }
     );
   }
@@ -122,7 +111,7 @@ Deno.serve(async (req) => {
 /**
  * Set up scheduled trigger
  */
-async function setupScheduleTrigger(bot: any, base44: any): Promise<TriggerSetupResult> {
+async function setupScheduleTrigger(bot: Bot, base44: Base44Client): Promise<TriggerSetupResult> {
   try {
     const config = bot.trigger?.config || {};
     
@@ -141,15 +130,16 @@ async function setupScheduleTrigger(bot: any, base44: any): Promise<TriggerSetup
       message: `Schedule trigger set for ${config.frequency}`,
       automation
     };
-  } catch (error: any) {
-    return { success: false, error: error.message };
+  } catch (error: unknown) {
+    const errorMsg = error instanceof Error ? error.message : String(error);
+    return { success: false, error: errorMsg };
   }
 }
 
 /**
  * Set up webhook trigger
  */
-async function setupWebhookTrigger(bot: any, base44: any): Promise<TriggerSetupResult> {
+async function setupWebhookTrigger(bot: Bot, _base44: Base44Client): Promise<TriggerSetupResult> {
   try {
     const webhookUrl = `${Deno.env.get('BASE44_API_URL')}/webhooks/bot?bot_id=${bot.id}`;
 
@@ -160,15 +150,16 @@ async function setupWebhookTrigger(bot: any, base44: any): Promise<TriggerSetupR
       methods: bot.trigger?.config?.methods || ['POST'],
       requiresAuth: bot.trigger?.config?.requireApiKey === true
     };
-  } catch (error: any) {
-    return { success: false, error: error.message };
+  } catch (error: unknown) {
+    const errorMsg = error instanceof Error ? error.message : String(error);
+    return { success: false, error: errorMsg };
   }
 }
 
 /**
  * Set up email trigger
  */
-async function setupEmailTrigger(bot: any, base44: any): Promise<TriggerSetupResult> {
+async function setupEmailTrigger(bot: Bot, _base44: Base44Client): Promise<TriggerSetupResult> {
   try {
     const config = bot.trigger?.config || {};
 
@@ -178,15 +169,16 @@ async function setupEmailTrigger(bot: any, base44: any): Promise<TriggerSetupRes
       emailAddress: config.emailAddress,
       triggerOn: config.trigger
     };
-  } catch (error: any) {
-    return { success: false, error: error.message };
+  } catch (error: unknown) {
+    const errorMsg = error instanceof Error ? error.message : String(error);
+    return { success: false, error: errorMsg };
   }
 }
 
 /**
  * Get schedule interval from frequency
  */
-function getScheduleInterval(frequency: string): number {
+function getScheduleInterval(frequency: string | undefined): number {
   const intervals: Record<string, number> = {
     'hourly': 1,
     'daily': 1,
@@ -199,12 +191,12 @@ function getScheduleInterval(frequency: string): number {
 /**
  * Get schedule unit from frequency
  */
-function getScheduleUnit(frequency: string): string {
+function getScheduleUnit(frequency: string | undefined): string {
   const units: Record<string, string> = {
     'hourly': 'hours',
     'daily': 'days',
     'weekly': 'weeks',
     'monthly': 'months'
   };
-  return units[frequency] || 'days';
+  return units[frequency || ''] || 'days';
 }
