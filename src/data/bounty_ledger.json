@@ -8,46 +8,46 @@
       "priority": 0.6,
       "reward": 60,
       "category": "architect",
-      "id": "BTY-1771901536573-31",
+      "id": "BTY-1771910800897-943",
       "status": "backlog",
-      "createdAt": "2026-02-24T02:52:16.573Z"
+      "createdAt": "2026-02-24T05:26:40.897Z"
     },
     {
       "description": "[Neural Accelerator] EXPERT_ARCHITECT: Refactor core (Coherence: 1.00)",
       "priority": 0.5,
       "reward": 50,
       "category": "architect",
-      "id": "BTY-1771901536611-232",
+      "id": "BTY-1771910800924-264",
       "status": "backlog",
-      "createdAt": "2026-02-24T02:52:16.611Z"
+      "createdAt": "2026-02-24T05:26:40.924Z"
     },
     {
       "description": "[Neural Accelerator] EXPERT_ARCHITECT: Refactor core (Coherence: 1.00)",
       "priority": 0.85,
       "reward": 85,
       "category": "architect",
-      "id": "BTY-1771901536651-5",
+      "id": "BTY-1771910800958-421",
       "status": "completed",
-      "createdAt": "2026-02-24T02:52:16.651Z",
-      "completedAt": "2026-02-24T02:52:16.774Z"
+      "createdAt": "2026-02-24T05:26:40.958Z",
+      "completedAt": "2026-02-24T05:26:41.067Z"
     },
     {
       "description": "[Neural Accelerator] EXPERT_ARCHITECT: Refactor core (Coherence: 1.00)",
-      "priority": 0.15527920343031454,
-      "reward": 16,
+      "priority": 0.1528919015784997,
+      "reward": 15,
       "category": "architect",
-      "id": "BTY-1771901536689-482",
+      "id": "BTY-1771910800999-289",
       "status": "backlog",
-      "createdAt": "2026-02-24T02:52:16.689Z"
+      "createdAt": "2026-02-24T05:26:40.999Z"
     },
     {
       "description": "[Neural Accelerator] EXPERT_ARCHITECT: Refactor core (Coherence: 1.00)",
-      "priority": 0.28375,
-      "reward": 28,
+      "priority": 0.29125,
+      "reward": 29,
       "category": "architect",
-      "id": "BTY-1771901536725-20",
+      "id": "BTY-1771910801037-735",
       "status": "backlog",
-      "createdAt": "2026-02-24T02:52:16.725Z"
+      "createdAt": "2026-02-24T05:26:41.037Z"
     }
   ]
 }
