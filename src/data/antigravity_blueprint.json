@@ -1,5 +1,5 @@
 {
-  "analyzedAt": "2026-02-24T13:24:01.624Z",
+  "analyzedAt": "2026-02-24T17:11:42.107Z",
   "coreHealth": "Robust",
   "repoScope": 131,
   "insights": [
@@ -31,7 +31,7 @@
     },
     {
       "file": "swarm/core/quantum_core.ts",
-      "complexity": 26512,
+      "complexity": 26554,
       "logicDensity": 0.5,
       "patterns": {
         "hasOracleConsultation": true,

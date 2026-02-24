@@ -8,46 +8,46 @@
       "priority": 0.6,
       "reward": 60,
       "category": "architect",
-      "id": "BTY-1771939442534-431",
+      "id": "BTY-1771953102994-840",
       "status": "backlog",
-      "createdAt": "2026-02-24T13:24:02.534Z"
+      "createdAt": "2026-02-24T17:11:42.994Z"
     },
     {
       "description": "[Neural Accelerator] EXPERT_ARCHITECT: Refactor core (Coherence: 1.00)",
       "priority": 0.5,
       "reward": 50,
       "category": "architect",
-      "id": "BTY-1771939442562-46",
+      "id": "BTY-1771953103037-814",
       "status": "backlog",
-      "createdAt": "2026-02-24T13:24:02.562Z"
+      "createdAt": "2026-02-24T17:11:43.037Z"
     },
     {
       "description": "[Neural Accelerator] EXPERT_ARCHITECT: Refactor core (Coherence: 1.00)",
       "priority": 0.85,
       "reward": 85,
       "category": "architect",
-      "id": "BTY-1771939442599-494",
+      "id": "BTY-1771953103070-950",
       "status": "completed",
-      "createdAt": "2026-02-24T13:24:02.599Z",
-      "completedAt": "2026-02-24T13:24:02.703Z"
+      "createdAt": "2026-02-24T17:11:43.070Z",
+      "completedAt": "2026-02-24T17:11:43.180Z"
     },
     {
       "description": "[Neural Accelerator] EXPERT_ARCHITECT: Refactor core (Coherence: 1.00)",
-      "priority": 0.15297169164693902,
-      "reward": 15,
+      "priority": 0.15661875874578698,
+      "reward": 16,
       "category": "architect",
-      "id": "BTY-1771939442643-193",
+      "id": "BTY-1771953103108-130",
       "status": "backlog",
-      "createdAt": "2026-02-24T13:24:02.643Z"
+      "createdAt": "2026-02-24T17:11:43.108Z"
     },
     {
       "description": "[Neural Accelerator] EXPERT_ARCHITECT: Refactor core (Coherence: 1.00)",
-      "priority": 0.385,
-      "reward": 39,
+      "priority": 0.365,
+      "reward": 37,
       "category": "architect",
-      "id": "BTY-1771939442666-292",
+      "id": "BTY-1771953103139-177",
       "status": "backlog",
-      "createdAt": "2026-02-24T13:24:02.666Z"
+      "createdAt": "2026-02-24T17:11:43.139Z"
     }
   ]
 }
