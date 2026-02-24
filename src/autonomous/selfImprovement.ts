@@ -172,16 +172,16 @@ export class SelfImprovementLoop extends EventEmitter {
 
     if (targetLanguage === 'typescript' || targetLanguage === 'javascript') {
       if (desc.includes('function') || desc.includes('method')) {
-        const funcName = this.extractFunctionName(desc) || 'generatedFunction';
-        const params = this.extractParameters(desc);
+        const funcName = this.extractFunctionName(naturalLanguage) || 'generatedFunction';
+        const params = this.extractParameters(naturalLanguage);
         code = this.generateFunction(funcName, params, targetLanguage);
         confidence = 0.85;
       } else if (desc.includes('class') || desc.includes('component')) {
-        const className = this.extractClassName(desc) || 'GeneratedClass';
+        const className = this.extractClassName(naturalLanguage) || 'GeneratedClass';
         code = this.generateClass(className, targetLanguage);
         confidence = 0.8;
       } else if (desc.includes('interface') || desc.includes('type')) {
-        const typeName = this.extractClassName(desc) || 'GeneratedType';
+        const typeName = this.extractClassName(naturalLanguage) || 'GeneratedType';
         code = this.generateInterface(typeName, targetLanguage);
         confidence = 0.9;
       } else {
@@ -286,7 +286,7 @@ export interface ${name} {
    * Extract function name from description
    */
   private extractFunctionName(description: string): string | null {
-    const match = description.match(/(?:function|method)\s+(?:called\s+)?(\w+)/i);
+    const match = description.match(/(?:function|method)\s+(?:called\s+)?([a-zA-Z_][a-zA-Z0-9_]*)/i);
     return match ? match[1] : null;
   }
 
@@ -305,7 +305,7 @@ export interface ${name} {
    * Extract class name from description
    */
   private extractClassName(description: string): string | null {
-    const match = description.match(/(?:class|component|interface)\s+(?:called\s+)?(\w+)/i);
+    const match = description.match(/(?:class|component|interface)\s+(?:called\s+)?([a-zA-Z_][a-zA-Z0-9_]*)/i);
     return match ? match[1] : null;
   }
 
