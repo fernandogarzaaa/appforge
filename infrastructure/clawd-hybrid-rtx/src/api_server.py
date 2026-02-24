@@ -5,7 +5,10 @@ import time
 import uuid
 
 from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel, Field
+from fastapi.exceptions import RequestValidationError
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
+from pydantic import BaseModel, Field, ConfigDict
 
 from .config import MODELS, OPENROUTER_API_KEY
 from .openrouter_client import query_all_models
@@ -21,22 +24,67 @@ app = FastAPI(
     version="1.0.0",
 )
 
+# CORS middleware so dashboards / browsers can reach the API
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 cache = SemanticCache()
+
+
+# ---------- Validation error handler ----------
+
+@app.exception_handler(RequestValidationError)
+async def validation_exception_handler(request, exc):
+    return JSONResponse(
+        status_code=422,
+        content={
+            "error": {
+                "message": str(exc),
+                "type": "invalid_request_error",
+                "code": "validation_error",
+            }
+        },
+    )
 
 
 # ---------- Request / Response models ----------
 
 class ChatMessage(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+
     role: str
-    content: str
+    content: str | list | None = None
+    name: str | None = None
+    tool_call_id: str | None = None
+    tool_calls: list | None = None
 
 
 class ChatCompletionRequest(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+
     model: str = "clawd-hybrid-rtx"
     messages: list[ChatMessage]
     temperature: float = Field(default=0.7, ge=0.0, le=2.0)
     max_tokens: int | None = None
     stream: bool = False
+    # Common OpenAI-compatible fields
+    top_p: float | None = None
+    frequency_penalty: float | None = None
+    presence_penalty: float | None = None
+    stop: str | list[str] | None = None
+    n: int | None = 1
+    user: str | None = None
+    seed: int | None = None
+    logprobs: bool | None = None
+    top_logprobs: int | None = None
+    response_format: dict | None = None
+    tools: list | None = None
+    tool_choice: str | dict | None = None
 
 
 class Usage(BaseModel):
@@ -79,6 +127,20 @@ class HealthResponse(BaseModel):
 
 # ---------- Endpoints ----------
 
+@app.get("/")
+async def root():
+    return {
+        "name": "Clawd Hybrid RTX",
+        "version": "1.0.0",
+        "description": "Multi-model consensus LLM server using free OpenRouter models",
+        "endpoints": {
+            "chat": "/v1/chat/completions",
+            "models": "/v1/models",
+            "health": "/health",
+        },
+    }
+
+
 @app.get("/health", response_model=HealthResponse)
 async def health():
     return HealthResponse(
@@ -97,8 +159,8 @@ async def list_models():
     return ModelList(data=models)
 
 
-@app.post("/v1/chat/completions", response_model=ChatCompletionResponse)
-async def chat_completions(request: ChatCompletionRequest):
+async def _handle_chat_completions(request: ChatCompletionRequest) -> ChatCompletionResponse:
+    """Shared handler for chat completions (both /v1/ and non-prefixed paths)."""
     if not OPENROUTER_API_KEY:
         raise HTTPException(status_code=500, detail="OPENROUTER_API_KEY not configured")
 
@@ -154,6 +216,16 @@ async def chat_completions(request: ChatCompletionRequest):
     cache.put(messages_raw, result.model_dump())
 
     return result
+
+
+@app.post("/v1/chat/completions", response_model=ChatCompletionResponse)
+async def chat_completions_v1(request: ChatCompletionRequest):
+    return await _handle_chat_completions(request)
+
+
+@app.post("/chat/completions", response_model=ChatCompletionResponse)
+async def chat_completions(request: ChatCompletionRequest):
+    return await _handle_chat_completions(request)
 
 
 # ---------- Main entry point ----------

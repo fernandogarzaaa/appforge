@@ -160,3 +160,7 @@ unsloth_compiled_cache/
 *.safetensors
 *.bin
 __pycache__/
+
+# Clawd API keys - NEVER commit
+.env.clawd
+infrastructure/clawd-hybrid-rtx/.env.clawd
