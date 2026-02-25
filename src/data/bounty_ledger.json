@@ -8,46 +8,46 @@
       "priority": 0.6,
       "reward": 60,
       "category": "architect",
-      "id": "BTY-1772025788920-485",
+      "id": "BTY-1772039615204-531",
       "status": "backlog",
-      "createdAt": "2026-02-25T13:23:08.920Z"
+      "createdAt": "2026-02-25T17:13:35.204Z"
     },
     {
       "description": "[Neural Accelerator] EXPERT_ARCHITECT: Refactor core (Coherence: 1.00)",
       "priority": 0.5,
       "reward": 50,
       "category": "architect",
-      "id": "BTY-1772025788957-919",
+      "id": "BTY-1772039615240-704",
       "status": "backlog",
-      "createdAt": "2026-02-25T13:23:08.957Z"
+      "createdAt": "2026-02-25T17:13:35.240Z"
     },
     {
       "description": "[Neural Accelerator] EXPERT_ARCHITECT: Refactor core (Coherence: 1.00)",
       "priority": 0.85,
       "reward": 85,
       "category": "architect",
-      "id": "BTY-1772025788992-23",
+      "id": "BTY-1772039615283-74",
       "status": "completed",
-      "createdAt": "2026-02-25T13:23:08.992Z",
-      "completedAt": "2026-02-25T13:23:09.115Z"
+      "createdAt": "2026-02-25T17:13:35.283Z",
+      "completedAt": "2026-02-25T17:13:35.388Z"
     },
     {
       "description": "[Neural Accelerator] EXPERT_ARCHITECT: Refactor core (Coherence: 1.00)",
-      "priority": 0.16732468800374506,
-      "reward": 17,
+      "priority": 0.17656334658613665,
+      "reward": 18,
       "category": "architect",
-      "id": "BTY-1772025789027-837",
+      "id": "BTY-1772039615326-917",
       "status": "backlog",
-      "createdAt": "2026-02-25T13:23:09.027Z"
+      "createdAt": "2026-02-25T17:13:35.326Z"
     },
     {
       "description": "[Neural Accelerator] EXPERT_ARCHITECT: Refactor core (Coherence: 1.00)",
-      "priority": 0.3225,
-      "reward": 32,
+      "priority": 0.30125,
+      "reward": 30,
       "category": "architect",
-      "id": "BTY-1772025789070-186",
+      "id": "BTY-1772039615355-779",
       "status": "backlog",
-      "createdAt": "2026-02-25T13:23:09.070Z"
+      "createdAt": "2026-02-25T17:13:35.355Z"
     }
   ]
 }
