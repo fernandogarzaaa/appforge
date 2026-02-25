@@ -8,46 +8,46 @@
       "priority": 0.6,
       "reward": 60,
       "category": "architect",
-      "id": "BTY-1772010069260-506",
+      "id": "BTY-1772025788920-485",
       "status": "backlog",
-      "createdAt": "2026-02-25T09:01:09.260Z"
+      "createdAt": "2026-02-25T13:23:08.920Z"
     },
     {
       "description": "[Neural Accelerator] EXPERT_ARCHITECT: Refactor core (Coherence: 1.00)",
       "priority": 0.5,
       "reward": 50,
       "category": "architect",
-      "id": "BTY-1772010069287-526",
+      "id": "BTY-1772025788957-919",
       "status": "backlog",
-      "createdAt": "2026-02-25T09:01:09.287Z"
+      "createdAt": "2026-02-25T13:23:08.957Z"
     },
     {
       "description": "[Neural Accelerator] EXPERT_ARCHITECT: Refactor core (Coherence: 1.00)",
       "priority": 0.85,
       "reward": 85,
       "category": "architect",
-      "id": "BTY-1772010069325-967",
+      "id": "BTY-1772025788992-23",
       "status": "completed",
-      "createdAt": "2026-02-25T09:01:09.325Z",
-      "completedAt": "2026-02-25T09:01:09.443Z"
+      "createdAt": "2026-02-25T13:23:08.992Z",
+      "completedAt": "2026-02-25T13:23:09.115Z"
     },
     {
       "description": "[Neural Accelerator] EXPERT_ARCHITECT: Refactor core (Coherence: 1.00)",
-      "priority": 0.16485732211390688,
-      "reward": 16,
+      "priority": 0.16732468800374506,
+      "reward": 17,
       "category": "architect",
-      "id": "BTY-1772010069358-445",
+      "id": "BTY-1772025789027-837",
       "status": "backlog",
-      "createdAt": "2026-02-25T09:01:09.358Z"
+      "createdAt": "2026-02-25T13:23:09.027Z"
     },
     {
       "description": "[Neural Accelerator] EXPERT_ARCHITECT: Refactor core (Coherence: 1.00)",
-      "priority": 0.31375,
-      "reward": 31,
+      "priority": 0.3225,
+      "reward": 32,
       "category": "architect",
-      "id": "BTY-1772010069393-996",
+      "id": "BTY-1772025789070-186",
       "status": "backlog",
-      "createdAt": "2026-02-25T09:01:09.393Z"
+      "createdAt": "2026-02-25T13:23:09.070Z"
     }
   ]
 }
