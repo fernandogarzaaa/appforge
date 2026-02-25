@@ -1,3 +1,68 @@
+def quantum_consensus_voting(responses: list[ModelResponse]) -> dict:
+    """Advanced consensus: multi-model voting, confidence scoring, and trace.
+    Returns dict: { 'best': ModelResponse, 'votes': {model: count}, 'confidences': {model: float}, 'scores': {model: float}, 'details': ... }
+    """
+    valid = [r for r in responses if r.content and not r.error]
+    if not valid:
+        return {"best": None, "votes": {}, "confidences": {}, "scores": {}, "details": "No valid responses"}
+    if len(valid) == 1:
+        return {"best": valid[0], "votes": {valid[0].model: 1}, "confidences": {valid[0].model: 1.0}, "scores": {valid[0].model: 1.0}, "details": "Only one response"}
+
+    # Vectorize all responses
+    vectors = [_text_to_vector(r.content) for r in valid]
+    lengths = [len(r.content) for r in valid]
+    median_len = float(np.median(lengths))
+    entropies = [_text_entropy(r.content) for r in valid]
+    max_entropy = max(entropies) if entropies else 1.0
+    if max_entropy == 0:
+        max_entropy = 1.0
+
+    # Compute pairwise agreement matrix
+    n = len(valid)
+    agreement_matrix = np.zeros((n, n))
+    for i in range(n):
+        for j in range(n):
+            if i != j:
+                agreement_matrix[i, j] = _cosine_similarity(vectors[i], vectors[j])
+
+    # Voting: each model votes for the most similar other response
+    votes = {r.model: 0 for r in valid}
+    for i in range(n):
+        sims = [(agreement_matrix[i, j], j) for j in range(n) if i != j]
+        if sims:
+            sims.sort(reverse=True)
+            best_j = sims[0][1]
+            votes[valid[best_j].model] += 1
+
+    # Confidence: normalized agreement score for each model
+    confidences = {}
+    scores = {}
+    for i, resp in enumerate(valid):
+        agreement = float(np.mean([agreement_matrix[i, j] for j in range(n) if i != j])) if n > 1 else 1.0
+        l_score = _length_score(resp.content, median_len)
+        e_score = entropies[i] / max_entropy
+        total = 0.50 * agreement + 0.25 * l_score + 0.25 * e_score
+        confidences[resp.model] = agreement
+        scores[resp.model] = total
+
+    # Winner: most votes, break ties by highest score
+    max_votes = max(votes.values())
+    candidates = [i for i, r in enumerate(valid) if votes[r.model] == max_votes]
+    if len(candidates) == 1:
+        best = valid[candidates[0]]
+    else:
+        # Break tie by highest score
+        best_idx = max(candidates, key=lambda i: scores[valid[i].model])
+        best = valid[best_idx]
+
+    trace = {
+        "votes": votes,
+        "confidences": confidences,
+        "scores": scores,
+        "winner": best.model,
+        "details": f"votes={votes}, confidences={confidences}, scores={scores}"
+    }
+    return {"best": best, **trace}
 """Score responses by coherence and return the best one.
 
 Uses cosine similarity between responses, length normalization, and entropy

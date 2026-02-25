@@ -192,6 +192,10 @@ async def query_single_model(
     if max_tokens is not None:
         payload["max_tokens"] = max_tokens
 
+    import random
+    base_backoff = 1.0
+    max_backoff = 16.0
+    rate_limit_429_count = 0
     for attempt in range(MAX_RETRIES + 1):
         try:
             resp = await client.post(
@@ -222,13 +226,29 @@ async def query_single_model(
 
             # -- Rate limited --
             if resp.status_code == 429:
-                retry_after = float(
-                    resp.headers.get("retry-after", str(2 ** attempt))
-                )
+                rate_limit_429_count += 1
+                # Exponential backoff with jitter
+                backoff = min(base_backoff * (2 ** attempt), max_backoff)
+                jitter = random.uniform(0, 0.5 * backoff)
+                retry_after = float(resp.headers.get("retry-after", backoff + jitter))
                 logger.warning(
-                    "[req:%s] Rate limited on %s, retrying in %ss (attempt %d)",
+                    "[req:%s] Rate limited on %s, retrying in %.2fs (attempt %d)",
                     request_id, model, retry_after, attempt + 1,
                 )
+                # If too many 429s, put model in cooldown for a while
+                if rate_limit_429_count >= 3:
+                    cooldown_time = max_backoff * 2
+                    health.cooldown_until = time.monotonic() + cooldown_time
+                    logger.warning(
+                        "[req:%s] Model %s put in cooldown for %.0fs after %d rate limits.",
+                        request_id, model, cooldown_time, rate_limit_429_count
+                    )
+                    return ModelResponse(
+                        model=model,
+                        content="",
+                        error=f"Rate limited: model in cooldown for {cooldown_time:.0f}s after repeated 429s.",
+                        request_id=request_id,
+                    )
                 await asyncio.sleep(retry_after)
                 continue
 

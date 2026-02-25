@@ -120,8 +120,27 @@ class PromptCompressor:
     # ---- helpers ----
 
     @staticmethod
-    def _normalize(text: str) -> str:
-        """Lowercase, strip punctuation/whitespace for dedup comparison."""
+    def _normalize(text: str | list) -> str:
+        """
+        Normalize text for deduplication:
+        - Joins lists to string
+        - Converts to lowercase
+        - Removes punctuation and extra whitespace
+        - Handles None and non-string types robustly
+        """
+        if text is None:
+            return ""
+        if isinstance(text, list):
+            # Join list elements as string, flattening nested lists if needed
+            flat = []
+            for x in text:
+                if isinstance(x, list):
+                    flat.extend(str(i) for i in x)
+                else:
+                    flat.append(str(x))
+            text = " ".join(flat)
+        else:
+            text = str(text)
         text = text.lower()
         text = re.sub(r"[^\w\s]", "", text)
         text = re.sub(r"\s+", " ", text).strip()
@@ -215,12 +234,13 @@ class SmartRouter:
     )
 
     # Model preference tiers (first = preferred for that category)
+    # Always prefer local models for cost savings
     _CATEGORY_PREFERENCES: dict[str, list[str]] = {
-        "simple":    ["gemma-3-27b", "llama-3.3-70b", "llama-4-scout"],
-        "moderate":  ["llama-3.3-70b", "llama-4-scout", "gemma-3-27b"],
-        "complex":   ["llama-3.3-70b", "deepseek-r1", "llama-4-scout"],
-        "code":      ["qwen3-coder", "deepseek-r1", "llama-3.3-70b"],
-        "reasoning": ["deepseek-r1", "llama-3.3-70b", "qwen3-coder"],
+        "simple":    ["ollama_local", "llama-3.3-70b", "gemma-3-27b", "llama-4-scout"],
+        "moderate":  ["ollama_local", "llama-3.3-70b", "llama-4-scout", "gemma-3-27b"],
+        "complex":   ["llama-3.3-70b", "deepseek-r1", "llama-4-scout", "ollama_local"],
+        "code":      ["ollama_local", "qwen3-coder", "deepseek-r1", "llama-3.3-70b"],
+        "reasoning": ["ollama_local", "deepseek-r1", "llama-3.3-70b", "qwen3-coder"],
     }
 
     def estimate_complexity(self, messages: list[dict[str, str]]) -> str:
@@ -262,12 +282,26 @@ class SmartRouter:
         messages: list[dict[str, str]],
         models: list[str],
         max_tokens: int | None = None,
+        adaptive_memory=None,
+        query_profile=None,
     ) -> str:
-        """Pick the best available model from *models* for these *messages*."""
+        """Pick the best available model from *models* for these *messages*, using adaptive memory if available. Always prefer local/cost-free models for simple, code, and moderate tasks."""
         complexity = self.estimate_complexity(messages)
         preferences = self._CATEGORY_PREFERENCES.get(complexity, self._CATEGORY_PREFERENCES["moderate"])
 
-        # Return the first preferred model that's in the available list
+        # If adaptive memory and query_profile are available, use them to rank models
+        if adaptive_memory and query_profile:
+            recs = adaptive_memory.get_recommendation(query_profile)
+            # recs: list of (model, score), sorted by score desc
+            ranked = [m for m, _ in sorted(recs, key=lambda x: -x[1]) if m in models]
+            for m in ranked:
+                # Always prefer local if present in ranked
+                if m == "ollama_local":
+                    return m
+            for m in ranked:
+                return m
+
+        # Always prefer local model if available
         for preferred in preferences:
             if preferred in models:
                 return preferred

@@ -1,3 +1,162 @@
+# ---------------------------------------------------------------------------
+# Local Model Support (llama.cpp, Ollama, vLLM, etc)
+# ---------------------------------------------------------------------------
+from .local_model_adapter import LocalModelAdapter
+
+# Example: Add local models to MODELS list (customize as needed)
+LOCAL_MODELS = [
+    LocalModelAdapter("http://localhost:11434", name="ollama"),
+    # Add more local endpoints as needed
+]
+
+@app.get("/v1/local_models")
+async def get_local_models():
+    """Return status of configured local models."""
+    return {lm.name: lm.health() for lm in LOCAL_MODELS}
+# ---------------------------------------------------------------------------
+# Blueprint Clustering and Feedback Endpoints
+# ---------------------------------------------------------------------------
+
+@app.get("/v1/blueprint_clusters")
+async def get_blueprint_clusters(n: int = 5):
+    """Return clusters of blueprints by semantic similarity."""
+    clusters = chimera_memory.cluster_blueprints(n_clusters=n)
+    return {"n_clusters": n, "clusters": [[bp["id"] for bp in group] for group in clusters]}
+# ---------------------------------------------------------------------------
+# Endpoint Health and Auto-Rotation
+# ---------------------------------------------------------------------------
+from .openrouter_client import get_model_health_summary, get_healthy_models
+
+@app.get("/v1/endpoints")
+async def get_endpoints_health():
+    """Return health summary for all model endpoints."""
+    return get_model_health_summary()
+# ---------------------------------------------------------------------------
+# Continuous Self-Evaluation (Background Task)
+# ---------------------------------------------------------------------------
+
+_selfeval_results = []  # Store last 20 self-eval runs
+def _self_evaluation_loop():
+    import random
+    while True:
+        try:
+            # Sample a recent blueprint
+            blueprints = chimera_memory.all_blueprints()
+            if not blueprints:
+                time.sleep(600)
+                continue
+            blueprint = random.choice(blueprints[-10:]) if len(blueprints) > 10 else random.choice(blueprints)
+            input_query = blueprint.get("input", "")
+            orig_consensus = blueprint.get("consensus", "")
+            # Re-query models for the same input
+            messages = [{"role": "user", "content": input_query}]
+            # Use same pipeline as normal, but only for self-eval
+            from .token_optimizer import SmartRouter
+            from .hyper_intelligence import QueryAnalyzer
+            query_profile = _query_analyzer.analyze(messages) if _HAS_HYPER and _query_analyzer else None
+            target_models = MODELS
+            if _HAS_OPTIMIZER and _smart_router and query_profile:
+                best_model = _smart_router.select_model(messages, MODELS, adaptive_memory=_adaptive_memory, query_profile=query_profile)
+                if best_model in MODELS:
+                    target_models = [best_model] + [m for m in MODELS if m != best_model]
+            responses = []
+            try:
+                responses = query_all_models(messages=messages, temperature=0.7, max_tokens=256, models=target_models)
+                if hasattr(responses, "__await__"):  # If coroutine, await it
+                    import asyncio
+                    responses = asyncio.run(responses)
+            except Exception as e:
+                _selfeval_results.append({"input": input_query, "error": str(e), "ts": int(time.time())})
+                if len(_selfeval_results) > 20:
+                    _selfeval_results.pop(0)
+                time.sleep(600)
+                continue
+            from .quantum_consensus import quantum_consensus_voting
+            consensus_result = quantum_consensus_voting([r for r in responses if hasattr(r, "content") and r.content])
+            new_consensus = consensus_result.get("best").content if consensus_result.get("best") else ""
+            drift = (orig_consensus.strip() != new_consensus.strip())
+            _selfeval_results.append({
+                "input": input_query,
+                "orig_consensus": orig_consensus,
+                "new_consensus": new_consensus,
+                "drift": drift,
+                "ts": int(time.time()),
+            })
+            if len(_selfeval_results) > 20:
+                _selfeval_results.pop(0)
+        except Exception as e:
+            _selfeval_results.append({"error": str(e), "ts": int(time.time())})
+            if len(_selfeval_results) > 20:
+                _selfeval_results.pop(0)
+        time.sleep(600)  # Run every 10 minutes
+
+threading.Thread(target=_self_evaluation_loop, daemon=True).start()
+
+# Endpoint to expose self-eval results
+@app.get("/v1/selfeval")
+async def get_selfeval():
+    """Return results of recent continuous self-evaluation runs."""
+    return {"results": list(_selfeval_results)}
+# ---------------------------------------------------------------------------
+# Meta-Reasoning Trace Endpoint
+# ---------------------------------------------------------------------------
+
+@app.get("/v1/trace")
+async def get_trace_log():
+    """Return the last 100 meta-reasoning traces (detailed pipeline logs)."""
+    return {
+        "count": len(_trace_log),
+        "traces": list(_trace_log),
+    }
+# ---------------------------------------------------------------------------
+# Continuous Self-Evaluation (Background Task)
+# ---------------------------------------------------------------------------
+import threading
+import time
+from .model_auto_discovery import ModelAutoDiscovery
+model_auto_discovery = ModelAutoDiscovery(refresh_interval=3600)
+
+# Optionally, integrate discovered endpoints into the model registry
+def update_model_registry_from_discovery():
+    endpoints = model_auto_discovery.get_endpoints()
+    # Example: Add discovered endpoints to your model registry
+    # This should be adapted to your registry structure
+    for ep in endpoints:
+        # Register or update model endpoint in your registry
+        # registry.register(ep['name'], ep['url'], ep['type'], status=ep['status'])
+        pass
+
+# Background thread to periodically update registry
+def _auto_update_registry_loop():
+    while True:
+        update_model_registry_from_discovery()
+        time.sleep(3600)
+
+threading.Thread(target=_auto_update_registry_loop, daemon=True).start()
+import logging
+from fastapi import FastAPI, HTTPException
+from fastapi.exceptions import RequestValidationError
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse, StreamingResponse
+from pydantic import BaseModel, Field, ConfigDict
+
+# ...existing code...
+
+# ---------------------------------------------------------------------------
+# FastAPI App
+# ---------------------------------------------------------------------------
+
+app = FastAPI(
+    title="CHIMERA QUANTUM",
+    description="Quantum-Inspired Multi-Model Intelligence — Free LLM Server",
+    version="1.0.0",
+)
+
+
+# List discovered models from ModelAutoDiscovery (keep after app = FastAPI)
+@app.get("/v1/discovered_models")
+async def list_discovered_models():
+    return {"models": model_auto_discovery.get_endpoints()}
 """
 ╔══════════════════════════════════════════════════════╗
 ║          CHIMERA QUANTUM LLM v1.0                    ║
@@ -15,6 +174,7 @@ hyper-intelligence routing, token optimization, and adaptive memory.
 import logging
 import time
 import uuid
+from .chimera_memory import ChimeraMemory
 
 from fastapi import FastAPI, HTTPException
 from fastapi.exceptions import RequestValidationError
@@ -98,6 +258,16 @@ except ImportError:
     _HAS_CONSENSUS = False
 
 try:
+    from .extended_thinking import ExtendedThinking, get_thinking_engine
+    _thinking_engine = get_thinking_engine()
+    _HAS_THINKING = True
+    logger.info("🤔 Extended Thinking loaded")
+except Exception as e:
+    logger.warning(f"Extended thinking unavailable: {e}")
+    _HAS_THINKING = False
+    _thinking_engine = None
+
+try:
     from .semantic_cache import SemanticCache
     _cache = SemanticCache()
     _HAS_CACHE = True
@@ -122,6 +292,10 @@ app = FastAPI(
     description="Quantum-Inspired Multi-Model Intelligence — Free LLM Server",
     version="1.0.0",
 )
+
+# --- Chimera Memory (Blueprints) ---
+chimera_memory = ChimeraMemory()
+_trace_log = []  # In-memory trace log for meta-reasoning/insights
 
 app.add_middleware(
     CORSMiddleware,
@@ -284,6 +458,8 @@ def _json_dumps(obj: dict) -> str:
 # ---------------------------------------------------------------------------
 
 async def _process_completion(request: ChatCompletionRequest):
+    # --- Step 8: Safety & Alignment Check (after consensus selection) ---
+    from .safety_filter import safety_filter
     """
     CHIMERA QUANTUM request pipeline:
     1. Token Optimization (compress prompts, deduplicate)
@@ -304,7 +480,16 @@ async def _process_completion(request: ChatCompletionRequest):
     if not _HAS_CLIENT:
         raise HTTPException(status_code=500, detail="OpenRouter client module not available")
 
+
     messages_raw = [{"role": m.role, "content": m.content or ""} for m in request.messages]
+
+    # --- Step 0: Retrieval-augmented generation (RAG) from ChimeraMemory ---
+    user_query = messages_raw[-1]["content"] if messages_raw else ""
+    similar_blueprints = chimera_memory.get_similar(user_query, top_k=2)
+    if similar_blueprints:
+        # Inject blueprint context as system prompt
+        context = "\n\n".join(f"[Blueprint] {bp.get('consensus','')}" for bp in similar_blueprints)
+        messages_raw.insert(0, {"role": "system", "content": f"Reference prior blueprints:\n{context}"})
 
     # --- Step 1: Token Optimization ---
     if _HAS_OPTIMIZER and _prompt_compressor:
@@ -328,12 +513,33 @@ async def _process_completion(request: ChatCompletionRequest):
 
     # --- Step 3: Strategy Selection ---
     strategy = None
-    target_models = MODELS
+    # --- Endpoint Health: Only use healthy models ---
+    # Support local models in routing
+    all_models = MODELS + LOCAL_MODELS
+    # Filter healthy remote models
+    remote_models = [m for m in all_models if isinstance(m, str)]
+    healthy_remote = get_healthy_models(remote_models)
+    # Always include healthy local models
+    healthy_local = [lm for lm in LOCAL_MODELS if lm.health()]
+    target_models = healthy_remote + healthy_local
+    if not target_models:
+        logger.error("No healthy models available! All endpoints in cooldown or offline.")
+        raise HTTPException(status_code=503, detail="No healthy models available (all endpoints in cooldown or offline)")
     if _HAS_HYPER and _strategy_selector and query_profile:
         try:
-            strategy = _strategy_selector.select(query_profile, MODELS)
-            if strategy and strategy.models:
-                target_models = strategy.models
+            # Use adaptive model weighting if available
+            if _smart_router and _adaptive_memory:
+                best_model = _smart_router.select_model(
+                    messages_raw, [m.name if isinstance(m, LocalModelAdapter) else m for m in target_models], adaptive_memory=_adaptive_memory, query_profile=query_profile
+                )
+                # Move best_model to front of list
+                target_models = sorted(target_models, key=lambda m: (getattr(m, 'name', m) != best_model))
+            else:
+                strategy = _strategy_selector.select(query_profile, [m.name if isinstance(m, LocalModelAdapter) else m for m in target_models])
+                if strategy and strategy.models:
+                    # Reorder target_models to match strategy.models
+                    name_map = {getattr(m, 'name', m): m for m in target_models}
+                    target_models = [name_map[n] for n in strategy.models if n in name_map]
             logger.info(f"Strategy: {strategy.name if strategy else 'default'} → {target_models}")
         except Exception as e:
             logger.warning(f"Strategy selection failed: {e}")
@@ -347,12 +553,21 @@ async def _process_completion(request: ChatCompletionRequest):
 
     # --- Step 5: Query Models ---
     logger.info(f"🔄 Querying {len(target_models)} models ({strategy.name if strategy else 'default'})...")
-    responses = await query_all_models(
-        messages=messages_raw,
-        temperature=request.temperature,
-        max_tokens=request.max_tokens,
-        models=target_models,
-    )
+
+    # Query remote and local models
+    remote_targets = [m for m in target_models if isinstance(m, str)]
+    local_targets = [m for m in target_models if isinstance(m, LocalModelAdapter)]
+    responses = []
+    if remote_targets:
+        responses += await query_all_models(
+            messages=messages_raw,
+            temperature=request.temperature,
+            max_tokens=request.max_tokens,
+            models=remote_targets,
+        )
+    for lm in local_targets:
+        content = lm.chat_completion(messages_raw, max_tokens=request.max_tokens or 256, temperature=request.temperature)
+        responses.append(type('LocalModelResponse', (), {"model": lm.name, "content": content, "error": None, "finish_reason": "stop", "usage": {}})())
 
     successful = [r for r in responses if r.content and not r.error]
     failed = [r for r in responses if r.error]
@@ -360,38 +575,51 @@ async def _process_completion(request: ChatCompletionRequest):
     for f in failed:
         logger.warning(f"  ✗ {f.model}: {f.error}")
 
+
     # --- Step 6: Quantum Consensus ---
-    best = None
-    if _HAS_QUANTUM and _quantum_engine and len(successful) > 1:
-        try:
-            result = _quantum_engine.superposition_evaluate(
-                [{"model": r.model, "content": r.content} for r in successful]
-            )
-            if result and "best" in result:
-                best_model = result["best"].get("model", "")
-                for r in successful:
-                    if r.model == best_model:
-                        best = r
-                        break
-            if best:
-                logger.info(f"⚛️  Quantum consensus winner: {best.model}")
-        except Exception as e:
-            logger.warning(f"Quantum consensus failed, falling back: {e}")
 
-    if best is None and _HAS_CONSENSUS and successful:
-        try:
-            best = select_best_response(responses)
-        except Exception as e:
-            logger.warning(f"Classic consensus failed: {e}")
-
-    if best is None and successful:
-        best = successful[0]
-
+    # --- Advanced consensus: quantum_consensus_voting ---
+    from .quantum_consensus import quantum_consensus_voting
+    consensus_result = quantum_consensus_voting(successful)
+    best = consensus_result.get("best")
+    consensus_trace = consensus_result
     if best is None:
         errors = "; ".join(f"{r.model}: {r.error}" for r in failed)
         raise HTTPException(status_code=502, detail=f"All models failed: {errors}")
 
-    # --- Step 7: Build Response ---
+
+    # --- Step 7: Blueprint distillation and memory persistence ---
+    blueprint = {
+        "id": f"CHIMERA-{int(time.time())}-{uuid.uuid4().hex[:6]}",
+        "input": user_query,
+        "models": [{"model": r.model, "content": r.content, "error": r.error} for r in responses],
+        "consensus": best.content,
+        "consensus_model": best.model,
+        "consensus_trace": consensus_trace,
+        "timestamp": int(time.time()),
+    }
+    chimera_memory.add_blueprint(blueprint)
+
+    # --- Step 8: Meta-reasoning trace logging ---
+    _trace_log.append({
+        "timestamp": int(time.time()),
+        "input": user_query,
+        "blueprint_id": blueprint["id"],
+        "consensus_model": best.model,
+        "consensus": best.content,
+        "models": [{"model": r.model, "content": r.content, "error": r.error} for r in responses],
+        "consensus_trace": consensus_trace,
+    })
+    if len(_trace_log) > 100:
+        _trace_log.pop(0)
+
+    # --- Step 8.5: Block unsafe completions ---
+    is_safe, reason = safety_filter(best.content)
+    if not is_safe:
+        logger.warning(f"Blocked unsafe completion: {reason}")
+        raise HTTPException(status_code=400, detail=f"Blocked by safety filter: {reason}")
+
+    # --- Step 9: Build Response ---
     completion_id = f"chatcmpl-chimera-{uuid.uuid4().hex[:12]}"
     result = ChatCompletionResponse(
         id=completion_id,
@@ -405,6 +633,17 @@ async def _process_completion(request: ChatCompletionRequest):
         ],
         usage=Usage(**(best.usage or {})),
     )
+# ---------------------------------------------------------------------------
+# Insights Endpoint (Meta-Reasoning Traces)
+# ---------------------------------------------------------------------------
+
+@app.get("/v1/insights")
+async def get_insights():
+    """Return recent meta-reasoning traces and blueprints."""
+    return {
+        "traces": list(_trace_log),
+        "blueprints": chimera_memory.all_blueprints(),
+    }
 
     # --- Step 8: Cache ---
     if _HAS_CACHE and _cache:
