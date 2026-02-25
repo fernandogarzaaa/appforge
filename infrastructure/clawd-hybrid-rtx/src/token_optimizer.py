@@ -1,3 +1,22 @@
+def normalize_messages(messages):
+    """Normalize input for token optimization: handle message arrays, raw strings, and malformed inputs."""
+    import logging
+    if isinstance(messages, list):
+        parts = []
+        for m in messages:
+            if isinstance(m, dict):
+                parts.append(str(m.get("content", "")))
+        return " ".join(parts)
+    return str(messages)
+
+# Example usage in optimizer:
+# raw_messages = request.get("messages", [])
+# text = normalize_messages(raw_messages).lower()
+# Defensive: never call .lower() on a list.
+
+# Example usage in optimizer:
+# text = normalize_messages(request.get("messages", []))
+# text = text.lower()
 """
 Token Optimizer — Aggressive token optimization for CHIMERA QUANTUM.
 
@@ -79,14 +98,16 @@ class PromptCompressor:
         return "\n".join(m.strip().lstrip("-*• ") for m in matches)
 
     def deduplicate_messages(self, messages: list[dict[str, str]]) -> list[dict[str, str]]:
-        """Remove exact and near-duplicate messages (by normalized content)."""
-        seen: set[str] = set()
-        deduped: list[dict[str, str]] = []
-        for msg in messages:
-            key = self._normalize(msg.get("content", ""))
-            if key not in seen:
-                seen.add(key)
-                deduped.append(msg)
+        """Return only deduplicated user messages (system messages are filtered out)."""
+        seen = set()
+        deduped = []
+        for m in messages:
+            if m.get('role') != 'user':
+                continue
+            content = m.get('content')
+            if content and content not in seen:
+                seen.add(content)
+                deduped.append(m)
         return deduped
 
     def summarize_old_context(
@@ -122,23 +143,29 @@ class PromptCompressor:
     @staticmethod
     def _normalize(text: str | list) -> str:
         """
-        Normalize text for deduplication:
-        - Joins lists to string
-        - Converts to lowercase
-        - Removes punctuation and extra whitespace
-        - Handles None and non-string types robustly
+        Normalize input for deduplication and routing:
+        - If input is a list of OpenAI messages, extract user message content and join.
+        - If input is a tuple, convert to list.
+        - Else, convert to string.
+        - Lowercase, remove punctuation, extra whitespace.
+        Defensive logging for unexpected types.
         """
+        import logging
+        logger = logging.getLogger("token-optimizer")
         if text is None:
             return ""
+        if isinstance(text, tuple):
+            text = list(text)
         if isinstance(text, list):
-            # Join list elements as string, flattening nested lists if needed
-            flat = []
-            for x in text:
-                if isinstance(x, list):
-                    flat.extend(str(i) for i in x)
-                else:
-                    flat.append(str(x))
-            text = " ".join(flat)
+            # OpenAI message array: filter user messages
+            user_contents = [m.get("content", "") for m in text if isinstance(m, dict) and m.get("role") == "user"]
+            text = " ".join(user_contents)
+        elif isinstance(text, dict):
+            # Defensive: extract user content if possible
+            if text.get("role") == "user":
+                text = text.get("content", "")
+            else:
+                text = ""
         else:
             text = str(text)
         text = text.lower()
@@ -248,10 +275,15 @@ class SmartRouter:
 
         Returns one of: "simple", "moderate", "complex", "code", "reasoning".
         """
-        combined = " ".join(m.get("content", "") for m in messages)
+        # Flatten tuple/list-wrapped lists robustly
+        while isinstance(messages, (tuple, list)) and len(messages) == 1 and isinstance(messages[0], (list, tuple)):
+            messages = messages[0]
+        if isinstance(messages, tuple):
+            messages = list(messages)
+        combined = " ".join(m.get("content", "") for m in messages if isinstance(m, dict))
         last_user = ""
         for m in reversed(messages):
-            if m.get("role") == "user":
+            if isinstance(m, dict) and m.get("role") == "user":
                 last_user = m.get("content", "")
                 break
 

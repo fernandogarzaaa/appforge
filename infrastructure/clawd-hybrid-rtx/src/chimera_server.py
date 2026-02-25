@@ -1,162 +1,23 @@
-# ---------------------------------------------------------------------------
-# Local Model Support (llama.cpp, Ollama, vLLM, etc)
-# ---------------------------------------------------------------------------
-from .local_model_adapter import LocalModelAdapter
-
-# Example: Add local models to MODELS list (customize as needed)
-LOCAL_MODELS = [
-    LocalModelAdapter("http://localhost:11434", name="ollama"),
-    # Add more local endpoints as needed
-]
-
-@app.get("/v1/local_models")
-async def get_local_models():
-    """Return status of configured local models."""
-    return {lm.name: lm.health() for lm in LOCAL_MODELS}
-# ---------------------------------------------------------------------------
-# Blueprint Clustering and Feedback Endpoints
-# ---------------------------------------------------------------------------
-
-@app.get("/v1/blueprint_clusters")
-async def get_blueprint_clusters(n: int = 5):
-    """Return clusters of blueprints by semantic similarity."""
-    clusters = chimera_memory.cluster_blueprints(n_clusters=n)
-    return {"n_clusters": n, "clusters": [[bp["id"] for bp in group] for group in clusters]}
-# ---------------------------------------------------------------------------
-# Endpoint Health and Auto-Rotation
-# ---------------------------------------------------------------------------
-from .openrouter_client import get_model_health_summary, get_healthy_models
-
-@app.get("/v1/endpoints")
-async def get_endpoints_health():
-    """Return health summary for all model endpoints."""
-    return get_model_health_summary()
-# ---------------------------------------------------------------------------
-# Continuous Self-Evaluation (Background Task)
-# ---------------------------------------------------------------------------
-
-_selfeval_results = []  # Store last 20 self-eval runs
-def _self_evaluation_loop():
-    import random
-    while True:
-        try:
-            # Sample a recent blueprint
-            blueprints = chimera_memory.all_blueprints()
-            if not blueprints:
-                time.sleep(600)
-                continue
-            blueprint = random.choice(blueprints[-10:]) if len(blueprints) > 10 else random.choice(blueprints)
-            input_query = blueprint.get("input", "")
-            orig_consensus = blueprint.get("consensus", "")
-            # Re-query models for the same input
-            messages = [{"role": "user", "content": input_query}]
-            # Use same pipeline as normal, but only for self-eval
-            from .token_optimizer import SmartRouter
-            from .hyper_intelligence import QueryAnalyzer
-            query_profile = _query_analyzer.analyze(messages) if _HAS_HYPER and _query_analyzer else None
-            target_models = MODELS
-            if _HAS_OPTIMIZER and _smart_router and query_profile:
-                best_model = _smart_router.select_model(messages, MODELS, adaptive_memory=_adaptive_memory, query_profile=query_profile)
-                if best_model in MODELS:
-                    target_models = [best_model] + [m for m in MODELS if m != best_model]
-            responses = []
-            try:
-                responses = query_all_models(messages=messages, temperature=0.7, max_tokens=256, models=target_models)
-                if hasattr(responses, "__await__"):  # If coroutine, await it
-                    import asyncio
-                    responses = asyncio.run(responses)
-            except Exception as e:
-                _selfeval_results.append({"input": input_query, "error": str(e), "ts": int(time.time())})
-                if len(_selfeval_results) > 20:
-                    _selfeval_results.pop(0)
-                time.sleep(600)
-                continue
-            from .quantum_consensus import quantum_consensus_voting
-            consensus_result = quantum_consensus_voting([r for r in responses if hasattr(r, "content") and r.content])
-            new_consensus = consensus_result.get("best").content if consensus_result.get("best") else ""
-            drift = (orig_consensus.strip() != new_consensus.strip())
-            _selfeval_results.append({
-                "input": input_query,
-                "orig_consensus": orig_consensus,
-                "new_consensus": new_consensus,
-                "drift": drift,
-                "ts": int(time.time()),
-            })
-            if len(_selfeval_results) > 20:
-                _selfeval_results.pop(0)
-        except Exception as e:
-            _selfeval_results.append({"error": str(e), "ts": int(time.time())})
-            if len(_selfeval_results) > 20:
-                _selfeval_results.pop(0)
-        time.sleep(600)  # Run every 10 minutes
-
-threading.Thread(target=_self_evaluation_loop, daemon=True).start()
-
-# Endpoint to expose self-eval results
-@app.get("/v1/selfeval")
-async def get_selfeval():
-    """Return results of recent continuous self-evaluation runs."""
-    return {"results": list(_selfeval_results)}
-# ---------------------------------------------------------------------------
-# Meta-Reasoning Trace Endpoint
-# ---------------------------------------------------------------------------
-
-@app.get("/v1/trace")
-async def get_trace_log():
-    """Return the last 100 meta-reasoning traces (detailed pipeline logs)."""
-    return {
-        "count": len(_trace_log),
-        "traces": list(_trace_log),
+def wrap_openai_response(content):
+    import uuid
+    if not content or not content.strip():
+        content = "Sorry, no valid response was generated."
+    response = {
+        "id": f"chimera-{uuid.uuid4()}",
+        "object": "chat.completion",
+        "choices": [
+            {
+                "index": 0,
+                "message": {
+                    "role": "assistant",
+                    "content": content
+                },
+                "finish_reason": "stop"
+            }
+        ]
     }
-# ---------------------------------------------------------------------------
-# Continuous Self-Evaluation (Background Task)
-# ---------------------------------------------------------------------------
-import threading
-import time
-from .model_auto_discovery import ModelAutoDiscovery
-model_auto_discovery = ModelAutoDiscovery(refresh_interval=3600)
-
-# Optionally, integrate discovered endpoints into the model registry
-def update_model_registry_from_discovery():
-    endpoints = model_auto_discovery.get_endpoints()
-    # Example: Add discovered endpoints to your model registry
-    # This should be adapted to your registry structure
-    for ep in endpoints:
-        # Register or update model endpoint in your registry
-        # registry.register(ep['name'], ep['url'], ep['type'], status=ep['status'])
-        pass
-
-# Background thread to periodically update registry
-def _auto_update_registry_loop():
-    while True:
-        update_model_registry_from_discovery()
-        time.sleep(3600)
-
-threading.Thread(target=_auto_update_registry_loop, daemon=True).start()
-import logging
-from fastapi import FastAPI, HTTPException
-from fastapi.exceptions import RequestValidationError
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse, StreamingResponse
-from pydantic import BaseModel, Field, ConfigDict
-
-# ...existing code...
-
-# ---------------------------------------------------------------------------
-# FastAPI App
-# ---------------------------------------------------------------------------
-
-app = FastAPI(
-    title="CHIMERA QUANTUM",
-    description="Quantum-Inspired Multi-Model Intelligence — Free LLM Server",
-    version="1.0.0",
-)
-
-
-# List discovered models from ModelAutoDiscovery (keep after app = FastAPI)
-@app.get("/v1/discovered_models")
-async def list_discovered_models():
-    return {"models": model_auto_discovery.get_endpoints()}
+    logger.info(f"OpenAI response length: {len(content)}")
+    return response
 """
 ╔══════════════════════════════════════════════════════╗
 ║          CHIMERA QUANTUM LLM v1.0                    ║
@@ -174,7 +35,8 @@ hyper-intelligence routing, token optimization, and adaptive memory.
 import logging
 import time
 import uuid
-from .chimera_memory import ChimeraMemory
+import threading
+import json
 
 from fastapi import FastAPI, HTTPException
 from fastapi.exceptions import RequestValidationError
@@ -183,6 +45,7 @@ from fastapi.responses import JSONResponse, StreamingResponse
 from pydantic import BaseModel, Field, ConfigDict
 
 from .config import MODELS, FALLBACK_MODELS, OPENROUTER_API_KEY, CLAWD_PORT, CLAWD_HOST, REQUEST_TIMEOUT
+from .chimera_memory import ChimeraMemory
 
 logging.basicConfig(
     level=logging.INFO,
@@ -195,7 +58,7 @@ logger = logging.getLogger("chimera-quantum")
 # ---------------------------------------------------------------------------
 
 try:
-    from .openrouter_client import query_all_models, ModelResponse
+    from .openrouter_client import query_all_models, ModelResponse, get_model_health_summary, get_healthy_models
     _HAS_CLIENT = True
 except ImportError as e:
     logger.warning(f"openrouter_client unavailable: {e}")
@@ -212,10 +75,10 @@ except Exception as e:
     _quantum_engine = None
 
 try:
-    from .model_discovery import needs_refresh, get_best_free_models, fetch_free_models, save_discovered
+    from .model_discovery import fetch_free_models, save_discovered, needs_refresh, get_best_free_models
     _HAS_DISCOVERY = True
     logger.info("🔍 Model Auto-Discovery loaded")
-except Exception as e:
+except ImportError as e:
     logger.warning(f"Model discovery unavailable: {e}")
     _HAS_DISCOVERY = False
 
@@ -252,7 +115,7 @@ except ImportError as e:
     _cost_tracker = None
 
 try:
-    from .quantum_consensus import select_best_response
+    from .quantum_consensus import select_best_response, quantum_consensus_voting
     _HAS_CONSENSUS = True
 except ImportError:
     _HAS_CONSENSUS = False
@@ -276,12 +139,36 @@ except ImportError:
     _cache = None
 
 try:
-    from .model_discovery import fetch_free_models, save_discovered, needs_refresh, get_best_free_models
-    _HAS_DISCOVERY = True
-    logger.info("🔍 Model Auto-Discovery loaded")
-except ImportError as e:
-    logger.warning(f"Model discovery unavailable: {e}")
-    _HAS_DISCOVERY = False
+    from .model_auto_discovery import ModelAutoDiscovery
+    model_auto_discovery = ModelAutoDiscovery(refresh_interval=3600)
+    _HAS_AUTO_DISCOVERY = True
+except ImportError:
+    _HAS_AUTO_DISCOVERY = False
+    model_auto_discovery = None
+
+try:
+    from .local_model_adapter import LocalModelAdapter
+    _HAS_LOCAL_MODELS = True
+except ImportError:
+    _HAS_LOCAL_MODELS = False
+    LocalModelAdapter = None
+
+try:
+    from .safety_filter import safety_filter
+    _HAS_SAFETY = True
+except ImportError:
+    _HAS_SAFETY = False
+    def safety_filter(content):
+        return True, None
+
+# ---------------------------------------------------------------------------
+# Local Model Support (llama.cpp, Ollama, vLLM, etc)
+# ---------------------------------------------------------------------------
+LOCAL_MODELS = []
+if _HAS_LOCAL_MODELS:
+    LOCAL_MODELS = [
+        LocalModelAdapter("http://localhost:11434", name="ollama"),
+    ]
 
 # ---------------------------------------------------------------------------
 # FastAPI App
@@ -304,39 +191,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-
-# ---------------------------------------------------------------------------
-# Error Handlers
-# ---------------------------------------------------------------------------
-
-@app.exception_handler(RequestValidationError)
-async def validation_error_handler(request, exc):
-    return JSONResponse(
-        status_code=422,
-        content={
-            "error": {
-                "message": str(exc),
-                "type": "invalid_request_error",
-                "code": "validation_error",
-            }
-        },
-    )
-
-
-@app.exception_handler(Exception)
-async def general_error_handler(request, exc):
-    logger.exception("Unhandled error")
-    return JSONResponse(
-        status_code=500,
-        content={
-            "error": {
-                "message": str(exc),
-                "type": "server_error",
-                "code": "internal_error",
-            }
-        },
-    )
 
 
 # ---------------------------------------------------------------------------
@@ -406,11 +260,46 @@ class ModelList(BaseModel):
 
 
 # ---------------------------------------------------------------------------
+# Error Handlers
+# ---------------------------------------------------------------------------
+
+@app.exception_handler(RequestValidationError)
+async def validation_error_handler(request, exc):
+    return JSONResponse(
+        status_code=422,
+        content={
+            "error": {
+                "message": str(exc),
+                "type": "invalid_request_error",
+                "code": "validation_error",
+            }
+        },
+    )
+
+
+@app.exception_handler(Exception)
+async def general_error_handler(request, exc):
+    logger.exception("Unhandled error")
+    return JSONResponse(
+        status_code=500,
+        content={
+            "error": {
+                "message": str(exc),
+                "type": "server_error",
+                "code": "internal_error",
+            }
+        },
+    )
+
+
+# ---------------------------------------------------------------------------
 # SSE Streaming Helper
 # ---------------------------------------------------------------------------
 
 async def _stream_response(content: str, model: str, completion_id: str):
     """Yield SSE chunks in OpenAI streaming format."""
+    import asyncio
+    
     # First chunk: role
     chunk = {
         "id": completion_id,
@@ -419,10 +308,9 @@ async def _stream_response(content: str, model: str, completion_id: str):
         "model": model,
         "choices": [{"index": 0, "delta": {"role": "assistant"}, "finish_reason": None}],
     }
-    yield f"data: {_json_dumps(chunk)}\n\n"
+    yield f"data: {json.dumps(chunk, ensure_ascii=False, separators=(',', ':'))}\n\n"
 
     # Content chunks: word by word
-    import asyncio
     words = content.split(" ")
     for i, word in enumerate(words):
         token = word if i == 0 else f" {word}"
@@ -433,7 +321,7 @@ async def _stream_response(content: str, model: str, completion_id: str):
             "model": model,
             "choices": [{"index": 0, "delta": {"content": token}, "finish_reason": None}],
         }
-        yield f"data: {_json_dumps(chunk)}\n\n"
+        yield f"data: {json.dumps(chunk, ensure_ascii=False, separators=(',', ':'))}\n\n"
         await asyncio.sleep(0.02)  # Natural streaming feel
 
     # Final chunk: finish_reason
@@ -444,13 +332,8 @@ async def _stream_response(content: str, model: str, completion_id: str):
         "model": model,
         "choices": [{"index": 0, "delta": {}, "finish_reason": "stop"}],
     }
-    yield f"data: {_json_dumps(chunk)}\n\n"
+    yield f"data: {json.dumps(chunk, ensure_ascii=False, separators=(',', ':'))}\n\n"
     yield "data: [DONE]\n\n"
-
-
-def _json_dumps(obj: dict) -> str:
-    import json
-    return json.dumps(obj, ensure_ascii=False, separators=(",", ":"))
 
 
 # ---------------------------------------------------------------------------
@@ -458,8 +341,6 @@ def _json_dumps(obj: dict) -> str:
 # ---------------------------------------------------------------------------
 
 async def _process_completion(request: ChatCompletionRequest):
-    # --- Step 8: Safety & Alignment Check (after consensus selection) ---
-    from .safety_filter import safety_filter
     """
     CHIMERA QUANTUM request pipeline:
     1. Token Optimization (compress prompts, deduplicate)
@@ -479,7 +360,6 @@ async def _process_completion(request: ChatCompletionRequest):
 
     if not _HAS_CLIENT:
         raise HTTPException(status_code=500, detail="OpenRouter client module not available")
-
 
     messages_raw = [{"role": m.role, "content": m.content or ""} for m in request.messages]
 
@@ -512,35 +392,36 @@ async def _process_completion(request: ChatCompletionRequest):
             logger.warning(f"Query analysis failed: {e}")
 
     # --- Step 3: Strategy Selection ---
-    strategy = None
-    # --- Endpoint Health: Only use healthy models ---
     # Support local models in routing
     all_models = MODELS + LOCAL_MODELS
     # Filter healthy remote models
     remote_models = [m for m in all_models if isinstance(m, str)]
-    healthy_remote = get_healthy_models(remote_models)
+    healthy_remote = get_healthy_models(remote_models) if _HAS_CLIENT else remote_models
     # Always include healthy local models
-    healthy_local = [lm for lm in LOCAL_MODELS if lm.health()]
+    healthy_local = [lm for lm in LOCAL_MODELS if lm.health()] if _HAS_LOCAL_MODELS else []
     target_models = healthy_remote + healthy_local
+    
     if not target_models:
         logger.error("No healthy models available! All endpoints in cooldown or offline.")
         raise HTTPException(status_code=503, detail="No healthy models available (all endpoints in cooldown or offline)")
+    
     if _HAS_HYPER and _strategy_selector and query_profile:
         try:
             # Use adaptive model weighting if available
             if _smart_router and _adaptive_memory:
+                model_names = [m.name if hasattr(m, 'name') else m for m in target_models]
                 best_model = _smart_router.select_model(
-                    messages_raw, [m.name if isinstance(m, LocalModelAdapter) else m for m in target_models], adaptive_memory=_adaptive_memory, query_profile=query_profile
+                    messages_raw, model_names, adaptive_memory=_adaptive_memory, query_profile=query_profile
                 )
                 # Move best_model to front of list
                 target_models = sorted(target_models, key=lambda m: (getattr(m, 'name', m) != best_model))
             else:
-                strategy = _strategy_selector.select(query_profile, [m.name if isinstance(m, LocalModelAdapter) else m for m in target_models])
+                strategy = _strategy_selector.select(query_profile, [getattr(m, 'name', m) for m in target_models])
                 if strategy and strategy.models:
                     # Reorder target_models to match strategy.models
                     name_map = {getattr(m, 'name', m): m for m in target_models}
                     target_models = [name_map[n] for n in strategy.models if n in name_map]
-            logger.info(f"Strategy: {strategy.name if strategy else 'default'} → {target_models}")
+            logger.info(f"Strategy selected, targeting {len(target_models)} models")
         except Exception as e:
             logger.warning(f"Strategy selection failed: {e}")
 
@@ -552,12 +433,13 @@ async def _process_completion(request: ChatCompletionRequest):
             return cached, True  # (response_dict, is_cached)
 
     # --- Step 5: Query Models ---
-    logger.info(f"🔄 Querying {len(target_models)} models ({strategy.name if strategy else 'default'})...")
+    logger.info(f"🔄 Querying {len(target_models)} models...")
 
     # Query remote and local models
     remote_targets = [m for m in target_models if isinstance(m, str)]
-    local_targets = [m for m in target_models if isinstance(m, LocalModelAdapter)]
+    local_targets = [m for m in target_models if hasattr(m, 'chat_completion')]
     responses = []
+    
     if remote_targets:
         responses += await query_all_models(
             messages=messages_raw,
@@ -565,6 +447,7 @@ async def _process_completion(request: ChatCompletionRequest):
             max_tokens=request.max_tokens,
             models=remote_targets,
         )
+    
     for lm in local_targets:
         content = lm.chat_completion(messages_raw, max_tokens=request.max_tokens or 256, temperature=request.temperature)
         responses.append(type('LocalModelResponse', (), {"model": lm.name, "content": content, "error": None, "finish_reason": "stop", "usage": {}})())
@@ -575,18 +458,16 @@ async def _process_completion(request: ChatCompletionRequest):
     for f in failed:
         logger.warning(f"  ✗ {f.model}: {f.error}")
 
-
     # --- Step 6: Quantum Consensus ---
-
-    # --- Advanced consensus: quantum_consensus_voting ---
-    from .quantum_consensus import quantum_consensus_voting
-    consensus_result = quantum_consensus_voting(successful)
-    best = consensus_result.get("best")
-    consensus_trace = consensus_result
+    consensus_result = quantum_consensus_voting(successful) if _HAS_CONSENSUS else {"best": successful[0] if successful else None}
+    best = consensus_result.get("best") if isinstance(consensus_result, dict) else None
+    
+    if best is None and successful:
+        best = successful[0]
+    
     if best is None:
         errors = "; ".join(f"{r.model}: {r.error}" for r in failed)
         raise HTTPException(status_code=502, detail=f"All models failed: {errors}")
-
 
     # --- Step 7: Blueprint distillation and memory persistence ---
     blueprint = {
@@ -595,7 +476,6 @@ async def _process_completion(request: ChatCompletionRequest):
         "models": [{"model": r.model, "content": r.content, "error": r.error} for r in responses],
         "consensus": best.content,
         "consensus_model": best.model,
-        "consensus_trace": consensus_trace,
         "timestamp": int(time.time()),
     }
     chimera_memory.add_blueprint(blueprint)
@@ -607,19 +487,17 @@ async def _process_completion(request: ChatCompletionRequest):
         "blueprint_id": blueprint["id"],
         "consensus_model": best.model,
         "consensus": best.content,
-        "models": [{"model": r.model, "content": r.content, "error": r.error} for r in responses],
-        "consensus_trace": consensus_trace,
     })
     if len(_trace_log) > 100:
         _trace_log.pop(0)
 
-    # --- Step 8.5: Block unsafe completions ---
-    is_safe, reason = safety_filter(best.content)
+    # --- Step 9: Safety & Alignment Check ---
+    is_safe, reason = safety_filter(best.content) if _HAS_SAFETY else (True, None)
     if not is_safe:
         logger.warning(f"Blocked unsafe completion: {reason}")
         raise HTTPException(status_code=400, detail=f"Blocked by safety filter: {reason}")
 
-    # --- Step 9: Build Response ---
+    # --- Step 10: Build Response ---
     completion_id = f"chatcmpl-chimera-{uuid.uuid4().hex[:12]}"
     result = ChatCompletionResponse(
         id=completion_id,
@@ -633,30 +511,19 @@ async def _process_completion(request: ChatCompletionRequest):
         ],
         usage=Usage(**(best.usage or {})),
     )
-# ---------------------------------------------------------------------------
-# Insights Endpoint (Meta-Reasoning Traces)
-# ---------------------------------------------------------------------------
-
-@app.get("/v1/insights")
-async def get_insights():
-    """Return recent meta-reasoning traces and blueprints."""
-    return {
-        "traces": list(_trace_log),
-        "blueprints": chimera_memory.all_blueprints(),
-    }
-
-    # --- Step 8: Cache ---
+    
+    # --- Step 11: Cache ---
     if _HAS_CACHE and _cache:
         _cache.put(messages_raw, result.model_dump())
 
-    # --- Step 9: Adaptive Memory ---
+    # --- Step 12: Adaptive Memory ---
     if _HAS_HYPER and _adaptive_memory and query_profile:
         try:
             _adaptive_memory.record(query_profile, best.model, 0.8)  # default quality
         except Exception:
             pass
 
-    # --- Step 10: Cost Tracking ---
+    # --- Step 13: Cost Tracking ---
     if _HAS_OPTIMIZER and _cost_tracker:
         try:
             usage = best.usage or {}
@@ -672,7 +539,7 @@ async def get_insights():
 
 
 # ---------------------------------------------------------------------------
-# Endpoints
+# API Endpoints
 # ---------------------------------------------------------------------------
 
 @app.get("/")
@@ -769,7 +636,7 @@ async def stats():
 
 @app.get("/v1/insights")
 async def insights():
-    result = {}
+    result = {"traces": list(_trace_log), "blueprints": chimera_memory.all_blueprints()}
     if _HAS_HYPER and _adaptive_memory:
         try:
             result["adaptive_memory"] = _adaptive_memory.get_insights()
@@ -777,7 +644,7 @@ async def insights():
             result["adaptive_memory"] = "unavailable"
     if _HAS_QUANTUM and _quantum_engine:
         result["quantum_engine"] = "active"
-    return result or {"message": "No intelligence modules loaded"}
+    return result
 
 
 @app.get("/v1/discover")
@@ -798,24 +665,141 @@ async def discover_models():
         return {"error": str(e)}
 
 
+@app.get("/v1/local_models")
+async def get_local_models():
+    """Return status of configured local models."""
+    if not _HAS_LOCAL_MODELS:
+        return {"error": "Local model support not available"}
+    return {lm.name: lm.health() for lm in LOCAL_MODELS}
+
+
+@app.get("/v1/blueprint_clusters")
+async def get_blueprint_clusters(n: int = 5):
+    """Return clusters of blueprints by semantic similarity."""
+    clusters = chimera_memory.cluster_blueprints(n_clusters=n)
+    return {"n_clusters": n, "clusters": [[bp["id"] for bp in group] for group in clusters]}
+
+
+@app.get("/v1/endpoints")
+async def get_endpoints_health():
+    """Return health summary for all model endpoints."""
+    if not _HAS_CLIENT:
+        return {"error": "Client module not available"}
+    return get_model_health_summary()
+
+
+@app.get("/v1/selfeval")
+async def get_selfeval():
+    """Return results of recent continuous self-evaluation runs."""
+    return {"results": list(_selfeval_results)}
+
+
+@app.get("/v1/trace")
+async def get_trace_log():
+    """Return the last 100 meta-reasoning traces (detailed pipeline logs)."""
+    return {
+        "count": len(_trace_log),
+        "traces": list(_trace_log),
+    }
+
+
+@app.get("/v1/discovered_models")
+async def list_discovered_models():
+    if not _HAS_AUTO_DISCOVERY or not model_auto_discovery:
+        return {"error": "Auto-discovery not available"}
+    return {"models": model_auto_discovery.get_endpoints()}
+
+
+# ---------------------------------------------------------------------------
+# Continuous Self-Evaluation (Background Task)
+# ---------------------------------------------------------------------------
+
+_selfeval_results = []  # Store last 20 self-eval runs
+
+def _self_evaluation_loop():
+    import random
+    while True:
+        try:
+            # Sample a recent blueprint
+            blueprints = chimera_memory.all_blueprints()
+            if not blueprints:
+                time.sleep(600)
+                continue
+            blueprint = random.choice(blueprints[-10:]) if len(blueprints) > 10 else random.choice(blueprints)
+            input_query = blueprint.get("input", "")
+            orig_consensus = blueprint.get("consensus", "")
+            # Re-query models for the same input
+            messages = [{"role": "user", "content": input_query}]
+            # Use same pipeline as normal, but only for self-eval
+            query_profile = _query_analyzer.analyze(messages) if _HAS_HYPER and _query_analyzer else None
+            target_models = MODELS
+            if _HAS_OPTIMIZER and _smart_router and query_profile:
+                best_model = _smart_router.select_model(messages, MODELS, adaptive_memory=_adaptive_memory, query_profile=query_profile)
+                if best_model in MODELS:
+                    target_models = [best_model] + [m for m in MODELS if m != best_model]
+            responses = []
+            try:
+                responses = query_all_models(messages=messages, temperature=0.7, max_tokens=256, models=target_models)
+                if hasattr(responses, "__await__"):  # If coroutine, await it
+                    import asyncio
+                    responses = asyncio.run(responses)
+            except Exception as e:
+                _selfeval_results.append({"input": input_query, "error": str(e), "ts": int(time.time())})
+                if len(_selfeval_results) > 20:
+                    _selfeval_results.pop(0)
+                time.sleep(600)
+                continue
+            
+            if _HAS_CONSENSUS:
+                consensus_result = quantum_consensus_voting([r for r in responses if hasattr(r, "content") and r.content])
+                new_consensus = consensus_result.get("best").content if consensus_result.get("best") else ""
+            else:
+                new_consensus = responses[0].content if responses else ""
+            
+            drift = (orig_consensus.strip() != new_consensus.strip())
+            _selfeval_results.append({
+                "input": input_query,
+                "orig_consensus": orig_consensus,
+                "new_consensus": new_consensus,
+                "drift": drift,
+                "ts": int(time.time()),
+            })
+            if len(_selfeval_results) > 20:
+                _selfeval_results.pop(0)
+        except Exception as e:
+            _selfeval_results.append({"error": str(e), "ts": int(time.time())})
+            if len(_selfeval_results) > 20:
+                _selfeval_results.pop(0)
+        time.sleep(600)  # Run every 10 minutes
+
+
+# Start background threads
+def _auto_update_registry_loop():
+    while True:
+        if _HAS_DISCOVERY:
+            try:
+                if needs_refresh(max_age_hours=24.0):
+                    logger.info("🔍 Refreshing free model list from OpenRouter...")
+                    fresh = fetch_free_models()
+                    if fresh:
+                        save_discovered(fresh)
+                        logger.info(f"🔍 Found {len(fresh)} free models")
+            except Exception as e:
+                logger.warning(f"Auto-discovery refresh failed: {e}")
+        time.sleep(3600)
+
+
+# Start background threads
+threading.Thread(target=_self_evaluation_loop, daemon=True).start()
+threading.Thread(target=_auto_update_registry_loop, daemon=True).start()
+
+
 # ---------------------------------------------------------------------------
 # Startup Banner
 # ---------------------------------------------------------------------------
 
 @app.on_event("startup")
 async def startup_banner():
-    # Auto-discover new free models if cache is stale
-    if _HAS_DISCOVERY:
-        try:
-            if needs_refresh(max_age_hours=24.0):
-                logger.info("🔍 Refreshing free model list from OpenRouter...")
-                fresh = fetch_free_models()
-                if fresh:
-                    save_discovered(fresh)
-                    logger.info(f"🔍 Found {len(fresh)} free models")
-        except Exception as e:
-            logger.warning(f"Auto-discovery refresh failed: {e}")
-
     banner = f"""
 ╔══════════════════════════════════════════════════════╗
 ║          CHIMERA QUANTUM LLM v1.0                    ║
@@ -842,3 +826,7 @@ def main():
     logger.info(f"Primary models: {MODELS}")
     logger.info(f"Fallback models: {FALLBACK_MODELS}")
     uvicorn.run(app, host=CLAWD_HOST, port=CLAWD_PORT)
+
+
+if __name__ == "__main__":
+    main()
