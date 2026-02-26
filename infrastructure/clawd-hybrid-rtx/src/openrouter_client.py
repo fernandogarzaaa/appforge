@@ -172,6 +172,9 @@ async def query_single_model(
     errors so retries aren't wasted.
     """
 
+
+    # Get per-model health record
+    health = _model_health[model]
     # Skip models in cooldown or rate-limited
     if not _model_tracker.is_available(model):
         return ModelResponse(
