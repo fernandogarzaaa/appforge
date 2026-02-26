@@ -1,3 +1,5 @@
+# Quantum Chimera LLM v3.0.0
+# ...existing code from Kimi-enhanced README.md...
 ## Kimi-enhanced version
 # ⚡ AppForge Quantum - Self-Evolving Enterprise Platform
 

@@ -1,1 +1,4 @@
+# Quantum Chimera LLM - Requirements
+# ===================================
+# ...existing code from Kimi-enhanced requirements.txt...
 ## Kimi-enhanced version
