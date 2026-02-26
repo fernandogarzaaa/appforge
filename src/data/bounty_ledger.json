@@ -8,46 +8,46 @@
       "priority": 0.6,
       "reward": 60,
       "category": "architect",
-      "id": "BTY-1772002469112-704",
+      "id": "BTY-1772125524212-25",
       "status": "backlog",
-      "createdAt": "2026-02-25T06:54:29.112Z"
+      "createdAt": "2026-02-26T17:05:24.212Z"
     },
     {
       "description": "[Neural Accelerator] EXPERT_ARCHITECT: Refactor core (Coherence: 1.00)",
       "priority": 0.5,
       "reward": 50,
       "category": "architect",
-      "id": "BTY-1772002469149-502",
+      "id": "BTY-1772125524257-377",
       "status": "backlog",
-      "createdAt": "2026-02-25T06:54:29.149Z"
+      "createdAt": "2026-02-26T17:05:24.257Z"
     },
     {
       "description": "[Neural Accelerator] EXPERT_ARCHITECT: Refactor core (Coherence: 1.00)",
       "priority": 0.85,
       "reward": 85,
       "category": "architect",
-      "id": "BTY-1772002469189-794",
+      "id": "BTY-1772125524294-685",
       "status": "completed",
-      "createdAt": "2026-02-25T06:54:29.189Z",
-      "completedAt": "2026-02-25T06:54:29.316Z"
+      "createdAt": "2026-02-26T17:05:24.294Z",
+      "completedAt": "2026-02-26T17:05:24.407Z"
     },
     {
       "description": "[Neural Accelerator] EXPERT_ARCHITECT: Refactor core (Coherence: 1.00)",
-      "priority": 0.16298918309424212,
-      "reward": 16,
+      "priority": 0.17009747961903696,
+      "reward": 17,
       "category": "architect",
-      "id": "BTY-1772002469229-945",
+      "id": "BTY-1772125524335-718",
       "status": "backlog",
-      "createdAt": "2026-02-25T06:54:29.229Z"
+      "createdAt": "2026-02-26T17:05:24.335Z"
     },
     {
       "description": "[Neural Accelerator] EXPERT_ARCHITECT: Refactor core (Coherence: 1.00)",
-      "priority": 0.425,
-      "reward": 43,
+      "priority": 0.37,
+      "reward": 37,
       "category": "architect",
-      "id": "BTY-1772002469267-93",
+      "id": "BTY-1772125524365-197",
       "status": "backlog",
-      "createdAt": "2026-02-25T06:54:29.267Z"
+      "createdAt": "2026-02-26T17:05:24.365Z"
     }
   ]
 }
