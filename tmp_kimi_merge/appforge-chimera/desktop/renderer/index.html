@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AppForge Chimera v4.0</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="app">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">
+                <div class="logo-icon">⚡</div>
+                <div class="logo-text">
+                    <span class="logo-name">AppForge</span>
+                    <span class="logo-subtitle">Chimera v4.0</span>
+                </div>
+            </div>
+            
+            <nav class="nav">
+                <a href="#" class="nav-item active" data-view="chat">
+                    <span class="nav-icon">💬</span>
+                    <span>Chat</span>
+                </a>
+                <a href="#" class="nav-item" data-view="models">
+                    <span class="nav-icon">🤖</span>
+                    <span>Models</span>
+                </a>
+                <a href="#" class="nav-item" data-view="analytics">
+                    <span class="nav-icon">📊</span>
+                    <span>Analytics</span>
+                </a>
+                <a href="#" class="nav-item" data-view="autonomous">
+                    <span class="nav-icon">🧠</span>
+                    <span>Autonomous</span>
+                </a>
+                <a href="#" class="nav-item" data-view="settings">
+                    <span class="nav-icon">⚙️</span>
+                    <span>Settings</span>
+                </a>
+            </nav>
+            
+            <div class="service-status">
+                <h4>Services</h4>
+                <div class="status-item" id="backend-status">
+                    <span class="status-dot offline"></span>
+                    <span>Backend</span>
+                </div>
+                <div class="status-item" id="ai-status">
+                    <span class="status-dot offline"></span>
+                    <span>AI Engine</span>
+                </div>
+                <div class="status-item" id="autonomous-status">
+                    <span class="status-dot offline"></span>
+                    <span>Autonomous</span>
+                </div>
+            </div>
+        </aside>
+        
+        <!-- Main Content -->
+        <main class="main">
+            <!-- Chat View -->
+            <div class="view active" id="chat-view">
+                <header class="view-header">
+                    <h1>Chat</h1>
+                    <div class="header-actions">
+                        <button class="btn btn-secondary" id="clear-chat">Clear</button>
+                        <select class="model-select" id="model-select">
+                            <option value="auto">🎯 Auto (Smart Routing)</option>
+                            <option value="kimi-latest">🌙 Kimi Latest</option>
+                            <option value="meta-llama/llama-3.3-70b-instruct">🦙 Llama 3.3 70B</option>
+                            <option value="llama-3.3-70b-versatile">⚡ Groq Llama 3.3</option>
+                        </select>
+                    </div>
+                </header>
+                
+                <div class="chat-container">
+                    <div class="messages" id="messages">
+                        <div class="welcome-message">
+                            <h2>⚡ Welcome to AppForge Chimera</h2>
+                            <p>Powered by Quantum Chimera LLM v4.0 with autonomous self-evolving AI.</p>
+                            <div class="features">
+                                <span class="feature">🎯 Smart Routing</span>
+                                <span class="feature">💰 Cost Optimization</span>
+                                <span class="feature">⚡ 100x Faster</span>
+                                <span class="feature">🧠 Self-Evolving</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="input-area">
+                        <div class="input-wrapper">
+                            <textarea 
+                                id="message-input" 
+                                placeholder="Type your message... (Shift+Enter for new line)"
+                                rows="1"
+                            ></textarea>
+                            <button class="send-btn" id="send-btn">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="22" y1="2" x2="11" y2="13"></line>
+                                    <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="input-info">
+                            <span id="token-count">0 tokens</span>
+                            <span id="routing-info">Auto-routing enabled</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Models View -->
+            <div class="view" id="models-view">
+                <header class="view-header">
+                    <h1>AI Models</h1>
+                </header>
+                <div class="models-grid" id="models-grid">
+                    <!-- Models loaded dynamically -->
+                </div>
+            </div>
+            
+            <!-- Analytics View -->
+            <div class="view" id="analytics-view">
+                <header class="view-header">
+                    <h1>Analytics</h1>
+                </header>
+                <div class="analytics-grid">
+                    <div class="stat-card">
+                        <h3>Total Requests</h3>
+                        <div class="stat-value" id="total-requests">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Cache Hit Rate</h3>
+                        <div class="stat-value" id="cache-hit-rate">0%</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Avg Latency</h3>
+                        <div class="stat-value" id="avg-latency">0ms</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Tokens Saved</h3>
+                        <div class="stat-value" id="tokens-saved">0</div>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <h3>Performance Over Time</h3>
+                    <canvas id="performance-chart"></canvas>
+                </div>
+            </div>
+            
+            <!-- Autonomous View -->
+            <div class="view" id="autonomous-view">
+                <header class="view-header">
+                    <h1>🧠 Autonomous Core</h1>
+                    <div class="autonomous-status" id="autonomous-core-status">
+                        <span class="status-badge active">Active</span>
+                    </div>
+                </header>
+                
+                <div class="autonomous-grid">
+                    <div class="autonomous-card">
+                        <h3>Self-Monitoring</h3>
+                        <div class="health-indicator" id="health-indicator">
+                            <span class="health-dot healthy"></span>
+                            <span>System Healthy</span>
+                        </div>
+                        <div class="metrics-list" id="system-metrics">
+                            <!-- Metrics loaded dynamically -->
+                        </div>
+                    </div>
+                    
+                    <div class="autonomous-card">
+                        <h3>Continuous Learning</h3>
+                        <div class="learning-stats">
+                            <div class="stat">
+                                <span class="stat-label">Patterns Learned</span>
+                                <span class="stat-number" id="patterns-count">0</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-label">Insights</span>
+                                <span class="stat-number" id="insights-count">0</span>
+                            </div>
+                        </div>
+                        <div class="insights-list" id="insights-list">
+                            <!-- Insights loaded dynamically -->
+                        </div>
+                    </div>
+                    
+                    <div class="autonomous-card">
+                        <h3>Self-Improvement</h3>
+                        <div class="improvement-stats">
+                            <div class="stat">
+                                <span class="stat-label">Suggestions</span>
+                                <span class="stat-number" id="suggestions-count">0</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-label">Applied</span>
+                                <span class="stat-number" id="applied-count">0</span>
+                            </div>
+                        </div>
+                        <div class="suggestions-list" id="suggestions-list">
+                            <!-- Suggestions loaded dynamically -->
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="logs-section">
+                    <h3>Autonomous Logs</h3>
+                    <div class="logs-container" id="autonomous-logs"></div>
+                </div>
+            </div>
+            
+            <!-- Settings View -->
+            <div class="view" id="settings-view">
+                <header class="view-header">
+                    <h1>Settings</h1>
+                </header>
+                <div class="settings-grid">
+                    <div class="settings-card">
+                        <h3>AI Configuration</h3>
+                        <div class="setting-item">
+                            <label>Routing Algorithm</label>
+                            <select id="routing-algorithm">
+                                <option value="multi_armed_bandit">Multi-Armed Bandit</option>
+                                <option value="thompson_sampling">Thompson Sampling</option>
+                                <option value="quantum">Quantum Superposition</option>
+                            </select>
+                        </div>
+                        <div class="setting-item">
+                            <label>Temperature</label>
+                            <input type="range" id="temperature" min="0" max="2" step="0.1" value="0.7">
+                            <span class="value">0.7</span>
+                        </div>
+                        <div class="setting-item">
+                            <label>Max Tokens</label>
+                            <input type="number" id="max-tokens" value="1024" min="100" max="8192">
+                        </div>
+                    </div>
+                    
+                    <div class="settings-card">
+                        <h3>Cache Settings</h3>
+                        <div class="setting-item">
+                            <label>Enable Semantic Cache</label>
+                            <input type="checkbox" id="semantic-cache" checked>
+                        </div>
+                        <div class="setting-item">
+                            <label>Enable Predictive Cache</label>
+                            <input type="checkbox" id="predictive-cache" checked>
+                        </div>
+                        <div class="setting-item">
+                            <label>Cache Similarity Threshold</label>
+                            <input type="range" id="cache-threshold" min="0.7" max="0.99" step="0.01" value="0.92">
+                            <span class="value">0.92</span>
+                        </div>
+                    </div>
+                    
+                    <div class="settings-card">
+                        <h3>Autonomous Features</h3>
+                        <div class="setting-item">
+                            <label>Enable Self-Monitoring</label>
+                            <input type="checkbox" id="self-monitoring" checked>
+                        </div>
+                        <div class="setting-item">
+                            <label>Enable Self-Improvement</label>
+                            <input type="checkbox" id="self-improvement" checked>
+                        </div>
+                        <div class="setting-item">
+                            <label>Enable Continuous Learning</label>
+                            <input type="checkbox" id="continuous-learning" checked>
+                        </div>
+                        <div class="setting-item">
+                            <label>Auto-Apply Safe Improvements</label>
+                            <input type="checkbox" id="auto-apply" checked>
+                        </div>
+                    </div>
+                    
+                    <div class="settings-card">
+                        <h3>API Keys</h3>
+                        <div class="setting-item">
+                            <label>Kimi API Key</label>
+                            <input type="password" id="kimi-key" placeholder="sk-...">
+                        </div>
+                        <div class="setting-item">
+                            <label>OpenRouter API Key</label>
+                            <input type="password" id="openrouter-key" placeholder="sk-or-...">
+                        </div>
+                        <div class="setting-item">
+                            <label>Groq API Key</label>
+                            <input type="password" id="groq-key" placeholder="gsk_...">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <script src="app.js"></script>
+</body>
+</html>

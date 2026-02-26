@@ -1,0 +1,70 @@
+{
+  "name": "appforge-chimera",
+  "version": "4.0.0",
+  "description": "AppForge Desktop + Quantum Chimera LLM - Autonomous Self-Evolving Platform",
+  "main": "desktop/main.js",
+  "scripts": {
+    "dev": "concurrently \"npm run dev:desktop\" \"npm run dev:backend\"",
+    "dev:desktop": "electron-forge start",
+    "dev:backend": "cd backend && python -m uvicorn main:app --reload --port 8765",
+    "dev:ai": "cd ai-engine && python chimera_server.py",
+    "build": "npm run build:desktop && npm run build:backend",
+    "build:desktop": "electron-forge make",
+    "build:backend": "cd backend && pip install -e .",
+    "start": "electron-forge start",
+    "package": "electron-forge package",
+    "make": "electron-forge make",
+    "autonomous:start": "python autonomous-core/main.py",
+    "test": "jest",
+    "lint": "eslint ."
+  },
+  "keywords": ["appforge", "chimera", "llm", "ai", "autonomous", "desktop"],
+  "author": "AppForge Chimera Team",
+  "license": "MIT",
+  "devDependencies": {
+    "@electron-forge/cli": "^7.2.0",
+    "@electron-forge/maker-deb": "^7.2.0",
+    "@electron-forge/maker-rpm": "^7.2.0",
+    "@electron-forge/maker-squirrel": "^7.2.0",
+    "@electron-forge/maker-zip": "^7.2.0",
+    "@electron-forge/plugin-auto-unpack-natives": "^7.2.0",
+    "@electron-forge/plugin-fuses": "^7.2.0",
+    "@electron/fuses": "^1.7.0",
+    "concurrently": "^8.2.2",
+    "electron": "^28.0.0",
+    "eslint": "^8.56.0"
+  },
+  "dependencies": {
+    "electron-squirrel-startup": "^1.0.0",
+    "axios": "^1.6.0",
+    "ws": "^8.14.0"
+  },
+  "config": {
+    "forge": {
+      "packagerConfig": {
+        "asar": true,
+        "icon": "desktop/assets/icon"
+      },
+      "makers": [
+        {
+          "name": "@electron-forge/maker-squirrel",
+          "config": {
+            "name": "AppForgeChimera"
+          }
+        },
+        {
+          "name": "@electron-forge/maker-zip",
+          "platforms": ["darwin", "linux"]
+        },
+        {
+          "name": "@electron-forge/maker-deb",
+          "config": {}
+        },
+        {
+          "name": "@electron-forge/maker-rpm",
+          "config": {}
+        }
+      ]
+    }
+  }
+}

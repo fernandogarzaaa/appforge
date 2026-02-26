@@ -1,3 +1,4 @@
+## Kimi-enhanced version
 # ⚡ AppForge Quantum - Self-Evolving Enterprise Platform
 
 A production-ready, full-stack application platform powered by **Quantum-Inspired AI** and **Swarm Intelligence**. AppForge isn't just a boilerplate; it's a **self-improving organism** that writes its own code, heals its own bugs, and optimizes its own performance.

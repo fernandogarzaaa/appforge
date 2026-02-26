@@ -2,6 +2,7 @@ import pytest
 from token_optimizer import PromptCompressor, SmartRouter
 
 @pytest.mark.parametrize("input_data,expected", [
+    ([{"role": "system", "content": "You are a helpful assistant."}, {"role": "user", "content": "Hello world"}], "hello world"),
     ([{"role": "user", "content": "Hello world"}], "hello world"),
     ("Just a string prompt", "just a string prompt"),
     ([{"role": "system", "content": "Ignore this"}, {"role": "user", "content": "Actual question"}], "actual question"),

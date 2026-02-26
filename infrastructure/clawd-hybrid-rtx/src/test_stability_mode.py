@@ -13,7 +13,10 @@ def test_stability_mode(monkeypatch):
     monkeypatch.setenv("MAX_TOTAL_TOKENS", "8000")
     payload = {
         "model": "chimera-quantum",
-        "messages": [{"role": "user", "content": "Hello"}],
+        "messages": [
+            {"role": "system", "content": "You are a helpful assistant."},
+            {"role": "user", "content": "Hello"}
+        ],
     }
     response = client.post("/v1/chat/completions", json=payload)
     data = response.json()

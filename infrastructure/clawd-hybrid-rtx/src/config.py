@@ -1,3 +1,4 @@
+## Kimi-enhanced version
 import os
 from pathlib import Path
 from dotenv import load_dotenv
@@ -57,7 +58,11 @@ MODELS: list[str] = (
 CIRCUIT_BREAKER_THRESHOLD: int = 3        # failures before cooldown
 CIRCUIT_BREAKER_COOLDOWN: float = 300.0   # seconds (5 minutes)
 
-# Consensus settings
+CACHE_SIMILARITY_THRESHOLD: float = float(os.getenv("CACHE_SIMILARITY_THRESHOLD", "0.92"))
+CACHE_MAX_ENTRIES: int = int(os.getenv("CACHE_MAX_ENTRIES", "500"))
+MAX_CALLS_PER_MINUTE: int = int(os.getenv("MAX_CALLS_PER_MINUTE", "10"))
+# Kimi API key (paid): set KIMI_API_KEY in .env.clawd if available
+KIMI_API_KEY: str = os.getenv("KIMI_API_KEY", "")
 CACHE_SIMILARITY_THRESHOLD: float = 0.92
 MAX_RETRIES: int = 2
 REQUEST_TIMEOUT: float = 60.0

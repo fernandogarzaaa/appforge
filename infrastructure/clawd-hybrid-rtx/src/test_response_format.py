@@ -1,7 +1,10 @@
 def test_openai_response_format():
     payload = {
         "model": "chimera-quantum",
-        "messages": [{"role": "user", "content": "Hello"}],
+        "messages": [
+            {"role": "system", "content": "You are a helpful assistant."},
+            {"role": "user", "content": "Hello"}
+        ],
     }
     # Mock the backend/model response to ensure test passes regardless of API/model availability
     mock_response = {

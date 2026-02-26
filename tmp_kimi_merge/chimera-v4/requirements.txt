@@ -1,0 +1,28 @@
+# Quantum Chimera LLM v4.0 - Requirements
+# ========================================
+
+# FastAPI and server
+fastapi>=0.104.0
+uvicorn[standard]>=0.24.0
+python-multipart>=0.0.6
+
+# HTTP client
+requests>=2.31.0
+httpx>=0.25.0
+aiohttp>=3.9.0
+
+# OpenAI compatibility
+openai>=1.3.0
+
+# Embeddings
+sentence-transformers>=2.2.2
+torch>=2.1.0
+numpy>=1.24.0
+
+# Data handling
+pydantic>=2.5.0
+python-dotenv>=1.0.0
+
+# Testing
+pytest>=7.4.0
+pytest-asyncio>=0.21.0

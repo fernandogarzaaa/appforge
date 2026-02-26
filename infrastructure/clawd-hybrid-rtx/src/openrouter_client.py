@@ -1,3 +1,9 @@
+## Kimi-enhanced version
+from .model_tracker import ModelTracker
+from .config import MAX_CALLS_PER_MINUTE
+
+# Global model tracker instance
+_model_tracker = ModelTracker(max_calls_per_minute=MAX_CALLS_PER_MINUTE)
 """Async HTTP client for querying OpenRouter models in parallel.
 
 Includes circuit-breaker, fallback models, request-ID tracking,
@@ -78,7 +84,8 @@ _model_health: dict[str, ModelHealth] = defaultdict(_default_model_health)
 def get_healthy_models(models: list[str] | None = None) -> list[str]:
     """Return models from *models* that are NOT currently in cooldown."""
     candidates = models or MODELS
-    return [m for m in candidates if not _model_health[m].is_in_cooldown]
+    # Only return models that are available (not in cooldown and not rate-limited)
+    return [m for m in candidates if _model_tracker.is_available(m) and _model_tracker.can_call(m)]
 
 
 def get_model_health_summary() -> dict[str, dict]:
@@ -164,15 +171,21 @@ async def query_single_model(
     Respects circuit-breaker state, tracks health, and fast-fails on auth
     errors so retries aren't wasted.
     """
-    health = _model_health[model]
 
-    # Skip models in cooldown
-    if health.is_in_cooldown:
+    # Skip models in cooldown or rate-limited
+    if not _model_tracker.is_available(model):
         return ModelResponse(
             model=model,
             content="",
-            error=f"Model in cooldown until {health.cooldown_until:.0f} — last error: {health.last_error}",
+            error=f"Model in cooldown (dynamic health)",
         )
+    if not _model_tracker.can_call(model):
+        return ModelResponse(
+            model=model,
+            content="",
+            error=f"Model rate-limited (calls per minute exceeded)",
+        )
+    _model_tracker.record_call(model)
 
     request_id = str(uuid.uuid4())
 
@@ -309,7 +322,7 @@ async def query_single_model(
             finish_reason = choices[0].get("finish_reason")
             usage = data.get("usage")
 
-            health.record_success()
+            _model_tracker.record_success(model, len(content))
             return ModelResponse(
                 model=model,
                 content=content,
@@ -337,13 +350,18 @@ async def query_single_model(
                 "[req:%s] Exception querying %s: %s",
                 request_id, model, e,
             )
-            health.record_failure(str(e))
+            _model_tracker.record_failure(model)
+            # If 3 consecutive failures, mark degraded
+            if _model_tracker.stats[model]['failure_count'] % 3 == 0:
+                _model_tracker.mark_degraded(model)
             return ModelResponse(
                 model=model, content="", error=str(e),
                 request_id=request_id,
             )
 
-    health.record_failure("Max retries exceeded")
+    _model_tracker.record_failure(model)
+    if _model_tracker.stats[model]['failure_count'] % 3 == 0:
+        _model_tracker.mark_degraded(model)
     return ModelResponse(
         model=model, content="", error="Max retries exceeded",
         request_id=request_id,

@@ -1,3 +1,4 @@
+## Kimi-enhanced version
 """
 ChimeraMemory — Persistent memory for blueprints and cognitive traces.
 Stores and retrieves Chimera Blueprints for retrieval-augmented generation and self-improvement.
@@ -19,8 +20,23 @@ class ChimeraMemory:
         self._lock = threading.Lock()
         self._memory: List[Dict[str, Any]] = []
         self._embeddings: List[np.ndarray] = []
-        self._model = SentenceTransformer("all-MiniLM-L6-v2")
+        self._model = None
         self._load()
+
+    def _ensure_model_loaded(self):
+        if self._model is None:
+            print("[ChimeraMemory] Lazy-loading embedding model...")
+            from sentence_transformers import SentenceTransformer
+            model_name = "all-MiniLM-L6-v2"
+            cache_dir = Path(__file__).parent.parent / "models" / "sentence-transformers"
+            cache_dir.mkdir(parents=True, exist_ok=True)
+            try:
+                self._model = SentenceTransformer(model_name, cache_folder=str(cache_dir), local_files_only=True)
+                print(f"[ChimeraMemory] Loaded SentenceTransformer '{model_name}' from local cache: {cache_dir}")
+            except Exception as cache_exc:
+                print(f"[ChimeraMemory] Local cache not found or incomplete, attempting to download '{model_name}'...")
+                self._model = SentenceTransformer(model_name, cache_folder=str(cache_dir), local_files_only=False)
+                print(f"[ChimeraMemory] Downloaded and cached SentenceTransformer '{model_name}' to: {cache_dir}")
 
     def _load(self):
         if self.path.exists():
@@ -33,10 +49,12 @@ class ChimeraMemory:
             self._memory = []
         # Rebuild embeddings
         self._embeddings = []
-        for bp in self._memory:
-            bp_text = (bp.get("input") or "") + " " + (bp.get("consensus") or "")
-            emb = self._model.encode(bp_text, show_progress_bar=False, convert_to_numpy=True)
-            self._embeddings.append(emb)
+        if self._memory:
+            self._ensure_model_loaded()
+            for bp in self._memory:
+                bp_text = (bp.get("input") or "") + " " + (bp.get("consensus") or "")
+                emb = self._model.encode(bp_text, show_progress_bar=False, convert_to_numpy=True)
+                self._embeddings.append(emb)
 
     def _save(self):
         with self._lock:

@@ -1,3 +1,4 @@
+## Kimi-enhanced version
 """Simple dict-based semantic cache using numpy cosine similarity."""
 
 import logging
@@ -22,18 +23,19 @@ class CacheEntry:
 
 
 class SemanticCache:
-        def extract_cache_key(self, messages):
-            user_parts = [m.get("content") for m in messages if m.get("role") == "user"]
-            key = " ".join(user_parts)
-            logger.debug(f"SemanticCache: cache key = '{key}'")
-            return key
-
     """In-memory semantic cache with cosine similarity matching."""
 
     def __init__(self, threshold: float = CACHE_SIMILARITY_THRESHOLD, dim: int = 256):
         self.threshold = threshold
         self.dim = dim
         self._entries: list[CacheEntry] = []
+
+    def extract_cache_key(self, messages: list[dict]) -> str:
+        """Extract cache key from messages (concatenate user content)."""
+        user_parts = [m.get("content", "") for m in messages if m.get("role") == "user"]
+        key = " ".join(str(p) for p in user_parts)
+        logger.debug(f"SemanticCache: cache key = '{key[:100]}...' " if len(key) > 100 else f"SemanticCache: cache key = '{key}'")
+        return key
 
     def _messages_to_vector(self, messages: list[dict]) -> np.ndarray:
         """Convert user message content to a vector for similarity comparison."""
@@ -47,25 +49,6 @@ class SemanticCache:
             vec /= norm
         return vec
 
-    def put(self, messages, response):
-        key = self.extract_cache_key(messages)
-        # Prune empty/whitespace responses
-        content = None
-        if isinstance(response, dict):
-            choices = response.get('choices')
-            if choices and isinstance(choices, list):
-                message = choices[0].get('message') if choices else None
-                if message:
-                    content = message.get('content')
-        if content is None or not content.strip():
-            logger.warning(f"SemanticCache: Rejecting empty response for key '{key}'")
-            return
-            logger.info(f"SemanticCache: rejected empty response for key '{key}'")
-            return
-        entry = CacheEntry(self._messages_to_vector(messages), response)
-        self._entries.append(entry)
-        logger.info(f"SemanticCache: cached response for key '{key}' (len={len(content)})")
-
     def _cosine_sim(self, a: np.ndarray, b: np.ndarray) -> float:
         dot = np.dot(a, b)
         na, nb = np.linalg.norm(a), np.linalg.norm(b)
@@ -78,52 +61,53 @@ class SemanticCache:
         now = time.time()
         self._entries = [e for e in self._entries if (now - e.timestamp) < CACHE_TTL]
 
+    def _extract_content(self, response: dict) -> str:
+        """Extract content string from OpenAI-style response."""
+        try:
+            if response and "choices" in response and response["choices"]:
+                return response["choices"][0].get("message", {}).get("content", "")
+        except Exception:
+            pass
+        return ""
+
     def get(self, messages: list[dict]) -> dict | None:
         """Look up a cached response by semantic similarity."""
         self._evict_expired()
         query_vec = self._messages_to_vector(messages)
-
         best_sim = 0.0
         best_entry: CacheEntry | None = None
-
         for entry in self._entries:
             sim = self._cosine_sim(query_vec, entry.key_vector)
             if sim > best_sim:
                 best_sim = sim
                 best_entry = entry
-
+        logger.info(f"SemanticCache: cache size = {len(self._entries)}")
         if best_entry is not None and best_sim >= self.threshold:
-            logger.info(f"Cache hit (similarity={best_sim:.4f})")
+            content = self._extract_content(best_entry.response)
+            if not content or not content.strip():
+                return None
+            if best_sim == 1.0:
+                logger.info("Cache hit (exact match)")
+            else:
+                logger.info(f"Cache hit (similarity={best_sim:.4f})")
             return best_entry.response
-
-            # If result is empty or only whitespace, treat as cache miss
-            if best_entry is not None:
-                content = None
-                if isinstance(best_entry.response, dict):
-                    choices = best_entry.response.get('choices')
-                    if choices and isinstance(choices, list):
-                        message = choices[0].get('message') if choices else None
-                        if message:
-                            content = message.get('content')
-                if content is not None and (not content or str(content).strip() == ""):
-                    return None
-            return best_entry.response
+        logger.info(f"SemanticCache: cache miss (best similarity={best_sim:.4f})")
+        return None
 
     def put(self, messages: list[dict], response: dict) -> None:
-        """Store a response in the cache, reject empty/whitespace-only responses."""
-        # Extract content from OpenAI response format
-        content = ""
-        try:
-            if response and "choices" in response and response["choices"]:
-                content = response["choices"][0]["message"]["content"]
-        except Exception:
-            logger.warning("Cache put: failed to extract content from response.")
-        if not content or not str(content).strip():
+        """Store a response in the cache, reject empty/whitespace-only responses. Enforce max entries and evict oldest 20% if exceeded."""
+        content = self._extract_content(response)
+        if not content or not content.strip():
             logger.info("Cache put: rejected empty or whitespace-only response.")
             return
         key_vec = self._messages_to_vector(messages)
         self._entries.append(CacheEntry(key_vector=key_vec, response=response))
-        logger.debug(f"Cached response (total entries: {len(self._entries)})")
+        from .config import CACHE_MAX_ENTRIES
+        if len(self._entries) > CACHE_MAX_ENTRIES:
+            evict_count = max(1, int(0.2 * CACHE_MAX_ENTRIES))
+            logger.info(f"SemanticCache: evicting {evict_count} oldest entries (max {CACHE_MAX_ENTRIES})")
+            self._entries = self._entries[evict_count:]
+        logger.info(f"Cached response (total entries: {len(self._entries)})")
 
     def clear(self) -> None:
         """Clear all cache entries."""

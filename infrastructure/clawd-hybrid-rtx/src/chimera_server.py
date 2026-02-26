@@ -1,3 +1,10 @@
+## Kimi-enhanced version
+from .model_tracker import ModelTracker
+from .conversation_memory import ConversationMemory
+from .config import MAX_CALLS_PER_MINUTE
+# Global model tracker and conversation memory
+_model_tracker = ModelTracker(max_calls_per_minute=MAX_CALLS_PER_MINUTE)
+_conversation_memory = ConversationMemory()
 def wrap_openai_response(content):
     import uuid
     if not content or not content.strip():
@@ -363,7 +370,20 @@ async def _process_completion(request: ChatCompletionRequest):
 
     messages_raw = [{"role": m.role, "content": m.content or ""} for m in request.messages]
 
-    # --- Step 0: Retrieval-augmented generation (RAG) from ChimeraMemory ---
+    # --- Step 0: Rolling Conversation Memory ---
+    session_id = None
+    for header in getattr(request, 'headers', []):
+        if header.lower() == 'x-session-id':
+            session_id = request.headers[header]
+            break
+    if not session_id:
+        # Fallback: hash first user message
+        session_id = str(hash(messages_raw[0]["content"])) if messages_raw else str(uuid.uuid4())
+    context_msgs = _conversation_memory.get_context(session_id)
+    if context_msgs:
+        messages_raw = context_msgs + messages_raw
+
+    # --- Step 0b: Retrieval-augmented generation (RAG) from ChimeraMemory ---
     user_query = messages_raw[-1]["content"] if messages_raw else ""
     similar_blueprints = chimera_memory.get_similar(user_query, top_k=2)
     if similar_blueprints:
@@ -372,15 +392,17 @@ async def _process_completion(request: ChatCompletionRequest):
         messages_raw.insert(0, {"role": "system", "content": f"Reference prior blueprints:\n{context}"})
 
     # --- Step 1: Token Optimization ---
-    if _HAS_OPTIMIZER and _prompt_compressor:
+    from .config import ENABLE_OPTIMIZER, ENABLE_CACHE, ENABLE_QUANTUM, ENABLE_HYPER, MAX_PRIMARY_MODELS, MAX_FALLBACK_MODELS
+    if ENABLE_OPTIMIZER and _HAS_OPTIMIZER and _prompt_compressor:
         try:
             messages_raw = _prompt_compressor.deduplicate_messages(messages_raw)
         except Exception as e:
-            logger.warning(f"Token optimization failed: {e}")
+            logger.error(f"Token optimization failed: {e}")
+            # Fallback: leave messages_raw unchanged
 
     # --- Step 2: Query Analysis ---
     query_profile = None
-    if _HAS_HYPER and _query_analyzer:
+    if ENABLE_HYPER and _HAS_HYPER and _query_analyzer:
         try:
             query_profile = _query_analyzer.analyze(messages_raw)
             logger.info(
@@ -389,44 +411,25 @@ async def _process_completion(request: ChatCompletionRequest):
                 f"domain={query_profile.domain}"
             )
         except Exception as e:
-            logger.warning(f"Query analysis failed: {e}")
+            logger.error(f"Query analysis failed: {e}")
 
-    # --- Step 3: Strategy Selection ---
-    # Support local models in routing
+    # --- Step 3: Strategy Selection + ModelTracker sorting ---
     all_models = MODELS + LOCAL_MODELS
-    # Filter healthy remote models
     remote_models = [m for m in all_models if isinstance(m, str)]
     healthy_remote = get_healthy_models(remote_models) if _HAS_CLIENT else remote_models
-    # Always include healthy local models
     healthy_local = [lm for lm in LOCAL_MODELS if lm.health()] if _HAS_LOCAL_MODELS else []
+    # Sort healthy_remote by ModelTracker score (descending)
+    healthy_remote = sorted(healthy_remote, key=lambda m: -_model_tracker.get_score(m))
     target_models = healthy_remote + healthy_local
-    
+    if MAX_PRIMARY_MODELS > 0:
+        target_models = target_models[:MAX_PRIMARY_MODELS]
     if not target_models:
         logger.error("No healthy models available! All endpoints in cooldown or offline.")
-        raise HTTPException(status_code=503, detail="No healthy models available (all endpoints in cooldown or offline)")
-    
-    if _HAS_HYPER and _strategy_selector and query_profile:
-        try:
-            # Use adaptive model weighting if available
-            if _smart_router and _adaptive_memory:
-                model_names = [m.name if hasattr(m, 'name') else m for m in target_models]
-                best_model = _smart_router.select_model(
-                    messages_raw, model_names, adaptive_memory=_adaptive_memory, query_profile=query_profile
-                )
-                # Move best_model to front of list
-                target_models = sorted(target_models, key=lambda m: (getattr(m, 'name', m) != best_model))
-            else:
-                strategy = _strategy_selector.select(query_profile, [getattr(m, 'name', m) for m in target_models])
-                if strategy and strategy.models:
-                    # Reorder target_models to match strategy.models
-                    name_map = {getattr(m, 'name', m): m for m in target_models}
-                    target_models = [name_map[n] for n in strategy.models if n in name_map]
-            logger.info(f"Strategy selected, targeting {len(target_models)} models")
-        except Exception as e:
-            logger.warning(f"Strategy selection failed: {e}")
+        return wrap_openai_response("All models failed. No valid response generated."), False
+    # (Retain strategy selection logic if needed)
 
     # --- Step 4: Cache Check ---
-    if _HAS_CACHE and _cache:
+    if ENABLE_CACHE and _HAS_CACHE and _cache:
         cached = _cache.get(messages_raw)
         if cached is not None:
             logger.info("⚡ Cache hit — serving from semantic cache")
@@ -434,40 +437,46 @@ async def _process_completion(request: ChatCompletionRequest):
 
     # --- Step 5: Query Models ---
     logger.info(f"🔄 Querying {len(target_models)} models...")
-
     # Query remote and local models
     remote_targets = [m for m in target_models if isinstance(m, str)]
     local_targets = [m for m in target_models if hasattr(m, 'chat_completion')]
     responses = []
-    
-    if remote_targets:
-        responses += await query_all_models(
-            messages=messages_raw,
-            temperature=request.temperature,
-            max_tokens=request.max_tokens,
-            models=remote_targets,
-        )
-    
-    for lm in local_targets:
-        content = lm.chat_completion(messages_raw, max_tokens=request.max_tokens or 256, temperature=request.temperature)
-        responses.append(type('LocalModelResponse', (), {"model": lm.name, "content": content, "error": None, "finish_reason": "stop", "usage": {}})())
-
+    try:
+        if remote_targets:
+            responses += await query_all_models(
+                messages=messages_raw,
+                temperature=request.temperature,
+                max_tokens=request.max_tokens,
+                models=remote_targets,
+            )
+        for lm in local_targets:
+            content = lm.chat_completion(messages_raw, max_tokens=request.max_tokens or 256, temperature=request.temperature)
+            responses.append(type('LocalModelResponse', (), {"model": lm.name, "content": content, "error": None, "finish_reason": "stop", "usage": {}})())
+    except Exception as e:
+        logger.error(f"Exception during model querying: {e}")
     successful = [r for r in responses if r.content and not r.error]
     failed = [r for r in responses if r.error]
     logger.info(f"Results: {len(successful)} successful, {len(failed)} failed")
     for f in failed:
         logger.warning(f"  ✗ {f.model}: {f.error}")
+        _model_tracker.record_failure(f.model)
+    for s in successful:
+        _model_tracker.record_success(s.model, len(s.content))
 
     # --- Step 6: Quantum Consensus ---
-    consensus_result = quantum_consensus_voting(successful) if _HAS_CONSENSUS else {"best": successful[0] if successful else None}
-    best = consensus_result.get("best") if isinstance(consensus_result, dict) else None
-    
+    best = None
+    if ENABLE_QUANTUM and _HAS_CONSENSUS:
+        try:
+            consensus_result = quantum_consensus_voting(successful)
+            best = consensus_result.get("best") if isinstance(consensus_result, dict) else None
+        except Exception as e:
+            logger.error(f"Quantum consensus failed: {e}")
     if best is None and successful:
         best = successful[0]
-    
     if best is None:
         errors = "; ".join(f"{r.model}: {r.error}" for r in failed)
-        raise HTTPException(status_code=502, detail=f"All models failed: {errors}")
+        logger.error(f"All models failed: {errors}")
+        return wrap_openai_response("All models failed. No valid response generated."), False
 
     # --- Step 7: Blueprint distillation and memory persistence ---
     blueprint = {
@@ -535,6 +544,11 @@ async def _process_completion(request: ChatCompletionRequest):
         except Exception:
             pass
 
+    # --- Step 14: Conversation Memory update ---
+    # Store user and assistant turns
+    if session_id:
+        _conversation_memory.add_message(session_id, "user", user_query)
+        _conversation_memory.add_message(session_id, "assistant", best.content)
     return result.model_dump(), False  # (response_dict, is_cached)
 
 

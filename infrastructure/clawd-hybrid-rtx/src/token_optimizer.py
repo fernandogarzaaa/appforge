@@ -1,22 +1,3 @@
-def normalize_messages(messages):
-    """Normalize input for token optimization: handle message arrays, raw strings, and malformed inputs."""
-    import logging
-    if isinstance(messages, list):
-        parts = []
-        for m in messages:
-            if isinstance(m, dict):
-                parts.append(str(m.get("content", "")))
-        return " ".join(parts)
-    return str(messages)
-
-# Example usage in optimizer:
-# raw_messages = request.get("messages", [])
-# text = normalize_messages(raw_messages).lower()
-# Defensive: never call .lower() on a list.
-
-# Example usage in optimizer:
-# text = normalize_messages(request.get("messages", []))
-# text = text.lower()
 """
 Token Optimizer — Aggressive token optimization for CHIMERA QUANTUM.
 
@@ -27,6 +8,18 @@ Python 3.12+
 """
 
 from __future__ import annotations
+
+
+def normalize_messages(messages):
+    """Normalize input for token optimization: handle message arrays, raw strings, and malformed inputs."""
+    import logging
+    if isinstance(messages, list):
+        parts = []
+        for m in messages:
+            if isinstance(m, dict):
+                parts.append(str(m.get("content", "")))
+        return " ".join(parts)
+    return str(messages)
 
 import json
 import math
