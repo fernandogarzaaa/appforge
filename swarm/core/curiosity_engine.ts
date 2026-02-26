@@ -91,30 +91,37 @@ export class CuriosityEngine {
     }
 
     private async findCandidateFiles(): Promise<string[]> {
-        const dirs = ['swarm/core', 'src/utils', 'scripts'];
-        let candidates: { file: string; mtimeMs: number }[] = [];
+        // Recursively scan the entire repo for .ts/.js files, excluding node_modules, .git, dist, build, coverage, .venv, and hidden/system folders
+        const excludeDirs = new Set(['node_modules', '.git', 'dist', 'build', 'coverage', '.venv', '.vscode', '.idea', '.pytest_cache', '__pycache__']);
+        const candidates: { file: string; mtimeMs: number }[] = [];
 
-        for (const dir of dirs) {
+        const walk = async (dir: string) => {
+            let entries: string[] = [];
             try {
-                const fullDir = path.join(this.projectRoot, dir);
-                const entries = await fs.readdir(fullDir);
-
-                for (const entry of entries) {
-                    if (entry.endsWith('.ts') || entry.endsWith('.js')) {
-                        const filePath = path.join(dir, entry);
-                        const fullPath = path.join(fullDir, entry);
-                        const stats = await fs.stat(fullPath);
-                        candidates.push({ file: filePath, mtimeMs: stats.mtimeMs });
+                entries = await fs.readdir(dir);
+            } catch (e) { return; }
+            for (const entry of entries) {
+                const fullPath = path.join(dir, entry);
+                const relPath = path.relative(this.projectRoot, fullPath);
+                try {
+                    const stat = await fs.stat(fullPath);
+                    if (stat.isDirectory()) {
+                        if (excludeDirs.has(entry) || entry.startsWith('.')) continue;
+                        await walk(fullPath);
+                    } else if ((entry.endsWith('.ts') || entry.endsWith('.js')) && !relPath.startsWith('node_modules') && !relPath.startsWith('.git')) {
+                        candidates.push({ file: relPath.replace(/\\/g, '/'), mtimeMs: stat.mtimeMs });
                     }
-                }
-            } catch (e) { }
-        }
+                } catch (e) { }
+            }
+        };
+
+        await walk(this.projectRoot);
 
         // Sort by age first to narrow down candidates
         candidates.sort((a, b) => a.mtimeMs - b.mtimeMs);
 
-        // Take top 20 "oldest" candidates and run git check on them
-        const topCandidates = candidates.slice(0, 20);
+        // Take top 50 "oldest" candidates and run git check on them
+        const topCandidates = candidates.slice(0, 50);
         const { execSync } = await import('child_process');
         const scored: { file: string; score: number }[] = [];
 
