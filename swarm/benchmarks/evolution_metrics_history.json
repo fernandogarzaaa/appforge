@@ -1,0 +1,170 @@
+[
+  {
+    "runId": "50516b9f-1d8b-4151-a68b-0964ed1177dd",
+    "timestamp": "2026-02-24T06:50:50.317Z",
+    "benchmark": {
+      "SWE-Bench": 0.896,
+      "HumanEval": 0.898,
+      "MMLU": 0.9,
+      "ARC": 0.899
+    },
+    "finalScore": 0.7821,
+    "weightedBenchmarkScore": 0.9283,
+    "efficiencyScore": 0.76,
+    "stabilityScore": 0.9967,
+    "mutationRisk": 0,
+    "nonRegressionPassed": true,
+    "minDeltaMet": true,
+    "plateaued": false,
+    "prEligible": true,
+    "selectedStrategyId": "debate",
+    "strategyScores": {
+      "direct": 0.7774,
+      "reflection": 0.7604,
+      "tree_of_thought": 0.7536,
+      "debate": 0.7821,
+      "multi_debate": 0.7652,
+      "self_consistency": 0.7436
+    }
+  },
+  {
+    "runId": "9ffec1dc-9fb0-4781-8571-75e070b662dd",
+    "timestamp": "2026-02-24T06:50:50.338Z",
+    "benchmark": {
+      "SWE-Bench": 0.896,
+      "HumanEval": 0.898,
+      "MMLU": 0.9,
+      "ARC": 0.899
+    },
+    "finalScore": 0.7821,
+    "weightedBenchmarkScore": 0.9283,
+    "efficiencyScore": 0.76,
+    "stabilityScore": 0.9967,
+    "mutationRisk": 0,
+    "nonRegressionPassed": true,
+    "minDeltaMet": true,
+    "plateaued": false,
+    "prEligible": false,
+    "selectedStrategyId": "debate",
+    "strategyScores": {
+      "direct": 0.7774,
+      "reflection": 0.7604,
+      "tree_of_thought": 0.7536,
+      "debate": 0.7821,
+      "multi_debate": 0.7652,
+      "self_consistency": 0.7436
+    }
+  },
+  {
+    "runId": "e879fc0c-362c-4704-a524-02dae113eedb",
+    "timestamp": "2026-02-24T06:50:50.354Z",
+    "benchmark": {
+      "SWE-Bench": 0.896,
+      "HumanEval": 0.898,
+      "MMLU": 0.9,
+      "ARC": 0.899
+    },
+    "finalScore": 0.7821,
+    "weightedBenchmarkScore": 0.9283,
+    "efficiencyScore": 0.76,
+    "stabilityScore": 0.9967,
+    "mutationRisk": 0,
+    "nonRegressionPassed": true,
+    "minDeltaMet": true,
+    "plateaued": false,
+    "prEligible": false,
+    "selectedStrategyId": "debate",
+    "strategyScores": {
+      "direct": 0.7774,
+      "reflection": 0.7604,
+      "tree_of_thought": 0.7536,
+      "debate": 0.7821,
+      "multi_debate": 0.7652,
+      "self_consistency": 0.7436
+    }
+  },
+  {
+    "runId": "28290a16-ca14-402d-89fb-e5a05f2a4e77",
+    "timestamp": "2026-02-24T06:50:50.370Z",
+    "benchmark": {
+      "SWE-Bench": 0.896,
+      "HumanEval": 0.898,
+      "MMLU": 0.9,
+      "ARC": 0.899
+    },
+    "finalScore": 0.7821,
+    "weightedBenchmarkScore": 0.9283,
+    "efficiencyScore": 0.76,
+    "stabilityScore": 0.9967,
+    "mutationRisk": 0,
+    "nonRegressionPassed": true,
+    "minDeltaMet": true,
+    "plateaued": false,
+    "prEligible": false,
+    "selectedStrategyId": "debate",
+    "strategyScores": {
+      "direct": 0.7774,
+      "reflection": 0.7604,
+      "tree_of_thought": 0.7536,
+      "debate": 0.7821,
+      "multi_debate": 0.7652,
+      "self_consistency": 0.7436
+    }
+  },
+  {
+    "runId": "9b54dfa7-b795-4b14-95d3-e3467c3beba9",
+    "timestamp": "2026-02-24T06:50:50.387Z",
+    "benchmark": {
+      "SWE-Bench": 0.896,
+      "HumanEval": 0.898,
+      "MMLU": 0.9,
+      "ARC": 0.899
+    },
+    "finalScore": 0.7821,
+    "weightedBenchmarkScore": 0.9283,
+    "efficiencyScore": 0.76,
+    "stabilityScore": 0.9967,
+    "mutationRisk": 0,
+    "nonRegressionPassed": true,
+    "minDeltaMet": true,
+    "plateaued": false,
+    "prEligible": false,
+    "selectedStrategyId": "debate",
+    "strategyScores": {
+      "direct": 0.7774,
+      "reflection": 0.7604,
+      "tree_of_thought": 0.7536,
+      "debate": 0.7821,
+      "multi_debate": 0.7652,
+      "self_consistency": 0.7436
+    }
+  },
+  {
+    "runId": "b1f70815-d37e-490d-87fc-043bafa9499f",
+    "timestamp": "2026-02-24T06:50:50.404Z",
+    "benchmark": {
+      "SWE-Bench": 0.896,
+      "HumanEval": 0.898,
+      "MMLU": 0.9,
+      "ARC": 0.899
+    },
+    "finalScore": 0.7821,
+    "weightedBenchmarkScore": 0.9283,
+    "efficiencyScore": 0.76,
+    "stabilityScore": 0.9967,
+    "mutationRisk": 0,
+    "nonRegressionPassed": true,
+    "minDeltaMet": true,
+    "plateaued": false,
+    "prEligible": false,
+    "selectedStrategyId": "debate",
+    "strategyScores": {
+      "direct": 0.7774,
+      "reflection": 0.7604,
+      "tree_of_thought": 0.7536,
+      "debate": 0.7821,
+      "multi_debate": 0.7652,
+      "self_consistency": 0.7436
+    }
+  }
+]

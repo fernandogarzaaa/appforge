@@ -2477,7 +2477,7 @@
           "optimizedBest": "EXPLORE_NEW_FRONTIERS",
           "confidence": 0.2748623870859537,
           "alternatives": [
-            "OPTIMIZE_EXISTING_COGNITION"
+            "EXPLORE_NEW_FRONTIERS"
           ],
           "engineVersion": "3.5",
           "consensus": {
