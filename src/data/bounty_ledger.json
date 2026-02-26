@@ -8,46 +8,46 @@
       "priority": 0.6,
       "reward": 60,
       "category": "architect",
-      "id": "BTY-1771936961734-301",
+      "id": "BTY-1771959032190-752",
       "status": "backlog",
-      "createdAt": "2026-02-24T12:42:41.734Z"
+      "createdAt": "2026-02-24T18:50:32.190Z"
     },
     {
       "description": "[Neural Accelerator] EXPERT_ARCHITECT: Refactor core (Coherence: 1.00)",
       "priority": 0.5,
       "reward": 50,
       "category": "architect",
-      "id": "BTY-1771936961773-400",
+      "id": "BTY-1771959032219-243",
       "status": "backlog",
-      "createdAt": "2026-02-24T12:42:41.773Z"
+      "createdAt": "2026-02-24T18:50:32.219Z"
     },
     {
       "description": "[Neural Accelerator] EXPERT_ARCHITECT: Refactor core (Coherence: 1.00)",
       "priority": 0.85,
       "reward": 85,
       "category": "architect",
-      "id": "BTY-1771936961815-615",
+      "id": "BTY-1771959032260-913",
       "status": "completed",
-      "createdAt": "2026-02-24T12:42:41.815Z",
-      "completedAt": "2026-02-24T12:42:41.932Z"
+      "createdAt": "2026-02-24T18:50:32.260Z",
+      "completedAt": "2026-02-24T18:50:32.367Z"
     },
     {
       "description": "[Neural Accelerator] EXPERT_ARCHITECT: Refactor core (Coherence: 1.00)",
-      "priority": 0.15323060085556425,
-      "reward": 15,
+      "priority": 0.156484934841347,
+      "reward": 16,
       "category": "architect",
-      "id": "BTY-1771936961854-395",
+      "id": "BTY-1771959032296-963",
       "status": "backlog",
-      "createdAt": "2026-02-24T12:42:41.854Z"
+      "createdAt": "2026-02-24T18:50:32.296Z"
     },
     {
       "description": "[Neural Accelerator] EXPERT_ARCHITECT: Refactor core (Coherence: 1.00)",
-      "priority": 0.3175,
-      "reward": 32,
+      "priority": 0.35,
+      "reward": 35,
       "category": "architect",
-      "id": "BTY-1771936961898-965",
+      "id": "BTY-1771959032330-15",
       "status": "backlog",
-      "createdAt": "2026-02-24T12:42:41.898Z"
+      "createdAt": "2026-02-24T18:50:32.330Z"
     }
   ]
 }
