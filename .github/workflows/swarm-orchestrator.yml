@@ -195,8 +195,6 @@ jobs:
       # Dispatch the right agent based on decision
       - name: Dispatch → Autonomous Swarm
         if: steps.decide.outputs.next_action == 'autonomous_swarm'
-        uses: peter-evans/create-or-update-comment@v4
-        # Actually dispatch:
         run: |
           gh workflow run autonomous_swarm.yml \
             --ref main \
