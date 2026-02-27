@@ -1,0 +1,239 @@
+
+name: Swarm Orchestrator
+
+on:
+  schedule:
+    - cron: "0 * * * *"
+  workflow_run:
+    workflows:
+      - Autonomous Swarm Cycle
+      - Quantum Self-Evolution
+      - Curiosity Engine Scan
+      - Frontend QA Swarm
+      - Evolution Benchmark Gate
+      - Iron Brain CI — Ghost Brain
+      - Node.js CI
+      - Code Scanning & Quality
+    types:
+      - completed
+  workflow_dispatch:
+    inputs:
+      force_action:
+        description: "Force a specific agent (autonomous_swarm|quantum_evolution|curiosity_scan)"
+        required: false
+
+concurrency:
+  group: orchestrator
+  cancel-in-progress: false
+
+jobs:
+  orchestrate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      actions: read
+      contents: write
+    steps:
+      - name: Checkout swarm-state branch
+        uses: actions/checkout@v4
+        with:
+          ref: swarm-state
+          token: ${{ secrets.BOT_TOKEN }}
+
+      # Read what triggered this orchestrator run
+      - name: Capture triggering event context
+        id: event
+        run: |
+          TRIGGER="${{ github.event_name }}"
+          WORKFLOW_NAME="${{ github.event.workflow_run.name }}"
+          CONCLUSION="${{ github.event.workflow_run.conclusion }}"
+          RUN_ID="${{ github.event.workflow_run.id }}"
+          echo "trigger=$TRIGGER" >> $GITHUB_OUTPUT
+          echo "workflow_name=$WORKFLOW_NAME" >> $GITHUB_OUTPUT
+          echo "conclusion=$CONCLUSION" >> $GITHUB_OUTPUT
+          echo "run_id=$RUN_ID" >> $GITHUB_OUTPUT
+          echo "Orchestrator triggered by: $TRIGGER | $WORKFLOW_NAME | $CONCLUSION"
+
+      # Download the completing agent's output artifact (only on workflow_run events)
+      - name: Download agent output artifact
+        if: github.event_name == 'workflow_run' && github.event.workflow_run.conclusion != ''
+        uses: actions/download-artifact@v4
+        continue-on-error: true  # Agent may not have produced an artifact
+        with:
+          github-token: ${{ secrets.BOT_TOKEN }}
+          run-id: ${{ github.event.workflow_run.id }}
+          pattern: "*_output.json"
+          path: agent_outputs/
+
+      # Merge agent output into master swarm_state.json
+      - name: Merge agent output into swarm state
+        run: |
+          python3 << 'EOF'
+          import json, os, glob
+          from datetime import datetime, timezone
+
+          # Load or init swarm state
+          state_file = "swarm_state.json"
+          try:
+            with open(state_file) as f:
+              state = json.load(f)
+          except:
+            state = {
+              "last_updated": "",
+              "ci": {"status": "unknown", "last_green_sha": "", "last_fail_reason": ""},
+              "curiosity": {"findings": [], "last_scan": ""},
+              "evolution": {"last_score": 0, "trend": "stable", "greenlit": True},
+              "frontend_qa": {"status": "unknown", "failures": []},
+              "swarm": {"last_commit_sha": "", "last_task": "", "status": "idle"},
+              "orchestrator": {"next_action": "", "reason": ""}
+            }
+
+          # Merge any downloaded agent artifacts
+          for artifact_file in glob.glob("agent_outputs/**/*.json", recursive=True):
+            try:
+              with open(artifact_file) as f:
+                agent_data = json.load(f)
+              agent_type = agent_data.get("agent_type", "unknown")
+              print(f"Merging artifact from: {agent_type}")
+
+              if agent_type == "ci" or "ci" in artifact_file:
+                state["ci"].update(agent_data.get("payload", {}))
+              elif agent_type == "curiosity":
+                state["curiosity"].update(agent_data.get("payload", {}))
+              elif agent_type == "evolution":
+                state["evolution"].update(agent_data.get("payload", {}))
+              elif agent_type == "frontend_qa":
+                state["frontend_qa"].update(agent_data.get("payload", {}))
+              elif agent_type == "swarm":
+                state["swarm"].update(agent_data.get("payload", {}))
+            except Exception as e:
+              print(f"Warning: could not merge {artifact_file}: {e}")
+
+          # Also update from workflow_run event context if available
+          wf_name = os.environ.get("WORKFLOW_NAME", "")
+          conclusion = os.environ.get("CONCLUSION", "")
+          if "Node.js CI" in wf_name or "Iron Brain" in wf_name or "Code Scanning" in wf_name:
+            state["ci"]["status"] = "pass" if conclusion == "success" else "fail"
+            if conclusion != "success":
+              state["ci"]["last_fail_reason"] = f"{wf_name} failed"
+          elif "Frontend QA" in wf_name:
+            state["frontend_qa"]["status"] = "pass" if conclusion == "success" else "fail"
+          elif "Evolution Benchmark" in wf_name:
+            if conclusion != "success":
+              state["evolution"]["greenlit"] = False
+
+          state["last_updated"] = datetime.now(timezone.utc).isoformat()
+
+          with open(state_file, "w") as f:
+            json.dump(state, f, indent=2)
+          print("State updated:", json.dumps(state, indent=2))
+          EOF
+        env:
+          WORKFLOW_NAME: ${{ steps.event.outputs.workflow_name }}
+          CONCLUSION: ${{ steps.event.outputs.conclusion }}
+
+      # Real decision logic based on actual state
+      - name: Decide next action
+        id: decide
+        run: |
+          python3 << 'EOF'
+          import json, os
+
+          with open("swarm_state.json") as f:
+            state = json.load(f)
+
+          force = os.environ.get("FORCE_ACTION", "")
+          next_action = "none"
+          reason = "all systems nominal"
+
+          if force:
+            next_action = force
+            reason = "manually forced"
+          elif state["ci"]["status"] == "fail":
+            next_action = "autonomous_swarm"
+            reason = f"CI failure: {state['ci'].get('last_fail_reason', 'unknown')}"
+          elif state["frontend_qa"]["status"] == "fail":
+            next_action = "frontend_qa_swarm"
+            reason = "Frontend QA failures need fixing"
+          elif state["curiosity"]["findings"]:
+            next_action = "autonomous_swarm"
+            reason = f"Curiosity found {len(state['curiosity']['findings'])} new opportunities"
+          elif state["evolution"]["greenlit"] and state["ci"]["status"] == "pass":
+            next_action = "quantum_evolution"
+            reason = "All CI green, evolution greenlit"
+          elif os.environ.get("TRIGGER") == "schedule":
+            next_action = "curiosity_scan"
+            reason = "Hourly curiosity scan"
+
+          # Update state with decision
+          state["orchestrator"]["next_action"] = next_action
+          state["orchestrator"]["reason"] = reason
+
+          with open("swarm_state.json", "w") as f:
+            json.dump(state, f, indent=2)
+
+          with open(os.environ["GITHUB_OUTPUT"], "a") as f:
+            f.write(f"next_action={next_action}\n")
+            f.write(f"reason={reason}\n")
+            f.write(f"task={'Fix: ' + state['ci'].get('last_fail_reason', '') if next_action == 'autonomous_swarm' else reason}\n")
+
+          print(f"Decision: {next_action} — {reason}")
+          EOF
+        env:
+          TRIGGER: ${{ steps.event.outputs.trigger }}
+          FORCE_ACTION: ${{ inputs.force_action }}
+
+      # Commit updated state back to swarm-state branch
+      - name: Persist swarm state
+        run: |
+          git config --global user.email "swarm-bot@appforge.ai"
+          git config --global user.name "Swarm Orchestrator"
+          git add swarm_state.json
+          git diff --staged --quiet || git commit -m "[orchestrator] Update swarm state — ${{ steps.decide.outputs.next_action }}: ${{ steps.decide.outputs.reason }}"
+          git push origin HEAD:swarm-state
+
+      # Dispatch the right agent based on decision
+      - name: Dispatch → Autonomous Swarm
+        if: steps.decide.outputs.next_action == 'autonomous_swarm'
+        uses: peter-evans/create-or-update-comment@v4
+        # Actually dispatch:
+        run: |
+          gh workflow run autonomous_swarm.yml \
+            --ref main \
+            --field context='{"reason":"${{ steps.decide.outputs.reason }}"}' \
+            --field priority=high \
+            --field task="${{ steps.decide.outputs.task }}"
+        env:
+          GH_TOKEN: ${{ secrets.BOT_TOKEN }}
+
+      - name: Dispatch → Quantum Evolution
+        if: steps.decide.outputs.next_action == 'quantum_evolution'
+        run: |
+          gh workflow run quantum_evolution.yml \
+            --ref main \
+            --field green_light=true \
+            --field reason="${{ steps.decide.outputs.reason }}"
+        env:
+          GH_TOKEN: ${{ secrets.BOT_TOKEN }}
+
+      - name: Dispatch → Curiosity Scan
+        if: steps.decide.outputs.next_action == 'curiosity_scan'
+        run: |
+          gh workflow run curiosity_scan.yml --ref main
+        env:
+          GH_TOKEN: ${{ secrets.BOT_TOKEN }}
+
+      - name: Dispatch → Frontend QA Swarm
+        if: steps.decide.outputs.next_action == 'frontend_qa_swarm'
+        run: |
+          gh workflow run frontend_qa_swarm.yml --ref main
+        env:
+          GH_TOKEN: ${{ secrets.BOT_TOKEN }}
+
+      # Always update the dashboard
+      - name: Update Swarm Dashboard
+        if: always()
+        run: |
+          gh workflow run swarm-dashboard.yml --ref main
+        env:
+          GH_TOKEN: ${{ secrets.BOT_TOKEN }}
