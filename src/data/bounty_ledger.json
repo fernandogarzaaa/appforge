@@ -8,46 +8,46 @@
       "priority": 0.6,
       "reward": 60,
       "category": "architect",
-      "id": "BTY-1772169493763-940",
+      "id": "BTY-1772174545207-455",
       "status": "backlog",
-      "createdAt": "2026-02-27T05:18:13.763Z"
+      "createdAt": "2026-02-27T06:42:25.207Z"
     },
     {
       "description": "[Neural Accelerator] EXPERT_ARCHITECT: Refactor core (Coherence: 1.00)",
       "priority": 0.5,
       "reward": 50,
       "category": "architect",
-      "id": "BTY-1772169493789-927",
+      "id": "BTY-1772174545244-56",
       "status": "backlog",
-      "createdAt": "2026-02-27T05:18:13.789Z"
+      "createdAt": "2026-02-27T06:42:25.244Z"
     },
     {
       "description": "[Neural Accelerator] EXPERT_ARCHITECT: Refactor core (Coherence: 1.00)",
       "priority": 0.85,
       "reward": 85,
       "category": "architect",
-      "id": "BTY-1772169493832-290",
+      "id": "BTY-1772174545280-688",
       "status": "completed",
-      "createdAt": "2026-02-27T05:18:13.832Z",
-      "completedAt": "2026-02-27T05:18:13.935Z"
+      "createdAt": "2026-02-27T06:42:25.280Z",
+      "completedAt": "2026-02-27T06:42:25.382Z"
     },
     {
       "description": "[Neural Accelerator] EXPERT_ARCHITECT: Refactor core (Coherence: 1.00)",
-      "priority": 0.17555086282281357,
-      "reward": 18,
+      "priority": 0.17472713261009878,
+      "reward": 17,
       "category": "architect",
-      "id": "BTY-1772169493863-833",
+      "id": "BTY-1772174545316-106",
       "status": "backlog",
-      "createdAt": "2026-02-27T05:18:13.863Z"
+      "createdAt": "2026-02-27T06:42:25.316Z"
     },
     {
       "description": "[Neural Accelerator] EXPERT_ARCHITECT: Refactor core (Coherence: 1.00)",
-      "priority": 0.395,
-      "reward": 40,
+      "priority": 0.33625,
+      "reward": 34,
       "category": "architect",
-      "id": "BTY-1772169493899-300",
+      "id": "BTY-1772174545345-91",
       "status": "backlog",
-      "createdAt": "2026-02-27T05:18:13.899Z"
+      "createdAt": "2026-02-27T06:42:25.345Z"
     }
   ]
 }
