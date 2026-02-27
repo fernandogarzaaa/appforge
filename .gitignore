@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Environment Variables
 .env
 .env.local
@@ -164,3 +165,4 @@ __pycache__/
 # Clawd API keys - NEVER commit
 .env.clawd
 infrastructure/clawd-hybrid-rtx/.env.clawd
+apps/backend/backend/.env
