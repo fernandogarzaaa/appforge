@@ -1,0 +1,14 @@
+node_modules
+.env.local
+.env.clawd
+apps/backend/backend/.env
+
+# Build Artifacts
+target/
+__pycache__/
+*.exe
+
+# Logs and Reports
+*.log
+logs/
+reports/
