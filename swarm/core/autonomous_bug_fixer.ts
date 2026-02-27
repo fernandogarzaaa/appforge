@@ -41,12 +41,23 @@ export class AutonomousBugFixer {
             console.log(`🧬 [BugFixer] Recursive Repair Attempt ${attempts}/${maxAttempts}`);
 
             for (const file of filesToFix) {
+                const fullPath = path.resolve(this.projectRoot, file);
+                if (!fs.existsSync(fullPath)) continue;
+                const fileContent = fs.readFileSync(fullPath, 'utf8');
+
                 const consultation = await this.core.consultOracle(
-                    `How should I repair files in ${file} to satisfy stability?`,
-                    ['Add strict types', 'Fix syntax errors', 'Remove unused imports', 'Add error handling'],
+                    `Generate a specific, safe logic or typing fix for '${file}' to satisfy stability.
+                    File snippet:
+                    ${fileContent.substring(0, 3000)}
+                    Return ONLY a JSON object with 'targetContent' and 'replacementContent'.
+                    Whitespace must be exact.`,
+                    ['GENERATE_PATCH'],
                     ['safety', 'integrity']
                 );
-                await this.applyStandardImprovement(file, consultation.recommendation);
+
+                if (consultation.confidence > 0.6) {
+                    await this.applyDynamicPatch(file, (consultation as any).reasoning || consultation.recommendation || '');
+                }
             }
 
             // After patching, we should ideally verify stability (e.g. via an external build check)
@@ -56,73 +67,62 @@ export class AutonomousBugFixer {
     }
 
     private async handleCodeDebt(signal: EnvironmentSignal) {
-        // In a real scenario, we'd use the payload to identify which files to fix.
-        // For Phase 90, we simulate fixing a common lint issue or missing comment.
-
-        const filesToAnalyze = signal.payload.files || [];
+        const filesToAnalyze = signal.payload?.files || [];
         if (filesToAnalyze.length === 0) return;
 
         for (const fileLine of filesToAnalyze) {
             const fileName = fileLine.split(' ')[1] || fileLine;
-            if (!fileName.endsWith('.ts') && !fileName.endsWith('.js')) continue;
+            if (!fileName.endsWith('.ts') && !fileName.endsWith('.js') && !fileName.endsWith('.tsx')) continue;
 
-            console.log(`   🛠️ Analyzing ${fileName} for potential patches...`);
+            console.log(`   🛠️ Analyzing ${fileName} for true AI self-healing...`);
 
-            // Consult Oracle for a fix logic
+            const fullPath = path.resolve(this.projectRoot, fileName);
+            if (!fs.existsSync(fullPath)) continue;
+
+            const fileContent = fs.readFileSync(fullPath, 'utf8');
+
+            const patchQuestion = `Generate a specific, safe, and effective logic or typing fix for '${fileName}' to repair code debt or build failures.
+            File snippet:
+            ${fileContent.substring(0, 3000)}
+            
+            Return ONLY a JSON object with 'targetContent' (existing code block to replace) and 'replacementContent' (new corrected code block).
+            Whitespace must be exact.`;
+
             const consultation = await this.core.consultOracle(
-                `How should I fix code debt in ${fileName}?`,
-                ['Refactor functions', 'Add missing types', 'Add documentation', 'Strict null checks'],
-                ['quality', 'maintainability']
+                patchQuestion,
+                ['GENERATE_PATCH'],
+                ['safety', 'quality']
             );
 
-            console.log(`   ✨ Oracle recommends: ${consultation.recommendation}`);
+            console.log(`   ✨ Oracle attempted patch generation with confidence: ${(consultation.confidence * 100).toFixed(1)}%`);
 
-            // If confidence is high, apply a "standard" improvement
-            if (consultation.confidence > 0.8) {
-                await this.applyStandardImprovement(fileName, consultation.recommendation);
+            if (consultation.confidence > 0.6) {
+                await this.applyDynamicPatch(fileName, (consultation as any).reasoning || consultation.recommendation || '');
             }
         }
     }
 
-    private async applyStandardImprovement(fileName: string, type: string) {
-        const fullPath = path.resolve(this.projectRoot, fileName);
-        if (!fs.existsSync(fullPath)) return;
-
+    private async applyDynamicPatch(fileName: string, rawPatch: string) {
         const patches: PatchChunk[] = [];
 
-        if (type.includes('documentation')) {
-            // Find a place to add a holographic header if missing
-            const content = fs.readFileSync(fullPath, 'utf8');
-            if (!content.includes('HOLOGRAPHIC_VERSION')) {
-                patches.push({
-                    targetContent: 'import',
-                    replacementContent: `/** HOLOGRAPHIC_VERSION: 1.0.0 (Self-Patched) */\nimport`
-                });
+        try {
+            const jsonMatch = rawPatch.match(/\{[\s\S]*\}/);
+            if (jsonMatch) {
+                const patchData: PatchChunk = JSON.parse(jsonMatch[0]);
+                if (patchData.targetContent && patchData.replacementContent) {
+                    patches.push(patchData);
+                }
             }
-        }
-
-        if (type.includes('strict types')) {
-            const content = fs.readFileSync(fullPath, 'utf8');
-            // Pattern replace: any -> unknown (safer)
-            if (content.includes(': any')) {
-                patches.push({
-                    targetContent: ': any',
-                    replacementContent: ': unknown'
-                });
-            }
-        }
-
-        if (type.includes('error handling')) {
-            // Simple robust wrap (conceptual for now)
-            console.log(`   🛠️ [BugFixer] Planning error handling injection for ${fileName}`);
+        } catch (e) {
+            console.warn(`   ⚠️ [BugFixer] Failed to parse Oracle patch: ${(e as any).message}`);
         }
 
         if (patches.length > 0) {
             const result = await this.patcher.applyPatches(fileName, patches);
             if (result.success) {
-                console.log(`   🔐 [BugFixer] Successfully applied ${type} patch to ${fileName}`);
+                console.log(`   🔐 [BugFixer] Successfully applied AI self-healing patch to ${fileName}`);
             } else {
-                console.warn(`   ⚠️ [BugFixer] Patch failed for ${fileName}: ${result.error}`);
+                console.warn(`   ⚠️ [BugFixer] AI Patch failed to apply on ${fileName}: ${result.error}`);
             }
         }
     }

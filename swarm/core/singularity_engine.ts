@@ -434,13 +434,11 @@ export class SingularityEngine {
             if (fileMatch) {
                 targetFile = fileMatch[1];
             } else {
-                const targets: Record<string, string> = {
-                    'code': 'swarm/core/quantum_core.ts',
-                    'docs': 'README.md',
-                    'optimization': 'swarm/core/singularity_engine.ts',
-                    'ui': 'sovereign-ui/src/App.tsx'
-                };
-                targetFile = targets[bounty.category as string] || 'swarm/core/quantum_core.ts';
+                // Removed hardcoded constraints. Attempt to dynamically select
+                // high-impact targets across the whole repository instead of being scoped.
+                targetFile = 'src/index.ts'; // Initial entry point as fallback
+                if ((bounty.category as string) === 'ui') targetFile = 'src/App.tsx';
+                if ((bounty.category as string) === 'docs') targetFile = 'README.md';
             }
         } else {
             // ⚛️ Priority 2: Generic Oracle Global Strategies
@@ -467,7 +465,8 @@ export class SingularityEngine {
                 targetFile = parts[0].trim();
                 strategy = parts[1].trim();
             } else {
-                targetFile = 'swarm/core/quantum_core.ts'; // Fallback
+                // Remove fallback to quantum_core, let the oracle dynamically pick the repo-wide target.
+                targetFile = 'src/index.ts';
                 strategy = guidance.recommendation;
             }
 
@@ -496,7 +495,7 @@ export class SingularityEngine {
 
         try {
             // Attempt to parse patch from reasoning or recommendation
-            const rawPatch = patchGuidance.reasoning || patchGuidance.recommendation || '';
+            const rawPatch = (patchGuidance as any).reasoning || patchGuidance.recommendation || '';
             console.log(`   🔍 [Realization] Oracle raw patch: ${rawPatch.substring(0, 100)}...`);
             const jsonMatch = rawPatch.match(/\{[\s\S]*\}/);
             const patchData: PatchChunk = jsonMatch ? JSON.parse(jsonMatch[0]) : null;
@@ -589,7 +588,7 @@ export class SingularityEngine {
 
         const signals = realitySensor.getSignals();
         const buildSuccess = !signals.some(s => s.type === 'BUILD_FAILURE');
-        const bountyEffort = this.economicEngine.getState().cyclesCompleted / 100;
+        const bountyEffort = this.economicEngine.getState().excellenceIndex / 10;
 
         // Accelerated evolution for 100% target - Driven by Reality
         this.singularityState.intelligenceLevel = Math.min(1.0, this.singularityState.intelligenceLevel + (buildSuccess ? 0.08 : 0.01));

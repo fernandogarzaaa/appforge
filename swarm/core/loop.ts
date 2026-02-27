@@ -18,6 +18,7 @@ if (result.error && (result.error as any).code !== 'ENOENT') {
 }
 
 const isTrueIndependence = process.env.TRUE_AI_INDEPENDENCE === 'true';
+import { AtomicPatcher } from './atomic_patcher.js';
 
 // TRUE AI INDEPENDENCE MODE: Use local Ollama, no external APIs required
 if (isTrueIndependence) {
@@ -714,6 +715,24 @@ ${lines}`);
                     // Collaboration: Pass findings to God Mode
                     const context = { source: task.changes?.source || 'reactive_signal', findings: results };
                     results.godMode = await godMode.run();
+
+                    // Apply BugHunter Patch if available
+                    if (results.bugHunter?.proposed_fix) {
+                        const fix = results.bugHunter.proposed_fix;
+                        console.log(`🛠️ [BugHunter] Applying AI-generated patch to ${fix.file}...`);
+                        const patcher = new AtomicPatcher(process.cwd());
+                        const patchResult = await patcher.applyPatches(fix.file, [{
+                            targetContent: fix.original,
+                            replacementContent: fix.replacement
+                        }]);
+                        if (patchResult.success) {
+                            console.log(`✅ [BugHunter] Autonomous self-healing patch applied successfully.`);
+                            results.bugHunter.patchApplied = true;
+                        } else {
+                            console.warn(`⚠️ [BugHunter] Autonomous self-healing patch failed: ${patchResult.error}`);
+                            results.bugHunter.patchApplied = false;
+                        }
+                    }
 
                     // 📚 LEARNING: Record task outcome
                     await swarmKnowledge.recordTaskOutcome(
