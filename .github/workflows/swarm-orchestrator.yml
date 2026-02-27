@@ -38,7 +38,16 @@ jobs:
         uses: actions/checkout@v4
         with:
           ref: swarm-state
-          token: ${{ secrets.BOT_TOKEN }}
+          token: ${{ github.token }}
+      # Ensure .git exists for gh CLI (ephemeral runners may need this)
+      - name: Ensure git repo for gh CLI
+        run: |
+          if [ ! -d .git ]; then
+            git init
+            git remote add origin https://github.com/${{ github.repository }}.git
+            git fetch origin main
+            git checkout main
+          fi
 
       # Read what triggered this orchestrator run
       - name: Capture triggering event context
