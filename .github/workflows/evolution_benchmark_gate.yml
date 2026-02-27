@@ -2,6 +2,11 @@ name: Evolution Benchmark Gate
 
 on:
   workflow_dispatch:
+    inputs:
+      context:
+        description: "JSON context payload from the Orchestrator"
+        required: false
+        default: "{}"
   push:
     branches:
       - main

@@ -1,84 +1,88 @@
 name: Frontend QA Swarm
 
 on:
-    push:
-        branches: [main, dev]
-    pull_request:
-        branches: [main]
-    schedule:
-        - cron: "0 0 * * *" # Run daily at midnight
-    workflow_dispatch:
-
+  push:
+    branches: [main, dev]
+  pull_request:
+    branches: [main]
+  schedule:
+    - cron: "0 0 * * *" # Run daily at midnight
+  workflow_dispatch:
+    inputs:
+      context:
+        description: "JSON context payload from the Orchestrator"
+        required: false
+        default: "{}"
 jobs:
-    frontend-qa:
-        runs-on: ubuntu-latest
-        timeout-minutes: 20
+  frontend-qa:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
 
-        steps:
-            - name: Checkout Code
-              uses: actions/checkout@v4
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
 
-            - name: Setup Node.js
-              uses: actions/setup-node@v4
-              with:
-                  node-version: "22"
-                  cache: "npm"
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
 
-            - name: Install Dependencies
-              run: npm install --legacy-peer-deps
+      - name: Install Dependencies
+        run: npm install --legacy-peer-deps
 
-            - name: Install Playwright Browsers
-              run: npx playwright install --with-deps chromium
-              continue-on-error: true
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps chromium
+        continue-on-error: true
 
-            - name: Setup PM2
-              run: npm install -g pm2
+      - name: Setup PM2
+        run: npm install -g pm2
 
-            - name: Start Services
-              run: |
-                  pm2 start "npm run dev" --name "frontend"
-                  if [ -f scripts/swarm_telemetry_server.ts ]; then
-                    pm2 start "npx tsx scripts/swarm_telemetry_server.ts" --name "telemetry"
-                  fi
-                  sleep 10
-              env:
-                  NODE_ENV: development
-                  BASE44_API_KEY: ${{ secrets.BASE44_API_KEY }}
-                  CHIMERA_API_KEY: ${{ secrets.CHIMERA_API_KEY }}
+      - name: Start Services
+        run: |
+          pm2 start "npm run dev" --name "frontend"
+          if [ -f scripts/swarm_telemetry_server.ts ]; then
+            pm2 start "npx tsx scripts/swarm_telemetry_server.ts" --name "telemetry"
+          fi
+          sleep 10
+        env:
+          NODE_ENV: development
+          BASE44_API_KEY: ${{ secrets.BASE44_API_KEY }}
+          CHIMERA_API_KEY: ${{ secrets.CHIMERA_API_KEY }}
 
-            - name: Run Frontend QA Swarm
-              run: |
-                  if [ -f scripts/run_frontend_qa_swarm.ts ]; then
-                    npx tsx scripts/run_frontend_qa_swarm.ts
-                  else
-                    echo "::warning::Frontend QA swarm script not found"
-                  fi
-              env:
-                  BASE44_API_KEY: ${{ secrets.BASE44_API_KEY }}
-                  CHIMERA_API_KEY: ${{ secrets.CHIMERA_API_KEY }}
-                  TRUE_AI_INDEPENDENCE: "true"
-              continue-on-error: true
+      - name: Run Frontend QA Swarm
+        run: |
+          if [ -f scripts/run_frontend_qa_swarm.ts ]; then
+            npx tsx scripts/run_frontend_qa_swarm.ts
+          else
+            echo "::warning::Frontend QA swarm script not found"
+          fi
+        env:
+          BASE44_API_KEY: ${{ secrets.BASE44_API_KEY }}
+          CHIMERA_API_KEY: ${{ secrets.CHIMERA_API_KEY }}
+          TRUE_AI_INDEPENDENCE: "true"
+        continue-on-error: true
 
-            - name: Run Generated Playwright Tests
-              run: |
-                  if ls tests/e2e/generated_swarm_test_*.spec.ts 1> /dev/null 2>&1; then
-                    npx playwright test tests/e2e/generated_swarm_test_*.spec.ts
-                  else
-                    echo "::notice::No generated test files found"
-                  fi
-              continue-on-error: true
+      - name: Run Generated Playwright Tests
+        run: |
+          if ls tests/e2e/generated_swarm_test_*.spec.ts 1> /dev/null 2>&1; then
+            npx playwright test tests/e2e/generated_swarm_test_*.spec.ts
+          else
+            echo "::notice::No generated test files found"
+          fi
+        continue-on-error: true
 
-            - name: Upload QA Artifacts
-              uses: actions/upload-artifact@v4
-              if: always()
-              with:
-                  name: qa-swarm-results-${{ github.run_id }}
-                  path: |
-                      tests/e2e/generated_swarm_test_*.spec.ts
-                      playwright-report/
-                  retention-days: 7
-                  if-no-files-found: warn
+      - name: Upload QA Artifacts
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: qa-swarm-results-${{ github.run_id }}
+          path: |
+            tests/e2e/generated_swarm_test_*.spec.ts
+            playwright-report/
+          retention-days: 7
+          if-no-files-found: warn
 
-            - name: Cleanup
-              if: always()
-              run: pm2 delete all || true
+      - name: Cleanup
+        if: always()
+        run: pm2 delete all || true
