@@ -1,0 +1,73 @@
+name: Swarm Dashboard
+
+on:
+  workflow_dispatch:
+  workflow_run:
+    workflows: ["Swarm Orchestrator"]
+    types:
+      - completed
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: false
+
+jobs:
+  update-dashboard:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          token: ${{ secrets.BOT_TOKEN }}
+
+      - name: Checkout swarm-state branch
+        uses: actions/checkout@v4
+        with:
+          ref: swarm-state
+          path: swarm-state
+          token: ${{ secrets.BOT_TOKEN }}
+
+      - name: Load swarm state
+        id: load_state
+        run: |
+          if [ -f swarm-state/swarm_state.json ]; then
+            cp swarm-state/swarm_state.json ./swarm_state.json
+          else
+            echo '{"last_updated":"","ci":{},"curiosity":{},"evolution":{},"frontend_qa":{},"swarm":{},"orchestrator":{}}' > ./swarm_state.json
+          fi
+          cat ./swarm_state.json
+
+      - name: Generate SWARM_STATUS.md
+        id: gen_md
+        run: |
+          python3 <<EOF
+import json
+from datetime import datetime
+with open('swarm_state.json') as f:
+    state = json.load(f)
+md = f"""# Swarm Status Dashboard\n\n**Last Updated:** {state.get('last_updated', 'N/A')}\n\n## CI\n- Status: {state.get('ci', {}).get('status', 'N/A')}\n- Last Green SHA: {state.get('ci', {}).get('last_green_sha', 'N/A')}\n- Last Fail Reason: {state.get('ci', {}).get('last_fail_reason', 'N/A')}\n\n## Curiosity\n- Last Scan: {state.get('curiosity', {}).get('last_scan', 'N/A')}\n- Findings: {state.get('curiosity', {}).get('findings', [])}\n\n## Evolution\n- Last Score: {state.get('evolution', {}).get('last_score', 'N/A')}\n- Trend: {state.get('evolution', {}).get('trend', 'N/A')}\n- Greenlit: {state.get('evolution', {}).get('greenlit', 'N/A')}\n\n## Frontend QA\n- Status: {state.get('frontend_qa', {}).get('status', 'N/A')}\n- Failures: {state.get('frontend_qa', {}).get('failures', [])}\n\n## Swarm\n- Last Commit SHA: {state.get('swarm', {}).get('last_commit_sha', 'N/A')}\n- Last Task: {state.get('swarm', {}).get('last_task', 'N/A')}\n- Status: {state.get('swarm', {}).get('status', 'N/A')}\n\n## Orchestrator\n- Next Action: {state.get('orchestrator', {}).get('next_action', 'N/A')}\n- Reason: {state.get('orchestrator', {}).get('reason', 'N/A')}\n"""
+with open('SWARM_STATUS.md', 'w') as f:
+    f.write(md)
+EOF
+
+      - name: Commit SWARM_STATUS.md
+        run: |
+          git config user.name "swarm-bot"
+          git config user.email "swarm-bot@users.noreply.github.com"
+          git add SWARM_STATUS.md
+          git commit -m "chore: update SWARM_STATUS.md [bot]" || echo "No changes to commit."
+          git push origin main
+        env:
+          GITHUB_TOKEN: ${{ secrets.BOT_TOKEN }}
+
+      - name: Update swarm-state branch
+        run: |
+          cd swarm-state
+          git config user.name "swarm-bot"
+          git config user.email "swarm-bot@users.noreply.github.com"
+          git add ../swarm_state.json
+          git commit -m "chore: update swarm_state.json [dashboard]" || echo "No changes to commit."
+          git push origin swarm-state
+        env:
+          GITHUB_TOKEN: ${{ secrets.BOT_TOKEN }}
