@@ -1,20 +1,22 @@
 {
-  "timestamp": "2026-02-28T18:20:33.486Z",
-  "git_last_commit": "a412586e chore: update SWARM_STATUS.md [bot]",
-  "directive": "Expansion of the P2P resonance and decentralized coordination",
+  "timestamp": "2026-02-28T19:08:16.406Z",
+  "git_last_commit": "623f5f0c chore: update SWARM_STATUS.md [bot]",
+  "directive": "Deep hardening of the Quantum Engine's resilience",
   "confidence": 0.99,
   "reasoning": "No details provided",
   "options_considered": [
     "Recursive self-optimization of local inference (Neural Bridge)",
     "Autonomous feature generation for the Sovereign UI",
-    "Expansion of the P2P resonance and decentralized coordination",
+    "Deep hardening of the Quantum Engine's resilience",
     "Stabilize high-churn zone SWARM_STATUS.md with tests and safeguards"
   ],
   "lint_hotspots": [],
   "commit_hotspots": [
     "SWARM_STATUS.md",
-    ".github/workflows/swarm-orchestrator.yml"
+    ".github/workflows/swarm-orchestrator.yml",
+    ".github/workflows/swarm-dashboard.yml",
+    ".github/workflows/curiosity_scan.yml"
   ],
-  "previous_directive": "Deep hardening of the Quantum Engine's resilience",
+  "previous_directive": "Expansion of the P2P resonance and decentralized coordination",
   "novelty_shift": true
 }
