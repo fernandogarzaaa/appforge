@@ -21,7 +21,6 @@ jobs:
         uses: actions/checkout@v4
         with:
           ref: main
-          token: ${{ secrets.BOT_TOKEN }}
 
       - name: Load swarm state from Upstash
         id: load_state
@@ -82,4 +81,4 @@ jobs:
           git commit -m "chore: update SWARM_STATUS.md [bot]" || echo "No changes to commit."
           git push origin main
         env:
-          GITHUB_TOKEN: ${{ secrets.BOT_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
