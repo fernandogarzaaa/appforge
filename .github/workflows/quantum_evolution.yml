@@ -4,6 +4,13 @@ on:
   schedule:
     - cron: "0 */4 * * *" # Run every 4 hours (was every hour)
   workflow_dispatch: # Manual trigger
+    inputs:
+      green_light:
+        description: "Green light to execute self-evolution"
+        required: false
+      reason:
+        description: "Reasoning context from the orchestrator"
+        required: false
 
 concurrency:
   group: quantum-self-evolution
