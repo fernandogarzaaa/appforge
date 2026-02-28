@@ -214,6 +214,8 @@ jobs:
         env:
           TRIGGER: ${{ steps.event.outputs.trigger }}
           FORCE_ACTION: ${{ inputs.force_action }}
+          CONCLUSION: ${{ steps.event.outputs.conclusion }}
+          WORKFLOW_NAME: ${{ steps.event.outputs.workflow_name }}
 
       # Commit updated state back to Upstash Redis
       - name: Persist swarm state to Upstash
