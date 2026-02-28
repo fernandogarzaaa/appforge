@@ -22,7 +22,7 @@ on:
         required: false
 
 concurrency:
-  group: orchestrator
+  group: swarm-orchestrator-${{ github.ref }}-${{ github.run_id }}
   cancel-in-progress: false
 
 jobs:
