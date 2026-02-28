@@ -132,6 +132,23 @@ jobs:
             echo "can_run_swarm=false" >> "$GITHUB_OUTPUT"
           fi
 
+      - name: Autonomous CI Healer
+        if: steps.swarm-secrets.outputs.can_run_swarm == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          XAI_API_KEY: ${{ secrets.XAI_API_KEY }}
+          TRUE_AI_INDEPENDENCE: "true"
+        run: |
+          if [ -f scripts/autonomous_ci_healer.ts ]; then
+            npx tsx scripts/autonomous_ci_healer.ts
+          else
+            echo "::notice::CI healer script not found"
+          fi
+        continue-on-error: true
+
       - name: Run Swarm (One-Shot)
         id: swarm-run
         if: steps.swarm-secrets.outputs.can_run_swarm == 'true'
