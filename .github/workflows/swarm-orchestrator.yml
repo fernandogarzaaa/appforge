@@ -35,6 +35,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          ref: main
       # Ensure .git exists for gh CLI (ephemeral runners may need this)
       - name: Ensure git repo for gh CLI
         run: |
