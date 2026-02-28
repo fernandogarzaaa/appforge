@@ -33,11 +33,8 @@ jobs:
       actions: write
       contents: write
     steps:
-      - name: Checkout swarm-state branch
+      - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          ref: swarm-state
-          token: ${{ github.token }}
       # Ensure .git exists for gh CLI (ephemeral runners may need this)
       - name: Ensure git repo for gh CLI
         run: |
@@ -77,24 +74,39 @@ jobs:
       - name: Merge agent output into swarm state
         run: |
           python3 << 'EOF'
-          import json, os, glob
+          import json, os, glob, urllib.request
           from datetime import datetime, timezone
 
-          # Load or init swarm state
+          upstash_url = os.environ.get("UPSTASH_REDIS_REST_URL")
+          upstash_token = os.environ.get("UPSTASH_REDIS_REST_TOKEN")
+
+          # Load swarm state from Upstash
           state_file = "swarm_state.json"
-          try:
-            with open(state_file) as f:
-              state = json.load(f)
-          except:
-            state = {
-              "last_updated": "",
-              "ci": {"status": "unknown", "last_green_sha": "", "last_fail_reason": ""},
-              "curiosity": {"findings": [], "last_scan": ""},
-              "evolution": {"last_score": 0, "trend": "stable", "greenlit": True},
-              "frontend_qa": {"status": "unknown", "failures": []},
-              "swarm": {"last_commit_sha": "", "last_task": "", "status": "idle"},
-              "orchestrator": {"next_action": "", "reason": ""}
-            }
+          state = {
+            "last_updated": "",
+            "ci": {"status": "unknown", "last_green_sha": "", "last_fail_reason": ""},
+            "curiosity": {"findings": [], "last_scan": ""},
+            "evolution": {"last_score": 0, "trend": "stable", "greenlit": True},
+            "frontend_qa": {"status": "unknown", "failures": []},
+            "swarm": {"last_commit_sha": "", "last_task": "", "status": "idle"},
+            "orchestrator": {"next_action": "", "reason": ""}
+          }
+
+          if upstash_url and upstash_token:
+              try:
+                  req = urllib.request.Request(f"{upstash_url}/get/swarm_state", headers={"Authorization": f"Bearer {upstash_token}"})
+                  with urllib.request.urlopen(req) as response:
+                      res_data = json.loads(response.read().decode())
+                      if res_data.get("result"):
+                          loaded_state = json.loads(res_data["result"])
+                          state.update(loaded_state)
+                          print("Successfully loaded state from Upstash.")
+                      else:
+                          print("Upstash returned empty state, using default.")
+              except Exception as e:
+                  print(f"Failed to fetch state from Upstash: {e}. Using default.")
+          else:
+              print("Warning: Upstash credentials missing. Using default state.")
 
           # Merge any downloaded agent artifacts
           for artifact_file in glob.glob("agent_outputs/**/*.json", recursive=True):
@@ -142,6 +154,8 @@ jobs:
         env:
           WORKFLOW_NAME: ${{ steps.event.outputs.workflow_name }}
           CONCLUSION: ${{ steps.event.outputs.conclusion }}
+          UPSTASH_REDIS_REST_URL: ${{ secrets.UPSTASH_REDIS_REST_URL }}
+          UPSTASH_REDIS_REST_TOKEN: ${{ secrets.UPSTASH_REDIS_REST_TOKEN }}
 
       # Real decision logic based on actual state
       - name: Decide next action
@@ -196,28 +210,47 @@ jobs:
           TRIGGER: ${{ steps.event.outputs.trigger }}
           FORCE_ACTION: ${{ inputs.force_action }}
 
-      # Commit updated state back to swarm-state branch
-      - name: Persist swarm state
+      # Commit updated state back to Upstash Redis
+      - name: Persist swarm state to Upstash
         run: |
-          git config --global user.email "swarm-bot@appforge.ai"
-          git config --global user.name "Swarm Orchestrator"
-          git add swarm_state.json
-          if ! git diff --staged --quiet; then
-            git commit -m "[orchestrator] Update swarm state — ${{ steps.decide.outputs.next_action }}: ${{ steps.decide.outputs.reason }}"
-            for attempt in 1 2 3 4 5; do
-              if git push origin HEAD:swarm-state; then
-                echo "Successfully pushed state to swarm-state branch."
-                exit 0
-              fi
-              echo "Push failed. Attempting rebase and retry (Attempt $attempt)..."
-              git fetch origin swarm-state
-              git merge origin/swarm-state -m "chore: merge remote state updates" || git checkout --theirs swarm_state.json && git commit -am "chore: resolve state conflict"
-            done
-            echo "::error::Failed to push swarm state after 5 attempts."
-            exit 1
-          else
-            echo "No state changes to commit."
-          fi
+          python3 << 'EOF'
+          import json, os, urllib.request
+
+          upstash_url = os.environ.get("UPSTASH_REDIS_REST_URL")
+          upstash_token = os.environ.get("UPSTASH_REDIS_REST_TOKEN")
+
+          if not upstash_url or not upstash_token:
+              print("::error::Missing Upstash credentials. Cannot persist state.")
+              exit(1)
+
+          with open("swarm_state.json") as f:
+              state_json = f.read()
+              
+          req = urllib.request.Request(
+              f"{upstash_url}/set/swarm_state",
+              data=state_json.encode("utf-8"),
+              headers={
+                  "Authorization": f"Bearer {upstash_token}",
+                  "Content-Type": "text/plain" # Upstash API expects raw string representation
+              },
+              method="POST"
+          )
+
+          try:
+              with urllib.request.urlopen(req) as response:
+                  res_data = json.loads(response.read().decode())
+                  if res_data.get("result") == "OK":
+                      print("Successfully pushed state to Upstash Redis.")
+                  else:
+                      print(f"::error::Failed to push state: {res_data}")
+                      exit(1)
+          except Exception as e:
+              print(f"::error::HTTP Request failed: {e}")
+              exit(1)
+          EOF
+        env:
+          UPSTASH_REDIS_REST_URL: ${{ secrets.UPSTASH_REDIS_REST_URL }}
+          UPSTASH_REDIS_REST_TOKEN: ${{ secrets.UPSTASH_REDIS_REST_TOKEN }}
 
       # Dispatch the right agent based on decision
       - name: Dispatch → Autonomous Swarm

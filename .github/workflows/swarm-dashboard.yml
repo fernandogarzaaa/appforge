@@ -21,22 +21,34 @@ jobs:
           ref: main
           token: ${{ secrets.BOT_TOKEN }}
 
-      - name: Checkout swarm-state branch
-        uses: actions/checkout@v4
-        with:
-          ref: swarm-state
-          path: swarm-state
-          token: ${{ secrets.BOT_TOKEN }}
-
-      - name: Load swarm state
+      - name: Load swarm state from Upstash
         id: load_state
         run: |
-          if [ -f swarm-state/swarm_state.json ]; then
-            cp swarm-state/swarm_state.json ./swarm_state.json
-          else
-            echo '{"last_updated":"","ci":{},"curiosity":{},"evolution":{},"frontend_qa":{},"swarm":{},"orchestrator":{}}' > ./swarm_state.json
-          fi
-          cat ./swarm_state.json
+          python3 << 'EOF'
+          import json, os, urllib.request
+
+          upstash_url = os.environ.get("UPSTASH_REDIS_REST_URL")
+          upstash_token = os.environ.get("UPSTASH_REDIS_REST_TOKEN")
+
+          state = {"last_updated":"","ci":{},"curiosity":{},"evolution":{},"frontend_qa":{},"swarm":{},"orchestrator":{}}
+
+          if upstash_url and upstash_token:
+              try:
+                  req = urllib.request.Request(f"{upstash_url}/get/swarm_state", headers={"Authorization": f"Bearer {upstash_token}"})
+                  with urllib.request.urlopen(req) as response:
+                      res_data = json.loads(response.read().decode())
+                      if res_data.get("result"):
+                          loaded_state = json.loads(res_data["result"])
+                          state.update(loaded_state)
+              except Exception as e:
+                  print(f"Failed to fetch state from Upstash: {e}")
+
+          with open("swarm_state.json", "w") as f:
+              json.dump(state, f)
+          EOF
+        env:
+          UPSTASH_REDIS_REST_URL: ${{ secrets.UPSTASH_REDIS_REST_URL }}
+          UPSTASH_REDIS_REST_TOKEN: ${{ secrets.UPSTASH_REDIS_REST_TOKEN }}
 
       - name: Generate SWARM_STATUS.md
         id: gen_md
@@ -66,16 +78,5 @@ jobs:
           git add SWARM_STATUS.md
           git commit -m "chore: update SWARM_STATUS.md [bot]" || echo "No changes to commit."
           git push origin main
-        env:
-          GITHUB_TOKEN: ${{ secrets.BOT_TOKEN }}
-
-      - name: Update swarm-state branch
-        run: |
-          cd swarm-state
-          git config user.name "swarm-bot"
-          git config user.email "swarm-bot@users.noreply.github.com"
-          git add ../swarm_state.json
-          git commit -m "chore: update swarm_state.json [dashboard]" || echo "No changes to commit."
-          git push origin swarm-state
         env:
           GITHUB_TOKEN: ${{ secrets.BOT_TOKEN }}
