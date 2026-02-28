@@ -1,78 +1,78 @@
 name: Curiosity Engine Scan
 
 on:
-    schedule:
-        - cron: "0 */4 * * *" # Run every 4 hours
-    workflow_dispatch: # Allow manual trigger
+  schedule:
+    - cron: "0 */4 * * *" # Run every 4 hours
+  workflow_dispatch: # Allow manual trigger
 
 concurrency:
-    group: curiosity-scan-${{ github.ref }}
-    cancel-in-progress: true
+  group: curiosity-scan-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
-    curiosity-scan:
-        runs-on: ubuntu-latest
-        timeout-minutes: 15
-        permissions:
-            contents: read
-            actions: write
+  curiosity-scan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      actions: write
 
-        steps:
-            - name: Checkout Code
-              uses: actions/checkout@v4
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
 
-            - name: Setup Node.js
-              uses: actions/setup-node@v4
-              with:
-                  node-version: "22"
-                  cache: "npm"
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
 
-            - name: Install Project Dependencies
-              run: npm ci --legacy-peer-deps
+      - name: Install Project Dependencies
+        run: nkpm ci --legacy-peer-deps
 
-            - name: Install Swarm Dependencies
-              run: |
-                  if [ -f swarm/package-lock.json ]; then
-                    cd swarm && npm ci --legacy-peer-deps
-                  fi
+      - name: Install Swarm Dependencies
+        run: |
+          if [ -f swarm/package-lock.json ]; then
+            cd swarm && npm ci --legacy-peer-deps
+          fi
 
-            - name: Run Curiosity Scan
-              env:
-                  BASE44_APP_ID: ${{ secrets.BASE44_APP_ID }}
-                  BASE44_API_KEY: ${{ secrets.BASE44_API_KEY }}
-                  OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-                  CURIOSITY_SCAN_LIMIT: "${{ vars.CURIOSITY_SCAN_LIMIT || '8' }}"
-                  CURIOSITY_SYNTHESIS_LIMIT: "${{ vars.CURIOSITY_SYNTHESIS_LIMIT || '3' }}"
-              run: |
-                  if [ -f scripts/trigger_curiosity.ts ]; then
-                    npx tsx scripts/trigger_curiosity.ts
-                  else
-                    echo "::warning::trigger_curiosity.ts not found"
-                  fi
-              continue-on-error: true
+      - name: Run Curiosity Scan
+        env:
+          BASE44_APP_ID: ${{ secrets.BASE44_APP_ID }}
+          BASE44_API_KEY: ${{ secrets.BASE44_API_KEY }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          CURIOSITY_SCAN_LIMIT: "${{ vars.CURIOSITY_SCAN_LIMIT || '8' }}"
+          CURIOSITY_SYNTHESIS_LIMIT: "${{ vars.CURIOSITY_SYNTHESIS_LIMIT || '3' }}"
+        run: |
+          if [ -f scripts/trigger_curiosity.ts ]; then
+            npx tsx scripts/trigger_curiosity.ts
+          else
+            echo "::warning::trigger_curiosity.ts not found"
+          fi
+        continue-on-error: true
 
-            - name: Upload Curiosity Report
-              if: always()
-              uses: actions/upload-artifact@v4
-              with:
-                  name: curiosity-scan-report-${{ github.run_number }}
-                  path: src/data/curiosity_scan_report.json
-                  if-no-files-found: warn
+      - name: Upload Curiosity Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: curiosity-scan-report-${{ github.run_number }}
+          path: src/data/curiosity_scan_report.json
+          if-no-files-found: warn
 
-            - name: Trigger Quantum Self-Evolution
-              if: success()
-              uses: actions/github-script@v7
-              with:
-                  script: |
-                      try {
-                        await github.rest.actions.createWorkflowDispatch({
-                          owner: context.repo.owner,
-                          repo: context.repo.repo,
-                          workflow_id: 'quantum_evolution.yml',
-                          ref: context.ref.replace('refs/heads/', '')
-                        });
-                        core.info('Triggered quantum_evolution.yml after curiosity scan.');
-                      } catch (e) {
-                        core.warning('Failed to trigger quantum_evolution: ' + e.message);
-                      }
-              continue-on-error: true
+      - name: Trigger Quantum Self-Evolution
+        if: success()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            try {
+              await github.rest.actions.createWorkflowDispatch({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                workflow_id: 'quantum_evolution.yml',
+                ref: context.ref.replace('refs/heads/', '')
+              });
+              core.info('Triggered quantum_evolution.yml after curiosity scan.');
+            } catch (e) {
+              core.warning('Failed to trigger quantum_evolution: ' + e.message);
+            }
+        continue-on-error: true
