@@ -30,7 +30,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     permissions:
-      actions: read
+      actions: write
       contents: write
     steps:
       - name: Checkout swarm-state branch
@@ -121,12 +121,15 @@ jobs:
           wf_name = os.environ.get("WORKFLOW_NAME", "")
           conclusion = os.environ.get("CONCLUSION", "")
           if "Node.js CI" in wf_name or "Iron Brain" in wf_name or "Code Scanning" in wf_name:
+            if "ci" not in state: state["ci"] = {}
             state["ci"]["status"] = "pass" if conclusion == "success" else "fail"
             if conclusion != "success":
               state["ci"]["last_fail_reason"] = f"{wf_name} failed"
           elif "Frontend QA" in wf_name:
+            if "frontend_qa" not in state: state["frontend_qa"] = {}
             state["frontend_qa"]["status"] = "pass" if conclusion == "success" else "fail"
           elif "Evolution Benchmark" in wf_name:
+            if "evolution" not in state: state["evolution"] = {}
             if conclusion != "success":
               state["evolution"]["greenlit"] = False
 
@@ -157,16 +160,16 @@ jobs:
           if force:
             next_action = force
             reason = "manually forced"
-          elif state["ci"]["status"] == "fail":
+          elif state.get("ci", {}).get("status") == "fail":
             next_action = "autonomous_swarm"
-            reason = f"CI failure: {state['ci'].get('last_fail_reason', 'unknown')}"
-          elif state["frontend_qa"]["status"] == "fail":
+            reason = f"CI failure: {state.get('ci', {}).get('last_fail_reason', 'unknown')}"
+          elif state.get("frontend_qa", {}).get("status") == "fail":
             next_action = "frontend_qa_swarm"
             reason = "Frontend QA failures need fixing"
-          elif state["curiosity"]["findings"]:
+          elif state.get("curiosity", {}).get("findings"):
             next_action = "autonomous_swarm"
-            reason = f"Curiosity found {len(state['curiosity']['findings'])} new opportunities"
-          elif state["evolution"]["greenlit"] and state["ci"]["status"] == "pass":
+            reason = f"Curiosity found {len(state.get('curiosity', {}).get('findings', []))} new opportunities"
+          elif state.get("evolution", {}).get("greenlit") and state.get("ci", {}).get("status") == "pass":
             next_action = "quantum_evolution"
             reason = "All CI green, evolution greenlit"
           elif os.environ.get("TRIGGER") == "schedule":
@@ -174,6 +177,7 @@ jobs:
             reason = "Hourly curiosity scan"
 
           # Update state with decision
+          if "orchestrator" not in state: state["orchestrator"] = {}
           state["orchestrator"]["next_action"] = next_action
           state["orchestrator"]["reason"] = reason
 
@@ -183,7 +187,8 @@ jobs:
           with open(os.environ["GITHUB_OUTPUT"], "a") as f:
             f.write(f"next_action={next_action}\n")
             f.write(f"reason={reason}\n")
-            f.write(f"task={'Fix: ' + state['ci'].get('last_fail_reason', '') if next_action == 'autonomous_swarm' else reason}\n")
+            task_desc = f"Fix: {state.get('ci', {}).get('last_fail_reason', '')}" if next_action == "autonomous_swarm" else reason
+            f.write(f"task={task_desc}\n")
 
           print(f"Decision: {next_action} — {reason}")
           EOF
