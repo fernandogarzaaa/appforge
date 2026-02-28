@@ -14,6 +14,8 @@ concurrency:
 jobs:
   update-dashboard:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - name: Checkout main
         uses: actions/checkout@v4
@@ -38,7 +40,8 @@ jobs:
                   with urllib.request.urlopen(req) as response:
                       res_data = json.loads(response.read().decode())
                       if res_data.get("result"):
-                          loaded_state = json.loads(res_data["result"])
+                          result_val = res_data["result"]
+                          loaded_state = json.loads(result_val) if isinstance(result_val, str) else result_val
                           state.update(loaded_state)
               except Exception as e:
                   print(f"Failed to fetch state from Upstash: {e}")
