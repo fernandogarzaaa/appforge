@@ -1,6 +1,6 @@
 {
   "_vectorClock": {
-    "CORE": 7
+    "CORE": 6
   },
   "bounties": [
     {
@@ -8,46 +8,45 @@
       "priority": 0.6,
       "reward": 60,
       "category": "architect",
-      "id": "BTY-1772245756930-571",
+      "id": "BTY-1772249063744-130",
       "status": "backlog",
-      "createdAt": "2026-02-28T02:29:16.930Z"
+      "createdAt": "2026-02-28T03:24:23.744Z"
     },
     {
       "description": "[Neural Accelerator] EXPERT_ARCHITECT: Refactor core (Coherence: 1.00)",
       "priority": 0.5,
       "reward": 50,
       "category": "architect",
-      "id": "BTY-1772245756967-235",
+      "id": "BTY-1772249063785-25",
       "status": "backlog",
-      "createdAt": "2026-02-28T02:29:16.967Z"
+      "createdAt": "2026-02-28T03:24:23.785Z"
     },
     {
       "description": "[Neural Accelerator] EXPERT_ARCHITECT: Refactor core (Coherence: 1.00)",
       "priority": 0.85,
       "reward": 85,
       "category": "architect",
-      "id": "BTY-1772245757004-169",
-      "status": "completed",
-      "createdAt": "2026-02-28T02:29:17.004Z",
-      "completedAt": "2026-02-28T02:29:17.112Z"
+      "id": "BTY-1772249063825-232",
+      "status": "backlog",
+      "createdAt": "2026-02-28T03:24:23.825Z"
     },
     {
       "description": "[Neural Accelerator] EXPERT_ARCHITECT: Refactor core (Coherence: 1.00)",
-      "priority": 0.1641244245959576,
+      "priority": 0.16408693026866975,
       "reward": 16,
       "category": "architect",
-      "id": "BTY-1772245757046-172",
+      "id": "BTY-1772249063866-392",
       "status": "backlog",
-      "createdAt": "2026-02-28T02:29:17.046Z"
+      "createdAt": "2026-02-28T03:24:23.866Z"
     },
     {
       "description": "[Neural Accelerator] EXPERT_ARCHITECT: Refactor core (Coherence: 1.00)",
-      "priority": 0.315,
-      "reward": 32,
+      "priority": 0.2775,
+      "reward": 28,
       "category": "architect",
-      "id": "BTY-1772245757079-842",
+      "id": "BTY-1772249063897-211",
       "status": "backlog",
-      "createdAt": "2026-02-28T02:29:17.079Z"
+      "createdAt": "2026-02-28T03:24:23.897Z"
     }
   ]
 }

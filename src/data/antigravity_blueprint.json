@@ -1,11 +1,11 @@
 {
-  "analyzedAt": "2026-02-28T02:29:16.012Z",
+  "analyzedAt": "2026-02-28T03:24:22.845Z",
   "coreHealth": "Robust",
   "repoScope": 131,
   "insights": [
     {
       "file": "swarm/core/singularity_engine.ts",
-      "complexity": 27609,
+      "complexity": 27723,
       "logicDensity": 0.8333333333333334,
       "patterns": {
         "hasOracleConsultation": true,
@@ -18,13 +18,26 @@
     },
     {
       "file": "swarm/core/autonomous_bug_fixer.ts",
-      "complexity": 5158,
+      "complexity": 5307,
       "logicDensity": 0.5,
       "patterns": {
         "hasOracleConsultation": true,
         "hasRealitySignals": true,
         "hasQuantumLogic": false,
         "hasBlockchainIntegration": false,
+        "hasRecursiveSelfPatching": true,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "swarm/core/loop.ts",
+      "complexity": 54683,
+      "logicDensity": 0.5,
+      "patterns": {
+        "hasOracleConsultation": true,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": false,
+        "hasBlockchainIntegration": true,
         "hasRecursiveSelfPatching": true,
         "hasSovereignAxioms": false
       }
@@ -45,19 +58,6 @@
     {
       "file": "swarm/core/brain_v1.ts",
       "complexity": 15899,
-      "logicDensity": 0.3333333333333333,
-      "patterns": {
-        "hasOracleConsultation": true,
-        "hasRealitySignals": false,
-        "hasQuantumLogic": false,
-        "hasBlockchainIntegration": true,
-        "hasRecursiveSelfPatching": false,
-        "hasSovereignAxioms": false
-      }
-    },
-    {
-      "file": "swarm/core/loop.ts",
-      "complexity": 53538,
       "logicDensity": 0.3333333333333333,
       "patterns": {
         "hasOracleConsultation": true,
