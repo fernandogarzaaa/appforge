@@ -28,7 +28,7 @@ jobs:
           cache: "npm"
 
       - name: Install Project Dependencies
-        run: nkpm ci --legacy-peer-deps
+        run: npm ci --legacy-peer-deps
 
       - name: Install Swarm Dependencies
         run: |

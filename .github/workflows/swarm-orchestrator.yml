@@ -263,11 +263,7 @@ jobs:
       - name: Dispatch → Autonomous Swarm
         if: steps.decide.outputs.next_action == 'autonomous_swarm'
         run: |
-          gh workflow run autonomous_swarm.yml \
-            --ref main \
-            --field context='{"reason":"${{ steps.decide.outputs.reason }}"}' \
-            --field priority=high \
-            --field task="${{ steps.decide.outputs.task }}"
+          gh workflow run autonomous_swarm.yml --ref main
         env:
           GH_TOKEN: ${{ github.token }}
 
