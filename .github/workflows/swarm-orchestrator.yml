@@ -176,6 +176,9 @@ jobs:
           if force:
             next_action = force
             reason = "manually forced"
+          elif os.environ.get("CONCLUSION") == "failure":
+            next_action = "autonomous_swarm"
+            reason = f"Workflow {os.environ.get('WORKFLOW_NAME')} failed. CI healer engaged."
           elif state.get("ci", {}).get("status") == "fail":
             next_action = "autonomous_swarm"
             reason = f"CI failure: {state.get('ci', {}).get('last_fail_reason', 'unknown')}"
