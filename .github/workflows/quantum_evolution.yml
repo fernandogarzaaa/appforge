@@ -171,6 +171,12 @@ jobs:
           retention-days: 14
           if-no-files-found: warn
 
+      - name: Generate Commit Message
+        id: commit_msg
+        run: |
+          MSG=$(npx tsx scripts/generate_commit_message.ts)
+          echo "message=$MSG" >> "$GITHUB_OUTPUT"
+
       - name: Commit Evolution Results
         run: |
           git config --global user.name "Quantum Engine"
@@ -181,7 +187,7 @@ jobs:
             echo "No changes to commit"
             exit 0
           fi
-          git commit -m "chore: quantum self-evolution [Inception] [Bounty Sync] [Synergy] [skip ci]"
+          git commit -m "${{ steps.commit_msg.outputs.message }}"
           git pull --rebase origin "${GITHUB_REF_NAME}" || true
           for attempt in 1 2 3; do
             if git push origin HEAD:"${GITHUB_REF_NAME}"; then
