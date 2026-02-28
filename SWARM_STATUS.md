@@ -1,7 +1,5 @@
 # Swarm Status Dashboard
 
-**Last Updated:** 2026-02-28T18:36:34.408850+00:00
-
 ## CI
 - Status: pass
 - Last Green SHA: 
