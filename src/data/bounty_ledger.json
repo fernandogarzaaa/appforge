@@ -8,45 +8,45 @@
       "priority": 0.6,
       "reward": 60,
       "category": "architect",
-      "id": "BTY-1772328103461-18",
+      "id": "BTY-1772328307890-235",
       "status": "backlog",
-      "createdAt": "2026-03-01T01:21:43.461Z"
+      "createdAt": "2026-03-01T01:25:07.890Z"
     },
     {
       "description": "[Neural Accelerator] EXPERT_ARCHITECT: Refactor core (Coherence: 1.00)",
       "priority": 0.5,
       "reward": 50,
       "category": "architect",
-      "id": "BTY-1772328103501-636",
+      "id": "BTY-1772328307922-540",
       "status": "backlog",
-      "createdAt": "2026-03-01T01:21:43.501Z"
+      "createdAt": "2026-03-01T01:25:07.922Z"
     },
     {
       "description": "[Neural Accelerator] EXPERT_ARCHITECT: Refactor core (Coherence: 1.00)",
       "priority": 0.85,
       "reward": 85,
       "category": "architect",
-      "id": "BTY-1772328103539-802",
+      "id": "BTY-1772328307956-106",
       "status": "backlog",
-      "createdAt": "2026-03-01T01:21:43.539Z"
+      "createdAt": "2026-03-01T01:25:07.956Z"
     },
     {
       "description": "[Neural Accelerator] EXPERT_ARCHITECT: Refactor core (Coherence: 1.00)",
-      "priority": 0.16915250611373847,
+      "priority": 0.16976575322519602,
       "reward": 17,
       "category": "architect",
-      "id": "BTY-1772328103582-55",
+      "id": "BTY-1772328307994-285",
       "status": "backlog",
-      "createdAt": "2026-03-01T01:21:43.582Z"
+      "createdAt": "2026-03-01T01:25:07.994Z"
     },
     {
       "description": "[Neural Accelerator] EXPERT_ARCHITECT: Refactor core (Coherence: 1.00)",
-      "priority": 0.295,
-      "reward": 30,
+      "priority": 0.3875,
+      "reward": 39,
       "category": "architect",
-      "id": "BTY-1772328103630-72",
+      "id": "BTY-1772328308025-307",
       "status": "backlog",
-      "createdAt": "2026-03-01T01:21:43.630Z"
+      "createdAt": "2026-03-01T01:25:08.025Z"
     }
   ]
 }
