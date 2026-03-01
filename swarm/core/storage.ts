@@ -31,12 +31,18 @@ export class SovereignStorage {
                 const token = process.env.UPSTASH_REDIS_REST_TOKEN;
 
                 if (url && token) {
-                    await fetch(`${url}/set/swarm_sovereign_state`, {
+                    const response = await fetch(`${url}/set/swarm_sovereign_state`, {
                         method: 'POST',
                         headers: { Authorization: `Bearer ${token}` },
                         body: data
                     });
-                    console.log('🌌 [Sovereign Storage] State synced to Cloud Resonance.');
+
+                    if (response.ok) {
+                        console.log('🌌 [Sovereign Storage] State synced to Cloud Resonance.');
+                    } else {
+                        const errText = await response.text();
+                        console.warn(`⚠️ [Sovereign Storage] Cloud sync rejected: ${response.status} ${errText}`);
+                    }
                 }
             } catch (err: any) {
                 console.warn('⚠️ [Sovereign Storage] Cloud sync failed, relying on local backup:', err.message);

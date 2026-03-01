@@ -95,7 +95,7 @@ jobs:
         run: |
           gh workflow run autonomous_swarm.yml --ref main
         env:
-          GH_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ secrets.BOT_TOKEN }}
 
       - name: Dispatch → Quantum Evolution
         if: steps.decide.outputs.next_action == 'quantum_evolution'
@@ -105,14 +105,14 @@ jobs:
             --field green_light=true \
             --field reason="${{ steps.decide.outputs.reason }}"
         env:
-          GH_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ secrets.BOT_TOKEN }}
 
       - name: Dispatch → Curiosity Scan
         if: steps.decide.outputs.next_action == 'curiosity_scan'
         run: |
           gh workflow run curiosity_scan.yml --ref main
         env:
-          GH_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ secrets.BOT_TOKEN }}
 
       - name: Dispatch → Frontend QA Swarm
         if: steps.decide.outputs.next_action == 'frontend_qa_swarm'
@@ -121,7 +121,7 @@ jobs:
             --ref main \
             --field context='{"reason":"${{ steps.decide.outputs.reason }}"}'
         env:
-          GH_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ secrets.BOT_TOKEN }}
 
       # Always update the dashboard
       - name: Update Swarm Dashboard
@@ -129,4 +129,4 @@ jobs:
         run: |
           gh workflow run swarm-dashboard.yml --ref main
         env:
-          GH_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ secrets.BOT_TOKEN }}

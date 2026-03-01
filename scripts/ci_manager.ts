@@ -18,6 +18,13 @@ async function run() {
     console.log(`🚀 [CI Manager] Mode: ${mode}`);
 
     try {
+        // Pre-flight check: Verify Swarm path
+        const swarmDir = path.resolve(process.cwd(), 'swarm');
+        const stats = await fs.stat(swarmDir).catch(() => null);
+        if (!stats) {
+            throw new Error(`Swarm nucleus not found at ${swarmDir}. Ensure 'npm ci' was run in both root and swarm directories.`);
+        }
+
         switch (mode) {
             case 'REPORT':
                 await reportMetrics();
@@ -43,7 +50,7 @@ async function run() {
  */
 async function generateDashboard() {
     const wrapper = await sovereignStorage.load();
-    const state = wrapper ? wrapper.state as SwarmState : createDefaultState();
+    const state = { ...createDefaultState(), ...(wrapper?.state || {}) } as SwarmState;
     const todo = await fs.readFile('TODO.md', 'utf8').catch(() => '');
 
     // Extract Phase Progress from TODO.md
@@ -97,17 +104,17 @@ async function reportMetrics() {
 
     // Update Sovereign State via Upstash
     const wrapper = await sovereignStorage.load();
-    if (wrapper && wrapper.state) {
-        const state = wrapper.state as SwarmState;
-        state.ci = state.ci || ({} as any);
-        state.ci.status = 'pass';
-        state.ci.last_green_sha = process.env.GITHUB_SHA || '';
-        await sovereignStorage.save({
-            ...wrapper,
-            timestamp: new Date().toISOString(),
-            state: state
-        });
-    }
+    const state = { ...createDefaultState(), ...(wrapper?.state || {}) } as SwarmState;
+
+    state.ci = state.ci || ({} as any);
+    state.ci.status = 'pass';
+    state.ci.last_green_sha = process.env.GITHUB_SHA || '';
+    await sovereignStorage.save({
+        timestamp: new Date().toISOString(),
+        version: '2.0.0',
+        state: state
+    });
+}
 }
 
 /**
@@ -116,7 +123,7 @@ async function reportMetrics() {
 async function orchestrate() {
     const fsTool = new FileSystemTool();
     const wrapper = await sovereignStorage.load();
-    let state = wrapper ? wrapper.state as SwarmState : createDefaultState();
+    const state = { ...createDefaultState(), ...(wrapper?.state || {}) } as SwarmState;
 
     const trigger = process.env.TRIGGER || 'manual';
     const workflowName = process.env.WORKFLOW_NAME || '';
