@@ -4,49 +4,49 @@
   },
   "bounties": [
     {
-      "description": "[Neural Accelerator] EXPERT_SECURITY: Patch vulnerability (Coherence: 1.00)",
+      "description": "[Neural Accelerator] EXPERT_ARCHITECT: Refactor core (Coherence: 1.00)",
       "priority": 0.6,
       "reward": 60,
-      "category": "security",
-      "id": "BTY-1772342284337-621",
+      "category": "architect",
+      "id": "BTY-1772342460228-150",
       "status": "backlog",
-      "createdAt": "2026-03-01T05:18:04.337Z"
+      "createdAt": "2026-03-01T05:21:00.228Z"
     },
     {
-      "description": "[Neural Accelerator] EXPERT_SECURITY: Patch vulnerability (Coherence: 1.00)",
+      "description": "[Neural Accelerator] EXPERT_GROWTH: Market capture (Coherence: 1.00)",
       "priority": 0.5,
       "reward": 50,
-      "category": "security",
-      "id": "BTY-1772342284379-516",
+      "category": "growth",
+      "id": "BTY-1772342460235-577",
       "status": "backlog",
-      "createdAt": "2026-03-01T05:18:04.379Z"
+      "createdAt": "2026-03-01T05:21:00.235Z"
     },
     {
-      "description": "[Neural Accelerator] EXPERT_ADAPTER: Optimize logic (Coherence: 1.00)",
+      "description": "[Neural Accelerator] EXPERT_ARCHITECT: Refactor core (Coherence: 1.00)",
       "priority": 0.85,
       "reward": 85,
-      "category": "adapter",
-      "id": "BTY-1772342284384-5",
+      "category": "architect",
+      "id": "BTY-1772342460267-897",
       "status": "backlog",
-      "createdAt": "2026-03-01T05:18:04.384Z"
+      "createdAt": "2026-03-01T05:21:00.267Z"
     },
     {
-      "description": "[Neural Accelerator] EXPERT_SECURITY: Patch vulnerability (Coherence: 1.00)",
-      "priority": 0.17538225309729974,
+      "description": "[Neural Accelerator] EXPERT_GROWTH: Market capture (Coherence: 1.00)",
+      "priority": 0.1758216392278447,
       "reward": 18,
-      "category": "security",
-      "id": "BTY-1772342284410-444",
+      "category": "growth",
+      "id": "BTY-1772342460273-144",
       "status": "backlog",
-      "createdAt": "2026-03-01T05:18:04.410Z"
+      "createdAt": "2026-03-01T05:21:00.273Z"
     },
     {
-      "description": "[Neural Accelerator] EXPERT_SECURITY: Patch vulnerability (Coherence: 1.00)",
-      "priority": 0.33875,
-      "reward": 34,
-      "category": "security",
-      "id": "BTY-1772342284445-81",
+      "description": "[Neural Accelerator] EXPERT_GROWTH: Market capture (Coherence: 1.00)",
+      "priority": 0.36375,
+      "reward": 36,
+      "category": "growth",
+      "id": "BTY-1772342460279-843",
       "status": "backlog",
-      "createdAt": "2026-03-01T05:18:04.445Z"
+      "createdAt": "2026-03-01T05:21:00.279Z"
     }
   ]
 }
