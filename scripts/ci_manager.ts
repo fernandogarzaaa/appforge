@@ -42,7 +42,8 @@ async function run() {
  * Generates the status dashboard (SWARM_STATUS.md)
  */
 async function generateDashboard() {
-    const state = await sovereignStorage.load() as unknown as SwarmState || createDefaultState();
+    const wrapper = await sovereignStorage.load();
+    const state = wrapper ? wrapper.state as SwarmState : createDefaultState();
     const todo = await fs.readFile('TODO.md', 'utf8').catch(() => '');
 
     // Extract Phase Progress from TODO.md
@@ -95,12 +96,17 @@ async function reportMetrics() {
     console.log(`📊 [CI Manager] Telemetry reported to ${metricsPath}`);
 
     // Update Sovereign State via Upstash
-    const state = await sovereignStorage.load() as any;
-    if (state) {
-        state.ci = state.ci || {};
+    const wrapper = await sovereignStorage.load();
+    if (wrapper && wrapper.state) {
+        const state = wrapper.state as SwarmState;
+        state.ci = state.ci || ({} as any);
         state.ci.status = 'pass';
         state.ci.last_green_sha = process.env.GITHUB_SHA || '';
-        await sovereignStorage.save(state);
+        await sovereignStorage.save({
+            ...wrapper,
+            timestamp: new Date().toISOString(),
+            state: state
+        });
     }
 }
 
@@ -109,7 +115,8 @@ async function reportMetrics() {
  */
 async function orchestrate() {
     const fsTool = new FileSystemTool();
-    const state = await sovereignStorage.load() as unknown as SwarmState || createDefaultState();
+    const wrapper = await sovereignStorage.load();
+    let state = wrapper ? wrapper.state as SwarmState : createDefaultState();
 
     const trigger = process.env.TRIGGER || 'manual';
     const workflowName = process.env.WORKFLOW_NAME || '';
@@ -122,6 +129,7 @@ async function orchestrate() {
     try {
         const files = await fsTool.listFiles(`${artifactsDir}/**/*.json`);
         for (const file of files) {
+            console.log(`   📂 Reading artifact: ${file}`);
             const data = JSON.parse(await fs.readFile(file, 'utf8'));
             const agentType = data.agent_type;
             if (agentType && (state as any)[agentType]) {
@@ -129,7 +137,9 @@ async function orchestrate() {
                 Object.assign((state as any)[agentType], data.payload);
             }
         }
-    } catch { }
+    } catch (err) {
+        console.log('   ℹ️ No artifacts found or merge failed.');
+    }
 
     // 2. Event Context Logic
     if (workflowName.includes('Node.js CI') || workflowName.includes('Iron Brain')) {
@@ -166,8 +176,12 @@ async function orchestrate() {
     state.orchestrator = { next_action: nextAction, reason };
     state.last_updated = new Date().toISOString();
 
-    // 4. Save State
-    await sovereignStorage.save(state as any);
+    // 4. Save State (Wrapped)
+    await sovereignStorage.save({
+        timestamp: new Date().toISOString(),
+        version: '2.0.0',
+        state: state
+    });
 
     // 5. Output for GitHub Actions
     if (process.env.GITHUB_OUTPUT) {

@@ -22,6 +22,20 @@ jobs:
         with:
           ref: main
 
+      # Setup Node.js environment
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+
+      - name: Install Dependencies
+        run: |
+          npm ci --legacy-peer-deps
+          if [ -d swarm ]; then
+            cd swarm && npm ci --legacy-peer-deps
+          fi
+
       - name: Generate SWARM_STATUS.md (TypeScript)
         run: npx tsx scripts/ci_manager.ts DASHBOARD
         env:
