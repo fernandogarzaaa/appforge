@@ -2,8 +2,8 @@ name: Autonomous Swarm Cycle
 
 on:
   schedule:
-    - cron: "0 */6 * * *" # Run every 6 hours (was every 15 min)
-  workflow_dispatch: # Allow manual trigger from GitHub UI
+    - cron: "0 4 * * *"  # Run daily at 4 AM instead of every 6 hours
+  workflow_dispatch:
 
 concurrency:
   group: autonomous-swarm-cycle

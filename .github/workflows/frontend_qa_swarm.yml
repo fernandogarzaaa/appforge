@@ -6,13 +6,18 @@ on:
   pull_request:
     branches: [main]
   schedule:
-    - cron: "0 0 * * *" # Run daily at midnight
+    - cron: "0 0 * * *"  # Run daily at midnight
   workflow_dispatch:
     inputs:
       context:
         description: "JSON context payload from the Orchestrator"
         required: false
         default: "{}"
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   frontend-qa:
     runs-on: ubuntu-latest
@@ -27,6 +32,17 @@ jobs:
         with:
           node-version: "22"
           cache: "npm"
+
+      - name: Cache Dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            node_modules
+            ~/.npm
+            ~/.cache/ms-playwright
+          key: ${{ runner.os }}-node-playwright-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-playwright-
 
       - name: Install Dependencies
         run: npm install --legacy-peer-deps

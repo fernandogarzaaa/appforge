@@ -10,6 +10,10 @@ on:
   pull_request:
     branches: [main]
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 env:
   LLAMA_CPP_VERSION: "b4734"
   NANO_MODEL: "TheBloke/TinyLlama-1.1B-Chat-v1.0-GGUF"
@@ -31,12 +35,21 @@ jobs:
           node-version: "22"
           cache: "npm"
 
+      - name: Cache Dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            node_modules
+            ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
       - name: Install dependencies
         run: npm ci --legacy-peer-deps
 
       - name: Run Test Suite
         run: npm run test
-        continue-on-error: true
 
       - name: Build Verification
         run: npm run build
