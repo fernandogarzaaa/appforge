@@ -1,0 +1,562 @@
+{
+  "timestamp": "2026-03-01T06:37:04.993Z",
+  "state": {
+    "version": "3.5",
+    "learningParams": {
+      "bias": 1,
+      "exploration": 0.2
+    },
+    "feedbackStats": {
+      "total": 0,
+      "success": 0
+    },
+    "optionWeights": {},
+    "criteriaWeights": {},
+    "memoryDump": {
+      "solve_6f38f461": {
+        "data": {
+          "predictionId": "Q3-1772347021712-974",
+          "optimizedBest": "RUN_ADAPTIVE_CORRECTION via error feedback and recursive learning",
+          "confidence": 0.99,
+          "alternatives": [
+            "RUN_ADAPTIVE_CORRECTION via error feedback and recursive learning",
+            "DEFER_CALIBRATION and continue with current coherence policy"
+          ],
+          "engineVersion": "3.5",
+          "consensus": {
+            "qubitCount": 8,
+            "fidelity": 4.4183048485078364
+          }
+        },
+        "timestamp": 1772347021712
+      },
+      "solve_567bd4c0": {
+        "data": {
+          "predictionId": "Q3-1772347021746-184",
+          "optimizedBest": "RUN_ADAPTIVE_CORRECTION via error feedback and recursive learning",
+          "confidence": 0.99,
+          "alternatives": [
+            "RUN_ADAPTIVE_CORRECTION via error feedback and recursive learning",
+            "DEFER_CALIBRATION and continue with current coherence policy"
+          ],
+          "engineVersion": "3.5",
+          "consensus": {
+            "qubitCount": 8,
+            "fidelity": 4.26151493033826
+          }
+        },
+        "timestamp": 1772347021746
+      },
+      "solve_58656be": {
+        "data": {
+          "predictionId": "Q3-1772347023064-59",
+          "optimizedBest": "Prioritize revenue and expansion swarms (SocialMediaSwarm, ResearchSwarm, CustomerSuccessSwarm, ExperimentationSwarm, AIEconomySwarm)",
+          "confidence": 0.99,
+          "alternatives": [
+            "Prioritize platform and product swarms (VoiceAgentSwarm, CodeGenerator, ProductOwner)",
+            "Prioritize reliability and quality swarms (LearningSwarm, QualityAssuranceSwarm)"
+          ],
+          "engineVersion": "3.5",
+          "consensus": {
+            "qubitCount": 8,
+            "fidelity": 2.569354952021971
+          }
+        },
+        "timestamp": 1772347023064
+      },
+      "solve_1be3b147": {
+        "data": {
+          "predictionId": "Q3-1772347023073-309",
+          "optimizedBest": "Review authentication patterns",
+          "confidence": 0.10554959355492305,
+          "alternatives": [
+            "Scan for dependency vulnerabilities",
+            "Check for exposed secrets in code"
+          ],
+          "engineVersion": "3.5",
+          "consensus": {
+            "qubitCount": 8,
+            "fidelity": 0.10554959355492305
+          }
+        },
+        "timestamp": 1772347023073
+      },
+      "solve_2870c3c2": {
+        "data": {
+          "predictionId": "Q3-1772347023076-805",
+          "optimizedBest": "CPU and processing efficiency",
+          "confidence": 0.2048780796664642,
+          "alternatives": [
+            "Memory usage optimization",
+            "Bundle size and load times"
+          ],
+          "engineVersion": "3.5",
+          "consensus": {
+            "qubitCount": 8,
+            "fidelity": 0.2048780796664642
+          }
+        },
+        "timestamp": 1772347023076
+      },
+      "solve_1bfb016e": {
+        "data": {
+          "predictionId": "Q3-1772347023157-467",
+          "optimizedBest": "Prioritize performance optimization",
+          "confidence": 0.8001743114667503,
+          "alternatives": [
+            "Focus on system integrity and stability",
+            "Focus on security and validation"
+          ],
+          "engineVersion": "3.5",
+          "consensus": {
+            "qubitCount": 8,
+            "fidelity": 0.8001743114667503
+          }
+        },
+        "timestamp": 1772347023157
+      },
+      "solve_58172bf4": {
+        "data": {
+          "predictionId": "Q3-1772347023116-805",
+          "optimizedBest": "Type errors and null pointer exceptions",
+          "confidence": 0.99,
+          "alternatives": [
+            "Logic bugs in core business features",
+            "Critical runtime errors and crashes"
+          ],
+          "engineVersion": "3.5",
+          "consensus": {
+            "qubitCount": 8,
+            "fidelity": 1.6415698045434843
+          }
+        },
+        "timestamp": 1772347023116
+      },
+      "solve_2b0170a6": {
+        "data": {
+          "predictionId": "Q3-1772347023119-183",
+          "optimizedBest": "Process High Priority requests first",
+          "confidence": 0.99,
+          "alternatives": [
+            "Batch process similar requests",
+            "Optimize for fastest response time"
+          ],
+          "engineVersion": "3.5",
+          "consensus": {
+            "qubitCount": 8,
+            "fidelity": 1.4692213361860809
+          }
+        },
+        "timestamp": 1772347023119
+      },
+      "solve_3684ccf1": {
+        "data": {
+          "predictionId": "Q3-1772347024672-691",
+          "optimizedBest": "Story: My journey with AI",
+          "confidence": 0.04467361934881932,
+          "alternatives": [
+            "Tutorial: How to use AI tools",
+            "Listicle: Top 5 AI trends"
+          ],
+          "engineVersion": "3.5",
+          "consensus": {
+            "qubitCount": 8,
+            "fidelity": 0.04467361934881932
+          }
+        },
+        "timestamp": 1772347024672
+      },
+      "solve_66fd5b3d": {
+        "data": {
+          "predictionId": "Q3-1772347023217-615",
+          "optimizedBest": "Tutorial: How to use AI tools",
+          "confidence": 0.1746111628218823,
+          "alternatives": [
+            "Listicle: Top 5 AI trends",
+            "Story: My journey with AI"
+          ],
+          "engineVersion": "3.5",
+          "consensus": {
+            "qubitCount": 8,
+            "fidelity": 0.1746111628218823
+          }
+        },
+        "timestamp": 1772347023217
+      },
+      "solve_56e96ac": {
+        "data": {
+          "predictionId": "Q3-1772347024869-237",
+          "optimizedBest": "Tutorial: How to use AI tools",
+          "confidence": 0.25663986798957933,
+          "alternatives": [
+            "Listicle: Top 5 AI trends",
+            "Analysis: Future of AI"
+          ],
+          "engineVersion": "3.5",
+          "consensus": {
+            "qubitCount": 8,
+            "fidelity": 0.25663986798957933
+          }
+        },
+        "timestamp": 1772347024869
+      },
+      "solve_36ca7aab": {
+        "data": {
+          "predictionId": "Q3-1772347023293-276",
+          "optimizedBest": "Listicle: Top 5 AI trends",
+          "confidence": 0.23335709511081298,
+          "alternatives": [
+            "Analysis: Future of AI",
+            "Tutorial: How to use AI tools"
+          ],
+          "engineVersion": "3.5",
+          "consensus": {
+            "qubitCount": 8,
+            "fidelity": 0.23335709511081298
+          }
+        },
+        "timestamp": 1772347023293
+      },
+      "solve_48860fc": {
+        "data": {
+          "predictionId": "Q3-1772347023318-885",
+          "optimizedBest": "Tutorial: How to use AI tools",
+          "confidence": 0.2440833832648942,
+          "alternatives": [
+            "Listicle: Top 5 AI trends",
+            "Story: My journey with AI"
+          ],
+          "engineVersion": "3.5",
+          "consensus": {
+            "qubitCount": 8,
+            "fidelity": 0.2440833832648942
+          }
+        },
+        "timestamp": 1772347023318
+      },
+      "solve_4d5c8223": {
+        "data": {
+          "predictionId": "Q3-1772347024941-237",
+          "optimizedBest": "Use viral sound",
+          "confidence": 0.2410972307117333,
+          "alternatives": [
+            "Add trending hashtags",
+            "Improve hook in first 3 seconds"
+          ],
+          "engineVersion": "3.5",
+          "consensus": {
+            "qubitCount": 8,
+            "fidelity": 0.2410972307117333
+          }
+        },
+        "timestamp": 1772347024941
+      },
+      "solve_7f8c6555": {
+        "data": {
+          "predictionId": "Q3-1772347024972-249",
+          "optimizedBest": "Improve title with keywords",
+          "confidence": 0.3772645160023965,
+          "alternatives": [
+            "Add more tags",
+            "Enhance description"
+          ],
+          "engineVersion": "3.5",
+          "consensus": {
+            "qubitCount": 8,
+            "fidelity": 0.3772645160023965
+          }
+        },
+        "timestamp": 1772347024972
+      },
+      "solve_9c328f6": {
+        "data": {
+          "predictionId": "Q3-1772347024993-944",
+          "optimizedBest": "Use emotional hook",
+          "confidence": 0.18023553601411912,
+          "alternatives": [
+            "Add call-to-action",
+            "Include relevant hashtags"
+          ],
+          "engineVersion": "3.5",
+          "consensus": {
+            "qubitCount": 8,
+            "fidelity": 0.18023553601411912
+          }
+        },
+        "timestamp": 1772347024993
+      },
+      "solve_6286b24a": {
+        "data": {
+          "predictionId": "Q3-1772347023393-71",
+          "optimizedBest": "Increase video production quality",
+          "confidence": 0.99,
+          "alternatives": [
+            "Focus on trending topics in tech and AI",
+            "Optimize posting times based on audience"
+          ],
+          "engineVersion": "3.5",
+          "consensus": {
+            "qubitCount": 8,
+            "fidelity": 3.2636762852980743
+          }
+        },
+        "timestamp": 1772347023393
+      },
+      "solve_3606fe9e": {
+        "data": {
+          "predictionId": "Q3-1772347024600-865",
+          "optimizedBest": "Creator Revenue Studio (35.1)",
+          "confidence": 0.99,
+          "alternatives": [
+            "SwarmOps Command Center (51.0)",
+            "Competitor Pulse Radar (50.2)"
+          ],
+          "engineVersion": "3.5",
+          "consensus": {
+            "qubitCount": 8,
+            "fidelity": 2.6155180062156167
+          }
+        },
+        "timestamp": 1772347024600
+      },
+      "solve_7ed4ac60": {
+        "data": {
+          "predictionId": "Q3-1772347024741-412",
+          "optimizedBest": "INAPP_NUDGE with guided adoption checklist and health tips",
+          "confidence": 0.99,
+          "alternatives": [
+            "RETAIN_CALL with proactive success manager outreach",
+            "UPSELL with higher-tier value pitch and ROI framing"
+          ],
+          "engineVersion": "3.5",
+          "consensus": {
+            "qubitCount": 8,
+            "fidelity": 3.9205167027675594
+          }
+        },
+        "timestamp": 1772347024741
+      },
+      "solve_34f8df1d": {
+        "data": {
+          "predictionId": "Q3-1772347024613-355",
+          "optimizedBest": "INAPP_NUDGE with guided adoption checklist and health tips",
+          "confidence": 0.99,
+          "alternatives": [
+            "RETAIN_CALL with proactive success manager outreach",
+            "UPSELL with higher-tier value pitch and ROI framing"
+          ],
+          "engineVersion": "3.5",
+          "consensus": {
+            "qubitCount": 8,
+            "fidelity": 1.702677329662846
+          }
+        },
+        "timestamp": 1772347024613
+      },
+      "solve_21e5cfff": {
+        "data": {
+          "predictionId": "Q3-1772347024625-612",
+          "optimizedBest": "INAPP_NUDGE with guided adoption checklist and health tips",
+          "confidence": 0.99,
+          "alternatives": [
+            "RETAIN_CALL with proactive success manager outreach",
+            "UPSELL with higher-tier value pitch and ROI framing"
+          ],
+          "engineVersion": "3.5",
+          "consensus": {
+            "qubitCount": 8,
+            "fidelity": 2.45958082613753
+          }
+        },
+        "timestamp": 1772347024625
+      },
+      "solve_52bf0505": {
+        "data": {
+          "predictionId": "Q3-1772347024630-829",
+          "optimizedBest": "INAPP_NUDGE with guided adoption checklist and health tips",
+          "confidence": 0.99,
+          "alternatives": [
+            "RETAIN_CALL with proactive success manager outreach",
+            "UPSELL with higher-tier value pitch and ROI framing"
+          ],
+          "engineVersion": "3.5",
+          "consensus": {
+            "qubitCount": 8,
+            "fidelity": 3.2154318133195128
+          }
+        },
+        "timestamp": 1772347024630
+      },
+      "solve_7de17732": {
+        "data": {
+          "predictionId": "Q3-1772347024746-91",
+          "optimizedBest": "Prioritize pricing_anchor_packaging_v2 (pricing) - winner=quarterly_anchor, uplift=15.5%, consensus=85.5%",
+          "confidence": 0.99,
+          "alternatives": [
+            "Prioritize content_offer_cta_mix_v4 (content) - winner=offer_led_cta, uplift=22.4%, consensus=77.1%",
+            "Prioritize onboarding_value_prop_v3 (onboarding) - winner=roi_value_path, uplift=15.7%, consensus=72.4%"
+          ],
+          "engineVersion": "3.5",
+          "consensus": {
+            "qubitCount": 8,
+            "fidelity": 1.0394804935578004
+          }
+        },
+        "timestamp": 1772347024746
+      },
+      "solve_58770324": {
+        "data": {
+          "predictionId": "Q3-1772347024706-953",
+          "optimizedBest": "DEFENSIVE_COMPOUNDING - prioritize reserve runway and stable compounding",
+          "confidence": 0.4018634033935616,
+          "alternatives": [
+            "BALANCED_FLYWHEEL - balance reserve, growth reinvestment, and reliability",
+            "AGGRESSIVE_EXPANSION - maximize growth and experimentation despite lower reserve"
+          ],
+          "engineVersion": "3.5",
+          "consensus": {
+            "qubitCount": 8,
+            "fidelity": 0.4018634033935616
+          }
+        },
+        "timestamp": 1772347024706
+      },
+      "solve_5601a176": {
+        "data": {
+          "predictionId": "Q3-1772347024711-316",
+          "optimizedBest": "Tutorial: How to use AI tools",
+          "confidence": 0.15894703597238044,
+          "alternatives": [
+            "Listicle: Top 5 AI trends",
+            "Story: My journey with AI"
+          ],
+          "engineVersion": "3.5",
+          "consensus": {
+            "qubitCount": 8,
+            "fidelity": 0.15894703597238044
+          }
+        },
+        "timestamp": 1772347024711
+      },
+      "solve_fe09375": {
+        "data": {
+          "predictionId": "Q3-1772347024778-169",
+          "optimizedBest": "Harden CI/CD with stricter pipeline gates and rollback checks",
+          "confidence": 0.99,
+          "alternatives": [
+            "Improve deployment reliability with environment verification and runbooks",
+            "Expand observability and incident response automation"
+          ],
+          "engineVersion": "3.5",
+          "consensus": {
+            "qubitCount": 8,
+            "fidelity": 6.4211348637669134
+          }
+        },
+        "timestamp": 1772347024778
+      },
+      "solve_21bba79b": {
+        "data": {
+          "predictionId": "Q3-1772347024785-546",
+          "optimizedBest": "Tutorial: How to use AI tools",
+          "confidence": 0.5303701297351243,
+          "alternatives": [
+            "Listicle: Top 5 AI trends",
+            "Story: My journey with AI"
+          ],
+          "engineVersion": "3.5",
+          "consensus": {
+            "qubitCount": 8,
+            "fidelity": 0.5303701297351243
+          }
+        },
+        "timestamp": 1772347024785
+      },
+      "solve_72119b9": {
+        "data": {
+          "predictionId": "Q3-1772347024799-8",
+          "optimizedBest": "Listicle: Top 5 AI trends",
+          "confidence": 0.2129631961661925,
+          "alternatives": [
+            "Story: My journey with AI",
+            "Analysis: Future of AI"
+          ],
+          "engineVersion": "3.5",
+          "consensus": {
+            "qubitCount": 8,
+            "fidelity": 0.2129631961661925
+          }
+        },
+        "timestamp": 1772347024799
+      },
+      "solve_3bcc5f94": {
+        "data": {
+          "predictionId": "Q3-1772347024898-589",
+          "optimizedBest": "Tutorial: How to use AI tools",
+          "confidence": 0.25452338739147257,
+          "alternatives": [
+            "Listicle: Top 5 AI trends",
+            "Story: My journey with AI"
+          ],
+          "engineVersion": "3.5",
+          "consensus": {
+            "qubitCount": 8,
+            "fidelity": 0.25452338739147257
+          }
+        },
+        "timestamp": 1772347024898
+      },
+      "solve_39e68723": {
+        "data": {
+          "predictionId": "Q3-1772347024836-201",
+          "optimizedBest": "Tutorial: How to use AI tools",
+          "confidence": 0.21501590984476057,
+          "alternatives": [
+            "Listicle: Top 5 AI trends",
+            "Story: My journey with AI"
+          ],
+          "engineVersion": "3.5",
+          "consensus": {
+            "qubitCount": 8,
+            "fidelity": 0.21501590984476057
+          }
+        },
+        "timestamp": 1772347024836
+      },
+      "solve_1049db73": {
+        "data": {
+          "predictionId": "Q3-1772347024854-22",
+          "optimizedBest": "Tutorial: How to use AI tools",
+          "confidence": 0.21789539294099708,
+          "alternatives": [
+            "Analysis: Future of AI",
+            "Listicle: Top 5 AI trends"
+          ],
+          "engineVersion": "3.5",
+          "consensus": {
+            "qubitCount": 8,
+            "fidelity": 0.21789539294099708
+          }
+        },
+        "timestamp": 1772347024854
+      },
+      "solve_365bb9da": {
+        "data": {
+          "predictionId": "Q3-1772347024938-736",
+          "optimizedBest": "Listicle: Top 5 AI trends",
+          "confidence": 0.08952187036196527,
+          "alternatives": [
+            "Listicle: Top 5 AI trends",
+            "Story: My journey with AI"
+          ],
+          "engineVersion": "3.5",
+          "consensus": {
+            "qubitCount": 8,
+            "fidelity": 0.08952187036196527
+          }
+        },
+        "timestamp": 1772347024938
+      }
+    }
+  }
+}
