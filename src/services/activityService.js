@@ -1,5 +1,6 @@
 // Activity/Notification Service
 // Manages all activity logging and notification events
+import { telemetryService } from './telemetryService'
 
 class ActivityService {
   constructor() {
@@ -41,6 +42,7 @@ class ActivityService {
     this.activities.unshift(newActivity)
     this.saveToStorage()
     this.notifyListeners(newActivity)
+    telemetryService.reportActivity(newActivity)
 
     return newActivity
   }

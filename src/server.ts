@@ -55,6 +55,51 @@ app.post('/api/factory/start', secureAPI, async (req, res) => {
     res.json({ status: 'Factory Started' });
 });
 
+// --- TELEMETRY SINK (Phase 8) ---
+app.post('/api/telemetry', secureAPI, async (req, res) => {
+    const { metrics, activity } = req.body;
+    const fs = await import('fs/promises');
+    const path = await import('path');
+    const { sovereignStorage } = await import('./swarm/core/storage.js');
+
+    const metricsPath = path.resolve(process.cwd(), 'src/data/frontend_metrics.json');
+
+    try {
+        // 1. Update local metrics file
+        const raw = await fs.readFile(metricsPath, 'utf-8').catch(() => '{}');
+        const currentMetrics = JSON.parse(raw);
+
+        const updatedMetrics = {
+            ...currentMetrics,
+            ...metrics,
+            lastFlush: new Date().toISOString()
+        };
+
+        await fs.writeFile(metricsPath, JSON.stringify(updatedMetrics, null, 2));
+
+        // 2. Sync to Sovereign Storage
+        const wrapper = await sovereignStorage.load();
+        if (wrapper && wrapper.state) {
+            const state = wrapper.state;
+            state.frontend_metrics = updatedMetrics;
+            if (activity) {
+                state.last_user_activity = activity;
+            }
+            await sovereignStorage.save({
+                ...wrapper,
+                timestamp: new Date().toISOString(),
+                state: state
+            });
+        }
+
+        broadcastLog('TELEMETRY', `Resonance Injected: ${activity?.type || 'Metrics Update'}`, 'SUCCESS');
+        res.json({ status: 'Resonance Received' });
+    } catch (err: any) {
+        console.error('❌ Telemetry Sink Failure:', err);
+        res.status(500).json({ status: 'Error', message: err.message });
+    }
+});
+
 // --- SOVEREIGN HUD DATA (Phase 46/47) ---
 app.get('/api/sovereign/status', async (req, res) => {
     const fs = await import('fs');

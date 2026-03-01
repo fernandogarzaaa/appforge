@@ -4,6 +4,7 @@
  */
 
 import { onCLS, onINP, onFCP, onLCP, onTTFB } from 'web-vitals';
+import { telemetryService } from '@/services/telemetryService';
 
 /**
  * Send vitals data to analytics service
@@ -20,6 +21,9 @@ function sendToAnalytics({ name, delta, value, id, rating }) {
       rating
     });
   }
+
+  // Report to Sovereign Telemetry (Phase 8)
+  telemetryService.reportVital(name, value, rating);
 
   // Send to Google Analytics (if available)
   if (window.gtag) {

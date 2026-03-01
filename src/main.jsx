@@ -13,6 +13,10 @@ import { initializeAPI } from '@/api/services'
 import { initializeTracingClient } from '@/lib/tracing.js'
 initializeTracingClient();
 
+// Initialize Sovereign Telemetry (Phase 8)
+import { telemetryService } from '@/services/telemetryService'
+telemetryService.start();
+
 // Initialize Sentry for error tracking
 import { initializeSentry, setSentryContext } from '@/lib/sentryConfig.jsx'
 initializeSentry();
