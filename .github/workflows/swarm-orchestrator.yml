@@ -71,7 +71,7 @@ jobs:
         uses: actions/download-artifact@v4
         continue-on-error: true # Agent may not have produced an artifact
         with:
-          github-token: ${{ secrets.BOT_TOKEN }}
+          github-token: ${{ secrets.BOT_GITHUB_TOKEN }}
           run-id: ${{ github.event.workflow_run.id }}
           pattern: "*_output.json"
           path: agent_outputs/
@@ -87,7 +87,7 @@ jobs:
           WORKFLOW_NAME: ${{ steps.event.outputs.workflow_name }}
           UPSTASH_REDIS_REST_URL: ${{ secrets.UPSTASH_REDIS_REST_URL }}
           UPSTASH_REDIS_REST_TOKEN: ${{ secrets.UPSTASH_REDIS_REST_TOKEN }}
-          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+          BOT_TOKEN: ${{ secrets.BOT_GITHUB_TOKEN }}
 
       # Dispatch the right agent based on decision
       - name: Dispatch → Autonomous Swarm
@@ -95,7 +95,7 @@ jobs:
         run: |
           gh workflow run "Autonomous Swarm Cycle" --ref main
         env:
-          GH_TOKEN: ${{ secrets.BOT_TOKEN }}
+          GH_TOKEN: ${{ secrets.BOT_GITHUB_TOKEN }}
 
       - name: Dispatch → Quantum Evolution
         if: steps.decide.outputs.next_action == 'quantum_evolution'
@@ -105,14 +105,14 @@ jobs:
             --field green_light=true \
             --field reason="${{ steps.decide.outputs.reason }}"
         env:
-          GH_TOKEN: ${{ secrets.BOT_TOKEN }}
+          GH_TOKEN: ${{ secrets.BOT_GITHUB_TOKEN }}
 
       - name: Dispatch → Curiosity Scan
         if: steps.decide.outputs.next_action == 'curiosity_scan'
         run: |
           gh workflow run "Curiosity Engine Scan" --ref main
         env:
-          GH_TOKEN: ${{ secrets.BOT_TOKEN }}
+          GH_TOKEN: ${{ secrets.BOT_GITHUB_TOKEN }}
 
       - name: Dispatch → Frontend QA Swarm
         if: steps.decide.outputs.next_action == 'frontend_qa_swarm'
@@ -121,6 +121,6 @@ jobs:
             --ref main \
             --field context='{"reason":"${{ steps.decide.outputs.reason }}"}'
         env:
-          GH_TOKEN: ${{ secrets.BOT_TOKEN }}
+          GH_TOKEN: ${{ secrets.BOT_GITHUB_TOKEN }}
 
       # Dashboard update is automated via workflow_run triggers
