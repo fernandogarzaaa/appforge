@@ -34,6 +34,12 @@ Unlike traditional boilerplates, AppForge is built on a **Sovereign Kernel** tha
 
 ---
 
+## 📚 Documentation
+
+- **[API Documentation](API_DOCUMENTATION.md)** - Complete REST API reference with examples
+- **[Deployment Guide](FINAL_DEPLOYMENT.md)** - Step-by-step production deployment instructions
+- **[Development Guide](DEVELOPMENT.md)** - Local development setup and workflows
+
 ## 🚀 Getting Started
 
 ### Prerequisites
