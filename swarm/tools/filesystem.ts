@@ -1,7 +1,8 @@
 
 import fs from 'fs/promises';
 import path from 'path';
-import { glob } from 'glob';
+import * as globModule from 'glob';
+const { glob } = globModule;
 
 export class FileSystemTool {
     baseDir: string;

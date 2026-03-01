@@ -75,7 +75,7 @@
       "priority": 0.06,
       "requests": 0.06,
       "first": 0.06,
-      "performance": 0.06,
+      "performance": 0.12,
       "optimization": 0.06,
       "open": 0.06,
       "source": 0.06,
@@ -104,7 +104,13 @@
       "redis": 0.06,
       "instant": 0.06,
       "state": 0.06,
-      "sync": 0.06
+      "sync": 0.06,
+      "fix": 0.06,
+      "oversized": 0.06,
+      "js": 0.06,
+      "chunks": 0.06,
+      "optimize": 0.06,
+      "builds": 0.06
     },
     "criteriaWeights": {
       "proactivity": 3,
@@ -126,19 +132,19 @@
       "cloud-compatibility": 1.03,
       "effectiveness": 3,
       "efficiency": 3,
-      "stability": 0.5,
+      "stability": 0.53,
       "consistency": 0.5,
       "error": 0.5,
       "correction": 0.5,
       "strategic": 1.8400000000000007,
-      "value": 1.8700000000000008,
+      "value": 1.9000000000000008,
       "execution": 1.8400000000000007,
       "speed": 1.8700000000000008,
       "risk": 1.8400000000000007,
       "reduction": 1.8400000000000007,
       "revenue": 1.8700000000000008,
       "business": 1.03,
-      "user": 1.06,
+      "user": 1.09,
       "need": 1.03,
       "feasibility": 1.03,
       "severity": 1.03,
@@ -150,7 +156,10 @@
       "urgency": 1.03,
       "scalability": 1.03,
       "market": 1.03,
-      "demand": 1.03
+      "demand": 1.03,
+      "technical": 1.03,
+      "debt": 1.03,
+      "performance": 1.03
     },
     "memoryDump": {
       "solve_171f69e8": {

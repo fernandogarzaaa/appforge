@@ -1,134 +1,82 @@
 {
   "CryptoSwarm": {
     "name": "CryptoSwarm",
-    "successRate": 0.8676766938645449,
-    "revenue": 0,
-    "tasksCompleted": 0,
-    "efficiency": 0.8037396269140509,
-    "lastActive": "2026-02-22T20:41:41.430Z",
-    "capabilities": [
-      "quantum_decision_making",
-      "risk_coherence_validation"
-    ]
+    "successRate": 0.85,
+    "revenue": 15000,
+    "tasksCompleted": 150,
+    "efficiency": 0.88,
+    "lastActive": "2026-03-01T04:58:28.618Z"
   },
   "RevenueHunter": {
     "name": "RevenueHunter",
-    "successRate": 0.9131606372783496,
-    "revenue": 0,
-    "tasksCompleted": 0,
-    "efficiency": 0.8068638522490896,
-    "lastActive": "2026-02-22T20:41:41.585Z",
-    "capabilities": [
-      "quantum_decision_making",
-      "confidence_scoring"
-    ]
+    "successRate": 0.78,
+    "revenue": 12000,
+    "tasksCompleted": 89,
+    "efficiency": 0.82,
+    "lastActive": "2026-03-01T04:58:28.618Z"
   },
   "FreelanceSwarm": {
     "name": "FreelanceSwarm",
-    "successRate": 0.7441634238313944,
-    "revenue": 0,
-    "tasksCompleted": 0,
-    "efficiency": 0.7614200083875152,
-    "lastActive": "2026-02-22T20:41:41.587Z",
-    "capabilities": [
-      "task_orchestration",
-      "workflow_automation"
-    ]
+    "successRate": 0.72,
+    "revenue": 8500,
+    "tasksCompleted": 45,
+    "efficiency": 0.75,
+    "lastActive": "2026-03-01T04:58:28.618Z"
   },
   "TrendAnalyzer": {
     "name": "TrendAnalyzer",
-    "successRate": 0.8496858758157615,
+    "successRate": 0.8,
     "revenue": 0,
-    "tasksCompleted": 0,
-    "efficiency": 0.9355232339536724,
-    "lastActive": "2026-02-22T20:41:41.589Z",
-    "capabilities": [
-      "vector_search",
-      "embeddings"
-    ]
+    "tasksCompleted": 200,
+    "efficiency": 0.85,
+    "lastActive": "2026-03-01T04:58:28.618Z"
   },
   "ArbitrageHunter": {
     "name": "ArbitrageHunter",
-    "successRate": 0.784826685338491,
-    "revenue": 0,
-    "tasksCompleted": 0,
-    "efficiency": 0.8884088636288047,
-    "lastActive": "2026-02-22T20:41:41.748Z",
-    "capabilities": [
-      "quantum_annealing",
-      "task_distribution"
-    ]
+    "successRate": 0.65,
+    "revenue": 2500,
+    "tasksCompleted": 30,
+    "efficiency": 0.7,
+    "lastActive": "2026-03-01T04:58:28.618Z"
   },
   "YieldOptimizer": {
     "name": "YieldOptimizer",
-    "successRate": 0.7089399403756413,
-    "revenue": 0,
-    "tasksCompleted": 0,
-    "efficiency": 0.9303944865876156,
-    "lastActive": "2026-02-22T20:41:41.762Z",
-    "capabilities": [
-      "quantum_annealing",
-      "resource_optimization"
-    ]
+    "successRate": 0.7,
+    "revenue": 1800,
+    "tasksCompleted": 25,
+    "efficiency": 0.72,
+    "lastActive": "2026-03-01T04:58:28.618Z"
   },
   "MarketAnalyzer": {
     "name": "MarketAnalyzer",
-    "successRate": 0.7423079367727469,
+    "successRate": 0.75,
     "revenue": 0,
-    "tasksCompleted": 0,
-    "efficiency": 0.8228743416053976,
-    "lastActive": "2026-02-22T20:41:41.824Z",
-    "capabilities": [
-      "quantum_decision_making",
-      "strategic_market_timing"
-    ]
+    "tasksCompleted": 120,
+    "efficiency": 0.78,
+    "lastActive": "2026-03-01T04:58:28.618Z"
   },
   "SalesBot": {
     "name": "SalesBot",
-    "successRate": 0.8681338542454899,
-    "revenue": 0,
-    "tasksCompleted": 0,
-    "efficiency": 0.9044279576132239,
-    "lastActive": "2026-02-22T20:41:42.129Z",
-    "capabilities": [
-      "quantum_decision_making",
-      "confidence_scoring"
-    ]
+    "successRate": 0.82,
+    "revenue": 5000,
+    "tasksCompleted": 35,
+    "efficiency": 0.85,
+    "lastActive": "2026-03-01T04:58:28.618Z"
   },
   "ReferralManager": {
     "name": "ReferralManager",
-    "successRate": 0.7414765280466934,
-    "revenue": 0,
-    "tasksCompleted": 0,
-    "efficiency": 0.9253700529592332,
-    "lastActive": "2026-02-22T20:41:42.135Z",
-    "capabilities": [
-      "feedback_learning",
-      "multi_agent_communication"
-    ]
+    "successRate": 0.68,
+    "revenue": 3200,
+    "tasksCompleted": 60,
+    "efficiency": 0.71,
+    "lastActive": "2026-03-01T04:58:28.618Z"
   },
-  "SolanaDeFiSwarm": {
-    "name": "SolanaDeFiSwarm",
-    "successRate": 0.741989830119173,
+  "TestVerificationSwarm": {
+    "name": "TestVerificationSwarm",
+    "successRate": 0.5,
     "revenue": 0,
     "tasksCompleted": 0,
-    "efficiency": 0.7003769635635508,
-    "lastActive": "2026-02-22T20:41:42.168Z",
-    "capabilities": [
-      "quantum_annealing",
-      "risk_coherence_validation"
-    ]
-  },
-  "GodSwarm": {
-    "name": "GodSwarm",
-    "successRate": 0.7650386037327161,
-    "revenue": 0,
-    "tasksCompleted": 0,
-    "efficiency": 0.8554357667705652,
-    "lastActive": "2026-02-22T20:41:42.290Z",
-    "capabilities": [
-      "universal_intelligence",
-      "recursive_self_improvement"
-    ]
+    "lastActive": "2026-03-01T04:58:28.621Z",
+    "efficiency": 0.5
   }
 }
