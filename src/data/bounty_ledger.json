@@ -4,49 +4,49 @@
   },
   "bounties": [
     {
-      "description": "[Neural Accelerator] EXPERT_SECURITY: Patch vulnerability (Coherence: 1.00)",
+      "description": "[Neural Accelerator] EXPERT_GROWTH: Market capture (Coherence: 1.00)",
       "priority": 0.6,
       "reward": 60,
-      "category": "security",
-      "id": "BTY-1772347025927-630",
+      "category": "growth",
+      "id": "BTY-1772354308171-30",
       "status": "backlog",
-      "createdAt": "2026-03-01T06:37:05.927Z"
+      "createdAt": "2026-03-01T08:38:28.171Z"
     },
     {
-      "description": "[Neural Accelerator] EXPERT_SECURITY: Patch vulnerability (Coherence: 1.00)",
+      "description": "[Neural Accelerator] EXPERT_GROWTH: Market capture (Coherence: 1.00)",
       "priority": 0.5,
       "reward": 50,
-      "category": "security",
-      "id": "BTY-1772347025962-656",
+      "category": "growth",
+      "id": "BTY-1772354308182-167",
       "status": "backlog",
-      "createdAt": "2026-03-01T06:37:05.962Z"
+      "createdAt": "2026-03-01T08:38:28.182Z"
     },
     {
-      "description": "[Neural Accelerator] EXPERT_ADAPTER: Optimize logic (Coherence: 1.00)",
+      "description": "[Neural Accelerator] EXPERT_GROWTH: Market capture (Coherence: 1.00)",
       "priority": 0.85,
       "reward": 85,
-      "category": "adapter",
-      "id": "BTY-1772347025968-542",
+      "category": "growth",
+      "id": "BTY-1772354308195-323",
       "status": "backlog",
-      "createdAt": "2026-03-01T06:37:05.968Z"
+      "createdAt": "2026-03-01T08:38:28.195Z"
     },
     {
       "description": "[Neural Accelerator] EXPERT_GROWTH: Market capture (Coherence: 1.00)",
-      "priority": 0.17297725891571236,
+      "priority": 0.17278354696826054,
       "reward": 17,
       "category": "growth",
-      "id": "BTY-1772347025974-694",
+      "id": "BTY-1772354308202-865",
       "status": "backlog",
-      "createdAt": "2026-03-01T06:37:05.974Z"
+      "createdAt": "2026-03-01T08:38:28.202Z"
     },
     {
       "description": "[Neural Accelerator] EXPERT_GROWTH: Market capture (Coherence: 1.00)",
-      "priority": 0.35375,
-      "reward": 35,
+      "priority": 0.2825,
+      "reward": 28,
       "category": "growth",
-      "id": "BTY-1772347025980-948",
+      "id": "BTY-1772354308210-515",
       "status": "backlog",
-      "createdAt": "2026-03-01T06:37:05.980Z"
+      "createdAt": "2026-03-01T08:38:28.210Z"
     }
   ]
 }
