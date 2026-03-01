@@ -1,11 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { Panel, PanelGroup, PanelResizeHandle } from 'react-resizable-panels';
-import EvolutionMap from '@/components/EvolutionMap';
-import CommandStream from '@/components/CommandStream';
-import RecordsVault from '@/components/RecordsVault';
+// Heavy components transitioned to Lazy Loading
+const EvolutionMap = lazy(() => import('@/components/EvolutionMap'));
+const CommandStream = lazy(() => import('@/components/CommandStream'));
+const RecordsVault = lazy(() => import('@/components/RecordsVault'));
+
 import { useSovereignStatus } from '@/hooks/useSovereignStatus';
 import { useNavigation } from '@/contexts/NavigationContext';
-import { Shield, Activity, Zap, Cpu, Terminal, Database, Lock, Search } from 'lucide-react';
+import { Shield, Activity, Zap, Cpu, Terminal, Database, Lock, Search, Loader2 } from 'lucide-react';
+
+function SkeletonLoader() {
+    return (
+        <div className="h-full w-full flex items-center justify-center bg-[#0f172a]/20 animate-pulse rounded-lg border border-slate-800">
+            <Loader2 className="w-6 h-6 text-slate-700 animate-spin" />
+        </div>
+    );
+}
 
 export default function CommandCenter() {
     const { currentProject } = useNavigation();
@@ -91,13 +101,17 @@ export default function CommandCenter() {
                         <PanelGroup direction="vertical">
                             <Panel defaultSize={70}>
                                 <div className="h-full p-2">
-                                    <EvolutionMap />
+                                    <Suspense fallback={<SkeletonLoader />}>
+                                        <EvolutionMap />
+                                    </Suspense>
                                 </div>
                             </Panel>
                             <PanelResizeHandle className="h-1 bg-slate-900 border-y border-slate-800 hover:bg-blue-900/20 transition-colors" />
                             <Panel defaultSize={30}>
                                 <div className="h-full p-2">
-                                    <CommandStream />
+                                    <Suspense fallback={<SkeletonLoader />}>
+                                        <CommandStream />
+                                    </Suspense>
                                 </div>
                             </Panel>
                         </PanelGroup>
@@ -109,7 +123,9 @@ export default function CommandCenter() {
                     <Panel defaultSize={40} minSize={30}>
                         <div className="h-full p-2 flex flex-col gap-4">
                             <div className="flex-1">
-                                <RecordsVault />
+                                <Suspense fallback={<SkeletonLoader />}>
+                                    <RecordsVault />
+                                </Suspense>
                             </div>
                             <div className="h-48 bg-[#0f172a]/50 rounded-lg border border-slate-800 p-4 flex flex-col gap-3 relative overflow-hidden group">
                                 <div className="absolute inset-0 bg-blue-500/5 opacity-0 group-hover:opacity-100 transition-opacity" />
