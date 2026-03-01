@@ -109,17 +109,17 @@ async def test_health():
             response = await client.get(f"{BASE_URL}/health", timeout=10.0)
             if response.status_code == 200:
                 data = response.json()
-                print(f"✅ Health check passed")
+                print(f"[OK] Health check passed")
                 print(f"   Status: {data.get('status', 'unknown')}")
                 print(f"   Version: {data.get('version', 'unknown')}")
                 print(f"   Models: {data.get('models_configured', 0)} primary, {data.get('fallback_models', 0)} fallback")
                 print(f"   Modules: {', '.join(data.get('modules_active', []))}")
                 return True
             else:
-                print(f"❌ Health check failed: {response.status_code}")
+                print(f"[FAIL] Health check failed: {response.status_code}")
                 return False
         except Exception as e:
-            print(f"❌ Health check error: {e}")
+            print(f"[ERROR] Health check error: {e}")
             return False
 
 
@@ -131,13 +131,13 @@ async def test_models_endpoint():
             if response.status_code == 200:
                 data = response.json()
                 models = data.get('data', [])
-                print(f"✅ Models endpoint working ({len(models)} models available)")
+                print(f"[OK] Models endpoint working ({len(models)} models available)")
                 return True
             else:
-                print(f"❌ Models endpoint failed: {response.status_code}")
+                print(f"[FAIL] Models endpoint failed: {response.status_code}")
                 return False
         except Exception as e:
-            print(f"❌ Models endpoint error: {e}")
+            print(f"[ERROR] Models endpoint error: {e}")
             return False
 
 
@@ -168,7 +168,7 @@ async def test_chat_completion(query: dict, index: int) -> dict:
                     # Check if response is valid
                     is_valid = len(content.strip()) > 20
                     
-                    print(f"  [{index+1}/10] {query['name']}: {'✅' if is_valid else '⚠️'} ({elapsed:.1f}s) - {model_used}")
+                    print(f"  [{index+1}/10] {query['name']}: {'[OK]' if is_valid else '[WARN]'} ({elapsed:.1f}s) - {model_used}")
                     
                     return {
                         "name": query["name"],
@@ -180,15 +180,15 @@ async def test_chat_completion(query: dict, index: int) -> dict:
                         "content_length": len(content),
                     }
                 else:
-                    print(f"  [{index+1}/10] {query['name']}: ❌ (no choices)")
+                    print(f"  [{index+1}/10] {query['name']}: [FAIL] (no choices)")
                     return {"name": query["name"], "success": False, "error": "no_choices"}
             else:
-                print(f"  [{index+1}/10] {query['name']}: ❌ HTTP {response.status_code}")
+                print(f"  [{index+1}/10] {query['name']}: [FAIL] HTTP {response.status_code}")
                 return {"name": query["name"], "success": False, "error": f"http_{response.status_code}"}
                 
         except Exception as e:
             elapsed = time.time() - start_time
-            print(f"  [{index+1}/10] {query['name']}: ❌ Error ({elapsed:.1f}s): {str(e)[:50]}")
+            print(f"  [{index+1}/10] {query['name']}: [ERROR] ({elapsed:.1f}s): {str(e)[:50]}")
             return {"name": query["name"], "success": False, "error": str(e)}
 
 
@@ -202,7 +202,7 @@ async def run_benchmark():
     # Test health endpoint
     print("Testing Health Endpoint...")
     if not await test_health():
-        print("\n❌ Server is not healthy. Please start the server first:")
+        print("\n[ERROR] Server is not healthy. Please start the server first:")
         print("   python -m uvicorn src.chimera_server:app --host 0.0.0.0 --port 7860")
         return
     print()
@@ -286,13 +286,13 @@ async def run_benchmark():
     
     readiness_score = len(valid_responses) / len(results)
     if readiness_score >= 0.9:
-        print("✅ EXCELLENT: Ready for production deployment")
+        print("[EXCELLENT] Ready for production deployment")
     elif readiness_score >= 0.7:
-        print("⚠️ GOOD: Minor issues, review before production")
+        print("[GOOD] Minor issues, review before production")
     elif readiness_score >= 0.5:
-        print("⚠️ FAIR: Significant issues, needs improvement")
+        print("[FAIR] Significant issues, needs improvement")
     else:
-        print("❌ POOR: Not ready for production")
+        print("[POOR] Not ready for production")
     
     print(f"Readiness Score: {readiness_score*100:.1f}%")
 
