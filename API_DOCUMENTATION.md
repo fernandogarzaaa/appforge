@@ -1,16 +1,16 @@
 # CHIMERA QUANTUM LLM - API Documentation
 
-Complete API reference for CHIMERA QUANTUM LLM v3.0.0
+Complete API reference for the CHIMERA QUANTUM LLM server.
 
-## Base URL
+**Base URL:** `http://localhost:7860`  
+**Version:** 3.0.0  
+**Protocol:** HTTP/REST + Server-Sent Events (SSE)
 
-```
-http://localhost:7860
-```
+---
 
 ## Authentication
 
-No authentication required for local deployment. The server uses OpenRouter API keys internally.
+CHIMERA does not require authentication for local use. The server is designed to run locally or behind a reverse proxy that handles authentication.
 
 ---
 
@@ -18,11 +18,12 @@ No authentication required for local deployment. The server uses OpenRouter API 
 
 ### 1. Chat Completions
 
-**Endpoint:** `POST /v1/chat/completions`
+Create a chat completion using the multi-model consensus system.
 
-**Description:** OpenAI-compatible chat completion endpoint with multi-model consensus.
+**Endpoint:** `POST /v1/chat/completions`  
+**Content-Type:** `application/json`
 
-**Request Body:**
+#### Request Body
 
 ```json
 {
@@ -37,33 +38,30 @@ No authentication required for local deployment. The server uses OpenRouter API 
 }
 ```
 
-**Parameters:**
+#### Parameters
 
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| `model` | string | Yes | Model identifier (use "chimera-quantum") |
-| `messages` | array | Yes | Array of message objects |
-| `temperature` | float | No | Sampling temperature (0.0-2.0, default: 0.7) |
-| `max_tokens` | integer | No | Maximum tokens to generate (default: 512) |
-| `stream` | boolean | No | Enable streaming (default: false) |
-| `top_p` | float | No | Nucleus sampling parameter |
-| `frequency_penalty` | float | No | Frequency penalty (-2.0 to 2.0) |
-| `presence_penalty` | float | No | Presence penalty (-2.0 to 2.0) |
+| Parameter | Type | Required | Default | Description |
+|-----------|------|----------|---------|-------------|
+| `model` | string | Yes | - | Must be `"chimera-quantum"` |
+| `messages` | array | Yes | - | List of message objects |
+| `temperature` | float | No | 0.7 | Sampling temperature (0.0-2.0) |
+| `max_tokens` | integer | No | 512 | Maximum tokens to generate |
+| `stream` | boolean | No | false | Enable SSE streaming |
 
-**Response:**
+#### Response
 
 ```json
 {
   "id": "chatcmpl-chimera-abc123",
   "object": "chat.completion",
-  "created": 1709836800,
+  "created": 1709385600,
   "model": "chimera-quantum/meta-llama/llama-3.3-70b-instruct:free",
   "choices": [
     {
       "index": 0,
       "message": {
         "role": "assistant",
-        "content": "Hello! I'm doing well, thank you for asking. How can I help you today?"
+        "content": "Hello! I'm doing well, thank you for asking."
       },
       "finish_reason": "stop"
     }
@@ -82,22 +80,13 @@ No authentication required for local deployment. The server uses OpenRouter API 
 
 **Endpoint:** `GET /health`
 
-**Description:** Health check endpoint for load balancers and monitoring.
-
-**Response:**
-
 ```json
 {
   "status": "healthy",
-  "name": "CHIMERA QUANTUM",
   "version": "1.0.0",
-  "cache_size": 42,
   "models_configured": 5,
   "fallback_models": 3,
-  "quantum_engine": true,
-  "hyper_intelligence": true,
-  "token_optimizer": true,
-  "api_key_configured": true
+  "cache_size": 42
 }
 ```
 
@@ -107,97 +96,13 @@ No authentication required for local deployment. The server uses OpenRouter API 
 
 **Endpoint:** `GET /v1/models`
 
-**Description:** List all available models.
-
-**Response:**
-
-```json
-{
-  "object": "list",
-  "data": [
-    {
-      "id": "chimera-quantum",
-      "object": "model",
-      "owned_by": "chimera-quantum"
-    },
-    {
-      "id": "meta-llama/llama-3.3-70b-instruct:free",
-      "object": "model",
-      "owned_by": "openrouter"
-    }
-  ]
-}
-```
-
 ---
 
 ### 4. Dashboard
 
 **Endpoint:** `GET /dashboard`
 
-**Description:** Live monitoring dashboard (HTML).
-
-**Response:** HTML page with real-time statistics.
-
----
-
-### 5. Statistics
-
-**Endpoint:** `GET /v1/stats`
-
-**Description:** Get cost tracking and usage statistics.
-
-**Response:**
-
-```json
-{
-  "total_calls": 150,
-  "total_tokens": 45000,
-  "estimated_cost": 0.0,
-  "cache_hits": 75,
-  "cache_misses": 75
-}
-```
-
----
-
-### 6. Insights
-
-**Endpoint:** `GET /v1/insights`
-
-**Description:** Get meta-reasoning traces and blueprints.
-
-**Response:**
-
-```json
-{
-  "traces": [...],
-  "blueprints": [...],
-  "adaptive_memory": {...}
-}
-```
-
----
-
-### 7. Endpoint Health
-
-**Endpoint:** `GET /v1/endpoints`
-
-**Description:** Get health summary for all model endpoints.
-
-**Response:**
-
-```json
-{
-  "meta-llama/llama-3.3-70b-instruct:free": {
-    "consecutive_failures": 0,
-    "total_failures": 2,
-    "total_successes": 148,
-    "in_cooldown": false,
-    "last_error": ""
-  }
-}
-```
+Live monitoring dashboard with auto-refresh.
 
 ---
 
@@ -208,21 +113,16 @@ No authentication required for local deployment. The server uses OpenRouter API 
 ```python
 import openai
 
-# Configure client
 client = openai.OpenAI(
     base_url="http://localhost:7860/v1",
     api_key="not-needed"
 )
 
-# Chat completion
 response = client.chat.completions.create(
     model="chimera-quantum",
     messages=[
-        {"role": "system", "content": "You are a helpful assistant."},
-        {"role": "user", "content": "Explain quantum computing"}
-    ],
-    temperature=0.7,
-    max_tokens=512
+        {"role": "user", "content": "Hello!"}
+    ]
 )
 
 print(response.choices[0].message.content)
@@ -231,23 +131,17 @@ print(response.choices[0].message.content)
 ### JavaScript
 
 ```javascript
-async function chatWithChimera() {
-  const response = await fetch('http://localhost:7860/v1/chat/completions', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      model: 'chimera-quantum',
-      messages: [
-        { role: 'user', content: 'Hello!' }
-      ]
-    })
-  });
+const response = await fetch('http://localhost:7860/v1/chat/completions', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    model: 'chimera-quantum',
+    messages: [{ role: 'user', content: 'Hello!' }]
+  })
+});
 
-  const data = await response.json();
-  console.log(data.choices[0].message.content);
-}
-
-chatWithChimera();
+const data = await response.json();
+console.log(data.choices[0].message.content);
 ```
 
 ### cURL
@@ -258,7 +152,7 @@ curl -X POST http://localhost:7860/v1/chat/completions \
   -d '{
     "model": "chimera-quantum",
     "messages": [
-      {"role": "user", "content": "Hello, how are you?"}
+      {"role": "user", "content": "Hello!"}
     ]
   }'
 ```
@@ -269,16 +163,14 @@ curl -X POST http://localhost:7860/v1/chat/completions \
 
 ### HTTP Status Codes
 
-| Code | Description |
-|------|-------------|
-| 200 | Success |
-| 400 | Bad Request |
-| 401 | Unauthorized (API key issues) |
-| 422 | Validation Error |
-| 429 | Rate Limited |
-| 500 | Internal Server Error |
+| Code | Meaning | Description |
+|------|---------|-------------|
+| 200 | OK | Request successful |
+| 400 | Bad Request | Invalid request format |
+| 422 | Validation Error | Request validation failed |
+| 500 | Internal Server Error | Server error |
 
-### Error Response Format
+### Error Response
 
 ```json
 {
@@ -294,31 +186,25 @@ curl -X POST http://localhost:7860/v1/chat/completions \
 
 ## Rate Limiting
 
-- **Per-model limit:** 10 calls per minute
-- **Kimi fallback:** Exempt from rate limiting
-- **Cache hits:** Not counted against rate limit
+- Per-model rate limit: 10 calls per minute
+- Kimi fallback: No rate limit (paid service)
+- Cache hits: Unlimited
 
 ---
 
-## Streaming
+## Models
 
-Enable streaming by setting `stream: true`:
+### Primary Models (Free Tier)
+- `meta-llama/llama-3.3-70b-instruct:free`
+- `qwen/qwen3-coder:free`
+- `deepseek/deepseek-r1-0528:free`
+- `google/gemma-3-27b-it:free`
+- `mistralai/mistral-small-3.1-24b-instruct:free`
 
-```python
-response = client.chat.completions.create(
-    model="chimera-quantum",
-    messages=[...],
-    stream=True
-)
+### Fallback Models
+- `nousresearch/hermes-3-llama-3.1-405b:free`
+- `arcee-ai/trinity-large-preview:free`
+- `nvidia/nemotron-3-nano-30b-a3b:free`
 
-for chunk in response:
-    print(chunk.choices[0].delta.content or "", end="")
-```
-
----
-
-## Support
-
-- **Documentation:** https://docs.appforge.ai
-- **Issues:** https://github.com/fernandogarzaaa/appforge/issues
-- **Dashboard:** http://localhost:7860/dashboard
+### Last Resort (Paid)
+- `moonshot/kimi-2.5` - Requires KIMI_API_KEY
