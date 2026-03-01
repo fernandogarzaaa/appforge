@@ -1,7 +1,7 @@
 {
-  "analyzedAt": "2026-03-01T05:06:34.165Z",
+  "analyzedAt": "2026-03-01T05:18:03.370Z",
   "coreHealth": "Robust",
-  "repoScope": 131,
+  "repoScope": 132,
   "insights": [
     {
       "file": "swarm/core/singularity_engine.ts",
@@ -44,7 +44,7 @@
     },
     {
       "file": "swarm/core/quantum_core.ts",
-      "complexity": 19784,
+      "complexity": 19728,
       "logicDensity": 0.5,
       "patterns": {
         "hasOracleConsultation": true,
@@ -1475,6 +1475,19 @@
     {
       "file": "swarm/core/sovereign_model.ts",
       "complexity": 8848,
+      "logicDensity": 0,
+      "patterns": {
+        "hasOracleConsultation": false,
+        "hasRealitySignals": false,
+        "hasQuantumLogic": false,
+        "hasBlockchainIntegration": false,
+        "hasRecursiveSelfPatching": false,
+        "hasSovereignAxioms": false
+      }
+    },
+    {
+      "file": "swarm/core/storage.ts",
+      "complexity": 2837,
       "logicDensity": 0,
       "patterns": {
         "hasOracleConsultation": false,
