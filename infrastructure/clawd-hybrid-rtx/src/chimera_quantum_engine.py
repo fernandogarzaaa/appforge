@@ -43,6 +43,8 @@ class ChimeraQuantumEngine:
     @staticmethod
     def _tokenize(text: str) -> list[str]:
         """Lowercase split on non-alpha, removing empties."""
+        if text is None:
+            return []
         return [t for t in re.split(r"[^a-zA-Z0-9]+", text.lower()) if t]
 
     @staticmethod
@@ -704,6 +706,10 @@ class QuantumCache:
         # Evict if at capacity
         while len(self._store) >= self._max_size:
             self._evict()
+
+        # Guard against None query
+        if query is None:
+            query = ""
 
         tokens = self._tokenize(query)
         self._update_idf(tokens)

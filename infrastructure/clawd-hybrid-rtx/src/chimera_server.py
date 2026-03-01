@@ -476,9 +476,31 @@ async def _process_completion(request: ChatCompletionRequest):
     if best is None:
         errors = "; ".join(f"{r.model}: {r.error}" for r in failed)
         logger.error(f"All models failed: {errors}")
-        # Return error response - all models exhausted
-        logger.error("All OpenRouter models failed - no fallback available")
-        return wrap_openai_response("All models failed. Please try again later or add OpenRouter credits for priority access."), False
+        
+        # --- NVIDIA fallback ---
+        from .nvidia_client import NvidiaClient
+        from .config import NVIDIA_API_KEY
+        if NVIDIA_API_KEY:
+            logger.warning("All OpenRouter models failed — trying NVIDIA Qwen fallback")
+            try:
+                nvidia_client = NvidiaClient(NVIDIA_API_KEY)
+                nvidia_response = nvidia_client.chat_completion(
+                    messages=messages_raw,
+                    max_tokens=request.max_tokens or 512,
+                    temperature=request.temperature or 0.7
+                )
+                if nvidia_response and nvidia_response.get('choices'):
+                    content = nvidia_response['choices'][0].get('message', {}).get('content', '')
+                    if content:
+                        logger.info("NVIDIA Qwen fallback successful")
+                        return wrap_openai_response(content), False
+                logger.error("NVIDIA fallback returned empty response")
+            except Exception as e:
+                logger.error(f"NVIDIA fallback failed: {e}")
+        
+        # All fallbacks exhausted
+        logger.error("All models and fallbacks failed")
+        return wrap_openai_response("All models failed. Please try again later or add OpenRouter/NVIDIA credits."), False
 
     # --- Step 7: Blueprint distillation and memory persistence ---
     blueprint = {
