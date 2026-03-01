@@ -22,56 +22,11 @@ jobs:
         with:
           ref: main
 
-      - name: Load swarm state from Upstash
-        id: load_state
-        run: |
-          python3 << 'EOF'
-          import json, os, urllib.request
-
-          upstash_url = os.environ.get("UPSTASH_REDIS_REST_URL")
-          upstash_token = os.environ.get("UPSTASH_REDIS_REST_TOKEN")
-
-          state = {"last_updated":"","ci":{},"curiosity":{},"evolution":{},"frontend_qa":{},"swarm":{},"orchestrator":{}}
-
-          if upstash_url and upstash_token:
-              try:
-                  req = urllib.request.Request(f"{upstash_url}/get/swarm_state", headers={"Authorization": f"Bearer {upstash_token}"})
-                  with urllib.request.urlopen(req) as response:
-                      res_data = json.loads(response.read().decode())
-                      if res_data.get("result"):
-                          result_val = res_data["result"]
-                          loaded_state = json.loads(result_val) if isinstance(result_val, str) else result_val
-                          state.update(loaded_state)
-              except Exception as e:
-                  print(f"Failed to fetch state from Upstash: {e}")
-
-          with open("swarm_state.json", "w") as f:
-              json.dump(state, f)
-          EOF
+      - name: Generate SWARM_STATUS.md (TypeScript)
+        run: npx tsx scripts/ci_manager.ts DASHBOARD
         env:
           UPSTASH_REDIS_REST_URL: ${{ secrets.UPSTASH_REDIS_REST_URL }}
           UPSTASH_REDIS_REST_TOKEN: ${{ secrets.UPSTASH_REDIS_REST_TOKEN }}
-
-      - name: Generate SWARM_STATUS.md
-        id: gen_md
-        run: |
-          python3 <<EOF
-          import json
-          from datetime import datetime
-          with open('swarm_state.json') as f:
-              state = json.load(f)
-          def safe_get(d, key, default):
-              return d.get(key, default) if isinstance(d, dict) else default
-          ci = safe_get(state, 'ci', {})
-          curiosity = safe_get(state, 'curiosity', {})
-          evolution = safe_get(state, 'evolution', {})
-          frontend_qa = safe_get(state, 'frontend_qa', {})
-          swarm = safe_get(state, 'swarm', {})
-          orchestrator = safe_get(state, 'orchestrator', {})
-          md = f"""# Swarm Status Dashboard\n\n## CI\n- Status: {safe_get(ci, 'status', 'N/A')}\n- Last Green SHA: {safe_get(ci, 'last_green_sha', 'N/A')}\n- Last Fail Reason: {safe_get(ci, 'last_fail_reason', 'N/A')}\n\n## Curiosity\n- Last Scan: {safe_get(curiosity, 'last_scan', 'N/A')}\n- Findings: {safe_get(curiosity, 'findings', [])}\n\n## Evolution\n- Last Score: {safe_get(evolution, 'last_score', 'N/A')}\n- Trend: {safe_get(evolution, 'trend', 'N/A')}\n- Greenlit: {safe_get(evolution, 'greenlit', 'N/A')}\n\n## Frontend QA\n- Status: {safe_get(frontend_qa, 'status', 'N/A')}\n- Failures: {safe_get(frontend_qa, 'failures', [])}\n\n## Swarm\n- Last Commit SHA: {safe_get(swarm, 'last_commit_sha', 'N/A')}\n- Last Task: {safe_get(swarm, 'last_task', 'N/A')}\n- Status: {safe_get(swarm, 'status', 'N/A')}\n\n## Orchestrator\n- Next Action: {safe_get(orchestrator, 'next_action', 'N/A')}\n- Reason: {safe_get(orchestrator, 'reason', 'N/A')}\n"""
-          with open('SWARM_STATUS.md', 'w') as f:
-              f.write(md)
-          EOF
 
       - name: Commit SWARM_STATUS.md
         run: |

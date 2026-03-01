@@ -37,3 +37,12 @@ jobs:
 
       - name: Build
         run: npm run build --if-present
+
+      - name: Report Telemetry
+        if: always()
+        run: npx tsx scripts/ci_manager.ts REPORT
+        env:
+          UPSTASH_REDIS_REST_URL: ${{ secrets.UPSTASH_REDIS_REST_URL }}
+          UPSTASH_REDIS_REST_TOKEN: ${{ secrets.UPSTASH_REDIS_REST_TOKEN }}
+          GITHUB_SHA: ${{ github.sha }}
+          CONCLUSION: ${{ job.status }}
