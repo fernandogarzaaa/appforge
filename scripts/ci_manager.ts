@@ -115,7 +115,6 @@ async function reportMetrics() {
         state: state
     });
 }
-}
 
 /**
  * Handles the main orchestration loop formerly in Python
