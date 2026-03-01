@@ -46,72 +46,95 @@ function getLastCommits(count: number): string[] {
 
 function generateMessage(): string {
     const realityPulse = safeReadJson('src/data/reality_pulse.json') || {};
-    const quantumBrain = safeReadJson('src/data/quantum_brain_state.json') || {};
-    const bountyLedger = safeReadJson('src/data/bounty_ledger.json') || { bounties: [] };
     const buildLogs = safeReadFile('build_logs.txt');
-    const lintLogsRaw = safeReadFile('lint_output.json');
-    let lintErrorsList: any[] = [];
-    try {
-        if (lintLogsRaw.length > 0) lintErrorsList = JSON.parse(lintLogsRaw);
-    } catch (e) { }
-
-    const todoMd = safeReadFile('TODO.md');
     const changedFiles = getGitChangedFiles();
 
-    const directive = realityPulse.directive || 'Autonomous evolution cycle';
-    const confidence = realityPulse.confidence ? (realityPulse.confidence * 100).toFixed(1) : '90.0';
-    const accuracy = quantumBrain.accuracy ? (quantumBrain.accuracy * 100).toFixed(1) : '95.0';
-    const activeBounties = bountyLedger.bounties ? bountyLedger.bounties.filter((b: any) => b.status === 'active' || b.status === 'backlog').length : 0;
+    // 1. Meaningful Work Detection
+    const sourceFiles = changedFiles.filter(f => /\.(ts|tsx|js|jsx|rs|css|html)$/.test(f));
+    const dataFiles = changedFiles.filter(f => /\.(json|txt|log|md|lock)$/.test(f));
+    const totalFiles = changedFiles.length;
+    const sourceRatio = totalFiles > 0 ? sourceFiles.length / totalFiles : 0;
 
-    const isDataOnly = changedFiles.length > 0 && changedFiles.every(f => f.endsWith('.json') || f.endsWith('.md') || f.endsWith('.txt'));
-    const hasBuildFailed = buildLogs.toLowerCase().includes('failed') || buildLogs.toLowerCase().includes('error');
+    const isInternalDataOnly = changedFiles.length > 0 && changedFiles.every(f =>
+        f.startsWith('swarm/') ||
+        f.endsWith('.json') ||
+        f.endsWith('.txt') ||
+        f.endsWith('.lock') ||
+        f.endsWith('.md')
+    );
 
-    let baseMessage = '';
+    // 2. Build Warning Triage (Chunk Size)
+    // Warning format: "(!) Some chunks are larger than 500 kB after minification"
+    const oversizedChunkWarning = buildLogs.includes('chunks are larger than 500 kB');
+    const metricsPath = 'src/data/build_metrics.json';
+    const prevMetrics = safeReadJson(metricsPath) || { oversizedChunks: 0 };
 
-    if (hasBuildFailed || lintErrorsList.length > 0) {
-        const actualErrors = lintErrorsList.filter(l => l.errorCount && l.errorCount > 0);
-        const totalErrors = actualErrors.reduce((sum, l) => sum + l.errorCount, 0);
-        const fileNames = actualErrors.map(l => path.basename(l.filePath)).slice(0, 2).join(', ');
-
-        if (totalErrors > 0) {
-            baseMessage = `fix(build): resolve ${totalErrors} lint errors in ${fileNames || 'multiple files'}`;
-        } else {
-            baseMessage = `fix(build): resolve build constraints in ${changedFiles.filter(f => !f.endsWith('.json')).slice(0, 1).join(', ') || 'core'}`;
-        }
-    } else if (directive.toLowerCase().includes('bounty') || (realityPulse.reasoning && realityPulse.reasoning.toLowerCase().includes('bounty'))) {
-        // Let's see if we can extract bounty context 
-        const category = bountyLedger.bounties && bountyLedger.bounties.length > 0 ? bountyLedger.bounties[0].category || 'feature' : 'feature';
-        baseMessage = `feat(${category}): complete bounty '${directive}'`;
-    } else if (isDataOnly) {
-        baseMessage = `chore(data): update quantum state (coherence: ${accuracy}%, ${activeBounties} bounties active)`;
-    } else if (directive.toLowerCase().includes('optimize') || directive.toLowerCase().includes('perf')) {
-        baseMessage = `perf(quantum): ${directive} (confidence: ${confidence}%)`;
-    } else {
-        // Default to a feature or generic AI update based on the directive and TODO matching
-        let context = 'swarm';
-        if (changedFiles.some(f => f.includes('orchestrator'))) context = 'orchestrator';
-        else if (changedFiles.some(f => f.includes('evolution'))) context = 'evolution';
-        else if (changedFiles.some(f => f.includes('scripts'))) context = 'scripts';
-
-        // Check if directive matches anything in TODO.md
-        if (todoMd && todoMd.includes(directive)) {
-            baseMessage = `feat(${context}): ${directive.toLowerCase()} per TODO.md`;
-        } else {
-            baseMessage = `feat(${context}): ${directive.toLowerCase()} (accuracy: ${accuracy}%)`;
+    // Simple count of occurrences of the warning line (or similar)
+    const currentOversizedCount = (buildLogs.match(/chunks are larger than 500 kB/g) || []).length;
+    let chunkMessage = '';
+    if (currentOversizedCount > 0) {
+        if (currentOversizedCount < prevMetrics.oversizedChunks) {
+            chunkMessage = ` [perf: reduced oversized chunks to ${currentOversizedCount}]`;
+        } else if (currentOversizedCount > prevMetrics.oversizedChunks) {
+            chunkMessage = ` [warning: oversized chunks increased to ${currentOversizedCount}]`;
         }
     }
 
+    // Update metrics
+    try {
+        fs.writeFileSync(metricsPath, JSON.stringify({
+            oversizedChunks: currentOversizedCount,
+            lastUpdated: new Date().toISOString()
+        }, null, 2));
+    } catch (e) { }
+
+    // 3. Directive & Context
+    const directive = realityPulse.directive || 'Maintenance and updates';
+    let context = 'core';
+    if (changedFiles.some(f => f.includes('apps/'))) context = 'app';
+    else if (changedFiles.some(f => f.includes('backend/'))) context = 'backend';
+    else if (changedFiles.some(f => f.includes('swarm/'))) context = 'swarm';
+    else if (changedFiles.some(f => f.includes('.github/'))) context = 'ci';
+
+    const hasBuildFailed = buildLogs.toLowerCase().includes('failed') || buildLogs.toLowerCase().includes('error');
+
+    // 4. Banned Phrases Sanitizer
+    const sanitize = (msg: string) => {
+        return msg
+            .replace(/quantum\s*/gi, '')
+            .replace(/resilience/gi, 'stability')
+            .replace(/resonance/gi, 'connectivity')
+            .replace(/deep hardening/gi, 'security hardening')
+            .replace(/accuracy:\s*\d+\.\d+%/gi, '')
+            .replace(/swarm expansion/gi, 'feature development')
+            .trim();
+    };
+
+    let baseMessage = '';
+
+    if (hasBuildFailed) {
+        baseMessage = `fix(${context}): solve build failure`;
+    } else if (isInternalDataOnly && sourceRatio < 0.2) {
+        // High Meta-work ratio
+        const fileSample = changedFiles.slice(0, 1).map(f => path.basename(f)).join('');
+        baseMessage = `chore(telemetry): sync ${fileSample || 'data'}`;
+    } else if (directive.toLowerCase().includes('fix') || hasBuildFailed) {
+        baseMessage = `fix(${context}): ${directive.toLowerCase()}`;
+    } else if (directive.toLowerCase().includes('perf') || oversizedChunkWarning) {
+        baseMessage = `perf(${context}): ${directive.toLowerCase()}`;
+    } else {
+        const type = sourceFiles.length > 0 ? 'feat' : 'chore';
+        baseMessage = `${type}(${context}): ${directive.toLowerCase()}`;
+    }
+
+    let finalMessage = sanitize(baseMessage) + chunkMessage;
+
     // Diversity Enforcement
     const lastCommits = getLastCommits(5);
-    let finalMessage = baseMessage;
-
-    if (lastCommits.some(commit => commit.includes(baseMessage) || baseMessage.includes(commit))) {
-        // Append specific file changes
+    if (lastCommits.some(commit => commit.includes(finalMessage) || finalMessage.includes(commit))) {
         const fileSummary = changedFiles.slice(0, 2).map(f => path.basename(f)).join(', ');
         if (fileSummary) {
-            finalMessage = `${baseMessage} [modifies: ${fileSummary}]`;
-        } else {
-            finalMessage = `${baseMessage} [${Date.now()}]`; // Ultimate fallback
+            finalMessage += ` (modifies: ${fileSummary})`;
         }
     }
 

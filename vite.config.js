@@ -72,8 +72,8 @@ export default defineConfig({
       }
     },
 
-    // Increase chunk size warning limit (we have proper code splitting now)
-    chunkSizeWarningLimit: 600,
+    // Standard chunk size warning limit (do not hide the problem)
+    chunkSizeWarningLimit: 500,
 
     // CSS code splitting
     cssCodeSplit: true,
@@ -101,7 +101,8 @@ export default defineConfig({
           'vendor-motion': ['framer-motion'],
           'vendor-editor': ['react-quill', 'quill'],
           'vendor-icons': ['lucide-react'],
-          'vendor-utils': ['clsx', 'tailwind-merge', 'class-variance-authority', 'date-fns'],
+          'vendor-solana': ['@solana/web3.js', '@solana/spl-token'],
+          'vendor-utils': ['clsx', 'tailwind-merge', 'class-variance-authority', 'date-fns', 'zod', 'axios'],
         },
       },
     },

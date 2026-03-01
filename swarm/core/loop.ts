@@ -103,19 +103,19 @@ async function validateSovereignIdentity(): Promise<boolean> {
                 const response = await fetch(`http://localhost:${port}/api/tags`, { signal: controller.signal });
                 clearTimeout(timeoutId);
                 if (response.ok) {
-                    console.log('   ⚛️ Local Model Resonance: STABLE (Ollama)');
+                    console.log('   ✅ Local Model Connection: STABLE (Ollama)');
                     resonanceFound = true;
                 }
             } catch (e) {
                 // Ollama not found, try Base44/Chimera
                 if (process.env.CHIMERA_CLOUD_URL || process.env.BASE44_API_KEY) {
-                    console.log('   ⚛️ Cloud Model Resonance: ESTABLISHED (Base44/Chimera)');
+                    console.log('   ✅ Cloud Model Connection: ESTABLISHED (Base44/Chimera)');
                     resonanceFound = true;
                 }
             }
 
             if (!resonanceFound) {
-                console.warn(`   ⚠️ Model Resonance: COLLAPSED (Ollama not on ${port} and no Cloud credentials)`);
+                console.warn(`   ⚠️ Model Connection: UNAVAILABLE (Ollama not on ${port} and no Cloud credentials)`);
                 if (process.env.SWARM_REALITY_MODE === 'true') {
                     console.error('   ❌ IDENTITY CRITICAL: Cannot resonate with any brain in REALITY_MODE.');
                     return false;
@@ -209,7 +209,7 @@ function hasKeyword(input: string, keywords: string[]): boolean {
 
 async function consultAutonomousOracleGuidance(cycleCount: number, coherence: number) {
     const guidance = await quantumCore.consultOracle(
-        `Autonomous cycle ${cycleCount} planning. Current quantum coherence ${(coherence * 100).toFixed(1)}%. All swarms in this system are multi-agent collectives (not singular entities). Which strategic swarm collective should execute now?`,
+        `Autonomous cycle ${cycleCount} planning. What strategic task should the swarm execute now to improve the product?`,
         [
             'Prioritize revenue and expansion swarms (SocialMediaSwarm, ResearchSwarm, CustomerSuccessSwarm, ExperimentationSwarm, AIEconomySwarm)',
             'Prioritize reliability and quality swarms (LearningSwarm, QualityAssuranceSwarm)',
@@ -273,7 +273,7 @@ async function checkQuantumChannel() {
 
 async function main() {
     console.log('🐝 AppForge Swarm Daemon Starting...');
-    console.log('⚛️ AUTONOMOUS MODE: Quantum-Powered Proactive Intelligence');
+    console.log('🤖 AUTONOMOUS MODE: Proactive Engine Active');
 
     // 🛡️ IDENTITY SAFETY CHECK - Validate before any operations
     console.log('🛡️ Running sovereign identity validation...');
