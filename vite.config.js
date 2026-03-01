@@ -85,7 +85,6 @@ export default defineConfig({
       output: {
         // Manual chunk splitting for better caching
         manualChunks: {
-          // Vendor chunks - separate large libraries
           'vendor-react': ['react', 'react-dom', 'react-router-dom'],
           'vendor-query': ['@tanstack/react-query'],
           'vendor-ui': [
@@ -101,6 +100,7 @@ export default defineConfig({
           'vendor-motion': ['framer-motion'],
           'vendor-editor': ['react-quill', 'quill'],
           'vendor-icons': ['lucide-react'],
+          'vendor-three': ['three', '@react-three/fiber', '@react-three/drei'],
           'vendor-solana': ['@solana/web3.js', '@solana/spl-token'],
           'vendor-utils': ['clsx', 'tailwind-merge', 'class-variance-authority', 'date-fns', 'zod', 'axios'],
         },

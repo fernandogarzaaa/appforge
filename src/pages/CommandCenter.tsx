@@ -4,6 +4,7 @@ import { Panel, PanelGroup, PanelResizeHandle } from 'react-resizable-panels';
 const EvolutionMap = lazy(() => import('@/components/EvolutionMap'));
 const CommandStream = lazy(() => import('@/components/CommandStream'));
 const RecordsVault = lazy(() => import('@/components/RecordsVault'));
+const OracleInsights = lazy(() => import('@/components/OracleInsights'));
 
 import { useSovereignStatus } from '@/hooks/useSovereignStatus';
 import { useNavigation } from '@/contexts/NavigationContext';
@@ -21,6 +22,7 @@ export default function CommandCenter() {
     const { currentProject } = useNavigation();
     const status = useSovereignStatus();
     const [currentTime, setCurrentTime] = useState(new Date().toLocaleTimeString());
+    const [rightPanelMode, setRightPanelMode] = useState<'records' | 'oracle'>('records');
 
     useEffect(() => {
         const timer = setInterval(() => setCurrentTime(new Date().toLocaleTimeString()), 1000);
@@ -122,11 +124,27 @@ export default function CommandCenter() {
                     {/* Right Column: Records Vault & Insights */}
                     <Panel defaultSize={40} minSize={30}>
                         <div className="h-full p-2 flex flex-col gap-4">
-                            <div className="flex-1">
+                            <div className="flex items-center gap-2 p-1 bg-slate-900/50 rounded-lg border border-slate-800">
+                                <button
+                                    onClick={() => setRightPanelMode('records')}
+                                    className={`flex-1 py-1.5 rounded-md text-[10px] font-black uppercase tracking-widest transition-all ${rightPanelMode === 'records' ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/20' : 'text-slate-500 hover:text-slate-300'}`}
+                                >
+                                    System Records
+                                </button>
+                                <button
+                                    onClick={() => setRightPanelMode('oracle')}
+                                    className={`flex-1 py-1.5 rounded-md text-[10px] font-black uppercase tracking-widest transition-all ${rightPanelMode === 'oracle' ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/20' : 'text-slate-500 hover:text-slate-300'}`}
+                                >
+                                    Oracle Logic
+                                </button>
+                            </div>
+
+                            <div className="flex-1 overflow-hidden">
                                 <Suspense fallback={<SkeletonLoader />}>
-                                    <RecordsVault />
+                                    {rightPanelMode === 'records' ? <RecordsVault /> : <OracleInsights />}
                                 </Suspense>
                             </div>
+
                             <div className="h-48 bg-[#0f172a]/50 rounded-lg border border-slate-800 p-4 flex flex-col gap-3 relative overflow-hidden group">
                                 <div className="absolute inset-0 bg-blue-500/5 opacity-0 group-hover:opacity-100 transition-opacity" />
                                 <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest flex items-center justify-between">

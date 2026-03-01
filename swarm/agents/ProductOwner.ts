@@ -27,6 +27,7 @@ export class ProductOwnerAgent {
             const todo = await this.fs.readFile('TODO.md').catch(() => '');
             const pkg = await this.fs.readFile('package.json').catch(() => '{}');
             const buildLogs = await this.fs.readFile('build_logs.txt').catch(() => '');
+            const frontendMetrics = await this.fs.readFile('src/data/frontend_metrics.json').catch(() => '{}');
 
             // Recursive scan for technical awareness (top 2 levels for brevity)
             const srcStructure = await this.scanDirectory('src', 2);
@@ -38,18 +39,23 @@ export class ProductOwnerAgent {
 
             const pkgData = JSON.parse(pkg);
             const deps = Object.keys(pkgData.dependencies || {}).join(', ');
+            const metrics = JSON.parse(frontendMetrics);
 
             // Dynamic Strategy Assessment
             const hasOversizedChunks = buildLogs.includes('larger than 500 kB');
+            const highErrorRate = (metrics.errorCount || 0) > 5;
+            const slowUX = (metrics.avgLatency || 0) > 300;
+
             const testCount = await this.countFiles('tests', ['.ts', '.tsx']);
             const srcCount = await this.countFiles('src', ['.ts', '.tsx']);
             const testParity = srcCount > 0 ? testCount / srcCount : 1;
 
             const strategies = [
-                'Performance: Fix oversized JS chunks and optimize builds',
+                'Performance: Fix oversized JS chunks and build bloat',
+                'Reliability: Fix frontend errors (Errors: ' + (metrics.errorCount || 0) + ')',
+                'UX: Optimize interaction latency (Avg: ' + (metrics.avgLatency || 0) + 'ms)',
                 'Stability: Increase test coverage (Current Parity: ' + (testParity * 100).toFixed(1) + '%)',
-                'Features: Add new user-facing functionality using: ' + deps.substring(0, 100),
-                'UX: Polish the premium design system and UI interactions'
+                'Features: Add new user-facing functionality using: ' + deps.substring(0, 50)
             ];
 
             // Consult Oracle for Strategic Direction

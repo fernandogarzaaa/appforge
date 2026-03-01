@@ -5,6 +5,7 @@ import { secureRandom, secureRandomRange } from './secure_entropy.js';
 import { p2pResonance } from './p2p_resonance.js';
 import * as crypto from 'crypto';
 import { DistributedPersistence } from './distributed_persistence.js';
+import { sovereignStorage } from './storage.js';
 
 const PROJECT_ROOT = process.cwd();
 
@@ -111,7 +112,7 @@ export class QuantumSwarmCore {
     }
 
     /**
-     * Persist QuantumEngine learning state to disk
+     * Persist QuantumEngine learning state to cloud/disk
      */
     private async persistEngineState(): Promise<void> {
         try {
@@ -120,14 +121,12 @@ export class QuantumSwarmCore {
                 : null;
             if (!state) return;
 
-            // Hive Restoration: Ensure directory exists
-            const dir = path.dirname(ORACLE_STATE_FILE);
-            try { await fs.mkdir(dir, { recursive: true }); } catch (e) { }
-
-            await fs.writeFile(ORACLE_STATE_FILE, JSON.stringify({
+            // Sovereign Persistence: Sync to Cloud + Local Backup
+            await sovereignStorage.save({
                 timestamp: new Date().toISOString(),
-                state
-            }, null, 2));
+                state,
+                version: this.engine.getStats().engineVersion
+            });
 
             // 🌌 HOLOGRAPHIC MESH SYNC: Phase 91
             await DistributedPersistence.broadcastHolographicMemory();
@@ -137,18 +136,17 @@ export class QuantumSwarmCore {
     }
 
     /**
-     * Load QuantumEngine learning state from disk
+     * Load QuantumEngine learning state from cloud/disk
      */
     private async loadEngineState(): Promise<void> {
         try {
-            const data = await fs.readFile(ORACLE_STATE_FILE, 'utf8');
-            const parsed = JSON.parse(data);
-            if (this.engine.importLearningState && parsed?.state) {
-                this.engine.importLearningState(parsed.state);
-                console.log('📚 [Core] Loaded Decision learning state');
+            const sovereignState = await sovereignStorage.load();
+            if (this.engine.importLearningState && sovereignState?.state) {
+                this.engine.importLearningState(sovereignState.state);
+                console.log('📚 [Core] Loaded Decision learning state via Sovereign Storage');
             }
         } catch (error) {
-            // File does not exist yet.
+            // No state found.
         }
     }
 
