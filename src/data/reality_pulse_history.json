@@ -1,10 +1,5 @@
 [
   {
-    "timestamp": "2026-02-28T11:19:25.653Z",
-    "directive": "Expansion of the P2P resonance and decentralized coordination",
-    "confidence": 0.99
-  },
-  {
     "timestamp": "2026-02-28T12:26:46.755Z",
     "directive": "Deep hardening of the Quantum Engine's resilience",
     "confidence": 0.99
@@ -147,6 +142,11 @@
   {
     "timestamp": "2026-03-01T02:53:51.946Z",
     "directive": "Deep hardening of the Quantum Engine's resilience",
+    "confidence": 0.99
+  },
+  {
+    "timestamp": "2026-03-01T04:24:33.277Z",
+    "directive": "Expansion of the P2P resonance and decentralized coordination",
     "confidence": 0.99
   }
 ]
