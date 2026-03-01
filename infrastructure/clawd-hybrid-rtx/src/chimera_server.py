@@ -476,27 +476,9 @@ async def _process_completion(request: ChatCompletionRequest):
     if best is None:
         errors = "; ".join(f"{r.model}: {r.error}" for r in failed)
         logger.error(f"All models failed: {errors}")
-        # --- Kimi fallback logic ---
-        from .kimi_client import KimiClient
-        from .config import KIMI_API_KEY
-        if KIMI_API_KEY:
-            logger.warning("All OpenRouter models failed — falling back to Kimi K2.5")
-            try:
-                _kimi_client = KimiClient(KIMI_API_KEY)
-                kimi_response = _kimi_client.chat(messages_raw, max_tokens=request.max_tokens or 256, temperature=request.temperature)
-                if kimi_response and kimi_response.get('choices'):
-                    content = kimi_response['choices'][0].get('message', {}).get('content', '')
-                    if content:
-                        logger.info("Kimi fallback successful")
-                        return wrap_openai_response(content), False
-                logger.error("Kimi fallback failed or returned empty content")
-                return wrap_openai_response("Kimi fallback failed. No valid response generated."), False
-            except Exception as e:
-                logger.error(f"Kimi fallback exception: {e}")
-                return wrap_openai_response(f"Kimi fallback error: {e}"), False
-        else:
-            logger.warning("Kimi fallback skipped — KIMI_API_KEY not set")
-            return wrap_openai_response("All models failed. Kimi fallback unavailable. No valid response generated."), False
+        # Return error response - all models exhausted
+        logger.error("All OpenRouter models failed - no fallback available")
+        return wrap_openai_response("All models failed. Please try again later or add OpenRouter credits for priority access."), False
 
     # --- Step 7: Blueprint distillation and memory persistence ---
     blueprint = {

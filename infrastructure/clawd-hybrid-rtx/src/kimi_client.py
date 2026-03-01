@@ -11,7 +11,7 @@ KIMI_COST_PER_1K = 0.012
 class KimiClient:
     def __init__(self, api_key: str):
         self.api_key = api_key
-        self.base_url = "https://api.moonshot.cn/v1/chat/completions"
+        self.base_url = "https://api.moonshot.ai/v1/chat/completions"
 
     def chat(self, messages, **kwargs):
         headers = {
