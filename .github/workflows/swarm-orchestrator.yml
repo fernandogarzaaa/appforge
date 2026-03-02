@@ -11,8 +11,6 @@ on:
       - Frontend QA Swarm
       - Evolution Benchmark Gate
       - Iron Brain CI — Ghost Brain
-      - Node.js CI
-      - Code Scanning & Quality
     types:
       - completed
   workflow_dispatch:
@@ -27,6 +25,7 @@ concurrency:
 
 jobs:
   orchestrate:
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
     timeout-minutes: 15
     permissions:
