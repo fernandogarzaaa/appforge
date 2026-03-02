@@ -22,8 +22,8 @@ on:
         required: false
 
 concurrency:
-  group: swarm-orchestrator-${{ github.ref }}-${{ github.run_id }}
-  cancel-in-progress: false
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   orchestrate:
@@ -91,14 +91,14 @@ jobs:
 
       # Dispatch the right agent based on decision
       - name: Dispatch → Autonomous Swarm
-        if: steps.decide.outputs.next_action == 'autonomous_swarm'
+        if: github.event_name != 'workflow_run' && steps.decide.outputs.next_action == 'autonomous_swarm'
         run: |
           gh workflow run "Autonomous Swarm Cycle" --ref main
         env:
           GH_TOKEN: ${{ secrets.BOT_GITHUB_TOKEN }}
 
       - name: Dispatch → Quantum Evolution
-        if: steps.decide.outputs.next_action == 'quantum_evolution'
+        if: github.event_name != 'workflow_run' && steps.decide.outputs.next_action == 'quantum_evolution'
         run: |
           gh workflow run "Quantum Self-Evolution" \
             --ref main \
@@ -108,14 +108,14 @@ jobs:
           GH_TOKEN: ${{ secrets.BOT_GITHUB_TOKEN }}
 
       - name: Dispatch → Curiosity Scan
-        if: steps.decide.outputs.next_action == 'curiosity_scan'
+        if: github.event_name != 'workflow_run' && steps.decide.outputs.next_action == 'curiosity_scan'
         run: |
           gh workflow run "Curiosity Engine Scan" --ref main
         env:
           GH_TOKEN: ${{ secrets.BOT_GITHUB_TOKEN }}
 
       - name: Dispatch → Frontend QA Swarm
-        if: steps.decide.outputs.next_action == 'frontend_qa_swarm'
+        if: github.event_name != 'workflow_run' && steps.decide.outputs.next_action == 'frontend_qa_swarm'
         run: |
           gh workflow run "Frontend QA Swarm" \
             --ref main \
