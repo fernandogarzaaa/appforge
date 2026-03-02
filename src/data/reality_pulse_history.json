@@ -1,10 +1,5 @@
 [
   {
-    "timestamp": "2026-03-01T02:11:25.924Z",
-    "directive": "Expansion of the P2P resonance and decentralized coordination",
-    "confidence": 0.99
-  },
-  {
     "timestamp": "2026-03-01T02:41:06.753Z",
     "directive": "Deep hardening of the Quantum Engine's resilience",
     "confidence": 0.99
@@ -148,5 +143,10 @@
     "timestamp": "2026-03-02T20:42:24.827Z",
     "directive": "Autonomous feature generation for the Sovereign UI",
     "confidence": 0.5532103444637432
+  },
+  {
+    "timestamp": "2026-03-02T20:45:31.435Z",
+    "directive": "Stabilize high-churn zone SWARM_STATUS.md with tests and safeguards",
+    "confidence": 0.99
   }
 ]
