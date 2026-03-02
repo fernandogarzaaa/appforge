@@ -25,7 +25,6 @@ concurrency:
 
 jobs:
   orchestrate:
-    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
     timeout-minutes: 15
     permissions:
@@ -130,14 +129,14 @@ jobs:
 
       # Dispatch the right agent based on decision
       - name: Dispatch → Autonomous Swarm
-        if: steps.cooldown.outputs.proceed == 'true' && github.event_name != 'workflow_run' && steps.decide.outputs.next_action == 'autonomous_swarm'
+        if: steps.cooldown.outputs.proceed == 'true' && steps.decide.outputs.next_action == 'autonomous_swarm' && (github.event_name != 'workflow_run' || github.event.workflow_run.name != 'Autonomous Swarm Cycle')
         run: |
           gh workflow run "Autonomous Swarm Cycle" --ref main
         env:
           GH_TOKEN: ${{ secrets.BOT_GITHUB_TOKEN }}
 
       - name: Dispatch → Quantum Evolution
-        if: steps.cooldown.outputs.proceed == 'true' && github.event_name != 'workflow_run' && steps.decide.outputs.next_action == 'quantum_evolution'
+        if: steps.cooldown.outputs.proceed == 'true' && steps.decide.outputs.next_action == 'quantum_evolution' && (github.event_name != 'workflow_run' || github.event.workflow_run.name != 'Quantum Self-Evolution')
         run: |
           gh workflow run "Quantum Self-Evolution" \
             --ref main \
@@ -147,14 +146,14 @@ jobs:
           GH_TOKEN: ${{ secrets.BOT_GITHUB_TOKEN }}
 
       - name: Dispatch → Curiosity Scan
-        if: steps.cooldown.outputs.proceed == 'true' && github.event_name != 'workflow_run' && steps.decide.outputs.next_action == 'curiosity_scan'
+        if: steps.cooldown.outputs.proceed == 'true' && steps.decide.outputs.next_action == 'curiosity_scan' && (github.event_name != 'workflow_run' || github.event.workflow_run.name != 'Curiosity Engine Scan')
         run: |
           gh workflow run "Curiosity Engine Scan" --ref main
         env:
           GH_TOKEN: ${{ secrets.BOT_GITHUB_TOKEN }}
 
       - name: Dispatch → Frontend QA Swarm
-        if: steps.cooldown.outputs.proceed == 'true' && github.event_name != 'workflow_run' && steps.decide.outputs.next_action == 'frontend_qa_swarm'
+        if: steps.cooldown.outputs.proceed == 'true' && steps.decide.outputs.next_action == 'frontend_qa_swarm' && (github.event_name != 'workflow_run' || github.event.workflow_run.name != 'Frontend QA Swarm')
         run: |
           gh workflow run "Frontend QA Swarm" \
             --ref main \
