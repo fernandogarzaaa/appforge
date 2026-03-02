@@ -58,15 +58,54 @@ jobs:
           WORKFLOW_NAME="${{ github.event.workflow_run.name }}"
           CONCLUSION="${{ github.event.workflow_run.conclusion }}"
           RUN_ID="${{ github.event.workflow_run.id }}"
+          UPDATED_AT="${{ github.event.workflow_run.updated_at }}"
           echo "trigger=$TRIGGER" >> $GITHUB_OUTPUT
           echo "workflow_name=$WORKFLOW_NAME" >> $GITHUB_OUTPUT
           echo "conclusion=$CONCLUSION" >> $GITHUB_OUTPUT
           echo "run_id=$RUN_ID" >> $GITHUB_OUTPUT
-          echo "Orchestrator triggered by: $TRIGGER | $WORKFLOW_NAME | $CONCLUSION"
+          echo "updated_at=$UPDATED_AT" >> $GITHUB_OUTPUT
+          echo "Orchestrator triggered by: $TRIGGER | $WORKFLOW_NAME | $CONCLUSION | $UPDATED_AT"
+
+      - name: Cooldown guard for workflow_run bursts
+        id: cooldown
+        run: |
+          COOLDOWN_MINUTES="${SWARM_ORCHESTRATOR_COOLDOWN_MINUTES:-5}"
+
+          if [ "${{ steps.event.outputs.trigger }}" != "workflow_run" ]; then
+            echo "proceed=true" >> "$GITHUB_OUTPUT"
+            echo "reason=Non-workflow_run trigger" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          if [ -z "${{ steps.event.outputs.updated_at }}" ]; then
+            echo "proceed=true" >> "$GITHUB_OUTPUT"
+            echo "reason=Missing updated_at; proceeding defensively" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          now_epoch="$(date -u +%s)"
+          upstream_epoch="$(date -u -d "${{ steps.event.outputs.updated_at }}" +%s || echo 0)"
+          min_delta="$((COOLDOWN_MINUTES * 60))"
+          actual_delta="$((now_epoch - upstream_epoch))"
+
+          if [ "$actual_delta" -lt "$min_delta" ]; then
+            echo "proceed=false" >> "$GITHUB_OUTPUT"
+            echo "reason=Cooldown active (${actual_delta}s < ${min_delta}s)" >> "$GITHUB_OUTPUT"
+          else
+            echo "proceed=true" >> "$GITHUB_OUTPUT"
+            echo "reason=Cooldown passed (${actual_delta}s >= ${min_delta}s)" >> "$GITHUB_OUTPUT"
+          fi
+        env:
+          SWARM_ORCHESTRATOR_COOLDOWN_MINUTES: ${{ vars.SWARM_ORCHESTRATOR_COOLDOWN_MINUTES }}
+
+      - name: Cooldown decision
+        if: steps.cooldown.outputs.proceed != 'true'
+        run: |
+          echo "Skipping orchestration due to cooldown: ${{ steps.cooldown.outputs.reason }}"
 
       # Download the completing agent's output artifact (only on workflow_run events)
       - name: Download agent output artifact
-        if: github.event_name == 'workflow_run' && github.event.workflow_run.conclusion != ''
+        if: steps.cooldown.outputs.proceed == 'true' && github.event_name == 'workflow_run' && github.event.workflow_run.conclusion != ''
         uses: actions/download-artifact@v4
         continue-on-error: true # Agent may not have produced an artifact
         with:
@@ -78,6 +117,7 @@ jobs:
       # Unified Orchestration Decision (TypeScript)
       - name: Swarm Orchestration Decision
         id: decide
+        if: steps.cooldown.outputs.proceed == 'true'
         run: npx tsx scripts/ci_manager.ts ORCHESTRATE
         env:
           TRIGGER: ${{ steps.event.outputs.trigger }}
@@ -90,14 +130,14 @@ jobs:
 
       # Dispatch the right agent based on decision
       - name: Dispatch → Autonomous Swarm
-        if: github.event_name != 'workflow_run' && steps.decide.outputs.next_action == 'autonomous_swarm'
+        if: steps.cooldown.outputs.proceed == 'true' && github.event_name != 'workflow_run' && steps.decide.outputs.next_action == 'autonomous_swarm'
         run: |
           gh workflow run "Autonomous Swarm Cycle" --ref main
         env:
           GH_TOKEN: ${{ secrets.BOT_GITHUB_TOKEN }}
 
       - name: Dispatch → Quantum Evolution
-        if: github.event_name != 'workflow_run' && steps.decide.outputs.next_action == 'quantum_evolution'
+        if: steps.cooldown.outputs.proceed == 'true' && github.event_name != 'workflow_run' && steps.decide.outputs.next_action == 'quantum_evolution'
         run: |
           gh workflow run "Quantum Self-Evolution" \
             --ref main \
@@ -107,14 +147,14 @@ jobs:
           GH_TOKEN: ${{ secrets.BOT_GITHUB_TOKEN }}
 
       - name: Dispatch → Curiosity Scan
-        if: github.event_name != 'workflow_run' && steps.decide.outputs.next_action == 'curiosity_scan'
+        if: steps.cooldown.outputs.proceed == 'true' && github.event_name != 'workflow_run' && steps.decide.outputs.next_action == 'curiosity_scan'
         run: |
           gh workflow run "Curiosity Engine Scan" --ref main
         env:
           GH_TOKEN: ${{ secrets.BOT_GITHUB_TOKEN }}
 
       - name: Dispatch → Frontend QA Swarm
-        if: github.event_name != 'workflow_run' && steps.decide.outputs.next_action == 'frontend_qa_swarm'
+        if: steps.cooldown.outputs.proceed == 'true' && github.event_name != 'workflow_run' && steps.decide.outputs.next_action == 'frontend_qa_swarm'
         run: |
           gh workflow run "Frontend QA Swarm" \
             --ref main \
