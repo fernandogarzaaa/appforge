@@ -11,6 +11,8 @@ on:
     branches:
       - main
       - master
+    paths-ignore:
+      - "SWARM_STATUS.md"
 
 permissions:
   contents: write
