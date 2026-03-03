@@ -20,8 +20,8 @@ on:
         required: false
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  group: ${{ github.workflow }}-${{ github.event_name }}-${{ github.ref }}
+  cancel-in-progress: false
 
 jobs:
   orchestrate:
@@ -115,6 +115,18 @@ jobs:
           path: agent_outputs/
 
       # Unified Orchestration Decision (TypeScript)
+      - name: Validate dispatch token
+        id: dispatch-token
+        env:
+          BOT_GITHUB_TOKEN: ${{ secrets.BOT_GITHUB_TOKEN }}
+        run: |
+          if [ -n "$BOT_GITHUB_TOKEN" ]; then
+            echo "can_dispatch=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "can_dispatch=false" >> "$GITHUB_OUTPUT"
+            echo "::warning::BOT_GITHUB_TOKEN is not configured; orchestration dispatch steps will be skipped."
+          fi
+
       - name: Swarm Orchestration Decision
         id: decide
         if: steps.cooldown.outputs.proceed == 'true'
@@ -130,14 +142,14 @@ jobs:
 
       # Dispatch the right agent based on decision
       - name: Dispatch → Autonomous Swarm
-        if: steps.cooldown.outputs.proceed == 'true' && steps.decide.outputs.next_action == 'autonomous_swarm' && (github.event_name != 'workflow_run' || github.event.workflow_run.name != 'Autonomous Swarm Cycle')
+        if: steps.cooldown.outputs.proceed == 'true' && steps.dispatch-token.outputs.can_dispatch == 'true' && steps.decide.outputs.next_action == 'autonomous_swarm' && (github.event_name != 'workflow_run' || github.event.workflow_run.name != 'Autonomous Swarm Cycle')
         run: |
           gh workflow run "Autonomous Swarm Cycle" --ref main
         env:
           GH_TOKEN: ${{ secrets.BOT_GITHUB_TOKEN }}
 
       - name: Dispatch → Quantum Evolution
-        if: steps.cooldown.outputs.proceed == 'true' && steps.decide.outputs.next_action == 'quantum_evolution' && (github.event_name != 'workflow_run' || github.event.workflow_run.name != 'Quantum Self-Evolution')
+        if: steps.cooldown.outputs.proceed == 'true' && steps.dispatch-token.outputs.can_dispatch == 'true' && steps.decide.outputs.next_action == 'quantum_evolution' && (github.event_name != 'workflow_run' || github.event.workflow_run.name != 'Quantum Self-Evolution')
         run: |
           gh workflow run "Quantum Self-Evolution" \
             --ref main \
@@ -147,19 +159,23 @@ jobs:
           GH_TOKEN: ${{ secrets.BOT_GITHUB_TOKEN }}
 
       - name: Dispatch → Curiosity Scan
-        if: steps.cooldown.outputs.proceed == 'true' && steps.decide.outputs.next_action == 'curiosity_scan' && (github.event_name != 'workflow_run' || github.event.workflow_run.name != 'Curiosity Engine Scan')
+        if: steps.cooldown.outputs.proceed == 'true' && steps.dispatch-token.outputs.can_dispatch == 'true' && steps.decide.outputs.next_action == 'curiosity_scan' && (github.event_name != 'workflow_run' || github.event.workflow_run.name != 'Curiosity Engine Scan')
         run: |
           gh workflow run "Curiosity Engine Scan" --ref main
         env:
           GH_TOKEN: ${{ secrets.BOT_GITHUB_TOKEN }}
 
       - name: Dispatch → Frontend QA Swarm
-        if: steps.cooldown.outputs.proceed == 'true' && steps.decide.outputs.next_action == 'frontend_qa_swarm' && (github.event_name != 'workflow_run' || github.event.workflow_run.name != 'Frontend QA Swarm')
+        if: steps.cooldown.outputs.proceed == 'true' && steps.dispatch-token.outputs.can_dispatch == 'true' && steps.decide.outputs.next_action == 'frontend_qa_swarm' && (github.event_name != 'workflow_run' || github.event.workflow_run.name != 'Frontend QA Swarm')
         run: |
           gh workflow run "Frontend QA Swarm" \
             --ref main \
             --field context='{"reason":"${{ steps.decide.outputs.reason }}"}'
         env:
           GH_TOKEN: ${{ secrets.BOT_GITHUB_TOKEN }}
+
+      - name: Dispatch skipped (missing token)
+        if: steps.cooldown.outputs.proceed == 'true' && steps.dispatch-token.outputs.can_dispatch != 'true'
+        run: echo "::notice::No BOT_GITHUB_TOKEN configured; skipping workflow dispatch steps."
 
       # Dashboard update is automated via workflow_run triggers
