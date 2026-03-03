@@ -1,0 +1,314 @@
+{
+  "research_swarm:last_report": {
+    "key": "research_swarm:last_report",
+    "value": {
+      "timestamp": "2026-03-03T05:15:17.640Z",
+      "signalsAnalyzed": 15,
+      "competitorsTracked": 8,
+      "topFocus": "Creator Revenue Studio",
+      "oracleRecommendation": "Creator Revenue Studio (35.1)",
+      "opportunities": [
+        {
+          "id": "swarm_ops_command_center",
+          "name": "SwarmOps Command Center",
+          "theme": "agent_ops",
+          "problem": "Teams lack governance and visibility over autonomous agent operations.",
+          "solution": "Control plane for agent orchestration, guardrails, incident rollback, and execution analytics.",
+          "monetization": "$249-$999/month B2B SaaS",
+          "score": 51.03,
+          "priority": "low",
+          "rationale": "Demand=72.0 | CompetitorPressure=88.0 | MoatBonus=12.0",
+          "oracleSelected": false
+        },
+        {
+          "id": "competitor_pulse_radar",
+          "name": "Competitor Pulse Radar",
+          "theme": "research",
+          "problem": "Founders lack continuous intelligence on competitor moves and product gaps.",
+          "solution": "Automated competitor monitoring, feature-gap alerts, and weekly strategy briefs.",
+          "monetization": "$149-$499/month",
+          "score": 50.25,
+          "priority": "low",
+          "rationale": "Demand=70.8 | CompetitorPressure=88.0 | MoatBonus=12.0",
+          "oracleSelected": false
+        },
+        {
+          "id": "autonomous_risk_desk",
+          "name": "Autonomous Risk Desk",
+          "theme": "trading_risk",
+          "problem": "Automated trading setups often miss strict risk controls and post-trade learning.",
+          "solution": "Portfolio guardrails with confidence gating, stop logic, and strategy quality reporting.",
+          "monetization": "$199/month plus usage",
+          "score": 48.72,
+          "priority": "low",
+          "rationale": "Demand=59.9 | CompetitorPressure=72.0 | MoatBonus=28.0",
+          "oracleSelected": false
+        },
+        {
+          "id": "freelance_pipeline_iq",
+          "name": "Freelance Pipeline IQ",
+          "theme": "freelance",
+          "problem": "Freelancers spend excessive time triaging opportunities and proposal quality.",
+          "solution": "High-ticket lead scoring, proposal generation, and close-probability tracking.",
+          "monetization": "$79-$199/month",
+          "score": 39.75,
+          "priority": "low",
+          "rationale": "Demand=45.0 | CompetitorPressure=70.0 | MoatBonus=30.0",
+          "oracleSelected": false
+        },
+        {
+          "id": "creator_revenue_studio",
+          "name": "Creator Revenue Studio",
+          "theme": "creator",
+          "problem": "Creators struggle to plan, publish, and monetize across channels consistently.",
+          "solution": "Unified AI workflow for topic ideation, multi-platform scheduling, and revenue optimization.",
+          "monetization": "$99-$299/month plus performance tier",
+          "score": 35.09,
+          "priority": "low",
+          "rationale": "Demand=40.5 | CompetitorPressure=75.0 | MoatBonus=25.0",
+          "oracleSelected": true
+        }
+      ]
+    },
+    "timestamp": 1772514917640,
+    "ttl": 604800
+  },
+  "learning:CustomerSuccessSwarm:tier:enterprise": {
+    "key": "learning:CustomerSuccessSwarm:tier:enterprise",
+    "value": {
+      "attempts": 2,
+      "successes": 2,
+      "totalReward": 10
+    },
+    "timestamp": 1772514917707,
+    "ttl": 604800
+  },
+  "learning:CustomerSuccessSwarm:tier:pro": {
+    "key": "learning:CustomerSuccessSwarm:tier:pro",
+    "value": {
+      "attempts": 4,
+      "successes": 4,
+      "totalReward": 20
+    },
+    "timestamp": 1772514917736,
+    "ttl": 604800
+  },
+  "learning:CustomerSuccessSwarm:tier:free": {
+    "key": "learning:CustomerSuccessSwarm:tier:free",
+    "value": {
+      "attempts": 2,
+      "successes": 2,
+      "totalReward": 10
+    },
+    "timestamp": 1772514917743,
+    "ttl": 604800
+  },
+  "customer_success_swarm:last_report": {
+    "key": "customer_success_swarm:last_report",
+    "value": {
+      "timestamp": "2026-03-03T05:15:17.744Z",
+      "accountsProcessed": 4,
+      "highRiskAccounts": 0,
+      "upsellTargets": 0,
+      "retentionActions": 4,
+      "decisions": [
+        {
+          "accountId": "acct_001",
+          "churnRisk": 0.556,
+          "action": "inapp_nudge",
+          "recommendation": "INAPP_NUDGE with guided adoption checklist and health tips",
+          "confidence": 0.99
+        },
+        {
+          "accountId": "acct_002",
+          "churnRisk": 0.139,
+          "action": "inapp_nudge",
+          "recommendation": "INAPP_NUDGE with guided adoption checklist and health tips",
+          "confidence": 0.99
+        },
+        {
+          "accountId": "acct_003",
+          "churnRisk": 0.586,
+          "action": "inapp_nudge",
+          "recommendation": "INAPP_NUDGE with guided adoption checklist and health tips",
+          "confidence": 0.99
+        },
+        {
+          "accountId": "acct_004",
+          "churnRisk": 0.216,
+          "action": "inapp_nudge",
+          "recommendation": "INAPP_NUDGE with guided adoption checklist and health tips",
+          "confidence": 0.99
+        }
+      ]
+    },
+    "timestamp": 1772514917745,
+    "ttl": 604800
+  },
+  "experimentation_swarm:last_report": {
+    "key": "experimentation_swarm:last_report",
+    "value": {
+      "timestamp": "2026-03-03T05:15:17.712Z",
+      "internalAgents": 4,
+      "experimentsEvaluated": 4,
+      "topRecommendation": "Promote quarterly_anchor for pricing_anchor_packaging_v2 with staged rollout (25% -> 50% -> 100%)",
+      "oracleRecommendation": "Prioritize pricing_anchor_packaging_v2 (pricing) - winner=quarterly_anchor, uplift=15.5%, consensus=85.5%",
+      "executedHandovers": 2,
+      "rankings": [
+        {
+          "experimentId": "pricing_anchor_packaging_v2",
+          "channel": "pricing",
+          "ownerSwarm": "ProductOwner",
+          "hypothesis": "Quarterly anchor pricing improves conversion-to-paid for pro accounts.",
+          "winner": "quarterly_anchor",
+          "upliftPct": 15.48,
+          "confidence": 0.877,
+          "priorityScore": 0.877,
+          "multiAgentConsensus": 0.855,
+          "recommendation": "Promote quarterly_anchor for pricing_anchor_packaging_v2 with staged rollout (25% -> 50% -> 100%)"
+        },
+        {
+          "experimentId": "content_offer_cta_mix_v4",
+          "channel": "content",
+          "ownerSwarm": "SocialMediaSwarm",
+          "hypothesis": "Offer-led CTAs outperform generic educational CTAs for inbound conversion.",
+          "winner": "offer_led_cta",
+          "upliftPct": 22.41,
+          "confidence": 0.689,
+          "priorityScore": 0.708,
+          "multiAgentConsensus": 0.771,
+          "recommendation": "Promote offer_led_cta for content_offer_cta_mix_v4 with staged rollout (25% -> 50% -> 100%)"
+        },
+        {
+          "experimentId": "onboarding_value_prop_v3",
+          "channel": "onboarding",
+          "ownerSwarm": "CustomerSuccessSwarm",
+          "hypothesis": "A tighter ROI-focused onboarding sequence increases week-1 activation.",
+          "winner": "roi_value_path",
+          "upliftPct": 15.71,
+          "confidence": 0.655,
+          "priorityScore": 0.706,
+          "multiAgentConsensus": 0.724,
+          "recommendation": "Promote roi_value_path for onboarding_value_prop_v3 with staged rollout (25% -> 50% -> 100%)"
+        },
+        {
+          "experimentId": "activation_prompt_timing_v2",
+          "channel": "activation",
+          "ownerSwarm": "CustomerSuccessSwarm",
+          "hypothesis": "Adaptive nudge timing increases feature adoption during first 72 hours.",
+          "winner": "adaptive_nudge_timing",
+          "upliftPct": 10.05,
+          "confidence": 0.678,
+          "priorityScore": 0.563,
+          "multiAgentConsensus": 0.547,
+          "recommendation": "Promote adaptive_nudge_timing for activation_prompt_timing_v2 with staged rollout (25% -> 50% -> 100%)"
+        }
+      ]
+    },
+    "timestamp": 1772514917717,
+    "ttl": 604800
+  },
+  "ai_economy_swarm:last_report": {
+    "key": "ai_economy_swarm:last_report",
+    "value": {
+      "timestamp": "2026-03-03T05:15:17.671Z",
+      "grossInflow": 120,
+      "operatingCost": 900,
+      "netInflow": -780,
+      "reserveBefore": 0,
+      "reserveAfter": 0,
+      "activeSources": 1,
+      "strategy": "defensive_compounding",
+      "strategySource": "oracle",
+      "oracleRecommendation": "DEFENSIVE_COMPOUNDING - prioritize reserve runway and stable compounding",
+      "oracleConfidence": 0.99,
+      "oracleMinConfidence": 0.55,
+      "oracleAccepted": true,
+      "sustainabilityScore": 0.18,
+      "allocation": {
+        "strategy": "defensive_compounding",
+        "reserveAmount": 54,
+        "growthAmount": 24,
+        "experimentationAmount": 18,
+        "infrastructureAmount": 24,
+        "percentages": {
+          "reserve": 0.45,
+          "growth": 0.2,
+          "experimentation": 0.15,
+          "infrastructure": 0.2
+        }
+      },
+      "milestones": [
+        "Reserve treasury to +$54.00 for runway extension",
+        "Fund retention and upsell execution with $24.00",
+        "Fund experiment velocity with $18.00",
+        "Harden reliability and deployment with $24.00"
+      ]
+    },
+    "timestamp": 1772514917672,
+    "ttl": 604800
+  },
+  "devops_swarm:last_report": {
+    "key": "devops_swarm:last_report",
+    "value": {
+      "timestamp": "2026-03-03T05:15:17.710Z",
+      "checks": [
+        {
+          "name": "ci_workflows",
+          "status": "critical",
+          "details": "No GitHub workflow directory found"
+        },
+        {
+          "name": "deployment_artifacts",
+          "status": "critical",
+          "details": "0/3 required deployment artifacts present"
+        },
+        {
+          "name": "qa_gate",
+          "status": "warning",
+          "details": "No QA gate report available yet"
+        }
+      ],
+      "action": {
+        "action": "Harden CI/CD with stricter pipeline gates and rollback checks",
+        "confidence": 0.99,
+        "recommendation": "Harden CI/CD with stricter pipeline gates and rollback checks"
+      }
+    },
+    "timestamp": 1772514917712,
+    "ttl": 604800
+  },
+  "qa_swarm:last_report": {
+    "key": "qa_swarm:last_report",
+    "value": {
+      "timestamp": "2026-03-03T05:15:18.073Z",
+      "gatePassed": false,
+      "passed": 0,
+      "failed": 4,
+      "results": [
+        {
+          "name": "strict_benchmark",
+          "passed": false,
+          "summary": "npm error Missing script: \"swarm:benchmark\"\nnpm error\nnpm error To see a list of scripts, run:\nnpm error   npm run\nnpm error A complete log of this run can be found in: /home/runner/.npm/_logs/2026-03-03T05_15_17_785Z-debug-0.log\n"
+        },
+        {
+          "name": "oracle_reporting_pipeline",
+          "passed": false,
+          "summary": "npm error Missing script: \"swarm:oracle:report\"\nnpm error\nnpm error To see a list of scripts, run:\nnpm error   npm run\nnpm error A complete log of this run can be found in: /home/runner/.npm/_logs/2026-03-03T05_15_17_911Z-debug-0.log\n"
+        },
+        {
+          "name": "swarm_collective_integrity",
+          "passed": false,
+          "summary": "npm error Missing script: \"swarm:audit:collectives\"\nnpm error\nnpm error To see a list of scripts, run:\nnpm error   npm run\nnpm error A complete log of this run can be found in: /home/runner/.npm/_logs/2026-03-03T05_15_18_020Z-debug-0.log\n"
+        },
+        {
+          "name": "artifact_integrity",
+          "passed": false,
+          "summary": "Invalid/missing: latest_intelligence_report.json, oracle_from_benchmark_latest.json, learning_swarm_report.json, voice_swarm_report.json, knowledge_graph_swarm_report.json, compliance_swarm_report.json"
+        }
+      ]
+    },
+    "timestamp": 1772514918073,
+    "ttl": 604800
+  }
+}

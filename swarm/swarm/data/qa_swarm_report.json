@@ -1,0 +1,28 @@
+{
+  "timestamp": "2026-03-03T05:15:18.073Z",
+  "gatePassed": false,
+  "passed": 0,
+  "failed": 4,
+  "results": [
+    {
+      "name": "strict_benchmark",
+      "passed": false,
+      "summary": "npm error Missing script: \"swarm:benchmark\"\nnpm error\nnpm error To see a list of scripts, run:\nnpm error   npm run\nnpm error A complete log of this run can be found in: /home/runner/.npm/_logs/2026-03-03T05_15_17_785Z-debug-0.log\n"
+    },
+    {
+      "name": "oracle_reporting_pipeline",
+      "passed": false,
+      "summary": "npm error Missing script: \"swarm:oracle:report\"\nnpm error\nnpm error To see a list of scripts, run:\nnpm error   npm run\nnpm error A complete log of this run can be found in: /home/runner/.npm/_logs/2026-03-03T05_15_17_911Z-debug-0.log\n"
+    },
+    {
+      "name": "swarm_collective_integrity",
+      "passed": false,
+      "summary": "npm error Missing script: \"swarm:audit:collectives\"\nnpm error\nnpm error To see a list of scripts, run:\nnpm error   npm run\nnpm error A complete log of this run can be found in: /home/runner/.npm/_logs/2026-03-03T05_15_18_020Z-debug-0.log\n"
+    },
+    {
+      "name": "artifact_integrity",
+      "passed": false,
+      "summary": "Invalid/missing: latest_intelligence_report.json, oracle_from_benchmark_latest.json, learning_swarm_report.json, voice_swarm_report.json, knowledge_graph_swarm_report.json, compliance_swarm_report.json"
+    }
+  ]
+}

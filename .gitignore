@@ -1,8 +1,17 @@
-# Environment Variables
-.env
+# ================================================
+# AppForge .gitignore
+# ================================================
+
+# ================================================
+# Environment & Secrets
+# ================================================
+.env*
+!.env.example
+!.env.*.example
 .env.local
 .env.*.local
-.env.production.local
+.env.clawd
+apps/backend/backend/.env
 base44/.app.jsonc
 
 # Swarm Secrets / Wallets / Sessions (never commit)
@@ -13,43 +22,47 @@ auth_info_baileys*/
 whatsapp_qr*.png
 swarm/quantum_channel.json
 
+# State files that should not be committed
+bot_memory.json
+swarm_state.json
+*.key
+*.pem
+*.p12
+*.pfx
+
+# ================================================
 # Dependencies
+# ================================================
 node_modules/
 /.pnp
 .pnp.js
+.pnpm-store/
 
+# ================================================
+# Build & Production
+# ================================================
+dist/
+dist-ssr/
+build/
+*.tsbuildinfo
+*.local
+.parcel-cache/
+.cache/
+
+# ================================================
 # Testing
+# ================================================
 coverage/
 *.lcov
 .nyc_output/
+test-results/
+playwright-report/
+playwright/.cache/
 
-# Build & Production
-dist/
-build/
-dist-ssr/
-*.tsbuildinfo
-
-# IDE
-.vscode/*
-!.vscode/settings.json
-!.vscode/extensions.json
-.idea/
-*.swp
-*.swo
-*~
-.DS_Store
-*.sublime-project
-*.sublime-workspace
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-
-# OS
-Thumbs.db
-
-# Temporary Files
-*.tmp
+# ================================================
+# Logs
+# ================================================
+logs/
 *.log
 npm-debug.log*
 yarn-debug.log*
@@ -57,124 +70,119 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-# Development Scripts (keep version-controlled scripts in /scripts)
-*.ps1
-!scripts/*.ps1
-!scripts/*.sh
-!backend/scripts/*.ps1
-!backend/scripts/*.sh
+# Debug & temporary files
+debug_*
+debug.*
+*.debug
 
-# Database & Cache
-*.db
-*.sqlite
-*.sqlite3
-dump.rdb
-*.aof
-.cache/
-.eslintcache
+# ================================================
+# IDE & Editors
+# ================================================
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+.DS_Store
+*.pem
 
-# Build Artifacts
-*.class
-*.jar
-*.o
-*.a
-*.dll
-*.exe
-.next/
-.nuxt/
-
-# Rust Build Artifacts
-quantum-core/target/
-static-analyzer-core/target/
-**/target/debug/
-**/target/release/
-**/target/.rustc_info.json
-**/*.rs.bk
-# Cargo.lock is tracked for deterministic CI builds
+# ================================================
+# Rust
+# ================================================
+target/
+Cargo.lock
 !Cargo.lock
-!swarm/core/quantum_bridge/Cargo.lock
 
-# Backup files
+# ================================================
+# Python
+# ================================================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# ================================================
+# Temporary & Backup Files
+# ================================================
+tmp/
+temp/
+*.tmp
+*.temp
 *.bak
 *.backup
+*.orig
+*.save
 *~
 
-# Archives
-*.zip
-*.tar
-*.tar.gz
-*.7z
-*.rar
-
-# Generated/Temporary Documentation (keep primary docs tracked)
-PREVIOUS_*.md
-OLD_*.md
-TEMP_*.md
-DEPRECATED_*.md
-
-# Setup/Installer Temporary Files
-setup-*.ps1
-install-*.ps1
-migrate-*.ps1
-fix-*.ps1
-convert-*.ps1
-
-# Load Test Artifacts
-load-tests/results/
-load-tests/*.json
-load-tests/output/
-
-# Terraform State
-*.tfstate
-*.tfstate.*
-.terraform/
-.terraform.lock.hcl
-
-# Docker
-.dockerignore
-.docker-sync/
-docker-compose.override.yml
-
-# Quantum Engine (Tracked)
-!QuantumEnginePortable.js
-
-# Runtime Data & Reports (never commit)
-swarm_memory.json
-quantum_analysis_report.json
-QUANTUM_HEALTH_REPORT.json
-quantum_verification_report.json
-reports/
-logs/
-data/
-!src/data/quantum_state.json
-!src/data/quantum_predictions.json
-playwright-report/
-
-swarm/core/quantum_bridge/target/
-whatsapp_qr.png
-
-# Models & Large Binary Data (Neural Bridge)
-swarm/factory/models/
-unsloth_compiled_cache/
-*.gguf
-*.safetensors
-*.bin
-__pycache__/
-
-# Clawd API keys - NEVER commit
-.env.clawd
-infrastructure/clawd-hybrid-rtx/.env.clawd
-apps/backend/backend/.env
-
-# AppForge generated diagnostics / resolved artifacts
-*.resolved.*
-final_scan_v*.txt
-full_test_results*.txt
-verification_results*.txt
-sidebar_test_output.txt
-tsc_output.txt
+# CI/CD temporary files
+fail_log_*
+final_scan_*
+qaswarm_*
+typecheck_report_*
+build_log_*
+code_scanning_fail.txt
+collapse_error.txt
+commit_details.txt
+conflicts.txt
+consensus_fail.txt
+core_diff.txt
+cycle_test_error.txt
+debug_health.txt
 debug_output.txt
-test_failure_debug.txt
+definition_lines.txt
+error.txt
+evo_log.txt
+final_results.txt
+git_status.txt
+help_output.txt
+import_path_findings.txt
+link_help.txt
+matching_lines.txt
+node_ci_fail*.txt
+npm_*_error.txt
 oracle_*.txt
+package_diff*.txt
+push_*.txt
+renorm_fail.txt
 renormalization_tap.txt
-run_list.txt
+run_list*.txt
+test_*.txt
+tsc_*.txt
+typecheck_*.txt
+verification_results.txt
+
+# ================================================
+# OS Files
+# ================================================
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db

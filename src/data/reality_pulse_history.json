@@ -1,70 +1,5 @@
 [
   {
-    "timestamp": "2026-02-28T20:34:23.790Z",
-    "directive": "Deep hardening of the Quantum Engine's resilience",
-    "confidence": 0.99
-  },
-  {
-    "timestamp": "2026-02-28T21:21:10.089Z",
-    "directive": "Expansion of the P2P resonance and decentralized coordination",
-    "confidence": 0.99
-  },
-  {
-    "timestamp": "2026-02-28T22:22:43.632Z",
-    "directive": "Deep hardening of the Quantum Engine's resilience",
-    "confidence": 0.99
-  },
-  {
-    "timestamp": "2026-02-28T23:22:11.176Z",
-    "directive": "Expansion of the P2P resonance and decentralized coordination",
-    "confidence": 0.99
-  },
-  {
-    "timestamp": "2026-03-01T01:11:42.055Z",
-    "directive": "Deep hardening of the Quantum Engine's resilience",
-    "confidence": 0.99
-  },
-  {
-    "timestamp": "2026-03-01T01:20:27.717Z",
-    "directive": "Expansion of the P2P resonance and decentralized coordination",
-    "confidence": 0.99
-  },
-  {
-    "timestamp": "2026-03-01T01:23:58.145Z",
-    "directive": "Deep hardening of the Quantum Engine's resilience",
-    "confidence": 0.99
-  },
-  {
-    "timestamp": "2026-03-01T02:11:25.924Z",
-    "directive": "Expansion of the P2P resonance and decentralized coordination",
-    "confidence": 0.99
-  },
-  {
-    "timestamp": "2026-03-01T02:41:06.753Z",
-    "directive": "Deep hardening of the Quantum Engine's resilience",
-    "confidence": 0.99
-  },
-  {
-    "timestamp": "2026-03-01T02:43:58.087Z",
-    "directive": "Expansion of the P2P resonance and decentralized coordination",
-    "confidence": 0.99
-  },
-  {
-    "timestamp": "2026-03-01T02:53:51.946Z",
-    "directive": "Deep hardening of the Quantum Engine's resilience",
-    "confidence": 0.99
-  },
-  {
-    "timestamp": "2026-03-01T04:24:33.277Z",
-    "directive": "Expansion of the P2P resonance and decentralized coordination",
-    "confidence": 0.99
-  },
-  {
-    "timestamp": "2026-03-01T04:36:08.816Z",
-    "directive": "Deep hardening of the Quantum Engine's resilience",
-    "confidence": 0.99
-  },
-  {
     "timestamp": "2026-03-01T04:54:02.996Z",
     "directive": "Expansion of the P2P resonance and decentralized coordination",
     "confidence": 0.99
@@ -148,5 +83,70 @@
     "timestamp": "2026-03-02T05:17:25.192Z",
     "directive": "Stabilize high-churn zone SWARM_STATUS.md with tests and safeguards",
     "confidence": 0.99
+  },
+  {
+    "timestamp": "2026-03-02T08:53:07.845Z",
+    "directive": "Autonomous feature generation for the Sovereign UI",
+    "confidence": 0.6663556968850668
+  },
+  {
+    "timestamp": "2026-03-02T08:56:31.941Z",
+    "directive": "Stabilize high-churn zone SWARM_STATUS.md with tests and safeguards",
+    "confidence": 0.99
+  },
+  {
+    "timestamp": "2026-03-02T13:08:24.903Z",
+    "directive": "Autonomous feature generation for the Sovereign UI",
+    "confidence": 0.5572771779508684
+  },
+  {
+    "timestamp": "2026-03-02T13:15:17.121Z",
+    "directive": "Stabilize high-churn zone SWARM_STATUS.md with tests and safeguards",
+    "confidence": 0.99
+  },
+  {
+    "timestamp": "2026-03-02T16:55:47.310Z",
+    "directive": "Autonomous feature generation for the Sovereign UI",
+    "confidence": 0.5591819263897168
+  },
+  {
+    "timestamp": "2026-03-02T17:00:07.300Z",
+    "directive": "Stabilize high-churn zone SWARM_STATUS.md with tests and safeguards",
+    "confidence": 0.99
+  },
+  {
+    "timestamp": "2026-03-02T20:42:24.827Z",
+    "directive": "Autonomous feature generation for the Sovereign UI",
+    "confidence": 0.5532103444637432
+  },
+  {
+    "timestamp": "2026-03-02T20:45:31.435Z",
+    "directive": "Stabilize high-churn zone SWARM_STATUS.md with tests and safeguards",
+    "confidence": 0.99
+  },
+  {
+    "timestamp": "2026-03-02T22:27:58.309Z",
+    "directive": "Autonomous feature generation for the Sovereign UI",
+    "confidence": 0.555821607854786
+  },
+  {
+    "timestamp": "2026-03-03T02:32:30.537Z",
+    "directive": "Stabilize high-churn zone SWARM_STATUS.md with tests and safeguards",
+    "confidence": 0.99
+  },
+  {
+    "timestamp": "2026-03-03T02:44:14.534Z",
+    "directive": "Autonomous feature generation for the Sovereign UI",
+    "confidence": 0.5583193228692428
+  },
+  {
+    "timestamp": "2026-03-03T05:14:02.793Z",
+    "directive": "Stabilize high-churn zone SWARM_STATUS.md with tests and safeguards",
+    "confidence": 0.99
+  },
+  {
+    "timestamp": "2026-03-03T08:50:10.642Z",
+    "directive": "Autonomous feature generation for the Sovereign UI",
+    "confidence": 0.5717852229114998
   }
 ]
