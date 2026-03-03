@@ -1,10 +1,5 @@
 [
   {
-    "timestamp": "2026-03-01T05:16:52.976Z",
-    "directive": "Stabilize high-churn zone src/data/quantum_oracle_state.json with tests and safeguards",
-    "confidence": 0.99
-  },
-  {
     "timestamp": "2026-03-01T05:19:50.824Z",
     "directive": "Stabilize high-churn zone build_logs.txt with tests and safeguards",
     "confidence": 0.99
@@ -148,5 +143,10 @@
     "timestamp": "2026-03-03T13:13:29.450Z",
     "directive": "Autonomous feature generation for the Sovereign UI",
     "confidence": 0.5680129859277152
+  },
+  {
+    "timestamp": "2026-03-03T16:55:55.985Z",
+    "directive": "Stabilize high-churn zone SWARM_STATUS.md with tests and safeguards",
+    "confidence": 0.99
   }
 ]
