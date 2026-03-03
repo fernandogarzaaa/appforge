@@ -1,0 +1,82 @@
+{
+  "CryptoSwarm": {
+    "name": "CryptoSwarm",
+    "successRate": 0.85,
+    "revenue": 15000,
+    "tasksCompleted": 150,
+    "efficiency": 0.88,
+    "lastActive": "2026-03-03T05:15:15.019Z"
+  },
+  "RevenueHunter": {
+    "name": "RevenueHunter",
+    "successRate": 0.78,
+    "revenue": 12000,
+    "tasksCompleted": 89,
+    "efficiency": 0.82,
+    "lastActive": "2026-03-03T05:15:15.019Z"
+  },
+  "FreelanceSwarm": {
+    "name": "FreelanceSwarm",
+    "successRate": 0.72,
+    "revenue": 8500,
+    "tasksCompleted": 45,
+    "efficiency": 0.75,
+    "lastActive": "2026-03-03T05:15:15.019Z"
+  },
+  "TrendAnalyzer": {
+    "name": "TrendAnalyzer",
+    "successRate": 0.8,
+    "revenue": 0,
+    "tasksCompleted": 200,
+    "efficiency": 0.85,
+    "lastActive": "2026-03-03T05:15:15.019Z"
+  },
+  "ArbitrageHunter": {
+    "name": "ArbitrageHunter",
+    "successRate": 0.65,
+    "revenue": 2500,
+    "tasksCompleted": 30,
+    "efficiency": 0.7,
+    "lastActive": "2026-03-03T05:15:15.019Z"
+  },
+  "YieldOptimizer": {
+    "name": "YieldOptimizer",
+    "successRate": 0.7,
+    "revenue": 1800,
+    "tasksCompleted": 25,
+    "efficiency": 0.72,
+    "lastActive": "2026-03-03T05:15:15.019Z"
+  },
+  "MarketAnalyzer": {
+    "name": "MarketAnalyzer",
+    "successRate": 0.75,
+    "revenue": 0,
+    "tasksCompleted": 120,
+    "efficiency": 0.78,
+    "lastActive": "2026-03-03T05:15:15.019Z"
+  },
+  "SalesBot": {
+    "name": "SalesBot",
+    "successRate": 0.82,
+    "revenue": 5000,
+    "tasksCompleted": 35,
+    "efficiency": 0.85,
+    "lastActive": "2026-03-03T05:15:15.019Z"
+  },
+  "ReferralManager": {
+    "name": "ReferralManager",
+    "successRate": 0.68,
+    "revenue": 3200,
+    "tasksCompleted": 60,
+    "efficiency": 0.71,
+    "lastActive": "2026-03-03T05:15:15.019Z"
+  },
+  "SolanaDeFiSwarm": {
+    "name": "SolanaDeFiSwarm",
+    "successRate": 0.5,
+    "revenue": 0,
+    "tasksCompleted": 0,
+    "lastActive": "2026-03-03T05:15:17.704Z",
+    "efficiency": 0.5
+  }
+}
