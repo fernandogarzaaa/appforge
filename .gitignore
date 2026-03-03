@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Environment Variables
 .env
 .env.local
@@ -166,3 +165,16 @@ __pycache__/
 .env.clawd
 infrastructure/clawd-hybrid-rtx/.env.clawd
 apps/backend/backend/.env
+
+# AppForge generated diagnostics / resolved artifacts
+*.resolved.*
+final_scan_v*.txt
+full_test_results*.txt
+verification_results*.txt
+sidebar_test_output.txt
+tsc_output.txt
+debug_output.txt
+test_failure_debug.txt
+oracle_*.txt
+renormalization_tap.txt
+run_list.txt

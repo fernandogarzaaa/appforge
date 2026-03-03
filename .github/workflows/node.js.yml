@@ -50,6 +50,9 @@ jobs:
       - name: Lint
         run: npm run lint
 
+      - name: Typecheck (app scope)
+        run: npm run typecheck:app
+
       - name: Run unit tests with coverage
         run: npm run test:coverage
 
