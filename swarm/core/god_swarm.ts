@@ -49,6 +49,47 @@ interface SpawnRequest {
     resources: { cpu: number; memory: number };
 }
 
+interface SpawnBlueprint {
+    purpose: string;
+    triggerKeywords: string[];
+    capabilities: string[];
+    resources: { cpu: number; memory: number };
+}
+
+interface MutationPolicyDecision {
+    allowed: boolean;
+    reasons: string[];
+    qualityScore: number;
+}
+
+const SWARM_REGISTRY_PATH = path.join(process.cwd(), 'swarm', 'data', 'swarm_registry.json');
+const AUTONOMOUS_SPAWN_BLUEPRINTS: SpawnBlueprint[] = [
+    {
+        purpose: 'TypeGuardian',
+        triggerKeywords: ['type', 'typing', 'contract', 'typescript'],
+        capabilities: ['typecheck', 'contract-validation', 'build-healing'],
+        resources: { cpu: 0.2, memory: 256 }
+    },
+    {
+        purpose: 'CodebaseSurgeon',
+        triggerKeywords: ['refactor', 'decompose', 'complexity', 'architecture'],
+        capabilities: ['module-decomposition', 'coupling-analysis', 'refactor-blueprints'],
+        resources: { cpu: 0.25, memory: 256 }
+    },
+    {
+        purpose: 'RuntimeBoundary',
+        triggerKeywords: ['runtime', 'deno', 'node', 'module'],
+        capabilities: ['runtime-contracts', 'dependency-validation', 'boundary-hardening'],
+        resources: { cpu: 0.2, memory: 192 }
+    },
+    {
+        purpose: 'MutationGuard',
+        triggerKeywords: ['mutation', 'governance', 'policy', 'guard'],
+        capabilities: ['policy-enforcement', 'risk-scoring', 'mutation-auditing'],
+        resources: { cpu: 0.15, memory: 128 }
+    }
+];
+
 export class TrueGodSwarm {
     private sovereignModel: SovereignModelProvider;
     private swarmRegistry: Map<string, SwarmMetrics>;
@@ -71,6 +112,8 @@ export class TrueGodSwarm {
      */
     private async initializeGodPowers(): Promise<void> {
         console.log('🔱 [GOD SWARM] Initializing god-level powers...');
+
+        await this.loadSwarmRegistryFromDisk();
 
         // Load existing swarms
         await this.discoverSwarms();
@@ -192,19 +235,47 @@ Write 5 core directives that govern your behavior. Be concise but comprehensive.
         launchCommand: string;
         confidence: number;
     }> {
-        console.log(`🧬 [GOD SWARM] Spawning new swarm: ${request.purpose}`);
+        const normalizedPurpose = this.normalizePurposeName(request.purpose);
+        const swarmName = `${normalizedPurpose}Swarm`;
+        console.log(`🧬 [GOD SWARM] Spawning new swarm: ${normalizedPurpose}`);
+
+        if (this.swarmRegistry.has(swarmName)) {
+            return {
+                success: true,
+                swarmName,
+                files: [],
+                launchCommand: `npx tsx swarm/agents/${swarmName}.ts`,
+                confidence: 1
+            };
+        }
+
+        const policyDecision = this.evaluateSpawnMutationPolicy(request);
+        if (!policyDecision.allowed) {
+            console.warn(`⚠️ [GOD SWARM] Spawn blocked by mutation policy: ${policyDecision.reasons.join('; ')}`);
+            return {
+                success: false,
+                swarmName,
+                files: [],
+                launchCommand: `npx tsx swarm/agents/${swarmName}.ts`,
+                confidence: policyDecision.qualityScore
+            };
+        }
 
         // 1. Analyze market need
-        const marketAnalysis = await this.analyzeMarketNeed(request);
+        const normalizedRequest: SpawnRequest = {
+            ...request,
+            purpose: normalizedPurpose
+        };
+
+        const marketAnalysis = await this.analyzeMarketNeed(normalizedRequest);
 
         // 2. Generate swarm architecture
-        const architecture = await this.generateSwarmArchitecture(request, marketAnalysis);
+        const architecture = await this.generateSwarmArchitecture(normalizedRequest, marketAnalysis);
 
         // 3. Create swarm files
-        const files = await this.writeSwarmFiles(request.purpose, architecture);
+        const files = await this.writeSwarmFiles(normalizedPurpose, architecture);
 
         // 4. Register swarm
-        const swarmName = `${request.purpose}Swarm`;
         this.swarmRegistry.set(swarmName, {
             name: swarmName,
             successRate: 0,
@@ -216,9 +287,10 @@ Write 5 core directives that govern your behavior. Be concise but comprehensive.
         });
 
         // 5. Generate launch command
-        const launchCommand = `npx tsx swarm/agents/${request.purpose}Swarm.ts`;
+        const launchCommand = `npx tsx swarm/agents/${swarmName}.ts`;
 
-        this.spawnHistory.push(request);
+        this.spawnHistory.push(normalizedRequest);
+        await this.saveSwarmRegistryToDisk();
 
         return {
             success: true,
@@ -240,6 +312,7 @@ Write 5 core directives that govern your behavior. Be concise but comprehensive.
         recommendations: string[];
         mutationTriggered: boolean;
         score: number;
+        spawnedSwarms: string[];
     }> {
         console.log('🔱 [GOD SWARM] Running autonomous cycle...');
 
@@ -294,6 +367,9 @@ Write 5 core directives that govern your behavior. Be concise but comprehensive.
         // 5. Check for spawning opportunities
         const spawnNeeds = await this.detectSpawnNeeds();
 
+        // 5b. Execute controlled autonomous spawning
+        const spawnedSwarms = await this.executeAutonomousSpawns(spawnNeeds, 2);
+
         // 6. Generate recommendations
         const recommendations = await sovereignModel.chat({
             system: 'You are the GOD SWARM. Provide actionable recommendations.',
@@ -308,7 +384,8 @@ Write 5 core directives that govern your behavior. Be concise but comprehensive.
             spawnsPending: spawnNeeds.length,
             recommendations: recommendations?.choices?.[0]?.message?.content?.split('\n').filter(Boolean) || [],
             mutationTriggered,
-            score: mutationScore
+            score: mutationScore,
+            spawnedSwarms
         };
     }
 
@@ -348,13 +425,21 @@ Write 5 core directives that govern your behavior. Be concise but comprehensive.
 
     private async discoverSwarms(): Promise<void> {
         const agentsDir = 'swarm/agents';
+        const signals = realitySensor.getSignals();
+        const sysStability = signals.some(s => s.type === 'BUILD_FAILURE') ? 0.3 : 0.95;
+
+        // Keep persisted swarms in sync with current telemetry baseline.
+        for (const metrics of this.swarmRegistry.values()) {
+            metrics.successRate = sysStability;
+            metrics.efficiency = sysStability * 0.98;
+            metrics.lastActive = new Date();
+        }
+
         try {
             const files = await fs.readdir(agentsDir);
             for (const file of files) {
                 if (file.endsWith('Swarm.ts') || file.endsWith('Agent.ts')) {
                     const name = file.replace('.ts', '');
-                    const signals = realitySensor.getSignals();
-                    const sysStability = signals.some(s => s.type === 'BUILD_FAILURE') ? 0.3 : 0.95;
 
                     this.swarmRegistry.set(name, {
                         name,
@@ -427,17 +512,124 @@ export class ${purpose}Swarm {
     }
 
     private async detectSpawnNeeds(): Promise<SpawnRequest[]> {
-        // Analyze performance gaps
+        const needs = this.buildSpawnBacklog();
+        return needs.sort((a, b) => a.priority - b.priority);
+    }
+
+    private buildSpawnBacklog(): SpawnRequest[] {
         const needs: SpawnRequest[] = [];
+        const existingNames = new Set(Array.from(this.swarmRegistry.keys()).map(name => name.toLowerCase()));
+        const directiveText = this.selfDirectives.join(' ').toLowerCase();
+
+        for (const blueprint of AUTONOMOUS_SPAWN_BLUEPRINTS) {
+            const swarmName = `${blueprint.purpose.toLowerCase()}swarm`;
+            if (existingNames.has(swarmName)) {
+                continue;
+            }
+
+            const directiveMatch = blueprint.triggerKeywords.some(keyword => directiveText.includes(keyword));
+            const priority = directiveMatch ? 1 : 2;
+
+            if (directiveMatch || this.swarmRegistry.size < 12) {
+                needs.push({
+                    purpose: blueprint.purpose,
+                    capabilities: blueprint.capabilities,
+                    priority,
+                    resources: blueprint.resources
+                });
+            }
+        }
+
         if (this.swarmRegistry.size < 5) {
             needs.push({
                 purpose: 'Monitoring',
-                capabilities: ['health-checks', 'alerts'],
+                capabilities: ['health-checks', 'alerts', 'slo-tracking'],
                 priority: 1,
                 resources: { cpu: 0.1, memory: 128 }
             });
         }
+
         return needs;
+    }
+
+    private evaluateSpawnMutationPolicy(request: SpawnRequest): MutationPolicyDecision {
+        const reasons: string[] = [];
+        const qualityScore = request.capabilities.length >= 2 ? 0.9 : 0.6;
+
+        if (request.capabilities.length < 2) {
+            reasons.push('spawn requests require at least two capabilities');
+        }
+
+        if (request.resources.cpu > 0.5) {
+            reasons.push('spawn cpu budget exceeds maximum allowed 0.5');
+        }
+
+        if (request.resources.memory > 512) {
+            reasons.push('spawn memory budget exceeds maximum allowed 512MB');
+        }
+
+        return {
+            allowed: reasons.length === 0,
+            reasons,
+            qualityScore
+        };
+    }
+
+    private async executeAutonomousSpawns(needs: SpawnRequest[], maxSpawnsPerCycle: number): Promise<string[]> {
+        const spawned: string[] = [];
+        for (const request of needs.slice(0, maxSpawnsPerCycle)) {
+            const result = await this.spawnSwarm(request);
+            if (result.success) {
+                spawned.push(result.swarmName);
+            }
+        }
+        return spawned;
+    }
+
+    private normalizePurposeName(rawPurpose: string): string {
+        const cleaned = rawPurpose.replace(/[^a-zA-Z0-9 ]/g, ' ').trim();
+        if (!cleaned) {
+            return 'Autonomous';
+        }
+
+        return cleaned
+            .split(/\s+/)
+            .map(token => token[0].toUpperCase() + token.slice(1).toLowerCase())
+            .join('');
+    }
+
+    private async loadSwarmRegistryFromDisk(): Promise<void> {
+        try {
+            const raw = await fs.readFile(SWARM_REGISTRY_PATH, 'utf8');
+            const parsed = JSON.parse(raw) as Record<string, Partial<SwarmMetrics>>;
+
+            for (const [name, metrics] of Object.entries(parsed)) {
+                this.swarmRegistry.set(name, {
+                    name,
+                    successRate: Number(metrics.successRate ?? 0),
+                    revenue: Number(metrics.revenue ?? 0),
+                    tasksCompleted: Number(metrics.tasksCompleted ?? 0),
+                    errors: Array.isArray(metrics.errors) ? metrics.errors : [],
+                    efficiency: Number(metrics.efficiency ?? 0),
+                    lastActive: metrics.lastActive ? new Date(metrics.lastActive) : new Date()
+                });
+            }
+        } catch {
+            // First run: registry may not exist yet.
+        }
+    }
+
+    private async saveSwarmRegistryToDisk(): Promise<void> {
+        const output: Record<string, Omit<SwarmMetrics, 'lastActive'> & { lastActive: string }> = {};
+
+        for (const [name, metrics] of this.swarmRegistry.entries()) {
+            output[name] = {
+                ...metrics,
+                lastActive: metrics.lastActive.toISOString()
+            };
+        }
+
+        await fs.writeFile(SWARM_REGISTRY_PATH, `${JSON.stringify(output, null, 2)}\n`, 'utf8');
     }
 
     private isSafeCommand(cmd: string): boolean {
