@@ -291,7 +291,7 @@ interface UseAutonomousModeReturn {
  * Hook for controlling autonomous mode
  */
 export function useAutonomousMode(): UseAutonomousModeReturn {
-  const [mode, setModeState] = useState<'useAutonomousModeReturn['mode']>('active');
+  const [mode, setModeState] = useState<UseAutonomousModeReturn['mode']>('active');
   const [enabled, setEnabledState] = useState(true);
   const systemRef = useRef(getAutonomousSystem());
 

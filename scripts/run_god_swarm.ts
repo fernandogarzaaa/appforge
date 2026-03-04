@@ -18,6 +18,11 @@ async function main() {
     console.log(`   Swarms Monitored: ${result.swarmsMonitored}`);
     console.log(`   Directives Active: ${result.directivesActive}`);
     console.log(`   Spawns Pending: ${result.spawnsPending}`);
+    console.log(`   Spawned This Cycle: ${result.spawnedSwarms.length}`);
+
+    if (result.spawnedSwarms.length > 0) {
+        console.log(`   New Swarms: ${result.spawnedSwarms.join(', ')}`);
+    }
     
     console.log('\n💡 RECOMMENDATIONS:');
     result.recommendations.forEach((r, i) => {
