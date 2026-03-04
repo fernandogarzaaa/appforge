@@ -1,5 +1,5 @@
 {
-  "analyzedAt": "2026-03-04T05:12:23.633Z",
+  "analyzedAt": "2026-03-04T13:07:04.438Z",
   "coreHealth": "Robust",
   "repoScope": 151,
   "insights": [
@@ -811,7 +811,7 @@
     },
     {
       "file": "swarm/core/god_swarm.ts",
-      "complexity": 16582,
+      "complexity": 23545,
       "logicDensity": 0,
       "patterns": {
         "hasOracleConsultation": false,
