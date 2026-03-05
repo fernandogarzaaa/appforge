@@ -39,9 +39,7 @@ jobs:
       - name: Expose run context
         id: context
         run: |
-          echo "has_task=$(node -e \"console.log(require('./swarm/run_context.json').has_task)\")" >> "$GITHUB_OUTPUT"
-          echo "run_id=$(node -e \"console.log(require('./swarm/run_context.json').run_id)\")" >> "$GITHUB_OUTPUT"
-          echo "strategies=$(node -e \"console.log(JSON.stringify(require('./swarm/run_context.json').strategies.map((s)=>s.id)))\")" >> "$GITHUB_OUTPUT"
+          node scripts/extract_run_context.js >> "$GITHUB_OUTPUT"
 
       - name: Upload swarm state
         uses: actions/upload-artifact@v4
