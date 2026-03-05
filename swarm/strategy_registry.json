@@ -1,0 +1,37 @@
+[
+  {
+    "name": "targeted-test-repair",
+    "goal": "fix_failing_tests",
+    "description": "Focus on failing test traces and repair the smallest affected units first.",
+    "success_rate": 0.6,
+    "attempts": 5
+  },
+  {
+    "name": "benchmark-hotpath-optimizer",
+    "goal": "increase_benchmark_score",
+    "description": "Optimize measured hot paths, then rerun microbenchmarks.",
+    "success_rate": 0.5,
+    "attempts": 4
+  },
+  {
+    "name": "curiosity-feature-scout",
+    "goal": "explore_new_features",
+    "description": "Probe lightweight feature experiments and collect quick feasibility feedback.",
+    "success_rate": 0.4,
+    "attempts": 3
+  },
+  {
+    "name": "quality-static-hardening",
+    "goal": "improve_code_quality",
+    "description": "Apply lint/type-driven hardening and remove unstable patterns.",
+    "success_rate": 0.55,
+    "attempts": 6
+  },
+  {
+    "name": "perf-budget-enforcer",
+    "goal": "optimize_performance",
+    "description": "Use performance budgets and tune expensive execution paths.",
+    "success_rate": 0.45,
+    "attempts": 2
+  }
+]

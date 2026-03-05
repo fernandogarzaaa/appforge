@@ -1,0 +1,20 @@
+[
+  {
+    "name": "autonomous_swarm",
+    "workflow": ".github/workflows/autonomous_swarm.yml",
+    "capabilities": ["test_repair", "code_quality"],
+    "created_at": "2026-01-01T00:00:00.000Z"
+  },
+  {
+    "name": "quantum_evolution",
+    "workflow": ".github/workflows/quantum_evolution.yml",
+    "capabilities": ["performance_optimization"],
+    "created_at": "2026-01-01T00:00:00.000Z"
+  },
+  {
+    "name": "frontend_qa_swarm",
+    "workflow": ".github/workflows/frontend_qa_swarm.yml",
+    "capabilities": ["security_scanning"],
+    "created_at": "2026-01-01T00:00:00.000Z"
+  }
+]

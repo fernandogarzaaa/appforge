@@ -1,3 +1,6 @@
+import { emitSwarmTelemetry } from './swarm_telemetry.js';
+import { getRedisValue, setRedisValue } from './swarm_redis.js';
+
 export type SwarmSystemState =
   | 'IDLE'
   | 'AUTONOMOUS_SWARM'
@@ -15,6 +18,7 @@ export interface SwarmStateRecord {
 export interface SwarmStateMeta {
   chain_length: number;
   last_workflow: string;
+  same_workflow_streak: number;
 }
 
 export interface SwarmTransitionTelemetry {
@@ -28,14 +32,15 @@ export interface SwarmTransitionTelemetry {
 const SWARM_STATE_KEY = 'appforge:swarm_state';
 const SWARM_META_KEY = 'appforge:swarm_state_meta';
 const MAX_CHAIN_LENGTH = 10;
+const MAX_SAME_WORKFLOW_STREAK = 2;
 
 export const validTransitions: Record<SwarmSystemState, SwarmSystemState[]> = {
-  IDLE: ['AUTONOMOUS_SWARM'],
-  AUTONOMOUS_SWARM: ['BENCHMARK'],
-  BENCHMARK: ['EVOLUTION'],
-  EVOLUTION: ['QA'],
-  QA: ['IDLE'],
-  CURIOSITY: ['AUTONOMOUS_SWARM']
+  IDLE: ['AUTONOMOUS_SWARM', 'CURIOSITY'],
+  AUTONOMOUS_SWARM: ['BENCHMARK', 'QA'],
+  BENCHMARK: ['EVOLUTION', 'QA'],
+  EVOLUTION: ['QA', 'IDLE'],
+  QA: ['IDLE', 'AUTONOMOUS_SWARM'],
+  CURIOSITY: ['AUTONOMOUS_SWARM', 'IDLE']
 };
 
 export const workflowToState: Record<string, SwarmSystemState> = {
@@ -68,57 +73,6 @@ function isValidState(input: string): input is SwarmSystemState {
   return input in validTransitions;
 }
 
-function getRedisConfig() {
-  const url = process.env.UPSTASH_REDIS_REST_URL;
-  const token = process.env.UPSTASH_REDIS_REST_TOKEN;
-  if (!url || !token) {
-    return null;
-  }
-  return { url, token };
-}
-
-async function getRedisValue(key: string): Promise<string | null> {
-  const config = getRedisConfig();
-  if (!config) {
-    return null;
-  }
-
-  const response = await fetch(`${config.url}/get/${key}`, {
-    method: 'GET',
-    headers: {
-      Authorization: `Bearer ${config.token}`
-    }
-  });
-
-  if (!response.ok) {
-    throw new Error(`Redis GET failed (${response.status}) for key ${key}`);
-  }
-
-  const payload = await response.json();
-  return payload?.result ?? null;
-}
-
-async function setRedisValue(key: string, value: unknown): Promise<void> {
-  const config = getRedisConfig();
-  if (!config) {
-    return;
-  }
-
-  const serialized = JSON.stringify(value);
-  const response = await fetch(`${config.url}/set/${key}`, {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${config.token}`
-    },
-    body: serialized
-  });
-
-  if (!response.ok) {
-    const details = await response.text();
-    throw new Error(`Redis SET failed (${response.status}) for key ${key}: ${details}`);
-  }
-}
-
 export function getDefaultSwarmState(runId = 'local'): SwarmStateRecord {
   return {
     state: 'IDLE',
@@ -130,22 +84,18 @@ export function getDefaultSwarmState(runId = 'local'): SwarmStateRecord {
 export function getDefaultSwarmMeta(): SwarmStateMeta {
   return {
     chain_length: 0,
-    last_workflow: ''
+    last_workflow: '',
+    same_workflow_streak: 0
   };
 }
 
 export async function readSwarmState(runId = 'local'): Promise<{ record: SwarmStateRecord; wasReset: boolean }> {
   try {
-    const raw = await getRedisValue(SWARM_STATE_KEY);
-    if (!raw) {
-      return { record: getDefaultSwarmState(runId), wasReset: false };
-    }
-
-    const parsed = JSON.parse(raw) as SwarmStateRecord;
+    const parsed = await getRedisValue<SwarmStateRecord>(SWARM_STATE_KEY);
     if (!parsed?.state || !isValidState(parsed.state)) {
       const resetRecord = getDefaultSwarmState(runId);
       await setRedisValue(SWARM_STATE_KEY, resetRecord);
-      return { record: resetRecord, wasReset: true };
+      return { record: resetRecord, wasReset: !!parsed };
     }
 
     return { record: parsed, wasReset: false };
@@ -156,17 +106,16 @@ export async function readSwarmState(runId = 'local'): Promise<{ record: SwarmSt
 
 export async function readSwarmMeta(): Promise<SwarmStateMeta> {
   try {
-    const raw = await getRedisValue(SWARM_META_KEY);
-    if (!raw) {
-      return getDefaultSwarmMeta();
-    }
-
-    const parsed = JSON.parse(raw) as SwarmStateMeta;
+    const parsed = await getRedisValue<SwarmStateMeta>(SWARM_META_KEY);
     if (!Number.isFinite(parsed?.chain_length) || typeof parsed?.last_workflow !== 'string') {
       return getDefaultSwarmMeta();
     }
 
-    return parsed;
+    return {
+      chain_length: parsed.chain_length,
+      last_workflow: parsed.last_workflow,
+      same_workflow_streak: Number.isFinite(parsed.same_workflow_streak) ? parsed.same_workflow_streak : 0
+    };
   } catch {
     return getDefaultSwarmMeta();
   }
@@ -215,17 +164,23 @@ export async function applyWorkflowCompletion(options: {
   const nextState = workflowToState[workflowName];
 
   if (!forceOverride && !isValidTransition(record.state, nextState)) {
-    const resetRecord = getDefaultSwarmState(runId);
-    const resetMeta = getDefaultSwarmMeta();
-    await persistSwarmState(resetRecord);
-    await persistSwarmMeta(resetMeta);
-    return { record: resetRecord, meta: resetMeta, status: 'rejected' };
+    return { record, meta, status: 'rejected' };
+  }
+
+  const nextStreak = meta.last_workflow === workflowName ? meta.same_workflow_streak + 1 : 1;
+  if (!forceOverride && nextStreak > MAX_SAME_WORKFLOW_STREAK) {
+    return { record, meta, status: 'rejected' };
   }
 
   const updatedMeta: SwarmStateMeta = {
     chain_length: nextState === 'IDLE' ? 0 : meta.chain_length + 1,
-    last_workflow: workflowName
+    last_workflow: workflowName,
+    same_workflow_streak: nextStreak
   };
+
+  if (!forceOverride && updatedMeta.chain_length > MAX_CHAIN_LENGTH) {
+    return { record, meta, status: 'rejected' };
+  }
 
   const updatedRecord: SwarmStateRecord = {
     state: nextState,
@@ -233,21 +188,16 @@ export async function applyWorkflowCompletion(options: {
     run_id: runId
   };
 
-  if (updatedMeta.chain_length > MAX_CHAIN_LENGTH && !forceOverride) {
-    const resetRecord = getDefaultSwarmState(runId);
-    const resetMeta = getDefaultSwarmMeta();
-    await persistSwarmState(resetRecord);
-    await persistSwarmMeta(resetMeta);
-    return { record: resetRecord, meta: resetMeta, status: 'rejected' };
-  }
-
   await persistSwarmState(updatedRecord);
   await persistSwarmMeta(updatedMeta);
+
+  const telemetry = buildTransitionTelemetry(record.state, nextState, runId);
+  await emitSwarmTelemetry(telemetry);
 
   return {
     record: updatedRecord,
     meta: updatedMeta,
-    telemetry: buildTransitionTelemetry(record.state, nextState, runId),
+    telemetry,
     status: 'updated'
   };
 }
@@ -256,9 +206,10 @@ export function canDispatchAction(options: {
   currentState: SwarmSystemState;
   requestedAction: string;
   lastWorkflow: string;
+  sameWorkflowStreak?: number;
   forceOverride?: boolean;
 }): { allowed: boolean; reason: string } {
-  const { currentState, requestedAction, lastWorkflow, forceOverride = false } = options;
+  const { currentState, requestedAction, lastWorkflow, sameWorkflowStreak = 0, forceOverride = false } = options;
   const targetState = actionToState[requestedAction];
 
   if (!targetState) {
@@ -273,10 +224,10 @@ export function canDispatchAction(options: {
   }
 
   const workflowName = Object.entries(workflowToState).find(([, state]) => state === targetState)?.[0] ?? '';
-  if (!forceOverride && workflowName && lastWorkflow === workflowName) {
+  if (!forceOverride && workflowName && lastWorkflow === workflowName && sameWorkflowStreak >= MAX_SAME_WORKFLOW_STREAK) {
     return {
       allowed: false,
-      reason: `Consecutive workflow blocked for '${workflowName}'`
+      reason: `Workflow '${workflowName}' exceeded consecutive limit (${MAX_SAME_WORKFLOW_STREAK})`
     };
   }
 
