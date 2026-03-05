@@ -39,7 +39,10 @@ Deno.serve(async (req) => {
 
     // Execute workflow nodes
     const nodes = bot.nodes || [];
-    let executionResult = { success: true, context: executionContext };
+    let executionResult: { success: boolean; context: typeof executionContext; error?: string } = {
+      success: true,
+      context: executionContext
+    };
 
     for (let i = 0; i < nodes.length; i++) {
       const node = nodes[i];
@@ -62,7 +65,7 @@ Deno.serve(async (req) => {
     }
 
     // Store execution log
-    const executionTime = new Date() - new Date(executionContext.startTime);
+    const executionTime = Date.now() - new Date(executionContext.startTime).getTime();
     try {
       await base44.entities.WorkflowExecution.create({
         bot_id: botId,
@@ -72,8 +75,9 @@ Deno.serve(async (req) => {
         results: executionContext.results,
         logs: executionContext.logs
       });
-    } catch (logError) {
-      console.error(`Failed to log execution: ${logError.message}`);
+    } catch (logError: unknown) {
+      const logErrorMsg = logError instanceof Error ? logError.message : String(logError);
+      console.error(`Failed to log execution: ${logErrorMsg}`);
     }
 
     return Response.json({
@@ -83,9 +87,10 @@ Deno.serve(async (req) => {
       logs: executionContext.logs,
       results: executionContext.results
     });
-  } catch (error) {
+  } catch (error: unknown) {
+    const errorMsg = error instanceof Error ? error.message : String(error);
     return Response.json(
-      { error: error.message },
+      { error: errorMsg },
       { status: 500 }
     );
   }
@@ -110,8 +115,9 @@ async function executeNode(node, context, base44) {
       default:
         return { success: false, error: `Unknown node type: ${node.type}` };
     }
-  } catch (error) {
-    return { success: false, error: error.message };
+  } catch (error: unknown) {
+    const errorMsg = error instanceof Error ? error.message : String(error);
+    return { success: false, error: errorMsg };
   }
 }
 

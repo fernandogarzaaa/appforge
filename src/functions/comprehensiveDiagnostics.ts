@@ -1,5 +1,15 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.6';
 
+interface DiagnosticsState {
+  timestamp: string;
+  user: string;
+  checks: Array<Record<string, unknown>>;
+  issues: Array<Record<string, unknown>>;
+  suggestions: Array<Record<string, unknown>>;
+  stats: Record<string, any>;
+  summary?: Record<string, unknown>;
+}
+
 Deno.serve(async (req) => {
   try {
     const base44 = createClientFromRequest(req);
@@ -9,7 +19,7 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const diagnostics = {
+    const diagnostics: DiagnosticsState = {
       timestamp: new Date().toISOString(),
       user: user.email,
       checks: [],
@@ -33,19 +43,21 @@ Deno.serve(async (req) => {
           const records = await base44.asServiceRole.entities[entityName].list();
           entityStats[entityName] = records.length;
         } catch (e) {
+          const errorMsg = e instanceof Error ? e.message : String(e);
           diagnostics.issues.push({
             severity: 'warning',
             type: 'entity_access',
             entity: entityName,
-            message: `Cannot access ${entityName}: ${e.message}`
+            message: `Cannot access ${entityName}: ${errorMsg}`
           });
         }
       }
       
       diagnostics.stats.entities = entityStats;
       diagnostics.checks.push({ name: 'Entity Access', status: 'passed' });
-    } catch (error) {
-      diagnostics.checks.push({ name: 'Entity Access', status: 'failed', error: error.message });
+    } catch (error: unknown) {
+      const errorMsg = error instanceof Error ? error.message : String(error);
+      diagnostics.checks.push({ name: 'Entity Access', status: 'failed', error: errorMsg });
       diagnostics.issues.push({
         severity: 'critical',
         type: 'entity_system',
@@ -60,8 +72,9 @@ Deno.serve(async (req) => {
       });
       diagnostics.checks.push({ name: 'AI Integration', status: 'passed' });
       diagnostics.stats.aiWorking = true;
-    } catch (error) {
-      diagnostics.checks.push({ name: 'AI Integration', status: 'failed', error: error.message });
+    } catch (error: unknown) {
+      const errorMsg = error instanceof Error ? error.message : String(error);
+      diagnostics.checks.push({ name: 'AI Integration', status: 'failed', error: errorMsg });
       diagnostics.issues.push({
         severity: 'critical',
         type: 'ai_integration',
@@ -87,8 +100,9 @@ Deno.serve(async (req) => {
         }
       }
       diagnostics.checks.push({ name: 'Agents', status: 'passed' });
-    } catch (error) {
-      diagnostics.checks.push({ name: 'Agents', status: 'failed', error: error.message });
+    } catch (error: unknown) {
+      const errorMsg = error instanceof Error ? error.message : String(error);
+      diagnostics.checks.push({ name: 'Agents', status: 'failed', error: errorMsg });
     }
 
     // Feature suggestions based on data
@@ -166,10 +180,12 @@ Deno.serve(async (req) => {
     };
 
     return Response.json(diagnostics);
-  } catch (error) {
+  } catch (error: unknown) {
+    const errorMsg = error instanceof Error ? error.message : String(error);
+    const errorStack = error instanceof Error ? error.stack : undefined;
     return Response.json({ 
-      error: error.message,
-      stack: error.stack 
+      error: errorMsg,
+      stack: errorStack 
     }, { status: 500 });
   }
 });

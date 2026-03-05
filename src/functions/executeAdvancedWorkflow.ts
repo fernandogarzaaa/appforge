@@ -53,7 +53,7 @@ Deno.serve(async (req) => {
           return executeFilter(node, context);
 
         case 'delay':
-          return await executeDelay(node);
+          return await executeDelay(node, context);
 
         default:
           return context;
@@ -83,7 +83,8 @@ Deno.serve(async (req) => {
 
     async function executeLoop(node, ctx, executor) {
       const { arrayField, itemVariableName, loopNodeId, maxIterations } = node.config;
-      const array = getNestedValue(ctx, arrayField) || [];
+      const loopSource = getNestedValue(ctx, arrayField);
+      const array = Array.isArray(loopSource) ? loopSource : [];
       
       let loopContext = ctx;
       const iterations = Math.min(array.length, maxIterations || 1000);
@@ -121,7 +122,7 @@ Deno.serve(async (req) => {
         return getNestedValue(ctx, key) || match;
       });
 
-      const options = {
+      const options: RequestInit & { body?: string } = {
         method,
         headers: { 'Content-Type': 'application/json', ...headers }
       };
@@ -194,7 +195,8 @@ Deno.serve(async (req) => {
 
     function executeFilter(node, ctx) {
       const { arrayVariable, conditions, outputVariable } = node.config;
-      const array = getNestedValue(ctx, arrayVariable) || [];
+      const filterSource = getNestedValue(ctx, arrayVariable);
+      const array = Array.isArray(filterSource) ? filterSource : [];
 
       const filtered = array.filter(item => {
         return (conditions || []).every(cond => {
@@ -209,7 +211,7 @@ Deno.serve(async (req) => {
       };
     }
 
-    async function executeDelay(node) {
+    async function executeDelay(node, ctx) {
       const { duration, unit = 'seconds' } = node.config;
       let ms = duration * 1000;
       if (unit === 'minutes') ms = duration * 60 * 1000;
@@ -220,16 +222,23 @@ Deno.serve(async (req) => {
     }
 
     function applyTransformation(value, type, params = {}) {
+      const config = params as {
+        expression?: string;
+        parts?: string[];
+        separator?: string;
+        pattern?: string;
+        decimalPlaces?: number;
+      };
       switch (type) {
         case 'format_date':
           return new Date(value).toISOString();
         case 'calculate':
-          return eval(params.expression?.replace(/\{(\w+)\}/g, (m, k) => getNestedValue(context, k)));
+          return eval(config.expression?.replace(/\{(\w+)\}/g, (m, k) => getNestedValue(context, k)) || String(value));
         case 'concatenate':
-          const parts = params.parts || [];
-          return parts.join(params.separator || '');
+          const parts = config.parts || [];
+          return parts.join(config.separator || '');
         case 'extract':
-          return new RegExp(params.pattern || '').exec(value)?.[0];
+          return new RegExp(config.pattern || '').exec(String(value))?.[0];
         case 'uppercase':
           return String(value).toUpperCase();
         case 'lowercase':
@@ -237,7 +246,7 @@ Deno.serve(async (req) => {
         case 'trim':
           return String(value).trim();
         case 'round':
-          return Math.round(value * Math.pow(10, params.decimalPlaces || 0)) / Math.pow(10, params.decimalPlaces || 0);
+          return Math.round(Number(value) * Math.pow(10, config.decimalPlaces || 0)) / Math.pow(10, config.decimalPlaces || 0);
         default:
           return value;
       }

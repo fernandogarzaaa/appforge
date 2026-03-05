@@ -1,5 +1,9 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.6';
 
+interface MonitoringMetrics {
+  [key: string]: any;
+}
+
 Deno.serve(async (req) => {
   try {
     const base44 = createClientFromRequest(req);
@@ -10,15 +14,15 @@ Deno.serve(async (req) => {
     }
 
     const timestamp = new Date().toISOString();
-    const criticalIssues = [];
-    const warnings = [];
-    const metrics = {};
+    const criticalIssues: Record<string, any>[] = [];
+    const warnings: Array<Record<string, any> | string> = [];
+    const metrics: MonitoringMetrics = {};
 
     // Monitor automations
     try {
       const automations = await base44.entities.Automation.list();
       metrics.total_automations = automations.length;
-      metrics.active_automations = automations.filter(a => a.is_active).length;
+      metrics.active_automations = automations.filter((a: { is_active?: boolean }) => a.is_active).length;
       
       for (const automation of automations) {
         if (automation.is_active && !automation.function_name) {
@@ -31,8 +35,9 @@ Deno.serve(async (req) => {
           });
         }
       }
-    } catch (e) {
-      warnings.push(`Failed to monitor automations: ${e.message}`);
+    } catch (e: unknown) {
+      const errorMsg = e instanceof Error ? e.message : String(e);
+      warnings.push(`Failed to monitor automations: ${errorMsg}`);
     }
 
     // Monitor workflows
@@ -50,15 +55,16 @@ Deno.serve(async (req) => {
           });
         }
       }
-    } catch (e) {
-      warnings.push(`Failed to monitor workflows: ${e.message}`);
+    } catch (e: unknown) {
+      const errorMsg = e instanceof Error ? e.message : String(e);
+      warnings.push(`Failed to monitor workflows: ${errorMsg}`);
     }
 
     // Monitor integrations
     try {
       const integrations = await base44.entities.IntegrationConnection.list();
       metrics.total_integrations = integrations.length;
-      metrics.healthy_integrations = integrations.filter(i => i.status === 'connected').length;
+      metrics.healthy_integrations = integrations.filter((i: { status?: string }) => i.status === 'connected').length;
       
       for (const integration of integrations) {
         if (integration.status === 'failed' || integration.status === 'error') {
@@ -72,8 +78,9 @@ Deno.serve(async (req) => {
           });
         }
       }
-    } catch (e) {
-      warnings.push(`Failed to monitor integrations: ${e.message}`);
+    } catch (e: unknown) {
+      const errorMsg = e instanceof Error ? e.message : String(e);
+      warnings.push(`Failed to monitor integrations: ${errorMsg}`);
     }
 
     // Monitor pipelines
@@ -92,8 +99,9 @@ Deno.serve(async (req) => {
           });
         }
       }
-    } catch (e) {
-      warnings.push(`Failed to monitor pipelines: ${e.message}`);
+    } catch (e: unknown) {
+      const errorMsg = e instanceof Error ? e.message : String(e);
+      warnings.push(`Failed to monitor pipelines: ${errorMsg}`);
     }
 
     // Monitor deployment configs
@@ -111,8 +119,9 @@ Deno.serve(async (req) => {
           });
         }
       }
-    } catch (e) {
-      warnings.push(`Failed to monitor deployments: ${e.message}`);
+    } catch (e: unknown) {
+      const errorMsg = e instanceof Error ? e.message : String(e);
+      warnings.push(`Failed to monitor deployments: ${errorMsg}`);
     }
 
     // Log health status
@@ -143,7 +152,8 @@ Deno.serve(async (req) => {
       metrics,
       monitoring_complete: true
     });
-  } catch (error) {
-    return Response.json({ error: error.message }, { status: 500 });
+  } catch (error: unknown) {
+    const errorMsg = error instanceof Error ? error.message : String(error);
+    return Response.json({ error: errorMsg }, { status: 500 });
   }
 });

@@ -18,16 +18,18 @@ Deno.serve(async (req) => {
     const file = formData.get('file');
     const directory = formData.get('directory') || '/uploads';
 
-    if (!file) {
+    if (!file || typeof file === 'string') {
       return Response.json({ error: 'No file provided' }, { status: 400 });
     }
+
+    const uploadedFile = file as File;
 
     // Get file metadata
     const fileMetadata = {
       name: file.name,
-      size: file.size,
-      type: file.type,
-      lastModified: file.lastModified,
+      size: uploadedFile.size,
+      type: uploadedFile.type,
+      lastModified: uploadedFile.lastModified,
       directory
     };
 
@@ -49,7 +51,7 @@ Deno.serve(async (req) => {
 
         // Check file type filter
         if (config.fileTypes) {
-          if (!matchesFileType(file.name, config.fileTypes)) {
+          if (!matchesFileType(uploadedFile.name, config.fileTypes)) {
             continue;
           }
         }
@@ -57,7 +59,7 @@ Deno.serve(async (req) => {
         // Check file size limit
         if (config.maxSize) {
           const maxSizeBytes = parseInt(config.maxSize) * 1024 * 1024;
-          if (file.size > maxSizeBytes) {
+          if (uploadedFile.size > maxSizeBytes) {
             continue;
           }
         }
@@ -65,19 +67,19 @@ Deno.serve(async (req) => {
         // Check file name pattern
         if (config.filePattern) {
           const pattern = new RegExp(config.filePattern);
-          if (!pattern.test(file.name)) {
+          if (!pattern.test(uploadedFile.name)) {
             continue;
           }
         }
 
         // Upload file
-        const fileUrl = await uploadFile(file, base44);
+        const fileUrl = await uploadFile(uploadedFile, base44);
 
         // Prepare trigger data
         const triggerData = {
-          fileName: file.name,
-          fileSize: file.size,
-          fileType: file.type,
+          fileName: uploadedFile.name,
+          fileSize: uploadedFile.size,
+          fileType: uploadedFile.type,
           fileUrl,
           directory,
           uploadedAt: new Date().toISOString()
@@ -106,32 +108,35 @@ Deno.serve(async (req) => {
            status: result.success ? 'success' : 'failed',
            logs: result.logs
            });
-         } catch (logError) {
-           console.error(`Failed to create trigger log: ${logError.message}`);
+         } catch (logError: unknown) {
+           const logErrorMsg = logError instanceof Error ? logError.message : String(logError);
+           console.error(`Failed to create trigger log: ${logErrorMsg}`);
          }
 
-      } catch (error) {
-        console.error(`Failed to trigger bot ${bot.id}: ${error.message}`);
+      } catch (error: unknown) {
+        const errorMsg = error instanceof Error ? error.message : String(error);
+        console.error(`Failed to trigger bot ${bot.id}: ${errorMsg}`);
         triggeredBots.push({
           botId: bot.id,
           botName: bot.name,
           success: false,
-          error: error.message
+          error: errorMsg
         });
       }
     }
 
     return Response.json({
       success: true,
-      fileName: file.name,
-      fileSize: file.size,
+      fileName: uploadedFile.name,
+      fileSize: uploadedFile.size,
       botsTriggered: triggeredBots.length,
       bots: triggeredBots
     });
 
-  } catch (error) {
+  } catch (error: unknown) {
+    const errorMsg = error instanceof Error ? error.message : String(error);
     return Response.json(
-      { error: error.message },
+      { error: errorMsg },
       { status: 500 }
     );
   }
@@ -140,7 +145,7 @@ Deno.serve(async (req) => {
 /**
  * Upload file to storage
  */
-async function uploadFile(file, base44) {
+async function uploadFile(file: File, base44: any) {
   try {
     const buffer = await file.arrayBuffer();
     const fileBlob = new Blob([buffer], { type: file.type });
@@ -150,8 +155,9 @@ async function uploadFile(file, base44) {
     });
 
     return result.file_url;
-  } catch (error) {
-    throw new Error(`Failed to upload file: ${error.message}`);
+  } catch (error: unknown) {
+    const errorMsg = error instanceof Error ? error.message : String(error);
+    throw new Error(`Failed to upload file: ${errorMsg}`);
   }
 }
 

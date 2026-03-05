@@ -47,8 +47,8 @@ Deno.serve(async (req) => {
     const totalExecutions = logsInRange.length;
     const successfulExecutions = logsInRange.filter(l => l.status === 'success').length;
     const failedExecutions = logsInRange.filter(l => l.status === 'failed').length;
-    const successRate = totalExecutions > 0 ? (successfulExecutions / totalExecutions * 100).toFixed(1) : 0;
-    const errorRate = totalExecutions > 0 ? (failedExecutions / totalExecutions * 100).toFixed(1) : 0;
+    const successRate = totalExecutions > 0 ? Number((successfulExecutions / totalExecutions * 100).toFixed(1)) : 0;
+    const errorRate = totalExecutions > 0 ? Number((failedExecutions / totalExecutions * 100).toFixed(1)) : 0;
     
     const avgResponseTime = totalExecutions > 0 
       ? Math.round(logsInRange.reduce((sum, l) => sum + (l.duration_ms || 0), 0) / totalExecutions)
@@ -86,8 +86,8 @@ Deno.serve(async (req) => {
       success: true,
       overview: {
         totalExecutions,
-        successRate: parseFloat(successRate),
-        errorRate: parseFloat(errorRate),
+        successRate,
+        errorRate,
         avgResponseTime,
         activeIntegrations,
         totalTemplates: templates.length,
@@ -100,8 +100,9 @@ Deno.serve(async (req) => {
         end: now.toISOString()
       }
     }, { status: 200 });
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('Aggregate analytics error:', error);
-    return Response.json({ error: error.message }, { status: 500 });
+    const errorMsg = error instanceof Error ? error.message : String(error);
+    return Response.json({ error: errorMsg }, { status: 500 });
   }
 });

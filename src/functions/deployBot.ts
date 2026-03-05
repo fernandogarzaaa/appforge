@@ -1,5 +1,13 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.6';
 
+interface TriggerSetupResult {
+  success: boolean;
+  message?: string;
+  error?: string;
+  webhookUrl?: string;
+  [key: string]: any;
+}
+
 /**
  * Deploy/activate a bot
  * Sets up triggers and validates configuration
@@ -35,7 +43,7 @@ Deno.serve(async (req) => {
     }
 
     // Set up trigger-specific infrastructure
-    let triggerSetup = { success: true };
+    let triggerSetup: TriggerSetupResult = { success: true };
 
     switch (bot.trigger?.type) {
       case 'schedule':
@@ -79,9 +87,10 @@ Deno.serve(async (req) => {
       webhookUrl: triggerSetup.webhookUrl || null
     });
 
-  } catch (error) {
+  } catch (error: unknown) {
+    const errorMsg = error instanceof Error ? error.message : String(error);
     return Response.json(
-      { error: error.message },
+      { error: errorMsg },
       { status: 500 }
     );
   }
@@ -90,7 +99,7 @@ Deno.serve(async (req) => {
 /**
  * Set up scheduled trigger
  */
-async function setupScheduleTrigger(bot, base44) {
+async function setupScheduleTrigger(bot: any, base44: any): Promise<TriggerSetupResult> {
   try {
     const config = bot.trigger?.config || {};
     
@@ -109,15 +118,16 @@ async function setupScheduleTrigger(bot, base44) {
       message: `Schedule trigger set for ${config.frequency}`,
       automation
     };
-  } catch (error) {
-    return { success: false, error: error.message };
+  } catch (error: unknown) {
+    const errorMsg = error instanceof Error ? error.message : String(error);
+    return { success: false, error: errorMsg };
   }
 }
 
 /**
  * Set up webhook trigger
  */
-async function setupWebhookTrigger(bot, base44) {
+async function setupWebhookTrigger(bot: any, base44: any): Promise<TriggerSetupResult> {
   try {
     const webhookUrl = `${Deno.env.get('BASE44_API_URL')}/webhooks/bot?bot_id=${bot.id}`;
 
@@ -128,15 +138,16 @@ async function setupWebhookTrigger(bot, base44) {
       methods: bot.trigger?.config?.methods || ['POST'],
       requiresAuth: bot.trigger?.config?.requireApiKey === true
     };
-  } catch (error) {
-    return { success: false, error: error.message };
+  } catch (error: unknown) {
+    const errorMsg = error instanceof Error ? error.message : String(error);
+    return { success: false, error: errorMsg };
   }
 }
 
 /**
  * Set up email trigger
  */
-async function setupEmailTrigger(bot, base44) {
+async function setupEmailTrigger(bot: any, base44: any): Promise<TriggerSetupResult> {
   try {
     const config = bot.trigger?.config || {};
 
@@ -146,8 +157,9 @@ async function setupEmailTrigger(bot, base44) {
       emailAddress: config.emailAddress,
       triggerOn: config.trigger
     };
-  } catch (error) {
-    return { success: false, error: error.message };
+  } catch (error: unknown) {
+    const errorMsg = error instanceof Error ? error.message : String(error);
+    return { success: false, error: errorMsg };
   }
 }
 
