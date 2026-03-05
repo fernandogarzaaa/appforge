@@ -1,5 +1,12 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.6';
 
+interface IntegrationTestResult {
+  success: boolean;
+  message: string;
+  details: Record<string, unknown>;
+  error?: string;
+}
+
 Deno.serve(async (req) => {
   try {
     const base44 = createClientFromRequest(req);
@@ -22,7 +29,7 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Integration not found' }, { status: 404 });
     }
 
-    let testResult = { success: false, message: '', details: {} };
+    let testResult: IntegrationTestResult = { success: false, message: '', details: {} };
 
     // Test based on integration type
     if (integration.integration_type === 'incoming_webhook') {
@@ -78,11 +85,15 @@ Deno.serve(async (req) => {
             endpoint: integration.api_endpoint
           }
         };
-      } catch (error) {
+      } catch (error: unknown) {
+        const errorMsg = error instanceof Error ? error.message : String(error);
         testResult = {
           success: false,
           message: 'Connection failed',
-          error: error.message
+          details: {
+            endpoint: integration.api_endpoint
+          },
+          error: errorMsg
         };
       }
     }

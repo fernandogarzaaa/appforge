@@ -1,5 +1,5 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.6';
-import type { Base44Client, AdvancedWorkflowNode, WorkflowContext } from '../types/base44.d.ts';
+import type { Base44Client, AdvancedWorkflowNode, WorkflowContext } from '@base44/sdk';
 
 interface ExecutionLogEntry {
   nodeId: string;
@@ -97,7 +97,8 @@ Deno.serve(async (req) => {
       executor: (id: string) => Promise<WorkflowContext>
     ): Promise<WorkflowContext> {
       const { arrayField, itemVariableName, loopNodeId, maxIterations } = node.config;
-      const array = getNestedValue(ctx, arrayField || '') || [];
+      const loopSource = getNestedValue(ctx, arrayField || '');
+      const array = Array.isArray(loopSource) ? loopSource : [];
       
       let loopContext = ctx;
       const iterations = Math.min(array.length, maxIterations || 1000);
@@ -220,7 +221,8 @@ Deno.serve(async (req) => {
 
     function executeFilter(node: AdvancedWorkflowNode, ctx: WorkflowContext): WorkflowContext {
       const { arrayVariable, conditions, outputVariable } = node.config;
-      const array = getNestedValue(ctx, arrayVariable || '') || [];
+      const filterSource = getNestedValue(ctx, arrayVariable || '');
+      const array = Array.isArray(filterSource) ? filterSource : [];
 
       const filtered = array.filter((item: unknown) => {
         return (conditions || []).every((cond: { field: string; operator: string; value: unknown }) => {

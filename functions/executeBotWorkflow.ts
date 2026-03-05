@@ -5,7 +5,7 @@ import type {
   NodeResult, 
   WorkflowResult,
   WorkflowNode 
-} from '../types/base44.d.ts';
+} from '@base44/sdk';
 
 /**
  * Execute a bot's workflow

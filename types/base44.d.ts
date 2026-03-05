@@ -10,6 +10,18 @@ declare module 'npm:@base44/sdk@0.8.18' {
   export * from '@base44/sdk';
 }
 
+declare module 'npm:uuid@9.0.0' {
+  export * from 'uuid';
+}
+
+declare module 'npm:@solana/web3.js' {
+  export * from '@solana/web3.js';
+}
+
+declare module 'npm:@solana/spl-token' {
+  export * from '@solana/spl-token';
+}
+
 declare module '@base44/sdk' {
   export interface AuthClient {
     me(): Promise<{ id?: string; email?: string; name?: string; role?: string; full_name?: string }>;
@@ -18,6 +30,153 @@ declare module '@base44/sdk' {
     logout(): void;
     getCurrentUser(): Promise<any>;
     loginViaEmailPassword(credentials: any): Promise<any>;
+  }
+
+  export interface Base44User {
+    id?: string;
+    email?: string;
+    name?: string;
+    role?: string;
+    full_name?: string;
+    [key: string]: any;
+  }
+
+  export interface CriticalIssue {
+    type: string;
+    area?: string;
+    issue?: string;
+    id?: string;
+    provider?: string;
+    auto_fixable?: boolean;
+    [key: string]: any;
+  }
+
+  export interface MonitoringMetrics {
+    total_automations?: number;
+    active_automations?: number;
+    total_workflows?: number;
+    total_integrations?: number;
+    healthy_integrations?: number;
+    total_pipelines?: number;
+    total_deployments?: number;
+    [key: string]: any;
+  }
+
+  export interface ValidationResult {
+    valid: boolean;
+    errors?: any[];
+    [key: string]: any;
+  }
+
+  export interface TriggerSetupResult {
+    success: boolean;
+    message?: string;
+    error?: string;
+    webhookUrl?: string;
+    methods?: string[];
+    requiresAuth?: boolean;
+    emailAddress?: string;
+    triggerOn?: string;
+    automation?: any;
+    [key: string]: any;
+  }
+
+  export interface WorkflowContext {
+    [key: string]: any;
+  }
+
+  export interface AdvancedWorkflowNode {
+    id: string;
+    type: string;
+    config?: Record<string, any>;
+    [key: string]: any;
+  }
+
+  export interface WorkflowNode {
+    id: string;
+    name?: string;
+    type: string;
+    config?: Record<string, any>;
+    [key: string]: any;
+  }
+
+  export interface NodeResult {
+    success: boolean;
+    message?: string;
+    error?: string;
+    output?: any;
+    conditionMet?: boolean;
+    [key: string]: any;
+  }
+
+  export interface ExecutionContext {
+    botId: string;
+    botName: string;
+    startTime: string;
+    variables: Record<string, any>;
+    logs: any[];
+    results: any[];
+    [key: string]: any;
+  }
+
+  export interface WorkflowResult {
+    success: boolean;
+    context: ExecutionContext;
+    error?: string;
+    [key: string]: any;
+  }
+
+  export interface AutomationMetrics {
+    name: string;
+    status: string;
+    cpu_percent: number;
+    memory_mb: number;
+    execution_count_24h: number;
+    network_io_kb: number;
+    health_score: number;
+    [key: string]: any;
+  }
+
+  export interface WorkflowMetrics {
+    name: string;
+    status: string;
+    cpu_percent: number;
+    memory_mb: number;
+    execution_count_24h: number;
+    avg_duration_ms: number;
+    network_io_kb: number;
+    health_score: number;
+    [key: string]: any;
+  }
+
+  export interface SystemSummary {
+    total_cpu_percent: number;
+    total_memory_mb: number;
+    total_network_io_kb: number;
+    active_processes: number;
+    utilization_trend: string;
+    [key: string]: any;
+  }
+
+  export interface DiagnosticsStats {
+    total_integrations?: number;
+    active_integrations?: number;
+    failed_integrations?: number;
+    total_templates?: number;
+    featured_templates?: number;
+    total_feature_flags?: number;
+    enabled_flags?: number;
+    [key: string]: any;
+  }
+
+  export interface DiagnosticsResult {
+    timestamp: string;
+    overall_health: string;
+    errors: any[];
+    warnings: any[];
+    suggestions: any[];
+    stats: DiagnosticsStats;
+    [key: string]: any;
   }
 
   export interface FunctionsModule {

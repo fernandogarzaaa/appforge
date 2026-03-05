@@ -1,5 +1,5 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.6';
-import type { Base44Client, TriggerSetupResult, ValidationResult } from '../types/base44.d.ts';
+import type { Base44Client, TriggerSetupResult, ValidationResult } from '@base44/sdk';
 
 interface BotTrigger {
   type?: string;
