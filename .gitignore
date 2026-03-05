@@ -37,6 +37,7 @@ node_modules/
 /.pnp
 .pnp.js
 .pnpm-store/
+.swarm_cache/
 
 # ================================================
 # Build & Production
