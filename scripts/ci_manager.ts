@@ -20,8 +20,24 @@ interface SwarmState {
     evolution: { last_score: number; trend: string; greenlit: boolean };
     frontend_qa: { status: string; failures: any[] };
     swarm: { last_commit_sha: string; last_task: string; status: string };
-    orchestrator: { next_action: string; reason: string };
+    orchestrator: {
+        next_action: string;
+        reason: string;
+        current_goal?: SwarmGoal;
+        selected_workflow?: string;
+        goal_action_history?: Array<{ goal: SwarmGoal; workflow: string; timestamp: string }>;
+        telemetry?: GoalTelemetryEvent[];
+    };
 }
+
+const WORKFLOW_ACTION_MAP: Record<string, string> = {
+    'Autonomous Swarm Cycle': 'autonomous_swarm',
+    'Quantum Self-Evolution': 'quantum_evolution',
+    'Curiosity Engine Scan': 'curiosity_scan',
+    'Frontend QA Swarm': 'frontend_qa_swarm',
+    'Iron Brain CI — Ghost Brain': 'autonomous_swarm',
+    'Evolution Benchmark Gate': 'quantum_evolution'
+};
 
 async function run() {
     const mode = process.argv[2] || 'ORCHESTRATE';
@@ -187,7 +203,32 @@ async function orchestrate() {
         state.frontend_qa.status = conclusion === 'success' ? 'pass' : 'fail';
     }
 
-    // 3. Decide Next Action (Decision Matrix)
+    // 3. Decide Next Action (Goal-Driven Decision Matrix)
+    const telemetryEvents = Array.isArray(state.orchestrator?.telemetry) ? state.orchestrator.telemetry : [];
+    const recentCommits = await readRecentCommits();
+
+    const selectedGoal = await determine_current_goal({
+        ciStatus: state.ci.status,
+        frontendQaStatus: state.frontend_qa.status,
+        benchmarkTrend: state.evolution.trend,
+        benchmarkScore: state.evolution.last_score,
+        lastUpdated: state.last_updated,
+        recentCommits,
+        telemetryEvents: telemetryEvents.map((event) => ({ type: event.type, timestamp: event.timestamp }))
+    });
+
+    const storedGoal = await loadStoredGoal();
+    const goalState = await saveGoalState(selectedGoal, storedGoal?.goal === selectedGoal ? storedGoal.priority : 1);
+
+    const goalActionHistory = Array.isArray(state.orchestrator?.goal_action_history)
+        ? state.orchestrator.goal_action_history
+        : [];
+
+    const recentGoalActions = goalActionHistory
+        .filter((entry) => entry.goal === selectedGoal)
+        .slice(-5)
+        .map((entry) => entry.workflow);
+
     let nextAction = 'none';
     let reason = 'All systems nominal';
     const forceAction = process.env.FORCE_ACTION || '';
@@ -237,7 +278,46 @@ async function orchestrate() {
         reason = `Workflow ${workflowName} failed. Awaiting retry/manual override.`;
     }
 
-    state.orchestrator = { next_action: nextAction, reason };
+    const telemetry: GoalTelemetryEvent[] = [
+        {
+            type: 'swarm_goal_selected',
+            goal: selectedGoal,
+            timestamp: new Date().toISOString(),
+            details: { priority: goalState.priority }
+        },
+        {
+            type: 'swarm_action_selected',
+            goal: selectedGoal,
+            selected_workflow: selectedWorkflow,
+            timestamp: new Date().toISOString(),
+            details: { next_action: nextAction }
+        },
+        {
+            type: 'swarm_action_executed',
+            goal: selectedGoal,
+            selected_workflow: selectedWorkflow,
+            timestamp: new Date().toISOString(),
+            details: { dispatched: nextAction !== 'none', trigger }
+        }
+    ];
+
+    if (selectedWorkflow) {
+        goalActionHistory.push({
+            goal: selectedGoal,
+            workflow: selectedWorkflow,
+            timestamp: new Date().toISOString()
+        });
+    }
+
+    state.orchestrator = {
+        ...state.orchestrator,
+        next_action: nextAction,
+        reason,
+        current_goal: selectedGoal,
+        selected_workflow: selectedWorkflow,
+        goal_action_history: goalActionHistory.slice(-30),
+        telemetry: [...telemetryEvents, ...telemetry].slice(-50)
+    };
     state.last_updated = new Date().toISOString();
 
     // 4. Save State (Wrapped)
@@ -251,11 +331,13 @@ async function orchestrate() {
     if (process.env.GITHUB_OUTPUT) {
         await fs.appendFile(process.env.GITHUB_OUTPUT, `next_action=${nextAction}\n`);
         await fs.appendFile(process.env.GITHUB_OUTPUT, `reason=${reason}\n`);
+        await fs.appendFile(process.env.GITHUB_OUTPUT, `current_goal=${selectedGoal}\n`);
+        await fs.appendFile(process.env.GITHUB_OUTPUT, `selected_workflow=${selectedWorkflow}\n`);
         const taskDesc = nextAction === 'autonomous_swarm' ? `Fix: ${state.ci.last_fail_reason}` : reason;
         await fs.appendFile(process.env.GITHUB_OUTPUT, `task=${taskDesc}\n`);
     }
 
-    console.log(`🎯 [CI Manager] Decision: ${nextAction} (${reason})`);
+    console.log(`🎯 [CI Manager] Goal: ${selectedGoal} | Workflow: ${selectedWorkflow || 'none'} | Decision: ${nextAction} (${reason})`);
 }
 
 function createDefaultState(): SwarmState {
@@ -268,6 +350,26 @@ function createDefaultState(): SwarmState {
         swarm: { last_commit_sha: '', last_task: '', status: 'idle' },
         orchestrator: { next_action: 'none', reason: 'Initial state' }
     };
+}
+
+async function readRecentCommits(): Promise<string[]> {
+    try {
+        const { execFile } = await import('node:child_process');
+        const { promisify } = await import('node:util');
+        const execFileAsync = promisify(execFile);
+        const { stdout } = await execFileAsync('git', ['log', '--pretty=%s', '-5']);
+        return stdout
+            .split('\n')
+            .map((line) => line.trim())
+            .filter(Boolean);
+    } catch {
+        return [];
+    }
+}
+
+function invertActionLookup(action: string): string | undefined {
+    const entry = Object.entries(WORKFLOW_ACTION_MAP).find(([, mappedAction]) => mappedAction === action);
+    return entry?.[0];
 }
 
 run();
