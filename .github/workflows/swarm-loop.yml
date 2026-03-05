@@ -110,6 +110,21 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Setup Node.js LTS
+        uses: actions/setup-node@v4
+        with:
+          node-version: 'lts/*'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: Download swarm state
+        uses: actions/download-artifact@v4
+        with:
+          name: swarm-state
+          path: .
+
       - name: Download experiment results
         uses: actions/download-artifact@v4
         with:
