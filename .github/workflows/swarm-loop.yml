@@ -10,40 +10,26 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  loop:
+  swarm:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     permissions:
-      contents: read
+      contents: write
 
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-      - name: Setup Node.js
+      - name: Setup Node.js LTS
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
-          cache: 'npm'
-          cache-dependency-path: |
-            package-lock.json
-            swarm/package-lock.json
+          node-version: 'lts/*'
+          cache: npm
 
       - name: Install dependencies
-        run: |
-          npm ci --legacy-peer-deps
-          if [ -f swarm/package-lock.json ]; then
-            cd swarm && npm ci --legacy-peer-deps
-          fi
+        run: npm ci --legacy-peer-deps
 
-      - name: Run swarm controller
+      - name: Run autonomous swarm controller
         run: npx tsx scripts/swarm_controller.ts
-        env:
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          XAI_API_KEY: ${{ secrets.XAI_API_KEY }}
-          BASE44_API_KEY: ${{ secrets.BASE44_API_KEY }}
-          BASE44_APP_ID: ${{ secrets.BASE44_APP_ID }}
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          TRUE_AI_INDEPENDENCE: 'true'
