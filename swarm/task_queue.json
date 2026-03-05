@@ -5,16 +5,31 @@
       "signal": "ci_failure",
       "description": "repair CI pipeline",
       "priority": 1,
-      "retries": 1,
+      "retries": 2,
       "status": "pending",
       "failed_strategies": [
         "A",
         "A_mut_1",
         "A_mut_2",
-        "B"
+        "B",
+        "C",
+        "C_mut_1",
+        "C_mut_2",
+        "D"
       ],
       "created_at": "2026-03-05T14:29:13.319Z",
-      "updated_at": "2026-03-05T14:33:57.895Z"
+      "updated_at": "2026-03-05T15:31:03.325Z"
+    },
+    {
+      "id": "task_1772724434172_1",
+      "signal": "ci_failure",
+      "description": "repair CI pipeline",
+      "priority": 1,
+      "retries": 0,
+      "status": "pending",
+      "failed_strategies": [],
+      "created_at": "2026-03-05T15:27:14.172Z",
+      "updated_at": "2026-03-05T15:27:14.172Z"
     }
   ]
 }
