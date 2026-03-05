@@ -1,0 +1,35 @@
+name: Dependency Upgrade Agent
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "15 */6 * * *"
+
+jobs:
+  run-agent:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: Analyze repository state
+        run: npx tsx scripts/ci_manager.ts REPORT
+
+      - name: Run specialized agent task
+        run: npx tsx scripts/real_swarm_executor.ts "Dependency Upgrade Agent"
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: agent_dependency_upgrade_agent_output.json
+          path: agent_outputs/**/*.json
