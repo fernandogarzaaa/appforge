@@ -36,7 +36,11 @@ jobs:
       - name: Prepare swarm run context
         run: npx tsx scripts/swarm_controller.ts
 
-      - name: Expose run context
+          if [ -f ./swarm/run_context.json ]; then
+            strategies=$(node -e "const fs = require('fs'); const p = './swarm/run_context.json'; const ctx = JSON.parse(fs.readFileSync(p, 'utf8')); const list = Array.isArray(ctx.strategies) ? ctx.strategies.map(s => s.id) : []; console.log(JSON.stringify(list));")
+          else
+            strategies="[]"
+          fi
         id: context
         run: |
           node scripts/extract_run_context.js >> "$GITHUB_OUTPUT"
@@ -72,7 +76,7 @@ jobs:
         with:
           node-version: 'lts/*'
           cache: npm
-
+          path: .
       - name: Install dependencies
         run: npm ci --legacy-peer-deps
 

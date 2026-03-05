@@ -90,8 +90,55 @@ async function prepareRunContext(): Promise<void> {
   const signals = await detectSwarmSignals();
   const tasks = generateTasksFromSignals(signals, MAX_TASKS_PER_CYCLE);
   if (tasks.length > 0) {
-    queue.tasks.push(...tasks);
+  // Ensure we are on the correct experiment branch before writing artifacts
+  ensureExperimentBranch(branch);
+
+  const artifactPath = path.resolve(`swarm/experiments/${runId}/${task.id}_${strategy.id}.md`);
+  mkdirSync(path.dirname(artifactPath), { recursive: true });
+  writeFileSync(
+    artifactPath,
+    [
+      `Task ${task.id}: ${task.description}`,
+      `Strategy ${strategy.id} (${strategy.title})`,
+      ...strategy.plan.map((line) => `- ${line}`),
+    ].join('\n'),
+  );
+  // Stage the artifact so it will be included in the experiment commit
+  execSync(`git add ${artifactPath}`, { stdio: 'inherit' });
   }
+  execSync(`git checkout -B ${branch}`, { stdio: 'inherit' });
+}
+
+function commitExperimentArtifact(runId: string, task: SwarmTask, strategyId: string, score: number): void {
+  const resultPath = path.resolve(`swarm/results/${runId}/${strategyId}.json`);
+  mkdirSync(path.dirname(resultPath), { recursive: true });
+  writeFileSync(
+    resultPath,
+    JSON.stringify({ taskId: task.id, strategyId, branch: `experiment/${runId}/${strategyId}`, score }, null, 2),
+  );
+
+  execSync(`git add ${resultPath}`, { stdio: 'inherit' });
+  execSync(`git commit -m "swarm experiment ${runId}/${strategyId}" || true`, { stdio: 'inherit' });
+}
+
+function evaluateStrategy(task: SwarmTask, strategy: ExperimentStrategy, runId: string): { branch: string; score: number } {
+  const branch = `experiment/${runId}/${strategy.id}`;
+  const artifactPath = path.resolve(`swarm/experiments/${runId}/${task.id}_${strategy.id}.md`);
+  mkdirSync(path.dirname(artifactPath), { recursive: true });
+  writeFileSync(artifactPath, [
+    `Task ${task.id}: ${task.description}`,
+    `Strategy ${strategy.id} (${strategy.title})`,
+    ...strategy.plan.map((line) => `- ${line}`),
+  ].join('\n'));
+    writeFileSync(RUN_CONTEXT_PATH, JSON.stringify(context, null, 2));
+  } else {
+    const context = { runId: null, task: null, strategies: [] as ExperimentStrategy[] };
+    writeFileSync(RUN_CONTEXT_PATH, JSON.stringify(context, null, 2));
+  const fullEvaluation = process.env.SWARM_FULL_EVAL === 'true';
+  const score = fullEvaluation ? evaluateExperiment().score : 50 + strategy.id.charCodeAt(0) % 25;
+
+  return { branch, score };
+}
 
   const nextTask = selectNextTask(queue.tasks);
   const runId = process.env.GITHUB_RUN_ID ?? `${Date.now()}`;

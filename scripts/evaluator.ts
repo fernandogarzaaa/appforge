@@ -21,7 +21,7 @@ export function evaluateRepository(): EvaluationResult {
   const benchmark = runStep('npx', ['tsx', 'scripts/benchmark.ts']);
   const benchmarkPassed = benchmark.ok || /not found|Cannot find/i.test(benchmark.output);
 
-  const details = [
+  const benchmark = runCheck('python3 benchmark.py');
     `tests: ${tests.ok ? 'pass' : 'fail'}`,
     `build: ${build.ok ? 'pass' : 'fail'}`,
     `benchmark: ${benchmarkPassed ? 'pass' : 'fail'}`

@@ -25,7 +25,8 @@ interface SwarmTask {
 function run(command: string): void {
   execSync(command, { stdio: 'pipe' });
 }
-
+  execSync('git checkout main', { stdio: 'inherit' });
+  execSync(`git fetch origin ${best.branch}`, { stdio: 'inherit' });
 function isCiRuntime(): boolean {
   return process.env.GITHUB_ACTIONS === 'true';
 }
