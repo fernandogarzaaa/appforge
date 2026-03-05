@@ -1,11 +1,11 @@
 {
-  "cycle_count": 2,
-  "last_cycle_at": "2026-03-05T15:27:14.181Z",
+  "cycle_count": 3,
+  "last_cycle_at": "2026-03-05T15:53:00.244Z",
   "last_signals": [
     "ci_failure"
   ],
   "completed_tasks": 0,
-  "failed_tasks": 2,
+  "failed_tasks": 3,
   "empty_strategy_cycles": 0,
   "failed_strategy_attempts": {
     "A": 1,
@@ -15,7 +15,11 @@
     "C": 1,
     "C_mut_1": 1,
     "C_mut_2": 1,
-    "D": 1
+    "D": 1,
+    "B_mut_1": 1,
+    "B_mut_2": 1,
+    "D_mut_1": 1,
+    "D_mut_2": 1
   },
   "failed_strategies": {
     "ci_failure": [
@@ -26,7 +30,11 @@
       "C",
       "C_mut_1",
       "C_mut_2",
-      "D"
+      "D",
+      "B_mut_1",
+      "B_mut_2",
+      "D_mut_1",
+      "D_mut_2"
     ]
   },
   "failed_mutated_strategies": {
@@ -34,7 +42,11 @@
       "A_mut_1",
       "A_mut_2",
       "C_mut_1",
-      "C_mut_2"
+      "C_mut_2",
+      "B_mut_1",
+      "B_mut_2",
+      "D_mut_1",
+      "D_mut_2"
     ]
   }
 }
