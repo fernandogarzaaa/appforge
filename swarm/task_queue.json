@@ -1,0 +1,10 @@
+{
+  "tasks": [
+    {
+      "id": "task_001",
+      "description": "repair CI pipeline",
+      "priority": 1,
+      "status": "pending"
+    }
+  ]
+}
