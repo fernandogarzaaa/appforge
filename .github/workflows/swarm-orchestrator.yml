@@ -3,6 +3,7 @@ name: Swarm Orchestrator
 on:
   schedule:
     - cron: "0 * * * *"
+    - cron: "*/20 * * * *"
   workflow_run:
     workflows:
       - Autonomous Swarm Cycle

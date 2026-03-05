@@ -14,6 +14,7 @@ import {
     stateToAction,
     workflowToState
 } from './swarm_state_machine.js';
+import { evaluateSwarmHeartbeat } from './swarm_heartbeat.js';
 
 interface SwarmState {
     last_updated: string;
@@ -189,13 +190,22 @@ async function orchestrate() {
         state.frontend_qa.status = conclusion === 'success' ? 'pass' : 'fail';
     }
 
-    // 3. Decide Next Action (Decision Matrix)
+    // 3. Heartbeat Evaluation + Next Action Decision Matrix
+    const heartbeat = await evaluateSwarmHeartbeat();
+
     let nextAction = 'none';
     let reason = 'All systems nominal';
     const forceAction = process.env.FORCE_ACTION || '';
 
-    if (!forceAction && swarmMeta.chain_length >= MAX_CHAIN_LENGTH) {
+    if (!forceAction && heartbeat.action === 'idle') {
+        nextAction = 'none';
+        reason = `Heartbeat idle: ${heartbeat.reason}`;
+    } else if (!forceAction && swarmMeta.chain_length >= MAX_CHAIN_LENGTH) {
+        nextAction = 'none';
         reason = `Workflow chain limit reached (${swarmMeta.chain_length}/${MAX_CHAIN_LENGTH}). Awaiting manual intervention.`;
+    } else if (!forceAction && heartbeat.action !== 'idle') {
+        nextAction = heartbeat.action;
+        reason = `Heartbeat action: ${heartbeat.reason}`;
     } else {
         const allowedState = getAllowedNextStates(swarmRecord.state)[0];
         const stateMachineAction = allowedState ? stateToAction[allowedState] : 'none';
@@ -227,11 +237,6 @@ async function orchestrate() {
             nextAction = 'none';
             reason = `Dispatch blocked by swarm state machine: ${guard.reason}`;
         }
-    }
-
-    if (!forceAction && nextAction === 'none' && trigger === 'schedule' && swarmRecord.state === 'IDLE') {
-        nextAction = 'curiosity_scan';
-        reason = 'Scheduled curiosity pulse from IDLE';
     }
 
     if (!forceAction && conclusion === 'failure' && workflowToState[workflowName]) {
