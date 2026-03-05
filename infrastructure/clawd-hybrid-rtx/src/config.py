@@ -68,3 +68,7 @@ NVIDIA_API_KEY: str = os.getenv("NVIDIA_API_KEY", "")
 CACHE_SIMILARITY_THRESHOLD: float = 0.92
 MAX_RETRIES: int = 2
 REQUEST_TIMEOUT: float = 60.0
+HF_API_KEY: str = os.getenv('HF_API_KEY', '')
+HF_MODELS: list[str] = ['Qwen/Qwen2.5-7B-Instruct', 'mistralai/Mistral-7B-Instruct-v0.3']
+
+

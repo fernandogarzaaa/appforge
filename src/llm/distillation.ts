@@ -355,9 +355,13 @@ class DatasetLoader {
           entry.text ||
           '';
 
-        return question.trim()
+        if (!question.trim()) {
+          return null;
+        }
+
+        return entry.category
           ? { question: question.trim(), category: entry.category }
-          : null;
+          : { question: question.trim() };
       })
       .filter((e): e is { question: string; category?: string } => e !== null);
   }

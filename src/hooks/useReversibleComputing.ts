@@ -10,15 +10,7 @@ import {
   getReversibleStateData,
   computeStateDiff
 } from '@/lib/ReversibleComputing';
-
-// Define the ReversibleStateData type
-export interface ReversibleStateData {
-  amplitudes: number[];
-  probabilities: number[];
-  entropy: number;
-  coherence: number;
-  size: number;
-}
+import type { ReversibleStateData } from '@/lib/ReversibleComputing';
 
 export interface Snapshot {
   id: number;

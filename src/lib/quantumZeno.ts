@@ -13,6 +13,8 @@ export interface StabilityMetrics {
   timestamp: number;
 }
 
+export type CodeHealthSnapshot = StabilityMetrics;
+
 export class QuantumZenoMonitor {
   private coherenceTime: number;
   public metricsHistory: StabilityMetrics[] = [];
@@ -66,6 +68,7 @@ export class QuantumZenoMonitor {
 
   calculateDegradationTimeline() { return { timeToFailure: 3600 }; }
   recommendTestFrequency() { return 1.0; }
+  recommendTestingFrequency() { return this.recommendTestFrequency(); }
   findCriticalObservationWindows() { return []; }
   calculateOptimalObservationPattern(freq: number) { return { frequency: freq, duration: 1.0 }; }
   measureFreezeDepth() {
@@ -81,6 +84,18 @@ export class QuantumZenoMonitor {
   predictFutureStability() { return 0.9; }
   clearHistory() {
     this.metricsHistory.length = 0;
+  }
+
+  getLatest(): StabilityMetrics | null {
+    return this.metricsHistory[this.metricsHistory.length - 1] || null;
+  }
+
+  getRecentMetrics(limit: number = 50): StabilityMetrics[] {
+    return this.metricsHistory.slice(-limit);
+  }
+
+  getHistory(): StabilityMetrics[] {
+    return [...this.metricsHistory];
   }
   async applyStabilization(data: any): Promise<any> {
     return { ...data, stability: 0.95 };

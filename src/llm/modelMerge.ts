@@ -548,7 +548,7 @@ export class ModelMerger {
         name: layerName,
         shape: [...baseLayer.shape],
         dtype: (config.outputDtype as 'float16' | 'bfloat16' | 'float32') ?? baseLayer.dtype,
-        data: currentData,
+        data: new Float32Array(currentData),
       });
 
       if (li % 10 === 0) {
@@ -617,7 +617,7 @@ export class ModelMerger {
         name: layerName,
         shape: [...baseLayer.shape],
         dtype: (config.outputDtype as 'float16' | 'bfloat16' | 'float32') ?? baseLayer.dtype,
-        data: resultData,
+        data: new Float32Array(resultData),
       });
 
       if (li % 10 === 0) {

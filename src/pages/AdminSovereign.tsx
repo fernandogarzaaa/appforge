@@ -24,7 +24,12 @@ import {
 } from 'lucide-react';
 import {
     AreaChart,
-    Area
+    Area,
+    ResponsiveContainer,
+    CartesianGrid,
+    XAxis,
+    YAxis,
+    Tooltip
 } from 'recharts';
 import SignalDensityDisplay from '@/components/common/SignalDensityDisplay';
 
@@ -40,6 +45,8 @@ const AdminSovereign = () => {
     const [status, setStatus] = useState<any>({ overall: 0, reasoning: 0, learning: 0, creativity: 0, gain: 0, phase: 'IDLE', bridge: { online: true, latency: 0 } });
     const [bridgeStatus, setBridgeStatus] = useState({ online: true, latency: 0 });
     const [compressionRatio, setCompressionRatio] = useState(0.65);
+    const [aiChat, setAiChat] = useState<Array<{ id: string; role: 'user' | 'assistant'; text: string }>>([]);
+    const [isThinking, setIsThinking] = useState(false);
     const scrollRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {

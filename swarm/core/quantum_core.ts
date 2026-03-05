@@ -7,6 +7,18 @@ import * as crypto from 'crypto';
 import { DistributedPersistence } from './distributed_persistence.js';
 import { sovereignStorage } from './storage.js';
 
+type QuantumSolveResultWithConsensus = {
+    predictionId: string;
+    optimizedBest: any;
+    confidence: number;
+    alternatives: any[];
+    engineVersion: string;
+    consensus?: {
+        fidelity: number;
+        qubitCount: number;
+    };
+};
+
 const PROJECT_ROOT = process.cwd();
 
 const STATE_FILE = path.join(PROJECT_ROOT, 'src/data/quantum_state.json');
@@ -194,7 +206,7 @@ export class QuantumSwarmCore {
             return neuralBridgeResult;
         }
 
-        const result = await this.engine.quantumSolve(question, options, criteria);
+        const result = await this.engine.quantumSolve(question, options, criteria) as QuantumSolveResultWithConsensus;
         await this.persistEngineState();
 
         console.log(`   ✨ Decision analysis recommends: ${result.optimizedBest}`);
@@ -217,7 +229,8 @@ export class QuantumSwarmCore {
      */
     async holographicReflection(predictionId: string): Promise<string> {
         await this.ready;
-        const state = this.engine.history.find((h: any) => h.id === predictionId);
+        const engineWithHistory = this.engine as QuantumEngine & { history?: Array<any> };
+        const state = engineWithHistory.history?.find((h: any) => h.id === predictionId);
         if (!state) return "Reflection failed: Prediction ID not found in holographic history.";
 
         return `🌌 [Holographic Reflection]
@@ -496,12 +509,18 @@ Format your response as a JSON object:
         }
 
         // Bridge to annealing engine if available
-        if (this.engine.annealing) {
+        const engineWithAnnealing = this.engine as QuantumEngine & {
+            annealing?: {
+                temperature: number;
+                coolingRate: number;
+            };
+        };
+        if (engineWithAnnealing.annealing) {
             if (typeof params.temperature === 'number') {
-                this.engine.annealing.temperature = params.temperature;
+                engineWithAnnealing.annealing.temperature = params.temperature;
             }
             if (typeof params.coolingRate === 'number') {
-                this.engine.annealing.coolingRate = params.coolingRate;
+                engineWithAnnealing.annealing.coolingRate = params.coolingRate;
             }
         }
 

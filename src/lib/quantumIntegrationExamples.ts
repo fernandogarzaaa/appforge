@@ -66,7 +66,7 @@ export async function codeQualityCheck() {
   });
 
   // Get recommended testing frequency for 24 hours
-  const dailyFrequency = zeno.recommendTestingFrequency(86400, 0.95);
+  const dailyFrequency = zeno.recommendTestingFrequency();
   console.log(
     `\n✅ Recommended: ${dailyFrequency.toFixed(1)} tests per second to maintain 95% stability over 24 hours`
   );
@@ -231,7 +231,7 @@ export function generateAlerts() {
 // ============================================
 
 export function generatePerformanceReport() {
-  const securityData = tunneling.exportMetrics?.() || { history: [] };
+  const securityData = tunneling.exportMetrics();
   const stabilityData = zeno.getHistory();
   const criticalityData = renormalization.exportMetrics();
 

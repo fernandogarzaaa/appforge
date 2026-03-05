@@ -9,7 +9,7 @@
  */
 
 import { ModelMerger } from './modelMerge';
-import { KnowledgeDistillation, defaultDistillationConfig } from './distillation';
+import { DistillationPipeline } from './distillation';
 import { SpeculativeDecoder, medusaConfig } from './speculativeDecode';
 import { LLMBenchmark, defaultBenchmarkConfig, GPT4_BASELINE } from './benchmark';
 
@@ -58,15 +58,13 @@ export const DEFAULT_CONFIG: SuperiorLLMConfig = {
 export class SuperiorLLMBuilder {
   private config: SuperiorLLMConfig;
   private merger: ModelMerger;
-  private distiller?: KnowledgeDistillation;
+  private distiller?: DistillationPipeline;
   private decoder?: SpeculativeDecoder;
   private benchmark?: LLMBenchmark;
 
   constructor(config: Partial<SuperiorLLMConfig> = {}) {
     this.config = { ...DEFAULT_CONFIG, ...config };
-    this.merger = new ModelMerger({
-      outputDir: `${this.config.checkpointDir}/merged`
-    });
+    this.merger = new ModelMerger();
   }
 
   /**
@@ -130,53 +128,41 @@ export class SuperiorLLMBuilder {
    * Stage 1: Merge models using configured recipe
    */
   private async runModelMerging(): Promise<string> {
-    try {
-      // Execute the merge recipe
-      const mergedPath = await this.merger.executeRecipe(this.config.mergeRecipe);
-      console.log(`✅ Models merged: ${mergedPath}`);
-      return mergedPath;
-    } catch (error) {
-      console.warn('Recipe execution failed, running full pipeline instead:', error);
-      return this.merger.runFullPipeline();
+    const outputDir = `${this.config.checkpointDir}/merged`;
+    const mergeConfig = this.config.mergeRecipe.toLowerCase().includes('task')
+      ? ModelMerger.presetTaskArithmeticCoding(outputDir)
+      : ModelMerger.presetFullSoup(outputDir);
+
+    const merged = await this.merger.merge(mergeConfig);
+    if ('error' in merged) {
+      throw merged.error;
     }
+
+    console.log(`✅ Models merged: ${merged.value.outputPath}`);
+    return merged.value.outputPath;
   }
 
   /**
    * Stage 2: Distill knowledge from teacher model
    */
   private async runDistillation(baseModel: string): Promise<string> {
-    const distillationConfig = {
-      ...defaultDistillationConfig,
-      student: {
-        ...defaultDistillationConfig.student,
-        modelPath: baseModel
-      },
-      teacher: {
-        ...defaultDistillationConfig.teacher,
-        model: this.config.teacherModel
-      },
-      dataset: {
-        ...defaultDistillationConfig.dataset,
-        numSamples: this.config.numDistillationSamples
-      },
-      output: {
-        ...defaultDistillationConfig.output,
-        dir: `${this.config.checkpointDir}/distilled`
-      }
+    const distillationConfig = DistillationPipeline.presetOrcaHermes(`${this.config.checkpointDir}/distilled`);
+    distillationConfig.studentModel = {
+      id: baseModel,
+      source: 'local',
+      path: baseModel
     };
+    distillationConfig.teacherModel.id = this.config.teacherModel;
+    distillationConfig.teacherModel.path = this.config.teacherModel;
+    distillationConfig.maxTeacherSamples = this.config.numDistillationSamples;
 
-    this.distiller = new KnowledgeDistillation(distillationConfig);
+    this.distiller = new DistillationPipeline(distillationConfig);
+    const result = await this.distiller.run();
+    if ('error' in result) {
+      throw result.error;
+    }
 
-    // Generate training data
-    await this.distiller.generateOrcaDataset();
-
-    // Train student
-    await this.distiller.trainStudent();
-
-    // Optional: Self-distillation for further improvement
-    // await this.distiller.selfDistillation(1);
-
-    return distillationConfig.output.dir;
+    return result.value.outputPath;
   }
 
   /**

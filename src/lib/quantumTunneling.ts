@@ -134,6 +134,26 @@ export class QuantumTunnelingAnalyzer {
     return this.analysisHistory[this.analysisHistory.length - 1] || null;
   }
 
+  exportMetrics() {
+    const history = this.getHistory();
+    const totalAnalyses = history.length;
+    const averageBreach = totalAnalyses > 0
+      ? history.reduce((sum, item) => sum + item.breachProbability, 0) / totalAnalyses
+      : 0;
+    const maxBreach = totalAnalyses > 0
+      ? Math.max(...history.map((item) => item.breachProbability))
+      : 0;
+
+    return {
+      history,
+      summary: {
+        totalAnalyses,
+        averageBreach,
+        maxBreach,
+      }
+    };
+  }
+
   /**
    * Calculate tunneling probability using WKB approximation
    * P ≈ exp(-2/ℏ ∫ √(2m(V(x)-E)) dx)

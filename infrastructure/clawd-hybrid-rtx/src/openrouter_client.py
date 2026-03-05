@@ -1,4 +1,4 @@
-## Kimi-enhanced version
+﻿## Kimi-enhanced version
 from .model_tracker import ModelTracker
 from .config import MAX_CALLS_PER_MINUTE
 
@@ -387,8 +387,7 @@ async def query_all_models(
 ) -> list[ModelResponse]:
     """Query all configured models in parallel and return responses.
 
-    Applies circuit-breaker filtering, falls back to FALLBACK_MODELS when
-    all primaries are unhealthy, and guarantees at least one response.
+    Uses First-Good-Answer-Wins strategy with a 3000ms grace period.
     """
     target_models = models or MODELS
 
@@ -406,13 +405,11 @@ async def query_all_models(
             logger.warning(
                 "All fallback models also in cooldown — resetting oldest cooldowns",
             )
-            # Reset cooldowns on primary models so we have something to try
             _reset_oldest_cooldowns(target_models)
             _reset_oldest_cooldowns(FALLBACK_MODELS)
             healthy = get_healthy_models(target_models + FALLBACK_MODELS)
 
             if not healthy:
-                # Last resort: just try everything
                 healthy = target_models
 
     logger.info(
@@ -421,74 +418,100 @@ async def query_all_models(
         ", ".join(m.split("/")[-1] for m in healthy),
     )
 
-    async with httpx.AsyncClient() as client:
-        tasks = [
-            query_single_model(client, model, messages, temperature, max_tokens)
-            for model in healthy
-        ]
-        responses = await asyncio.gather(*tasks, return_exceptions=True)
-
     results: list[ModelResponse] = []
-    all_auth_errors = True
+    
+    # --- Async First-Good-Wins with Grace Period ---
+    async with httpx.AsyncClient() as client:
+        tasks = []
+        for model in healthy:
+            # We wrap query_single_model in a task
+            task = asyncio.create_task(
+                query_single_model(client, model, messages, temperature, max_tokens)
+            )
+            task.set_name(model)
+            tasks.append(task)
+            
+        if not tasks:
+             return [ModelResponse(model="system", content="", error="No models available")]
 
-    for i, resp in enumerate(responses):
-        if isinstance(resp, Exception):
-            results.append(ModelResponse(
-                model=healthy[i],
-                content="",
-                error=str(resp),
-            ))
-        else:
-            results.append(resp)
-            if resp.error is None or "auth" not in (resp.error or "").lower():
-                all_auth_errors = False
+        pending = set(tasks)
+        finished_success = False
+        first_success_time = 0.0
+        GRACE_PERIOD = 3.0 # seconds
+        
+        while pending:
+            # Calculate timeout
+            timeout = None
+            if finished_success:
+                elapsed = time.monotonic() - first_success_time
+                remaining = GRACE_PERIOD - elapsed
+                if remaining <= 0:
+                    logger.info("Grace period expired, cancelling remaining tasks")
+                    break
+                timeout = remaining
+                
+            done, pending = await asyncio.wait(
+                pending, 
+                return_when=asyncio.FIRST_COMPLETED,
+                timeout=timeout
+            )
+            
+            if not done and finished_success:
+                # Timeout hit during grace period
+                logger.info("Grace period expired (timeout), cancelling remaining tasks")
+                break
+                
+            for task in done:
+                try:
+                    resp = task.result()
+                    results.append(resp)
+                    
+                    # Check for success
+                    if resp.content and not resp.error:
+                        if not finished_success:
+                            finished_success = True
+                            first_success_time = time.monotonic()
+                            logger.info(f"First success from {resp.model}, starting {GRACE_PERIOD}s grace period")
+                        
+                except Exception as e:
+                    logger.error(f"Task exception: {e}")
+                    
+        # Cancel remaining
+        for task in pending:
+            task.cancel()
 
-    # --- 2. If every single response was an auth error, add a helpful message ---
-    if all_auth_errors and results:
-        results.insert(0, ModelResponse(
-            model="system",
-            content="",
-            error=(
-                "ALL models failed with authentication errors. "
-                "Your OPENROUTER_API_KEY is invalid or missing. "
-                "Get a free key at https://openrouter.ai/keys "
-                "and set it in .env.clawd"
-            ),
-        ))
-
-    # --- 3. If primary models all errored, try fallback models ---
+    # Check if we have any successes
     successful = [r for r in results if r.error is None and r.content]
-    if not successful and not all_auth_errors:
+    
+    # --- Fallback Logic if everything failed ---
+    if not successful:
+        logger.warning("All primary models failed in consensus — trying fallback models")
         fallback_candidates = get_healthy_models(FALLBACK_MODELS)
-        # Exclude models we already tried
         already_tried = set(healthy)
         fallback_candidates = [m for m in fallback_candidates if m not in already_tried]
 
         if fallback_candidates:
-            logger.info(
-                "All primary models failed — trying %d fallback model(s)",
-                len(fallback_candidates),
-            )
+            # Recurse for fallbacks (simple sequential for now)
             async with httpx.AsyncClient() as client:
-                fb_tasks = [
+                 fb_tasks = [
                     query_single_model(
-                        client, model, messages, temperature, max_tokens,
+                        client, model, messages, temperature, max_tokens
                     )
                     for model in fallback_candidates
                 ]
-                fb_responses = await asyncio.gather(*fb_tasks, return_exceptions=True)
+                 fb_responses = await asyncio.gather(*fb_tasks, return_exceptions=True)
+                 
+                 for i, resp in enumerate(fb_responses):
+                    if isinstance(resp, Exception):
+                        results.append(ModelResponse(
+                            model=fallback_candidates[i],
+                            content="",
+                            error=str(resp),
+                        ))
+                    else:
+                        results.append(resp)
 
-            for i, resp in enumerate(fb_responses):
-                if isinstance(resp, Exception):
-                    results.append(ModelResponse(
-                        model=fallback_candidates[i],
-                        content="",
-                        error=str(resp),
-                    ))
-                else:
-                    results.append(resp)
-
-    # --- 4. Guarantee at least one response ---
+    # --- Guarantee at least one response ---
     if not results:
         results.append(ModelResponse(
             model="system",

@@ -53,6 +53,32 @@ export class HolographicConsensusEngine {
     };
   }
 
+  async processAIResponses(
+    responses: Array<{ model: 'gpt4' | 'claude' | 'gemini'; text: string }>,
+    candidates?: string[]
+  ) {
+    this.clearResponses();
+    for (const response of responses) {
+      this.addResponse(response.model, response.text);
+    }
+
+    const consensusResult = await this.computeConsensus();
+    const recommendation = candidates && candidates.length > 0
+      ? candidates[0]
+      : (consensusResult.consensus || responses[0]?.text || 'No recommendation');
+
+    return {
+      truthVector: consensusResult.truthVector,
+      consensus: consensusResult.consensus,
+      entropy: consensusResult.entropy,
+      coherence: consensusResult.coherence,
+      confidence: consensusResult.confidence,
+      quality: consensusResult.qualityScore,
+      agreementLevel: consensusResult.agreementLevel,
+      recommendation
+    };
+  }
+
   measureCoherence(): number {
     return this._responses.length > 2 ? 0.9 : 0.5;
   }

@@ -198,7 +198,7 @@ class WebhooksManager {
           data: event.payload,
           timestamp: event.timestamp
         }),
-        timeout: 10000 // 10 second timeout
+        signal: AbortSignal.timeout(10000) // 10 second timeout
       });
 
       const responseTime = Date.now() - startTime;

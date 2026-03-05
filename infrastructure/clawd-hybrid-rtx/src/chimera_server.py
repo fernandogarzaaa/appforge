@@ -174,7 +174,7 @@ except ImportError:
 LOCAL_MODELS = []
 if _HAS_LOCAL_MODELS:
     LOCAL_MODELS = [
-        LocalModelAdapter("http://localhost:11434", name="ollama"),
+        LocalModelAdapter("http://localhost:8080", name="qwen2.5-7b"),
     ]
 
 # ---------------------------------------------------------------------------
@@ -420,7 +420,7 @@ async def _process_completion(request: ChatCompletionRequest):
     healthy_local = [lm for lm in LOCAL_MODELS if lm.health()] if _HAS_LOCAL_MODELS else []
     # Sort healthy_remote by ModelTracker score (descending)
     healthy_remote = sorted(healthy_remote, key=lambda m: -_model_tracker.get_score(m))
-    target_models = healthy_remote + healthy_local
+    target_models = healthy_local + healthy_remote  # Local first
     if MAX_PRIMARY_MODELS > 0:
         target_models = target_models[:MAX_PRIMARY_MODELS]
     if not target_models:
@@ -497,6 +497,19 @@ async def _process_completion(request: ChatCompletionRequest):
                 logger.error("NVIDIA fallback returned empty response")
             except Exception as e:
                 logger.error(f"NVIDIA fallback failed: {e}")
+        
+        # --- Hugging Face fallback ---
+        try:
+            from .hf_client import query_hf_fallback
+            from .config import HF_API_KEY
+            if HF_API_KEY:
+                logger.warning("All OpenRouter/NVIDIA models failed — trying Hugging Face")
+                hf_resp = await query_hf_fallback(messages_raw, request.temperature or 0.7, request.max_tokens or 256)
+                if hf_resp.content:
+                    logger.info("HF fallback successful")
+                    return wrap_openai_response(hf_resp.content), False
+        except Exception as hf_err:
+            logger.error(f"HF fallback failed: {hf_err}")
         
         # All fallbacks exhausted
         logger.error("All models and fallbacks failed")
@@ -868,3 +881,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
+
+

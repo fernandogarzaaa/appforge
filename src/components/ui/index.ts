@@ -154,7 +154,6 @@ export {
 
 export {
   Checkbox,
-  type CheckboxProps,
 } from './checkbox';
 
 export {
@@ -166,7 +165,6 @@ export {
 
 export {
   Switch,
-  type SwitchProps,
 } from './switch';
 
 export {
@@ -319,7 +317,6 @@ export {
 
 export {
   Slider,
-  type SliderProps,
 } from './slider';
 
 // Calendar & Date Picker

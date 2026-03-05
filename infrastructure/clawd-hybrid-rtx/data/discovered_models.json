@@ -1,13 +1,13 @@
 {
-  "last_updated": 1772480673.0465434,
-  "count": 28,
+  "last_updated": 1772727083.5972536,
+  "count": 27,
   "models": [
     {
       "id": "qwen/qwen3-vl-30b-a3b-thinking",
       "name": "Qwen: Qwen3 VL 30B A3B Thinking",
       "context_length": 131072,
       "modality": "text+image->text",
-      "discovered_at": 1772480673.0455236,
+      "discovered_at": 1772727083.5960507,
       "quality_score": 1.0
     },
     {
@@ -15,7 +15,7 @@
       "name": "Qwen: Qwen3 VL 235B A22B Thinking",
       "context_length": 131072,
       "modality": "text+image->text",
-      "discovered_at": 1772480673.0455325,
+      "discovered_at": 1772727083.596063,
       "quality_score": 1.0
     },
     {
@@ -23,7 +23,7 @@
       "name": "Qwen: Qwen3 Next 80B A3B Instruct (free)",
       "context_length": 262144,
       "modality": "text->text",
-      "discovered_at": 1772480673.045541,
+      "discovered_at": 1772727083.5960753,
       "quality_score": 1.0
     },
     {
@@ -31,7 +31,7 @@
       "name": "Qwen: Qwen3 235B A22B Thinking 2507",
       "context_length": 131072,
       "modality": "text->text",
-      "discovered_at": 1772480673.0455844,
+      "discovered_at": 1772727083.596137,
       "quality_score": 1.0
     },
     {
@@ -39,7 +39,7 @@
       "name": "Qwen: Qwen3 Coder 480B A35B (free)",
       "context_length": 262000,
       "modality": "text->text",
-      "discovered_at": 1772480673.0455894,
+      "discovered_at": 1772727083.5961444,
       "quality_score": 1.0
     },
     {
@@ -47,7 +47,7 @@
       "name": "Meta: Llama 3.3 70B Instruct (free)",
       "context_length": 128000,
       "modality": "text->text",
-      "discovered_at": 1772480673.045666,
+      "discovered_at": 1772727083.5962565,
       "quality_score": 1.0
     },
     {
@@ -55,7 +55,7 @@
       "name": "Nous: Hermes 3 405B Instruct (free)",
       "context_length": 131072,
       "modality": "text->text",
-      "discovered_at": 1772480673.0456853,
+      "discovered_at": 1772727083.5962806,
       "quality_score": 0.95
     },
     {
@@ -63,7 +63,7 @@
       "name": "Mistral: Mistral Small 3.1 24B (free)",
       "context_length": 128000,
       "modality": "text+image->text",
-      "discovered_at": 1772480673.0456347,
+      "discovered_at": 1772727083.5962136,
       "quality_score": 0.9
     },
     {
@@ -71,7 +71,7 @@
       "name": "Google: Gemma 3 27B (free)",
       "context_length": 131072,
       "modality": "text+image->text",
-      "discovered_at": 1772480673.0456514,
+      "discovered_at": 1772727083.5962367,
       "quality_score": 0.9
     },
     {
@@ -79,7 +79,7 @@
       "name": "NVIDIA: Nemotron 3 Nano 30B A3B (free)",
       "context_length": 256000,
       "modality": "text->text",
-      "discovered_at": 1772480673.0454867,
+      "discovered_at": 1772727083.5960004,
       "quality_score": 0.8999999999999999
     },
     {
@@ -87,7 +87,7 @@
       "name": "Qwen: Qwen3 4B (free)",
       "context_length": 40960,
       "modality": "text->text",
-      "discovered_at": 1772480673.0456223,
+      "discovered_at": 1772727083.5961952,
       "quality_score": 0.8500000000000001
     },
     {
@@ -95,7 +95,7 @@
       "name": "NVIDIA: Nemotron Nano 9B V2 (free)",
       "context_length": 128000,
       "modality": "text->text",
-      "discovered_at": 1772480673.045552,
+      "discovered_at": 1772727083.5960863,
       "quality_score": 0.85
     },
     {
@@ -103,7 +103,7 @@
       "name": "OpenAI: gpt-oss-120b (free)",
       "context_length": 131072,
       "modality": "text->text",
-      "discovered_at": 1772480673.045564,
+      "discovered_at": 1772727083.5961034,
       "quality_score": 0.8
     },
     {
@@ -111,7 +111,7 @@
       "name": "Google: Gemma 3 4B (free)",
       "context_length": 32768,
       "modality": "text+image->text",
-      "discovered_at": 1772480673.0456402,
+      "discovered_at": 1772727083.5962212,
       "quality_score": 0.8
     },
     {
@@ -119,7 +119,7 @@
       "name": "Meta: Llama 3.2 3B Instruct (free)",
       "context_length": 131072,
       "modality": "text->text",
-      "discovered_at": 1772480673.0456755,
+      "discovered_at": 1772727083.5962698,
       "quality_score": 0.7999999999999999
     },
     {
@@ -127,7 +127,7 @@
       "name": "Google: Gemma 3 12B (free)",
       "context_length": 32768,
       "modality": "text+image->text",
-      "discovered_at": 1772480673.0456455,
+      "discovered_at": 1772727083.5962284,
       "quality_score": 0.7500000000000001
     },
     {
@@ -135,7 +135,7 @@
       "name": "NVIDIA: Nemotron Nano 12B 2 VL (free)",
       "context_length": 128000,
       "modality": "text+image+video->text",
-      "discovered_at": 1772480673.045513,
+      "discovered_at": 1772727083.5960367,
       "quality_score": 0.75
     },
     {
@@ -143,7 +143,7 @@
       "name": "Google: Gemma 3n 4B (free)",
       "context_length": 8192,
       "modality": "text->text",
-      "discovered_at": 1772480673.0456152,
+      "discovered_at": 1772727083.596185,
       "quality_score": 0.75
     },
     {
@@ -151,7 +151,7 @@
       "name": "OpenAI: gpt-oss-20b (free)",
       "context_length": 131072,
       "modality": "text->text",
-      "discovered_at": 1772480673.0455709,
+      "discovered_at": 1772727083.5961177,
       "quality_score": 0.65
     },
     {
@@ -159,7 +159,7 @@
       "name": "Google: Gemma 3n 2B (free)",
       "context_length": 8192,
       "modality": "text->text",
-      "discovered_at": 1772480673.0456052,
+      "discovered_at": 1772727083.59617,
       "quality_score": 0.65
     },
     {
@@ -167,7 +167,7 @@
       "name": "StepFun: Step 3.5 Flash (free)",
       "context_length": 256000,
       "modality": "text->text",
-      "discovered_at": 1772480673.0454257,
+      "discovered_at": 1772727083.5959296,
       "quality_score": 0.6
     },
     {
@@ -175,15 +175,7 @@
       "name": "Arcee AI: Trinity Large Preview (free)",
       "context_length": 131000,
       "modality": "text->text",
-      "discovered_at": 1772480673.045443,
-      "quality_score": 0.6
-    },
-    {
-      "id": "upstage/solar-pro-3:free",
-      "name": "Upstage: Solar Pro 3 (free)",
-      "context_length": 128000,
-      "modality": "text->text",
-      "discovered_at": 1772480673.0454533,
+      "discovered_at": 1772727083.5959523,
       "quality_score": 0.6
     },
     {
@@ -191,7 +183,7 @@
       "name": "Arcee AI: Trinity Mini (free)",
       "context_length": 131072,
       "modality": "text->text",
-      "discovered_at": 1772480673.0454986,
+      "discovered_at": 1772727083.596017,
       "quality_score": 0.6
     },
     {
@@ -199,7 +191,7 @@
       "name": "Z.ai: GLM 4.5 Air (free)",
       "context_length": 131072,
       "modality": "text->text",
-      "discovered_at": 1772480673.0455787,
+      "discovered_at": 1772727083.596129,
       "quality_score": 0.6
     },
     {
@@ -207,7 +199,7 @@
       "name": "Venice: Uncensored (free)",
       "context_length": 32768,
       "modality": "text->text",
-      "discovered_at": 1772480673.0455992,
+      "discovered_at": 1772727083.596162,
       "quality_score": 0.55
     },
     {
@@ -215,7 +207,7 @@
       "name": "LiquidAI: LFM2.5-1.2B-Thinking (free)",
       "context_length": 32768,
       "modality": "text->text",
-      "discovered_at": 1772480673.0454645,
+      "discovered_at": 1772727083.595971,
       "quality_score": 0.45000000000000007
     },
     {
@@ -223,7 +215,7 @@
       "name": "LiquidAI: LFM2.5-1.2B-Instruct (free)",
       "context_length": 32768,
       "modality": "text->text",
-      "discovered_at": 1772480673.0454736,
+      "discovered_at": 1772727083.5959828,
       "quality_score": 0.45000000000000007
     }
   ]
