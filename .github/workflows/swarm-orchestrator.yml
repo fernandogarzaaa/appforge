@@ -16,7 +16,7 @@ on:
   workflow_dispatch:
     inputs:
       force_action:
-        description: "Force a specific agent (autonomous_swarm|evolution_benchmark|quantum_evolution|curiosity_scan|frontend_qa_swarm|appforge_task_runner)"
+        description: "Force a specific agent (autonomous_swarm|evolution_benchmark|quantum_evolution|curiosity_scan|frontend_qa_swarm|dynamic_agent|appforge_task_runner)"
         required: false
       task_description:
         description: "Optional task description when force_action=appforge_task_runner"
@@ -136,8 +136,58 @@ jobs:
           RUN_ID: ${{ steps.event.outputs.run_id }}
           FORCE_OVERRIDE: ${{ inputs.force_override }}
 
-      - name: Control-plane queue result
-        if: steps.cooldown.outputs.proceed == 'true'
+      # Dispatch the right agent based on decision
+      - name: Dispatch → Autonomous Swarm
+        if: steps.cooldown.outputs.proceed == 'true' && steps.dispatch-token.outputs.can_dispatch == 'true' && steps.decide.outputs.next_action == 'autonomous_swarm' && (github.event_name != 'workflow_run' || github.event.workflow_run.name != 'Autonomous Swarm Cycle')
+        run: |
+          gh workflow run "Autonomous Swarm Cycle" --ref main
+        env:
+          GH_TOKEN: ${{ secrets.BOT_GITHUB_TOKEN }}
+
+      - name: Dispatch → Evolution Benchmark Gate
+        if: steps.cooldown.outputs.proceed == 'true' && steps.dispatch-token.outputs.can_dispatch == 'true' && steps.decide.outputs.next_action == 'evolution_benchmark' && (github.event_name != 'workflow_run' || github.event.workflow_run.name != 'Evolution Benchmark Gate')
+        run: |
+          gh workflow run "Evolution Benchmark Gate" --ref main
+        env:
+          GH_TOKEN: ${{ secrets.BOT_GITHUB_TOKEN }}
+
+      - name: Dispatch → Quantum Evolution
+        if: steps.cooldown.outputs.proceed == 'true' && steps.dispatch-token.outputs.can_dispatch == 'true' && steps.decide.outputs.next_action == 'quantum_evolution' && (github.event_name != 'workflow_run' || github.event.workflow_run.name != 'Quantum Self-Evolution')
+        run: |
+          gh workflow run "Quantum Self-Evolution" \
+            --ref main \
+            --field green_light=true \
+            --field reason="${{ steps.decide.outputs.reason }}"
+        env:
+          GH_TOKEN: ${{ secrets.BOT_GITHUB_TOKEN }}
+
+      - name: Dispatch → Curiosity Scan
+        if: steps.cooldown.outputs.proceed == 'true' && steps.dispatch-token.outputs.can_dispatch == 'true' && steps.decide.outputs.next_action == 'curiosity_scan' && (github.event_name != 'workflow_run' || github.event.workflow_run.name != 'Curiosity Engine Scan')
+        run: |
+          gh workflow run "Curiosity Engine Scan" --ref main
+        env:
+          GH_TOKEN: ${{ secrets.BOT_GITHUB_TOKEN }}
+
+      - name: Dispatch → Frontend QA Swarm
+        if: steps.cooldown.outputs.proceed == 'true' && steps.dispatch-token.outputs.can_dispatch == 'true' && steps.decide.outputs.next_action == 'frontend_qa_swarm' && (github.event_name != 'workflow_run' || github.event.workflow_run.name != 'Frontend QA Swarm')
+        run: |
+          gh workflow run "Frontend QA Swarm" \
+            --ref main \
+            --field context='{"reason":"${{ steps.decide.outputs.reason }}"}'
+        env:
+          GH_TOKEN: ${{ secrets.BOT_GITHUB_TOKEN }}
+
+
+
+      - name: Dispatch → Dynamic Agent
+        if: steps.cooldown.outputs.proceed == 'true' && steps.dispatch-token.outputs.can_dispatch == 'true' && steps.decide.outputs.next_action == 'dynamic_agent' && steps.decide.outputs.dynamic_workflow != ''
+        run: |
+          gh workflow run "${{ steps.decide.outputs.dynamic_workflow }}" --ref main
+        env:
+          GH_TOKEN: ${{ secrets.BOT_GITHUB_TOKEN }}
+
+      - name: Dispatch → AppForge Task Runner
+        if: steps.cooldown.outputs.proceed == 'true' && steps.dispatch-token.outputs.can_dispatch == 'true' && inputs.force_action == 'appforge_task_runner'
         run: |
           echo "Swarm command queued=${{ steps.decide.outputs.queued_command }}"
           echo "Next action=${{ steps.decide.outputs.next_action }}"

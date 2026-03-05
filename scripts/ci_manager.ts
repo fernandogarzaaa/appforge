@@ -2,6 +2,8 @@ import { sovereignStorage } from '../swarm/core/storage.js';
 import fs from 'fs/promises';
 import path from 'path';
 import { FileSystemTool } from '../swarm/tools/filesystem.js';
+import { analyzeCapabilityGaps, inferIssuesFromState, readAgentRegistry } from './swarm_capability_analyzer.js';
+import { generateAndRegisterAgent } from './swarm_agent_generator.js';
 import {
   MAX_CHAIN_LENGTH,
   applyWorkflowCompletion,
@@ -265,16 +267,56 @@ async function orchestrate() {
     });
   }
 
-  state.orchestrator = { next_action: nextAction, reason };
-  state.last_updated = new Date().toISOString();
+    const registry = await readAgentRegistry();
+    const activeGoals = (process.env.SWARM_GOALS || '')
+        .split(',')
+        .map((goal) => goal.trim())
+        .filter(Boolean);
+
+    const issues = inferIssuesFromState({
+        ciStatus: state.ci?.status,
+        ciFailReason: state.ci?.last_fail_reason,
+        frontendQaStatus: state.frontend_qa?.status,
+        telemetryErrors: Number(process.env.TELEMETRY_ERRORS || 0)
+    });
+
+    const capabilityProposals = await analyzeCapabilityGaps(issues);
+    let dynamicWorkflow = '';
+
+    if (capabilityProposals.length > 0) {
+        const generation = await generateAndRegisterAgent(capabilityProposals[0]);
+        if (generation.created && generation.agent?.workflow) {
+            registry.agents.push(generation.agent);
+            console.log(JSON.stringify(generation.telemetry));
+        } else if (generation.reason) {
+            console.log(`ℹ️ [CI Manager] Dynamic agent creation skipped: ${generation.reason}`);
+        }
+    }
+
+    if (!forceAction) {
+        const dynamicAgent = registry.agents.find((agent) =>
+            (agent.capabilities || []).some((capability) => activeGoals.includes(capability))
+        );
+        if (dynamicAgent) {
+            nextAction = 'dynamic_agent';
+            dynamicWorkflow = dynamicAgent.workflow;
+            reason = `Dynamic dispatch selected: ${dynamicAgent.name}`;
+        }
+    }
+
+    state.orchestrator = { next_action: nextAction, reason };
+    state.last_updated = new Date().toISOString();
 
   await sovereignStorage.save({ timestamp: new Date().toISOString(), version: '2.0.0', state });
 
-  if (process.env.GITHUB_OUTPUT) {
-    await fs.appendFile(process.env.GITHUB_OUTPUT, `next_action=${nextAction}\n`);
-    await fs.appendFile(process.env.GITHUB_OUTPUT, `reason=${reason}\n`);
-    await fs.appendFile(process.env.GITHUB_OUTPUT, `queued_command=${queueCommand ? 'true' : 'false'}\n`);
-  }
+    // 5. Output for GitHub Actions
+    if (process.env.GITHUB_OUTPUT) {
+        await fs.appendFile(process.env.GITHUB_OUTPUT, `next_action=${nextAction}\n`);
+        await fs.appendFile(process.env.GITHUB_OUTPUT, `reason=${reason}\n`);
+        await fs.appendFile(process.env.GITHUB_OUTPUT, `dynamic_workflow=${dynamicWorkflow}\n`);
+        const taskDesc = nextAction === 'autonomous_swarm' ? `Fix: ${state.ci.last_fail_reason}` : reason;
+        await fs.appendFile(process.env.GITHUB_OUTPUT, `task=${taskDesc}\n`);
+    }
 
   console.log(`🎯 [CI Manager] Decision: ${nextAction} (${reason})`);
 }
