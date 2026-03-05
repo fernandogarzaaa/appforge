@@ -3,13 +3,15 @@ import fs from 'fs/promises';
 import path from 'path';
 import { FileSystemTool } from '../swarm/tools/filesystem.js';
 import {
-    determine_current_goal,
-    GoalTelemetryEvent,
-    loadStoredGoal,
-    saveGoalState,
-    selectWorkflowForGoal,
-    SwarmGoal
-} from './swarm_goal_engine.js';
+    MAX_CHAIN_LENGTH,
+    applyWorkflowCompletion,
+    canDispatchAction,
+    getAllowedNextStates,
+    readSwarmMeta,
+    readSwarmState,
+    stateToAction,
+    workflowToState
+} from './swarm_state_machine.js';
 
 interface SwarmState {
     last_updated: string;
@@ -151,8 +153,30 @@ async function orchestrate() {
     const trigger = process.env.TRIGGER || 'manual';
     const workflowName = process.env.WORKFLOW_NAME || '';
     const conclusion = process.env.CONCLUSION || '';
+    const runId = process.env.RUN_ID || process.env.GITHUB_RUN_ID || 'local';
+    const forceOverride = process.env.FORCE_OVERRIDE === 'true';
 
     console.log(`🧠 [CI Manager] Trigger: ${trigger} | Workflow: ${workflowName} | Conclusion: ${conclusion}`);
+
+    const completion = await applyWorkflowCompletion({
+        workflowName,
+        runId,
+        wasSuccessful: conclusion === 'success',
+        forceOverride
+    });
+
+    if (completion.status === 'updated' && completion.telemetry) {
+        console.log(JSON.stringify(completion.telemetry));
+    } else if (completion.status === 'rejected') {
+        console.warn('⚠️ [CI Manager] Invalid state detected while applying completion. State reset to IDLE.');
+    }
+
+    const { record: swarmRecord, wasReset } = await readSwarmState(runId);
+    const swarmMeta = await readSwarmMeta();
+
+    if (wasReset) {
+        console.warn('⚠️ [CI Manager] Swarm state was invalid and has been reset to IDLE.');
+    }
 
     // 1. Merge Artifacts (if any)
     const artifactsDir = 'agent_outputs';
@@ -207,25 +231,51 @@ async function orchestrate() {
 
     let nextAction = 'none';
     let reason = 'All systems nominal';
-    let selectedWorkflow = '';
+    const forceAction = process.env.FORCE_ACTION || '';
 
-    if (process.env.FORCE_ACTION) {
-        nextAction = process.env.FORCE_ACTION;
-        reason = 'Manually forced';
-        selectedWorkflow = invertActionLookup(nextAction) || '';
+    if (!forceAction && swarmMeta.chain_length >= MAX_CHAIN_LENGTH) {
+        reason = `Workflow chain limit reached (${swarmMeta.chain_length}/${MAX_CHAIN_LENGTH}). Awaiting manual intervention.`;
     } else {
-        if (conclusion === 'failure' || state.ci.status === 'fail') {
-            reason = conclusion === 'failure'
-                ? `Workflow ${workflowName} failed. CI healer engaged.`
-                : `CI failure: ${state.ci.last_fail_reason}`;
-        } else if (trigger === 'schedule') {
-            reason = `Scheduled orchestration cycle aligned to goal: ${selectedGoal}`;
-        } else {
-            reason = `Goal selected: ${selectedGoal}`;
-        }
+        const allowedState = getAllowedNextStates(swarmRecord.state)[0];
+        const stateMachineAction = allowedState ? stateToAction[allowedState] : 'none';
 
-        selectedWorkflow = selectWorkflowForGoal(selectedGoal, recentGoalActions, workflowName);
-        nextAction = WORKFLOW_ACTION_MAP[selectedWorkflow] || 'none';
+        if (forceAction) {
+            const forceDecision = canDispatchAction({
+                currentState: swarmRecord.state,
+                requestedAction: forceAction,
+                lastWorkflow: swarmMeta.last_workflow,
+                forceOverride: true
+            });
+            nextAction = forceAction;
+            reason = `Manually forced (${forceDecision.reason})`;
+        } else {
+            nextAction = stateMachineAction;
+            reason = `State machine route: ${swarmRecord.state} → ${allowedState || 'none'}`;
+        }
+    }
+
+    if (nextAction !== 'none') {
+        const guard = canDispatchAction({
+            currentState: swarmRecord.state,
+            requestedAction: nextAction,
+            lastWorkflow: swarmMeta.last_workflow,
+            forceOverride: !!forceAction
+        });
+
+        if (!guard.allowed) {
+            nextAction = 'none';
+            reason = `Dispatch blocked by swarm state machine: ${guard.reason}`;
+        }
+    }
+
+    if (!forceAction && nextAction === 'none' && trigger === 'schedule' && swarmRecord.state === 'IDLE') {
+        nextAction = 'curiosity_scan';
+        reason = 'Scheduled curiosity pulse from IDLE';
+    }
+
+    if (!forceAction && conclusion === 'failure' && workflowToState[workflowName]) {
+        nextAction = 'none';
+        reason = `Workflow ${workflowName} failed. Awaiting retry/manual override.`;
     }
 
     const telemetry: GoalTelemetryEvent[] = [

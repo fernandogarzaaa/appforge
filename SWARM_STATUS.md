@@ -9,11 +9,11 @@
 - **Frontend QA**: pass
 
 ## 🧠 Strategic Oracle
-- **Next Decision**: `quantum_evolution`
-- **Logic Reason**: CI green, evolution proceeding
+- **Next Decision**: `autonomous_swarm`
+- **Logic Reason**: State machine route: IDLE → AUTONOMOUS_SWARM
 
 ## 🏗️ Build Telemetry
-- **Last Sync**: 3/5/2026, 7:03:34 AM
+- **Last Sync**: 3/5/2026, 7:10:43 AM
 - **Build Dur**: N/A
 
 ---
