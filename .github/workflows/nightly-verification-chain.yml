@@ -1,0 +1,97 @@
+name: Nightly Verification Chain
+
+on:
+  schedule:
+    - cron: '0 3 * * *'
+  workflow_dispatch:
+
+permissions:
+  actions: read
+  contents: read
+
+concurrency:
+  group: nightly-verification-chain
+  cancel-in-progress: false
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Run verification chain
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+
+          START_TS="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          SUMMARY_FILE="verification-summary.md"
+          echo "# Nightly Verification Chain" > "$SUMMARY_FILE"
+          echo >> "$SUMMARY_FILE"
+          echo "Start (UTC): ${START_TS}" >> "$SUMMARY_FILE"
+          echo >> "$SUMMARY_FILE"
+          echo "| Workflow | Run ID | Conclusion | URL |" >> "$SUMMARY_FILE"
+          echo "|---|---:|---|---|" >> "$SUMMARY_FILE"
+
+          dispatch_and_wait() {
+            local workflow_file="$1"
+            local workflow_label="$2"
+
+            echo "Dispatching ${workflow_label} (${workflow_file})"
+            gh workflow run "$workflow_file" --ref main
+
+            local run_id=""
+            for _ in {1..40}; do
+              run_id="$(gh run list \
+                --workflow "$workflow_file" \
+                --limit 30 \
+                --json databaseId,event,headBranch,createdAt \
+                --jq ".[] | select(.event==\"workflow_dispatch\" and .headBranch==\"main\" and .createdAt >= \"${START_TS}\") | .databaseId" \
+                | head -n 1 || true)"
+              if [ -n "$run_id" ]; then
+                break
+              fi
+              sleep 10
+            done
+
+            if [ -z "$run_id" ]; then
+              echo "Failed to locate run ID for ${workflow_label}"
+              echo "| ${workflow_label} | n/a | failed_to_start | n/a |" >> "$SUMMARY_FILE"
+              return 1
+            fi
+
+            echo "Watching ${workflow_label} run ${run_id}"
+            if gh run watch "$run_id" --exit-status; then
+              conclusion="$(gh run view "$run_id" --json conclusion --jq '.conclusion')"
+            else
+              conclusion="$(gh run view "$run_id" --json conclusion --jq '.conclusion' || echo failed)"
+            fi
+            url="$(gh run view "$run_id" --json url --jq '.url')"
+
+            echo "| ${workflow_label} | ${run_id} | ${conclusion} | ${url} |" >> "$SUMMARY_FILE"
+
+            if [ "$conclusion" != "success" ]; then
+              echo "${workflow_label} failed with conclusion: ${conclusion}"
+              return 1
+            fi
+          }
+
+          dispatch_and_wait "swarm-loop.yml" "Swarm Loop"
+          dispatch_and_wait "node.js.yml" "Node.js CI"
+          dispatch_and_wait "code-scanning.yml" "Code Scanning & Quality"
+          dispatch_and_wait "frontend_qa_swarm.yml" "Frontend QA Swarm"
+
+          echo >> "$SUMMARY_FILE"
+          echo "All verification workflows completed successfully." >> "$SUMMARY_FILE"
+
+      - name: Upload verification summary
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nightly-verification-summary
+          path: verification-summary.md
