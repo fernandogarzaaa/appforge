@@ -1,8 +1,30 @@
 {
-  "cycle_count": 0,
-  "last_cycle_at": "1970-01-01T00:00:00.000Z",
-  "last_signals": [],
+  "cycle_count": 1,
+  "last_cycle_at": "2026-03-05T14:29:13.321Z",
+  "last_signals": [
+    "ci_failure"
+  ],
   "completed_tasks": 0,
-  "failed_tasks": 0,
-  "failed_strategies": {}
+  "failed_tasks": 1,
+  "empty_strategy_cycles": 0,
+  "failed_strategy_attempts": {
+    "A": 1,
+    "A_mut_1": 1,
+    "A_mut_2": 1,
+    "B": 1
+  },
+  "failed_strategies": {
+    "ci_failure": [
+      "A",
+      "A_mut_1",
+      "A_mut_2",
+      "B"
+    ]
+  },
+  "failed_mutated_strategies": {
+    "ci_failure": [
+      "A_mut_1",
+      "A_mut_2"
+    ]
+  }
 }
