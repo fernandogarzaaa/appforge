@@ -1,5 +1,5 @@
-import { execSync } from 'node:child_process';
 import { existsSync, readFileSync } from 'node:fs';
+import { spawnSync } from 'node:child_process';
 import path from 'node:path';
 
 export type SignalType =
@@ -8,166 +8,150 @@ export type SignalType =
   | 'benchmark_regression'
   | 'outdated_dependencies'
   | 'missing_tests'
-  | 'low_coverage';
+  | 'low_code_coverage';
 
-export interface RepositorySignal {
+export interface DetectedSignal {
   type: SignalType;
   severity: number;
-  detail: string;
-  source: string;
+  details: string;
 }
 
-const COVERAGE_THRESHOLD = 80;
-
-function safeExec(command: string): string {
-  try {
-    return execSync(command, { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] });
-  } catch (error) {
-    return (error as { stdout?: string }).stdout ?? '';
-  }
+function run(command: string, args: string[]): { code: number; stdout: string; stderr: string } {
+  const result = spawnSync(command, args, { encoding: 'utf-8', timeout: 120000 });
+  return {
+    code: result.status ?? 1,
+    stdout: result.stdout ?? '',
+    stderr: result.stderr ?? ''
+  };
 }
 
-function detectCiFailure(): RepositorySignal[] {
-  const ciStatusPath = path.resolve('.swarm/last_ci_status.json');
-  if (!existsSync(ciStatusPath)) return [];
+function detectCiFailure(): DetectedSignal | null {
+  const candidates = ['final_scan.txt', 'verification_results.txt', 'lint_output.json'];
+  const failPattern = /(fail|error|panic|fatal)/i;
 
-  const payload = JSON.parse(readFileSync(ciStatusPath, 'utf8')) as { status?: string; reason?: string };
-  if (payload.status === 'failed') {
-    return [
-      {
+  for (const candidate of candidates) {
+    if (!existsSync(candidate)) continue;
+    const content = readFileSync(candidate, 'utf-8').slice(0, 5000);
+    if (failPattern.test(content)) {
+      return {
         type: 'ci_failure',
         severity: 1,
-        detail: payload.reason ?? 'Previous CI run reported failure.',
-        source: '.swarm/last_ci_status.json',
-      },
-    ];
-  }
-
-  return [];
-}
-
-function detectFailingTests(): RepositorySignal[] {
-  const failLogCandidates = ['local_test_fail.txt', 'final_test_output.txt', 'build_log.txt'];
-  for (const filePath of failLogCandidates) {
-    if (!existsSync(filePath)) continue;
-    const content = readFileSync(filePath, 'utf8');
-    if (/\b(fail(?:ed|ure)?|error)\b/i.test(content)) {
-      return [
-        {
-          type: 'failing_tests',
-          severity: 1,
-          detail: `Potential failures detected in ${filePath}.`,
-          source: filePath,
-        },
-      ];
+        details: `Detected failure markers in ${candidate}`
+      };
     }
   }
 
-  return [];
+  return null;
 }
 
-function detectBenchmarkRegression(): RepositorySignal[] {
-  const baselinePath = path.resolve('swarm/benchmark_baseline.json');
-  const latestPath = path.resolve('swarm/benchmark_latest.json');
-  if (!existsSync(baselinePath) || !existsSync(latestPath)) return [];
-
-  const baseline = JSON.parse(readFileSync(baselinePath, 'utf8')) as { score?: number };
-  const latest = JSON.parse(readFileSync(latestPath, 'utf8')) as { score?: number };
-  if (typeof baseline.score === 'number' && typeof latest.score === 'number' && latest.score < baseline.score) {
-    return [
-      {
-        type: 'benchmark_regression',
-        severity: 2,
-        detail: `Benchmark dropped from ${baseline.score} to ${latest.score}.`,
-        source: 'swarm/benchmark_latest.json',
-      },
-    ];
+function detectFailingTests(): DetectedSignal | null {
+  if (process.env.SWARM_SKIP_EXPENSIVE_SIGNALS !== 'false') {
+    return null;
   }
 
-  return [];
+  const result = run('npm', ['run', 'test', '--', '--passWithNoTests']);
+  if (result.code !== 0) {
+    return {
+      type: 'failing_tests',
+      severity: 1,
+      details: 'Unit tests are failing.'
+    };
+  }
+
+  return null;
 }
 
-function detectOutdatedDependencies(): RepositorySignal[] {
-  const output = safeExec('npm outdated --json');
-  if (!output.trim()) return [];
+function detectBenchmarkRegression(): DetectedSignal | null {
+  const benchmarkPath = path.join('swarm', 'benchmark_results.json');
+  if (!existsSync(benchmarkPath)) return null;
 
   try {
-    const parsed = JSON.parse(output) as Record<string, unknown>;
-    const total = Object.keys(parsed).length;
-    if (total > 0) {
-      return [
-        {
-          type: 'outdated_dependencies',
-          severity: total > 10 ? 2 : 3,
-          detail: `${total} dependencies are outdated.`,
-          source: 'npm outdated --json',
-        },
-      ];
+    const payload = JSON.parse(readFileSync(benchmarkPath, 'utf-8')) as Record<string, unknown>;
+    const hasRegression =
+      payload.regression === true || payload.performance_regression === true || payload.status === 'regression';
+
+    if (hasRegression) {
+      return {
+        type: 'benchmark_regression',
+        severity: 2,
+        details: 'Benchmark file indicates a regression.'
+      };
     }
   } catch {
-    return [];
+    return {
+      type: 'benchmark_regression',
+      severity: 3,
+      details: 'Benchmark metadata is unreadable.'
+    };
   }
 
-  return [];
+  return null;
 }
 
-function detectLowCoverage(): RepositorySignal[] {
-  const coverageSummaryPath = path.resolve('coverage/coverage-summary.json');
-  if (!existsSync(coverageSummaryPath)) return [];
+function detectOutdatedDependencies(): DetectedSignal | null {
+  if (process.env.SWARM_SKIP_EXPENSIVE_SIGNALS !== 'false') {
+    return null;
+  }
 
-  const summary = JSON.parse(readFileSync(coverageSummaryPath, 'utf8')) as {
-    total?: { lines?: { pct?: number } };
+  const result = run('npm', ['outdated', '--json']);
+  if (result.code === 0) return null;
+
+  const trimmed = result.stdout.trim();
+  if (!trimmed) return null;
+
+  return {
+    type: 'outdated_dependencies',
+    severity: 2,
+    details: 'Outdated dependencies detected via npm outdated.'
   };
-  const pct = summary.total?.lines?.pct;
-  if (typeof pct === 'number' && pct < COVERAGE_THRESHOLD) {
-    return [
-      {
-        type: 'low_coverage',
-        severity: 2,
-        detail: `Coverage ${pct}% is below ${COVERAGE_THRESHOLD}%.`,
-        source: coverageSummaryPath,
-      },
-    ];
+}
+
+function detectTestCoverageSignals(): DetectedSignal[] {
+  const srcFiles = run('bash', ['-lc', "rg --files src --glob '*.ts' --glob '*.tsx' | wc -l"]);
+  const testFiles = run('bash', ['-lc', "rg --files src tests --glob '*.{test,spec}.{ts,tsx,js,jsx}' | wc -l"]);
+
+  const srcCount = Number.parseInt(srcFiles.stdout.trim(), 10) || 0;
+  const testsCount = Number.parseInt(testFiles.stdout.trim(), 10) || 0;
+  if (srcCount === 0) return [];
+
+  const ratio = testsCount / srcCount;
+  const signals: DetectedSignal[] = [];
+
+  if (testsCount === 0) {
+    signals.push({
+      type: 'missing_tests',
+      severity: 1,
+      details: 'No test files detected for source tree.'
+    });
   }
 
-  return [];
-}
-
-function detectMissingTests(): RepositorySignal[] {
-  const sourceFiles = safeExec("rg --files src functions | wc -l").trim();
-  const testFiles = safeExec("rg --files tests | wc -l").trim();
-  const sourceCount = Number(sourceFiles || 0);
-  const testCount = Number(testFiles || 0);
-
-  if (sourceCount === 0) return [];
-
-  const ratio = testCount / sourceCount;
-  if (ratio < 0.2) {
-    return [
-      {
-        type: 'missing_tests',
-        severity: 2,
-        detail: `Test-to-source ratio (${ratio.toFixed(2)}) appears low.`,
-        source: 'rg --files src functions / tests',
-      },
-    ];
+  if (ratio < 0.12) {
+    signals.push({
+      type: 'low_code_coverage',
+      severity: 2,
+      details: `Estimated test-to-source ratio is ${ratio.toFixed(2)}.`
+    });
   }
 
-  return [];
+  return signals;
 }
 
-export function detectRepositorySignals(): RepositorySignal[] {
-  return [
-    ...detectCiFailure(),
-    ...detectFailingTests(),
-    ...detectBenchmarkRegression(),
-    ...detectOutdatedDependencies(),
-    ...detectMissingTests(),
-    ...detectLowCoverage(),
-  ];
-}
+export async function detectSwarmSignals(): Promise<DetectedSignal[]> {
+  const signals: DetectedSignal[] = [];
 
-if (import.meta.url === `file://${process.argv[1]}`) {
-  const signals = detectRepositorySignals();
-  console.log(JSON.stringify({ generatedAt: new Date().toISOString(), signals }, null, 2));
+  const ciFailure = detectCiFailure();
+  if (ciFailure) signals.push(ciFailure);
+
+  const failingTests = detectFailingTests();
+  if (failingTests) signals.push(failingTests);
+
+  const benchmarkRegression = detectBenchmarkRegression();
+  if (benchmarkRegression) signals.push(benchmarkRegression);
+
+  const outdatedDependencies = detectOutdatedDependencies();
+  if (outdatedDependencies) signals.push(outdatedDependencies);
+
+  signals.push(...detectTestCoverageSignals());
+
+  return signals;
 }

@@ -1,12 +1,13 @@
-import type { SwarmTask } from '../swarm_task_generator';
-import type { ExperimentStrategy } from '../swarm_experiment_generator';
+import { spawnSync } from 'node:child_process';
 
-export function proposeTestRepair(task: SwarmTask, strategy: ExperimentStrategy): string[] {
-  return [
-    `Task ${task.id}: ${task.description}`,
-    `Strategy ${strategy.id} (${strategy.title})`,
-    'Proposed changes:',
-    '- Isolate flaky tests and remove shared state.',
-    '- Update assertions and fixtures for deterministic behavior.',
-  ];
+interface AgentInput {
+  task_id: string;
+  description: string;
+}
+
+export function runAgent(input: AgentInput): { success: boolean; log: string } {
+  const run = spawnSync('npm', ['run', 'test', '--', '--passWithNoTests'], { encoding: 'utf-8' });
+  const success = (run.status ?? 1) === 0;
+  const log = `[${input.task_id}] ${input.description}\n${run.stdout ?? ''}${run.stderr ?? ''}`;
+  return { success, log };
 }

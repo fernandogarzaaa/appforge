@@ -1,65 +1,90 @@
-import { execSync } from 'node:child_process';
-import { mkdirSync, readFileSync, writeFileSync, existsSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
-import { detectRepositorySignals } from './swarm_signal_detector';
-import { generateTasksFromSignals, type SwarmTask } from './swarm_task_generator';
-import { generateExperimentStrategies, type ExperimentStrategy } from './swarm_experiment_generator';
-import { evaluateExperiment } from './evaluator';
+import { detectSwarmSignals } from './swarm_signal_detector.ts';
+import { generateTasksFromSignals, type SwarmTask } from './swarm_task_generator.ts';
+import { selectNextTask } from './swarm_task_executor.ts';
+import { generateExperimentStrategies } from './swarm_experiment_generator.ts';
 
-interface TaskQueueFile {
+interface QueueState {
   tasks: SwarmTask[];
 }
 
 interface SwarmMemory {
-  lastRunAt: string;
-  cycles: number;
-  completedTasks: number;
-  experiments: Array<{ taskId: string; strategyId: string; branch: string; score: number }>;
+  cycle_count: number;
+  last_cycle_at: string;
+  last_signals: string[];
+  completed_tasks: number;
+  failed_tasks: number;
+  failed_strategy_attempts: Record<string, number>;
 }
 
-interface RunContext {
-  runId: string;
-  task: SwarmTask;
-  strategies: ExperimentStrategy[];
-}
-
+const TASK_QUEUE_PATH = path.join('swarm', 'task_queue.json');
+const SWARM_MEMORY_PATH = path.join('swarm', 'swarm_memory.json');
+const RUN_CONTEXT_PATH = path.join('swarm', 'run_context.json');
 const MAX_TASKS_PER_CYCLE = 5;
 const MAX_EXPERIMENTS_PER_TASK = 4;
-const MAX_RETRIES_PER_TASK = 3;
-const TASK_QUEUE_PATH = path.resolve('swarm/task_queue.json');
-const MEMORY_PATH = path.resolve('swarm/swarm_memory.json');
-const RUN_CONTEXT_PATH = path.resolve('swarm/run_context.json');
+const MAX_RETRIES = 3;
 
-function ensureStateFiles(): void {
-  mkdirSync(path.dirname(TASK_QUEUE_PATH), { recursive: true });
+function ensurePersistenceFiles(): void {
+  mkdirSync('swarm', { recursive: true });
+
   if (!existsSync(TASK_QUEUE_PATH)) {
     writeFileSync(TASK_QUEUE_PATH, JSON.stringify({ tasks: [] }, null, 2));
   }
-  if (!existsSync(MEMORY_PATH)) {
-    const initialMemory: SwarmMemory = { lastRunAt: '', cycles: 0, completedTasks: 0, experiments: [] };
-    writeFileSync(MEMORY_PATH, JSON.stringify(initialMemory, null, 2));
+
+  if (!existsSync(SWARM_MEMORY_PATH)) {
+    writeFileSync(
+      SWARM_MEMORY_PATH,
+      JSON.stringify(
+        {
+          cycle_count: 0,
+          last_cycle_at: new Date(0).toISOString(),
+          last_signals: [],
+          completed_tasks: 0,
+          failed_tasks: 0,
+          failed_strategy_attempts: {}
+        },
+        null,
+        2
+      )
+    );
   }
 }
 
-function loadQueue(): TaskQueueFile {
-  return JSON.parse(readFileSync(TASK_QUEUE_PATH, 'utf8')) as TaskQueueFile;
+function loadQueue(): QueueState {
+  return JSON.parse(readFileSync(TASK_QUEUE_PATH, 'utf-8')) as QueueState;
 }
 
-function saveQueue(queue: TaskQueueFile): void {
-  writeFileSync(TASK_QUEUE_PATH, JSON.stringify(queue, null, 2));
+function saveQueue(state: QueueState): void {
+  writeFileSync(TASK_QUEUE_PATH, JSON.stringify(state, null, 2));
 }
 
 function loadMemory(): SwarmMemory {
-  return JSON.parse(readFileSync(MEMORY_PATH, 'utf8')) as SwarmMemory;
+  const loaded = JSON.parse(readFileSync(SWARM_MEMORY_PATH, 'utf-8')) as Partial<SwarmMemory>;
+  return {
+    cycle_count: loaded.cycle_count ?? 0,
+    last_cycle_at: loaded.last_cycle_at ?? new Date(0).toISOString(),
+    last_signals: loaded.last_signals ?? [],
+    completed_tasks: loaded.completed_tasks ?? 0,
+    failed_tasks: loaded.failed_tasks ?? 0,
+    failed_strategy_attempts: loaded.failed_strategy_attempts ?? {}
+  };
 }
 
 function saveMemory(memory: SwarmMemory): void {
-  writeFileSync(MEMORY_PATH, JSON.stringify(memory, null, 2));
+  writeFileSync(SWARM_MEMORY_PATH, JSON.stringify(memory, null, 2));
 }
 
-function ensureExperimentBranch(branch: string): void {
-  if (!branch.startsWith('experiment/')) {
-    throw new Error(`Unsafe branch ${branch}. Experiments must run on experiment/* branches only.`);
+async function prepareRunContext(): Promise<void> {
+  ensurePersistenceFiles();
+
+  const queue = loadQueue();
+  const memory = loadMemory();
+
+  const signals = await detectSwarmSignals();
+  const tasks = generateTasksFromSignals(signals, MAX_TASKS_PER_CYCLE);
+  if (tasks.length > 0) {
+    queue.tasks.push(...tasks);
   }
   execSync(`git checkout -B ${branch}`, { stdio: 'inherit' });
 }
@@ -92,65 +117,48 @@ function evaluateStrategy(task: SwarmTask, strategy: ExperimentStrategy, runId: 
   return { branch, score };
 }
 
-async function runSwarmLoop(): Promise<void> {
-  ensureStateFiles();
-  const memory = loadMemory();
-  const queue = loadQueue();
+  const nextTask = selectNextTask(queue.tasks);
+  const runId = process.env.GITHUB_RUN_ID ?? `${Date.now()}`;
 
-  const signals = detectRepositorySignals();
-  const newTasks = generateTasksFromSignals(signals, MAX_TASKS_PER_CYCLE);
-  const pending = queue.tasks.filter((task) => task.status === 'pending' && task.retries < MAX_RETRIES_PER_TASK);
-  const selectedTasks = [...pending, ...newTasks].slice(0, MAX_TASKS_PER_CYCLE);
-
-  queue.tasks = selectedTasks;
-  saveQueue(queue);
-
-  const task = selectedTasks[0];
-  if (task) {
-    const runId = new Date().toISOString().replace(/[:.]/g, '-');
-    const strategies = generateExperimentStrategies(task, MAX_EXPERIMENTS_PER_TASK);
-    const context: RunContext = { runId, task, strategies };
+  if (!nextTask) {
+    const context = { run_id: runId, has_task: false, strategies: [] };
     writeFileSync(RUN_CONTEXT_PATH, JSON.stringify(context, null, 2));
-  }
 
-  memory.lastRunAt = new Date().toISOString();
-  memory.cycles += 1;
-  saveMemory(memory);
-
-  console.log(`✅ Swarm cycle prepared | tasks=${selectedTasks.length} signals=${signals.length}`);
-}
-
-async function runSingleExperimentMode(): Promise<void> {
-  ensureStateFiles();
-  if (!existsSync(RUN_CONTEXT_PATH)) {
-    throw new Error('Missing swarm/run_context.json. Run loop mode first.');
-  }
-
-  const ctx = JSON.parse(readFileSync(RUN_CONTEXT_PATH, 'utf8')) as RunContext;
-  const strategyId = process.env.SWARM_STRATEGY_ID ?? process.argv.find((arg) => arg.startsWith('--strategy='))?.split('=')[1] ?? 'A';
-  const strategy = ctx.strategies.find((item) => item.id === strategyId);
-  if (!strategy) {
-    throw new Error(`Strategy ${strategyId} not found in run context.`);
-  }
-
-  const result = evaluateStrategy(ctx.task, strategy, ctx.runId);
-  ensureExperimentBranch(result.branch);
-  commitExperimentArtifact(ctx.runId, ctx.task, strategyId, result.score);
-
-  console.log(JSON.stringify({ ...result, taskId: ctx.task.id, strategyId }, null, 2));
-}
-
-async function main(): Promise<void> {
-  const mode = process.argv.find((arg) => arg.startsWith('--mode='))?.split('=')[1] ?? 'loop';
-  if (mode === 'experiment') {
-    await runSingleExperimentMode();
+    memory.cycle_count += 1;
+    memory.last_cycle_at = new Date().toISOString();
+    memory.last_signals = signals.map((signal) => signal.type);
+    saveQueue(queue);
+    saveMemory(memory);
     return;
   }
 
-  await runSwarmLoop();
+  const strategies = generateExperimentStrategies(nextTask, MAX_EXPERIMENTS_PER_TASK);
+
+  nextTask.status = 'running';
+  nextTask.updated_at = new Date().toISOString();
+  saveQueue(queue);
+
+  const context = {
+    run_id: runId,
+    has_task: true,
+    task: nextTask,
+    strategies,
+    limits: {
+      max_tasks_per_cycle: MAX_TASKS_PER_CYCLE,
+      max_experiments_per_task: MAX_EXPERIMENTS_PER_TASK,
+      max_retries_per_task: MAX_RETRIES
+    }
+  };
+
+  writeFileSync(RUN_CONTEXT_PATH, JSON.stringify(context, null, 2));
+
+  memory.cycle_count += 1;
+  memory.last_cycle_at = new Date().toISOString();
+  memory.last_signals = signals.map((signal) => signal.type);
+  saveMemory(memory);
 }
 
-main().catch((error) => {
-  console.error('❌ Swarm controller failed:', error);
+prepareRunContext().catch((error) => {
+  console.error('Swarm controller failed:', error);
   process.exit(1);
 });

@@ -1,70 +1,155 @@
 import { execSync } from 'node:child_process';
-import { existsSync, readdirSync, readFileSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 
-export interface ExperimentScore {
-  branch: string;
-  score: number;
-  taskId: string;
-  strategyId: string;
+interface ExperimentResult {
+  run_id: string;
+  task_id?: string;
+  strategy_id: string;
+  branch?: string;
+  success: boolean;
+  skipped?: boolean;
+  benchmark_score: number;
+  checks: { lint: boolean; tests: boolean; benchmark: boolean; build: boolean };
 }
 
-export function selectBestResult(results: ExperimentScore[]): ExperimentScore | null {
-  if (!results.length) return null;
-  return results.slice().sort((a, b) => b.score - a.score)[0];
+interface SwarmTask {
+  id: string;
+  retries: number;
+  status: 'pending' | 'running' | 'completed' | 'failed';
+  failed_strategies?: string[];
+  updated_at?: string;
 }
 
-export function mergeBestResult(best: ExperimentScore, dryRun = true): void {
-  if (!best.branch.startsWith('experiment/')) {
-    throw new Error(`Unsafe merge source: ${best.branch}`);
-  }
+function run(command: string): void {
+  execSync(command, { stdio: 'pipe' });
+}
 
-  if (dryRun) {
-    console.log(`🧪 [dry-run] Would merge ${best.branch} into main with score ${best.score}`);
+function isCiRuntime(): boolean {
+  return process.env.GITHUB_ACTIONS === 'true';
+}
+
+function loadJson<T>(file: string): T {
+  return JSON.parse(readFileSync(file, 'utf-8')) as T;
+}
+
+function persistTaskOutcome(results: ExperimentResult[], winner: ExperimentResult | null): void {
+  const queuePath = path.join('swarm', 'task_queue.json');
+  const memoryPath = path.join('swarm', 'swarm_memory.json');
+
+  if (!existsSync(queuePath) || !existsSync(memoryPath) || results.length === 0) {
     return;
   }
 
-  execSync('git checkout main', { stdio: 'inherit' });
-  execSync(`git merge --no-ff ${best.branch}`, { stdio: 'inherit' });
+  const queue = loadJson<{ tasks: SwarmTask[] }>(queuePath);
+  const memory = loadJson<Record<string, any>>(memoryPath);
+  const taskId = results.find((result) => !!result.task_id)?.task_id;
+  if (!taskId) {
+    return;
+  }
+
+  const target = queue.tasks.find((task) => task.id === taskId);
+  if (!target) {
+    return;
+  }
+
+  const failedStrategies = results.filter((result) => !result.success).map((result) => result.strategy_id);
+  target.failed_strategies = Array.from(new Set([...(target.failed_strategies ?? []), ...failedStrategies]));
+  target.updated_at = new Date().toISOString();
+
+  if (winner) {
+    target.status = 'completed';
+    memory.completed_tasks = (memory.completed_tasks ?? 0) + 1;
+  } else {
+    target.retries = (target.retries ?? 0) + 1;
+    target.status = target.retries >= 3 ? 'failed' : 'pending';
+    memory.failed_tasks = (memory.failed_tasks ?? 0) + 1;
+    memory.failed_strategy_attempts = memory.failed_strategy_attempts ?? {};
+    for (const strategyId of failedStrategies) {
+      memory.failed_strategy_attempts[strategyId] = (memory.failed_strategy_attempts[strategyId] ?? 0) + 1;
+    }
+  }
+
+  writeFileSync(queuePath, JSON.stringify(queue, null, 2));
+  writeFileSync(memoryPath, JSON.stringify(memory, null, 2));
 }
 
-export function discardFailedBranches(results: ExperimentScore[], selectedBranch?: string): void {
-  for (const result of results) {
-    if (result.branch === selectedBranch) continue;
-    console.log(`🗑️  Discard experiment branch ${result.branch}`);
+function commitMemory(message: string): void {
+  run('git add swarm/swarm_memory.json swarm/task_queue.json');
+  try {
+    run(`git commit -m "${message}"`);
+  } catch {
+    // no memory deltas
   }
 }
 
-function loadRunResults(runId: string): ExperimentScore[] {
-  const dir = path.resolve(`swarm/results/${runId}`);
-  if (!existsSync(dir)) return [];
-
-  return readdirSync(dir)
-    .filter((file) => file.endsWith('.json'))
-    .map((file) => JSON.parse(readFileSync(path.join(dir, file), 'utf8')) as ExperimentScore);
-}
-
-async function main(): Promise<void> {
-  const runContextPath = path.resolve('swarm/run_context.json');
-  if (!existsSync(runContextPath)) {
-    throw new Error('Missing swarm/run_context.json for result selection.');
+function main(): void {
+  const resultDir = process.argv[2] ?? path.join('swarm', 'experiment_results');
+  if (!existsSync(resultDir)) {
+    console.log('No experiment result directory found.');
+    return;
   }
 
-  const runContext = JSON.parse(readFileSync(runContextPath, 'utf8')) as { runId: string };
-  const results = loadRunResults(runContext.runId);
-  const best = selectBestResult(results);
-  if (!best) {
+  const files = readdirSync(resultDir).filter((file) => file.endsWith('.json') && file !== 'no_task.json');
+  const results: ExperimentResult[] = files.map((file) => loadJson<ExperimentResult>(path.join(resultDir, file)));
+
+  if (results.length === 0) {
     console.log('No experiment results found.');
     return;
   }
 
-  mergeBestResult(best, process.env.SWARM_ALLOW_MAIN_MERGE !== 'true');
-  discardFailedBranches(results, best.branch);
+  const successful = results
+    .filter((result) => result.success)
+    .filter((result) => result.checks.tests && result.checks.benchmark && result.checks.build && result.checks.lint)
+    .sort((a, b) => b.benchmark_score - a.benchmark_score);
+
+  run('git fetch --all --prune');
+
+  if (successful.length === 0) {
+    persistTaskOutcome(results, null);
+    commitMemory('swarm: record failed experiment cycle');
+
+    if (isCiRuntime()) {
+      run('git push origin main');
+      for (const result of results) {
+        if (!result.branch) {
+          continue;
+        }
+        try {
+          run(`git push origin --delete ${result.branch}`);
+        } catch {
+          // ignore branch deletion failures
+        }
+      }
+    }
+
+    console.log('No successful experiments to merge. Task marked for retry/failure.');
+    return;
+  }
+
+  const winner = successful[0];
+  if (!winner.branch) {
+    throw new Error('Winning experiment is missing branch metadata.');
+  }
+
+  const losers = results.filter((result) => result.branch && result.branch !== winner.branch);
+
+  run('git checkout main');
+  run(`git merge --no-ff origin/${winner.branch} -m "swarm: merge winning experiment ${winner.strategy_id}"`);
+
+  persistTaskOutcome(results, winner);
+  commitMemory('swarm: persist memory after experiment selection');
+
+  if (isCiRuntime()) {
+    run('git push origin main');
+    for (const loser of losers) {
+      try {
+        run(`git push origin --delete ${loser.branch}`);
+      } catch {
+        // ignore missing remote branches
+      }
+    }
+  }
 }
 
-if (import.meta.url === `file://${process.argv[1]}`) {
-  main().catch((error) => {
-    console.error('❌ Result selector failed:', error);
-    process.exit(1);
-  });
-}
+main();
