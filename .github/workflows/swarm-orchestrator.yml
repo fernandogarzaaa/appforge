@@ -46,8 +46,11 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "22"
+          node-version: "20"
           cache: "npm"
+          cache-dependency-path: |
+            package-lock.json
+            swarm/package-lock.json
 
       - name: Install Dependencies
         run: |
@@ -57,6 +60,9 @@ jobs:
           fi
 
       # Read what triggered this orchestrator run
+      - name: Install tsx globally
+        run: npm install --global tsx
+
       - name: Capture triggering event context
         id: event
         run: |

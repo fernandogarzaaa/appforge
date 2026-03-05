@@ -29,7 +29,7 @@ async function createPR() {
             return;
         }
         run(`git commit -m "auto: swarm evolution cycle (autonomous)"`);
-        run(`git push origin main`);
+        run(`git push --force-with-lease origin main`);
         console.log('✅ [Evolution PR] Changes committed directly to main.');
     } catch (error: any) {
         console.error('❌ [Evolution PR] Direct commit failed:', error.message);
@@ -43,9 +43,9 @@ async function createPR() {
                 return;
             }
             run(`git commit -m "auto: swarm evolution cycle"`);
-            run(`git push origin ${branch}`);
+            run(`git push --force-with-lease origin ${branch}`);
             run(`git tag -a ${branch} -m "Autonomous Evolution Cycle"`);
-            run(`git push origin ${branch} --tags`);
+            run(`git push --force-with-lease origin ${branch} --tags`);
             console.log(`📡 [Evolution PR] Opening Pull Request for ${repo}...`);
             const response = await fetch(
                 `https://api.github.com/repos/${owner}/${name}/pulls`,

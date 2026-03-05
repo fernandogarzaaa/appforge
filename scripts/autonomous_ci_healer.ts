@@ -67,7 +67,7 @@ async function runHealer() {
                             execSync(`git add ${patchData.fileName}`);
                             let commitMsg = `fix(ci): autonomous heal for ${targetRun.name} - ${patchData.reasoning.substring(0, 60)}`;
                             execSync(`git commit -m "${commitMsg}"`);
-                            execSync('git push origin HEAD');
+                            execSync('git push --force-with-lease origin HEAD');
                             console.log(`🚀 [CI Healer] Fix committed and pushed to repository.`);
                         } catch (gitErr: any) {
                             console.warn(`⚠️ [CI Healer] Git commit/push failed (perhaps no structural changes were made?): ${gitErr.message}`);
