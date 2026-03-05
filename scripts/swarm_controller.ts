@@ -110,6 +110,27 @@ async function prepareRunContext(): Promise<void> {
 
   const strategies = generateExperimentStrategies(nextTask, MAX_EXPERIMENTS_PER_TASK);
 
+  if (strategies.length === 0) {
+    nextTask.retries = (nextTask.retries ?? 0) + 1;
+    nextTask.status = nextTask.retries >= MAX_RETRIES ? 'failed' : 'pending';
+    nextTask.updated_at = new Date().toISOString();
+    saveQueue(queue);
+
+    const context = {
+      run_id: runId,
+      has_task: false,
+      strategies: []
+    };
+    writeFileSync(RUN_CONTEXT_PATH, JSON.stringify(context, null, 2));
+
+    memory.cycle_count += 1;
+    memory.last_cycle_at = new Date().toISOString();
+    memory.last_signals = signals.map((signal) => signal.type);
+    saveMemory(memory);
+
+    return;
+  }
+
   nextTask.status = 'running';
   nextTask.updated_at = new Date().toISOString();
   saveQueue(queue);
