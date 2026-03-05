@@ -2,7 +2,7 @@ name: Swarm Orchestrator
 
 on:
   schedule:
-    - cron: "0 * * * *"
+    - cron: "*/20 * * * *"
   workflow_run:
     workflows:
       - Autonomous Swarm Cycle
@@ -121,18 +121,6 @@ jobs:
           path: agent_outputs/
 
       # Unified Orchestration Decision (TypeScript)
-      - name: Validate dispatch token
-        id: dispatch-token
-        env:
-          BOT_GITHUB_TOKEN: ${{ secrets.BOT_GITHUB_TOKEN }}
-        run: |
-          if [ -n "$BOT_GITHUB_TOKEN" ]; then
-            echo "can_dispatch=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "can_dispatch=false" >> "$GITHUB_OUTPUT"
-            echo "::warning::BOT_GITHUB_TOKEN is not configured; orchestration dispatch steps will be skipped."
-          fi
-
       - name: Swarm Orchestration Decision
         id: decide
         if: steps.cooldown.outputs.proceed == 'true'
@@ -201,18 +189,8 @@ jobs:
       - name: Dispatch → AppForge Task Runner
         if: steps.cooldown.outputs.proceed == 'true' && steps.dispatch-token.outputs.can_dispatch == 'true' && inputs.force_action == 'appforge_task_runner'
         run: |
-          TASK_INPUT='${{ inputs.task_description }}'
-          if [ -z "$TASK_INPUT" ]; then
-            TASK_INPUT='build a simple REST API'
-          fi
-          gh workflow run "AppForge Task Runner" \
-            --ref main \
-            --field task_description="$TASK_INPUT"
-        env:
-          GH_TOKEN: ${{ secrets.BOT_GITHUB_TOKEN }}
-
-      - name: Dispatch skipped (missing token)
-        if: steps.cooldown.outputs.proceed == 'true' && steps.dispatch-token.outputs.can_dispatch != 'true'
-        run: echo "::notice::No BOT_GITHUB_TOKEN configured; skipping workflow dispatch steps."
+          echo "Swarm command queued=${{ steps.decide.outputs.queued_command }}"
+          echo "Next action=${{ steps.decide.outputs.next_action }}"
+          echo "Reason=${{ steps.decide.outputs.reason }}"
 
       # Dashboard update is automated via workflow_run triggers

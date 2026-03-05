@@ -5,72 +5,73 @@ import { FileSystemTool } from '../swarm/tools/filesystem.js';
 import { analyzeCapabilityGaps, inferIssuesFromState, readAgentRegistry } from './swarm_capability_analyzer.js';
 import { generateAndRegisterAgent } from './swarm_agent_generator.js';
 import {
-    MAX_CHAIN_LENGTH,
-    applyWorkflowCompletion,
-    canDispatchAction,
-    getAllowedNextStates,
-    readSwarmMeta,
-    readSwarmState,
-    stateToAction,
-    workflowToState
+  MAX_CHAIN_LENGTH,
+  applyWorkflowCompletion,
+  canDispatchAction,
+  getAllowedNextStates,
+  readSwarmMeta,
+  readSwarmState,
+  stateToAction,
+  workflowToState
 } from './swarm_state_machine.js';
+import { evaluateSwarmHeartbeat } from './swarm_heartbeat.js';
+import { goalToAction, persistSwarmGoal, selectGoal } from './swarm_goal_engine.js';
+import { findMissingCapabilities } from './swarm_capability_analyzer.js';
+import { generateAgent } from './swarm_agent_generator.js';
+import { appendRedisList, getRedisValue, setRedisValue } from './swarm_redis.js';
+import { recordStrategyResult, selectStrategies } from './swarm_strategy_engine.js';
 
 interface SwarmState {
-    last_updated: string;
-    ci: { status: string; last_green_sha?: string; last_fail_reason?: string; build_duration?: string };
-    curiosity: { findings: any[]; last_scan: string };
-    evolution: { last_score: number; trend: string; greenlit: boolean };
-    frontend_qa: { status: string; failures: any[] };
-    swarm: { last_commit_sha: string; last_task: string; status: string };
-    orchestrator: { next_action: string; reason: string };
+  last_updated: string;
+  ci: { status: string; last_green_sha?: string; last_fail_reason?: string; build_duration?: string };
+  curiosity: { findings: any[]; last_scan: string };
+  evolution: { last_score: number; trend: string; greenlit: boolean };
+  frontend_qa: { status: string; failures: any[] };
+  swarm: { last_commit_sha: string; last_task: string; status: string };
+  orchestrator: { next_action: string; reason: string };
 }
 
 async function run() {
-    const mode = process.argv[2] || 'ORCHESTRATE';
-    console.log(`🚀 [CI Manager] Mode: ${mode}`);
+  const mode = process.argv[2] || 'ORCHESTRATE';
+  console.log(`🚀 [CI Manager] Mode: ${mode}`);
 
-    try {
-        // Pre-flight check: Verify Swarm path
-        const swarmDir = path.resolve(process.cwd(), 'swarm');
-        const stats = await fs.stat(swarmDir).catch(() => null);
-        if (!stats) {
-            throw new Error(`Swarm nucleus not found at ${swarmDir}. Ensure 'npm ci' was run in both root and swarm directories.`);
-        }
+  try {
+    const swarmDir = path.resolve(process.cwd(), 'swarm');
+    const stats = await fs.stat(swarmDir).catch(() => null);
+    if (!stats) {
+      throw new Error(`Swarm nucleus not found at ${swarmDir}. Ensure 'npm ci' was run in both root and swarm directories.`);
+    }
 
-        switch (mode) {
-            case 'REPORT':
-                await reportMetrics();
-                break;
-            case 'ORCHESTRATE':
-                await orchestrate();
-                break;
-            case 'DASHBOARD':
-                await generateDashboard();
-                break;
-            default:
-                console.error(`Unknown mode: ${mode}`);
-                process.exit(1)
-        }
-    } catch (err) {
-        console.error(`❌ [CI Manager] Critical Failure:`, err);
+    switch (mode) {
+      case 'REPORT':
+        await reportMetrics();
+        break;
+      case 'ORCHESTRATE':
+        await orchestrate();
+        break;
+      case 'DASHBOARD':
+        await generateDashboard();
+        break;
+      default:
+        console.error(`Unknown mode: ${mode}`);
         process.exit(1);
     }
+  } catch (err) {
+    console.error('❌ [CI Manager] Critical Failure:', err);
+    process.exit(1);
+  }
 }
 
-/**
- * Generates the status dashboard (SWARM_STATUS.md)
- */
 async function generateDashboard() {
-    const wrapper = await sovereignStorage.load();
-    const state = { ...createDefaultState(), ...(wrapper?.state || {}) } as SwarmState;
-    const todo = await fs.readFile('TODO.md', 'utf8').catch(() => '');
+  const wrapper = await sovereignStorage.load();
+  const state = { ...createDefaultState(), ...(wrapper?.state || {}) } as SwarmState;
+  const todo = await fs.readFile('TODO.md', 'utf8').catch(() => '');
 
-    // Extract Phase Progress from TODO.md
-    const phases = todo.match(/## (Phase \d+:[^ \n]+)/g) || [];
-    const currentPhase = phases[phases.length - 1] || 'Phase 1: Stability';
+  const phases = todo.match(/## (Phase \d+:[^ \n]+)/g) || [];
+  const currentPhase = phases[phases.length - 1] || 'Phase 1: Stability';
 
-    const md = `# AppForge Swarm Live Status
-    
+  const md = `# AppForge Swarm Live Status
+
 ## 🚀 Current Engineering Phase
 **${currentPhase}** (Synced from [TODO.md](TODO.md))
 
@@ -91,153 +92,180 @@ async function generateDashboard() {
 *Status generated by Sovereign CI Manager*
 `;
 
-    await fs.writeFile('SWARM_STATUS.md', md);
-    console.log('📝 [CI Manager] SWARM_STATUS.md updated.');
+  await fs.writeFile('SWARM_STATUS.md', md);
+  console.log('📝 [CI Manager] SWARM_STATUS.md updated.');
 }
 
-/**
- * Reports detailed metrics from a standard CI run (node.js.yml)
- */
 async function reportMetrics() {
-    const metricsPath = 'src/data/frontend_metrics.json';
-    let metrics = { errorCount: 0, avgLatency: 0, lastFlush: new Date().toISOString(), topErrors: [] };
+  const metricsPath = 'src/data/frontend_metrics.json';
+  let metrics = { errorCount: 0, avgLatency: 0, lastFlush: new Date().toISOString(), topErrors: [] };
 
-    try {
-        const raw = await fs.readFile(metricsPath, 'utf8');
-        metrics = JSON.parse(raw);
-    } catch { }
+  try {
+    const raw = await fs.readFile(metricsPath, 'utf8');
+    metrics = JSON.parse(raw);
+  } catch {}
 
-    // In a real CI environment, we would parse test/lint results here
-    // For now, we update the timestamp and basic health
-    metrics.lastFlush = new Date().toISOString();
+  metrics.lastFlush = new Date().toISOString();
+  await fs.writeFile(metricsPath, JSON.stringify(metrics, null, 2));
+  console.log(`📊 [CI Manager] Telemetry reported to ${metricsPath}`);
 
-    await fs.writeFile(metricsPath, JSON.stringify(metrics, null, 2));
-    console.log(`📊 [CI Manager] Telemetry reported to ${metricsPath}`);
+  const wrapper = await sovereignStorage.load();
+  const state = { ...createDefaultState(), ...(wrapper?.state || {}) } as SwarmState;
+  state.ci = state.ci || ({} as any);
+  state.ci.status = 'pass';
+  state.ci.last_green_sha = process.env.GITHUB_SHA || '';
 
-    // Update Sovereign State via Upstash
-    const wrapper = await sovereignStorage.load();
-    const state = { ...createDefaultState(), ...(wrapper?.state || {}) } as SwarmState;
-
-    state.ci = state.ci || ({} as any);
-    state.ci.status = 'pass';
-    state.ci.last_green_sha = process.env.GITHUB_SHA || '';
-    await sovereignStorage.save({
-        timestamp: new Date().toISOString(),
-        version: '2.0.0',
-        state: state
-    });
+  await sovereignStorage.save({
+    timestamp: new Date().toISOString(),
+    version: '2.0.0',
+    state
+  });
 }
 
-/**
- * Handles the main orchestration loop formerly in Python
- */
 async function orchestrate() {
-    const fsTool = new FileSystemTool();
-    const wrapper = await sovereignStorage.load();
-    const state = { ...createDefaultState(), ...(wrapper?.state || {}) } as SwarmState;
+  const fsTool = new FileSystemTool();
+  const wrapper = await sovereignStorage.load();
+  const state = { ...createDefaultState(), ...(wrapper?.state || {}) } as SwarmState;
 
-    const trigger = process.env.TRIGGER || 'manual';
-    const workflowName = process.env.WORKFLOW_NAME || '';
-    const conclusion = process.env.CONCLUSION || '';
-    const runId = process.env.RUN_ID || process.env.GITHUB_RUN_ID || 'local';
-    const forceOverride = process.env.FORCE_OVERRIDE === 'true';
+  const trigger = process.env.TRIGGER || 'manual';
+  const workflowName = process.env.WORKFLOW_NAME || '';
+  const conclusion = process.env.CONCLUSION || '';
+  const runId = process.env.RUN_ID || process.env.GITHUB_RUN_ID || 'local';
+  const forceOverride = process.env.FORCE_OVERRIDE === 'true';
 
-    console.log(`🧠 [CI Manager] Trigger: ${trigger} | Workflow: ${workflowName} | Conclusion: ${conclusion}`);
+  const heartbeatDecision = await evaluateSwarmHeartbeat();
 
-    const completion = await applyWorkflowCompletion({
-        workflowName,
-        runId,
-        wasSuccessful: conclusion === 'success',
-        forceOverride
+  const completion = await applyWorkflowCompletion({ workflowName, runId, wasSuccessful: conclusion === 'success', forceOverride });
+  if (completion.status === 'updated' && completion.telemetry) {
+    console.log(JSON.stringify(completion.telemetry));
+  }
+
+  const { record: swarmRecord } = await readSwarmState(runId);
+  const swarmMeta = await readSwarmMeta();
+
+  const artifactsDir = 'agent_outputs';
+  try {
+    const files = await fsTool.listFiles(`${artifactsDir}/**/*.json`);
+    for (const file of files) {
+      const data = JSON.parse(await fs.readFile(file, 'utf8'));
+      const agentType = data.agent_type;
+      if (agentType && (state as any)[agentType]) {
+        Object.assign((state as any)[agentType], data.payload);
+      }
+    }
+  } catch {
+    console.log('ℹ️ [CI Manager] No artifacts found.');
+  }
+
+  if (workflowName.includes('Node.js CI') || workflowName.includes('Iron Brain')) {
+    state.ci.status = conclusion === 'success' ? 'pass' : 'fail';
+    if (conclusion !== 'success') {
+      state.ci.last_fail_reason = `${workflowName} failed`;
+    }
+  } else if (workflowName.includes('Frontend QA')) {
+    state.frontend_qa.status = conclusion === 'success' ? 'pass' : 'fail';
+  }
+
+  const benchmarkRegression = Number(state.evolution.last_score || 0) < 0;
+  const testsFailing = state.ci.status === 'fail';
+  const selectedGoal = selectGoal({
+    testsFailing,
+    benchmarkRegression,
+    idle: heartbeatDecision === 'idle',
+    perfIssues: heartbeatDecision === 'trigger_evolution'
+  });
+
+  await persistSwarmGoal(selectedGoal, `heartbeat=${heartbeatDecision}`);
+
+  const strategies = await selectStrategies(selectedGoal);
+  for (const strategy of strategies) {
+    await recordStrategyResult(strategy.name, true);
+  }
+
+  const missingCapabilities = await findMissingCapabilities();
+  if (missingCapabilities.length > 0) {
+    await generateAgent(missingCapabilities[0]);
+  }
+
+  let nextAction = goalToAction(selectedGoal);
+  let reason = `Goal-driven route (${selectedGoal}) after heartbeat=${heartbeatDecision}`;
+  const forceAction = process.env.FORCE_ACTION || '';
+
+  if (!forceAction && swarmMeta.chain_length >= MAX_CHAIN_LENGTH) {
+    nextAction = 'none';
+    reason = `Workflow chain limit reached (${swarmMeta.chain_length}/${MAX_CHAIN_LENGTH}).`;
+  }
+
+  if (!forceAction && nextAction === 'none') {
+    const allowedState = getAllowedNextStates(swarmRecord.state)[0];
+    nextAction = allowedState ? stateToAction[allowedState] : 'none';
+    reason = `Fallback state-machine route: ${swarmRecord.state} → ${allowedState || 'none'}`;
+  }
+
+  if (forceAction) {
+    nextAction = forceAction;
+    reason = 'Manually forced action';
+  }
+
+  if (nextAction !== 'none') {
+    const guard = canDispatchAction({
+      currentState: swarmRecord.state,
+      requestedAction: nextAction,
+      lastWorkflow: swarmMeta.last_workflow,
+      sameWorkflowStreak: swarmMeta.same_workflow_streak,
+      forceOverride: !!forceAction
     });
 
-    if (completion.status === 'updated' && completion.telemetry) {
-        console.log(JSON.stringify(completion.telemetry));
-    } else if (completion.status === 'rejected') {
-        console.warn('⚠️ [CI Manager] Invalid state detected while applying completion. State reset to IDLE.');
+    if (!guard.allowed) {
+      nextAction = 'none';
+      reason = `Dispatch blocked: ${guard.reason}`;
     }
+  }
 
-    const { record: swarmRecord, wasReset } = await readSwarmState(runId);
-    const swarmMeta = await readSwarmMeta();
+  const actionMap: Record<string, string> = {
+    trigger_autonomous_swarm: 'autonomous_swarm',
+    trigger_evolution: 'quantum_evolution',
+    trigger_qa: 'frontend_qa_swarm',
+    trigger_curiosity: 'curiosity_scan',
+    idle: 'none'
+  };
 
-    if (wasReset) {
-        console.warn('⚠️ [CI Manager] Swarm state was invalid and has been reset to IDLE.');
-    }
+  if (!forceAction && actionMap[heartbeatDecision] && actionMap[heartbeatDecision] !== 'none') {
+    nextAction = actionMap[heartbeatDecision];
+    reason = `Heartbeat override: ${heartbeatDecision}`;
+  }
 
-    // 1. Merge Artifacts (if any)
-    const artifactsDir = 'agent_outputs';
-    try {
-        const files = await fsTool.listFiles(`${artifactsDir}/**/*.json`);
-        for (const file of files) {
-            console.log(`   📂 Reading artifact: ${file}`);
-            const data = JSON.parse(await fs.readFile(file, 'utf8'));
-            const agentType = data.agent_type;
-            if (agentType && (state as any)[agentType]) {
-                console.log(`   📎 Merging artifact from ${agentType}`);
-                Object.assign((state as any)[agentType], data.payload);
-            }
-        }
-    } catch (err) {
-        console.log('   ℹ️ No artifacts found or merge failed.');
-    }
+  if (!forceAction && conclusion === 'failure' && workflowToState[workflowName]) {
+    nextAction = 'none';
+    reason = `Workflow ${workflowName} failed. Awaiting retry/manual override.`;
+  }
 
-    // 2. Event Context Logic
-    if (workflowName.includes('Node.js CI') || workflowName.includes('Iron Brain')) {
-        state.ci.status = conclusion === 'success' ? 'pass' : 'fail';
-        if (conclusion !== 'success') state.ci.last_fail_reason = `${workflowName} failed`;
-    } else if (workflowName.includes('Frontend QA')) {
-        state.frontend_qa.status = conclusion === 'success' ? 'pass' : 'fail';
-    }
+  const queueCommand =
+    nextAction === 'none'
+      ? null
+      : {
+          command: 'run_agent',
+          agent: nextAction,
+          run_id: runId,
+          goal: selectedGoal,
+          trigger
+        };
 
-    // 3. Decide Next Action (Decision Matrix)
-    let nextAction = 'none';
-    let reason = 'All systems nominal';
-    const forceAction = process.env.FORCE_ACTION || '';
+  if (queueCommand) {
+    await appendRedisList('appforge:swarm_commands', queueCommand);
+    await setRedisValue('appforge:last_swarm_action', { timestamp: new Date().toISOString(), action: nextAction });
 
-    if (!forceAction && swarmMeta.chain_length >= MAX_CHAIN_LENGTH) {
-        reason = `Workflow chain limit reached (${swarmMeta.chain_length}/${MAX_CHAIN_LENGTH}). Awaiting manual intervention.`;
-    } else {
-        const allowedState = getAllowedNextStates(swarmRecord.state)[0];
-        const stateMachineAction = allowedState ? stateToAction[allowedState] : 'none';
+    const existingSafety =
+      (await getRedisValue<{ hour_window_start?: string; cycles_this_hour?: number }>('appforge:swarm_safety')) || {};
+    const now = Date.now();
+    const windowStart = existingSafety.hour_window_start ? new Date(existingSafety.hour_window_start).getTime() : 0;
+    const resetWindow = !windowStart || now - windowStart >= 60 * 60 * 1000;
 
-        if (forceAction) {
-            const forceDecision = canDispatchAction({
-                currentState: swarmRecord.state,
-                requestedAction: forceAction,
-                lastWorkflow: swarmMeta.last_workflow,
-                forceOverride: true
-            });
-            nextAction = forceAction;
-            reason = `Manually forced (${forceDecision.reason})`;
-        } else {
-            nextAction = stateMachineAction;
-            reason = `State machine route: ${swarmRecord.state} → ${allowedState || 'none'}`;
-        }
-    }
-
-    if (nextAction !== 'none') {
-        const guard = canDispatchAction({
-            currentState: swarmRecord.state,
-            requestedAction: nextAction,
-            lastWorkflow: swarmMeta.last_workflow,
-            forceOverride: !!forceAction
-        });
-
-        if (!guard.allowed) {
-            nextAction = 'none';
-            reason = `Dispatch blocked by swarm state machine: ${guard.reason}`;
-        }
-    }
-
-    if (!forceAction && nextAction === 'none' && trigger === 'schedule' && swarmRecord.state === 'IDLE') {
-        nextAction = 'curiosity_scan';
-        reason = 'Scheduled curiosity pulse from IDLE';
-    }
-
-    if (!forceAction && conclusion === 'failure' && workflowToState[workflowName]) {
-        nextAction = 'none';
-        reason = `Workflow ${workflowName} failed. Awaiting retry/manual override.`;
-    }
+    await setRedisValue('appforge:swarm_safety', {
+      hour_window_start: resetWindow ? new Date().toISOString() : existingSafety.hour_window_start,
+      cycles_this_hour: (resetWindow ? 0 : existingSafety.cycles_this_hour || 0) + 1
+    });
+  }
 
     const registry = await readAgentRegistry();
     const activeGoals = (process.env.SWARM_GOALS || '')
@@ -279,12 +307,7 @@ async function orchestrate() {
     state.orchestrator = { next_action: nextAction, reason };
     state.last_updated = new Date().toISOString();
 
-    // 4. Save State (Wrapped)
-    await sovereignStorage.save({
-        timestamp: new Date().toISOString(),
-        version: '2.0.0',
-        state: state
-    });
+  await sovereignStorage.save({ timestamp: new Date().toISOString(), version: '2.0.0', state });
 
     // 5. Output for GitHub Actions
     if (process.env.GITHUB_OUTPUT) {
@@ -295,19 +318,19 @@ async function orchestrate() {
         await fs.appendFile(process.env.GITHUB_OUTPUT, `task=${taskDesc}\n`);
     }
 
-    console.log(`🎯 [CI Manager] Decision: ${nextAction} (${reason})`);
+  console.log(`🎯 [CI Manager] Decision: ${nextAction} (${reason})`);
 }
 
 function createDefaultState(): SwarmState {
-    return {
-        last_updated: new Date().toISOString(),
-        ci: { status: 'unknown' },
-        curiosity: { findings: [], last_scan: '' },
-        evolution: { last_score: 0, trend: 'stable', greenlit: true },
-        frontend_qa: { status: 'unknown', failures: [] },
-        swarm: { last_commit_sha: '', last_task: '', status: 'idle' },
-        orchestrator: { next_action: 'none', reason: 'Initial state' }
-    };
+  return {
+    last_updated: new Date().toISOString(),
+    ci: { status: 'unknown' },
+    curiosity: { findings: [], last_scan: '' },
+    evolution: { last_score: 0, trend: 'stable', greenlit: true },
+    frontend_qa: { status: 'unknown', failures: [] },
+    swarm: { last_commit_sha: '', last_task: '', status: 'idle' },
+    orchestrator: { next_action: 'none', reason: 'Initial state' }
+  };
 }
 
 run();
