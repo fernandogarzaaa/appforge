@@ -24,6 +24,14 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           fetch-depth: 0
 
+      - name: Ensure swarm memory file exists
+        run: |
+          mkdir -p swarm
+          if [ ! -f swarm/swarm_memory.json ]; then
+            echo '{}' > swarm/swarm_memory.json
+            echo "::notice::Created missing swarm/swarm_memory.json"
+          fi
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
@@ -42,22 +50,6 @@ jobs:
           key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json', 'swarm/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-node-
-
-      - name: Cache Swarm Memory
-        uses: actions/cache@v4
-        with:
-          path: |
-            swarm/swarm_memory.json
-            src/data/quantum_state.json
-            src/data/quantum_predictions.json
-            src/data/bounty_ledger.json
-            src/data/economic_state.json
-            src/data/synergy_scout.json
-            src/data/antigravity_blueprint.json
-          key: swarm-memory-${{ runner.os }}-${{ github.ref_name }}-${{ hashFiles('swarm/swarm_memory.json', 'src/data/quantum_state.json', 'src/data/quantum_predictions.json', 'src/data/bounty_ledger.json', 'src/data/economic_state.json', 'src/data/synergy_scout.json', 'src/data/antigravity_blueprint.json') }}
-          restore-keys: |
-            swarm-memory-${{ runner.os }}-${{ github.ref_name }}-
-            swarm-memory-${{ runner.os }}-
 
       - name: Install Dependencies
         run: |
@@ -208,6 +200,17 @@ jobs:
 
       - name: Run Tests
         run: npm run test
+
+      - name: Commit updated swarm memory
+        run: |
+          if ! git diff --quiet -- swarm/swarm_memory.json; then
+            git add swarm/swarm_memory.json
+            git commit -m "chore: persist swarm memory state"
+            git push origin HEAD:${{ github.ref_name }}
+            echo "::notice::Persisted swarm/swarm_memory.json updates"
+          else
+            echo "::notice::No swarm memory changes detected"
+          fi
 
       - name: Upload Swarm Artifacts
         uses: actions/upload-artifact@v4
