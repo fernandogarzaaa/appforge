@@ -46,6 +46,7 @@ jobs:
 
       - name: Commit SWARM_STATUS.md
         run: |
+          set -euo pipefail
           git config user.name "swarm-bot"
           git config user.email "swarm-bot@users.noreply.github.com"
           git add SWARM_STATUS.md
@@ -53,8 +54,24 @@ jobs:
             echo "No dashboard changes to commit."
           else
             git commit -m "chore: update SWARM_STATUS.md [bot]"
-            git pull --rebase origin main || true
-            git push --force-with-lease origin HEAD:main
+            attempt=1
+            max_attempts=3
+            while [ "$attempt" -le "$max_attempts" ]; do
+              echo "Push attempt ${attempt}/${max_attempts}"
+              if git pull --rebase origin main && git push origin HEAD:main; then
+                echo "Dashboard push succeeded."
+                break
+              fi
+
+              git rebase --abort || true
+              if [ "$attempt" -eq "$max_attempts" ]; then
+                echo "Dashboard push failed after ${max_attempts} attempts."
+                exit 1
+              fi
+
+              attempt=$((attempt + 1))
+              sleep 5
+            done
           fi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
