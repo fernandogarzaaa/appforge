@@ -23,10 +23,18 @@ interface SwarmMemory {
 
 const TASK_QUEUE_PATH = path.join('swarm', 'task_queue.json');
 const SWARM_MEMORY_PATH = path.join('swarm', 'swarm_memory.json');
+const LOOP_TELEMETRY_PATH = path.join('swarm', 'loop_telemetry.json');
 const RUN_CONTEXT_PATH = path.join('swarm', 'run_context.json');
 const MAX_TASKS_PER_CYCLE = 5;
 const MAX_EXPERIMENTS_PER_TASK = 4;
 const MAX_RETRIES = 3;
+const MAX_TELEMETRY_POINTS = 1000;
+
+interface LoopTelemetryPoint {
+  timestamp: string;
+  cycle_count: number;
+  empty_strategy_cycles: number;
+}
 
 function ensurePersistenceFiles(): void {
   mkdirSync('swarm', { recursive: true });
@@ -54,6 +62,10 @@ function ensurePersistenceFiles(): void {
         2
       )
     );
+  }
+
+  if (!existsSync(LOOP_TELEMETRY_PATH)) {
+    writeFileSync(LOOP_TELEMETRY_PATH, JSON.stringify([], null, 2));
   }
 }
 
@@ -84,6 +96,20 @@ function saveMemory(memory: SwarmMemory): void {
   writeFileSync(SWARM_MEMORY_PATH, JSON.stringify(memory, null, 2));
 }
 
+function appendLoopTelemetry(memory: SwarmMemory): void {
+  const history = existsSync(LOOP_TELEMETRY_PATH)
+    ? (JSON.parse(readFileSync(LOOP_TELEMETRY_PATH, 'utf-8')) as LoopTelemetryPoint[])
+    : [];
+
+  history.push({
+    timestamp: memory.last_cycle_at,
+    cycle_count: memory.cycle_count,
+    empty_strategy_cycles: memory.empty_strategy_cycles
+  });
+
+  writeFileSync(LOOP_TELEMETRY_PATH, JSON.stringify(history.slice(-MAX_TELEMETRY_POINTS), null, 2));
+}
+
 async function prepareRunContext(): Promise<void> {
   ensurePersistenceFiles();
 
@@ -107,6 +133,7 @@ async function prepareRunContext(): Promise<void> {
     memory.last_cycle_at = new Date().toISOString();
     memory.last_signals = signals.map((signal) => signal.type);
     saveQueue(queue);
+    appendLoopTelemetry(memory);
     saveMemory(memory);
     return;
   }
@@ -134,6 +161,7 @@ async function prepareRunContext(): Promise<void> {
     memory.last_cycle_at = new Date().toISOString();
     memory.last_signals = signals.map((signal) => signal.type);
     memory.empty_strategy_cycles += 1;
+    appendLoopTelemetry(memory);
     saveMemory(memory);
 
     return;
@@ -160,6 +188,7 @@ async function prepareRunContext(): Promise<void> {
   memory.cycle_count += 1;
   memory.last_cycle_at = new Date().toISOString();
   memory.last_signals = signals.map((signal) => signal.type);
+  appendLoopTelemetry(memory);
   saveMemory(memory);
 }
 
