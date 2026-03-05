@@ -10,12 +10,17 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  loop-controller:
+  swarm:
     runs-on: ubuntu-latest
-    timeout-minutes: 25
+    timeout-minutes: 30
+    permissions:
+      contents: write
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup Node.js LTS
         uses: actions/setup-node@v4
@@ -26,49 +31,5 @@ jobs:
       - name: Install dependencies
         run: npm ci --legacy-peer-deps
 
-      - name: Run swarm controller
-        run: npx tsx scripts/swarm_controller.ts --mode=loop
-
-  experiment-matrix:
-    runs-on: ubuntu-latest
-    needs: loop-controller
-    strategy:
-      fail-fast: false
-      matrix:
-        strategy: [A, B, C, D]
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js LTS
-        uses: actions/setup-node@v4
-        with:
-          node-version: 'lts/*'
-          cache: npm
-
-      - name: Install dependencies
-        run: npm ci --legacy-peer-deps
-
-      - name: Run experiment strategy
-        run: npx tsx scripts/swarm_controller.ts --mode=experiment --strategy=${{ matrix.strategy }}
-        env:
-          SWARM_STRATEGY_ID: ${{ matrix.strategy }}
-
-  result-selection:
-    runs-on: ubuntu-latest
-    needs: experiment-matrix
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js LTS
-        uses: actions/setup-node@v4
-        with:
-          node-version: 'lts/*'
-          cache: npm
-
-      - name: Install dependencies
-        run: npm ci --legacy-peer-deps
-
-      - name: Select best result and update memory
-        run: npx tsx scripts/swarm_controller.ts --mode=loop
+      - name: Run autonomous swarm controller
+        run: npx tsx scripts/swarm_controller.ts

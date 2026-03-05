@@ -1,167 +1,145 @@
-import { mkdirSync, readFileSync, writeFileSync, existsSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { spawnSync } from 'node:child_process';
 import path from 'node:path';
-import { detectRepositorySignals } from './swarm_signal_detector';
-import { generateTasksFromSignals, type SwarmTask } from './swarm_task_generator';
-import { generateExperimentStrategies, type ExperimentStrategy } from './swarm_experiment_generator';
-import { evaluateExperiment } from './evaluator';
-import { discardFailedBranches, mergeBestResult, selectBestResult, type ExperimentScore } from './swarm_result_selector';
-import { proposeCiRepair } from './agents/ci_repair_agent';
-import { proposeTestRepair } from './agents/test_repair_agent';
-import { proposeDependencyUpdate } from './agents/dependency_update_agent';
-import { proposeCodeOptimization } from './agents/code_optimizer_agent';
+import { detectSwarmSignals } from './swarm_signal_detector.ts';
+import { generateTasksFromSignals, type SwarmTask } from './swarm_task_generator.ts';
+import { executeTask, selectNextTask } from './swarm_task_executor.ts';
+import { evaluateRepository } from './evaluator.ts';
 
-interface TaskQueueFile {
+interface QueueState {
   tasks: SwarmTask[];
 }
 
 interface SwarmMemory {
-  lastRunAt: string;
-  cycles: number;
-  completedTasks: number;
-  experiments: Array<{ taskId: string; strategyId: string; branch: string; score: number }>;
+  cycle_count: number;
+  last_cycle_at: string;
+  last_signals: string[];
+  completed_tasks: number;
+  failed_tasks: number;
 }
 
+const TASK_QUEUE_PATH = path.join('swarm', 'task_queue.json');
+const SWARM_MEMORY_PATH = path.join('swarm', 'swarm_memory.json');
 const MAX_TASKS_PER_CYCLE = 5;
-const MAX_EXPERIMENTS_PER_TASK = 4;
-const MAX_RETRIES_PER_TASK = 3;
-const TASK_QUEUE_PATH = path.resolve('swarm/task_queue.json');
-const MEMORY_PATH = path.resolve('swarm/swarm_memory.json');
+const MAX_RETRIES = 3;
 
-function ensureStateFiles(): void {
-  mkdirSync(path.dirname(TASK_QUEUE_PATH), { recursive: true });
+function ensurePersistenceFiles(): void {
+  mkdirSync('swarm', { recursive: true });
+
   if (!existsSync(TASK_QUEUE_PATH)) {
     writeFileSync(TASK_QUEUE_PATH, JSON.stringify({ tasks: [] }, null, 2));
   }
-  if (!existsSync(MEMORY_PATH)) {
-    const initialMemory: SwarmMemory = { lastRunAt: '', cycles: 0, completedTasks: 0, experiments: [] };
-    writeFileSync(MEMORY_PATH, JSON.stringify(initialMemory, null, 2));
+
+  if (!existsSync(SWARM_MEMORY_PATH)) {
+    writeFileSync(
+      SWARM_MEMORY_PATH,
+      JSON.stringify(
+        {
+          cycle_count: 0,
+          last_cycle_at: new Date(0).toISOString(),
+          last_signals: [],
+          completed_tasks: 0,
+          failed_tasks: 0
+        },
+        null,
+        2
+      )
+    );
   }
 }
 
-function loadQueue(): TaskQueueFile {
-  return JSON.parse(readFileSync(TASK_QUEUE_PATH, 'utf8')) as TaskQueueFile;
+function loadQueue(): QueueState {
+  return JSON.parse(readFileSync(TASK_QUEUE_PATH, 'utf-8')) as QueueState;
 }
 
-function saveQueue(queue: TaskQueueFile): void {
-  writeFileSync(TASK_QUEUE_PATH, JSON.stringify(queue, null, 2));
+function saveQueue(state: QueueState): void {
+  writeFileSync(TASK_QUEUE_PATH, JSON.stringify(state, null, 2));
 }
 
 function loadMemory(): SwarmMemory {
-  return JSON.parse(readFileSync(MEMORY_PATH, 'utf8')) as SwarmMemory;
+  return JSON.parse(readFileSync(SWARM_MEMORY_PATH, 'utf-8')) as SwarmMemory;
 }
 
 function saveMemory(memory: SwarmMemory): void {
-  writeFileSync(MEMORY_PATH, JSON.stringify(memory, null, 2));
+  writeFileSync(SWARM_MEMORY_PATH, JSON.stringify(memory, null, 2));
 }
 
-function planAgentChanges(task: SwarmTask, strategy: ExperimentStrategy): string[] {
-  if (task.signalType === 'ci_failure') return proposeCiRepair(task, strategy);
-  if (task.signalType === 'failing_tests' || task.signalType === 'missing_tests' || task.signalType === 'low_coverage') {
-    return proposeTestRepair(task, strategy);
-  }
-  if (task.signalType === 'outdated_dependencies') return proposeDependencyUpdate(task, strategy);
-  return proposeCodeOptimization(task, strategy);
+function gitHasChanges(): boolean {
+  const result = spawnSync('git', ['status', '--porcelain'], { encoding: 'utf-8' });
+  return (result.stdout ?? '').trim().length > 0;
 }
 
-function evaluateStrategy(task: SwarmTask, strategy: ExperimentStrategy, runId: string): ExperimentScore {
-  const branch = `experiment/${runId}/${strategy.id}`;
-  const plan = planAgentChanges(task, strategy);
-  const artifactPath = path.resolve(`swarm/experiments/${runId}/${task.id}_${strategy.id}.md`);
-  mkdirSync(path.dirname(artifactPath), { recursive: true });
-  writeFileSync(artifactPath, plan.join('\n'));
-
-  const fullEvaluation = process.env.SWARM_FULL_EVAL === 'true';
-  const score = fullEvaluation ? evaluateExperiment().score : 50 + strategy.id.charCodeAt(0) % 25;
-
-  return {
-    branch,
-    score,
-    taskId: task.id,
-    strategyId: strategy.id,
-  };
+function commitChanges(message: string): void {
+  spawnSync('git', ['config', 'user.name', 'appforge-swarm-bot'], { encoding: 'utf-8' });
+  spawnSync('git', ['config', 'user.email', 'swarm-bot@appforge.local'], { encoding: 'utf-8' });
+  spawnSync('git', ['add', '-A'], { encoding: 'utf-8' });
+  spawnSync('git', ['commit', '-m', message], { encoding: 'utf-8' });
 }
 
-async function runTaskExperiments(task: SwarmTask, runId: string): Promise<ExperimentScore[]> {
-  const strategies = generateExperimentStrategies(task, MAX_EXPERIMENTS_PER_TASK);
-  const jobs = strategies.map(async (strategy) => evaluateStrategy(task, strategy, runId));
-  return Promise.all(jobs);
-}
-
-async function runSwarmLoop(): Promise<void> {
-  ensureStateFiles();
-  const memory = loadMemory();
-  const queue = loadQueue();
-
-  const signals = detectRepositorySignals();
-  const newTasks = generateTasksFromSignals(signals, MAX_TASKS_PER_CYCLE);
-  const pending = queue.tasks.filter((task) => task.status === 'pending' && task.retries < MAX_RETRIES_PER_TASK);
-  const selectedTasks = [...pending, ...newTasks].slice(0, MAX_TASKS_PER_CYCLE);
-
-  queue.tasks = selectedTasks;
-  saveQueue(queue);
-
-  const runId = new Date().toISOString().replace(/[:.]/g, '-');
-  const allResults: ExperimentScore[] = [];
-
-  for (const task of selectedTasks) {
-    task.status = 'running';
-    const experimentResults = await runTaskExperiments(task, runId);
-    const best = selectBestResult(experimentResults);
-
-    if (best) {
-      mergeBestResult(best, true);
-      discardFailedBranches(experimentResults, best.branch);
-      task.status = 'completed';
-      memory.completedTasks += 1;
-      allResults.push(...experimentResults);
-    } else {
-      task.status = 'failed';
-      task.retries += 1;
-    }
-  }
-
-  memory.lastRunAt = new Date().toISOString();
-  memory.cycles += 1;
-  memory.experiments.push(...allResults);
-  saveMemory(memory);
-  saveQueue(queue);
-
-  console.log(`✅ Swarm cycle complete | tasks=${selectedTasks.length} signals=${signals.length}`);
-}
-
-async function runSingleExperimentMode(): Promise<void> {
-  ensureStateFiles();
-  const strategyId = process.env.SWARM_STRATEGY_ID ?? process.argv.find((arg) => arg.startsWith('--strategy='))?.split('=')[1] ?? 'A';
-  const task: SwarmTask = {
-    id: 'task_matrix',
-    description: 'matrix experiment execution',
-    priority: 1,
-    status: 'running',
-    signalType: 'ci_failure',
-    retries: 0,
-    createdAt: new Date().toISOString(),
-  };
-  const strategy: ExperimentStrategy = {
-    id: strategyId,
-    title: `Matrix strategy ${strategyId}`,
-    plan: ['Run isolated strategy experiment in workflow matrix'],
-  };
-
-  const result = evaluateStrategy(task, strategy, process.env.GITHUB_RUN_ID ?? 'local');
-  console.log(JSON.stringify(result, null, 2));
+function revertRepoChanges(): void {
+  spawnSync('git', ['reset', '--hard', 'HEAD'], { encoding: 'utf-8' });
+  spawnSync('git', ['clean', '-fd'], { encoding: 'utf-8' });
 }
 
 async function main(): Promise<void> {
-  const mode = process.argv.find((arg) => arg.startsWith('--mode='))?.split('=')[1] ?? 'loop';
-  if (mode === 'experiment') {
-    await runSingleExperimentMode();
+  ensurePersistenceFiles();
+
+  const queue = loadQueue();
+  const memory = loadMemory();
+
+  const signals = await detectSwarmSignals();
+  const tasks = generateTasksFromSignals(signals, MAX_TASKS_PER_CYCLE);
+
+  if (tasks.length > 0) {
+    queue.tasks.push(...tasks);
+  }
+
+  const nextTask = selectNextTask(queue.tasks);
+  if (!nextTask) {
+    console.log('No runnable tasks detected in queue.');
+    memory.cycle_count += 1;
+    memory.last_cycle_at = new Date().toISOString();
+    memory.last_signals = signals.map((signal) => signal.type);
+    saveQueue(queue);
+    saveMemory(memory);
     return;
   }
 
-  await runSwarmLoop();
+  nextTask.status = 'running';
+  nextTask.updated_at = new Date().toISOString();
+  saveQueue(queue);
+
+  const execution = executeTask(nextTask);
+  const evaluation = evaluateRepository();
+
+  if (execution.success && evaluation.success) {
+    nextTask.status = 'completed';
+    memory.completed_tasks += 1;
+
+    if (gitHasChanges()) {
+      commitChanges(`swarm: complete ${nextTask.id} (${nextTask.description})`);
+    }
+  } else {
+    nextTask.retries += 1;
+    nextTask.status = nextTask.retries >= MAX_RETRIES ? 'failed' : 'pending';
+    memory.failed_tasks += 1;
+    revertRepoChanges();
+  }
+
+  nextTask.updated_at = new Date().toISOString();
+  memory.cycle_count += 1;
+  memory.last_cycle_at = new Date().toISOString();
+  memory.last_signals = signals.map((signal) => signal.type);
+
+  saveQueue(queue);
+  saveMemory(memory);
+
+  console.log('Task execution log:');
+  console.log(execution.log);
+  console.log('Evaluation:', evaluation.details.join(' | '));
 }
 
 main().catch((error) => {
-  console.error('❌ Swarm controller failed:', error);
+  console.error('Swarm controller failed:', error);
   process.exit(1);
 });

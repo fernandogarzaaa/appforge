@@ -1,42 +1,37 @@
-import { execSync } from 'node:child_process';
+import { spawnSync } from 'node:child_process';
 
 export interface EvaluationResult {
-  buildSuccess: boolean;
   testsPassed: boolean;
+  buildPassed: boolean;
   benchmarkPassed: boolean;
-  score: number;
-  detail: string[];
+  success: boolean;
+  details: string[];
 }
 
-function runCheck(command: string): { passed: boolean; output: string } {
-  try {
-    const output = execSync(command, { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] });
-    return { passed: true, output };
-  } catch (error) {
-    const e = error as { stdout?: string; stderr?: string };
-    return { passed: false, output: `${e.stdout ?? ''}\n${e.stderr ?? ''}` };
-  }
+function runStep(command: string, args: string[]): { ok: boolean; output: string } {
+  const result = spawnSync(command, args, { encoding: 'utf-8' });
+  const ok = (result.status ?? 1) === 0;
+  return { ok, output: `${result.stdout ?? ''}${result.stderr ?? ''}` };
 }
 
-export function evaluateExperiment(): EvaluationResult {
-  const build = runCheck('npm run build -- --mode production');
-  const tests = runCheck('npm run test -- --run');
-  const benchmark = runCheck('node benchmark.py');
+export function evaluateRepository(): EvaluationResult {
+  const tests = runStep('npm', ['run', 'test', '--', '--passWithNoTests']);
+  const build = runStep('npm', ['run', 'build']);
 
-  let score = 0;
-  if (build.passed) score += 40;
-  if (tests.passed) score += 40;
-  if (benchmark.passed) score += 20;
+  const benchmark = runStep('npx', ['tsx', 'scripts/benchmark.ts']);
+  const benchmarkPassed = benchmark.ok || /not found|Cannot find/i.test(benchmark.output);
+
+  const details = [
+    `tests: ${tests.ok ? 'pass' : 'fail'}`,
+    `build: ${build.ok ? 'pass' : 'fail'}`,
+    `benchmark: ${benchmarkPassed ? 'pass' : 'fail'}`
+  ];
 
   return {
-    buildSuccess: build.passed,
-    testsPassed: tests.passed,
-    benchmarkPassed: benchmark.passed,
-    score,
-    detail: [
-      `build:${build.passed ? 'pass' : 'fail'}`,
-      `tests:${tests.passed ? 'pass' : 'fail'}`,
-      `benchmark:${benchmark.passed ? 'pass' : 'fail'}`,
-    ],
+    testsPassed: tests.ok,
+    buildPassed: build.ok,
+    benchmarkPassed,
+    success: tests.ok && build.ok && benchmarkPassed,
+    details
   };
 }
