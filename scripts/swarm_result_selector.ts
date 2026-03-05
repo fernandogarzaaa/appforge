@@ -15,6 +15,7 @@ interface ExperimentResult {
 
 interface SwarmTask {
   id: string;
+  signal: string;
   retries: number;
   status: 'pending' | 'running' | 'completed' | 'failed';
   failed_strategies?: string[];
@@ -56,6 +57,11 @@ function persistTaskOutcome(results: ExperimentResult[], winner: ExperimentResul
   const failedStrategies = results.filter((result) => !result.success).map((result) => result.strategy_id);
   target.failed_strategies = Array.from(new Set([...(target.failed_strategies ?? []), ...failedStrategies]));
   target.updated_at = new Date().toISOString();
+
+  memory.failed_strategies = memory.failed_strategies ?? {};
+  const taskType = target.signal;
+  const historical = memory.failed_strategies[taskType] ?? [];
+  memory.failed_strategies[taskType] = Array.from(new Set([...historical, ...failedStrategies]));
 
   if (winner) {
     target.status = 'completed';

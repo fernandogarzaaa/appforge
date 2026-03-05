@@ -16,13 +16,14 @@ interface SwarmMemory {
   completed_tasks: number;
   failed_tasks: number;
   failed_strategy_attempts: Record<string, number>;
+  failed_strategies: Record<string, string[]>;
 }
 
 const TASK_QUEUE_PATH = path.join('swarm', 'task_queue.json');
 const SWARM_MEMORY_PATH = path.join('swarm', 'swarm_memory.json');
 const RUN_CONTEXT_PATH = path.join('swarm', 'run_context.json');
 const MAX_TASKS_PER_CYCLE = 5;
-const MAX_EXPERIMENTS_PER_TASK = 8;
+const MAX_EXPERIMENTS_PER_TASK = 4;
 const MAX_RETRIES = 3;
 
 function ensurePersistenceFiles(): void {
@@ -42,7 +43,8 @@ function ensurePersistenceFiles(): void {
           last_signals: [],
           completed_tasks: 0,
           failed_tasks: 0,
-          failed_strategy_attempts: {}
+          failed_strategy_attempts: {},
+          failed_strategies: {}
         },
         null,
         2
@@ -67,7 +69,8 @@ function loadMemory(): SwarmMemory {
     last_signals: loaded.last_signals ?? [],
     completed_tasks: loaded.completed_tasks ?? 0,
     failed_tasks: loaded.failed_tasks ?? 0,
-    failed_strategy_attempts: loaded.failed_strategy_attempts ?? {}
+    failed_strategy_attempts: loaded.failed_strategy_attempts ?? {},
+    failed_strategies: loaded.failed_strategies ?? {}
   };
 }
 
