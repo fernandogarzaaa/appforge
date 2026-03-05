@@ -16,7 +16,7 @@ on:
   workflow_dispatch:
     inputs:
       force_action:
-        description: "Force a specific agent (autonomous_swarm|evolution_benchmark|quantum_evolution|curiosity_scan|frontend_qa_swarm|appforge_task_runner)"
+        description: "Force a specific agent (autonomous_swarm|evolution_benchmark|quantum_evolution|curiosity_scan|frontend_qa_swarm|dynamic_agent|appforge_task_runner)"
         required: false
       task_description:
         description: "Optional task description when force_action=appforge_task_runner"
@@ -189,6 +189,14 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.BOT_GITHUB_TOKEN }}
 
+
+
+      - name: Dispatch → Dynamic Agent
+        if: steps.cooldown.outputs.proceed == 'true' && steps.dispatch-token.outputs.can_dispatch == 'true' && steps.decide.outputs.next_action == 'dynamic_agent' && steps.decide.outputs.dynamic_workflow != ''
+        run: |
+          gh workflow run "${{ steps.decide.outputs.dynamic_workflow }}" --ref main
+        env:
+          GH_TOKEN: ${{ secrets.BOT_GITHUB_TOKEN }}
 
       - name: Dispatch → AppForge Task Runner
         if: steps.cooldown.outputs.proceed == 'true' && steps.dispatch-token.outputs.can_dispatch == 'true' && inputs.force_action == 'appforge_task_runner'
