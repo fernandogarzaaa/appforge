@@ -36,6 +36,16 @@ interface LoopTelemetryPoint {
   empty_strategy_cycles: number;
 }
 
+function dedupeNewTasks(queue: QueueState, generatedTasks: SwarmTask[]): SwarmTask[] {
+  const activeSignals = new Set(
+    queue.tasks
+      .filter((task) => task.status === 'pending' || task.status === 'running')
+      .map((task) => task.signal)
+  );
+
+  return generatedTasks.filter((task) => !activeSignals.has(task.signal));
+}
+
 function ensurePersistenceFiles(): void {
   mkdirSync('swarm', { recursive: true });
 
@@ -117,9 +127,17 @@ async function prepareRunContext(): Promise<void> {
   const memory = loadMemory();
 
   const signals = await detectSwarmSignals();
-  const tasks = generateTasksFromSignals(signals, MAX_TASKS_PER_CYCLE);
-  if (tasks.length > 0) {
-    queue.tasks.push(...tasks);
+  const generatedTasks = generateTasksFromSignals(signals, MAX_TASKS_PER_CYCLE);
+  const tasksToQueue = dedupeNewTasks(queue, generatedTasks);
+
+  if (generatedTasks.length > tasksToQueue.length) {
+    console.log(
+      `[swarm-controller] Skipped ${generatedTasks.length - tasksToQueue.length} duplicate task(s) due to active signal queue entries.`
+    );
+  }
+
+  if (tasksToQueue.length > 0) {
+    queue.tasks.push(...tasksToQueue);
   }
 
   const nextTask = selectNextTask(queue.tasks);
