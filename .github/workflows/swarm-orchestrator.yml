@@ -16,10 +16,13 @@ on:
   workflow_dispatch:
     inputs:
       force_action:
-        description: "Force a specific agent (autonomous_swarm|quantum_evolution|curiosity_scan|frontend_qa_swarm|appforge_task_runner)"
+        description: "Force a specific agent (autonomous_swarm|evolution_benchmark|quantum_evolution|curiosity_scan|frontend_qa_swarm|appforge_task_runner)"
         required: false
       task_description:
         description: "Optional task description when force_action=appforge_task_runner"
+        required: false
+      force_override:
+        description: "Allow override of state-machine transition guards (true|false)"
         required: false
 
 concurrency:
@@ -59,7 +62,7 @@ jobs:
           TRIGGER="${{ github.event_name }}"
           WORKFLOW_NAME="${{ github.event.workflow_run.name }}"
           CONCLUSION="${{ github.event.workflow_run.conclusion }}"
-          RUN_ID="${{ github.event.workflow_run.id }}"
+          RUN_ID="${{ github.event.workflow_run.id || github.run_id }}"
           UPDATED_AT="${{ github.event.workflow_run.updated_at }}"
           echo "trigger=$TRIGGER" >> $GITHUB_OUTPUT
           echo "workflow_name=$WORKFLOW_NAME" >> $GITHUB_OUTPUT
@@ -142,12 +145,21 @@ jobs:
           UPSTASH_REDIS_REST_URL: ${{ secrets.UPSTASH_REDIS_REST_URL }}
           UPSTASH_REDIS_REST_TOKEN: ${{ secrets.UPSTASH_REDIS_REST_TOKEN }}
           BOT_TOKEN: ${{ secrets.BOT_GITHUB_TOKEN }}
+          RUN_ID: ${{ steps.event.outputs.run_id }}
+          FORCE_OVERRIDE: ${{ inputs.force_override }}
 
       # Dispatch the right agent based on decision
       - name: Dispatch → Autonomous Swarm
         if: steps.cooldown.outputs.proceed == 'true' && steps.dispatch-token.outputs.can_dispatch == 'true' && steps.decide.outputs.next_action == 'autonomous_swarm' && (github.event_name != 'workflow_run' || github.event.workflow_run.name != 'Autonomous Swarm Cycle')
         run: |
           gh workflow run "Autonomous Swarm Cycle" --ref main
+        env:
+          GH_TOKEN: ${{ secrets.BOT_GITHUB_TOKEN }}
+
+      - name: Dispatch → Evolution Benchmark Gate
+        if: steps.cooldown.outputs.proceed == 'true' && steps.dispatch-token.outputs.can_dispatch == 'true' && steps.decide.outputs.next_action == 'evolution_benchmark' && (github.event_name != 'workflow_run' || github.event.workflow_run.name != 'Evolution Benchmark Gate')
+        run: |
+          gh workflow run "Evolution Benchmark Gate" --ref main
         env:
           GH_TOKEN: ${{ secrets.BOT_GITHUB_TOKEN }}
 
