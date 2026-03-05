@@ -22,7 +22,7 @@ const TASK_QUEUE_PATH = path.join('swarm', 'task_queue.json');
 const SWARM_MEMORY_PATH = path.join('swarm', 'swarm_memory.json');
 const RUN_CONTEXT_PATH = path.join('swarm', 'run_context.json');
 const MAX_TASKS_PER_CYCLE = 5;
-const MAX_EXPERIMENTS_PER_TASK = 4;
+const MAX_EXPERIMENTS_PER_TASK = 8;
 const MAX_RETRIES = 3;
 
 function ensurePersistenceFiles(): void {

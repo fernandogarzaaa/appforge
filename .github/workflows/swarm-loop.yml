@@ -2,7 +2,7 @@ name: Swarm Loop
 
 on:
   schedule:
-    - cron: '*/20 * * * *'
+    - cron: '0 */4 * * *'
   workflow_dispatch:
 
 concurrency:
@@ -10,7 +10,7 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  prepare:
+  controller:
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -51,13 +51,14 @@ jobs:
             swarm/task_queue.json
 
   experiments:
-    needs: prepare
-    if: needs.prepare.outputs.has_task == 'true'
+    needs: controller
+    if: needs.controller.outputs.has_task == 'true'
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
+      max-parallel: 8
       matrix:
-        strategy: ${{ fromJson(needs.prepare.outputs.strategies) }}
+        strategy: ${{ fromJson(needs.controller.outputs.strategies) }}
     permissions:
       contents: write
     steps:
@@ -98,8 +99,8 @@ jobs:
           path: swarm/experiment_results/${{ matrix.strategy }}.json
 
   select-result:
-    needs: [prepare, experiments]
-    if: needs.prepare.outputs.has_task == 'true'
+    needs: [controller, experiments]
+    if: needs.controller.outputs.has_task == 'true'
     runs-on: ubuntu-latest
     permissions:
       contents: write
