@@ -3,6 +3,8 @@ import pluginJs from "@eslint/js";
 import pluginReact from "eslint-plugin-react";
 import pluginReactHooks from "eslint-plugin-react-hooks";
 import pluginUnusedImports from "eslint-plugin-unused-imports";
+import tsParser from "@typescript-eslint/parser";
+import tsPlugin from "@typescript-eslint/eslint-plugin";
 
 export default [
   {
@@ -36,6 +38,40 @@ export default [
       // Frontend lib - excluded
       "src/lib/**/*",
     ],
+  },
+
+  {
+    files: [
+      "scripts/swarm_controller.ts",
+      "scripts/swarm_experiment_generator.ts",
+      "scripts/swarm_result_selector.ts",
+      "scripts/swarm_strategy_mutator.ts",
+    ],
+    ...pluginJs.configs.recommended,
+    languageOptions: {
+      parser: tsParser,
+      parserOptions: {
+        ecmaVersion: 2022,
+        sourceType: "module",
+      },
+      globals: globals.node,
+    },
+    plugins: {
+      "@typescript-eslint": tsPlugin,
+    },
+    rules: {
+      "no-unused-vars": "off",
+      "@typescript-eslint/no-unused-vars": [
+        "warn",
+        {
+          vars: "all",
+          varsIgnorePattern: "^_",
+          args: "after-used",
+          argsIgnorePattern: "^_",
+          caughtErrors: "none",
+        },
+      ],
+    },
   },
   {
     files: [
