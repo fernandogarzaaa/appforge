@@ -177,8 +177,12 @@ async function executeConditionNode(node, context) {
  */
 async function executeLoopNode(node, context, base44) {
   try {
-    const loopVar = node.config?.loopVar || '';
-    const iterator = node.config?.iterator || 'item';
+    const loopVar = node.config?.loopVar || node.config?.arrayField || '';
+    const iterator = node.config?.iterator || node.config?.itemVariableName || 'item';
+    const configuredMaxIterations = Number(node.config?.maxIterations);
+    const maxIterations = Number.isFinite(configuredMaxIterations) && configuredMaxIterations > 0
+      ? Math.floor(configuredMaxIterations)
+      : Infinity;
 
     if (!context.variables[loopVar]) {
       return { success: false, error: `Loop variable not found: ${loopVar}` };
@@ -189,12 +193,40 @@ async function executeLoopNode(node, context, base44) {
       : [context.variables[loopVar]];
 
     const results = [];
-    for (const item of items) {
+    const loopAction = node.config?.loopAction || null;
+    const inlineActionType = node.config?.actionType;
+    const inlineActionDetails = node.config?.details;
+
+    for (const item of items.slice(0, maxIterations)) {
       context.variables[iterator] = item;
-      results.push(item);
+
+      // Execute a loop-specific action when configured.
+      if (loopAction || inlineActionType) {
+        const actionNode = {
+          id: `${node.id}_loop_action`,
+          config: {
+            actionType: loopAction?.actionType || inlineActionType,
+            details: loopAction?.details || inlineActionDetails || ''
+          }
+        };
+
+        const actionResult = await executeActionNode(actionNode, context, base44);
+        if (!actionResult.success) {
+          return {
+            success: false,
+            error: `Loop action failed on iterator value ${JSON.stringify(item)}: ${actionResult.error}`
+          };
+        }
+
+        results.push({ item, output: actionResult.output });
+      } else {
+        results.push(item);
+      }
     }
 
     context.variables[`${node.id}_results`] = results;
+    context.variables[`${node.id}_iterations`] = results.length;
+
     return {
       success: true,
       message: `Loop executed ${results.length} times`,
