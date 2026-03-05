@@ -84,7 +84,21 @@ async function prepareRunContext(): Promise<void> {
   const signals = await detectSwarmSignals();
   const tasks = generateTasksFromSignals(signals, MAX_TASKS_PER_CYCLE);
   if (tasks.length > 0) {
-    queue.tasks.push(...tasks);
+  // Ensure we are on the correct experiment branch before writing artifacts
+  ensureExperimentBranch(branch);
+
+  const artifactPath = path.resolve(`swarm/experiments/${runId}/${task.id}_${strategy.id}.md`);
+  mkdirSync(path.dirname(artifactPath), { recursive: true });
+  writeFileSync(
+    artifactPath,
+    [
+      `Task ${task.id}: ${task.description}`,
+      `Strategy ${strategy.id} (${strategy.title})`,
+      ...strategy.plan.map((line) => `- ${line}`),
+    ].join('\n'),
+  );
+  // Stage the artifact so it will be included in the experiment commit
+  execSync(`git add ${artifactPath}`, { stdio: 'inherit' });
   }
   execSync(`git checkout -B ${branch}`, { stdio: 'inherit' });
 }
