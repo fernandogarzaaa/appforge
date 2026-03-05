@@ -1,0 +1,162 @@
+[
+  {
+    "id": "sale_1770836220973_2",
+    "product": "Custom Development - $150/hour",
+    "customer": "customer_421",
+    "amount": 150,
+    "status": "completed",
+    "timestamp": "2026-02-11T18:57:00.973Z"
+  },
+  {
+    "id": "sale_1770836220973_4",
+    "product": "AppForge Team - $299/month",
+    "customer": "customer_373",
+    "amount": 299,
+    "status": "completed",
+    "timestamp": "2026-02-11T18:57:00.973Z"
+  },
+  {
+    "id": "sale_1770836228374_0",
+    "product": "AppForge Pro - $99/month",
+    "customer": "customer_270",
+    "amount": 99,
+    "status": "completed",
+    "timestamp": "2026-02-11T18:57:08.374Z"
+  },
+  {
+    "id": "sale_1770836228374_1",
+    "product": "AppForge Pro - $99/month",
+    "customer": "customer_594",
+    "amount": 99,
+    "status": "completed",
+    "timestamp": "2026-02-11T18:57:08.374Z"
+  },
+  {
+    "id": "sale_1770836228374_3",
+    "product": "Consulting Package - $500/session",
+    "customer": "customer_85",
+    "amount": 500,
+    "status": "completed",
+    "timestamp": "2026-02-11T18:57:08.374Z"
+  },
+  {
+    "id": "sale_1770836245800_2",
+    "product": "AppForge Enterprise - $499/month",
+    "customer": "customer_576",
+    "amount": 499,
+    "status": "completed",
+    "timestamp": "2026-02-11T18:57:25.800Z"
+  },
+  {
+    "id": "sale_1770836286724_2",
+    "product": "AppForge Team - $299/month",
+    "customer": "customer_464",
+    "amount": 299,
+    "status": "completed",
+    "timestamp": "2026-02-11T18:58:06.724Z"
+  },
+  {
+    "id": "sale_1770836286724_3",
+    "product": "Consulting Package - $500/session",
+    "customer": "customer_687",
+    "amount": 500,
+    "status": "completed",
+    "timestamp": "2026-02-11T18:58:06.724Z"
+  },
+  {
+    "id": "sale_1770836289850_0",
+    "product": "AppForge Pro - $99/month",
+    "customer": "customer_941",
+    "amount": 99,
+    "status": "completed",
+    "timestamp": "2026-02-11T18:58:09.850Z"
+  },
+  {
+    "id": "sale_1770836289851_1",
+    "product": "AppForge Pro - $99/month",
+    "customer": "customer_531",
+    "amount": 99,
+    "status": "completed",
+    "timestamp": "2026-02-11T18:58:09.851Z"
+  },
+  {
+    "id": "sale_1770836289851_3",
+    "product": "AppForge Pro - $99/month",
+    "customer": "customer_398",
+    "amount": 99,
+    "status": "completed",
+    "timestamp": "2026-02-11T18:58:09.851Z"
+  },
+  {
+    "id": "sale_1770836321845_1",
+    "product": "AppForge Team - $299/month",
+    "customer": "customer_216",
+    "amount": 299,
+    "status": "completed",
+    "timestamp": "2026-02-11T18:58:41.845Z"
+  },
+  {
+    "id": "sale_1770836321845_2",
+    "product": "AppForge Enterprise - $499/month",
+    "customer": "customer_773",
+    "amount": 499,
+    "status": "completed",
+    "timestamp": "2026-02-11T18:58:41.845Z"
+  },
+  {
+    "id": "sale_1770836321845_3",
+    "product": "Consulting Package - $500/session",
+    "customer": "customer_299",
+    "amount": 500,
+    "status": "completed",
+    "timestamp": "2026-02-11T18:58:41.845Z"
+  },
+  {
+    "id": "sale_1770836340756_3",
+    "product": "AppForge Team - $299/month",
+    "customer": "customer_350",
+    "amount": 299,
+    "status": "completed",
+    "timestamp": "2026-02-11T18:59:00.756Z"
+  },
+  {
+    "id": "sale_1770836355527_0",
+    "product": "AppForge Team - $299/month",
+    "customer": "customer_958",
+    "amount": 299,
+    "status": "completed",
+    "timestamp": "2026-02-11T18:59:15.527Z"
+  },
+  {
+    "id": "sale_1770836355527_1",
+    "product": "AppForge Enterprise - $499/month",
+    "customer": "customer_86",
+    "amount": 499,
+    "status": "completed",
+    "timestamp": "2026-02-11T18:59:15.527Z"
+  },
+  {
+    "id": "sale_1770836355527_3",
+    "product": "Custom Development - $150/hour",
+    "customer": "customer_732",
+    "amount": 150,
+    "status": "completed",
+    "timestamp": "2026-02-11T18:59:15.527Z"
+  },
+  {
+    "id": "sale_1770836355527_4",
+    "product": "AppForge Pro - $99/month",
+    "customer": "customer_895",
+    "amount": 99,
+    "status": "completed",
+    "timestamp": "2026-02-11T18:59:15.527Z"
+  },
+  {
+    "id": "sale_1770837573729_2",
+    "product": "Consulting Package - $500/session",
+    "customer": "customer_188",
+    "amount": 500,
+    "status": "completed",
+    "timestamp": "2026-02-11T19:19:33.729Z"
+  }
+]

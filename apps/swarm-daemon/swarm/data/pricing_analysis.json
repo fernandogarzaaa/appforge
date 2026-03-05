@@ -1,0 +1,67 @@
+{
+  "currentTiers": [
+    {
+      "name": "Free",
+      "price": 0,
+      "features": [
+        "Basic features",
+        "Limited queries"
+      ],
+      "conversionRate": 0.05,
+      "popular": false
+    },
+    {
+      "name": "Pro",
+      "price": 99,
+      "features": [
+        "All features",
+        "Priority support",
+        "Unlimited queries"
+      ],
+      "conversionRate": 0.15,
+      "popular": true
+    },
+    {
+      "name": "Enterprise",
+      "price": 499,
+      "features": [
+        "Custom features",
+        "Dedicated support",
+        "SLA",
+        "On-premise option"
+      ],
+      "conversionRate": 0.08,
+      "popular": false
+    },
+    {
+      "name": "Team",
+      "price": 299,
+      "features": [
+        "Team collaboration",
+        "Shared workspace",
+        "Admin tools"
+      ],
+      "conversionRate": 0.12,
+      "popular": false
+    }
+  ],
+  "recommendedChanges": [
+    {
+      "tier": "Pro",
+      "change": "Add AI features",
+      "expectedImpact": 0.05
+    },
+    {
+      "tier": "Enterprise",
+      "change": "Add white-label",
+      "expectedImpact": 0.03
+    },
+    {
+      "tier": "Team",
+      "change": "Add analytics",
+      "expectedImpact": 0.02
+    }
+  ],
+  "revenueProjection": 10878000,
+  "competitorPositioning": "Positioned as premium solution with enterprise focus"
+}

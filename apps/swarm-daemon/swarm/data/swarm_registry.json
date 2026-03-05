@@ -1,0 +1,134 @@
+{
+  "CryptoSwarm": {
+    "name": "CryptoSwarm",
+    "successRate": 0.8676766938645449,
+    "revenue": 0,
+    "tasksCompleted": 0,
+    "efficiency": 0.8037396269140509,
+    "lastActive": "2026-02-22T20:41:41.430Z",
+    "capabilities": [
+      "quantum_decision_making",
+      "risk_coherence_validation"
+    ]
+  },
+  "RevenueHunter": {
+    "name": "RevenueHunter",
+    "successRate": 0.9131606372783496,
+    "revenue": 0,
+    "tasksCompleted": 0,
+    "efficiency": 0.8068638522490896,
+    "lastActive": "2026-02-22T20:41:41.585Z",
+    "capabilities": [
+      "quantum_decision_making",
+      "confidence_scoring"
+    ]
+  },
+  "FreelanceSwarm": {
+    "name": "FreelanceSwarm",
+    "successRate": 0.7441634238313944,
+    "revenue": 0,
+    "tasksCompleted": 0,
+    "efficiency": 0.7614200083875152,
+    "lastActive": "2026-02-22T20:41:41.587Z",
+    "capabilities": [
+      "task_orchestration",
+      "workflow_automation"
+    ]
+  },
+  "TrendAnalyzer": {
+    "name": "TrendAnalyzer",
+    "successRate": 0.8496858758157615,
+    "revenue": 0,
+    "tasksCompleted": 0,
+    "efficiency": 0.9355232339536724,
+    "lastActive": "2026-02-22T20:41:41.589Z",
+    "capabilities": [
+      "vector_search",
+      "embeddings"
+    ]
+  },
+  "ArbitrageHunter": {
+    "name": "ArbitrageHunter",
+    "successRate": 0.784826685338491,
+    "revenue": 0,
+    "tasksCompleted": 0,
+    "efficiency": 0.8884088636288047,
+    "lastActive": "2026-02-22T20:41:41.748Z",
+    "capabilities": [
+      "quantum_annealing",
+      "task_distribution"
+    ]
+  },
+  "YieldOptimizer": {
+    "name": "YieldOptimizer",
+    "successRate": 0.7089399403756413,
+    "revenue": 0,
+    "tasksCompleted": 0,
+    "efficiency": 0.9303944865876156,
+    "lastActive": "2026-02-22T20:41:41.762Z",
+    "capabilities": [
+      "quantum_annealing",
+      "resource_optimization"
+    ]
+  },
+  "MarketAnalyzer": {
+    "name": "MarketAnalyzer",
+    "successRate": 0.7423079367727469,
+    "revenue": 0,
+    "tasksCompleted": 0,
+    "efficiency": 0.8228743416053976,
+    "lastActive": "2026-02-22T20:41:41.824Z",
+    "capabilities": [
+      "quantum_decision_making",
+      "strategic_market_timing"
+    ]
+  },
+  "SalesBot": {
+    "name": "SalesBot",
+    "successRate": 0.8681338542454899,
+    "revenue": 0,
+    "tasksCompleted": 0,
+    "efficiency": 0.9044279576132239,
+    "lastActive": "2026-02-22T20:41:42.129Z",
+    "capabilities": [
+      "quantum_decision_making",
+      "confidence_scoring"
+    ]
+  },
+  "ReferralManager": {
+    "name": "ReferralManager",
+    "successRate": 0.7414765280466934,
+    "revenue": 0,
+    "tasksCompleted": 0,
+    "efficiency": 0.9253700529592332,
+    "lastActive": "2026-02-22T20:41:42.135Z",
+    "capabilities": [
+      "feedback_learning",
+      "multi_agent_communication"
+    ]
+  },
+  "SolanaDeFiSwarm": {
+    "name": "SolanaDeFiSwarm",
+    "successRate": 0.741989830119173,
+    "revenue": 0,
+    "tasksCompleted": 0,
+    "efficiency": 0.7003769635635508,
+    "lastActive": "2026-02-22T20:41:42.168Z",
+    "capabilities": [
+      "quantum_annealing",
+      "risk_coherence_validation"
+    ]
+  },
+  "GodSwarm": {
+    "name": "GodSwarm",
+    "successRate": 0.7650386037327161,
+    "revenue": 0,
+    "tasksCompleted": 0,
+    "efficiency": 0.8554357667705652,
+    "lastActive": "2026-02-22T20:41:42.290Z",
+    "capabilities": [
+      "universal_intelligence",
+      "recursive_self_improvement"
+    ]
+  }
+}

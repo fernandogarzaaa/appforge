@@ -1,0 +1,13 @@
+{
+  "version": "1.0",
+  "type": "swarm_trading_wallet_template",
+  "chain": "solana",
+  "network": "mainnet-beta",
+  "address": "YOUR_WALLET_ADDRESS_HERE",
+  "notes": [
+    "Template file only.",
+    "Do not commit real seed phrases or private keys to git.",
+    "Configure SOLANA_WALLET_ADDRESS and SOLANA_PRIVATE_KEY in .env.local instead."
+  ]
+}
+

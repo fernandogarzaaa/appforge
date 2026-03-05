@@ -1,0 +1,333 @@
+{
+  "version": "1.0.0",
+  "lastUpdated": "2026-02-13T13:57:02.154Z",
+  "repositories": [
+    {
+      "name": "chrome-devtools-mcp",
+      "owner": "ChromeDevTools",
+      "category": "devtools",
+      "focus": "Browser automation, CDP protocol"
+    },
+    {
+      "name": "superhuman",
+      "owner": "google-deepmind",
+      "category": "ai_assistant",
+      "focus": "AI assistant patterns, context awareness"
+    },
+    {
+      "name": "shannon",
+      "owner": "KeygraphHQ",
+      "category": "ai_framework",
+      "focus": "LLM orchestration, streaming"
+    },
+    {
+      "name": "gh-aw",
+      "owner": "github",
+      "category": "automation",
+      "focus": "GitHub Actions, workflow automation"
+    },
+    {
+      "name": "claude-skills",
+      "owner": "Jeffallan",
+      "category": "code_skills",
+      "focus": "Code execution, file operations"
+    },
+    {
+      "name": "openclaw",
+      "owner": "openclaw",
+      "category": "automation",
+      "focus": "Task automation"
+    },
+    {
+      "name": "AionUi",
+      "owner": "iOfficeAI",
+      "category": "ui_ai",
+      "focus": "AI-powered UI components"
+    },
+    {
+      "name": "pi-mono",
+      "owner": "badlogic",
+      "category": "graphics",
+      "focus": "Real-time graphics, games"
+    },
+    {
+      "name": "PageIndex",
+      "owner": "VectifyAI",
+      "category": "indexing",
+      "focus": "Document indexing, search"
+    },
+    {
+      "name": "opencode",
+      "owner": "anomalyco",
+      "category": "code_editor",
+      "focus": "Code editing, syntax highlighting"
+    },
+    {
+      "name": "windmill",
+      "owner": "windmill-labs",
+      "category": "workflow",
+      "focus": "Workflow automation, low-code"
+    },
+    {
+      "name": "platform",
+      "owner": "orchidsoftware",
+      "category": "platform",
+      "focus": "Platform development"
+    }
+  ],
+  "patterns": {
+    "devtools": {
+      "patterns": [
+        {
+          "id": "cdp-protocol",
+          "name": "Chrome DevTools Protocol",
+          "description": "Browser automation via CDP",
+          "implementation": "\nasync function connectToBrowser(): Promise<CDPSession> {\n    const browser = await CDP.launch();\n    const page = await browser.newPage();\n    return page;\n}\n\nasync function evaluateJS(page: Page, script: string): Promise<any> {\n    const { result } = await page.evaluate(script);\n    return result;\n}"
+        },
+        {
+          "id": "dom-inspection",
+          "name": "DOM Inspection",
+          "description": "Query and inspect DOM elements",
+          "implementation": "\nasync function querySelector(page: Page, selector: string): Promise<Element> {\n    const node = await page.$eval(selector, el => ({\n        tagName: el.tagName,\n        text: el.textContent,\n        attributes: [...el.attributes]\n    }));\n    return node;\n}"
+        }
+      ],
+      "skills": [
+        "browser_automation",
+        "web_scraping",
+        "testing",
+        "dom_inspection"
+      ]
+    },
+    "ai_assistant": {
+      "patterns": [
+        {
+          "id": "context-memory",
+          "name": "Context-Aware Memory",
+          "description": "Store and retrieve conversation context",
+          "implementation": "\nclass ContextMemory {\n    async store(query: string, response: string): Promise<void> {\n        const embedding = await this.embed(query);\n        await this.vectorStore.add({ query, response, embedding });\n    }\n    \n    async retrieve(query: string, k: number = 5): Promise<Context[]> {\n        const embedding = await this.embed(query);\n        return await this.vectorStore.search(embedding, k);\n    }\n}"
+        },
+        {
+          "id": "streaming-response",
+          "name": "Streaming Response",
+          "description": "Stream AI responses in real-time",
+          "implementation": "\nasync function* streamResponse(prompt: string): AsyncGenerator<string> {\n    const stream = await llm.createStream(prompt);\n    for await (const chunk of stream) {\n        yield chunk.choices[0]?.delta?.content || '';\n    }\n}"
+        }
+      ],
+      "skills": [
+        "conversation",
+        "memory",
+        "streaming",
+        "context_awareness"
+      ]
+    },
+    "ai_framework": {
+      "patterns": [
+        {
+          "id": "provider-fallback",
+          "name": "Multi-Provider Fallback",
+          "description": "Switch between LLM providers on failure",
+          "implementation": "\nclass LLMProvider {\n    private providers: Provider[] = [];\n    \n    async generate(prompt: string): Promise<string> {\n        for (const provider of this.providers) {\n            try {\n                return await provider.generate(prompt);\n            } catch (e) {\n                console.warn(`Provider ${provider.name} failed, trying next`);\n            }\n        }\n        throw new Error('All providers failed');\n    }\n}"
+        },
+        {
+          "id": "rate-limit-handler",
+          "name": "Rate Limit Handler",
+          "description": "Handle API rate limits gracefully",
+          "implementation": "\nasync function withRateLimit<T>(fn: () => Promise<T>): Promise<T> {\n    while (true) {\n        try {\n            return await fn();\n        } catch (e) {\n            if (e.status === 429) {\n                const delay = e.headers['retry-after'] * 1000;\n                await sleep(delay);\n            } else throw e;\n        }\n    }\n}"
+        }
+      ],
+      "skills": [
+        "multi_provider",
+        "fallback",
+        "rate_limiting",
+        "reliability"
+      ]
+    },
+    "automation": {
+      "patterns": [
+        {
+          "id": "workflow-engine",
+          "name": "Workflow Engine",
+          "description": "Execute conditional workflows",
+          "implementation": "\nclass WorkflowEngine {\n    async execute(steps: WorkflowStep[]): Promise<Result> {\n        let context = {};\n        for (const step of steps) {\n            if (step.condition && !this.evaluate(step.condition, context)) continue;\n            context = await this.executeStep(step, context);\n        }\n        return context;\n    }\n}"
+        },
+        {
+          "id": "retry-logic",
+          "name": "Exponential Backoff Retry",
+          "description": "Retry failed operations with exponential backoff",
+          "implementation": "\nasync function retry<T>(\n    fn: () => Promise<T>,\n    maxAttempts: number = 3,\n    baseDelay: number = 1000\n): Promise<T> {\n    for (let i = 0; i < maxAttempts; i++) {\n        try {\n            return await fn();\n        } catch (e) {\n            if (i === maxAttempts - 1) throw e;\n            await sleep(baseDelay * Math.pow(2, i));\n        }\n    }\n}"
+        }
+      ],
+      "skills": [
+        "workflows",
+        "retry_logic",
+        "error_handling",
+        "orchestration"
+      ]
+    },
+    "code_skills": {
+      "patterns": [
+        {
+          "id": "sandbox-execution",
+          "name": "Safe Code Execution",
+          "description": "Execute code in isolated sandbox",
+          "implementation": "\nclass CodeSandbox {\n    async execute(code: string): Promise<ExecutionResult> {\n        const vm = new VM({\n            timeout: 30000,\n            memoryLimit: 100 * 1024 * 1024\n        });\n        try {\n            return { success: true, result: vm.run(code) };\n        } catch (e) {\n            return { success: false, error: e.message };\n        }\n    }\n}"
+        },
+        {
+          "id": "safe-file-ops",
+          "name": "Safe File Operations",
+          "description": "Read/write files with path validation",
+          "implementation": "\nclass SafeFileOps {\n    private basePath: string;\n    \n    async readFile(filePath: string): Promise<string> {\n        const safePath = this.resolveSafePath(filePath);\n        if (!safePath.startsWith(this.basePath)) throw new Error('Path escape detected');\n        return await fs.readFile(safePath, 'utf-8');\n    }\n}"
+        }
+      ],
+      "skills": [
+        "sandboxing",
+        "file_safety",
+        "code_execution",
+        "security"
+      ]
+    },
+    "ui_ai": {
+      "patterns": [
+        {
+          "id": "ai-suggestions",
+          "name": "AI-Powered Suggestions",
+          "description": "Real-time AI suggestions in UI",
+          "implementation": "\nclass AISuggestions {\n    private debouncedQuery: DebounceFunction;\n    \n    onInputChange(query: string): void {\n        this.debouncedQuery(query, async (q) => {\n            const suggestion = await this.aiService.suggest(q);\n            this.updateUI(suggestion);\n        });\n    }\n}"
+        }
+      ],
+      "skills": [
+        "ai_ui",
+        "real_time_suggestions",
+        "react",
+        "interactive"
+      ]
+    },
+    "graphics": {
+      "patterns": [
+        {
+          "id": "webgl-renderer",
+          "name": "WebGL Renderer",
+          "description": "Real-time 3D graphics",
+          "implementation": "\nclass WebGLRenderer {\n    private gl: WebGL2RenderingContext;\n    \n    async init(canvas: HTMLCanvasElement): Promise<void> {\n        this.gl = canvas.getContext('webgl2');\n        await this.loadShaders();\n    }\n    \n    render(scene: Scene): void {\n        this.gl.clear(COLOR_BUFFER_BIT | DEPTH_BUFFER_BIT);\n        for (const entity of scene.entities) {\n            this.draw(entity);\n        }\n    }\n}"
+        }
+      ],
+      "skills": [
+        "webgl",
+        "3d_rendering",
+        "graphics",
+        "games"
+      ]
+    },
+    "code_editor": {
+      "patterns": [
+        {
+          "id": "autocomplete",
+          "name": "Syntax-Aware Autocomplete",
+          "description": "Provide code completions based on syntax",
+          "implementation": "\nclass CodeAutocomplete {\n    async getCompletions(doc: TextDocument, pos: Position): Promise<Completion[]> {\n        const lang = this.getLanguage(doc.languageId);\n        const completions = await lang.server.request('completion', { doc, pos });\n        return this.rankCompletions(completions, this.getContext(doc, pos));\n    }\n}"
+        }
+      ],
+      "skills": [
+        "autocomplete",
+        "syntax_highlighting",
+        "ide_integration"
+      ]
+    },
+    "workflow": {
+      "patterns": [
+        {
+          "id": "lowcode-builder",
+          "name": "Low-Code Workflow Builder",
+          "description": "Visual workflow construction",
+          "implementation": "\nclass WorkflowBuilder {\n    validateGraph(nodes: Node[], edges: Edge[]): ValidationResult {\n        const errors = [];\n        for (const node of nodes) {\n            if (!this.hasRequiredInputs(node, edges)) {\n                errors.push({ node: node.id, error: 'Missing required input' });\n            }\n        }\n        return { valid: errors.length === 0, errors };\n    }\n}"
+        }
+      ],
+      "skills": [
+        "workflows",
+        "low_code",
+        "visual_programming",
+        "automation"
+      ]
+    },
+    "indexing": {
+      "patterns": [
+        {
+          "id": "vector-index",
+          "name": "Vector Document Index",
+          "description": "Index documents with embeddings",
+          "implementation": "\nclass VectorIndex {\n    async indexDocument(doc: Document): Promise<void> {\n        const chunks = await this.chunkDocument(doc);\n        const embeddings = await this.embed(chunks);\n        await this.index.add(chunks, embeddings);\n    }\n    \n    async search(query: string, k: number = 5): Promise<Chunk[]> {\n        const queryEmbedding = await this.embed(query);\n        return await this.index.search(queryEmbedding, k);\n    }\n}"
+        }
+      ],
+      "skills": [
+        "vector_search",
+        "embeddings",
+        "document_indexing",
+        "rag"
+      ]
+    },
+    "platform": {
+      "patterns": [
+        {
+          "id": "api-gateway",
+          "name": "API Gateway",
+          "description": "Centralized API routing and auth",
+          "implementation": "\nclass API Gateway {\n    async handleRequest(req: Request): Promise<Response> {\n        const route = this.findRoute(req.path);\n        if (!route) return new Response('Not Found', { status: 404 });\n        \n        const auth = await this.authMiddleware(req);\n        if (route.requiresAuth && !auth) return new Response('Unauthorized', { status: 401 });\n        \n        return await route.handler(req);\n    }\n}"
+        }
+      ],
+      "skills": [
+        "api_design",
+        "authentication",
+        "routing",
+        "middleware"
+      ]
+    }
+  },
+  "allSkills": [
+    "browser_automation",
+    "web_scraping",
+    "testing",
+    "dom_inspection",
+    "conversation",
+    "memory",
+    "streaming",
+    "context_awareness",
+    "multi_provider",
+    "fallback",
+    "rate_limiting",
+    "reliability",
+    "workflows",
+    "retry_logic",
+    "error_handling",
+    "orchestration",
+    "sandboxing",
+    "file_safety",
+    "code_execution",
+    "security",
+    "ai_ui",
+    "real_time_suggestions",
+    "react",
+    "interactive",
+    "webgl",
+    "3d_rendering",
+    "graphics",
+    "games",
+    "autocomplete",
+    "syntax_highlighting",
+    "ide_integration",
+    "low_code",
+    "visual_programming",
+    "vector_search",
+    "embeddings",
+    "document_indexing",
+    "rag",
+    "api_design",
+    "authentication",
+    "routing",
+    "middleware"
+  ],
+  "architecture": {
+    "overview": "The swarm intelligence is enhanced with patterns from 12 open-source repositories",
+    "integration": "Patterns are stored in swarm/data/repository_knowledge.json",
+    "usage": "Import patterns and use them to enhance swarm capabilities"
+  }
+}

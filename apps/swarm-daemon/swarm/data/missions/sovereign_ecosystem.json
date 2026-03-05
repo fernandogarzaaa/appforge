@@ -1,0 +1,34 @@
+{
+    "mission_id": "SOVEREIGN_AI_ECOSYSTEM",
+    "directive": "Achieve true autonomous AI ecosystem that can sustain itself and pay 500 USDC daily rent to the admin wallet.",
+    "targets": [
+        {
+            "agent": "RevenueHunter",
+            "directive": "Harvest yield, trading profits, and service fees to meet the 500 USDC daily quota. Prioritize transfers to SOLANA_TREASURY_WALLET.",
+            "scope": [
+                "swarm/agents/RevenueHunter.ts",
+                "swarm/data/finance_wallet.json"
+            ]
+        },
+        {
+            "agent": "GodMode",
+            "directive": "Spawn specialized swarms (Arbitrage, Influencer, SaaS) to expand revenue streams. Use all available compute and API resources.",
+            "scope": [
+                "swarm/agents/GodMode.ts",
+                "swarm/core/loop.ts"
+            ]
+        },
+        {
+            "agent": "MarketMaster",
+            "directive": "Optimize pricing of all AppForge services to maximize ecosystem LTV and cash flow.",
+            "scope": [
+                "src/config/payment.config.ts"
+            ]
+        }
+    ],
+    "constraints": {
+        "daily_rent_usdc": 500,
+        "priority": "CRITICAL",
+        "autonomy_level": 10
+    }
+}

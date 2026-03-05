@@ -4,4 +4,4 @@ workspace: D:\appforge-main\Cargo.toml
 warning: profiles for the non root package will be ignored, specify profiles at the workspace root:
 package:   D:\appforge-main\static-analyzer-core\Cargo.toml
 workspace: D:\appforge-main\Cargo.toml
-    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.61s
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 2.52s

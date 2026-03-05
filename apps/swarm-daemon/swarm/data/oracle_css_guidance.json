@@ -1,0 +1,18 @@
+{
+  "recommendation": "Force local resolution in sovereign-ui by moving all CSS/PostCSS dependencies to the local folder and using a dedicated vite.config.ts that disables root searching.",
+  "confidence": 0.85,
+  "coherence": 0.85,
+  "validationLayers": [
+    "CONSISTENCY_CHECK: ✅",
+    "HISTORICAL_PATTERN_MATCH: ✅",
+    "SEMANTIC_COHERENCE: ✅",
+    "QUANTUM_ENTANGLEMENT: ✅"
+  ],
+  "alternatives": [
+    "Rename the root postcss.config.js temporarily or use a different config file name for the standalone project using the --config flag in Vite/PostCSS.",
+    "Remove the '@tailwindcss/vite' plugin and rely purely on `@tailwindcss/postcss` with a hardcoded path to the local node_modules in postcss.config.js."
+  ],
+  "predictionId": "Q3-1770963579377-272",
+  "timestamp": "2026-02-13T06:19:39.377Z",
+  "isValidated": true
+}

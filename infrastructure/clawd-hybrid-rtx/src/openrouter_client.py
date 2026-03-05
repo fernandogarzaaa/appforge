@@ -19,6 +19,10 @@ from dataclasses import dataclass, field
 
 import httpx
 
+# Force IPv4-only connections to avoid IPv6 issues on Windows
+from .ipv4_transport import enable_ipv4_only
+enable_ipv4_only()
+
 from .config import (
     OPENROUTER_API_KEY,
     OPENROUTER_BASE_URL,

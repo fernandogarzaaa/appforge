@@ -1,0 +1,99 @@
+{
+  "timestamp": "2026-02-21T20:23:52.196Z",
+  "nodes": [
+    {
+      "id": "learning",
+      "domain": "reasoning",
+      "signal": "Reasoning hardening with adversarial drills and outcome feedback",
+      "score": 100
+    },
+    {
+      "id": "research",
+      "domain": "market",
+      "signal": "Creator Revenue Studio",
+      "score": 73.75
+    },
+    {
+      "id": "voice",
+      "domain": "support",
+      "signal": "Upsell:0 Escalated:0",
+      "score": 100
+    },
+    {
+      "id": "customer_success",
+      "domain": "retention",
+      "signal": "HighRisk:0 UpsellTargets:0",
+      "score": 100
+    },
+    {
+      "id": "qa",
+      "domain": "quality",
+      "signal": "GatePassed:false (2/4)",
+      "score": 50
+    }
+  ],
+  "edges": [
+    {
+      "from": "learning",
+      "to": "research",
+      "relation": "moderate_correlation",
+      "weight": 0.738
+    },
+    {
+      "from": "learning",
+      "to": "voice",
+      "relation": "strong_correlation",
+      "weight": 1
+    },
+    {
+      "from": "learning",
+      "to": "customer_success",
+      "relation": "strong_correlation",
+      "weight": 1
+    },
+    {
+      "from": "learning",
+      "to": "qa",
+      "relation": "weak_correlation",
+      "weight": 0.5
+    },
+    {
+      "from": "research",
+      "to": "voice",
+      "relation": "moderate_correlation",
+      "weight": 0.738
+    },
+    {
+      "from": "research",
+      "to": "customer_success",
+      "relation": "moderate_correlation",
+      "weight": 0.738
+    },
+    {
+      "from": "research",
+      "to": "qa",
+      "relation": "strong_correlation",
+      "weight": 0.762
+    },
+    {
+      "from": "voice",
+      "to": "customer_success",
+      "relation": "strong_correlation",
+      "weight": 1
+    },
+    {
+      "from": "voice",
+      "to": "qa",
+      "relation": "weak_correlation",
+      "weight": 0.5
+    },
+    {
+      "from": "customer_success",
+      "to": "qa",
+      "relation": "weak_correlation",
+      "weight": 0.5
+    }
+  ],
+  "strategyRecommendation": "Prioritize reliability hardening before revenue expansion",
+  "confidence": 0.99
+}

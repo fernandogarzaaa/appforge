@@ -1,0 +1,35 @@
+{
+  "timestamp": "2026-02-21T20:20:00.725Z",
+  "grossInflow": 58120,
+  "operatingCost": 1140,
+  "netInflow": 56980,
+  "reserveBefore": 0,
+  "reserveAfter": 25014,
+  "activeSources": 3,
+  "strategy": "defensive_compounding",
+  "strategySource": "oracle",
+  "oracleRecommendation": "DEFENSIVE_COMPOUNDING - prioritize reserve runway and stable compounding",
+  "oracleConfidence": 0.99,
+  "oracleMinConfidence": 0.55,
+  "oracleAccepted": true,
+  "sustainabilityScore": 0.73,
+  "allocation": {
+    "strategy": "defensive_compounding",
+    "reserveAmount": 26154,
+    "growthAmount": 11624,
+    "experimentationAmount": 8718,
+    "infrastructureAmount": 11624,
+    "percentages": {
+      "reserve": 0.45,
+      "growth": 0.2,
+      "experimentation": 0.15,
+      "infrastructure": 0.2
+    }
+  },
+  "milestones": [
+    "Reserve treasury to +$26154.00 for runway extension",
+    "Fund retention and upsell execution with $11624.00",
+    "Fund experiment velocity with $8718.00",
+    "Harden reliability and deployment with $11624.00"
+  ]
+}

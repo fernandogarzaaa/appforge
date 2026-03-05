@@ -1,0 +1,35 @@
+{
+    "mission_name": "AppForge Web App Optimization",
+    "objective": "Fix broken payment flows, optimize UI/UX aesthetics, and align monetization strategy with treasury configuration.",
+    "targets": [
+        {
+            "agent": "BugHunter",
+            "scope": [
+                "src/pages/Pricing.jsx",
+                "src/components/payments/SolanaPaymentProcessor.jsx",
+                "backend/src/controllers/paymentController.js"
+            ],
+            "directive": "Identify and fix the treasury wallet mismatch and ensure Solana USDC payments are correctly processed and verified."
+        },
+        {
+            "agent": "Optimizer",
+            "scope": [
+                "src/pages/Landing.jsx",
+                "src/globals.css",
+                "src/pages/DashboardNew.jsx"
+            ],
+            "directive": "Enhance visual aesthetics with premium gradients, smooth transitions, and modern typography. Ensure the UI feels 'Hyper Intelligent' and alive."
+        },
+        {
+            "agent": "MarketMaster",
+            "scope": [
+                "src/pages/Landing.jsx",
+                "src/config/payment.config.ts"
+            ],
+            "directive": "Audit and align the pricing tiers shown on the landing page with the actual payment configuration to ensure consistency."
+        }
+    ],
+    "priority": "HIGH",
+    "reality_mode": true,
+    "autonomous_edits_enabled": true
+}

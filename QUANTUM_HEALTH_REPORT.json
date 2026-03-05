@@ -1,0 +1,19 @@
+{
+  "timestamp": "2026-02-16T04:05:27.176Z",
+  "buildStatus": "PASSED",
+  "testStatus": "FAILED",
+  "analysis": [
+    {
+      "file": "src/store/useCausalStore.ts",
+      "coherence": 0.974,
+      "complexity": 13,
+      "density": 8.412
+    },
+    {
+      "file": "src/components/anomalies/CausalInferenceViewer.jsx",
+      "coherence": 0.962,
+      "complexity": 19,
+      "density": 16.929
+    }
+  ]
+}
