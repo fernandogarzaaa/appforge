@@ -17,7 +17,7 @@ export interface DetectedSignal {
 }
 
 function run(command: string, args: string[]): { code: number; stdout: string; stderr: string } {
-  const result = spawnSync(command, args, { encoding: 'utf-8' });
+  const result = spawnSync(command, args, { encoding: 'utf-8', timeout: 120000 });
   return {
     code: result.status ?? 1,
     stdout: result.stdout ?? '',
@@ -45,6 +45,10 @@ function detectCiFailure(): DetectedSignal | null {
 }
 
 function detectFailingTests(): DetectedSignal | null {
+  if (process.env.SWARM_SKIP_EXPENSIVE_SIGNALS !== 'false') {
+    return null;
+  }
+
   const result = run('npm', ['run', 'test', '--', '--passWithNoTests']);
   if (result.code !== 0) {
     return {
@@ -85,6 +89,10 @@ function detectBenchmarkRegression(): DetectedSignal | null {
 }
 
 function detectOutdatedDependencies(): DetectedSignal | null {
+  if (process.env.SWARM_SKIP_EXPENSIVE_SIGNALS !== 'false') {
+    return null;
+  }
+
   const result = run('npm', ['outdated', '--json']);
   if (result.code === 0) return null;
 

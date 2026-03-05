@@ -158,6 +158,28 @@ async function orchestrate() {
         console.warn('⚠️ [CI Manager] Invalid state detected while applying completion. State reset to IDLE.');
     }
 
+    // PR67 architecture consolidation: CI manager no longer dispatches workflows directly.
+    state.orchestrator = {
+        next_action: 'none',
+        reason: 'Dispatch logic disabled; swarm-loop.yml owns autonomous orchestration.'
+    };
+    state.last_updated = new Date().toISOString();
+    await sovereignStorage.save({
+        timestamp: new Date().toISOString(),
+        version: '2.0.0',
+        state
+    });
+
+    if (process.env.GITHUB_OUTPUT) {
+        await fs.appendFile(process.env.GITHUB_OUTPUT, 'next_action=none\n');
+        await fs.appendFile(process.env.GITHUB_OUTPUT, 'reason=swarm-loop controller is authoritative\n');
+        await fs.appendFile(process.env.GITHUB_OUTPUT, 'dynamic_workflow=\n');
+        await fs.appendFile(process.env.GITHUB_OUTPUT, 'task=swarm-loop controller is authoritative\n');
+    }
+
+    console.log('🎯 [CI Manager] Dispatch logic disabled in favor of swarm-loop controller.');
+    return;
+
     const { record: swarmRecord, wasReset } = await readSwarmState(runId);
     const swarmMeta = await readSwarmMeta();
 
