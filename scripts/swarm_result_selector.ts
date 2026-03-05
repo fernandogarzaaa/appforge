@@ -34,6 +34,10 @@ function loadJson<T>(file: string): T {
   return JSON.parse(readFileSync(file, 'utf-8')) as T;
 }
 
+function isMutatedStrategy(strategyId: string): boolean {
+  return strategyId.includes('_mut_');
+}
+
 function persistTaskOutcome(results: ExperimentResult[], winner: ExperimentResult | null): void {
   const queuePath = path.join('swarm', 'task_queue.json');
   const memoryPath = path.join('swarm', 'swarm_memory.json');
@@ -55,6 +59,8 @@ function persistTaskOutcome(results: ExperimentResult[], winner: ExperimentResul
   }
 
   const failedStrategies = results.filter((result) => !result.success).map((result) => result.strategy_id);
+  const failedMutatedStrategies = failedStrategies.filter(isMutatedStrategy);
+
   target.failed_strategies = Array.from(new Set([...(target.failed_strategies ?? []), ...failedStrategies]));
   target.updated_at = new Date().toISOString();
 
@@ -62,6 +68,12 @@ function persistTaskOutcome(results: ExperimentResult[], winner: ExperimentResul
   const taskType = target.signal;
   const historical = memory.failed_strategies[taskType] ?? [];
   memory.failed_strategies[taskType] = Array.from(new Set([...historical, ...failedStrategies]));
+
+  memory.failed_mutated_strategies = memory.failed_mutated_strategies ?? {};
+  const historicalMutated = memory.failed_mutated_strategies[taskType] ?? [];
+  memory.failed_mutated_strategies[taskType] = Array.from(
+    new Set([...historicalMutated, ...failedMutatedStrategies])
+  );
 
   if (winner) {
     target.status = 'completed';

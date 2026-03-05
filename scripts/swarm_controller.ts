@@ -17,6 +17,7 @@ interface SwarmMemory {
   failed_tasks: number;
   failed_strategy_attempts: Record<string, number>;
   failed_strategies: Record<string, string[]>;
+  failed_mutated_strategies: Record<string, string[]>;
 }
 
 const TASK_QUEUE_PATH = path.join('swarm', 'task_queue.json');
@@ -44,7 +45,8 @@ function ensurePersistenceFiles(): void {
           completed_tasks: 0,
           failed_tasks: 0,
           failed_strategy_attempts: {},
-          failed_strategies: {}
+          failed_strategies: {},
+          failed_mutated_strategies: {}
         },
         null,
         2
@@ -70,7 +72,8 @@ function loadMemory(): SwarmMemory {
     completed_tasks: loaded.completed_tasks ?? 0,
     failed_tasks: loaded.failed_tasks ?? 0,
     failed_strategy_attempts: loaded.failed_strategy_attempts ?? {},
-    failed_strategies: loaded.failed_strategies ?? {}
+    failed_strategies: loaded.failed_strategies ?? {},
+    failed_mutated_strategies: loaded.failed_mutated_strategies ?? {}
   };
 }
 
