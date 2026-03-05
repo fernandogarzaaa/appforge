@@ -18,9 +18,20 @@ base44/.app.jsonc
 swarm/data/swarm_wallet.json
 swarm/data/swarm_wallet_backup.json
 swarm/data/finance_wallet.json
+apps/swarm-daemon/swarm/data/finance_wallet.json
 auth_info_baileys*/
 whatsapp_qr*.png
 swarm/quantum_channel.json
+
+# Local generated swarm/runtime artifacts
+apps/swarm-daemon/swarm/core/quantum_bridge/target_local/
+apps/swarm-daemon/swarm/factory/
+infrastructure/clawd-hybrid-rtx/src/models/
+infrastructure/clawd-hybrid-rtx/models/
+infrastructure/clawd-hybrid-rtx/llama.cpp/
+qcore.exe
+seeds/
+spawn_points/
 
 # State files that should not be committed
 bot_memory.json
