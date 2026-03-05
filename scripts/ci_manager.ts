@@ -13,6 +13,9 @@ import {
     workflowToState
 } from './swarm_state_machine.js';
 
+const SWARM_COMMAND_QUEUE = process.env.SWARM_COMMAND_QUEUE || 'appforge:swarm_commands';
+const SWARM_NODE_DISPATCH_ONLY = process.env.SWARM_NODE_DISPATCH_ONLY !== 'false';
+
 interface SwarmState {
     last_updated: string;
     ci: { status: string; last_green_sha?: string; last_fail_reason?: string; build_duration?: string };
@@ -237,6 +240,26 @@ async function orchestrate() {
         reason = `Workflow ${workflowName} failed. Awaiting retry/manual override.`;
     }
 
+    let dispatchedToSwarmNode = false;
+    if (nextAction !== 'none') {
+        const queueResult = await enqueueSwarmCommand(nextAction, runId, {
+            reason,
+            trigger,
+            workflowName,
+            conclusion
+        });
+
+        if (queueResult.ok) {
+            dispatchedToSwarmNode = true;
+            reason = `Dispatched to Swarm Node queue (${SWARM_COMMAND_QUEUE})`;
+            if (SWARM_NODE_DISPATCH_ONLY) {
+                nextAction = 'none';
+            }
+        } else {
+            reason = `Swarm Node dispatch failed: ${queueResult.error}`;
+        }
+    }
+
     state.orchestrator = { next_action: nextAction, reason };
     state.last_updated = new Date().toISOString();
 
@@ -251,11 +274,48 @@ async function orchestrate() {
     if (process.env.GITHUB_OUTPUT) {
         await fs.appendFile(process.env.GITHUB_OUTPUT, `next_action=${nextAction}\n`);
         await fs.appendFile(process.env.GITHUB_OUTPUT, `reason=${reason}\n`);
+        await fs.appendFile(process.env.GITHUB_OUTPUT, `dispatched_to_swarm_node=${dispatchedToSwarmNode}\n`);
         const taskDesc = nextAction === 'autonomous_swarm' ? `Fix: ${state.ci.last_fail_reason}` : reason;
         await fs.appendFile(process.env.GITHUB_OUTPUT, `task=${taskDesc}\n`);
     }
 
     console.log(`🎯 [CI Manager] Decision: ${nextAction} (${reason})`);
+}
+
+async function enqueueSwarmCommand(agent: string, runId: string, payload: Record<string, unknown>) {
+    const url = process.env.UPSTASH_REDIS_REST_URL;
+    const token = process.env.UPSTASH_REDIS_REST_TOKEN;
+
+    if (!url || !token) {
+        return { ok: false, error: 'UPSTASH_REDIS_REST_URL or UPSTASH_REDIS_REST_TOKEN missing' };
+    }
+
+    const command = {
+        command: 'run_agent',
+        agent,
+        run_id: runId,
+        payload,
+        requested_at: new Date().toISOString()
+    };
+
+    const encodedQueue = encodeURIComponent(SWARM_COMMAND_QUEUE);
+    const encodedCommand = encodeURIComponent(JSON.stringify(command));
+
+    const response = await fetch(`${url}/lpush/${encodedQueue}/${encodedCommand}`, {
+        method: 'POST',
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    });
+
+    if (!response.ok) {
+        return {
+            ok: false,
+            error: `${response.status} ${response.statusText}`
+        };
+    }
+
+    return { ok: true };
 }
 
 function createDefaultState(): SwarmState {
