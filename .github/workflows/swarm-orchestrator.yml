@@ -161,6 +161,20 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.BOT_GITHUB_TOKEN }}
 
+      - name: Dispatch → Evolution Benchmark Gate
+        if: steps.cooldown.outputs.proceed == 'true' && steps.dispatch-token.outputs.can_dispatch == 'true' && steps.decide.outputs.selected_workflow == 'Evolution Benchmark Gate' && (github.event_name != 'workflow_run' || github.event.workflow_run.name != 'Evolution Benchmark Gate')
+        run: |
+          gh workflow run "Evolution Benchmark Gate" --ref main
+        env:
+          GH_TOKEN: ${{ secrets.BOT_GITHUB_TOKEN }}
+
+      - name: Dispatch → Iron Brain CI
+        if: steps.cooldown.outputs.proceed == 'true' && steps.dispatch-token.outputs.can_dispatch == 'true' && steps.decide.outputs.selected_workflow == 'Iron Brain CI — Ghost Brain' && (github.event_name != 'workflow_run' || github.event.workflow_run.name != 'Iron Brain CI — Ghost Brain')
+        run: |
+          gh workflow run "Iron Brain CI — Ghost Brain" --ref main
+        env:
+          GH_TOKEN: ${{ secrets.BOT_GITHUB_TOKEN }}
+
       - name: Dispatch → Curiosity Scan
         if: steps.cooldown.outputs.proceed == 'true' && steps.dispatch-token.outputs.can_dispatch == 'true' && steps.decide.outputs.next_action == 'curiosity_scan' && (github.event_name != 'workflow_run' || github.event.workflow_run.name != 'Curiosity Engine Scan')
         run: |
