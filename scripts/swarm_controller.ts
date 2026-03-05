@@ -110,7 +110,10 @@ function evaluateStrategy(task: SwarmTask, strategy: ExperimentStrategy, runId: 
     `Strategy ${strategy.id} (${strategy.title})`,
     ...strategy.plan.map((line) => `- ${line}`),
   ].join('\n'));
-
+    writeFileSync(RUN_CONTEXT_PATH, JSON.stringify(context, null, 2));
+  } else {
+    const context = { runId: null, task: null, strategies: [] as ExperimentStrategy[] };
+    writeFileSync(RUN_CONTEXT_PATH, JSON.stringify(context, null, 2));
   const fullEvaluation = process.env.SWARM_FULL_EVAL === 'true';
   const score = fullEvaluation ? evaluateExperiment().score : 50 + strategy.id.charCodeAt(0) % 25;
 
