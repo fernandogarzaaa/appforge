@@ -1,10 +1,5 @@
 [
   {
-    "timestamp": "2026-03-02T01:25:36.290Z",
-    "directive": "Stabilize high-churn zone SWARM_STATUS.md with tests and safeguards",
-    "confidence": 0.99
-  },
-  {
     "timestamp": "2026-03-02T03:47:19.006Z",
     "directive": "Autonomous feature generation for the Sovereign UI",
     "confidence": 0.5579590022049158
@@ -147,6 +142,11 @@
   {
     "timestamp": "2026-03-05T13:09:41.546Z",
     "directive": "Stabilize high-churn zone .github/workflows/swarm-loop.yml with tests and safeguards",
+    "confidence": 0.99
+  },
+  {
+    "timestamp": "2026-03-05T18:08:54.280Z",
+    "directive": "Stabilize high-churn zone SWARM_STATUS.md with tests and safeguards",
     "confidence": 0.99
   }
 ]
