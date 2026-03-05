@@ -27,8 +27,11 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "22"
+          node-version: "20"
           cache: "npm"
+          cache-dependency-path: |
+            package-lock.json
+            swarm/package-lock.json
 
       - name: Cache Node Modules
         uses: actions/cache@v4
@@ -51,9 +54,10 @@ jobs:
             src/data/economic_state.json
             src/data/synergy_scout.json
             src/data/antigravity_blueprint.json
-          key: swarm-memory-${{ github.run_number }}
+          key: swarm-memory-${{ runner.os }}-${{ github.ref_name }}-${{ hashFiles('swarm/swarm_memory.json', 'src/data/quantum_state.json', 'src/data/quantum_predictions.json', 'src/data/bounty_ledger.json', 'src/data/economic_state.json', 'src/data/synergy_scout.json', 'src/data/antigravity_blueprint.json') }}
           restore-keys: |
-            swarm-memory-
+            swarm-memory-${{ runner.os }}-${{ github.ref_name }}-
+            swarm-memory-${{ runner.os }}-
 
       - name: Install Dependencies
         run: |
@@ -61,6 +65,9 @@ jobs:
           if [ -f swarm/package-lock.json ]; then
             cd swarm && npm ci --legacy-peer-deps
           fi
+
+      - name: Install tsx globally
+        run: npm install --global tsx
 
       - name: Run Resonance Check
         run: |
@@ -165,8 +172,11 @@ jobs:
           if [ -d swarm ] && [ -f swarm/package.json ]; then
             cd swarm
             set +e
-            NODE_ID="GA-AUTONOMOUS" MESH_ENABLED="true" npm start
+            timeout 20m env NODE_ID="GA-AUTONOMOUS" MESH_ENABLED="true" npm start
             swarm_exit_code=$?
+            if [ "$swarm_exit_code" -eq 124 ]; then
+              echo "::warning::Swarm runtime hit 20 minute timeout"
+            fi
             echo "swarm_exit_code=$swarm_exit_code" >> "$GITHUB_OUTPUT"
             if [ "$swarm_exit_code" -ne 0 ]; then
               echo "::warning::Swarm exited with code $swarm_exit_code"
@@ -198,7 +208,6 @@ jobs:
 
       - name: Run Tests
         run: npm run test
-        continue-on-error: true
 
       - name: Upload Swarm Artifacts
         uses: actions/upload-artifact@v4

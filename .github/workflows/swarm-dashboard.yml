@@ -27,8 +27,11 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "22"
+          node-version: "20"
           cache: "npm"
+          cache-dependency-path: |
+            package-lock.json
+            swarm/package-lock.json
 
       - name: Install Dependencies
         run: |
@@ -36,6 +39,9 @@ jobs:
           if [ -d swarm ]; then
             cd swarm && npm ci --legacy-peer-deps
           fi
+
+      - name: Install tsx globally
+        run: npm install --global tsx
 
       - name: Generate SWARM_STATUS.md (TypeScript)
         run: npx tsx scripts/ci_manager.ts DASHBOARD
@@ -52,7 +58,8 @@ jobs:
             echo "No dashboard changes to commit."
           else
             git commit -m "chore: update SWARM_STATUS.md [bot]"
-            git push origin main
+            git pull --rebase origin main || true
+            git push --force-with-lease origin HEAD:main
           fi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

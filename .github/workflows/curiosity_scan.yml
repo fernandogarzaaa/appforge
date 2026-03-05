@@ -24,11 +24,17 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "22"
+          node-version: "20"
           cache: "npm"
+          cache-dependency-path: |
+            package-lock.json
+            swarm/package-lock.json
 
       - name: Install Project Dependencies
         run: npm ci --legacy-peer-deps
+
+      - name: Install tsx globally
+        run: npm install --global tsx
 
       - name: Install Swarm Dependencies
         run: |

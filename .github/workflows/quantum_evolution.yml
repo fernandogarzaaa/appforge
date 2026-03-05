@@ -32,7 +32,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "22"
+          node-version: "20"
           cache: "npm"
           cache-dependency-path: |
             package-lock.json
@@ -49,9 +49,10 @@ jobs:
             src/data/economic_state.json
             src/data/synergy_scout.json
             src/data/antigravity_blueprint.json
-          key: quantum-evolution-${{ github.run_number }}
+          key: quantum-evolution-${{ runner.os }}-${{ github.ref_name }}-${{ hashFiles('src/data/quantum_state.json', 'src/data/quantum_predictions.json', 'src/data/quantum_weights.json', 'src/data/bounty_ledger.json', 'src/data/economic_state.json', 'src/data/synergy_scout.json', 'src/data/antigravity_blueprint.json') }}
           restore-keys: |
-            quantum-evolution-
+            quantum-evolution-${{ runner.os }}-${{ github.ref_name }}-
+            quantum-evolution-${{ runner.os }}-
 
       - name: Setup Rust
         uses: dtolnay/rust-toolchain@stable
@@ -74,6 +75,9 @@ jobs:
           if [ -f swarm/package-lock.json ]; then
             cd swarm && npm ci --legacy-peer-deps
           fi
+
+      - name: Install tsx globally
+        run: npm install --global tsx
 
       - name: Validate AI Provider Secrets
         id: ai-secrets
@@ -123,7 +127,7 @@ jobs:
         working-directory: ./swarm
         run: |
           if [ -f intelligence_pulse.ts ]; then
-            npx tsx intelligence_pulse.ts
+            timeout 20m npx tsx intelligence_pulse.ts
           else
             echo "::warning::intelligence_pulse.ts not found"
           fi
@@ -136,14 +140,12 @@ jobs:
           RESONANCE_PORT: "11435"
           QUANTUM_GENERATIONS: "50"
           QUANTUM_EPOCHS: "100"
-        continue-on-error: true
 
       - name: Run Synergy Scouting
         if: steps.ai-secrets.outputs.has_provider == 'true'
         run: npm run swarm:scout || echo "::warning::Scout failed"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        continue-on-error: true
 
       - name: Run Architectural Analysis
         run: npm run swarm:analyze || echo "::warning::Analysis failed"
@@ -156,7 +158,6 @@ jobs:
           fi
         env:
           TRUE_AI_INDEPENDENCE: "true"
-        continue-on-error: true
 
       - name: Upload Evolution Artifacts
         uses: actions/upload-artifact@v4
@@ -190,7 +191,7 @@ jobs:
           git commit -m "${{ steps.commit_msg.outputs.message }}"
           git pull --rebase origin "${GITHUB_REF_NAME}" || true
           for attempt in 1 2 3; do
-            if git push origin HEAD:"${GITHUB_REF_NAME}"; then
+            if git push --force-with-lease origin HEAD:"${GITHUB_REF_NAME}"; then
               exit 0
             fi
             echo "Push attempt ${attempt} failed. Rebasing and retrying..."
