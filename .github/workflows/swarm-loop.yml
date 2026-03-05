@@ -6,16 +6,18 @@ on:
   workflow_dispatch:
 
 concurrency:
-  group: swarm-loop
+  group: swarm-controller
   cancel-in-progress: false
 
 jobs:
-  swarm:
+  prepare:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
     permissions:
       contents: write
-
+    outputs:
+      has_task: ${{ steps.context.outputs.has_task }}
+      run_id: ${{ steps.context.outputs.run_id }}
+      strategies: ${{ steps.context.outputs.strategies }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -31,5 +33,96 @@ jobs:
       - name: Install dependencies
         run: npm ci --legacy-peer-deps
 
-      - name: Run autonomous swarm controller
+      - name: Prepare swarm run context
         run: npx tsx scripts/swarm_controller.ts
+
+      - name: Expose run context
+        id: context
+        run: |
+          echo "has_task=$(node -e \"console.log(require('./swarm/run_context.json').has_task)\")" >> "$GITHUB_OUTPUT"
+          echo "run_id=$(node -e \"console.log(require('./swarm/run_context.json').run_id)\")" >> "$GITHUB_OUTPUT"
+          echo "strategies=$(node -e \"console.log(JSON.stringify(require('./swarm/run_context.json').strategies.map((s)=>s.id)))\")" >> "$GITHUB_OUTPUT"
+
+      - name: Upload swarm state
+        uses: actions/upload-artifact@v4
+        with:
+          name: swarm-state
+          path: |
+            swarm/run_context.json
+            swarm/swarm_memory.json
+            swarm/task_queue.json
+
+  experiments:
+    needs: prepare
+    if: needs.prepare.outputs.has_task == 'true'
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        strategy: ${{ fromJson(needs.prepare.outputs.strategies) }}
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js LTS
+        uses: actions/setup-node@v4
+        with:
+          node-version: 'lts/*'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: Download swarm state
+        uses: actions/download-artifact@v4
+        with:
+          name: swarm-state
+          path: .
+
+      - name: Configure git for experiment branch
+        run: |
+          git config user.name "appforge-swarm-bot"
+          git config user.email "swarm-bot@appforge.local"
+
+      - name: Run experiment strategy
+        env:
+          SWARM_STRATEGY_ID: ${{ matrix.strategy }}
+        run: npx tsx scripts/swarm_parallel_experiment.ts
+
+      - name: Upload experiment result
+        uses: actions/upload-artifact@v4
+        with:
+          name: experiment-${{ matrix.strategy }}
+          path: swarm/experiment_results/${{ matrix.strategy }}.json
+
+  select-result:
+    needs: [prepare, experiments]
+    if: needs.prepare.outputs.has_task == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download experiment results
+        uses: actions/download-artifact@v4
+        with:
+          pattern: experiment-*
+          path: swarm/experiment_results
+          merge-multiple: true
+        continue-on-error: true
+
+      - name: Configure git for merge
+        run: |
+          git config user.name "appforge-swarm-bot"
+          git config user.email "swarm-bot@appforge.local"
+
+      - name: Select winner and merge
+        run: npx tsx scripts/swarm_result_selector.ts swarm/experiment_results

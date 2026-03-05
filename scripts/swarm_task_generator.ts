@@ -9,6 +9,7 @@ export interface SwarmTask {
   priority: number;
   retries: number;
   status: TaskStatus;
+  failed_strategies: string[];
   created_at: string;
   updated_at: string;
 }
@@ -34,6 +35,7 @@ export function generateTasksFromSignals(signals: DetectedSignal[], maxTasks = 5
       priority: Math.min(mapped.priority, signal.severity),
       retries: 0,
       status: 'pending',
+      failed_strategies: [],
       created_at: now,
       updated_at: now
     };
