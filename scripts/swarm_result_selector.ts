@@ -10,7 +10,15 @@ interface ExperimentResult {
   success: boolean;
   skipped?: boolean;
   benchmark_score: number;
-  checks: { lint: boolean; tests: boolean; benchmark: boolean; build: boolean };
+  checks: {
+    execution?: boolean;
+    lint_fix?: boolean;
+    typecheck?: boolean;
+    lint: boolean;
+    tests: boolean;
+    benchmark: boolean;
+    build: boolean;
+  };
 }
 
 interface SwarmTask {
@@ -118,7 +126,15 @@ function main(): void {
 
   const successful = results
     .filter((result) => result.success)
-    .filter((result) => result.checks.tests && result.checks.benchmark && result.checks.build && result.checks.lint)
+    .filter(
+      (result) =>
+        (result.checks.execution ?? false) &&
+        (result.checks.typecheck ?? false) &&
+        result.checks.tests &&
+        result.checks.benchmark &&
+        result.checks.build &&
+        result.checks.lint
+    )
     .sort((a, b) => b.benchmark_score - a.benchmark_score);
 
   run('git fetch --all --prune');

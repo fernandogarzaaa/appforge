@@ -23,9 +23,18 @@ interface ExperimentResult {
   branch?: string;
   success: boolean;
   skipped?: boolean;
-  checks: { lint: boolean; tests: boolean; benchmark: boolean; build: boolean };
+  checks: {
+    execution: boolean;
+    lint_fix: boolean;
+    typecheck: boolean;
+    lint: boolean;
+    tests: boolean;
+    benchmark: boolean;
+    build: boolean;
+  };
   benchmark_score: number;
   execution_log: string;
+  typecheck_mode?: 'delta' | 'full' | 'skipped';
 }
 
 const contextPath = path.join('swarm', 'run_context.json');
@@ -62,7 +71,15 @@ function main(): void {
       strategy_id: strategyId || 'unknown',
       success: false,
       skipped: true,
-      checks: { lint: false, tests: false, benchmark: false, build: false },
+      checks: {
+        execution: false,
+        lint_fix: false,
+        typecheck: false,
+        lint: false,
+        tests: false,
+        benchmark: false,
+        build: false
+      },
       benchmark_score: 0,
       execution_log: 'Strategy not selected for this run context.'
     };
@@ -103,13 +120,17 @@ function main(): void {
     branch,
     success,
     checks: {
+      execution: execution.success,
+      lint_fix: execution.checks?.lint_fix ?? false,
+      typecheck: execution.checks?.typecheck ?? false,
       lint: lint.ok,
       tests: tests.ok,
       benchmark: benchmark.ok,
       build: build.ok
     },
     benchmark_score: benchmarkScore,
-    execution_log: execution.log
+    execution_log: execution.log,
+    typecheck_mode: execution.typecheck_mode
   };
 
   writeFileSync(path.join(resultsDir, `${strategy.id}.json`), JSON.stringify(result, null, 2));

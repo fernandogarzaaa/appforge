@@ -8,6 +8,8 @@ export interface TaskExecutionResult {
   task: SwarmTask;
   success: boolean;
   log: string;
+  checks?: Record<string, boolean>;
+  typecheck_mode?: 'delta' | 'full' | 'skipped';
 }
 
 export function selectNextTask(tasks: SwarmTask[]): SwarmTask | null {
