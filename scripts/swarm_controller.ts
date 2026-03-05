@@ -15,6 +15,7 @@ interface SwarmMemory {
   last_signals: string[];
   completed_tasks: number;
   failed_tasks: number;
+  empty_strategy_cycles: number;
   failed_strategy_attempts: Record<string, number>;
   failed_strategies: Record<string, string[]>;
   failed_mutated_strategies: Record<string, string[]>;
@@ -44,6 +45,7 @@ function ensurePersistenceFiles(): void {
           last_signals: [],
           completed_tasks: 0,
           failed_tasks: 0,
+          empty_strategy_cycles: 0,
           failed_strategy_attempts: {},
           failed_strategies: {},
           failed_mutated_strategies: {}
@@ -71,6 +73,7 @@ function loadMemory(): SwarmMemory {
     last_signals: loaded.last_signals ?? [],
     completed_tasks: loaded.completed_tasks ?? 0,
     failed_tasks: loaded.failed_tasks ?? 0,
+    empty_strategy_cycles: loaded.empty_strategy_cycles ?? 0,
     failed_strategy_attempts: loaded.failed_strategy_attempts ?? {},
     failed_strategies: loaded.failed_strategies ?? {},
     failed_mutated_strategies: loaded.failed_mutated_strategies ?? {}
@@ -111,6 +114,10 @@ async function prepareRunContext(): Promise<void> {
   const strategies = generateExperimentStrategies(nextTask, MAX_EXPERIMENTS_PER_TASK);
 
   if (strategies.length === 0) {
+    console.warn(
+      `[swarm-controller] No experiment strategies generated for task ${nextTask.id} (${nextTask.signal}); retrying later.`
+    );
+
     nextTask.retries = (nextTask.retries ?? 0) + 1;
     nextTask.status = nextTask.retries >= MAX_RETRIES ? 'failed' : 'pending';
     nextTask.updated_at = new Date().toISOString();
@@ -126,6 +133,7 @@ async function prepareRunContext(): Promise<void> {
     memory.cycle_count += 1;
     memory.last_cycle_at = new Date().toISOString();
     memory.last_signals = signals.map((signal) => signal.type);
+    memory.empty_strategy_cycles += 1;
     saveMemory(memory);
 
     return;
