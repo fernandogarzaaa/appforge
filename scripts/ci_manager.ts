@@ -67,7 +67,7 @@ async function generateDashboard() {
     const todo = await fs.readFile('TODO.md', 'utf8').catch(() => '');
     const swarmMemoryRaw = await fs.readFile(path.join('swarm', 'swarm_memory.json'), 'utf8').catch(() => '{}');
     const loopTelemetryRaw = await fs.readFile(path.join('swarm', 'loop_telemetry.json'), 'utf8').catch(() => '[]');
-    const swarmMemory = JSON.parse(swarmMemoryRaw) as { empty_strategy_cycles?: number };
+    const swarmMemory = JSON.parse(swarmMemoryRaw) as { empty_strategy_cycles?: number; last_cycle_at?: string };
     const loopTelemetry = JSON.parse(loopTelemetryRaw) as Array<{ timestamp?: string; empty_strategy_cycles?: number }>;
     const emptyStrategyCycles = swarmMemory.empty_strategy_cycles ?? 0;
     const now = Date.now();
@@ -81,9 +81,12 @@ async function generateDashboard() {
         ?? null;
     const baselineEmptyCycles = historicalPoint?.empty_strategy_cycles ?? emptyStrategyCycles;
     const emptyStrategyDelta24h = emptyStrategyCycles - baselineEmptyCycles;
+    const fallbackLastCycleAt = swarmMemory.last_cycle_at && swarmMemory.last_cycle_at !== '1970-01-01T00:00:00.000Z'
+        ? swarmMemory.last_cycle_at
+        : 'N/A';
     const latestTelemetryTimestamp = sortedTelemetry.length > 0
         ? String(sortedTelemetry[sortedTelemetry.length - 1].timestamp)
-        : 'N/A';
+        : fallbackLastCycleAt;
 
     // Extract Phase Progress from TODO.md
     const phases = todo.match(/## (Phase \d+:[^ \n]+)/g) || [];
