@@ -30,6 +30,14 @@ interface SwarmTask {
   updated_at?: string;
 }
 
+interface RunContextTaskRef {
+  id: string;
+}
+
+interface RunContextPayload {
+  task?: RunContextTaskRef;
+}
+
 function run(command: string): void {
   execSync(command, { stdio: 'pipe' });
 }
@@ -109,6 +117,51 @@ function commitMemory(message: string): void {
   }
 }
 
+function resolveTaskIdFromRunContext(): string | null {
+  const runContextPath = path.join('swarm', 'run_context.json');
+  if (!existsSync(runContextPath)) {
+    return null;
+  }
+
+  const context = loadJson<RunContextPayload>(runContextPath);
+  return context.task?.id ?? null;
+}
+
+function persistMissingResultsOutcome(reason: string): boolean {
+  const queuePath = path.join('swarm', 'task_queue.json');
+  const memoryPath = path.join('swarm', 'swarm_memory.json');
+
+  if (!existsSync(queuePath) || !existsSync(memoryPath)) {
+    return false;
+  }
+
+  const taskId = resolveTaskIdFromRunContext();
+  if (!taskId) {
+    return false;
+  }
+
+  const queue = loadJson<{ tasks: SwarmTask[] }>(queuePath);
+  const memory = loadJson<Record<string, any>>(memoryPath);
+  const target = queue.tasks.find((task) => task.id === taskId);
+
+  if (!target) {
+    return false;
+  }
+
+  target.retries = (target.retries ?? 0) + 1;
+  target.status = target.retries >= 3 ? 'failed' : 'pending';
+  target.updated_at = new Date().toISOString();
+
+  memory.failed_tasks = (memory.failed_tasks ?? 0) + 1;
+  memory.failed_strategy_attempts = memory.failed_strategy_attempts ?? {};
+  memory.failed_strategy_attempts.no_result_artifact = (memory.failed_strategy_attempts.no_result_artifact ?? 0) + 1;
+  memory.last_result_selector_reason = reason;
+
+  writeFileSync(queuePath, JSON.stringify(queue, null, 2));
+  writeFileSync(memoryPath, JSON.stringify(memory, null, 2));
+  return true;
+}
+
 function cleanupTransientSwarmArtifacts(): void {
   const transientFiles = [path.join('swarm', 'run_context.json')];
   const transientDirs = [path.join('swarm', 'experiment_results')];
@@ -129,6 +182,13 @@ function cleanupTransientSwarmArtifacts(): void {
 function main(): void {
   const resultDir = process.argv[2] ?? path.join('swarm', 'experiment_results');
   if (!existsSync(resultDir)) {
+    const persisted = persistMissingResultsOutcome('missing_result_dir');
+    if (persisted) {
+      commitMemory('swarm: mark retry when experiment artifacts are missing');
+      if (isCiRuntime()) {
+        run('git push origin main');
+      }
+    }
     console.log('No experiment result directory found.');
     return;
   }
@@ -137,6 +197,13 @@ function main(): void {
   const results: ExperimentResult[] = files.map((file) => loadJson<ExperimentResult>(path.join(resultDir, file)));
 
   if (results.length === 0) {
+    const persisted = persistMissingResultsOutcome('empty_result_dir');
+    if (persisted) {
+      commitMemory('swarm: mark retry when no experiment results are present');
+      if (isCiRuntime()) {
+        run('git push origin main');
+      }
+    }
     console.log('No experiment results found.');
     return;
   }

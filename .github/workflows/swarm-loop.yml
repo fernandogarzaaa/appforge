@@ -104,19 +104,54 @@ jobs:
           git config user.email "swarm-bot@appforge.local"
 
       - name: Run experiment strategy
+        id: run_experiment
         env:
           SWARM_STRATEGY_ID: ${{ matrix.strategy }}
         run: npx tsx scripts/swarm_parallel_experiment.ts
+        continue-on-error: true
+
+      - name: Ensure fallback experiment result on strategy crash
+        if: steps.run_experiment.outcome != 'success'
+        env:
+          SWARM_STRATEGY_ID: ${{ matrix.strategy }}
+        run: |
+          mkdir -p swarm/experiment_results
+          node -e "
+            const fs = require('fs');
+            const path = require('path');
+            const strategyId = process.env.SWARM_STRATEGY_ID || 'unknown';
+            const resultPath = path.join('swarm', 'experiment_results', `${strategyId}.json`);
+            if (!fs.existsSync(resultPath)) {
+              const payload = {
+                run_id: process.env.GITHUB_RUN_ID || `${Date.now()}`,
+                strategy_id: strategyId,
+                success: false,
+                benchmark_score: 0,
+                checks: {
+                  execution: false,
+                  lint_fix: false,
+                  typecheck: false,
+                  lint: false,
+                  tests: false,
+                  benchmark: false,
+                  build: false
+                }
+              };
+              fs.writeFileSync(resultPath, JSON.stringify(payload, null, 2));
+            }
+          "
 
       - name: Upload experiment result
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: experiment-${{ matrix.strategy }}
           path: swarm/experiment_results/${{ matrix.strategy }}.json
+          if-no-files-found: warn
 
   select-result:
     needs: [controller, experiments]
-    if: needs.controller.outputs.has_task == 'true'
+    if: always() && needs.controller.outputs.has_task == 'true'
     runs-on: ubuntu-latest
     permissions:
       contents: write
