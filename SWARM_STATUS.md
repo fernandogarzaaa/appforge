@@ -19,12 +19,12 @@
 ## 🔁 Swarm Loop Telemetry
 - **Empty Strategy Cycles**: 0
 - **24h Delta**: +0
-- **Last Telemetry Timestamp**: 2026-03-06T04:51:53.304Z
+- **Last Telemetry Timestamp**: 2026-03-06T08:49:57.676Z
 
 ## 🤖 Swarm Backlog Intelligence
-- **Tasks Total**: 2
+- **Tasks Total**: 6
 - **Active/Pending/Running**: 0/0/0
-- **Completed/Failed**: 1/1
+- **Completed/Failed**: 5/1
 - **Active Signals**: none
 - **Oldest Running Age**: none
 
