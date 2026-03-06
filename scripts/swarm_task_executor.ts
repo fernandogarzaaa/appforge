@@ -23,6 +23,26 @@ export function selectNextTask(tasks: SwarmTask[]): SwarmTask | null {
 export function executeTask(task: SwarmTask): TaskExecutionResult {
   const input = { task_id: task.id, description: task.description };
 
+  if (task.signal === 'ci_failure') {
+    const result = runCiRepairAgent(input);
+    return { task, ...result };
+  }
+
+  if (task.signal === 'failing_tests' || task.signal === 'missing_tests' || task.signal === 'low_code_coverage') {
+    const result = runTestRepairAgent(input);
+    return { task, ...result };
+  }
+
+  if (task.signal === 'outdated_dependencies') {
+    const result = runDependencyAgent(input);
+    return { task, ...result };
+  }
+
+  if (task.signal === 'benchmark_regression') {
+    const result = runOptimizerAgent(input);
+    return { task, ...result };
+  }
+
   if (task.description.includes('CI')) {
     const result = runCiRepairAgent(input);
     return { task, ...result };
