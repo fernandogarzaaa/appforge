@@ -108,15 +108,15 @@ export const useQuantumModelSelector = (): UseQuantumModelSelectorReturn => {
 
   const selectModel = useCallback((complexity: TaskComplexity, strategy: SelectionStrategy = SelectionStrategy.OPTIMAL) =>
     wrapAction(
-      () => selectOptimalModel(complexity, strategy),
-      (result) => dispatch({ type: 'SET_MODEL', result: result as ModelSelectionResult, complexity, strategy }),
+      () => selectOptimalModel(complexity, strategy) as Promise<ModelSelectionResult>,
+      (result) => dispatch({ type: 'SET_MODEL', result, complexity, strategy }),
       { model: 'base44', modelName: 'Base44', index: 4, fallback: true } as ModelSelectionResult
     ), []);
 
   const selectBatch = useCallback((tasks: TaskComplexity[], strategy: SelectionStrategy = SelectionStrategy.OPTIMAL) =>
     wrapAction(
-      () => selectModelsForTasks(tasks, strategy),
-      (results) => dispatch({ type: 'SET_BATCH', results: results as ModelSelectionResult[] }),
+      () => selectModelsForTasks(tasks, strategy) as Promise<ModelSelectionResult[]>,
+      (results) => dispatch({ type: 'SET_BATCH', results }),
       []
     ), []);
 
@@ -131,8 +131,23 @@ export const useQuantumModelSelector = (): UseQuantumModelSelectorReturn => {
     wrapAction(
       () => getRecommendation(complexity),
       (rec) => {
-        dispatch({ type: 'SET_RECOMMENDATIONS', data: rec.comparisons || [] });
-        dispatch({ type: 'SET_MODEL', result: rec.recommendation as ModelSelectionResult });
+        const recommendation: any = rec?.recommendation ?? {};
+        dispatch({ type: 'SET_RECOMMENDATIONS', data: rec?.comparisons || [] });
+        dispatch({
+          type: 'SET_MODEL',
+          result: {
+            model: recommendation.model || 'base44',
+            modelName: recommendation.modelName || 'Base44',
+            index: recommendation.index ?? 4,
+            complexity,
+            strategy: recommendation.strategy ?? SelectionStrategy.OPTIMAL,
+            metrics: recommendation.metrics ?? { cost: 0, latency: 0, quality: 0 },
+            temperature: recommendation.temperature ?? null,
+            isFrozen: recommendation.isFrozen ?? null,
+            quantumOptimized: recommendation.quantumOptimized ?? true,
+            timestamp: recommendation.timestamp ?? new Date().toISOString(),
+          }
+        });
       },
       null
     ), []);

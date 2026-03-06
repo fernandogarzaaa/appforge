@@ -50,33 +50,33 @@ function createCancellationToken(): CancellationToken {
 }
 
 /** Dot product of two Float32Arrays */
-function dot(a: Float32Array, b: Float32Array): number {
+function dot(a: Float32Array<ArrayBufferLike>, b: Float32Array<ArrayBufferLike>): number {
   let sum = 0;
   for (let i = 0; i < a.length; i++) sum += a[i] * b[i];
   return sum;
 }
 
 /** L2 norm of a Float32Array */
-function norm(a: Float32Array): number {
+function norm(a: Float32Array<ArrayBufferLike>): number {
   return Math.sqrt(dot(a, a));
 }
 
 /** Element-wise addition: out = a + b */
-function addVectors(a: Float32Array, b: Float32Array): Float32Array {
+function addVectors(a: Float32Array<ArrayBufferLike>, b: Float32Array<ArrayBufferLike>): Float32Array<ArrayBufferLike> {
   const result = new Float32Array(a.length);
   for (let i = 0; i < a.length; i++) result[i] = a[i] + b[i];
   return result;
 }
 
 /** Element-wise subtraction: out = a - b */
-function subVectors(a: Float32Array, b: Float32Array): Float32Array {
+function subVectors(a: Float32Array<ArrayBufferLike>, b: Float32Array<ArrayBufferLike>): Float32Array<ArrayBufferLike> {
   const result = new Float32Array(a.length);
   for (let i = 0; i < a.length; i++) result[i] = a[i] - b[i];
   return result;
 }
 
 /** Element-wise scaling: out = a * scalar */
-function scaleVector(a: Float32Array, scalar: number): Float32Array {
+function scaleVector(a: Float32Array<ArrayBufferLike>, scalar: number): Float32Array<ArrayBufferLike> {
   const result = new Float32Array(a.length);
   for (let i = 0; i < a.length; i++) result[i] = a[i] * scalar;
   return result;
@@ -86,7 +86,7 @@ function scaleVector(a: Float32Array, scalar: number): Float32Array {
  * Spherical Linear Interpolation between two vectors.
  * Falls back to linear interpolation for nearly-parallel vectors.
  */
-function slerp(a: Float32Array, b: Float32Array, t: number): Float32Array {
+function slerp(a: Float32Array<ArrayBufferLike>, b: Float32Array<ArrayBufferLike>, t: number): Float32Array<ArrayBufferLike> {
   const normA = norm(a);
   const normB = norm(b);
 
@@ -529,7 +529,7 @@ export class ModelMerger {
       if (this.cancellation.isCancelled) throw new Error('Cancelled');
 
       // Start with base weights
-      let currentData = new Float32Array(baseLayer.data);
+      let currentData: Float32Array<ArrayBufferLike> = new Float32Array(baseLayer.data);
 
       for (const mw of modelWeights) {
         const modelLayer = mw.weights.weights.get(layerName);
@@ -548,7 +548,7 @@ export class ModelMerger {
         name: layerName,
         shape: [...baseLayer.shape],
         dtype: (config.outputDtype as 'float16' | 'bfloat16' | 'float32') ?? baseLayer.dtype,
-        data: new Float32Array(currentData),
+        data: (new Float32Array(Array.from(currentData)) as unknown as Float32Array<ArrayBuffer>),
       });
 
       if (li % 10 === 0) {
@@ -593,7 +593,7 @@ export class ModelMerger {
       if (this.cancellation.isCancelled) throw new Error('Cancelled');
 
       // Start with base weights
-      let resultData = new Float32Array(baseLayer.data);
+      let resultData: Float32Array<ArrayBufferLike> = new Float32Array(baseLayer.data);
 
       // Accumulate task vectors
       for (const mw of modelWeights) {
@@ -617,7 +617,7 @@ export class ModelMerger {
         name: layerName,
         shape: [...baseLayer.shape],
         dtype: (config.outputDtype as 'float16' | 'bfloat16' | 'float32') ?? baseLayer.dtype,
-        data: new Float32Array(resultData),
+        data: (new Float32Array(Array.from(resultData)) as unknown as Float32Array<ArrayBuffer>),
       });
 
       if (li % 10 === 0) {
@@ -693,7 +693,7 @@ export class ModelMerger {
         name: layerName,
         shape: [...refLayer.shape],
         dtype: (config.outputDtype as 'float16' | 'bfloat16' | 'float32') ?? refLayer.dtype,
-        data: resultData,
+        data: (new Float32Array(Array.from(resultData)) as unknown as Float32Array<ArrayBuffer>),
       });
 
       if (li % 10 === 0) {
@@ -802,7 +802,7 @@ export class ModelMerger {
         name: layerName,
         shape: [...baseLayer.shape],
         dtype: (config.outputDtype as 'float16' | 'bfloat16' | 'float32') ?? baseLayer.dtype,
-        data: resultData,
+        data: (new Float32Array(Array.from(resultData)) as unknown as Float32Array<ArrayBuffer>),
       });
 
       if (li % 10 === 0) {

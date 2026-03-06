@@ -1,5 +1,6 @@
-
-import { broadcastLog } from '../../server.js';
+const broadcastLog = (scope: string, message: string, level: string) => {
+    console.log(`[${level}] [${scope}] ${message}`);
+};
 
 export interface Objective {
     id: string;

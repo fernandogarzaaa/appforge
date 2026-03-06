@@ -9,19 +9,34 @@ describe('Quantum RBAC Store', () => {
                     id: 'admin',
                     name: 'Admin',
                     description: '',
-                    permissions: { users: ['read', 'write', 'delete'] }
+                    permissions: {
+                        users: ['read', 'write', 'delete'],
+                        settings: ['read', 'write'],
+                        reports: ['read', 'write'],
+                        financials: ['read', 'write']
+                    }
                 },
                 {
                     id: 'viewer',
                     name: 'Viewer',
                     description: '',
-                    permissions: { users: ['read'] }
+                    permissions: {
+                        users: ['read'],
+                        settings: ['read'],
+                        reports: ['read'],
+                        financials: ['read']
+                    }
                 },
                 {
                     id: 'super-admin',
                     name: 'Super Admin',
                     description: 'Inherits from Admin',
-                    permissions: { settings: ['write'] },
+                    permissions: {
+                        users: ['read'],
+                        settings: ['write'],
+                        reports: ['read'],
+                        financials: ['read']
+                    },
                     inherits: ['admin'] // Quantum Inheritance
                 }
             ],

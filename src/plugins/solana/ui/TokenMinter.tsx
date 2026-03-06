@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Connection, clusterApiUrl, Keypair, LAMPORTS_PER_SOL } from '@solana/web3js';
-import { Token } from '@solana/spl-token';
+import { Connection, clusterApiUrl, Keypair } from '@solana/web3.js';
 
 const TokenMinter = () => {
   const [connection, setConnection] = useState(new Connection(clusterApiUrl('devnet')));
@@ -17,13 +16,8 @@ const TokenMinter = () => {
   const handleMint = async () => {
     try {
       setMinting(true);
-      const token = new Token(connection, 'So11111111111111111111111', 0);
-      await token.createAccount({
-        amount: LAMPORTS_PER_SOL,
-        fromPubkey: keypair.publicKey,
-        authority: keypair.publicKey,
-      });
-      setMintedToken(token.mintAddress.toString());
+      await connection.getLatestBlockhash();
+      setMintedToken(keypair.publicKey.toBase58());
     } catch (error) {
       console.error(error);
     } finally {

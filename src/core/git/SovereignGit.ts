@@ -7,7 +7,7 @@
  * - Manages 'main' branch synchronization.
  */
 
-import { SimpleGit, simpleGit } from 'simple-git';
+import { simpleGit } from 'simple-git';
 import path from 'path';
 import fs from 'fs/promises';
 
@@ -18,7 +18,7 @@ export interface GitCommitOptions {
 }
 
 export class SovereignGit {
-  private git: SimpleGit;
+  private git: any;
   private repoPath: string;
 
   constructor(repoPath = process.cwd()) {

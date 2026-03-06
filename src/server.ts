@@ -60,7 +60,7 @@ app.post('/api/telemetry', secureAPI, async (req, res) => {
     const { metrics, activity } = req.body;
     const fs = await import('fs/promises');
     const path = await import('path');
-    const { sovereignStorage } = await import('./swarm/core/storage.js');
+    const { sovereignStorage } = await import('../swarm/core/storage.js');
 
     const metricsPath = path.resolve(process.cwd(), 'src/data/frontend_metrics.json');
 

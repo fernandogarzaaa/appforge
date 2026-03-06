@@ -22,6 +22,11 @@ declare module 'npm:@solana/spl-token' {
   export * from '@solana/spl-token';
 }
 
+declare module 'swagger-jsdoc';
+declare module 'swagger-ui-express';
+declare module 'simple-git';
+declare module '@tensorflow/tfjs-node';
+
 declare module '@base44/sdk' {
   export interface AuthClient {
     me(): Promise<{ id?: string; email?: string; name?: string; role?: string; full_name?: string }>;

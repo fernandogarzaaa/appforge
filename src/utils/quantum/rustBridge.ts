@@ -11,11 +11,12 @@ const wasmUrl = new URL('../../quantum-core/pkg/quantum_core_bg.wasm', import.me
 
 export const initQuantumCore = async () => {
   if (!initPromise) {
-    initPromise = init(wasmUrl).catch((error) => {
-      // Reset so subsequent calls can retry
-      initPromise = null;
-      throw error;
-    }) as Promise<void>;
+    initPromise = init(wasmUrl)
+      .then(() => undefined)
+      .catch((error) => {
+        initPromise = null;
+        throw error;
+      });
   }
   return initPromise;
 };
@@ -36,7 +37,7 @@ export const validateWithRust = async (modelResponses: QuantumModelResponse[]) =
   }
 
   const [primary, ...others] = modelResponses;
-  const qState = QuantumState.new(primary.confidence);
+  const qState = new QuantumState(primary.confidence);
 
   others.forEach((comparison) => {
     const semanticAgreement = calculateSimilarity(primary.text, comparison.text);

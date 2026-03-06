@@ -34,7 +34,7 @@ export interface ModelWeight {
   /** Data type: float16, bfloat16, float32 */
   dtype: 'float16' | 'bfloat16' | 'float32';
   /** Raw weight tensor as typed array buffer */
-  data: Float32Array | Float64Array;
+  data: Float32Array<ArrayBufferLike> | Float64Array<ArrayBufferLike>;
   /** Optional metadata attached to the weight */
   metadata?: Record<string, unknown>;
 }

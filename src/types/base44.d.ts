@@ -18,3 +18,8 @@ declare module '@base44/sdk' {
         create: (table: string, data: any) => any;
     }
 }
+
+declare module 'swagger-jsdoc';
+declare module 'swagger-ui-express';
+declare module 'simple-git';
+declare module '@tensorflow/tfjs-node';

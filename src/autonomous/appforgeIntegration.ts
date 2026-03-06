@@ -11,6 +11,7 @@
 import {
   AutonomousSystem,
   getAutonomousSystem,
+  getSelfImprovementLoop,
   HealthMetric,
   TaskPriority,
 } from './index';

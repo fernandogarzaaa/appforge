@@ -54,7 +54,7 @@ export interface GenerationResult {
 
 export class SpeculativeDecoder {
   private config: SpeculativeConfig;
-  private medusaHeads: tf.LayersModel[] = [];
+  private medusaHeads: any[] = [];
   private ngramPool: Map<string, number[]> = new Map();
 
   constructor(config: SpeculativeConfig) {

@@ -363,7 +363,7 @@ class DatasetLoader {
           ? { question: question.trim(), category: entry.category }
           : { question: question.trim() };
       })
-      .filter((e): e is { question: string; category?: string } => e !== null);
+      .filter((e): e is { question: string; category: string } | { question: string; category?: undefined } => e !== null);
   }
 }
 
