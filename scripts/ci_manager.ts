@@ -26,6 +26,38 @@ interface SwarmState {
     orchestrator: { next_action: string; reason: string };
 }
 
+interface DashboardTask {
+    id: string;
+    signal?: string;
+    status?: string;
+    retries?: number;
+    priority?: number;
+    created_at?: string;
+    updated_at?: string;
+}
+
+function parseIsoEpoch(value?: string): number {
+    if (!value) return 0;
+    const epoch = Date.parse(value);
+    return Number.isNaN(epoch) ? 0 : epoch;
+}
+
+function formatDurationFromMs(durationMs: number): string {
+    if (!Number.isFinite(durationMs) || durationMs <= 0) {
+        return '0m';
+    }
+
+    const minutes = Math.floor(durationMs / 60000);
+    const hours = Math.floor(minutes / 60);
+    const remainingMinutes = minutes % 60;
+
+    if (hours > 0) {
+        return `${hours}h ${remainingMinutes}m`;
+    }
+
+    return `${minutes}m`;
+}
+
 async function run() {
     const mode = process.argv[2] || 'ORCHESTRATE';
     console.log(`🚀 [CI Manager] Mode: ${mode}`);
@@ -67,8 +99,40 @@ async function generateDashboard() {
     const todo = await fs.readFile('TODO.md', 'utf8').catch(() => '');
     const swarmMemoryRaw = await fs.readFile(path.join('swarm', 'swarm_memory.json'), 'utf8').catch(() => '{}');
     const loopTelemetryRaw = await fs.readFile(path.join('swarm', 'loop_telemetry.json'), 'utf8').catch(() => '[]');
+    const taskQueueRaw = await fs.readFile(path.join('swarm', 'task_queue.json'), 'utf8').catch(() => '{"tasks": []}');
     const swarmMemory = JSON.parse(swarmMemoryRaw) as { empty_strategy_cycles?: number; last_cycle_at?: string };
     const loopTelemetry = JSON.parse(loopTelemetryRaw) as Array<{ timestamp?: string; empty_strategy_cycles?: number }>;
+    const taskQueue = JSON.parse(taskQueueRaw) as { tasks?: DashboardTask[] };
+    const tasks = Array.isArray(taskQueue.tasks) ? taskQueue.tasks : [];
+    const activeTasks = tasks.filter((task) => task.status === 'pending' || task.status === 'running');
+    const pendingTasks = activeTasks.filter((task) => task.status === 'pending');
+    const runningTasks = activeTasks.filter((task) => task.status === 'running');
+    const completedTasks = tasks.filter((task) => task.status === 'completed');
+    const failedTasks = tasks.filter((task) => task.status === 'failed');
+
+    const activeSignalsMap = activeTasks.reduce((acc, task) => {
+        const key = task.signal || 'unknown';
+        acc.set(key, (acc.get(key) ?? 0) + 1);
+        return acc;
+    }, new Map<string, number>());
+
+    const activeSignalsSummary = Array.from(activeSignalsMap.entries())
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 5)
+        .map(([signal, count]) => `${signal}:${count}`)
+        .join(', ') || 'none';
+
+    const oldestRunning = [...runningTasks]
+        .sort((a, b) => {
+            const aEpoch = parseIsoEpoch(a.updated_at) || parseIsoEpoch(a.created_at);
+            const bEpoch = parseIsoEpoch(b.updated_at) || parseIsoEpoch(b.created_at);
+            return aEpoch - bEpoch;
+        })[0] ?? null;
+
+    const oldestRunningAge = oldestRunning
+        ? formatDurationFromMs(Date.now() - (parseIsoEpoch(oldestRunning.updated_at) || parseIsoEpoch(oldestRunning.created_at)))
+        : 'none';
+
     const emptyStrategyCycles = swarmMemory.empty_strategy_cycles ?? 0;
     const now = Date.now();
     const lookbackMs = 24 * 60 * 60 * 1000;
@@ -91,6 +155,11 @@ async function generateDashboard() {
     // Extract Phase Progress from TODO.md
     const phases = todo.match(/## (Phase \d+:[^ \n]+)/g) || [];
     const currentPhase = phases[phases.length - 1] || 'Phase 1: Stability';
+    const ciStatusLabel = state.ci.status === 'pass' ? '✅ GREEN' : state.ci.status === 'unknown' ? '⚪ UNKNOWN' : '❌ FAIL';
+    const frontendQaLabel = state.frontend_qa.status || 'unknown';
+    const orchestratorAction = state.orchestrator?.next_action || 'none';
+    const orchestratorReason = state.orchestrator?.reason || 'No reason provided.';
+    const lastSync = state.last_updated ? new Date(state.last_updated).toISOString() : 'N/A';
 
     const md = `# AppForge Swarm Live Status
     
@@ -98,22 +167,29 @@ async function generateDashboard() {
 **${currentPhase}** (Synced from [TODO.md](TODO.md))
 
 ## 📊 Performance & Health
-- **CI Status**: ${state.ci.status === 'pass' ? '✅ GREEN' : '❌ FAIL'}
+- **CI Status**: ${ciStatusLabel}
 - **Evolution Score**: ${state.evolution.last_score || 'N/A'}
-- **Frontend QA**: ${state.frontend_qa.status || 'N/A'}
+- **Frontend QA**: ${frontendQaLabel}
 
 ## 🧠 Strategic Oracle
-- **Next Decision**: \`${state.orchestrator.next_action}\`
-- **Logic Reason**: ${state.orchestrator.reason}
+- **Next Decision**: \`${orchestratorAction}\`
+- **Logic Reason**: ${orchestratorReason}
 
 ## 🏗️ Build Telemetry
-- **Last Sync**: ${new Date(state.last_updated).toLocaleString()}
+- **Last Sync (UTC)**: ${lastSync}
 - **Build Dur**: ${state.ci.build_duration || 'N/A'}
 
 ## 🔁 Swarm Loop Telemetry
 - **Empty Strategy Cycles**: ${emptyStrategyCycles}
 - **24h Delta**: ${emptyStrategyDelta24h >= 0 ? '+' : ''}${emptyStrategyDelta24h}
 - **Last Telemetry Timestamp**: ${latestTelemetryTimestamp}
+
+## 🤖 Swarm Backlog Intelligence
+- **Tasks Total**: ${tasks.length}
+- **Active/Pending/Running**: ${activeTasks.length}/${pendingTasks.length}/${runningTasks.length}
+- **Completed/Failed**: ${completedTasks.length}/${failedTasks.length}
+- **Active Signals**: ${activeSignalsSummary}
+- **Oldest Running Age**: ${oldestRunningAge}
 
 ---
 *Status generated by Sovereign CI Manager*

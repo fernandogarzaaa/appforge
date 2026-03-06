@@ -14,6 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      pull-requests: write
     steps:
       - name: Checkout main
         uses: actions/checkout@v4
@@ -46,7 +47,38 @@ jobs:
           UPSTASH_REDIS_REST_URL: ${{ secrets.UPSTASH_REDIS_REST_URL }}
           UPSTASH_REDIS_REST_TOKEN: ${{ secrets.UPSTASH_REDIS_REST_TOKEN }}
 
+      - name: Detect semantic dashboard changes
+        id: detect_changes
+        run: |
+          set -euo pipefail
+          if ! git ls-files --error-unmatch SWARM_STATUS.md >/dev/null 2>&1; then
+            echo "should_commit=true" >> "$GITHUB_OUTPUT"
+            echo "reason=new-file" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          OLD_FILE=$(mktemp)
+          NEW_FILE=$(mktemp)
+          OLD_NORM=$(mktemp)
+          NEW_NORM=$(mktemp)
+
+          git show HEAD:SWARM_STATUS.md > "$OLD_FILE" || true
+          cp SWARM_STATUS.md "$NEW_FILE"
+
+          tr -d '[:space:]' < "$OLD_FILE" > "$OLD_NORM"
+          tr -d '[:space:]' < "$NEW_FILE" > "$NEW_NORM"
+
+          if cmp -s "$OLD_NORM" "$NEW_NORM"; then
+            echo "should_commit=false" >> "$GITHUB_OUTPUT"
+            echo "reason=whitespace-only" >> "$GITHUB_OUTPUT"
+          else
+            echo "should_commit=true" >> "$GITHUB_OUTPUT"
+            echo "reason=meaningful-content-change" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Commit SWARM_STATUS.md
+        id: commit_dashboard
+        if: steps.detect_changes.outputs.should_commit == 'true'
         run: |
           set -euo pipefail
           git config user.name "swarm-bot"
@@ -58,22 +90,45 @@ jobs:
             git commit -m "chore: update SWARM_STATUS.md [bot]"
             attempt=1
             max_attempts=3
+            push_succeeded=false
             while [ "$attempt" -le "$max_attempts" ]; do
               echo "Push attempt ${attempt}/${max_attempts}"
               if git pull --rebase origin main && git push origin HEAD:main; then
                 echo "Dashboard push succeeded."
+                push_succeeded=true
+                echo "push_mode=direct" >> "$GITHUB_OUTPUT"
                 break
               fi
 
               git rebase --abort || true
-              if [ "$attempt" -eq "$max_attempts" ]; then
-                echo "Dashboard push failed after ${max_attempts} attempts."
-                exit 1
-              fi
-
               attempt=$((attempt + 1))
               sleep 5
             done
+
+            if [ "$push_succeeded" != "true" ]; then
+              fallback_branch="swarm-bot/dashboard-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+              git checkout -B "$fallback_branch"
+              git push -u origin "$fallback_branch"
+
+              pr_title="chore: update SWARM_STATUS.md [bot]"
+              pr_body="Automated fallback PR because direct push to main failed after ${max_attempts} attempts.\n\nRun: ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
+              gh pr create --base main --head "$fallback_branch" --title "$pr_title" --body "$pr_body"
+              echo "push_mode=pr" >> "$GITHUB_OUTPUT"
+            fi
           fi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Dashboard bot summary
+        if: always()
+        run: |
+          {
+            echo "## Swarm Dashboard Bot"
+            echo "- Semantic change: ${{ steps.detect_changes.outputs.reason }}"
+            if [ "${{ steps.detect_changes.outputs.should_commit }}" = "true" ]; then
+              echo "- Commit action: ${{ steps.commit_dashboard.outputs.push_mode || 'none' }}"
+            else
+              echo "- Commit action: skipped"
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
