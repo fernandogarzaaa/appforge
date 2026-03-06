@@ -150,7 +150,24 @@ const options = {
   apis: ['./src/api/routes/**/*.js', './src/api/endpoints/**/*.ts'],
 };
 
-export const swaggerSpec = swaggerJsdoc(options);
+function buildSwaggerSpec() {
+  try {
+    return swaggerJsdoc(options as any);
+  } catch (error) {
+    console.warn('⚠️ Swagger spec generation failed, using fallback spec:', error);
+    return {
+      openapi: '3.0.0',
+      info: {
+        title: 'AppForge API - Quantum AI Platform',
+        version: '1.0.0',
+        description: 'Fallback OpenAPI spec (auto-generation unavailable in current runtime)'
+      },
+      paths: {}
+    };
+  }
+}
+
+export const swaggerSpec = buildSwaggerSpec();
 
 export function setupSwagger(app) {
   // Swagger UI

@@ -8,6 +8,7 @@
  */
 
 import { simpleGit } from 'simple-git';
+import type { SimpleGit } from 'simple-git';
 import path from 'path';
 import fs from 'fs/promises';
 
@@ -18,7 +19,7 @@ export interface GitCommitOptions {
 }
 
 export class SovereignGit {
-  private git: any;
+  private git: SimpleGit;
   private repoPath: string;
 
   constructor(repoPath = process.cwd()) {

@@ -8,7 +8,7 @@
  * - Lookahead Decoding (Fu et al., 2023)
  */
 
-import * as tf from '@tensorflow/tfjs-node';
+import * as tf from '@tensorflow/tfjs';
 import { spawn } from 'child_process';
 
 export interface MedusaConfig {
@@ -56,6 +56,7 @@ export class SpeculativeDecoder {
   private config: SpeculativeConfig;
   private medusaHeads: any[] = [];
   private ngramPool: Map<string, number[]> = new Map();
+  private tfReady = false;
 
   constructor(config: SpeculativeConfig) {
     this.config = config;
@@ -66,6 +67,7 @@ export class SpeculativeDecoder {
    * Head i predicts token at position t+i+1
    */
   async initializeMedusa(): Promise<void> {
+    await this.ensureTensorflowBackend();
     console.log(`🐍 Initializing ${this.config.medusa?.numHeads || 4} Medusa heads...`);
 
     const numHeads = this.config.medusa?.numHeads || 4;
@@ -96,6 +98,21 @@ export class SpeculativeDecoder {
     }
 
     console.log('✅ Medusa heads initialized');
+  }
+
+  private async ensureTensorflowBackend(): Promise<void> {
+    if (this.tfReady) {
+      return;
+    }
+
+    try {
+      await import('@tensorflow/tfjs-node');
+      console.log('✅ TensorFlow backend: tfjs-node');
+    } catch {
+      console.warn('⚠️ tfjs-node not available, using pure @tensorflow/tfjs backend');
+    }
+
+    this.tfReady = true;
   }
 
   /**

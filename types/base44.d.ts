@@ -24,7 +24,6 @@ declare module 'npm:@solana/spl-token' {
 
 declare module 'swagger-jsdoc';
 declare module 'swagger-ui-express';
-declare module 'simple-git';
 declare module '@tensorflow/tfjs-node';
 
 declare module '@base44/sdk' {
