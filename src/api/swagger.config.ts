@@ -5,6 +5,17 @@
 
 import swaggerJsdoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
+import { globSync } from 'glob';
+
+const apiPatterns = ['./src/api/routes/**/*.js', './src/api/endpoints/**/*.ts'];
+const resolvedApiFiles = Array.from(new Set(
+  apiPatterns.flatMap((pattern) =>
+    globSync(pattern, {
+      nodir: true,
+      windowsPathsNoEscape: true,
+    })
+  )
+));
 
 const options = {
   definition: {
@@ -147,27 +158,10 @@ const options = {
       { apiKeyAuth: [] },
     ],
   },
-  apis: ['./src/api/routes/**/*.js', './src/api/endpoints/**/*.ts'],
+  apis: resolvedApiFiles.length > 0 ? resolvedApiFiles : ['./src/api/swagger.config.ts'],
 };
 
-function buildSwaggerSpec() {
-  try {
-    return swaggerJsdoc(options as any);
-  } catch (error) {
-    console.warn('⚠️ Swagger spec generation failed, using fallback spec:', error);
-    return {
-      openapi: '3.0.0',
-      info: {
-        title: 'AppForge API - Quantum AI Platform',
-        version: '1.0.0',
-        description: 'Fallback OpenAPI spec (auto-generation unavailable in current runtime)'
-      },
-      paths: {}
-    };
-  }
-}
-
-export const swaggerSpec = buildSwaggerSpec();
+export const swaggerSpec = swaggerJsdoc(options as any);
 
 export function setupSwagger(app) {
   // Swagger UI
