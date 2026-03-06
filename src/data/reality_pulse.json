@@ -1,22 +1,23 @@
 {
-  "timestamp": "2026-03-06T02:26:56.861Z",
-  "git_last_commit": "f231460f chore(telemetry): sync Cargo.lock (modifies: Cargo.lock, build_logs.txt)",
-  "directive": "Stabilize high-churn zone build_logs.txt with tests and safeguards",
+  "timestamp": "2026-03-06T08:44:06.861Z",
+  "git_last_commit": "2b68d0fe swarm: persist memory after experiment selection",
+  "directive": "Stabilize high-churn zone swarm/swarm_memory.json with tests and safeguards",
   "confidence": 0.99,
   "reasoning": "No details provided",
   "options_considered": [
     "Recursive self-optimization of local inference (Neural Bridge)",
+    "Autonomous feature generation for the Sovereign UI",
     "Deep hardening of the Quantum Engine's resilience",
     "Expansion of the P2P resonance and decentralized coordination",
-    "Stabilize high-churn zone build_logs.txt with tests and safeguards"
+    "Stabilize high-churn zone swarm/swarm_memory.json with tests and safeguards"
   ],
   "lint_hotspots": [],
   "commit_hotspots": [
-    "build_logs.txt",
-    "src/data/antigravity_blueprint.json",
-    "src/data/bounty_ledger.json",
-    "src/data/build_metrics.json"
+    "swarm/swarm_memory.json",
+    "swarm/task_queue.json",
+    "swarm/benchmarks/evolution_metrics_history.json",
+    "swarm/benchmarks/latest_intelligence_report.json"
   ],
-  "previous_directive": "Autonomous feature generation for the Sovereign UI",
+  "previous_directive": "Stabilize high-churn zone build_logs.txt with tests and safeguards",
   "novelty_shift": true
 }
