@@ -1,5 +1,5 @@
 import { execSync } from 'node:child_process';
-import { existsSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync, rmSync, unlinkSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 
 interface ExperimentResult {
@@ -109,6 +109,23 @@ function commitMemory(message: string): void {
   }
 }
 
+function cleanupTransientSwarmArtifacts(): void {
+  const transientFiles = [path.join('swarm', 'run_context.json')];
+  const transientDirs = [path.join('swarm', 'experiment_results')];
+
+  for (const file of transientFiles) {
+    if (existsSync(file)) {
+      unlinkSync(file);
+    }
+  }
+
+  for (const dir of transientDirs) {
+    if (existsSync(dir)) {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  }
+}
+
 function main(): void {
   const resultDir = process.argv[2] ?? path.join('swarm', 'experiment_results');
   if (!existsSync(resultDir)) {
@@ -169,6 +186,7 @@ function main(): void {
   const losers = results.filter((result) => result.branch && result.branch !== winner.branch);
 
   run('git checkout main');
+  cleanupTransientSwarmArtifacts();
   run(`git merge --no-ff origin/${winner.branch} -m "swarm: merge winning experiment ${winner.strategy_id}"`);
 
   persistTaskOutcome(results, winner);

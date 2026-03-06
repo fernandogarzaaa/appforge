@@ -1,5 +1,5 @@
 import { execSync } from 'node:child_process';
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, rmSync, unlinkSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { executeTask } from './swarm_task_executor.ts';
 
@@ -48,6 +48,23 @@ function run(command: string): { ok: boolean; output: string } {
   } catch (error) {
     const output = error instanceof Error ? error.message : String(error);
     return { ok: false, output };
+  }
+}
+
+function cleanupTransientSwarmArtifacts(): void {
+  const transientFiles = [path.join('swarm', 'run_context.json')];
+  const transientDirs = [path.join('swarm', 'experiment_results')];
+
+  for (const file of transientFiles) {
+    if (existsSync(file)) {
+      unlinkSync(file);
+    }
+  }
+
+  for (const dir of transientDirs) {
+    if (existsSync(dir)) {
+      rmSync(dir, { recursive: true, force: true });
+    }
   }
 }
 
@@ -105,6 +122,7 @@ function main(): void {
   const success = execution.success && lint.ok && tests.ok && benchmark.ok && build.ok;
 
   if (success) {
+    cleanupTransientSwarmArtifacts();
     run('git add -A');
     run(`git commit -m "swarm(experiment): ${context.task.id} strategy ${strategy.id}"`);
     if (process.env.GITHUB_ACTIONS === 'true') {
