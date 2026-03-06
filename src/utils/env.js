@@ -53,10 +53,10 @@ export const env = {
     apiUrl: import.meta.env.VITE_BASE44_API_URL || 'https://appforge.fun',
   },
 
-  // Backend API
+  // Backend API - Vercel deployment
   backend: {
-    apiUrl: import.meta.env.VITE_API_URL || 'http://localhost:5000/api',
-    wsUrl: import.meta.env.VITE_WS_URL || 'http://localhost:5001',
+    apiUrl: import.meta.env.VITE_API_URL || '',  // Empty = use relative /api
+    wsUrl: import.meta.env.VITE_WS_URL || '',    // Empty = WebSocket disabled
   },
 
   // Application Settings

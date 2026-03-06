@@ -14,8 +14,8 @@ if (!baseURL && typeof window !== 'undefined') {
   const host = window.location.host;
   baseURL = `${protocol}//${host}/api`;
 } else if (!baseURL) {
-  // Fallback for non-browser environments
-  baseURL = 'http://localhost:5000/api';
+  // Fallback for non-browser environments - use relative URL for Vercel
+  baseURL = '/api';
 }
 
 const appforgeClient = axios.create({
