@@ -61,15 +61,20 @@ function cleanupTransientSwarmArtifacts(): void {
   }
 }
 
+function ensureResultsDir(): void {
+  mkdirSync(resultsDir, { recursive: true });
+}
+
 function main(): void {
   if (!existsSync(contextPath)) {
     throw new Error('swarm/run_context.json is missing. Run swarm_controller first.');
   }
 
   const context = JSON.parse(readFileSync(contextPath, 'utf-8')) as RunContext;
-  mkdirSync(resultsDir, { recursive: true });
+  ensureResultsDir();
 
   if (!context.has_task || !context.task) {
+    ensureResultsDir();
     writeFileSync(path.join(resultsDir, 'no_task.json'), JSON.stringify({ status: 'idle' }, null, 2));
     return;
   }
@@ -93,6 +98,7 @@ function main(): void {
       benchmark_score: 0,
       execution_log: 'Strategy not selected for this run context.'
     };
+    ensureResultsDir();
     writeFileSync(path.join(resultsDir, `${strategyId || 'unknown'}.json`), JSON.stringify(skipped, null, 2));
     return;
   }
@@ -144,6 +150,7 @@ function main(): void {
     typecheck_mode: execution.typecheck_mode
   };
 
+  ensureResultsDir();
   writeFileSync(path.join(resultsDir, `${strategy.id}.json`), JSON.stringify(result, null, 2));
 }
 
