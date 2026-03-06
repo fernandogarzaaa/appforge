@@ -59,6 +59,12 @@ export const env = {
     wsUrl: import.meta.env.VITE_WS_URL || '',    // Empty = WebSocket disabled
   },
 
+  // CHIMERA Quantum LLM
+  chimera: {
+    url: import.meta.env.VITE_CHIMERA_URL || 'http://localhost:7861/v1',
+    apiKey: import.meta.env.VITE_CHIMERA_API_KEY || 'chimera-local',
+  },
+
   // Application Settings
   app: {
     env: import.meta.env.VITE_APP_ENV || 'production',
