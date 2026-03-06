@@ -1,0 +1,28 @@
+{
+  "run_id": "22749034820",
+  "has_task": true,
+  "reason": "task_selected",
+  "task": {
+    "id": "task_1772724434172_1",
+    "signal": "ci_failure",
+    "description": "repair CI pipeline",
+    "priority": 1,
+    "retries": 0,
+    "status": "running",
+    "failed_strategies": [],
+    "created_at": "2026-03-05T15:27:14.172Z",
+    "updated_at": "2026-03-06T04:26:57.527Z"
+  },
+  "strategies": [
+    {
+      "id": "A_RECOVERY",
+      "strategy": "minimal_fix_recovery",
+      "prompt": "Apply the smallest safe fix that resolves the task. Ignore historical exclusions for this run and attempt a safe recovery fix."
+    }
+  ],
+  "limits": {
+    "max_tasks_per_cycle": 5,
+    "max_experiments_per_task": 4,
+    "max_retries_per_task": 3
+  }
+}
