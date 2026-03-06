@@ -11,4 +11,7 @@ const strategyIds = Array.isArray(context.strategies)
 
 console.log(`has_task=${context.has_task}`);
 console.log(`run_id=${context.run_id}`);
+console.log(`reason=${context.reason ?? ''}`);
+console.log(`task_id=${context.task?.id ?? ''}`);
+console.log(`task_signal=${context.task?.signal ?? ''}`);
 console.log(`strategies=${JSON.stringify(strategyIds)}`);

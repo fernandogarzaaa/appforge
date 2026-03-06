@@ -144,7 +144,7 @@ async function prepareRunContext(): Promise<void> {
   const runId = process.env.GITHUB_RUN_ID ?? `${Date.now()}`;
 
   if (!nextTask) {
-    const context = { run_id: runId, has_task: false, strategies: [] };
+    const context = { run_id: runId, has_task: false, reason: 'no_task', strategies: [] };
     writeFileSync(RUN_CONTEXT_PATH, JSON.stringify(context, null, 2));
 
     memory.cycle_count += 1;
@@ -171,6 +171,8 @@ async function prepareRunContext(): Promise<void> {
     const context = {
       run_id: runId,
       has_task: false,
+      reason: 'empty_strategies',
+      task: nextTask,
       strategies: []
     };
     writeFileSync(RUN_CONTEXT_PATH, JSON.stringify(context, null, 2));
@@ -192,6 +194,7 @@ async function prepareRunContext(): Promise<void> {
   const context = {
     run_id: runId,
     has_task: true,
+    reason: 'task_selected',
     task: nextTask,
     strategies,
     limits: {

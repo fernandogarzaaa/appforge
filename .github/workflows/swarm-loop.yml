@@ -17,6 +17,9 @@ jobs:
     outputs:
       has_task: ${{ steps.context.outputs.has_task }}
       run_id: ${{ steps.context.outputs.run_id }}
+      reason: ${{ steps.context.outputs.reason }}
+      task_id: ${{ steps.context.outputs.task_id }}
+      task_signal: ${{ steps.context.outputs.task_signal }}
       strategies: ${{ steps.context.outputs.strategies }}
     steps:
       - name: Checkout repository
@@ -50,6 +53,17 @@ jobs:
             swarm/run_context.json
             swarm/swarm_memory.json
             swarm/task_queue.json
+
+  guard-controller:
+    needs: controller
+    if: needs.controller.outputs.has_task != 'true' && needs.controller.outputs.reason == 'empty_strategies'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fail on empty strategy generation
+        run: |
+          echo "Controller selected task '${{ needs.controller.outputs.task_id }}' (signal='${{ needs.controller.outputs.task_signal }}') but produced zero strategies."
+          echo "Failing workflow to avoid misleading success-with-skips."
+          exit 1
 
   experiments:
     needs: controller
