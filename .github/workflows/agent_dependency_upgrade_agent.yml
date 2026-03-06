@@ -74,11 +74,13 @@ jobs:
           STEP_OUTCOME="${{ steps.run_agent.outcome }}"
           FINAL_STATUS="${{ steps.run_agent.outputs.final_status || '' }}"
           ATTEMPTS="${{ steps.run_agent.outputs.attempts_used || '' }}"
+          MAX_ATTEMPTS="2"
 
           if [ -z "$ATTEMPTS" ] && [ -f "agent_outputs/dependency_upgrade_agent_attempts.log" ]; then
             LAST_ATTEMPT_LINE=$(grep -Eo 'attempt [0-9]+/[0-9]+' agent_outputs/dependency_upgrade_agent_attempts.log | tail -n 1 || true)
             if [ -n "$LAST_ATTEMPT_LINE" ]; then
               ATTEMPTS=$(echo "$LAST_ATTEMPT_LINE" | sed -E 's/attempt ([0-9]+)\/.*/\1/')
+              MAX_ATTEMPTS=$(echo "$LAST_ATTEMPT_LINE" | sed -E 's/attempt [0-9]+\/([0-9]+)/\1/')
             fi
           fi
 
@@ -97,7 +99,13 @@ jobs:
           if [ "$STEP_OUTCOME" = "cancelled" ]; then
             CLASSIFICATION="cancelled"
           elif [ "$STEP_OUTCOME" = "failure" ] && [ "$FINAL_STATUS" = "failed" ]; then
-            CLASSIFICATION="failed_after_retry"
+            if [ "$ATTEMPTS" -ge "$MAX_ATTEMPTS" ] && [ "$MAX_ATTEMPTS" -gt 0 ]; then
+              CLASSIFICATION="failed_after_all_retries"
+            elif [ "$ATTEMPTS" -gt 0 ]; then
+              CLASSIFICATION="interrupted_or_timeout_before_retry_completion"
+            else
+              CLASSIFICATION="failed_unknown_progress"
+            fi
           elif [ "$STEP_OUTCOME" = "success" ] && [ "$ATTEMPTS" != "1" ]; then
             CLASSIFICATION="recovered_after_retry"
           elif [ "$STEP_OUTCOME" = "success" ]; then
@@ -108,7 +116,9 @@ jobs:
 
           echo "classification=$CLASSIFICATION" >> "$GITHUB_OUTPUT"
           echo "step_outcome=$STEP_OUTCOME" >> "$GITHUB_OUTPUT"
+          echo "final_status=$FINAL_STATUS" >> "$GITHUB_OUTPUT"
           echo "attempts=$ATTEMPTS" >> "$GITHUB_OUTPUT"
+          echo "max_attempts=$MAX_ATTEMPTS" >> "$GITHUB_OUTPUT"
 
       - name: Workflow summary
         if: always()
@@ -117,8 +127,9 @@ jobs:
             echo "## Dependency Upgrade Agent"
             echo ""
             echo "- Step outcome: ${{ steps.classify.outputs.step_outcome }}"
+            echo "- Final status: ${{ steps.classify.outputs.final_status }}"
             echo "- Classification: ${{ steps.classify.outputs.classification }}"
-            echo "- Attempts used: ${{ steps.classify.outputs.attempts }}"
+            echo "- Attempts used: ${{ steps.classify.outputs.attempts }} / ${{ steps.classify.outputs.max_attempts }}"
           } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Upload artifacts
@@ -132,7 +143,7 @@ jobs:
           if-no-files-found: warn
 
       - name: Fail on unrecovered agent failure
-        if: always() && steps.classify.outputs.classification == 'failed_after_retry'
+        if: always() && contains('failed_after_all_retries interrupted_or_timeout_before_retry_completion failed_unknown_progress', steps.classify.outputs.classification)
         run: |
-          echo "Dependency upgrade agent failed after bounded retry." >&2
+          echo "Dependency upgrade agent failed with classification: ${{ steps.classify.outputs.classification }}" >&2
           exit 1
