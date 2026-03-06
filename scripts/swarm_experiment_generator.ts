@@ -104,6 +104,19 @@ export function generateExperimentStrategies(task: SwarmTask, maxExperiments = M
     }
   }
 
+  if (selected.length === 0) {
+    const recovery = DEFAULT_STRATEGIES[0];
+    const recoveryStrategy: ExperimentStrategy = {
+      id: `${recovery.id}_RECOVERY`,
+      strategy: `${recovery.strategy}_recovery`,
+      prompt: `${recovery.prompt} Ignore historical exclusions for this run and attempt a safe recovery fix.`
+    };
+    selected.push(recoveryStrategy);
+    console.warn(
+      `[swarm-experiment-generator] No available strategies for task ${task.id} (${task.signal}); using fallback ${recoveryStrategy.id}.`
+    );
+  }
+
   logGeneratedStrategies(task, selectedBase, mutated, selected);
   return selected;
 }
