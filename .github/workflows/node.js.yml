@@ -52,7 +52,10 @@ jobs:
 
       - name: Swagger import smoke check
         run: |
-          npx tsx -e "import('./src/api/swagger.config.ts').then((m)=>{console.log('swagger-paths', Object.keys(m.swaggerSpec?.paths || {}).length);}).catch((e)=>{console.error(e); process.exit(1);})"
+          API_FILE_COUNT=$(find src/api/routes src/api/endpoints -type f \( -name "*.js" -o -name "*.ts" \) 2>/dev/null | wc -l | tr -d ' ')
+          export API_FILE_COUNT
+          echo "swagger-api-files ${API_FILE_COUNT}"
+          npx tsx -e "import('./src/api/swagger.config.ts').then((m)=>{const pathCount=Object.keys(m.swaggerSpec?.paths||{}).length; const apiFileCount=Number(process.env.API_FILE_COUNT||'0'); console.log('swagger-paths', pathCount); if(apiFileCount>0 && pathCount===0){console.error('Swagger spec contains zero paths despite API source files.'); process.exit(1);} }).catch((e)=>{console.error(e); process.exit(1);})"
 
       - name: Run security audit
         run: npm audit --audit-level=high
