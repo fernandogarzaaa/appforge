@@ -19,7 +19,6 @@ jobs:
     permissions:
       contents: write
       pull-requests: write
-      issues: write
     steps:
       - name: Checkout main
         uses: actions/checkout@v4
@@ -62,18 +61,7 @@ jobs:
             exit 0
           fi
 
-          OLD_FILE=$(mktemp)
-          NEW_FILE=$(mktemp)
-          OLD_NORM=$(mktemp)
-          NEW_NORM=$(mktemp)
-
-          git show HEAD:SWARM_STATUS.md > "$OLD_FILE" || true
-          cp SWARM_STATUS.md "$NEW_FILE"
-
-          tr -d '[:space:]' < "$OLD_FILE" > "$OLD_NORM"
-          tr -d '[:space:]' < "$NEW_FILE" > "$NEW_NORM"
-
-          if cmp -s "$OLD_NORM" "$NEW_NORM"; then
+          if git diff --ignore-all-space --quiet -- SWARM_STATUS.md; then
             echo "should_commit=false" >> "$GITHUB_OUTPUT"
             echo "reason=whitespace-only" >> "$GITHUB_OUTPUT"
           else
@@ -142,53 +130,3 @@ jobs:
               echo "- Commit action: skipped"
             fi
           } >> "$GITHUB_STEP_SUMMARY"
-
-      - name: Escalate repeated dashboard failures
-        if: failure()
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          set -euo pipefail
-
-          REPO="${GITHUB_REPOSITORY}"
-          CURRENT_RUN="${GITHUB_RUN_ID}"
-
-          PREVIOUS_STATUS=$(gh run list \
-            --workflow "swarm-dashboard.yml" \
-            --limit 10 \
-            --json databaseId,status,conclusion \
-            --jq "map(select((.databaseId|tostring) != \"${CURRENT_RUN}\" and .status == \"completed\"))[0].conclusion // \"none\"")
-
-          if [ "$PREVIOUS_STATUS" != "failure" ]; then
-            echo "Previous completed dashboard run was '$PREVIOUS_STATUS'; no escalation issue needed."
-            exit 0
-          fi
-
-          ISSUE_TITLE="swarm-bot: repeated dashboard workflow failures"
-          ISSUE_LABELS="swarm-bot,automation,incident"
-          RUN_URL="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
-          BODY=$(cat <<EOF
-Swarm Dashboard failed in **2 consecutive completed runs**.
-
-- Workflow: \`swarm-dashboard.yml\`
-- Current run: ${RUN_URL}
-- Trigger: ${GITHUB_EVENT_NAME}
-
-Please investigate CI environment, Redis connectivity, and bot commit/push path.
-EOF
-)
-
-          EXISTING=$(gh issue list \
-            --repo "$REPO" \
-            --state open \
-            --search "in:title ${ISSUE_TITLE}" \
-            --json number \
-            --jq '.[0].number // empty')
-
-          if [ -n "$EXISTING" ]; then
-            gh issue comment "$EXISTING" --repo "$REPO" --body "$BODY"
-            echo "Updated existing escalation issue #$EXISTING"
-          else
-            gh issue create --repo "$REPO" --title "$ISSUE_TITLE" --body "$BODY" --label "$ISSUE_LABELS"
-            echo "Created new escalation issue."
-          fi
