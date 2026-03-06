@@ -64,8 +64,19 @@ jobs:
           fi
           echo "✅ Build artifacts verified"
 
+      - name: Check deployment configuration
+        id: deploy_config
+        run: |
+          if [ -z "${{ secrets.DEPLOY_TOKEN }}" ]; then
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+            echo "::warning::Skipping deployment; missing DEPLOY_TOKEN secret"
+          else
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Deploy to Production
         id: deploy
+        if: steps.deploy_config.outputs.ready == 'true'
         run: |
           echo "🚀 Deploying to production..."
           # Add your deployment command here
@@ -78,15 +89,23 @@ jobs:
           echo "deployed=true" >> $GITHUB_OUTPUT
         env:
           DEPLOY_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
-        continue-on-error: true
 
       - name: Post-Deploy Health Check
-        if: steps.deploy.outputs.deployed == 'true'
+        if: steps.deploy_config.outputs.ready == 'true' && steps.deploy.outputs.deployed == 'true'
         run: |
           echo "🏥 Running post-deploy health check..."
           # Add health check for your deployed app
           # curl -f https://appforge.fun/health || exit 1
           echo "::notice::Post-deploy health check - configure your health endpoint"
+
+      - name: Deployment summary
+        if: always()
+        run: |
+          if [ "${{ steps.deploy_config.outputs.ready }}" = "true" ]; then
+            echo "✅ Production deployment executed." >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "⚠️ Production deployment skipped because DEPLOY_TOKEN is not configured." >> "$GITHUB_STEP_SUMMARY"
+          fi
 
       - name: Notify Deployment Status
         if: always()
