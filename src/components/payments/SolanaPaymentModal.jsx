@@ -131,7 +131,7 @@ export default function SolanaPaymentModal({
     } catch (error) {
       setStatus('error');
       setErrorMsg(error.message || 'Payment failed');
-      // eslint-disable-next-line no-undef
+       
       toast.error(error.message || 'Payment failed');
     }
   };
