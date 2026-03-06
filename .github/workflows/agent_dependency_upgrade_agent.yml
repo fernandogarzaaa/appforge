@@ -72,8 +72,27 @@ jobs:
         if: always()
         run: |
           STEP_OUTCOME="${{ steps.run_agent.outcome }}"
-          FINAL_STATUS="${{ steps.run_agent.outputs.final_status || 'failed' }}"
-          ATTEMPTS="${{ steps.run_agent.outputs.attempts_used || '0' }}"
+          FINAL_STATUS="${{ steps.run_agent.outputs.final_status || '' }}"
+          ATTEMPTS="${{ steps.run_agent.outputs.attempts_used || '' }}"
+
+          if [ -z "$ATTEMPTS" ] && [ -f "agent_outputs/dependency_upgrade_agent_attempts.log" ]; then
+            LAST_ATTEMPT_LINE=$(grep -Eo 'attempt [0-9]+/[0-9]+' agent_outputs/dependency_upgrade_agent_attempts.log | tail -n 1 || true)
+            if [ -n "$LAST_ATTEMPT_LINE" ]; then
+              ATTEMPTS=$(echo "$LAST_ATTEMPT_LINE" | sed -E 's/attempt ([0-9]+)\/.*/\1/')
+            fi
+          fi
+
+          if [ -z "$ATTEMPTS" ]; then
+            ATTEMPTS="0"
+          fi
+
+          if [ -z "$FINAL_STATUS" ]; then
+            if [ "$STEP_OUTCOME" = "success" ]; then
+              FINAL_STATUS="success"
+            else
+              FINAL_STATUS="failed"
+            fi
+          fi
 
           if [ "$STEP_OUTCOME" = "cancelled" ]; then
             CLASSIFICATION="cancelled"
