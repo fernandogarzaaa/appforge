@@ -1,7 +1,7 @@
 {
-  "timestamp": "2026-03-06T13:05:33.764Z",
-  "git_last_commit": "34d10687 fix(ci): gate production deploy on token readiness",
-  "directive": "Stabilize high-churn zone .github/workflows/swarm-dashboard.yml with tests and safeguards",
+  "timestamp": "2026-03-06T16:49:24.998Z",
+  "git_last_commit": "f283c6fd Add Vercel deployment guide",
+  "directive": "Stabilize high-churn zone .github/workflows/agent_dependency_upgrade_agent.yml with tests and safeguards",
   "confidence": 0.99,
   "reasoning": "No details provided",
   "options_considered": [
@@ -9,15 +9,15 @@
     "Autonomous feature generation for the Sovereign UI",
     "Deep hardening of the Quantum Engine's resilience",
     "Expansion of the P2P resonance and decentralized coordination",
-    "Stabilize high-churn zone .github/workflows/swarm-dashboard.yml with tests and safeguards"
+    "Stabilize high-churn zone .github/workflows/agent_dependency_upgrade_agent.yml with tests and safeguards"
   ],
   "lint_hotspots": [],
   "commit_hotspots": [
-    ".github/workflows/swarm-dashboard.yml",
-    ".github/workflows/vercel.yml",
+    ".github/workflows/agent_dependency_upgrade_agent.yml",
     "package-lock.json",
-    "swarm/benchmarks/evolution_metrics_history.json"
+    "SWARM_STATUS.md",
+    ".github/workflows/swarm-dashboard.yml"
   ],
-  "previous_directive": "Stabilize high-churn zone swarm/swarm_memory.json with tests and safeguards",
+  "previous_directive": "Stabilize high-churn zone .github/workflows/swarm-dashboard.yml with tests and safeguards",
   "novelty_shift": true
 }
