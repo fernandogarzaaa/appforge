@@ -1,6 +1,10 @@
 name: Swarm Dashboard
 
 on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - "SWARM_STATUS.md"
   schedule:
     - cron: '0 */4 * * *'
   workflow_dispatch:
@@ -124,11 +128,16 @@ jobs:
       - name: Dashboard bot summary
         if: always()
         run: |
+          commit_action="${{ steps.commit_dashboard.outputs.push_mode }}"
+          if [ -z "$commit_action" ]; then
+            commit_action="none"
+          fi
+
           {
             echo "## Swarm Dashboard Bot"
             echo "- Semantic change: ${{ steps.detect_changes.outputs.reason }}"
             if [ "${{ steps.detect_changes.outputs.should_commit }}" = "true" ]; then
-              echo "- Commit action: ${{ steps.commit_dashboard.outputs.push_mode || 'none' }}"
+              echo "- Commit action: ${commit_action}"
             else
               echo "- Commit action: skipped"
             fi
