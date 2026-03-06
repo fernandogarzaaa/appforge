@@ -1,3 +1,6 @@
 {
-    "name": "base44-app"
+    "name": "appforge",
+    "site": {
+        "outputDirectory": "dist"
+    }
 }
