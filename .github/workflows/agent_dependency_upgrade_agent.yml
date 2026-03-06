@@ -9,6 +9,8 @@ jobs:
   run-agent:
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    permissions:
+      contents: read
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -28,11 +30,90 @@ jobs:
       - name: Analyze repository state
         run: npx tsx scripts/ci_manager.ts REPORT
 
-      - name: Run specialized agent task
-        run: npx tsx scripts/real_swarm_executor.ts "Dependency Upgrade Agent"
+      - name: Run specialized agent task with bounded retry
+        id: run_agent
+        continue-on-error: true
+        timeout-minutes: 14
+        run: |
+          mkdir -p agent_outputs
+          LOG_FILE="agent_outputs/dependency_upgrade_agent_attempts.log"
+          : > "$LOG_FILE"
+
+          MAX_ATTEMPTS=2
+          ATTEMPT=1
+          SUCCESS=0
+
+          while [ "$ATTEMPT" -le "$MAX_ATTEMPTS" ]; do
+            echo "[dependency-upgrade-agent] attempt $ATTEMPT/$MAX_ATTEMPTS" | tee -a "$LOG_FILE"
+            if npx tsx scripts/real_swarm_executor.ts "Dependency Upgrade Agent" 2>&1 | tee -a "$LOG_FILE"; then
+              SUCCESS=1
+              break
+            fi
+
+            if [ "$ATTEMPT" -lt "$MAX_ATTEMPTS" ]; then
+              echo "[dependency-upgrade-agent] attempt $ATTEMPT failed, retrying after backoff" | tee -a "$LOG_FILE"
+              sleep 20
+            fi
+            ATTEMPT=$((ATTEMPT + 1))
+          done
+
+          if [ "$SUCCESS" -eq 1 ]; then
+            echo "final_status=success" >> "$GITHUB_OUTPUT"
+            echo "attempts_used=$ATTEMPT" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          echo "final_status=failed" >> "$GITHUB_OUTPUT"
+          echo "attempts_used=$MAX_ATTEMPTS" >> "$GITHUB_OUTPUT"
+          exit 1
+
+      - name: Classify dependency-agent outcome
+        id: classify
+        if: always()
+        run: |
+          STEP_OUTCOME="${{ steps.run_agent.outcome }}"
+          FINAL_STATUS="${{ steps.run_agent.outputs.final_status || 'failed' }}"
+          ATTEMPTS="${{ steps.run_agent.outputs.attempts_used || '0' }}"
+
+          if [ "$STEP_OUTCOME" = "cancelled" ]; then
+            CLASSIFICATION="cancelled"
+          elif [ "$STEP_OUTCOME" = "failure" ] && [ "$FINAL_STATUS" = "failed" ]; then
+            CLASSIFICATION="failed_after_retry"
+          elif [ "$STEP_OUTCOME" = "success" ] && [ "$ATTEMPTS" != "1" ]; then
+            CLASSIFICATION="recovered_after_retry"
+          elif [ "$STEP_OUTCOME" = "success" ]; then
+            CLASSIFICATION="success"
+          else
+            CLASSIFICATION="unknown"
+          fi
+
+          echo "classification=$CLASSIFICATION" >> "$GITHUB_OUTPUT"
+          echo "step_outcome=$STEP_OUTCOME" >> "$GITHUB_OUTPUT"
+          echo "attempts=$ATTEMPTS" >> "$GITHUB_OUTPUT"
+
+      - name: Workflow summary
+        if: always()
+        run: |
+          {
+            echo "## Dependency Upgrade Agent"
+            echo ""
+            echo "- Step outcome: ${{ steps.classify.outputs.step_outcome }}"
+            echo "- Classification: ${{ steps.classify.outputs.classification }}"
+            echo "- Attempts used: ${{ steps.classify.outputs.attempts }}"
+          } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Upload artifacts
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: agent_dependency_upgrade_agent_output.json
-          path: agent_outputs/**/*.json
+          path: |
+            agent_outputs/**/*.json
+            agent_outputs/dependency_upgrade_agent_attempts.log
+          if-no-files-found: warn
+
+      - name: Fail on unrecovered agent failure
+        if: always() && steps.classify.outputs.classification == 'failed_after_retry'
+        run: |
+          echo "Dependency upgrade agent failed after bounded retry." >&2
+          exit 1
