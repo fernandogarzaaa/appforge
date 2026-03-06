@@ -1,5 +1,5 @@
 import { execSync } from 'node:child_process';
-import { existsSync, mkdirSync, readFileSync, rmSync, unlinkSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, unlinkSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { executeTask } from './swarm_task_executor.ts';
 
@@ -53,17 +53,10 @@ function run(command: string): { ok: boolean; output: string } {
 
 function cleanupTransientSwarmArtifacts(): void {
   const transientFiles = [path.join('swarm', 'run_context.json')];
-  const transientDirs = [path.join('swarm', 'experiment_results')];
 
   for (const file of transientFiles) {
     if (existsSync(file)) {
       unlinkSync(file);
-    }
-  }
-
-  for (const dir of transientDirs) {
-    if (existsSync(dir)) {
-      rmSync(dir, { recursive: true, force: true });
     }
   }
 }
