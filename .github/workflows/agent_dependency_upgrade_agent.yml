@@ -40,19 +40,42 @@ jobs:
           : > "$LOG_FILE"
 
           MAX_ATTEMPTS=2
+          STEP_BUDGET_SECONDS=$((14 * 60))
+          BACKOFF_SECONDS=20
+          SAFETY_BUFFER_SECONDS=45
+          PER_ATTEMPT_TIMEOUT_SECONDS=$(((STEP_BUDGET_SECONDS - (BACKOFF_SECONDS * (MAX_ATTEMPTS - 1)) - SAFETY_BUFFER_SECONDS) / MAX_ATTEMPTS))
+          if [ "$PER_ATTEMPT_TIMEOUT_SECONDS" -lt 120 ]; then
+            PER_ATTEMPT_TIMEOUT_SECONDS=120
+          fi
           ATTEMPT=1
           SUCCESS=0
+          LAST_FAILURE_MODE="none"
+
+          echo "[dependency-upgrade-agent] budget step=${STEP_BUDGET_SECONDS}s per_attempt=${PER_ATTEMPT_TIMEOUT_SECONDS}s max_attempts=${MAX_ATTEMPTS}" | tee -a "$LOG_FILE"
 
           while [ "$ATTEMPT" -le "$MAX_ATTEMPTS" ]; do
             echo "[dependency-upgrade-agent] attempt $ATTEMPT/$MAX_ATTEMPTS" | tee -a "$LOG_FILE"
-            if npx tsx scripts/real_swarm_executor.ts "Dependency Upgrade Agent" 2>&1 | tee -a "$LOG_FILE"; then
+            set +e
+            timeout --signal=TERM --kill-after=20s "${PER_ATTEMPT_TIMEOUT_SECONDS}s" npx tsx scripts/real_swarm_executor.ts "Dependency Upgrade Agent" 2>&1 | tee -a "$LOG_FILE"
+            ATTEMPT_EXIT_CODE=${PIPESTATUS[0]}
+            set -e
+
+            if [ "$ATTEMPT_EXIT_CODE" -eq 0 ]; then
               SUCCESS=1
               break
             fi
 
+            if [ "$ATTEMPT_EXIT_CODE" -eq 124 ]; then
+              LAST_FAILURE_MODE="attempt_timeout"
+              echo "[dependency-upgrade-agent] attempt $ATTEMPT timed out after ${PER_ATTEMPT_TIMEOUT_SECONDS}s" | tee -a "$LOG_FILE"
+            else
+              LAST_FAILURE_MODE="attempt_error_code_${ATTEMPT_EXIT_CODE}"
+              echo "[dependency-upgrade-agent] attempt $ATTEMPT failed with exit code ${ATTEMPT_EXIT_CODE}" | tee -a "$LOG_FILE"
+            fi
+
             if [ "$ATTEMPT" -lt "$MAX_ATTEMPTS" ]; then
               echo "[dependency-upgrade-agent] attempt $ATTEMPT failed, retrying after backoff" | tee -a "$LOG_FILE"
-              sleep 20
+              sleep "$BACKOFF_SECONDS"
             fi
             ATTEMPT=$((ATTEMPT + 1))
           done
@@ -60,11 +83,13 @@ jobs:
           if [ "$SUCCESS" -eq 1 ]; then
             echo "final_status=success" >> "$GITHUB_OUTPUT"
             echo "attempts_used=$ATTEMPT" >> "$GITHUB_OUTPUT"
+            echo "failure_mode=none" >> "$GITHUB_OUTPUT"
             exit 0
           fi
 
           echo "final_status=failed" >> "$GITHUB_OUTPUT"
           echo "attempts_used=$MAX_ATTEMPTS" >> "$GITHUB_OUTPUT"
+          echo "failure_mode=$LAST_FAILURE_MODE" >> "$GITHUB_OUTPUT"
           exit 1
 
       - name: Classify dependency-agent outcome
@@ -74,6 +99,7 @@ jobs:
           STEP_OUTCOME="${{ steps.run_agent.outcome }}"
           FINAL_STATUS="${{ steps.run_agent.outputs.final_status || '' }}"
           ATTEMPTS="${{ steps.run_agent.outputs.attempts_used || '' }}"
+          FAILURE_MODE="${{ steps.run_agent.outputs.failure_mode || '' }}"
           MAX_ATTEMPTS="2"
 
           if [ -z "$ATTEMPTS" ] && [ -f "agent_outputs/dependency_upgrade_agent_attempts.log" ]; then
@@ -117,6 +143,7 @@ jobs:
           echo "classification=$CLASSIFICATION" >> "$GITHUB_OUTPUT"
           echo "step_outcome=$STEP_OUTCOME" >> "$GITHUB_OUTPUT"
           echo "final_status=$FINAL_STATUS" >> "$GITHUB_OUTPUT"
+          echo "failure_mode=$FAILURE_MODE" >> "$GITHUB_OUTPUT"
           echo "attempts=$ATTEMPTS" >> "$GITHUB_OUTPUT"
           echo "max_attempts=$MAX_ATTEMPTS" >> "$GITHUB_OUTPUT"
 
@@ -129,6 +156,7 @@ jobs:
             echo "- Step outcome: ${{ steps.classify.outputs.step_outcome }}"
             echo "- Final status: ${{ steps.classify.outputs.final_status }}"
             echo "- Classification: ${{ steps.classify.outputs.classification }}"
+            echo "- Failure mode: ${{ steps.classify.outputs.failure_mode }}"
             echo "- Attempts used: ${{ steps.classify.outputs.attempts }} / ${{ steps.classify.outputs.max_attempts }}"
           } >> "$GITHUB_STEP_SUMMARY"
 
