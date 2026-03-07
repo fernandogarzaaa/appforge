@@ -635,11 +635,23 @@ export class RealSwarmExecutor {
 
 async function main(): Promise<void> {
     const executor = new RealSwarmExecutor();
+    const cliArgs = process.argv.slice(2);
+    const forceDaemon = cliArgs.includes('--daemon');
+    const forceOneShot = cliArgs.includes('--once');
+    const hasTaskLikeArg = cliArgs.some((arg) => !arg.startsWith('--'));
+    const runOneShot = forceOneShot || (!forceDaemon && hasTaskLikeArg);
 
     // Wait for initialization
     await executor.ensureInitialized();
 
     console.log(`[RealSwarmExecutor] Initialized with ${executor.getStatus().swarmCount} swarms`);
+
+    if (runOneShot) {
+        console.log(`[RealSwarmExecutor] Running one-shot execution${cliArgs.length > 0 ? ` (${cliArgs.join(' ')})` : ''}`);
+        await executor.executeAllSwarms();
+        console.log('[RealSwarmExecutor] One-shot execution completed.');
+        return;
+    }
 
     // Start executor
     executor.start(60000); // Execute every 60 seconds
