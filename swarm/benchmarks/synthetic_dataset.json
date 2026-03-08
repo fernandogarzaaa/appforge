@@ -42670,5 +42670,1021 @@
         "benchmarkLabel": "efficiency"
       }
     ]
+  },
+  {
+    "datasetVersion": 589,
+    "entries": [
+      {
+        "taskInput": "synthetic_task_cycle_1_0",
+        "reasoningTrace": [
+          "strategy=debate",
+          "seed=13",
+          "failureMode=direct"
+        ],
+        "selectedStrategy": "debate",
+        "failureMode": "direct",
+        "benchmarkLabel": "efficiency"
+      },
+      {
+        "taskInput": "synthetic_task_cycle_1_1",
+        "reasoningTrace": [
+          "strategy=debate",
+          "seed=13",
+          "failureMode=reflection"
+        ],
+        "selectedStrategy": "debate",
+        "failureMode": "reflection",
+        "benchmarkLabel": "robustness"
+      },
+      {
+        "taskInput": "synthetic_task_cycle_1_2",
+        "reasoningTrace": [
+          "strategy=debate",
+          "seed=13",
+          "failureMode=tree_of_thought"
+        ],
+        "selectedStrategy": "debate",
+        "failureMode": "tree_of_thought",
+        "benchmarkLabel": "efficiency"
+      },
+      {
+        "taskInput": "synthetic_task_cycle_1_3",
+        "reasoningTrace": [
+          "strategy=debate",
+          "seed=13",
+          "failureMode=debate"
+        ],
+        "selectedStrategy": "debate",
+        "failureMode": "debate",
+        "benchmarkLabel": "robustness"
+      },
+      {
+        "taskInput": "synthetic_task_cycle_1_4",
+        "reasoningTrace": [
+          "strategy=debate",
+          "seed=13",
+          "failureMode=multi_debate"
+        ],
+        "selectedStrategy": "debate",
+        "failureMode": "multi_debate",
+        "benchmarkLabel": "robustness"
+      },
+      {
+        "taskInput": "synthetic_task_cycle_1_5",
+        "reasoningTrace": [
+          "strategy=debate",
+          "seed=13",
+          "failureMode=self_consistency"
+        ],
+        "selectedStrategy": "debate",
+        "failureMode": "self_consistency",
+        "benchmarkLabel": "accuracy"
+      }
+    ]
+  },
+  {
+    "datasetVersion": 590,
+    "entries": [
+      {
+        "taskInput": "synthetic_task_cycle_1_0",
+        "reasoningTrace": [
+          "strategy=debate",
+          "seed=13",
+          "failureMode=direct"
+        ],
+        "selectedStrategy": "debate",
+        "failureMode": "direct",
+        "benchmarkLabel": "efficiency"
+      },
+      {
+        "taskInput": "synthetic_task_cycle_1_1",
+        "reasoningTrace": [
+          "strategy=debate",
+          "seed=13",
+          "failureMode=reflection"
+        ],
+        "selectedStrategy": "debate",
+        "failureMode": "reflection",
+        "benchmarkLabel": "robustness"
+      },
+      {
+        "taskInput": "synthetic_task_cycle_1_2",
+        "reasoningTrace": [
+          "strategy=debate",
+          "seed=13",
+          "failureMode=tree_of_thought"
+        ],
+        "selectedStrategy": "debate",
+        "failureMode": "tree_of_thought",
+        "benchmarkLabel": "efficiency"
+      },
+      {
+        "taskInput": "synthetic_task_cycle_1_3",
+        "reasoningTrace": [
+          "strategy=debate",
+          "seed=13",
+          "failureMode=debate"
+        ],
+        "selectedStrategy": "debate",
+        "failureMode": "debate",
+        "benchmarkLabel": "robustness"
+      },
+      {
+        "taskInput": "synthetic_task_cycle_1_4",
+        "reasoningTrace": [
+          "strategy=debate",
+          "seed=13",
+          "failureMode=multi_debate"
+        ],
+        "selectedStrategy": "debate",
+        "failureMode": "multi_debate",
+        "benchmarkLabel": "robustness"
+      },
+      {
+        "taskInput": "synthetic_task_cycle_1_5",
+        "reasoningTrace": [
+          "strategy=debate",
+          "seed=13",
+          "failureMode=self_consistency"
+        ],
+        "selectedStrategy": "debate",
+        "failureMode": "self_consistency",
+        "benchmarkLabel": "accuracy"
+      }
+    ]
+  },
+  {
+    "datasetVersion": 591,
+    "entries": [
+      {
+        "taskInput": "synthetic_task_cycle_1_0",
+        "reasoningTrace": [
+          "strategy=debate",
+          "seed=7",
+          "failureMode=HumanEval dropped from 0.9000 to 0.7690"
+        ],
+        "selectedStrategy": "debate",
+        "failureMode": "HumanEval dropped from 0.9000 to 0.7690",
+        "benchmarkLabel": "robustness"
+      },
+      {
+        "taskInput": "synthetic_task_cycle_1_1",
+        "reasoningTrace": [
+          "strategy=debate",
+          "seed=7",
+          "failureMode=reflection"
+        ],
+        "selectedStrategy": "debate",
+        "failureMode": "reflection",
+        "benchmarkLabel": "efficiency"
+      },
+      {
+        "taskInput": "synthetic_task_cycle_1_2",
+        "reasoningTrace": [
+          "strategy=debate",
+          "seed=7",
+          "failureMode=tree_of_thought"
+        ],
+        "selectedStrategy": "debate",
+        "failureMode": "tree_of_thought",
+        "benchmarkLabel": "efficiency"
+      },
+      {
+        "taskInput": "synthetic_task_cycle_1_3",
+        "reasoningTrace": [
+          "strategy=debate",
+          "seed=7",
+          "failureMode=multi_debate"
+        ],
+        "selectedStrategy": "debate",
+        "failureMode": "multi_debate",
+        "benchmarkLabel": "efficiency"
+      },
+      {
+        "taskInput": "synthetic_task_cycle_1_4",
+        "reasoningTrace": [
+          "strategy=debate",
+          "seed=7",
+          "failureMode=self_consistency"
+        ],
+        "selectedStrategy": "debate",
+        "failureMode": "self_consistency",
+        "benchmarkLabel": "robustness"
+      }
+    ]
+  },
+  {
+    "datasetVersion": 592,
+    "entries": [
+      {
+        "taskInput": "synthetic_task_cycle_1_0",
+        "reasoningTrace": [
+          "strategy=debate",
+          "seed=21",
+          "failureMode=SWE-Bench dropped from 1.0000 to 0.9000"
+        ],
+        "selectedStrategy": "debate",
+        "failureMode": "SWE-Bench dropped from 1.0000 to 0.9000",
+        "benchmarkLabel": "efficiency"
+      },
+      {
+        "taskInput": "synthetic_task_cycle_1_1",
+        "reasoningTrace": [
+          "strategy=debate",
+          "seed=21",
+          "failureMode=HumanEval dropped from 1.0000 to 0.8950"
+        ],
+        "selectedStrategy": "debate",
+        "failureMode": "HumanEval dropped from 1.0000 to 0.8950",
+        "benchmarkLabel": "accuracy"
+      },
+      {
+        "taskInput": "synthetic_task_cycle_1_2",
+        "reasoningTrace": [
+          "strategy=debate",
+          "seed=21",
+          "failureMode=MMLU dropped from 1.0000 to 0.8970"
+        ],
+        "selectedStrategy": "debate",
+        "failureMode": "MMLU dropped from 1.0000 to 0.8970",
+        "benchmarkLabel": "robustness"
+      },
+      {
+        "taskInput": "synthetic_task_cycle_1_3",
+        "reasoningTrace": [
+          "strategy=debate",
+          "seed=21",
+          "failureMode=ARC dropped from 1.0000 to 0.8960"
+        ],
+        "selectedStrategy": "debate",
+        "failureMode": "ARC dropped from 1.0000 to 0.8960",
+        "benchmarkLabel": "robustness"
+      },
+      {
+        "taskInput": "synthetic_task_cycle_1_4",
+        "reasoningTrace": [
+          "strategy=debate",
+          "seed=21",
+          "failureMode=direct"
+        ],
+        "selectedStrategy": "debate",
+        "failureMode": "direct",
+        "benchmarkLabel": "efficiency"
+      },
+      {
+        "taskInput": "synthetic_task_cycle_1_5",
+        "reasoningTrace": [
+          "strategy=debate",
+          "seed=21",
+          "failureMode=reflection"
+        ],
+        "selectedStrategy": "debate",
+        "failureMode": "reflection",
+        "benchmarkLabel": "efficiency"
+      },
+      {
+        "taskInput": "synthetic_task_cycle_1_6",
+        "reasoningTrace": [
+          "strategy=debate",
+          "seed=21",
+          "failureMode=tree_of_thought"
+        ],
+        "selectedStrategy": "debate",
+        "failureMode": "tree_of_thought",
+        "benchmarkLabel": "robustness"
+      },
+      {
+        "taskInput": "synthetic_task_cycle_1_7",
+        "reasoningTrace": [
+          "strategy=debate",
+          "seed=21",
+          "failureMode=multi_debate"
+        ],
+        "selectedStrategy": "debate",
+        "failureMode": "multi_debate",
+        "benchmarkLabel": "accuracy"
+      },
+      {
+        "taskInput": "synthetic_task_cycle_1_8",
+        "reasoningTrace": [
+          "strategy=debate",
+          "seed=21",
+          "failureMode=self_consistency"
+        ],
+        "selectedStrategy": "debate",
+        "failureMode": "self_consistency",
+        "benchmarkLabel": "robustness"
+      }
+    ]
+  },
+  {
+    "datasetVersion": 593,
+    "entries": [
+      {
+        "taskInput": "synthetic_task_cycle_2_0",
+        "reasoningTrace": [
+          "strategy=debate",
+          "seed=21",
+          "failureMode=SWE-Bench dropped from 1.0000 to 0.9000"
+        ],
+        "selectedStrategy": "debate",
+        "failureMode": "SWE-Bench dropped from 1.0000 to 0.9000",
+        "benchmarkLabel": "accuracy"
+      },
+      {
+        "taskInput": "synthetic_task_cycle_2_1",
+        "reasoningTrace": [
+          "strategy=debate",
+          "seed=21",
+          "failureMode=HumanEval dropped from 1.0000 to 0.8950"
+        ],
+        "selectedStrategy": "debate",
+        "failureMode": "HumanEval dropped from 1.0000 to 0.8950",
+        "benchmarkLabel": "robustness"
+      },
+      {
+        "taskInput": "synthetic_task_cycle_2_2",
+        "reasoningTrace": [
+          "strategy=debate",
+          "seed=21",
+          "failureMode=MMLU dropped from 1.0000 to 0.8970"
+        ],
+        "selectedStrategy": "debate",
+        "failureMode": "MMLU dropped from 1.0000 to 0.8970",
+        "benchmarkLabel": "robustness"
+      },
+      {
+        "taskInput": "synthetic_task_cycle_2_3",
+        "reasoningTrace": [
+          "strategy=debate",
+          "seed=21",
+          "failureMode=ARC dropped from 1.0000 to 0.8960"
+        ],
+        "selectedStrategy": "debate",
+        "failureMode": "ARC dropped from 1.0000 to 0.8960",
+        "benchmarkLabel": "efficiency"
+      },
+      {
+        "taskInput": "synthetic_task_cycle_2_4",
+        "reasoningTrace": [
+          "strategy=debate",
+          "seed=21",
+          "failureMode=direct"
+        ],
+        "selectedStrategy": "debate",
+        "failureMode": "direct",
+        "benchmarkLabel": "efficiency"
+      },
+      {
+        "taskInput": "synthetic_task_cycle_2_5",
+        "reasoningTrace": [
+          "strategy=debate",
+          "seed=21",
+          "failureMode=reflection"
+        ],
+        "selectedStrategy": "debate",
+        "failureMode": "reflection",
+        "benchmarkLabel": "robustness"
+      },
+      {
+        "taskInput": "synthetic_task_cycle_2_6",
+        "reasoningTrace": [
+          "strategy=debate",
+          "seed=21",
+          "failureMode=tree_of_thought"
+        ],
+        "selectedStrategy": "debate",
+        "failureMode": "tree_of_thought",
+        "benchmarkLabel": "accuracy"
+      },
+      {
+        "taskInput": "synthetic_task_cycle_2_7",
+        "reasoningTrace": [
+          "strategy=debate",
+          "seed=21",
+          "failureMode=multi_debate"
+        ],
+        "selectedStrategy": "debate",
+        "failureMode": "multi_debate",
+        "benchmarkLabel": "robustness"
+      },
+      {
+        "taskInput": "synthetic_task_cycle_2_8",
+        "reasoningTrace": [
+          "strategy=debate",
+          "seed=21",
+          "failureMode=self_consistency"
+        ],
+        "selectedStrategy": "debate",
+        "failureMode": "self_consistency",
+        "benchmarkLabel": "accuracy"
+      }
+    ]
+  },
+  {
+    "datasetVersion": 594,
+    "entries": [
+      {
+        "taskInput": "synthetic_task_cycle_3_0",
+        "reasoningTrace": [
+          "strategy=debate",
+          "seed=21",
+          "failureMode=SWE-Bench dropped from 1.0000 to 0.9000"
+        ],
+        "selectedStrategy": "debate",
+        "failureMode": "SWE-Bench dropped from 1.0000 to 0.9000",
+        "benchmarkLabel": "robustness"
+      },
+      {
+        "taskInput": "synthetic_task_cycle_3_1",
+        "reasoningTrace": [
+          "strategy=debate",
+          "seed=21",
+          "failureMode=HumanEval dropped from 1.0000 to 0.8950"
+        ],
+        "selectedStrategy": "debate",
+        "failureMode": "HumanEval dropped from 1.0000 to 0.8950",
+        "benchmarkLabel": "robustness"
+      },
+      {
+        "taskInput": "synthetic_task_cycle_3_2",
+        "reasoningTrace": [
+          "strategy=debate",
+          "seed=21",
+          "failureMode=MMLU dropped from 1.0000 to 0.8970"
+        ],
+        "selectedStrategy": "debate",
+        "failureMode": "MMLU dropped from 1.0000 to 0.8970",
+        "benchmarkLabel": "efficiency"
+      },
+      {
+        "taskInput": "synthetic_task_cycle_3_3",
+        "reasoningTrace": [
+          "strategy=debate",
+          "seed=21",
+          "failureMode=ARC dropped from 1.0000 to 0.8960"
+        ],
+        "selectedStrategy": "debate",
+        "failureMode": "ARC dropped from 1.0000 to 0.8960",
+        "benchmarkLabel": "efficiency"
+      },
+      {
+        "taskInput": "synthetic_task_cycle_3_4",
+        "reasoningTrace": [
+          "strategy=debate",
+          "seed=21",
+          "failureMode=direct"
+        ],
+        "selectedStrategy": "debate",
+        "failureMode": "direct",
+        "benchmarkLabel": "robustness"
+      },
+      {
+        "taskInput": "synthetic_task_cycle_3_5",
+        "reasoningTrace": [
+          "strategy=debate",
+          "seed=21",
+          "failureMode=reflection"
+        ],
+        "selectedStrategy": "debate",
+        "failureMode": "reflection",
+        "benchmarkLabel": "accuracy"
+      },
+      {
+        "taskInput": "synthetic_task_cycle_3_6",
+        "reasoningTrace": [
+          "strategy=debate",
+          "seed=21",
+          "failureMode=tree_of_thought"
+        ],
+        "selectedStrategy": "debate",
+        "failureMode": "tree_of_thought",
+        "benchmarkLabel": "robustness"
+      },
+      {
+        "taskInput": "synthetic_task_cycle_3_7",
+        "reasoningTrace": [
+          "strategy=debate",
+          "seed=21",
+          "failureMode=multi_debate"
+        ],
+        "selectedStrategy": "debate",
+        "failureMode": "multi_debate",
+        "benchmarkLabel": "accuracy"
+      },
+      {
+        "taskInput": "synthetic_task_cycle_3_8",
+        "reasoningTrace": [
+          "strategy=debate",
+          "seed=21",
+          "failureMode=self_consistency"
+        ],
+        "selectedStrategy": "debate",
+        "failureMode": "self_consistency",
+        "benchmarkLabel": "efficiency"
+      }
+    ]
+  },
+  {
+    "datasetVersion": 595,
+    "entries": [
+      {
+        "taskInput": "synthetic_task_cycle_4_0",
+        "reasoningTrace": [
+          "strategy=debate",
+          "seed=21",
+          "failureMode=SWE-Bench dropped from 1.0000 to 0.9000"
+        ],
+        "selectedStrategy": "debate",
+        "failureMode": "SWE-Bench dropped from 1.0000 to 0.9000",
+        "benchmarkLabel": "robustness"
+      },
+      {
+        "taskInput": "synthetic_task_cycle_4_1",
+        "reasoningTrace": [
+          "strategy=debate",
+          "seed=21",
+          "failureMode=HumanEval dropped from 1.0000 to 0.8950"
+        ],
+        "selectedStrategy": "debate",
+        "failureMode": "HumanEval dropped from 1.0000 to 0.8950",
+        "benchmarkLabel": "efficiency"
+      },
+      {
+        "taskInput": "synthetic_task_cycle_4_2",
+        "reasoningTrace": [
+          "strategy=debate",
+          "seed=21",
+          "failureMode=MMLU dropped from 1.0000 to 0.8970"
+        ],
+        "selectedStrategy": "debate",
+        "failureMode": "MMLU dropped from 1.0000 to 0.8970",
+        "benchmarkLabel": "efficiency"
+      },
+      {
+        "taskInput": "synthetic_task_cycle_4_3",
+        "reasoningTrace": [
+          "strategy=debate",
+          "seed=21",
+          "failureMode=ARC dropped from 1.0000 to 0.8960"
+        ],
+        "selectedStrategy": "debate",
+        "failureMode": "ARC dropped from 1.0000 to 0.8960",
+        "benchmarkLabel": "robustness"
+      },
+      {
+        "taskInput": "synthetic_task_cycle_4_4",
+        "reasoningTrace": [
+          "strategy=debate",
+          "seed=21",
+          "failureMode=direct"
+        ],
+        "selectedStrategy": "debate",
+        "failureMode": "direct",
+        "benchmarkLabel": "accuracy"
+      },
+      {
+        "taskInput": "synthetic_task_cycle_4_5",
+        "reasoningTrace": [
+          "strategy=debate",
+          "seed=21",
+          "failureMode=reflection"
+        ],
+        "selectedStrategy": "debate",
+        "failureMode": "reflection",
+        "benchmarkLabel": "robustness"
+      },
+      {
+        "taskInput": "synthetic_task_cycle_4_6",
+        "reasoningTrace": [
+          "strategy=debate",
+          "seed=21",
+          "failureMode=tree_of_thought"
+        ],
+        "selectedStrategy": "debate",
+        "failureMode": "tree_of_thought",
+        "benchmarkLabel": "accuracy"
+      },
+      {
+        "taskInput": "synthetic_task_cycle_4_7",
+        "reasoningTrace": [
+          "strategy=debate",
+          "seed=21",
+          "failureMode=multi_debate"
+        ],
+        "selectedStrategy": "debate",
+        "failureMode": "multi_debate",
+        "benchmarkLabel": "efficiency"
+      },
+      {
+        "taskInput": "synthetic_task_cycle_4_8",
+        "reasoningTrace": [
+          "strategy=debate",
+          "seed=21",
+          "failureMode=self_consistency"
+        ],
+        "selectedStrategy": "debate",
+        "failureMode": "self_consistency",
+        "benchmarkLabel": "efficiency"
+      }
+    ]
+  },
+  {
+    "datasetVersion": 596,
+    "entries": [
+      {
+        "taskInput": "synthetic_task_cycle_5_0",
+        "reasoningTrace": [
+          "strategy=debate",
+          "seed=21",
+          "failureMode=SWE-Bench dropped from 1.0000 to 0.9000"
+        ],
+        "selectedStrategy": "debate",
+        "failureMode": "SWE-Bench dropped from 1.0000 to 0.9000",
+        "benchmarkLabel": "efficiency"
+      },
+      {
+        "taskInput": "synthetic_task_cycle_5_1",
+        "reasoningTrace": [
+          "strategy=debate",
+          "seed=21",
+          "failureMode=HumanEval dropped from 1.0000 to 0.8950"
+        ],
+        "selectedStrategy": "debate",
+        "failureMode": "HumanEval dropped from 1.0000 to 0.8950",
+        "benchmarkLabel": "efficiency"
+      },
+      {
+        "taskInput": "synthetic_task_cycle_5_2",
+        "reasoningTrace": [
+          "strategy=debate",
+          "seed=21",
+          "failureMode=MMLU dropped from 1.0000 to 0.8970"
+        ],
+        "selectedStrategy": "debate",
+        "failureMode": "MMLU dropped from 1.0000 to 0.8970",
+        "benchmarkLabel": "robustness"
+      },
+      {
+        "taskInput": "synthetic_task_cycle_5_3",
+        "reasoningTrace": [
+          "strategy=debate",
+          "seed=21",
+          "failureMode=ARC dropped from 1.0000 to 0.8960"
+        ],
+        "selectedStrategy": "debate",
+        "failureMode": "ARC dropped from 1.0000 to 0.8960",
+        "benchmarkLabel": "accuracy"
+      },
+      {
+        "taskInput": "synthetic_task_cycle_5_4",
+        "reasoningTrace": [
+          "strategy=debate",
+          "seed=21",
+          "failureMode=direct"
+        ],
+        "selectedStrategy": "debate",
+        "failureMode": "direct",
+        "benchmarkLabel": "robustness"
+      },
+      {
+        "taskInput": "synthetic_task_cycle_5_5",
+        "reasoningTrace": [
+          "strategy=debate",
+          "seed=21",
+          "failureMode=reflection"
+        ],
+        "selectedStrategy": "debate",
+        "failureMode": "reflection",
+        "benchmarkLabel": "accuracy"
+      },
+      {
+        "taskInput": "synthetic_task_cycle_5_6",
+        "reasoningTrace": [
+          "strategy=debate",
+          "seed=21",
+          "failureMode=tree_of_thought"
+        ],
+        "selectedStrategy": "debate",
+        "failureMode": "tree_of_thought",
+        "benchmarkLabel": "efficiency"
+      },
+      {
+        "taskInput": "synthetic_task_cycle_5_7",
+        "reasoningTrace": [
+          "strategy=debate",
+          "seed=21",
+          "failureMode=multi_debate"
+        ],
+        "selectedStrategy": "debate",
+        "failureMode": "multi_debate",
+        "benchmarkLabel": "efficiency"
+      },
+      {
+        "taskInput": "synthetic_task_cycle_5_8",
+        "reasoningTrace": [
+          "strategy=debate",
+          "seed=21",
+          "failureMode=self_consistency"
+        ],
+        "selectedStrategy": "debate",
+        "failureMode": "self_consistency",
+        "benchmarkLabel": "efficiency"
+      }
+    ]
+  },
+  {
+    "datasetVersion": 597,
+    "entries": [
+      {
+        "taskInput": "synthetic_task_cycle_1_0",
+        "reasoningTrace": [
+          "strategy=debate",
+          "seed=31",
+          "failureMode=reflection"
+        ],
+        "selectedStrategy": "debate",
+        "failureMode": "reflection",
+        "benchmarkLabel": "efficiency"
+      },
+      {
+        "taskInput": "synthetic_task_cycle_1_1",
+        "reasoningTrace": [
+          "strategy=debate",
+          "seed=31",
+          "failureMode=tree_of_thought"
+        ],
+        "selectedStrategy": "debate",
+        "failureMode": "tree_of_thought",
+        "benchmarkLabel": "efficiency"
+      },
+      {
+        "taskInput": "synthetic_task_cycle_1_2",
+        "reasoningTrace": [
+          "strategy=debate",
+          "seed=31",
+          "failureMode=multi_debate"
+        ],
+        "selectedStrategy": "debate",
+        "failureMode": "multi_debate",
+        "benchmarkLabel": "efficiency"
+      },
+      {
+        "taskInput": "synthetic_task_cycle_1_3",
+        "reasoningTrace": [
+          "strategy=debate",
+          "seed=31",
+          "failureMode=self_consistency"
+        ],
+        "selectedStrategy": "debate",
+        "failureMode": "self_consistency",
+        "benchmarkLabel": "robustness"
+      }
+    ]
+  },
+  {
+    "datasetVersion": 598,
+    "entries": [
+      {
+        "taskInput": "synthetic_task_cycle_2_0",
+        "reasoningTrace": [
+          "strategy=debate",
+          "seed=31",
+          "failureMode=reflection"
+        ],
+        "selectedStrategy": "debate",
+        "failureMode": "reflection",
+        "benchmarkLabel": "efficiency"
+      },
+      {
+        "taskInput": "synthetic_task_cycle_2_1",
+        "reasoningTrace": [
+          "strategy=debate",
+          "seed=31",
+          "failureMode=tree_of_thought"
+        ],
+        "selectedStrategy": "debate",
+        "failureMode": "tree_of_thought",
+        "benchmarkLabel": "efficiency"
+      },
+      {
+        "taskInput": "synthetic_task_cycle_2_2",
+        "reasoningTrace": [
+          "strategy=debate",
+          "seed=31",
+          "failureMode=multi_debate"
+        ],
+        "selectedStrategy": "debate",
+        "failureMode": "multi_debate",
+        "benchmarkLabel": "robustness"
+      },
+      {
+        "taskInput": "synthetic_task_cycle_2_3",
+        "reasoningTrace": [
+          "strategy=debate",
+          "seed=31",
+          "failureMode=self_consistency"
+        ],
+        "selectedStrategy": "debate",
+        "failureMode": "self_consistency",
+        "benchmarkLabel": "robustness"
+      }
+    ]
+  },
+  {
+    "datasetVersion": 599,
+    "entries": [
+      {
+        "taskInput": "synthetic_task_cycle_3_0",
+        "reasoningTrace": [
+          "strategy=debate",
+          "seed=31",
+          "failureMode=reflection"
+        ],
+        "selectedStrategy": "debate",
+        "failureMode": "reflection",
+        "benchmarkLabel": "efficiency"
+      },
+      {
+        "taskInput": "synthetic_task_cycle_3_1",
+        "reasoningTrace": [
+          "strategy=debate",
+          "seed=31",
+          "failureMode=tree_of_thought"
+        ],
+        "selectedStrategy": "debate",
+        "failureMode": "tree_of_thought",
+        "benchmarkLabel": "robustness"
+      },
+      {
+        "taskInput": "synthetic_task_cycle_3_2",
+        "reasoningTrace": [
+          "strategy=debate",
+          "seed=31",
+          "failureMode=multi_debate"
+        ],
+        "selectedStrategy": "debate",
+        "failureMode": "multi_debate",
+        "benchmarkLabel": "robustness"
+      },
+      {
+        "taskInput": "synthetic_task_cycle_3_3",
+        "reasoningTrace": [
+          "strategy=debate",
+          "seed=31",
+          "failureMode=self_consistency"
+        ],
+        "selectedStrategy": "debate",
+        "failureMode": "self_consistency",
+        "benchmarkLabel": "accuracy"
+      }
+    ]
+  },
+  {
+    "datasetVersion": 600,
+    "entries": [
+      {
+        "taskInput": "synthetic_task_cycle_4_0",
+        "reasoningTrace": [
+          "strategy=debate",
+          "seed=31",
+          "failureMode=reflection"
+        ],
+        "selectedStrategy": "debate",
+        "failureMode": "reflection",
+        "benchmarkLabel": "robustness"
+      },
+      {
+        "taskInput": "synthetic_task_cycle_4_1",
+        "reasoningTrace": [
+          "strategy=debate",
+          "seed=31",
+          "failureMode=tree_of_thought"
+        ],
+        "selectedStrategy": "debate",
+        "failureMode": "tree_of_thought",
+        "benchmarkLabel": "robustness"
+      },
+      {
+        "taskInput": "synthetic_task_cycle_4_2",
+        "reasoningTrace": [
+          "strategy=debate",
+          "seed=31",
+          "failureMode=multi_debate"
+        ],
+        "selectedStrategy": "debate",
+        "failureMode": "multi_debate",
+        "benchmarkLabel": "accuracy"
+      },
+      {
+        "taskInput": "synthetic_task_cycle_4_3",
+        "reasoningTrace": [
+          "strategy=debate",
+          "seed=31",
+          "failureMode=self_consistency"
+        ],
+        "selectedStrategy": "debate",
+        "failureMode": "self_consistency",
+        "benchmarkLabel": "efficiency"
+      }
+    ]
+  },
+  {
+    "datasetVersion": 601,
+    "entries": [
+      {
+        "taskInput": "synthetic_task_cycle_5_0",
+        "reasoningTrace": [
+          "strategy=debate",
+          "seed=31",
+          "failureMode=reflection"
+        ],
+        "selectedStrategy": "debate",
+        "failureMode": "reflection",
+        "benchmarkLabel": "robustness"
+      },
+      {
+        "taskInput": "synthetic_task_cycle_5_1",
+        "reasoningTrace": [
+          "strategy=debate",
+          "seed=31",
+          "failureMode=tree_of_thought"
+        ],
+        "selectedStrategy": "debate",
+        "failureMode": "tree_of_thought",
+        "benchmarkLabel": "accuracy"
+      },
+      {
+        "taskInput": "synthetic_task_cycle_5_2",
+        "reasoningTrace": [
+          "strategy=debate",
+          "seed=31",
+          "failureMode=multi_debate"
+        ],
+        "selectedStrategy": "debate",
+        "failureMode": "multi_debate",
+        "benchmarkLabel": "efficiency"
+      },
+      {
+        "taskInput": "synthetic_task_cycle_5_3",
+        "reasoningTrace": [
+          "strategy=debate",
+          "seed=31",
+          "failureMode=self_consistency"
+        ],
+        "selectedStrategy": "debate",
+        "failureMode": "self_consistency",
+        "benchmarkLabel": "robustness"
+      }
+    ]
+  },
+  {
+    "datasetVersion": 602,
+    "entries": [
+      {
+        "taskInput": "synthetic_task_cycle_6_0",
+        "reasoningTrace": [
+          "strategy=debate",
+          "seed=31",
+          "failureMode=reflection"
+        ],
+        "selectedStrategy": "debate",
+        "failureMode": "reflection",
+        "benchmarkLabel": "accuracy"
+      },
+      {
+        "taskInput": "synthetic_task_cycle_6_1",
+        "reasoningTrace": [
+          "strategy=debate",
+          "seed=31",
+          "failureMode=tree_of_thought"
+        ],
+        "selectedStrategy": "debate",
+        "failureMode": "tree_of_thought",
+        "benchmarkLabel": "efficiency"
+      },
+      {
+        "taskInput": "synthetic_task_cycle_6_2",
+        "reasoningTrace": [
+          "strategy=debate",
+          "seed=31",
+          "failureMode=multi_debate"
+        ],
+        "selectedStrategy": "debate",
+        "failureMode": "multi_debate",
+        "benchmarkLabel": "robustness"
+      },
+      {
+        "taskInput": "synthetic_task_cycle_6_3",
+        "reasoningTrace": [
+          "strategy=debate",
+          "seed=31",
+          "failureMode=self_consistency"
+        ],
+        "selectedStrategy": "debate",
+        "failureMode": "self_consistency",
+        "benchmarkLabel": "efficiency"
+      }
+    ]
   }
 ]
