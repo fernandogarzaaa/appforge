@@ -1,0 +1,132 @@
+name: CI Regression Guard
+
+on:
+  workflow_run:
+    workflows:
+      - Dependency Upgrade Agent
+    types:
+      - completed
+
+jobs:
+  detect-regression:
+    if: ${{ github.event.workflow_run.conclusion == 'failure' }}
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      issues: write
+    steps:
+      - name: Detect repeated CI-fix failures
+        id: detect
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          CURRENT_RUN_ID: ${{ github.event.workflow_run.id }}
+          CURRENT_SHA: ${{ github.event.workflow_run.head_sha }}
+          CURRENT_URL: ${{ github.event.workflow_run.html_url }}
+        run: |
+          set -euo pipefail
+
+          current_subject=$(gh api "repos/$REPO/commits/$CURRENT_SHA" --jq '.commit.message' | head -n 1 || echo "")
+
+          mapfile -t failed_runs < <(
+            gh run list \
+              --repo "$REPO" \
+              --workflow "Dependency Upgrade Agent" \
+              --limit 60 \
+              --json databaseId,headSha,conclusion,createdAt \
+              | jq -r '.[] | select(.conclusion == "failure") | "\(.databaseId)|\(.headSha)|\(.createdAt)"'
+          )
+
+          declare -A seen_sha
+          previous_ci_fix_failures=0
+          previous_ci_fix_details=""
+
+          for row in "${failed_runs[@]}"; do
+            IFS='|' read -r run_id sha created_at <<< "$row"
+
+            if [[ "$run_id" == "$CURRENT_RUN_ID" ]]; then
+              continue
+            fi
+
+            if [[ -n "${seen_sha[$sha]:-}" ]]; then
+              continue
+            fi
+            seen_sha[$sha]=1
+
+            subject=$(gh api "repos/$REPO/commits/$sha" --jq '.commit.message' | head -n 1 || echo "")
+            if [[ "$subject" == ci:* ]]; then
+              previous_ci_fix_failures=$((previous_ci_fix_failures + 1))
+              previous_ci_fix_details+="- $sha ($created_at): $subject"$'\n'
+            fi
+
+            if [[ "$previous_ci_fix_failures" -ge 3 ]]; then
+              break
+            fi
+          done
+
+          regression_detected=false
+          if [[ "$current_subject" == ci:* ]] && [[ "$previous_ci_fix_failures" -ge 3 ]]; then
+            regression_detected=true
+          fi
+
+          {
+            echo "regression_detected=$regression_detected"
+            echo "current_subject=$current_subject"
+            echo "previous_ci_fix_failures=$previous_ci_fix_failures"
+            echo "current_url=$CURRENT_URL"
+            echo 'previous_ci_fix_details<<EOF'
+            printf '%s\n' "$previous_ci_fix_details"
+            echo 'EOF'
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Add run summary
+        if: always()
+        run: |
+          {
+            echo "## CI Regression Guard"
+            echo ""
+            echo "- Workflow: Dependency Upgrade Agent"
+            echo "- Current run: ${{ steps.detect.outputs.current_url }}"
+            echo "- Current commit subject: ${{ steps.detect.outputs.current_subject }}"
+            echo "- Previous failed ci:* SHAs: ${{ steps.detect.outputs.previous_ci_fix_failures }}"
+            echo "- Regression detected: ${{ steps.detect.outputs.regression_detected }}"
+            echo ""
+            echo "### Previous failed ci:* SHAs"
+            echo "${{ steps.detect.outputs.previous_ci_fix_details }}"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Create alert issue
+        if: steps.detect.outputs.regression_detected == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          title="CI Regression Guard: repeated failed ci:* commits for Dependency Upgrade Agent"
+          body=$(cat <<'EOF'
+          CI Regression Guard detected repeated failed ci:* commits for `Dependency Upgrade Agent`.
+
+          - Current run: ${{ steps.detect.outputs.current_url }}
+          - Current subject: `${{ steps.detect.outputs.current_subject }}`
+          - Previous failed ci:* SHAs count: `${{ steps.detect.outputs.previous_ci_fix_failures }}`
+
+          Previous failed ci:* SHAs:
+          ${{ steps.detect.outputs.previous_ci_fix_details }}
+
+          Action required: root-cause fix must land before additional ci:* patch churn.
+          EOF
+          )
+
+          existing_issue=$(gh issue list --repo "$REPO" --search "$title in:title state:open" --json number --jq '.[0].number // empty')
+          if [[ -n "$existing_issue" ]]; then
+            gh issue comment "$existing_issue" --repo "$REPO" --body "$body"
+          else
+            gh issue create --repo "$REPO" --title "$title" --body "$body" --label "ci"
+          fi
+
+      - name: Fail on detected regression churn
+        if: steps.detect.outputs.regression_detected == 'true'
+        run: |
+          echo "Repeated failed ci:* commits detected for Dependency Upgrade Agent." >&2
+          exit 1
