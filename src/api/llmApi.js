@@ -5,7 +5,14 @@
 
 import { getAuthToken } from './appforgeClient';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+const API_BASE_URL = (import.meta.env.VITE_API_URL || '').replace(/\/+$/, '');
+
+const withApiBase = (path) => {
+  if (API_BASE_URL) {
+    return `${API_BASE_URL}${path}`;
+  }
+  return path;
+};
 
 /**
  * Call LLM through backend API
@@ -25,7 +32,7 @@ export async function callLLM(prompt, options = {}) {
   try {
     const token = getAuthToken();
 
-    const response = await fetch(`${API_BASE_URL}/api/base44/llm`, {
+    const response = await fetch(withApiBase('/api/base44/llm'), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -82,7 +89,7 @@ export async function streamLLM(prompt, onChunk, options = {}) {
   try {
     const token = getAuthToken();
 
-    const response = await fetch(`${API_BASE_URL}/api/base44/llm/stream`, {
+    const response = await fetch(withApiBase('/api/base44/llm/stream'), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -147,7 +154,7 @@ export async function generateEmbedding(text) {
   try {
     const token = localStorage.getItem('token');
 
-    const response = await fetch(`${API_BASE_URL}/api/embeddings`, {
+    const response = await fetch(withApiBase('/api/embeddings'), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

@@ -8,9 +8,9 @@ export default async function handler(req, res) {
   }
 
   const apiKey = req.headers['x-api-key'];
-  const validKey = process.env.VITE_BASE44_API_KEY || 'appforge_local_dev_key';
-  
-  if (apiKey !== validKey) {
+  const validKey = process.env.APPFORGE_API_KEY;
+
+  if (validKey && apiKey !== validKey) {
     return res.status(401).json({ error: 'Unauthorized' });
   }
 

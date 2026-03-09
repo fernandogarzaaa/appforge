@@ -90,24 +90,79 @@ jobs:
         env:
           DEPLOY_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
 
-      - name: Post-Deploy Health Check
+      - name: LLM Readiness Probe
+        id: llm_probe
         if: steps.deploy_config.outputs.ready == 'true' && steps.deploy.outputs.deployed == 'true'
         run: |
-          echo "🏥 Running post-deploy health check..."
-          # Add health check for your deployed app
-          # curl -f https://appforge.fun/health || exit 1
-          echo "::notice::Post-deploy health check - configure your health endpoint"
+          HEALTH_ENDPOINT="${{ env.APP_PROD_URL || 'https://appforge-placeholder.vercel.app' }}/api/health/llm"
+          echo "?? Running LLM Readiness Probe against $HEALTH_ENDPOINT"
+          HTTP_CODE=$(curl -s -o probe_output.json -w "%{http_code}" --fail "$HEALTH_ENDPOINT")
+          if [ "$HTTP_CODE" -ne "200" ]; then
+            echo "::error::LLM Health Check FAILED: HTTP Status Code $HTTP_CODE. Endpoint unreachable or server error."
+            exit 1
+          fi
+          
+          # Use Node.js inline script for safe JSON parsing and setting outputs/summary
+          NODE_SCRIPT="
+            const fs = require('fs');
+            const data = JSON.parse(fs.readFileSync('probe_output.json', 'utf8'));
+            const configured = data.configured === true;
+            const hasApiKey = data.hasApiKey === true;
+            const baseUrlRaw = data.baseUrl || 'MASKED';
+            const model = data.model || 'unknown';
+            const embeddingModel = data.embeddingModel || 'unknown';
+            const timestamp = data.timestamp || 'N/A';
+            const safeBaseUrl = baseUrlRaw.replace(/sk-[a-zA-Z0-9]+|pplx-[a-zA-Z0-9]+/g, 'MASKED');
+            if (!configured) { process.exit(1); }
+            console.log(`configured=${configured}`); console.log(`hasApiKey=${hasApiKey}`); console.log(`baseUrl=${safeBaseUrl}`); console.log(`model=${model}`); console.log(`embeddingModel=${embeddingModel}`); console.log(`timestamp=${timestamp}`);
+          "
+          
+          NODE_OUTPUT=$(node -e "$NODE_SCRIPT")
+          echo "$NODE_OUTPUT" >> "$GITHUB_OUTPUT"
+          
+          echo "### LLM Readiness Probe Results" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Field | Value |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| :--- | :--- |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Endpoint Status | 200 OK |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| LLM Configured | ${{ steps.llm_probe.outputs.configured }} |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| LLM API Key Present | ${{ steps.llm_probe.outputs.hasApiKey }} |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Base URL | ${{ steps.llm_probe.outputs.baseUrl }} |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Model | ${{ steps.llm_probe.outputs.model }} |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Embedding Model | ${{ steps.llm_probe.outputs.embeddingModel }} |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Timestamp | ${{ steps.llm_probe.outputs.timestamp }} |" >> "$GITHUB_STEP_SUMMARY"
 
+        env:
+          APP_PROD_URL: ${{ secrets.APP_PROD_URL || 'https://appforge-placeholder.vercel.app' }}
+        shell: bash
       - name: Deployment summary
         if: always()
         run: |
           if [ "${{ steps.deploy_config.outputs.ready }}" = "true" ]; then
-            echo "✅ Production deployment executed." >> "$GITHUB_STEP_SUMMARY"
+            echo "? Production deployment executed." >> "$GITHUB_STEP_SUMMARY"
           else
-            echo "⚠️ Production deployment skipped because DEPLOY_TOKEN is not configured." >> "$GITHUB_STEP_SUMMARY"
+            echo "?? Production deployment skipped because DEPLOY_TOKEN is not configured." >> "$GITHUB_STEP_SUMMARY"
+          fi
+          
+          if [ "${{ steps.llm_probe.if }}" = "true" ]; then
+              echo "## LLM Readiness Check Status" >> "$GITHUB_STEP_SUMMARY"
+              echo "| Metric | Value |" >> "$GITHUB_STEP_SUMMARY"
+              echo "| :--- | :--- |" >> "$GITHUB_STEP_SUMMARY"
+              echo "| Configured | ${{ steps.llm_probe.outputs.configured }} |" >> "$GITHUB_STEP_SUMMARY"
+              echo "| API Key | ${{ steps.llm_probe.outputs.hasApiKey }} |" >> "$GITHUB_STEP_SUMMARY"
+              echo "| Base URL | ${{ steps.llm_probe.outputs.baseUrl }} |" >> "$GITHUB_STEP_SUMMARY"
+              echo "| Model | ${{ steps.llm_probe.outputs.model }} |" >> "$GITHUB_STEP_SUMMARY"
+              echo "| Embedding Model | ${{ steps.llm_probe.outputs.embeddingModel }} |" >> "$GITHUB_STEP_SUMMARY"
+              echo "| Timestamp | ${{ steps.llm_probe.outputs.timestamp }} |" >> "$GITHUB_STEP_SUMMARY"
           fi
 
       - name: Notify Deployment Status
+        if: always()
+        run: |
+          if [ "${{ job.status }}" == "success" ]; then
+            echo "? Deployment successful!"
+          else
+            echo "? Deployment failed"
+          fi      - name: Notify Deployment Status
         if: always()
         run: |
           if [ "${{ job.status }}" == "success" ]; then
@@ -124,3 +179,4 @@ jobs:
           path: dist/
           retention-days: 7
           if-no-files-found: ignore
+

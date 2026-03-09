@@ -6,22 +6,35 @@ import axios from 'axios';
  */
 export class AppForgeBridge {
     private localUrl: string;
-    private apiKey: string;
+    private apiKey?: string;
 
     constructor(localUrl?: string, apiKey = import.meta.env.VITE_BASE44_API_KEY) {
-        // Prioritize VITE_API_URL regarding Base44 Sovereign Deployment
-        this.localUrl = localUrl || import.meta.env.VITE_API_URL || 'http://localhost:3001';
+        this.localUrl = (localUrl || import.meta.env.VITE_API_URL || '').replace(/\/+$/, '');
         this.apiKey = apiKey;
+    }
+
+    private buildUrl(path: string) {
+        if (this.localUrl) {
+            return `${this.localUrl}${path}`;
+        }
+        return path;
+    }
+
+    private headers() {
+        const baseHeaders: Record<string, string> = {
+            'Content-Type': 'application/json'
+        };
+        if (this.apiKey) {
+            baseHeaders['x-api-key'] = this.apiKey;
+        }
+        return baseHeaders;
     }
 
     async sendCommand(task: string) {
         try {
             console.log(`🌁 BRIDGE: Sending task to ${this.localUrl}...`);
-            const response = await axios.post(`${this.localUrl}/api/command`, { task }, {
-                headers: {
-                    'x-api-key': this.apiKey,
-                    'Content-Type': 'application/json'
-                }
+            const response = await axios.post(this.buildUrl('/api/command'), { task }, {
+                headers: this.headers()
             });
             return response.data;
         } catch (error: any) {
@@ -32,10 +45,8 @@ export class AppForgeBridge {
 
     async startFactory() {
         try {
-            const response = await axios.post(`${this.localUrl}/api/factory/start`, {}, {
-                headers: {
-                    'x-api-key': this.apiKey
-                }
+            const response = await axios.post(this.buildUrl('/api/factory/start'), {}, {
+                headers: this.headers()
             });
             return response.data;
         } catch (error: any) {

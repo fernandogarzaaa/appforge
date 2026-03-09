@@ -24,7 +24,7 @@ const CodeVendingMachine: React.FC = () => {
     const triggerSwarmBuild = async () => {
         setIsBuilding(true);
         try {
-            await axios.post('http://localhost:3001/api/command', { task });
+            await axios.post('/api/command', { task });
         } catch (error) {
             console.error("Vending Machine Error:", error);
         } finally {

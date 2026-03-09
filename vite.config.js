@@ -14,6 +14,8 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': path.resolve(__dirname, 'src'),
+      'stream-browserify/web': path.resolve(__dirname, 'src/shims/stream-web.cjs'),
+      'node:stream/web': path.resolve(__dirname, 'src/shims/stream-web.cjs'),
     },
   },
   plugins: [

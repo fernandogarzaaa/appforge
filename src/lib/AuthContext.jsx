@@ -43,6 +43,16 @@ export const AuthProvider = ({ children }) => {
       setIsLoadingPublicSettings(true);
       setAuthError(null);
 
+      if (!appParams.appId) {
+        setAuthError({
+          type: 'app_misconfigured',
+          message: 'Missing app configuration (app_id / VITE_BASE44_APP_ID).'
+        });
+        setIsLoadingPublicSettings(false);
+        setIsLoadingAuth(false);
+        return;
+      }
+
       // First, check app public settings (with token if available)
       // This will tell us if auth is required, user not registered, etc.
       const appClient = createAxiosClient({

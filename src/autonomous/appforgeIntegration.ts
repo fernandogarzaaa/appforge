@@ -122,7 +122,7 @@ function setupAppForgeHealthMonitoring(system: AutonomousSystem): void {
 async function checkAppForgeHealth(system: AutonomousSystem): Promise<void> {
   // Check API connectivity
   try {
-    const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+    const apiUrl = import.meta.env.VITE_API_URL || '/api';
     const startTime = performance.now();
     const response = await fetch(`${apiUrl}/health`, { method: 'HEAD' });
     const latency = performance.now() - startTime;

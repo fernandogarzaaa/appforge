@@ -2,7 +2,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Terminal, Zap, Cpu } from 'lucide-react';
 import { io } from 'socket.io-client';
 
-const socket = io('http://localhost:3001');
+const socketUrl = import.meta.env.VITE_WS_URL;
+const socket = socketUrl ? io(socketUrl) : null;
 
 export default function CommandStream() {
     const [input, setInput] = useState('');
@@ -26,6 +27,8 @@ export default function CommandStream() {
     ];
 
     useEffect(() => {
+        if (!socket) return;
+
         socket.on('reply', (data: { text: string }) => {
             const lines = data.text.split('\n');
             setHistory(prev => [...prev, ...lines.map(l => `> ${l}`)]);
@@ -52,7 +55,11 @@ export default function CommandStream() {
         if (e.key === 'Enter' && input.trim()) {
             const cmd = input.trim();
             setHistory(prev => [...prev, `§ ${cmd}`]);
-            socket.emit('prompt', { text: cmd, id: Date.now().toString() });
+            if (socket) {
+                socket.emit('prompt', { text: cmd, id: Date.now().toString() });
+            } else {
+                setHistory(prev => [...prev, '> Real-time channel unavailable (VITE_WS_URL not configured).']);
+            }
             setInput('');
             setPrediction('');
         }

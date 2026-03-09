@@ -1,43 +1,53 @@
 import React, { useEffect, useState } from 'react';
-import { Shield, Cloud, Lock } from 'lucide-react';
+import { Cloud, Lock, AlertTriangle } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 
 export const SovereignStatus = () => {
-    const [mode, setMode] = useState('Checking...');
-    const [isLocal, setIsLocal] = useState(false);
+    const [isReady, setIsReady] = useState(false);
+    const [hasKey, setHasKey] = useState(true);
 
     useEffect(() => {
-        const checkOracle = async () => {
+        const checkRuntimeReadiness = async () => {
             try {
-                // Try to hit the local Rust Oracle port
-                const controller = new AbortController();
-                const timeoutId = setTimeout(() => controller.abort(), 1000);
-
-                await fetch('http://localhost:3002/api/oracle/validate', {
-                    method: 'POST',
-                    signal: controller.signal
+                const response = await fetch('/api/health/llm', {
+                    method: 'GET',
+                    cache: 'no-store'
                 });
 
-                setIsLocal(true);
-                setMode('Sovereign Mode');
+                if (!response.ok) {
+                    setIsReady(false);
+                    return;
+                }
+
+                const data = await response.json();
+                setIsReady(Boolean(data?.configured));
+                setHasKey(Boolean(data?.hasApiKey));
             } catch (e) {
-                setIsLocal(false);
-                setMode('Vibe Mode');
+                setIsReady(false);
             }
         };
 
-        checkOracle();
-        // Poll infrequently just to keep status somewhat fresh without spamming
-        const interval = setInterval(checkOracle, 10000);
+        checkRuntimeReadiness();
+        const interval = setInterval(checkRuntimeReadiness, 20000);
         return () => clearInterval(interval);
     }, []);
 
-    if (isLocal) {
+    if (isReady) {
         return (
             <Badge className="bg-emerald-500/10 text-emerald-400 border-emerald-500/20 px-3 py-1 text-[10px] font-bold uppercase tracking-wide flex items-center gap-1.5 transition-all">
                 <Lock className="w-3 h-3" />
-                SOVEREIGN ACTIVE
+                MVP READY
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse ml-1" />
+            </Badge>
+        );
+    }
+
+    if (!hasKey) {
+        return (
+            <Badge className="bg-amber-500/10 text-amber-400 border-amber-500/20 px-3 py-1 text-[10px] font-bold uppercase tracking-wide flex items-center gap-1.5 transition-all">
+                <AlertTriangle className="w-3 h-3" />
+                LLM KEY MISSING
+                <span className="w-1.5 h-1.5 rounded-full bg-amber-500 ml-1" />
             </Badge>
         );
     }

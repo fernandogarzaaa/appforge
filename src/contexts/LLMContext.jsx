@@ -444,7 +444,7 @@ Here's what I can suggest:
 2. **Use the template** patterns in this codebase
 3. **The quantum engine** is processing your request locally
 
-💡 **Tip:** For full AI capabilities, ensure the backend API is running at \`http://localhost:5000\` or configure \`VITE_API_URL\`.
+💡 **Tip:** For full AI capabilities, ensure your deployment exposes \`/api/base44/llm\` (or set \`VITE_API_URL\` to your backend origin).
 
 Would you like me to help with something specific using local quantum processing?`;
     }

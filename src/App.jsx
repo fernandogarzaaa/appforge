@@ -114,6 +114,17 @@ const AuthenticatedApp = ({ onSearchOpen }) => {
   if (authError) {
     if (authError.type === 'user_not_registered') {
       return <UserNotRegisteredError />;
+    } else if (authError.type === 'app_misconfigured') {
+      return (
+        <div className="fixed inset-0 flex items-center justify-center p-6">
+          <div className="max-w-xl text-center space-y-3">
+            <h2 className="text-xl font-bold text-slate-900">App Configuration Required</h2>
+            <p className="text-slate-600">
+              This deployment is missing required app configuration values. Set <strong>VITE_BASE44_APP_ID</strong> in environment variables and redeploy.
+            </p>
+          </div>
+        </div>
+      );
     } else if (authError.type === 'auth_required') {
       // Redirect to login automatically
       navigateToLogin();

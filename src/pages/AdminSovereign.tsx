@@ -34,6 +34,7 @@ import {
 import SignalDensityDisplay from '@/components/common/SignalDensityDisplay';
 
 const SocketContext = React.createContext<any>(null);
+const socketUrl = import.meta.env.VITE_WS_URL;
 
 const AdminSovereign = () => {
     const [socket, setSocket] = useState<any>(null);
@@ -50,7 +51,11 @@ const AdminSovereign = () => {
     const scrollRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        const newSocket = io('http://localhost:3001');
+        if (!socketUrl) {
+            return;
+        }
+
+        const newSocket = io(socketUrl);
         setSocket(newSocket);
 
         // Check if running in Electron

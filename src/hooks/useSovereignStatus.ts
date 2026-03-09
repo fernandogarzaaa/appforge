@@ -19,7 +19,7 @@ export function useSovereignStatus() {
 
     const fetchStatus = async () => {
         try {
-            const res = await fetch('http://localhost:3001/api/sovereign/status');
+            const res = await fetch('/api/sovereign/status');
             const data = await res.json();
             setStatus(data);
         } catch (e) {

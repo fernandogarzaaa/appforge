@@ -4,18 +4,18 @@ import env from '@/utils/env';
 // Storage key for auth token
 const TOKEN_STORAGE_KEY = 'appforge_auth_token';
 
+const normalizeBaseUrl = (value) => {
+  if (!value) return '';
+  return value.replace(/\/+$/, '');
+};
+
 // Determine the correct API URL based on environment
 // Priority: 1. VITE_API_URL env var, 2. Backend config, 3. Runtime detection
-let baseURL = import.meta.env.VITE_API_URL || env?.backend?.apiUrl;
+let baseURL = normalizeBaseUrl(import.meta.env.VITE_API_URL || env?.backend?.apiUrl);
 
-// If not configured, detect based on current window location
+// If not configured, prefer same-origin in browser
 if (!baseURL && typeof window !== 'undefined') {
-  const protocol = window.location.protocol;
-  const host = window.location.host;
-  baseURL = `${protocol}//${host}/api`;
-} else if (!baseURL) {
-  // Fallback for non-browser environments - use relative URL for Vercel
-  baseURL = '/api';
+  baseURL = window.location.origin;
 }
 
 const appforgeClient = axios.create({
@@ -48,6 +48,14 @@ export const clearAuthToken = () => {
 };
 
 appforgeClient.interceptors.request.use((config) => {
+  // Avoid duplicate /api/api paths when callers already include /api/*
+  if (typeof config.baseURL === 'string' && typeof config.url === 'string') {
+    const trimmedBase = config.baseURL.replace(/\/+$/, '');
+    if (trimmedBase.endsWith('/api') && config.url.startsWith('/api/')) {
+      config.url = config.url.replace(/^\/api/, '');
+    }
+  }
+
   const token = getAuthToken();
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;

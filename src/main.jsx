@@ -30,14 +30,14 @@ initializeAPI({
 
 // Set initial Sentry context
 setSentryContext('environment', {
-  apiUrl: import.meta.env.VITE_API_URL || 'http://localhost:5000/api',
-  wsUrl: import.meta.env.VITE_WS_URL || 'http://localhost:5001',
+  apiUrl: import.meta.env.VITE_API_URL || '/api',
+  wsUrl: import.meta.env.VITE_WS_URL || 'disabled',
   appVersion: import.meta.env.VITE_APP_VERSION || 'unknown',
 });
 
 console.log('[AppForge] API services initialized', {
-  apiUrl: import.meta.env.VITE_API_URL || 'http://localhost:5000/api',
-  wsUrl: import.meta.env.VITE_WS_URL || 'http://localhost:5001'
+  apiUrl: import.meta.env.VITE_API_URL || '/api',
+  wsUrl: import.meta.env.VITE_WS_URL || 'disabled'
 });
 
 ReactDOM.createRoot(document.getElementById('root')).render(
