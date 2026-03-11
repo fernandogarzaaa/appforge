@@ -1,10 +1,5 @@
 [
   {
-    "timestamp": "2026-03-06T13:05:33.764Z",
-    "directive": "Stabilize high-churn zone .github/workflows/swarm-dashboard.yml with tests and safeguards",
-    "confidence": 0.99
-  },
-  {
     "timestamp": "2026-03-06T16:49:24.998Z",
     "directive": "Stabilize high-churn zone .github/workflows/agent_dependency_upgrade_agent.yml with tests and safeguards",
     "confidence": 0.99
@@ -148,5 +143,10 @@
     "timestamp": "2026-03-11T08:50:44.220Z",
     "directive": "Autonomous feature generation for the Sovereign UI",
     "confidence": 0.5660498176758457
+  },
+  {
+    "timestamp": "2026-03-11T13:10:12.467Z",
+    "directive": "Stabilize high-churn zone swarm/swarm_memory.json with tests and safeguards",
+    "confidence": 0.99
   }
 ]
