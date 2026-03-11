@@ -589,6 +589,21 @@
       "failed_strategies": [],
       "created_at": "2026-03-11T05:15:10.464Z",
       "updated_at": "2026-03-11T05:18:48.524Z"
+    },
+    {
+      "id": "task_1773219220651_ci_failure_1",
+      "signal": "ci_failure",
+      "description": "repair CI pipeline: Detected failure markers in final_scan.txt",
+      "priority": 1,
+      "severity": 1,
+      "signal_count": 1,
+      "signal_details": "Detected failure markers in final_scan.txt",
+      "urgency_score": 115,
+      "retries": 0,
+      "status": "completed",
+      "failed_strategies": [],
+      "created_at": "2026-03-11T08:53:40.651Z",
+      "updated_at": "2026-03-11T08:57:08.337Z"
     }
   ]
 }
