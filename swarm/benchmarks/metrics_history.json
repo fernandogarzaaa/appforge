@@ -6362,5 +6362,91 @@
       "This suite is local and reproducible; it does not claim scientific AGI certification.",
       "Reasoning includes adversarial tasks to avoid keyword-only inflation."
     ]
+  },
+  {
+    "generatedAt": "2026-03-11T20:43:01.731Z",
+    "profile": "default",
+    "overall": {
+      "score": 97.5,
+      "threshold": 80,
+      "passed": true,
+      "verdict": "ADVANCED_AUTONOMOUS",
+      "trueHyperIntelligence": false
+    },
+    "dimensions": [
+      {
+        "name": "reasoning",
+        "score": 100,
+        "threshold": 70,
+        "passed": true,
+        "durationMs": 22.95,
+        "details": {
+          "directTasks": 8,
+          "directAccuracy": 100,
+          "adversarialTasks": 8,
+          "adversarialAccuracy": 100,
+          "avgConfidence": 99,
+          "failures": []
+        }
+      },
+      {
+        "name": "planning",
+        "score": 100,
+        "threshold": 80,
+        "passed": true,
+        "durationMs": 9.1,
+        "details": {
+          "checksPassed": "8/8",
+          "statusesCount": 4,
+          "godMessages": 2,
+          "financeMessages": 1,
+          "cryptoMessages": 1
+        }
+      },
+      {
+        "name": "coding",
+        "score": 100,
+        "threshold": 85,
+        "passed": true,
+        "durationMs": 714.47,
+        "details": {
+          "filesChecked": 10,
+          "filesPassed": 10,
+          "failingFiles": []
+        }
+      },
+      {
+        "name": "autonomy",
+        "score": 83.33,
+        "threshold": 80,
+        "passed": true,
+        "durationMs": 32.09,
+        "details": {
+          "checksPassed": "5/6",
+          "callbackHits": 8,
+          "pendingSignalsForBenchAgentB": 2,
+          "totalSignals": 4
+        }
+      },
+      {
+        "name": "reliability",
+        "score": 100,
+        "threshold": 90,
+        "passed": true,
+        "durationMs": 22.89,
+        "details": {
+          "operations": 70,
+          "success": 70,
+          "failures": 0,
+          "avgLatencyMs": 0.31,
+          "p95LatencyMs": 0.52
+        }
+      }
+    ],
+    "benchmarkDurationMs": 801.5,
+    "notes": [
+      "This suite is local and reproducible; it does not claim scientific AGI certification.",
+      "Reasoning includes adversarial tasks to avoid keyword-only inflation."
+    ]
   }
 ]
