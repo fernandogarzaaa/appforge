@@ -1,10 +1,5 @@
 [
   {
-    "timestamp": "2026-03-06T02:26:56.861Z",
-    "directive": "Stabilize high-churn zone build_logs.txt with tests and safeguards",
-    "confidence": 0.99
-  },
-  {
     "timestamp": "2026-03-06T08:44:06.861Z",
     "directive": "Stabilize high-churn zone swarm/swarm_memory.json with tests and safeguards",
     "confidence": 0.99
@@ -147,6 +142,11 @@
   {
     "timestamp": "2026-03-11T02:24:36.555Z",
     "directive": "Stabilize high-churn zone SWARM_STATUS.md with tests and safeguards",
+    "confidence": 0.99
+  },
+  {
+    "timestamp": "2026-03-11T05:14:27.834Z",
+    "directive": "Stabilize high-churn zone swarm/swarm_memory.json with tests and safeguards",
     "confidence": 0.99
   }
 ]
