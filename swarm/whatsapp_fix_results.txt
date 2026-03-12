@@ -1,6 +1,0 @@
-≡ƒº¬ [Verification] Replaying WhatsApp Logs through Bridge (Internal Mode)...
-
-ΓÜá∩╕Å VERIFICATION INCOMPLETE: No commands found in logs. (Maybe no messages sent today?)
-
-≡ƒôè Results: Found 0 valid commands in logs.
-≡ƒöì Raw Log check: "inbound message" exists? true

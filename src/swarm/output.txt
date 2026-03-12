@@ -1,8 +1,0 @@
-from swarmcomms import SwarmComms
-import time
-
-sc = SwarmComms()
-
-while True:
-    sc.publish("SIGNAL_DETECTED", {"signature": "MOCK_FIXED_123"})
-    time.sleep(1)

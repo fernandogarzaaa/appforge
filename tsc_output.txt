@@ -1,1 +1,0 @@
-swarm/core/p2p_resonance.ts(97,37): error TS2802: Type 'MapIterator<[string, WebSocket]>' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.

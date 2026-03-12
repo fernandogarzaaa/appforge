@@ -1,7 +1,0 @@
-≡ƒº¬ [Verification] Replaying WhatsApp Logs through Bridge (Internal Mode)...
-≡ƒô▒ [WhatsApp] Processing inbound: "Sovereign ping" from 120363407304493100@g.us
-
-≡ƒôè Results: Found 1 valid commands in logs.
-   ≡ƒö╕ Command identified: ping
-
-Γ£à VERIFICATION SUCCESS: Bridge is correctly parsing and matching logs.

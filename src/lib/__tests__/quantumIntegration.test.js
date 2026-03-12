@@ -16,7 +16,7 @@ import {
 
 describe('Quantum Core Integration', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   describe('initializeQuantumCore', () => {
@@ -36,7 +36,7 @@ describe('Quantum Core Integration', () => {
 
     it('should handle initialization errors gracefully', async () => {
       // Force re-initialization to test error handling
-      jest.resetModules();
+      vi.resetModules();
       try {
         await initializeQuantumCore();
       } catch (error) {
