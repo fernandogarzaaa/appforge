@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-03-12T05:20:37.945Z",
+  "generatedAt": "2026-03-11T13:18:28.229Z",
   "profile": "default",
   "overall": {
     "score": 97.29,
@@ -14,7 +14,7 @@
       "score": 100,
       "threshold": 70,
       "passed": true,
-      "durationMs": 25.43,
+      "durationMs": 25.74,
       "details": {
         "directTasks": 8,
         "directAccuracy": 100,
@@ -29,7 +29,7 @@
       "score": 100,
       "threshold": 80,
       "passed": true,
-      "durationMs": 9.8,
+      "durationMs": 9.64,
       "details": {
         "checksPassed": "8/8",
         "statusesCount": 4,
@@ -43,7 +43,7 @@
       "score": 100,
       "threshold": 85,
       "passed": true,
-      "durationMs": 745.35,
+      "durationMs": 766.25,
       "details": {
         "filesChecked": 10,
         "filesPassed": 10,
@@ -55,7 +55,7 @@
       "score": 83.33,
       "threshold": 80,
       "passed": true,
-      "durationMs": 35.88,
+      "durationMs": 32.39,
       "details": {
         "checksPassed": "5/6",
         "callbackHits": 8,
@@ -68,17 +68,17 @@
       "score": 98.57,
       "threshold": 90,
       "passed": true,
-      "durationMs": 32.64,
+      "durationMs": 30.21,
       "details": {
         "operations": 70,
         "success": 69,
         "failures": 1,
-        "avgLatencyMs": 0.45,
-        "p95LatencyMs": 0.78
+        "avgLatencyMs": 0.41,
+        "p95LatencyMs": 0.67
       }
     }
   ],
-  "benchmarkDurationMs": 849.1,
+  "benchmarkDurationMs": 864.23,
   "notes": [
     "This suite is local and reproducible; it does not claim scientific AGI certification.",
     "Reasoning includes adversarial tasks to avoid keyword-only inflation."
