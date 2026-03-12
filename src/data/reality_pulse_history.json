@@ -1,10 +1,5 @@
 [
   {
-    "timestamp": "2026-03-07T02:13:32.071Z",
-    "directive": "Stabilize high-churn zone .github/workflows/agent_dependency_upgrade_agent.yml with tests and safeguards",
-    "confidence": 0.99
-  },
-  {
     "timestamp": "2026-03-07T05:03:00.446Z",
     "directive": "Stabilize high-churn zone SWARM_STATUS.md with tests and safeguards",
     "confidence": 0.99
@@ -148,5 +143,10 @@
     "timestamp": "2026-03-11T20:39:30.160Z",
     "directive": "Autonomous feature generation for the Sovereign UI",
     "confidence": 0.5607723168951179
+  },
+  {
+    "timestamp": "2026-03-12T02:30:32.308Z",
+    "directive": "Stabilize high-churn zone SWARM_STATUS.md with tests and safeguards",
+    "confidence": 0.99
   }
 ]
