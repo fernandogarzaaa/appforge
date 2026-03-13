@@ -26,6 +26,8 @@ async function runToSingularity() {
     let iteration = 0;
     const maxIterations = 1000;
     let totalProgress = 0;
+    let progressStagnationCount = 0;
+    let lastProgress = 0;
 
     console.log('\n🚀 Starting continuous training loop...\n');
 
@@ -49,6 +51,20 @@ async function runToSingularity() {
         const singularityState = singularityEngine.getState();
 
         totalProgress = (hyperStatus.singularityReadiness * 0.5 + singularityState.progress * 0.5);
+
+        // Anti-Loop Logic: Detect Stagnation
+        if (Math.abs(totalProgress - lastProgress) < 0.001) {
+            progressStagnationCount++;
+            console.warn(`⚠️ Warning: Progress stagnated for ${progressStagnationCount} iterations.`);
+        } else {
+            progressStagnationCount = 0;
+            lastProgress = totalProgress;
+        }
+
+        if (progressStagnationCount >= 5) {
+            console.error('🚫 ANTI-LOOP TRIGGERED: Progress has stagnated. Halting.');
+            break;
+        }
 
         console.log('\n' + '-'.repeat(50));
         console.log('📊 PROGRESS REPORT');

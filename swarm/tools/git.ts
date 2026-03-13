@@ -13,7 +13,8 @@ export class GitTool {
     }
 
     async commit(message: string) {
-        await this.git.add('.');
+        // Exclude lockfiles to prevent autonomous loop commits
+        await this.git.add(['.', ':!Cargo.lock', ':!package-lock.json', ':!yarn.lock']);
         return await this.git.commit(message);
     }
 

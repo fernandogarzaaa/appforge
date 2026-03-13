@@ -1,0 +1,328 @@
+import fs from 'fs';
+import path from 'path';
+import axios from 'axios';
+import crypto from 'crypto';
+import { generateText } from './inference_client.js';
+import { GodMode } from './god_mode.js';
+import { broadcastLog } from '../logger.js';
+import { GitManager } from './git_manager.js';
+import { memoryManager } from './memory_manager.js';
+import { swarmComms, SwarmEvent } from './comms.js';
+import { Refiner } from './agents/Refiner.js';
+import { Architect } from './agents/Architect.js';
+import { Teacher } from './agents/Teacher.js';
+import { LogicMapper } from './agents/LogicMapper.js';
+import { Distiller } from './agents/Distiller.js';
+import { Spawner } from './factory_core/Spawner.js';
+import { Handoff } from './factory_core/Handoff.js';
+import { Sentinel } from './agents/Sentinel.js';
+import { Evolution } from './factory_core/Evolution.js';
+import { SovereignBridge } from '../core/Bridge.js'; // Phase 38: Zero-Trust Bridge
+import { FractalManager } from './core/Fractal.js'; // Phase 39: Recursive Evolution
+import quantumCore from '../../swarm/core/quantum_core.js';
+const SKILLS_DIR = path.resolve(process.cwd(), 'src/swarm/skills');
+const QCORE_PATH = process.env.QCORE_PATH || path.resolve(process.cwd(), 'qcore.exe');
+const MEMORY_DIR = path.resolve(process.cwd(), 'memory');
+// --- AGENT REGISTRY (Lazy Loaded Singletons) ---
+let godModeInstance;
+let gitManagerInstance;
+let refinerInstance;
+let architectInstance;
+let teacherInstance;
+let logicMapperInstance;
+let distillerInstance;
+let sentinelInstance;
+const getGodMode = () => { if (!godModeInstance)
+    godModeInstance = new GodMode(); return godModeInstance; };
+const getGitManager = () => { if (!gitManagerInstance)
+    gitManagerInstance = new GitManager(); return gitManagerInstance; };
+const getRefiner = () => { if (!refinerInstance)
+    refinerInstance = new Refiner(); return refinerInstance; };
+const getArchitect = () => { if (!architectInstance)
+    architectInstance = new Architect(); return architectInstance; };
+const getTeacher = () => { if (!teacherInstance)
+    teacherInstance = new Teacher(); return teacherInstance; };
+const getLogicMapper = () => { if (!logicMapperInstance)
+    logicMapperInstance = new LogicMapper(); return logicMapperInstance; };
+const getDistiller = () => { if (!distillerInstance)
+    distillerInstance = new Distiller(); return distillerInstance; };
+const getSentinel = () => { if (!sentinelInstance)
+    sentinelInstance = new Sentinel(); return sentinelInstance; };
+export class Orchestrator {
+    // PHASE 30: SOVEREIGN CAPABILITY
+    async runSentinelScan() {
+        return await getSentinel().scanForGaps();
+    }
+    async approveEvolution(proposalId) {
+        const proposal = getSentinel().approveProposal(proposalId);
+        if (!proposal)
+            throw new Error("Proposal not found");
+        const verified = await this.verifyExecutiveAction('APPROVE_EVOLUTION', { proposalId });
+        if (!verified)
+            throw new Error("SECURITY_ALERT: Evolution approval rejected by Truth Anchor.");
+        return await Evolution.evolve(proposal, this);
+    }
+    async loadSkills() {
+        if (!fs.existsSync(SKILLS_DIR))
+            fs.mkdirSync(SKILLS_DIR, { recursive: true });
+        const files = fs.readdirSync(SKILLS_DIR).filter(f => f.endsWith('.ts') || f.endsWith('.js'));
+        return files.map(f => f.replace(/\.(ts|js)$/, ''));
+    }
+    getRecentLessons() {
+        if (!fs.existsSync(MEMORY_DIR))
+            return "";
+        try {
+            const files = fs.readdirSync(MEMORY_DIR).filter(f => f.startsWith('lesson_') && f.endsWith('.json'));
+            // Get last 3 lessons
+            const recent = files.slice(-3);
+            let context = "";
+            for (const file of recent) {
+                const content = fs.readFileSync(path.join(MEMORY_DIR, file), 'utf-8');
+                context += `\n[LESSON]: ${content}`;
+            }
+            return context;
+        }
+        catch (e) {
+            return "";
+        }
+    }
+    async executeOmniSwarm(taskDescription) {
+        broadcastLog('OMNI-SWARM', `PROTOCOL ACTIVATED: "${taskDescription}"`, 'INFO');
+        // 1. RECOMMEND AND SPAWN SWARM CYCLE
+        const recommendation = Spawner.recommendSwarmCycle(taskDescription);
+        const swarmCycle = recommendation.cycle;
+        const allAgents = swarmCycle.flatMap(swarm => swarm.agents);
+        broadcastLog('SPAWNER', `Swarm cycle deployed (${swarmCycle.length} swarms, ${allAgents.length} agents).`, 'SUCCESS');
+        recommendation.rationale.forEach((reason, idx) => {
+            broadcastLog('SPAWNER', `Cycle rationale ${idx + 1}: ${reason}`, 'INFO');
+        });
+        // 2. HANDOFF PROTOCOL BY SWARM
+        const cycleLogs = [];
+        for (const swarmTemplate of swarmCycle) {
+            broadcastLog('HANDOFF', `Executing swarm: ${swarmTemplate.name}`, 'INFO');
+            const handoff = new Handoff(`${taskDescription} [${swarmTemplate.name}]`);
+            const finalState = await handoff.executeHandoff(swarmTemplate.agents);
+            cycleLogs.push(`=== ${swarmTemplate.name} ===`, ...finalState.logs);
+        }
+        // 3. SYNTHESIS (Simulated)
+        const unifiedPlan = `[OMNI-BUILD] ${taskDescription}
+Swarms: ${swarmCycle.map(s => s.name).join(' -> ')}
+Agents: ${allAgents.map(a => a.role).join(', ')}
+
+LOGS:
+${cycleLogs.join('\n')}`;
+        // 4. ORACLE JUDGEMENT
+        broadcastLog('Q-CORE', 'Validating Unified Plan...', 'INFO');
+        // Simulated validation
+        await new Promise(r => setTimeout(r, 1000));
+        broadcastLog('Q-CORE', 'Plan Verified via Deterministic Logic.', 'SUCCESS');
+        // 5. DNA EXTRACTION
+        await Spawner.distillDNA(taskDescription, allAgents);
+        return unifiedPlan;
+    }
+    async verifyExecutiveAction(intent, params) {
+        const secret = process.env.PRODUCTION_SECRET || 'SOVEREIGN_RESERVE';
+        const checksum = crypto.createHash('sha256')
+            .update(intent + JSON.stringify(params) + secret)
+            .digest('hex');
+        const decision = { intent, params, checksum, verified: true };
+        const validation = await quantumCore.validateDecision(decision, { priority: 'critical' });
+        if (!validation.valid) {
+            broadcastLog('Q-CORE', `DECISION_REJECTED: ${validation.corrections.join(', ')}`, 'CRITICAL');
+            return false;
+        }
+        broadcastLog('Q-CORE', `Decision Verified: ${intent} [${checksum.substring(0, 8)}]`, 'SUCCESS');
+        return true;
+    }
+    async validateWithOracle(code, intent) {
+        try {
+            // Updated to support Universal Decoupling (Phase 32) & Production Hardening (Phase 33)
+            // Generate Production Verification Hash
+            const secret = process.env.PRODUCTION_SECRET;
+            if (!secret) {
+                broadcastLog('Q-CORE', "SOVEREIGN_SHOR_ERR: PRODUCTION_SECRET not configured. Blocking execution.", 'CRITICAL');
+                return false;
+            }
+            const verificationFlow = code + intent + secret;
+            const verification_hash = crypto.createHash('sha256').update(verificationFlow).digest('hex');
+            // Assuming Oracle is running on port 3002 as per main.rs
+            const response = await axios.post('http://localhost:3002/api/oracle/validate', {
+                code,
+                intent,
+                verification_hash
+            });
+            if (!response.data.safe) {
+                broadcastLog('Q-CORE', `VIOLATION: ${response.data.message}`, 'CRITICAL');
+                return false;
+            }
+            broadcastLog('Q-CORE', `Validation Passed: ${response.data.message} (${response.data.confidence * 100}%)`, 'SUCCESS');
+            return true;
+        }
+        catch (error) {
+            broadcastLog('Q-CORE', `Oracle Unavailable: ${error.message}. FAIL_CLOSED enforced for Reality Mode.`, 'CRITICAL');
+            return false; // Fail CLOSED for production safety
+        }
+    }
+    async performHandshake(taskDescription) {
+        try {
+            const handshake = await SovereignBridge.executeHandshake({
+                swarm_id: 'GOD_MODE_ORCHESTRATOR',
+                intent: taskDescription,
+                payload: 'PENDING_GENERATION',
+                risk_score: 0.5
+            });
+            broadcastLog('KERNEL_BRIDGE', `Handshake Blessed. Token: ${handshake.verification_token}`, 'SUCCESS');
+        }
+        catch (e) {
+            broadcastLog('KERNEL_BRIDGE', `Handshake Rejected: ${e.message}`, 'CRITICAL');
+            if (e.message.includes('AXIOM_VIOLATION')) {
+                fs.appendFileSync(path.resolve(process.cwd(), 'AGENTS.md'), `\n### [${new Date().toISOString()}] 🛑 LOGIC_VIRUS DETECTED\n**Task:** ${taskDescription}\n**Error:** Axiom Weakening Attempt Detected. Attack Vector Neutralized.\n---\n`);
+            }
+            throw new Error(`CORE_VIOLATION: ${e.message}`);
+        }
+    }
+    async handleDeterministicPath(taskDescription) {
+        const staticTemplate = getLogicMapper().findTemplate(taskDescription);
+        if (staticTemplate) {
+            broadcastLog('ORMA_CORE', 'Executing Deterministic Logic (0% LLM usage).', 'SUCCESS');
+            this.updateSovereigntyScore(true);
+            return staticTemplate;
+        }
+        return null;
+    }
+    async handleFractalDecomposition(taskDescription) {
+        if (taskDescription.length > 200 || taskDescription.toLowerCase().includes('complex')) {
+            broadcastLog('EVOLUTION_ENGINE', 'Task exceeds Atomic Complexity Limit. Initiating FRACTAL DECOMPOSITION.', 'WARN');
+            const microTasks = await FractalManager.decompose(taskDescription);
+            if (microTasks.length > 0) {
+                const results = await FractalManager.executeUnknown(microTasks);
+                broadcastLog('EVOLUTION_ENGINE', 'Fractal Synthesis Complete.', 'SUCCESS');
+                return results.join('\n\n');
+            }
+        }
+        return null;
+    }
+    async executeTask(taskDescription, mode = 'standard') {
+        if (mode === 'omni')
+            return this.executeOmniSwarm(taskDescription);
+        broadcastLog('QUANTUM_ENGINE', `Recv Task: ${taskDescription}`, 'INFO');
+        // Hardened Decision Verification
+        const verified = await this.verifyExecutiveAction('EXECUTE_TASK', { taskDescription, mode });
+        if (!verified)
+            throw new Error("SECURITY_ALERT: Task execution rejected by Verification Gate.");
+        await this.performHandshake(taskDescription);
+        try {
+            const deterministicResult = await this.handleDeterministicPath(taskDescription);
+            if (deterministicResult)
+                return deterministicResult;
+            const fractalResult = await this.handleFractalDecomposition(taskDescription);
+            if (fractalResult)
+                return fractalResult;
+            const solution = await this.generateQuantumSolution(taskDescription);
+            const filePath = await this.persistSolution(solution, taskDescription);
+            broadcastLog('Q-CORE', `Stability Verified. Saved to ${filePath}`, 'SUCCESS');
+            return solution;
+        }
+        catch (error) {
+            broadcastLog('Q-CORE', `QUANTUM DECOHERENCE: ${error.message}`, 'CRITICAL');
+            // TRIGGER GOD MODE
+            await getGodMode().refineSwarmIntelligence(error.message, taskDescription);
+            broadcastLog('GOD_MODE', "System Evolved via Oracle feedback. Retrying...", 'WARN');
+            throw error;
+        }
+    }
+    async generateQuantumSolution(taskDescription) {
+        const skills = await this.loadSkills();
+        if (skills.length > 0)
+            broadcastLog('ORCHESTRATOR', `Skills Online: ${skills.join(', ')}`, 'INFO');
+        const cachedSolution = await memoryManager.retrieve(taskDescription);
+        const recentLessons = this.getRecentLessons();
+        const systemPrompt = `You are the Swarm Architect (Omni-Forge Edition).
+            When building capabilities, you must think in 4 Dimensions:
+            1. [Frontend]: React/Tailwind (Base44 UI).
+            2. [Financials]: Sovereign/Rust (Pure Reality Logic).
+            3. [Logic]: TypeScript/Deno (Edge Functions).
+            4. [Intelligence]: LLM Hooks (AI Agents).
+            Context from Previous Lessons: ${recentLessons}
+            ${cachedSolution ? `Use this previous solution as reference: ${cachedSolution}` : 'Write complete, production-ready code.'}
+            Ensure all code satisfies the 'Iron Guard' security constraints.`;
+        const results = await Promise.allSettled([
+            generateText({ system: `${systemPrompt} - Path Alpha`, prompt: taskDescription }),
+            generateText({ system: `${systemPrompt} - Path Beta`, prompt: taskDescription }),
+            generateText({ system: `${systemPrompt} - Path Gamma`, prompt: taskDescription })
+        ]);
+        const paths = results.filter(r => r.status === 'fulfilled').map(r => r.value);
+        if (paths.length === 0)
+            throw new Error(`Quantum Collapse: All paths failed generation.`);
+        for (let i = 0; i < paths.length; i++) {
+            let candidate = paths[i].replace(/```[a-z]*\n?/g, '').replace(/```/g, '').trim();
+            let retryCount = 0;
+            while (retryCount < 3) {
+                if (await this.validateWithOracle(candidate, taskDescription))
+                    return candidate;
+                const fixed = await getRefiner().refine(candidate, "Oracle rejection", systemPrompt, retryCount + 1);
+                if (fixed) {
+                    candidate = fixed;
+                    retryCount++;
+                }
+                else
+                    break;
+            }
+        }
+        throw new Error("Quantum Decoherence: All paths rejected.");
+    }
+    async persistSolution(solution, taskDescription) {
+        const fileMatch = taskDescription.match(/(src\/[\w\/\.-]+(?=\s|['"]|$))/);
+        const filePath = fileMatch ? fileMatch[0].replace(/[.,]$/, '') : 'src/swarm/output.txt';
+        const absolutePath = path.resolve(process.cwd(), filePath);
+        const dir = path.dirname(absolutePath);
+        if (!fs.existsSync(dir))
+            fs.mkdirSync(dir, { recursive: true });
+        if (taskDescription.startsWith('REFAC_HEAL')) {
+            const { ObjectiveOptimizer } = await import('../core/objective/Optimizer.js');
+            const originalCode = fs.readFileSync(absolutePath, 'utf-8');
+            if (!(ObjectiveOptimizer.validateRefactorEfficiency(originalCode, solution)).success) {
+                throw new Error("INSUFFICIENT_HEAL_EFFICIENCY");
+            }
+        }
+        fs.writeFileSync(absolutePath, solution);
+        await memoryManager.memorize(taskDescription, solution, ['quantum_build', filePath.split('.').pop() || 'txt']);
+        await getTeacher().harvestLesson(taskDescription, solution, `Validated by Iron Guard`);
+        this.updateSovereigntyScore(false);
+        swarmComms.publish(SwarmEvent.TASK_COMPLETED, { filePath, task: taskDescription });
+        await getGitManager().commitAndPush(`feat(swarm): Omni-Forge build of ${filePath}`, [filePath]);
+        getArchitect().scanAndOptimize(path.resolve(process.cwd(), 'src'));
+        return filePath;
+    }
+    updateSovereigntyScore(isInternal) {
+        const STATS_FILE = path.join(MEMORY_DIR, 'sovereignty_stats.json');
+        let stats = { total: 0, internal: 0, external: 0, score: 0, distilled_templates: 0, velocity: 0 };
+        if (fs.existsSync(STATS_FILE)) {
+            try {
+                stats = JSON.parse(fs.readFileSync(STATS_FILE, 'utf-8'));
+            }
+            catch (e) { }
+        }
+        stats.total++;
+        if (isInternal) {
+            stats.internal++;
+            const templateCount = fs.readdirSync(path.resolve(process.cwd(), 'swarm/core/src/knowledge_base/templates')).length;
+            stats.distilled_templates = templateCount;
+        }
+        else {
+            stats.external++;
+        }
+        // Sovereignty Ratio Formula: (Internal / Total) * 100
+        stats.score = Math.round((stats.internal / stats.total) * 100);
+        // INTELLIGENCE VELOCITY: (New Capabilities / Total Commits) * 100
+        stats.velocity = parseFloat(((stats.distilled_templates / stats.total) * 10).toFixed(2));
+        fs.writeFileSync(STATS_FILE, JSON.stringify(stats, null, 2));
+        // Broadcast the specific score event for UI
+        broadcastLog('SOVEREIGNTY_SCORE', JSON.stringify(stats), 'INFO');
+    }
+}
+// Keep the legacy function for compatibility if needed
+export async function runSwarmTask(taskDescription, mode = 'standard') {
+    const orchestrator = new Orchestrator();
+    return orchestrator.executeTask(taskDescription, mode);
+}

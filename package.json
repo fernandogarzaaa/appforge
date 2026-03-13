@@ -14,7 +14,7 @@
     "build:production": "vite build --mode production",
     "lint": "eslint . --quiet",
     "lint:fix": "eslint . --fix",
-    "typecheck": "tsc -p ./jsconfig.json",
+    "typecheck": "tsc -p ./tsconfig.json",
     "preview": "vite preview",
     "swarm:scout": "npx tsx scripts/scout_synergy.ts",
     "swarm:analyze": "npx tsx scripts/analyze_antigravity.ts",

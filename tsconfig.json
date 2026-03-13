@@ -16,6 +16,7 @@
     "resolveJsonModule": true,
     "allowJs": false,
     "allowImportingTsExtensions": true,
+    "noEmit": true,
     "typeRoots": ["./types", "./node_modules/@types"],
     "strict": false,
     "noImplicitAny": false,
@@ -39,10 +40,9 @@
     "**/__tests__/**",
     "src/test/**",
     "src/tests/**",
-    "tests/**"
-  ],
-  "deno": {
-    "enable": true,
-    "unstable": true
-  }
+    "tests/**",
+    "AutoGPT/**",
+    "RuView/**",
+    "litellm/**"
+  ]
 } 
