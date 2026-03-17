@@ -1,10 +1,5 @@
 [
   {
-    "timestamp": "2026-03-12T20:41:11.002Z",
-    "directive": "Stabilize high-churn zone build_logs.txt with tests and safeguards",
-    "confidence": 0.99
-  },
-  {
     "timestamp": "2026-03-13T02:28:24.507Z",
     "directive": "Recursive self-optimization of local inference (Neural Bridge)",
     "confidence": 0.5550390193818009
@@ -148,5 +143,10 @@
     "timestamp": "2026-03-17T17:07:35.555Z",
     "directive": "Autonomous feature generation for the Sovereign UI",
     "confidence": 0.5526284059461586
+  },
+  {
+    "timestamp": "2026-03-17T20:44:57.211Z",
+    "directive": "Stabilize high-churn zone build_logs.txt with tests and safeguards",
+    "confidence": 0.99
   }
 ]
