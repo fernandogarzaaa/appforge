@@ -1,38 +1,58 @@
 
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import QuantumEngine from '../../scripts/lib/QuantumEnginePortable.js';
-
-const engine = new QuantumEngine();
 
 const QuantumDashboard = () => {
     const [systemState, setSystemState] = useState({
         agents: [],
         coherence: 0,
         energy: 0,
-        taskId: ''
+        taskId: 'Connecting...'
     });
 
     useEffect(() => {
-        // Initialize the engine's swarm for visualization
-        if (engine.swarm.agents.length === 0) {
-            engine.swarm.addAgent('GodMode', 'Omniscient');
-            engine.swarm.addAgent('Architect', 'Design');
-            engine.swarm.addAgent('Optimizer', 'Speed');
-        }
+        const fetchSystemData = async () => {
+            try {
+                // Fetch from the real MCP backend
+                const response = await fetch('http://localhost:8000/mcp', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        jsonrpc: '2.0',
+                        method: 'tools/call',
+                        params: {
+                            name: 'get_system_status',
+                            arguments: {}
+                        },
+                        id: 1
+                    })
+                });
 
-        const interval = setInterval(async () => {
-            // Simulate/Get Real State
-            // In a real scenario, this would poll the actual running swarm
-            const swarmState = await engine.swarm.processTask('System Health Check');
+                if (!response.ok) throw new Error('Network response was not ok');
+                
+                const data = await response.json();
+                
+                // Assuming the response structure based on common agent patterns
+                // Adjusting to what the dashboard expects
+                if (data.result) {
+                    setSystemState({
+                        agents: data.result.agents || [],
+                        coherence: data.result.coherence || 0,
+                        energy: data.result.energy || 0,
+                        taskId: data.result.taskId || 'IDLE'
+                    });
+                }
+            } catch (error) {
+                console.error('Failed to fetch system metrics:', error);
+                // Graceful degradation or error display
+            }
+        };
 
-            setSystemState({
-                agents: engine.swarm.agents,
-                coherence: swarmState.swarmAlignment,
-                energy: Math.random() * 100, // Simulated Quantum Energy
-                taskId: swarmState.taskId
-            });
-        }, 2000);
+        // Poll every 2 seconds
+        const interval = setInterval(fetchSystemData, 2000);
+        
+        // Initial fetch
+        fetchSystemData();
 
         return () => clearInterval(interval);
     }, []);
@@ -78,27 +98,29 @@ const QuantumDashboard = () => {
                         </h2>
 
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                            {systemState.agents.map((agent, idx) => (
-                                <motion.div
-                                    key={idx}
-                                    initial={{ scale: 0.9, opacity: 0 }}
-                                    animate={{ scale: 1, opacity: 1 }}
-                                    transition={{ delay: idx * 0.1 }}
-                                    className="bg-black/40 border border-cyan-500/20 p-4 rounded hover:border-cyan-400/60 transition-colors"
-                                >
-                                    <div className="text-xs text-purple-400 mb-1">{agent.role.toUpperCase()}</div>
-                                    <div className="text-lg font-bold">{agent.name}</div>
-                                    <div className="mt-2 w-full bg-slate-700 h-1 rounded-full overflow-hidden">
-                                        <motion.div
-                                            className="bg-cyan-400 h-full"
-                                            style={{ width: `${Math.random() * 100}%` }}
-                                            animate={{ width: [`${Math.random() * 100}%`, `${Math.random() * 100}%`] }}
-                                            transition={{ repeat: Infinity, duration: 2, ease: "linear" }}
-                                        />
-                                    </div>
-                                    <div className="text-[10px] text-right mt-1 text-cyan-500/60">CPU: {Math.floor(Math.random() * 100)}%</div>
-                                </motion.div>
-                            ))}
+                            {systemState.agents.length > 0 ? (
+                                systemState.agents.map((agent, idx) => (
+                                    <motion.div
+                                        key={idx}
+                                        initial={{ scale: 0.9, opacity: 0 }}
+                                        animate={{ scale: 1, opacity: 1 }}
+                                        transition={{ delay: idx * 0.1 }}
+                                        className="bg-black/40 border border-cyan-500/20 p-4 rounded hover:border-cyan-400/60 transition-colors"
+                                    >
+                                        <div className="text-xs text-purple-400 mb-1">{agent.role ? agent.role.toUpperCase() : 'AGENT'}</div>
+                                        <div className="text-lg font-bold">{agent.name || 'Unnamed Agent'}</div>
+                                        <div className="mt-2 w-full bg-slate-700 h-1 rounded-full overflow-hidden">
+                                            <motion.div
+                                                className="bg-cyan-400 h-full"
+                                                style={{ width: `${agent.load || 50}%` }}
+                                            />
+                                        </div>
+                                        <div className="text-[10px] text-right mt-1 text-cyan-500/60">CPU: {agent.load || 50}%</div>
+                                    </motion.div>
+                                ))
+                            ) : (
+                                <div className="text-cyan-500/50 italic">No agents detected.</div>
+                            )}
                         </div>
                     </div>
 
@@ -129,11 +151,9 @@ const QuantumDashboard = () => {
                 {/* Terminal Log */}
                 <div className="mt-6 bg-black/80 border border-slate-700 rounded-lg p-4 font-mono text-xs text-green-400 h-48 overflow-y-auto shadow-inner">
                     <div className="opacity-50 mb-2">// QUANTUM TERMINAL STREAM</div>
-                    {['Initializing Superposition...', 'Entangling Qubits...', 'Swarm Consensus Reached...', 'Optimizing Neural Pathways...'].map((log, i) => (
-                        <div key={i} className="mb-1">
-                            <span className="text-slate-500">[{new Date().toLocaleTimeString()}]</span> {log}
-                        </div>
-                    ))}
+                    <div className="mb-1">
+                        <span className="text-slate-500">[{new Date().toLocaleTimeString()}]</span> Connected to Backend: http://localhost:8000/mcp
+                    </div>
                     <div className="animate-pulse">_</div>
                 </div>
             </motion.div>

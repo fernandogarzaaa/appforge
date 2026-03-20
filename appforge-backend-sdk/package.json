@@ -1,0 +1,9 @@
+{
+    "main":  "src/index.ts",
+    "description":  "Lightweight offline-first AppForge backend SDK",
+    "name":  "@appforge/backend-sdk",
+    "version":  "1.0.0",
+    "scripts":  {
+                    "build":  "tsc"
+                }
+}

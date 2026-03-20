@@ -1,0 +1,62 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "AppForge Backend SDK API",
+    "version": "1.0.0",
+    "description": "Autonomous API documentation for AppForge backend services"
+  },
+  "paths": {
+    "/auth/register": {
+      "post": {
+        "summary": "User registration",
+        "operationId": "register",
+        "responses": { "200": { "description": "Success" } }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "summary": "User login",
+        "operationId": "login",
+        "responses": { "200": { "description": "Success" } }
+      }
+    },
+    "/auth/verify-email-code": {
+      "post": {
+        "summary": "Verify email with code",
+        "operationId": "verifyEmailWithCode",
+        "responses": { "200": { "description": "Success" } }
+      }
+    },
+    "/auth/verify-email-token": {
+      "post": {
+        "summary": "Verify email with token",
+        "operationId": "verifyEmailWithToken",
+        "responses": { "200": { "description": "Success" } }
+      }
+    },
+    "/storage/objects": {
+      "post": {
+        "summary": "Put object",
+        "operationId": "putObject",
+        "responses": { "200": { "description": "Success" } }
+      },
+      "get": {
+        "summary": "List objects",
+        "operationId": "listObjects",
+        "responses": { "200": { "description": "Success" } }
+      }
+    },
+    "/database/tables": {
+      "get": {
+        "summary": "List tables",
+        "operationId": "listTables",
+        "responses": { "200": { "description": "Success" } }
+      },
+      "post": {
+        "summary": "Create table",
+        "operationId": "createTable",
+        "responses": { "200": { "description": "Success" } }
+      }
+    }
+  }
+}
