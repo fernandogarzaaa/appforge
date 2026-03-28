@@ -1,10 +1,5 @@
 [
   {
-    "timestamp": "2026-03-23T05:42:30.422Z",
-    "directive": "Stabilize high-churn zone build_logs.txt with tests and safeguards",
-    "confidence": 0.99
-  },
-  {
     "timestamp": "2026-03-23T09:02:51.854Z",
     "directive": "Autonomous feature generation for the Sovereign UI",
     "confidence": 0.5530750886818355
@@ -148,5 +143,10 @@
     "timestamp": "2026-03-28T02:33:54.465Z",
     "directive": "Autonomous feature generation for the Sovereign UI",
     "confidence": 0.5508336043098148
+  },
+  {
+    "timestamp": "2026-03-28T05:23:38.886Z",
+    "directive": "Stabilize high-churn zone build_logs.txt with tests and safeguards",
+    "confidence": 0.99
   }
 ]
