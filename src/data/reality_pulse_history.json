@@ -1,10 +1,5 @@
 [
   {
-    "timestamp": "2026-07-12T20:59:36.742Z",
-    "directive": "Autonomous feature generation for the Sovereign UI",
-    "confidence": 0.5579482830830655
-  },
-  {
     "timestamp": "2026-07-13T03:37:26.579Z",
     "directive": "Stabilize high-churn zone SWARM_STATUS.md with tests and safeguards",
     "confidence": 0.99
@@ -148,5 +143,10 @@
     "timestamp": "2026-07-17T17:19:17.015Z",
     "directive": "Stabilize high-churn zone SWARM_STATUS.md with tests and safeguards",
     "confidence": 0.99
+  },
+  {
+    "timestamp": "2026-07-17T21:03:28.471Z",
+    "directive": "Autonomous feature generation for the Sovereign UI",
+    "confidence": 0.5597939272814987
   }
 ]
