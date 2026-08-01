@@ -8,45 +8,45 @@
       "priority": 0.6,
       "reward": 60,
       "category": "growth",
-      "id": "BTY-1785591837368-21",
+      "id": "BTY-1785604169606-953",
       "status": "backlog",
-      "createdAt": "2026-08-01T13:43:57.368Z"
+      "createdAt": "2026-08-01T17:09:29.606Z"
     },
     {
       "description": "[Neural Accelerator] EXPERT_GROWTH: Market capture (Coherence: 1.00)",
       "priority": 0.5,
       "reward": 50,
       "category": "growth",
-      "id": "BTY-1785591837404-118",
+      "id": "BTY-1785604169650-472",
       "status": "backlog",
-      "createdAt": "2026-08-01T13:43:57.404Z"
+      "createdAt": "2026-08-01T17:09:29.650Z"
     },
     {
       "description": "[Neural Accelerator] EXPERT_GROWTH: Market capture (Coherence: 1.00)",
       "priority": 0.85,
       "reward": 85,
       "category": "growth",
-      "id": "BTY-1785591837440-902",
+      "id": "BTY-1785604169673-540",
       "status": "backlog",
-      "createdAt": "2026-08-01T13:43:57.440Z"
+      "createdAt": "2026-08-01T17:09:29.673Z"
     },
     {
       "description": "[Neural Accelerator] EXPERT_GROWTH: Market capture (Coherence: 1.00)",
-      "priority": 0.1458287239644545,
+      "priority": 0.14536508801562967,
       "reward": 15,
       "category": "growth",
-      "id": "BTY-1785591837477-887",
+      "id": "BTY-1785604169704-708",
       "status": "backlog",
-      "createdAt": "2026-08-01T13:43:57.477Z"
+      "createdAt": "2026-08-01T17:09:29.704Z"
     },
     {
       "description": "[Neural Accelerator] EXPERT_GROWTH: Market capture (Coherence: 1.00)",
-      "priority": 0.3325,
-      "reward": 33,
+      "priority": 0.33625,
+      "reward": 34,
       "category": "growth",
-      "id": "BTY-1785591837502-875",
+      "id": "BTY-1785604169742-390",
       "status": "backlog",
-      "createdAt": "2026-08-01T13:43:57.502Z"
+      "createdAt": "2026-08-01T17:09:29.742Z"
     }
   ]
 }
