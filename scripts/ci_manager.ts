@@ -16,6 +16,9 @@ import {
 } from './swarm_state_machine.js';
 import { evaluateSwarmHeartbeat } from './swarm_heartbeat.js';
 
+const SWARM_COMMAND_QUEUE = process.env.SWARM_COMMAND_QUEUE || 'appforge:swarm_commands';
+const SWARM_NODE_DISPATCH_ONLY = process.env.SWARM_NODE_DISPATCH_ONLY !== 'false';
+
 interface SwarmState {
     last_updated: string;
     ci: { status: string; last_green_sha?: string; last_fail_reason?: string; build_duration?: string };
@@ -426,6 +429,42 @@ async function orchestrate() {
     }
 
     console.log(`🎯 [CI Manager] Decision: ${nextAction} (${reason})`);
+}
+
+async function enqueueSwarmCommand(agent: string, runId: string, payload: Record<string, unknown>) {
+    const url = process.env.UPSTASH_REDIS_REST_URL;
+    const token = process.env.UPSTASH_REDIS_REST_TOKEN;
+
+    if (!url || !token) {
+        return { ok: false, error: 'UPSTASH_REDIS_REST_URL or UPSTASH_REDIS_REST_TOKEN missing' };
+    }
+
+    const command = {
+        command: 'run_agent',
+        agent,
+        run_id: runId,
+        payload,
+        requested_at: new Date().toISOString()
+    };
+
+    const encodedQueue = encodeURIComponent(SWARM_COMMAND_QUEUE);
+    const encodedCommand = encodeURIComponent(JSON.stringify(command));
+
+    const response = await fetch(`${url}/lpush/${encodedQueue}/${encodedCommand}`, {
+        method: 'POST',
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    });
+
+    if (!response.ok) {
+        return {
+            ok: false,
+            error: `${response.status} ${response.statusText}`
+        };
+    }
+
+    return { ok: true };
 }
 
 function createDefaultState(): SwarmState {

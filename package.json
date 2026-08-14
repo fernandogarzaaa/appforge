@@ -59,7 +59,8 @@
     "build:analyzer:release": "cd static-analyzer-core && wasm-pack build --release --target web --out-dir ../src/static-analyzer-core/pkg",
     "start:server": "node server.js",
     "deploy": "node scripts/deploy_swarm.js",
-    "app:desktop": "electron ."
+    "app:desktop": "electron .",
+    "swarm:node": "npx tsx runtime/swarm_node/index.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.74.0",
