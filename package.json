@@ -59,7 +59,8 @@
     "build:analyzer:release": "cd static-analyzer-core && wasm-pack build --release --target web --out-dir ../src/static-analyzer-core/pkg",
     "start:server": "node server.js",
     "deploy": "node scripts/deploy_swarm.js",
-    "app:desktop": "electron ."
+    "app:desktop": "electron .",
+    "typecheck:app": "tsc -p ./tsconfig.app.json"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.74.0",
@@ -229,6 +230,7 @@
     "minimatch": "^10.0.2",
     "tar": "^7.5.8",
     "undici": "^6.22.1",
-    "path-to-regexp": "^8.2.0"
+    "path-to-regexp": "^8.2.0",
+    "rollup": "^4.59.0"
   }
 }
